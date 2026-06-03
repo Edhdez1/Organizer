@@ -25,6 +25,8 @@ Hecho con **Next.js 15 + Supabase + Vercel + OpenAI**.
 - **Gestión de fuentes** por proyecto: enlazar/quitar repos y carpetas, con **sugerencia automática** de carpetas de Drive por similitud de nombre.
 - **Vistas**: Roadmap (columnas por fase con % por proyecto) y Tarjetas, con filtros y búsqueda.
 - **Editar / eliminar** proyectos.
+- **Analizar todo**: re-analiza todos los proyectos de un clic, con progreso.
+- **Re-análisis programado** (opcional): cron diario de Vercel que actualiza los proyectos más desactualizados.
 - **Branding Faro**: tema oscuro cálido, logo y tipografías (paleta verificada WCAG AA).
 
 ---
@@ -67,6 +69,7 @@ El esquema de la base de datos está en `supabase/migrations/`.
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` — OAuth de Google (login + Drive; el secret refresca el token de Drive).
 - `OPENAI_API_KEY` (+ `OPENAI_MODEL` opcional, por defecto `gpt-4o-mini`).
 - `GITHUB_TOKEN` — **opcional/legado**; el acceso a GitHub se hace con OAuth en la app.
+- `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` — **opcionales**, solo para el re-análisis programado (cron). Configurado en `vercel.json` (diario).
 
 ### Configuración OAuth
 
@@ -102,9 +105,9 @@ docs/                      # manual de marca y guías (OAuth, token)
 - [x] Google Drive: varias carpetas por proyecto con sugerencia automática
 - [x] Editar / eliminar proyectos + gestión de fuentes
 - [x] Landing pública
+- [x] "Analizar todo" + re-análisis programado (cron diario)
 - [ ] Verificación de la app en Google (para abrirla a otros usuarios)
 - [ ] Dominio propio
-- [ ] Re-análisis programado y "Analizar todo"
 
 ---
 
