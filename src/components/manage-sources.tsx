@@ -96,11 +96,19 @@ export function ManageSources({ project }: { project: ProjectWithSources }) {
       if (!res.ok) throw new Error((await res.json()).error ?? "Error");
       setFolder("");
       setRepo("");
+      // Re-analiza automáticamente con la nueva fuente (incluye Drive).
+      setStatus("Analizando con la nueva fuente…");
+      await fetch("/api/ai/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: project.id }),
+      });
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error");
     } finally {
       setBusy(false);
+      setStatus(null);
     }
   }
 
