@@ -12,7 +12,10 @@ export function ConnectGithub({ connected }: { connected: boolean }) {
   async function connect() {
     setError(null);
     const supabase = createClient();
-    const { data, error } = await supabase.auth.linkIdentity({
+    // Usamos signInWithOAuth (enlace automático por correo) en vez de linkIdentity,
+    // que requiere "manual linking" activado en Supabase. Como GitHub y Google
+    // comparten el mismo correo, Supabase los vincula en la misma cuenta.
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
         redirectTo: `${window.location.origin}/auth/callback?provider=github&next=/dashboard`,
@@ -23,7 +26,6 @@ export function ConnectGithub({ connected }: { connected: boolean }) {
       setError(error.message);
       return;
     }
-    // Algunos flujos devuelven la URL para redirigir manualmente.
     if (data?.url) window.location.href = data.url;
   }
 
