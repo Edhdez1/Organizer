@@ -43,6 +43,19 @@ export function RoadmapView({ projects }: { projects: ProjectWithSources[] }) {
                         → {p.next_action}
                       </p>
                     )}
+                    {typeof p.progress_pct === "number" && (
+                      <div className="mt-1.5 flex items-center gap-1.5">
+                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-edge">
+                          <div
+                            className="h-full rounded-full bg-brand"
+                            style={{ width: `${p.progress_pct}%` }}
+                          />
+                        </div>
+                        <span className="font-mono text-[10px] text-muted">
+                          {p.progress_pct}%
+                        </span>
+                      </div>
+                    )}
                     {snap && (
                       <p className="mt-1 font-mono text-[10px] text-muted">
                         {snap.open_issues}i · {snap.open_pull_requests}PR
