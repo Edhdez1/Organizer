@@ -13,6 +13,10 @@ interface RepoOption {
   description: string | null;
   private: boolean;
 }
+interface FolderOption {
+  id: string;
+  name: string;
+}
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -22,11 +26,15 @@ export default function NewProjectPage() {
   const [nextAction, setNextAction] = useState("");
   const [tags, setTags] = useState("");
   const [repo, setRepo] = useState("");
+  const [folder, setFolder] = useState("");
 
   const [repos, setRepos] = useState<RepoOption[]>([]);
   const [reposError, setReposError] = useState<string | null>(null);
-  const [loadingRepos, setLoadingRepos] = useState(true);
+  const [folders, setFolders] = useState<FolderOption[]>([]);
+  const [foldersError, setFoldersError] = useState<string | null>(null);
+
   const [saving, setSaving] = useState(false);
+  const [savingLabel, setSavingLabel] = useState("Crear proyecto");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,8 +44,15 @@ export default function NewProjectPage() {
         if (!res.ok) throw new Error(data.error ?? "Error");
         setRepos(data.repos ?? []);
       })
-      .catch((err) => setReposError(err.message))
-      .finally(() => setLoadingRepos(false));
+      .catch((err) => setReposError(err.message));
+
+    fetch("/api/drive/folders")
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "Error");
+        setFolders(data.folders ?? []);
+      })
+      .catch((err) => setFoldersError(err.message));
   }, []);
 
   async function submit(e: React.FormEvent) {
@@ -46,6 +61,8 @@ export default function NewProjectPage() {
     setError(null);
     try {
       const selected = repos.find((r) => r.full_name === repo);
+      const selectedFolder = folders.find((f) => f.id === folder);
+      setSavingLabel("Creando…");
       const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,21 +71,36 @@ export default function NewProjectPage() {
           description: description || null,
           phase,
           next_action: nextAction || null,
-          tags: tags
-            .split(",")
-            .map((t) => t.trim())
-            .filter(Boolean),
+          tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
           github_repo: repo || undefined,
           github_url: selected?.html_url,
+          drive_folder_id: folder || undefined,
+          drive_folder_name: selectedFolder?.name,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error");
+
+      // Análisis automático si hay alguna fuente enlazada.
+      if (data.project?.id && (repo || folder)) {
+        setSavingLabel("Analizando con IA…");
+        try {
+          await fetch("/api/ai/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ project_id: data.project.id }),
+          });
+        } catch {
+          // si el análisis falla, el proyecto ya está creado; se reintenta luego
+        }
+      }
+
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error");
       setSaving(false);
+      setSavingLabel("Crear proyecto");
     }
   }
 
@@ -77,7 +109,11 @@ export default function NewProjectPage() {
       <Link href="/dashboard" className="text-sm text-muted hover:underline">
         ← Volver
       </Link>
-      <h1 className="mb-4 mt-2 text-2xl font-bold">Añadir proyecto</h1>
+      <h1 className="mb-1 mt-2 text-2xl font-bold">Añadir proyecto</h1>
+      <p className="mb-4 text-sm text-muted">
+        Enlaza un repo de GitHub y/o una carpeta de Drive: Faro leerá su contenido
+        y generará descripción, progreso y roadmap automáticamente.
+      </p>
 
       <Card>
         <CardBody>
@@ -91,7 +127,7 @@ export default function NewProjectPage() {
               />
             </Field>
 
-            <Field label="Descripción">
+            <Field label="Descripción (opcional)">
               <Input
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -100,23 +136,42 @@ export default function NewProjectPage() {
             </Field>
 
             <Field label="Repositorio de GitHub (opcional)">
-              {loadingRepos ? (
-                <p className="text-sm text-muted">Cargando repos…</p>
-              ) : reposError ? (
-                <p className="text-sm text-danger">
-                  No se pudieron cargar los repos: {reposError}
-                </p>
+              {reposError ? (
+                <p className="text-sm text-danger">{reposError}</p>
               ) : (
                 <select
                   className="w-full rounded-xl border border-edge bg-ink px-3 py-2 text-sm text-cream"
                   value={repo}
                   onChange={(e) => setRepo(e.target.value)}
                 >
-                  <option value="">— Sin repo —</option>
+                  <option value="">
+                    {repos.length ? "— Sin repo —" : "Cargando repos…"}
+                  </option>
                   {repos.map((r) => (
                     <option key={r.full_name} value={r.full_name}>
                       {r.full_name}
                       {r.private ? " (privado)" : ""}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </Field>
+
+            <Field label="Carpeta de Google Drive (opcional)">
+              {foldersError ? (
+                <p className="text-sm text-danger">{foldersError}</p>
+              ) : (
+                <select
+                  className="w-full rounded-xl border border-edge bg-ink px-3 py-2 text-sm text-cream"
+                  value={folder}
+                  onChange={(e) => setFolder(e.target.value)}
+                >
+                  <option value="">
+                    {folders.length ? "— Sin carpeta —" : "Cargando carpetas…"}
+                  </option>
+                  {folders.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.name}
                     </option>
                   ))}
                 </select>
@@ -147,7 +202,7 @@ export default function NewProjectPage() {
               </Field>
             </div>
 
-            <Field label="Siguiente acción">
+            <Field label="Siguiente acción (opcional)">
               <Input
                 value={nextAction}
                 onChange={(e) => setNextAction(e.target.value)}
@@ -158,7 +213,7 @@ export default function NewProjectPage() {
             {error && <p className="text-sm text-danger">{error}</p>}
 
             <Button type="submit" disabled={saving} className="w-full">
-              {saving ? "Guardando…" : "Crear proyecto"}
+              {saving ? savingLabel : "Crear proyecto"}
             </Button>
           </form>
         </CardBody>
