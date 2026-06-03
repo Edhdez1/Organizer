@@ -1,5 +1,4 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getProject } from "@/lib/queries";
 import { getProviderToken } from "@/lib/connections";
 import {
   fetchRepoContext,
@@ -9,17 +8,62 @@ import {
 import { fetchDriveContext } from "@/lib/google-drive";
 import { analyzeProject, type AnalyzeResult } from "@/lib/openai";
 import { inferPhaseFromSnapshot } from "@/lib/phases";
-import type { GithubSnapshot } from "@/lib/types";
+import type {
+  GithubSnapshot,
+  ProjectSource,
+  ProjectWithSources,
+  SourceSnapshot,
+} from "@/lib/types";
+
+// Carga un proyecto con sus fuentes y el último snapshot de cada una usando el
+// cliente que se le pase (de usuario con RLS, o admin/service-role para el cron).
+async function loadProject(
+  supabase: SupabaseClient,
+  projectId: string
+): Promise<ProjectWithSources | null> {
+  const { data: project } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", projectId)
+    .maybeSingle();
+  if (!project) return null;
+
+  const { data: sources } = await supabase
+    .from("project_sources")
+    .select("*")
+    .eq("project_id", projectId);
+
+  const sourceIds = (sources ?? []).map((s: ProjectSource) => s.id);
+  let snaps: SourceSnapshot[] = [];
+  if (sourceIds.length > 0) {
+    const { data } = await supabase
+      .from("source_snapshots")
+      .select("*")
+      .in("source_id", sourceIds)
+      .order("fetched_at", { ascending: false });
+    snaps = (data ?? []) as SourceSnapshot[];
+  }
+  const latest = new Map<string, SourceSnapshot>();
+  for (const s of snaps) if (!latest.has(s.source_id)) latest.set(s.source_id, s);
+
+  return {
+    ...(project as ProjectWithSources),
+    sources: (sources ?? []).map((s: ProjectSource) => ({
+      ...s,
+      snapshot: latest.get(s.id) ?? null,
+    })),
+  };
+}
 
 // Analiza un proyecto leyendo el contenido de TODAS sus fuentes (GitHub + Drive)
 // y guarda descripción, estado, progreso % y roadmap. Reutilizado por la ruta de
-// análisis y por la creación automática.
+// análisis, la creación automática y el cron de re-análisis.
 export async function runAnalysis(
   supabase: SupabaseClient,
   userId: string,
   projectId: string
 ): Promise<AnalyzeResult | null> {
-  const project = await getProject(projectId);
+  const project = await loadProject(supabase, projectId);
   if (!project) return null;
 
   const ghSource = project.sources.find((s) => s.type === "github_repo");
