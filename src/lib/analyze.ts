@@ -23,7 +23,7 @@ export async function runAnalysis(
   if (!project) return null;
 
   const ghSource = project.sources.find((s) => s.type === "github_repo");
-  const driveSource = project.sources.find((s) => s.type === "drive_folder");
+  const driveSources = project.sources.filter((s) => s.type === "drive_folder");
 
   let repo: Parameters<typeof analyzeProject>[0]["repo"] = null;
   let drive: Parameters<typeof analyzeProject>[0]["drive"] = null;
@@ -53,21 +53,27 @@ export async function runAnalysis(
     };
   }
 
-  // Google Drive
-  if (driveSource) {
+  // Google Drive: combina el contenido de TODAS las carpetas enlazadas.
+  if (driveSources.length > 0) {
     try {
       const gtoken = await getProviderToken(supabase, userId, "google");
       if (gtoken) {
-        const dctx = await fetchDriveContext(gtoken, driveSource.external_id);
-        await supabase.from("source_snapshots").insert({
-          source_id: driveSource.id,
-          data: {
-            fileCount: dctx.fileCount,
-            lastModified: dctx.lastModified,
-            files: dctx.files,
-          },
-        });
-        drive = { files: dctx.files, docs: dctx.docs };
+        const files: string[] = [];
+        const docs: string[] = [];
+        for (const ds of driveSources) {
+          const dctx = await fetchDriveContext(gtoken, ds.external_id);
+          await supabase.from("source_snapshots").insert({
+            source_id: ds.id,
+            data: {
+              fileCount: dctx.fileCount,
+              lastModified: dctx.lastModified,
+              files: dctx.files,
+            },
+          });
+          files.push(...dctx.files);
+          docs.push(...dctx.docs);
+        }
+        if (files.length || docs.length) drive = { files, docs };
       }
     } catch {
       // si Drive falla, analizamos solo con lo de GitHub

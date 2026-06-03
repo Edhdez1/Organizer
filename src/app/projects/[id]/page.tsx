@@ -5,6 +5,7 @@ import { getProject } from "@/lib/queries";
 import { Card, CardBody } from "@/components/ui";
 import { ProjectCard } from "@/components/project-card";
 import { EditProject } from "@/components/edit-project";
+import { ManageSources } from "@/components/manage-sources";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,10 @@ export default async function ProjectDetailPage({
       <h1 className="mb-4 mt-2 text-2xl font-bold">{project.name}</h1>
 
       <ProjectCard project={project} />
+
+      <div className="mt-4">
+        <ManageSources project={project} />
+      </div>
 
       <div className="mt-4">
         <EditProject project={project} />
