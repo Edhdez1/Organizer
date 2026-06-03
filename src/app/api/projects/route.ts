@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { fetchRepoSnapshot } from "@/lib/github";
+import { getProviderToken } from "@/lib/connections";
 import { inferPhaseFromSnapshot } from "@/lib/phases";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +55,8 @@ export async function POST(request: NextRequest) {
     // Si el usuario dejó la fase por defecto ("idea"), la ajustamos a lo que
     // diga GitHub; si eligió otra a mano, se respeta.
     try {
-      const data = await fetchRepoSnapshot(github_repo);
+      const token = await getProviderToken(supabase, user.id, "github");
+      const data = await fetchRepoSnapshot(token, github_repo);
       await supabase.from("source_snapshots").insert({ source_id: source.id, data });
       if (phase === "idea") {
         const inferred = inferPhaseFromSnapshot(data);

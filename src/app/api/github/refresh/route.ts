@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { fetchRepoSnapshot } from "@/lib/github";
+import { getProviderToken } from "@/lib/connections";
 import { inferPhaseFromSnapshot } from "@/lib/phases";
 import type { GithubSnapshot, ProjectSource } from "@/lib/types";
 
@@ -27,11 +28,13 @@ export async function POST(request: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
+  const token = await getProviderToken(supabase, user.id, "github");
+
   const results: { source_id: string; ok: boolean; error?: string }[] = [];
   let lastData: GithubSnapshot | null = null;
   for (const source of (sources ?? []) as ProjectSource[]) {
     try {
-      const data = await fetchRepoSnapshot(source.external_id);
+      const data = await fetchRepoSnapshot(token, source.external_id);
       await supabase.from("source_snapshots").insert({ source_id: source.id, data });
       lastData = data;
       results.push({ source_id: source.id, ok: true });
