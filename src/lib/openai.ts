@@ -14,6 +14,8 @@ export interface SummarizeInput {
   name: string;
   description: string | null;
   phase: ProjectPhase;
+  // Fase deducida de la actividad real (commits/PRs/fechas), como pista para el modelo.
+  inferredPhase?: ProjectPhase | null;
   snapshots: { label: string; data: GithubSnapshot | Record<string, unknown> }[];
 }
 
@@ -42,9 +44,14 @@ export async function summarizeProject(
         role: "system",
         content:
           "Eres un asistente que resume el estado de proyectos de software a partir " +
-          "de su actividad en GitHub. Responde en español, conciso y concreto. " +
+          "de su actividad real en GitHub. Responde en español, conciso y concreto. " +
+          "IMPORTANTE: basa el estado en la ACTIVIDAD real (commits, PRs abiertas, " +
+          "fecha del último commit y de la última actividad), NO en la etiqueta de fase. " +
+          "Si hay commits y PRs recientes, el proyecto está EN DESARROLLO activo, aunque " +
+          "la etiqueta diga 'idea'. No afirmes que no hay actividad si los datos muestran " +
+          "commits o PRs. " +
           'Devuelve SOLO un JSON con las claves "summary" (2-3 frases sobre el estado ' +
-          'actual) y "next_action" (una sola siguiente acción recomendada, accionable).',
+          'real) y "next_action" (una sola siguiente acción recomendada y accionable).',
       },
       {
         role: "user",

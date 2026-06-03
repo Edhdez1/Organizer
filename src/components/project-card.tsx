@@ -30,17 +30,28 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
   const [busy, setBusy] = useState<null | "refresh" | "summary" | "phase">(null);
   const [error, setError] = useState<string | null>(null);
   const [suggestion, setSuggestion] = useState<string | null>(null);
+  const [phaseSuggestion, setPhaseSuggestion] = useState<ProjectPhase | null>(null);
 
   async function refresh() {
     setBusy("refresh");
     setError(null);
+    setPhaseSuggestion(null);
     try {
       const res = await fetch("/api/github/refresh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ project_id: project.id }),
       });
-      if (!res.ok) throw new Error((await res.json()).error ?? "Error");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error");
+      // Si GitHub sugiere una fase distinta y no se aplicó sola, la ofrecemos.
+      if (
+        data.suggested_phase &&
+        !data.applied &&
+        data.suggested_phase !== project.phase
+      ) {
+        setPhaseSuggestion(data.suggested_phase as ProjectPhase);
+      }
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error");
@@ -73,6 +84,7 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
   async function changePhase(phase: ProjectPhase) {
     setBusy("phase");
     setError(null);
+    setPhaseSuggestion(null);
     try {
       await fetch("/api/projects", {
         method: "PATCH",
@@ -186,6 +198,25 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
             </p>
             <Button variant="secondary" className="mt-2" onClick={applySuggestion}>
               Usar como siguiente acción
+            </Button>
+          </div>
+        )}
+
+        {phaseSuggestion && (
+          <div className="rounded-xl border border-brand/40 bg-brand/10 p-2 text-sm">
+            <p className="text-cream">
+              Según la actividad de GitHub, la fase sugerida es{" "}
+              <span className="font-semibold text-brand">
+                {PHASES.find((p) => p.value === phaseSuggestion)?.label}
+              </span>
+              .
+            </p>
+            <Button
+              variant="secondary"
+              className="mt-2"
+              onClick={() => changePhase(phaseSuggestion)}
+            >
+              Aplicar fase sugerida
             </Button>
           </div>
         )}
