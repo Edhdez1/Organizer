@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button, Card, CardBody, Input } from "@/components/ui";
+import { Logo } from "@/components/logo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -33,17 +34,20 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
+      <div className="mb-5 flex justify-center">
+        <Logo size={40} />
+      </div>
       <Card>
         <CardBody className="space-y-4">
           <div>
-            <h1 className="text-2xl font-bold">Entrar a Organizer</h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <h1 className="text-2xl font-bold">Entrar a Faro</h1>
+            <p className="mt-1 text-sm text-muted">
               Te enviamos un enlace mágico a tu correo. Sin contraseñas.
             </p>
           </div>
 
           {status === "sent" ? (
-            <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
+            <p className="rounded-lg border border-ok/30 bg-ok/10 p-3 text-sm text-ok">
               Revisa tu correo ({email}) y abre el enlace para entrar.
             </p>
           ) : (
@@ -65,11 +69,7 @@ export default function LoginPage() {
             </form>
           )}
 
-          {error && (
-            <p className="text-sm text-red-600">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-sm text-danger">{error}</p>}
         </CardBody>
       </Card>
     </main>

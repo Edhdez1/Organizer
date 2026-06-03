@@ -74,7 +74,7 @@ export default function NewProjectPage() {
 
   return (
     <main className="mx-auto max-w-xl px-4 py-8">
-      <Link href="/dashboard" className="text-sm text-slate-500 hover:underline">
+      <Link href="/dashboard" className="text-sm text-muted hover:underline">
         ← Volver
       </Link>
       <h1 className="mb-4 mt-2 text-2xl font-bold">Añadir proyecto</h1>
@@ -101,14 +101,14 @@ export default function NewProjectPage() {
 
             <Field label="Repositorio de GitHub (opcional)">
               {loadingRepos ? (
-                <p className="text-sm text-slate-500">Cargando repos…</p>
+                <p className="text-sm text-muted">Cargando repos…</p>
               ) : reposError ? (
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-danger">
                   No se pudieron cargar los repos: {reposError}
                 </p>
               ) : (
                 <select
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  className="w-full rounded-xl border border-edge bg-ink px-3 py-2 text-sm text-cream"
                   value={repo}
                   onChange={(e) => setRepo(e.target.value)}
                 >
@@ -126,7 +126,7 @@ export default function NewProjectPage() {
             <div className="grid grid-cols-2 gap-3">
               <Field label="Fase">
                 <select
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  className="w-full rounded-xl border border-edge bg-ink px-3 py-2 text-sm text-cream"
                   value={phase}
                   onChange={(e) => setPhase(e.target.value as ProjectPhase)}
                 >
@@ -155,7 +155,7 @@ export default function NewProjectPage() {
               />
             </Field>
 
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-danger">{error}</p>}
 
             <Button type="submit" disabled={saving} className="w-full">
               {saving ? "Guardando…" : "Crear proyecto"}
@@ -176,7 +176,7 @@ function Field({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <span className="text-sm font-medium text-cream">{label}</span>
       {children}
     </label>
   );

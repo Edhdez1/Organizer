@@ -1,13 +1,13 @@
 import type { ProjectPhase } from "@/lib/types";
 
-// Configuración visual de cada fase. Editable: si quieres otras fases, se cambian
-// aquí y en la migración SQL (enum project_phase).
+// Configuración visual de cada fase, mapeada a la paleta de marca "Faro".
+// Texto oscuro sobre fondo de color (verificado para contraste AA).
 export const PHASES: { value: ProjectPhase; label: string; className: string }[] = [
-  { value: "idea", label: "Idea", className: "bg-slate-100 text-slate-700" },
-  { value: "en_progreso", label: "En progreso", className: "bg-blue-100 text-blue-700" },
-  { value: "en_pausa", label: "En pausa", className: "bg-amber-100 text-amber-700" },
-  { value: "bloqueado", label: "Bloqueado", className: "bg-red-100 text-red-700" },
-  { value: "terminado", label: "Terminado", className: "bg-green-100 text-green-700" },
+  { value: "idea", label: "Idea", className: "bg-gold text-ink" },
+  { value: "en_progreso", label: "En progreso", className: "bg-brand text-ink" },
+  { value: "en_pausa", label: "En pausa", className: "bg-terracota text-ink" },
+  { value: "bloqueado", label: "Bloqueado", className: "bg-danger text-ink" },
+  { value: "terminado", label: "Terminado", className: "bg-ok text-ink" },
 ];
 
 export function phaseConfig(phase: ProjectPhase) {

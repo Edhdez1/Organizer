@@ -55,7 +55,7 @@ export function ProjectsBoard({ projects }: { projects: ProjectWithSources[] }) 
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-8 text-center text-sm text-slate-500">
+        <p className="py-8 text-center text-sm text-muted">
           Ningún proyecto coincide con el filtro.
         </p>
       ) : (
@@ -82,10 +82,10 @@ function FilterChip({
     <button
       onClick={onClick}
       className={
-        "rounded-full px-3 py-1 text-xs font-medium transition " +
+        "rounded-full px-3 py-1 text-xs font-semibold transition " +
         (active
           ? "bg-brand text-brand-fg"
-          : "bg-slate-100 text-slate-600 hover:bg-slate-200")
+          : "bg-edge text-muted hover:bg-edge/70")
       }
     >
       {label}

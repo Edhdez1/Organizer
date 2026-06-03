@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="64" viewBox="0 0 220 64" font-family="'Space Grotesk', system-ui, sans-serif">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="55%" r="50%">
+      <stop offset="0%" stop-color="#F4A340" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#F4A340" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#F4A340" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="34" r="24" fill="url(#g)"/>
+  <path d="M32 34 L17 12 L27 12 Z" fill="#F3C969" opacity="0.85"/>
+  <path d="M32 34 L47 12 L37 12 Z" fill="#F3C969" opacity="0.85"/>
+  <circle cx="32" cy="34" r="7" fill="#F4A340"/>
+  <text x="72" y="42" fill="#F5EFE6" font-size="30" font-weight="700">Faro</text>
+  <circle cx="142" cy="26" r="5" fill="#F4A340"/>
+</svg>
