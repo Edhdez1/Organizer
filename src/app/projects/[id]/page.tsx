@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getProject } from "@/lib/queries";
 import { Card, CardBody } from "@/components/ui";
 import { ProjectCard } from "@/components/project-card";
+import { EditProject } from "@/components/edit-project";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,10 @@ export default async function ProjectDetailPage({
       <h1 className="mb-4 mt-2 text-2xl font-bold">{project.name}</h1>
 
       <ProjectCard project={project} />
+
+      <div className="mt-4">
+        <EditProject project={project} />
+      </div>
 
       <Card className="mt-4">
         <CardBody className="text-sm text-muted">

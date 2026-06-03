@@ -23,6 +23,8 @@ export async function POST(request: NextRequest) {
     tags = [],
     github_repo, // 'owner/repo' (opcional)
     github_url, // html_url del repo (opcional)
+    drive_folder_id, // id de carpeta de Drive (opcional)
+    drive_folder_name, // nombre de la carpeta (opcional)
   } = body ?? {};
 
   if (!name || typeof name !== "string") {
@@ -72,6 +74,16 @@ export async function POST(request: NextRequest) {
     } catch {
       // Si GitHub falla, el proyecto igual se crea; se refresca luego a mano.
     }
+  }
+
+  if (drive_folder_id) {
+    await supabase.from("project_sources").insert({
+      project_id: project.id,
+      type: "drive_folder",
+      external_id: drive_folder_id,
+      external_url: `https://drive.google.com/drive/folders/${drive_folder_id}`,
+      label: drive_folder_name ?? "Carpeta de Drive",
+    });
   }
 
   return NextResponse.json({ project }, { status: 201 });

@@ -111,6 +111,7 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
   }
 
   const githubSources = project.sources.filter((s) => s.type === "github_repo");
+  const driveSources = project.sources.filter((s) => s.type === "drive_folder");
 
   return (
     <Card>
@@ -196,6 +197,20 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
             </div>
           );
         })}
+
+        {/* Carpetas de Drive enlazadas */}
+        {driveSources.map((s) => (
+          <div key={s.id} className="rounded-xl bg-ink p-2 text-xs text-muted">
+            <a
+              href={s.external_url ?? "#"}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-gold hover:underline"
+            >
+              📁 {s.label ?? "Carpeta de Drive"}
+            </a>
+          </div>
+        ))}
 
         {project.next_action && (
           <p className="text-sm text-cream">
