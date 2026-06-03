@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { summarizeProject } from "@/lib/openai";
 import { getProject } from "@/lib/queries";
 import { fetchRepoSnapshot } from "@/lib/github";
+import { getProviderToken } from "@/lib/connections";
 import { inferPhaseFromSnapshot } from "@/lib/phases";
 import type { GithubSnapshot } from "@/lib/types";
 
@@ -32,9 +33,10 @@ export async function POST(request: NextRequest) {
     (s) => s.type === "github_repo" && !s.snapshot
   );
   if (stale.length > 0) {
+    const token = await getProviderToken(supabase, user.id, "github");
     for (const s of stale) {
       try {
-        const data = await fetchRepoSnapshot(s.external_id);
+        const data = await fetchRepoSnapshot(token, s.external_id);
         await supabase.from("source_snapshots").insert({ source_id: s.id, data });
       } catch {
         // Si GitHub falla, seguimos con lo que haya.

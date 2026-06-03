@@ -1,12 +1,12 @@
 import { Octokit } from "@octokit/rest";
 import type { GithubSnapshot } from "@/lib/types";
 
-// El token vive SOLO en el servidor (variable de entorno GITHUB_TOKEN).
-function octokit() {
-  const token = process.env.GITHUB_TOKEN;
+// El token llega del usuario (conexión OAuth de GitHub) o, en su defecto, del
+// entorno (compatibilidad). Con el token OAuth del usuario se ven repos privados.
+function octokit(token: string | null) {
   if (!token) {
     throw new Error(
-      "Falta GITHUB_TOKEN. Genera un token fino de solo lectura y configúralo."
+      "Conecta tu cuenta de GitHub para leer tus repositorios."
     );
   }
   return new Octokit({ auth: token });
@@ -20,9 +20,9 @@ export interface RepoOption {
   pushed_at: string | null;
 }
 
-// Lista los repos accesibles por el token (para elegir al añadir un proyecto).
-export async function listRepos(): Promise<RepoOption[]> {
-  const gh = octokit();
+// Lista los repos accesibles por el token (incluye privados con OAuth del usuario).
+export async function listRepos(token: string | null): Promise<RepoOption[]> {
+  const gh = octokit(token);
   const repos = await gh.paginate(gh.repos.listForAuthenticatedUser, {
     per_page: 100,
     sort: "pushed",
@@ -38,8 +38,11 @@ export async function listRepos(): Promise<RepoOption[]> {
 }
 
 // Lee el estado actual de un repo 'owner/repo' y lo normaliza a GithubSnapshot.
-export async function fetchRepoSnapshot(fullName: string): Promise<GithubSnapshot> {
-  const gh = octokit();
+export async function fetchRepoSnapshot(
+  token: string | null,
+  fullName: string
+): Promise<GithubSnapshot> {
+  const gh = octokit(token);
   const [owner, repo] = fullName.split("/");
   if (!owner || !repo) {
     throw new Error(`Formato de repo inválido: "${fullName}" (esperado owner/repo)`);
