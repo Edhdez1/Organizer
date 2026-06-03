@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, CardBody } from "@/components/ui";
 import { PhaseBadge } from "@/components/phase-badge";
+import { PhaseProgress } from "@/components/phase-progress";
 import { PHASES } from "@/lib/phases";
 import type {
   GithubSnapshot,
@@ -110,6 +111,11 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
             )}
           </div>
           <PhaseBadge phase={project.phase} />
+        </div>
+
+        {/* Roadmap visual del proyecto */}
+        <div className="rounded-xl border border-edge bg-ink/60 px-3 py-2">
+          <PhaseProgress phase={project.phase} />
         </div>
 
         {project.tags.length > 0 && (
