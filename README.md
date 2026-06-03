@@ -27,7 +27,7 @@ Hecho con **Next.js 15 + Supabase + Vercel + OpenAI**.
 - **Editar / eliminar** proyectos.
 - **Analizar todo**: re-analiza todos los proyectos de un clic, con progreso.
 - **Re-análisis programado** (opcional): cron diario de Vercel que actualiza los proyectos más desactualizados.
-- **Branding Faro**: tema oscuro cálido, logo y tipografías (paleta verificada WCAG AA).
+- **Branding Faro**: tema oscuro cálido, logo de torre de faro, tipografías (paleta WCAG AA) e imagen Open Graph para compartir.
 
 ---
 
