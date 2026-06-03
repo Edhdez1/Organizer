@@ -73,3 +73,87 @@ export async function summarizeProject(
     next_action: parsed.next_action?.trim() || "",
   };
 }
+
+// ── Análisis completo del proyecto (Fase B) ─────────────────────────────────
+// Lee el CONTENIDO real (README, archivos, lenguajes, Drive) para describir QUÉ
+// es el proyecto, su estado, siguiente acción, progreso % y roadmap.
+export interface AnalyzeInput {
+  name: string;
+  description: string | null;
+  phase: ProjectPhase;
+  repo?: {
+    description: string | null;
+    languages: string[];
+    topics: string[];
+    readme: string | null;
+    files: string[];
+    activity: GithubSnapshot | null;
+  } | null;
+  drive?: { files: string[]; docs: string[] } | null;
+  // Progreso por milestones (si existe, la IA debe usarlo como ancla).
+  milestoneProgress?: number | null;
+}
+
+export interface AnalyzeResult {
+  description: string;
+  summary: string;
+  next_action: string;
+  progress_pct: number;
+  roadmap: { title: string; done: boolean }[];
+}
+
+export async function analyzeProject(
+  input: AnalyzeInput
+): Promise<AnalyzeResult> {
+  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+  const openai = client();
+  const context = JSON.stringify(input, null, 2);
+
+  const completion = await openai.chat.completions.create({
+    model,
+    temperature: 0.3,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Eres un analista de proyectos. A partir del README, archivos, lenguajes, " +
+          "actividad de GitHub y documentos de Drive, describe QUÉ ES el proyecto y en " +
+          "qué punto está. Responde en español, concreto, sin relleno. " +
+          "Devuelve SOLO un JSON con estas claves: " +
+          '"description" (1-2 frases: qué es y para qué sirve el proyecto, basado en el ' +
+          'README/contenido, NO en métricas), ' +
+          '"summary" (2-3 frases sobre el estado actual real), ' +
+          '"next_action" (una siguiente acción concreta), ' +
+          '"progress_pct" (entero 0-100 de avance hacia un producto terminado; si te paso ' +
+          'milestoneProgress, úsalo como base), ' +
+          '"roadmap" (4 a 6 hitos en orden, cada uno {"title": string, "done": boolean}; ' +
+          "marca done=true los que el contenido indique completados).",
+      },
+      { role: "user", content: `Datos del proyecto:\n${context}` },
+    ],
+  });
+
+  const raw = completion.choices[0]?.message?.content ?? "{}";
+  let p: Partial<AnalyzeResult> = {};
+  try {
+    p = JSON.parse(raw);
+  } catch {}
+
+  const pct =
+    typeof p.progress_pct === "number"
+      ? Math.max(0, Math.min(100, Math.round(p.progress_pct)))
+      : input.milestoneProgress ?? 0;
+
+  return {
+    description: p.description?.trim() || input.description || "",
+    summary: p.summary?.trim() || "No se pudo generar el análisis.",
+    next_action: p.next_action?.trim() || "",
+    progress_pct: pct,
+    roadmap: Array.isArray(p.roadmap)
+      ? p.roadmap
+          .filter((s) => s && typeof s.title === "string")
+          .map((s) => ({ title: s.title, done: !!s.done }))
+      : [],
+  };
+}

@@ -91,3 +91,76 @@ export async function fetchRepoSnapshot(
     language: repoData.language ?? null,
   };
 }
+
+// Contexto de CONTENIDO del repo, para que la IA describa QUÉ es el proyecto
+// (no solo su actividad). Incluye README, archivos, lenguajes y milestones.
+export interface RepoContext {
+  description: string | null;
+  languages: string[];
+  topics: string[];
+  readme: string | null;
+  files: string[];
+  milestones: { title: string; open: number; closed: number }[];
+}
+
+export async function fetchRepoContext(
+  token: string | null,
+  fullName: string
+): Promise<RepoContext> {
+  const gh = octokit(token);
+  const [owner, repo] = fullName.split("/");
+
+  const { data: repoData } = await gh.repos.get({ owner, repo });
+
+  let languages: string[] = [];
+  try {
+    const { data } = await gh.repos.listLanguages({ owner, repo });
+    languages = Object.keys(data);
+  } catch {}
+
+  let readme: string | null = null;
+  try {
+    const { data } = await gh.repos.getReadme({ owner, repo });
+    readme = Buffer.from(data.content, "base64")
+      .toString("utf8")
+      .slice(0, 6000); // recorte para no inflar el prompt
+  } catch {}
+
+  let files: string[] = [];
+  try {
+    const { data } = await gh.repos.getContent({ owner, repo, path: "" });
+    if (Array.isArray(data)) files = data.map((f) => f.name).slice(0, 60);
+  } catch {}
+
+  let milestones: RepoContext["milestones"] = [];
+  try {
+    const { data } = await gh.issues.listMilestones({
+      owner,
+      repo,
+      state: "all",
+      per_page: 30,
+    });
+    milestones = data.map((m) => ({
+      title: m.title,
+      open: m.open_issues,
+      closed: m.closed_issues,
+    }));
+  } catch {}
+
+  return {
+    description: repoData.description,
+    languages,
+    topics: repoData.topics ?? [],
+    readme,
+    files,
+    milestones,
+  };
+}
+
+// Progreso por milestones (parte "hitos" del cálculo híbrido). null si no hay.
+export function milestoneProgress(ctx: RepoContext): number | null {
+  const total = ctx.milestones.reduce((a, m) => a + m.open + m.closed, 0);
+  if (total === 0) return null;
+  const closed = ctx.milestones.reduce((a, m) => a + m.closed, 0);
+  return Math.round((closed / total) * 100);
+}

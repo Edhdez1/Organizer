@@ -9,6 +9,11 @@ export type ProjectPhase =
 
 export type SourceType = "github_repo" | "drive_folder";
 
+export interface RoadmapStep {
+  title: string;
+  done: boolean;
+}
+
 export interface Project {
   id: string;
   owner_id: string;
@@ -19,6 +24,9 @@ export interface Project {
   tags: string[];
   ai_summary: string | null;
   ai_summary_at: string | null;
+  ai_description: string | null;
+  progress_pct: number | null;
+  roadmap: RoadmapStep[];
   sort_order: number;
   created_at: string;
   updated_at: string;

@@ -60,12 +60,12 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
     }
   }
 
-  async function summarize() {
+  async function analyze() {
     setBusy("summary");
     setError(null);
     setSuggestion(null);
     try {
-      const res = await fetch("/api/ai/summarize", {
+      const res = await fetch("/api/ai/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ project_id: project.id }),
@@ -130,6 +130,27 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
           <PhaseProgress phase={project.phase} />
         </div>
 
+        {/* Progreso % (de la IA / hitos) */}
+        {typeof project.progress_pct === "number" && (
+          <div>
+            <div className="mb-1 flex items-center justify-between text-xs text-muted">
+              <span>Progreso</span>
+              <span className="font-mono text-cream">{project.progress_pct}%</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-edge">
+              <div
+                className="h-full rounded-full bg-brand"
+                style={{ width: `${project.progress_pct}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Descripción del proyecto (qué es), generada por la IA */}
+        {project.ai_description && (
+          <p className="text-sm text-cream">{project.ai_description}</p>
+        )}
+
         {project.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {project.tags.map((t) => (
@@ -185,8 +206,27 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
 
         {project.ai_summary && (
           <div className="rounded-xl border border-brand/30 bg-brand/10 p-2 text-sm text-cream">
-            <span className="font-semibold text-brand">Resumen IA:</span>{" "}
+            <span className="font-semibold text-brand">Estado (IA):</span>{" "}
             {project.ai_summary}
+          </div>
+        )}
+
+        {/* Roadmap con hitos (de la IA / milestones) */}
+        {project.roadmap && project.roadmap.length > 0 && (
+          <div className="rounded-xl border border-edge bg-ink/40 p-2">
+            <p className="mb-1 text-xs font-semibold text-muted">Roadmap</p>
+            <ul className="space-y-1">
+              {project.roadmap.map((step, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm">
+                  <span className={step.done ? "text-ok" : "text-muted"}>
+                    {step.done ? "✓" : "○"}
+                  </span>
+                  <span className={step.done ? "text-muted line-through" : "text-cream"}>
+                    {step.title}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
@@ -232,8 +272,8 @@ export function ProjectCard({ project }: { project: ProjectWithSources }) {
           >
             {busy === "refresh" ? "Actualizando…" : "Actualizar estado"}
           </Button>
-          <Button variant="secondary" onClick={summarize} disabled={busy !== null}>
-            {busy === "summary" ? "Resumiendo…" : "Resumir con IA"}
+          <Button variant="secondary" onClick={analyze} disabled={busy !== null}>
+            {busy === "summary" ? "Analizando…" : "Analizar con IA"}
           </Button>
           <select
             className="rounded-xl border border-edge bg-ink px-2 py-2 text-sm text-cream"
