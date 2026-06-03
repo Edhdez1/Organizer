@@ -25,7 +25,7 @@ export default async function ProjectDetailPage({
 
   return (
     <main className="mx-auto max-w-xl px-4 py-8">
-      <Link href="/dashboard" className="text-sm text-slate-500 hover:underline">
+      <Link href="/dashboard" className="text-sm text-muted hover:underline">
         ← Volver al dashboard
       </Link>
       <h1 className="mb-4 mt-2 text-2xl font-bold">{project.name}</h1>
@@ -33,7 +33,7 @@ export default async function ProjectDetailPage({
       <ProjectCard project={project} />
 
       <Card className="mt-4">
-        <CardBody className="text-sm text-slate-600">
+        <CardBody className="text-sm text-muted">
           <p>
             Creado: {new Date(project.created_at).toLocaleDateString("es")}
             {project.ai_summary_at && (

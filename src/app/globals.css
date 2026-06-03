@@ -2,14 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+@layer base {
+  html,
+  body {
+    @apply bg-ink text-cream font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
 }
 
-html,
-body {
-  background: var(--background);
-  color: var(--foreground);
-  -webkit-font-smoothing: antialiased;
+/* Pulso lento del acento ámbar: la "luz del faro". Discreto, CSS puro. */
+@keyframes faro-pulse {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.faro-glow {
+  animation: faro-pulse 3.5s ease-in-out infinite;
 }

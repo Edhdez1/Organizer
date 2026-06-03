@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { fetchRepoSnapshot } from "@/lib/github";
+import { inferPhaseFromSnapshot } from "@/lib/phases";
 
 export const dynamic = "force-dynamic";
 
@@ -35,14 +37,39 @@ export async function POST(request: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
   if (github_repo) {
-    const { error: srcErr } = await supabase.from("project_sources").insert({
-      project_id: project.id,
-      type: "github_repo",
-      external_id: github_repo,
-      external_url: github_url ?? `https://github.com/${github_repo}`,
-      label: github_repo,
-    });
+    const { data: source, error: srcErr } = await supabase
+      .from("project_sources")
+      .insert({
+        project_id: project.id,
+        type: "github_repo",
+        external_id: github_repo,
+        external_url: github_url ?? `https://github.com/${github_repo}`,
+        label: github_repo,
+      })
+      .select()
+      .single();
     if (srcErr) return NextResponse.json({ error: srcErr.message }, { status: 400 });
+
+    // Trae el estado inicial del repo y deduce la fase real de la actividad.
+    // Si el usuario dejó la fase por defecto ("idea"), la ajustamos a lo que
+    // diga GitHub; si eligió otra a mano, se respeta.
+    try {
+      const data = await fetchRepoSnapshot(github_repo);
+      await supabase.from("source_snapshots").insert({ source_id: source.id, data });
+      if (phase === "idea") {
+        const inferred = inferPhaseFromSnapshot(data);
+        if (inferred !== "idea") {
+          await supabase
+            .from("projects")
+            .update({ phase: inferred })
+            .eq("id", project.id)
+            .eq("owner_id", user.id);
+          project.phase = inferred;
+        }
+      }
+    } catch {
+      // Si GitHub falla, el proyecto igual se crea; se refresca luego a mano.
+    }
   }
 
   return NextResponse.json({ project }, { status: 201 });

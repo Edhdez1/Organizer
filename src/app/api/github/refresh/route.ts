@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { fetchRepoSnapshot } from "@/lib/github";
-import type { ProjectSource } from "@/lib/types";
+import { inferPhaseFromSnapshot } from "@/lib/phases";
+import type { GithubSnapshot, ProjectSource } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -27,10 +28,12 @@ export async function POST(request: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
   const results: { source_id: string; ok: boolean; error?: string }[] = [];
+  let lastData: GithubSnapshot | null = null;
   for (const source of (sources ?? []) as ProjectSource[]) {
     try {
       const data = await fetchRepoSnapshot(source.external_id);
       await supabase.from("source_snapshots").insert({ source_id: source.id, data });
+      lastData = data;
       results.push({ source_id: source.id, ok: true });
     } catch (err) {
       results.push({
@@ -41,5 +44,27 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ results });
+  // Deducción de fase a partir de la actividad. Si el proyecto seguía en "idea"
+  // (valor por defecto, sin tocar), la corregimos sola; si el usuario ya eligió
+  // una fase, solo la devolvemos como sugerencia para que decida.
+  let suggested_phase: string | null = null;
+  let applied = false;
+  if (lastData) {
+    suggested_phase = inferPhaseFromSnapshot(lastData);
+    const { data: proj } = await supabase
+      .from("projects")
+      .select("phase")
+      .eq("id", project_id)
+      .single();
+    if (proj?.phase === "idea" && suggested_phase !== "idea") {
+      await supabase
+        .from("projects")
+        .update({ phase: suggested_phase })
+        .eq("id", project_id)
+        .eq("owner_id", user.id);
+      applied = true;
+    }
+  }
+
+  return NextResponse.json({ results, suggested_phase, applied });
 }
