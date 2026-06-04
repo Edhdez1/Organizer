@@ -7,6 +7,7 @@ import { Button } from "@/components/ui";
 import { ProjectsBoard } from "@/components/projects-board";
 import { SignOutButton } from "@/components/sign-out-button";
 import { ConnectGithub } from "@/components/connect-github";
+import { TodayAgenda } from "@/components/today-agenda";
 import { Logo } from "@/components/logo";
 
 export const dynamic = "force-dynamic";
@@ -34,6 +35,9 @@ export default async function DashboardPage() {
           <p className="text-sm text-muted">{user.email}</p>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/agenda">
+            <Button variant="secondary">📅 Agenda</Button>
+          </Link>
           <ConnectGithub connected={conns.github} />
           <Link href="/projects/new">
             <Button>+ Añadir proyecto</Button>
@@ -41,6 +45,8 @@ export default async function DashboardPage() {
           <SignOutButton />
         </div>
       </header>
+
+      <TodayAgenda />
 
       {!conns.github && (
         <div className="mb-6 rounded-2xl border border-brand/30 bg-brand/10 p-4 text-sm text-cream">
