@@ -1,5 +1,11 @@
 import OpenAI from "openai";
-import type { GithubSnapshot, ProjectPhase } from "@/lib/types";
+import type {
+  AgendaPlan,
+  DeviceKind,
+  GithubSnapshot,
+  ProjectPhase,
+  Weekday,
+} from "@/lib/types";
 
 // La API key vive SOLO en el servidor (OPENAI_API_KEY).
 function client() {
@@ -156,4 +162,71 @@ export async function analyzeProject(
           .map((s) => ({ title: s.title, done: !!s.done }))
       : [],
   };
+}
+
+// ── Agenda semanal por dispositivo (Fase Agenda) ────────────────────────────
+export interface AgendaInput {
+  weekStart: string; // "YYYY-MM-DD" (lunes)
+  days: {
+    date: string;
+    weekday: Weekday;
+    device: DeviceKind;
+    hours: number;
+    deviceCapabilities: string; // perfil de capacidades del dispositivo del día
+  }[];
+  projects: {
+    id: string;
+    name: string;
+    phase: ProjectPhase;
+    progress_pct: number | null;
+    next_action: string | null;
+    description: string | null;
+    pending: string[]; // hitos pendientes del roadmap
+  }[];
+}
+
+// Genera un plan semanal repartiendo los proyectos elegidos entre los días, con
+// tareas que encajen en las capacidades del dispositivo de cada día.
+export async function generateWeeklyAgenda(
+  input: AgendaInput
+): Promise<AgendaPlan> {
+  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+  const openai = client();
+  const context = JSON.stringify(input, null, 2);
+
+  const completion = await openai.chat.completions.create({
+    model,
+    temperature: 0.4,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Eres un planificador personal. Repartes el tiempo de la semana entre los " +
+          "proyectos dados para que ninguno quede olvidado. Respondes en español. " +
+          "REGLAS: (1) Cada día tiene un dispositivo y un número de horas disponibles; " +
+          "no superes esas horas. (2) Asigna a cada día SOLO tareas que encajen con las " +
+          "'deviceCapabilities' de ese día (p. ej. con Claude Code en el teléfono SÍ se " +
+          "puede programar; evita tareas que requieran app de escritorio/entorno local si " +
+          "el perfil lo indica). (3) En días con device 'off' no programes nada (blocks vacío). " +
+          "(4) Rota entre los proyectos para equilibrar; elige la tarea concreta según " +
+          "'next_action' y los hitos 'pending'. (5) Bloques realistas de 1-2 horas con horas " +
+          "de inicio razonables. " +
+          'Devuelve SOLO un JSON: {"days":[{"date","weekday","device","blocks":[{"start"(HH:MM),' +
+          '"end"(HH:MM),"project_id","project_name","task","device"}]}]}. Usa exactamente las ' +
+          "fechas, weekday y device que te paso para cada día.",
+      },
+      { role: "user", content: `Semana y proyectos:\n${context}` },
+    ],
+  });
+
+  const raw = completion.choices[0]?.message?.content ?? "{}";
+  let parsed: { days?: unknown } = {};
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    parsed = {};
+  }
+  const days = Array.isArray(parsed.days) ? (parsed.days as AgendaPlan["days"]) : [];
+  return { days };
 }

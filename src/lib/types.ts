@@ -69,3 +69,39 @@ export interface SourceSnapshot {
 export interface ProjectWithSources extends Project {
   sources: (ProjectSource & { snapshot: SourceSnapshot | null })[];
 }
+
+// ── Agenda / preferencias ───────────────────────────────────────────────────
+export type DeviceKind = "off" | "phone" | "computer";
+export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
+export interface DayConfig {
+  device: DeviceKind;
+  hours: number;
+}
+export interface DeviceProfile {
+  label: string;
+  capabilities: string;
+}
+export interface UserPrefs {
+  timezone: string;
+  days: Record<Weekday, DayConfig>;
+  devices: { phone: DeviceProfile; computer: DeviceProfile };
+}
+
+export interface AgendaBlock {
+  start: string; // "HH:MM"
+  end: string; // "HH:MM"
+  project_id: string | null;
+  project_name: string;
+  task: string;
+  device: DeviceKind;
+}
+export interface AgendaDay {
+  date: string; // ISO "YYYY-MM-DD"
+  weekday: Weekday;
+  device: DeviceKind;
+  blocks: AgendaBlock[];
+}
+export interface AgendaPlan {
+  days: AgendaDay[];
+}

@@ -25,6 +25,7 @@ Hecho con **Next.js 15 + Supabase + Vercel + OpenAI**.
 - **Gestión de fuentes** por proyecto: enlazar/quitar repos y carpetas, con **sugerencia automática** de carpetas de Drive por similitud de nombre.
 - **Vistas**: Roadmap (columnas por fase con % por proyecto) y Tarjetas, con filtros y búsqueda.
 - **Editar / eliminar** proyectos.
+- **Agenda inteligente por dispositivo**: marcas, por día, desde qué dispositivo trabajarás (📱/💻/libre) y cuántas horas; eliges los proyectos de la semana y la IA reparte el tiempo en bloques con tareas adecuadas a las capacidades de cada dispositivo. Vista semanal con "hoy" destacado y tarjeta "Hoy te toca…" en el dashboard. (Sincronización con Google Calendar: próxima fase.)
 - **Analizar todo**: re-analiza todos los proyectos de un clic, con progreso.
 - **Re-análisis programado** (opcional): cron diario de Vercel que actualiza los proyectos más desactualizados.
 - **Branding Faro**: tema oscuro cálido, logo de torre de faro, tipografías (paleta WCAG AA) e imagen Open Graph para compartir.
@@ -106,6 +107,8 @@ docs/                      # manual de marca y guías (OAuth, token)
 - [x] Editar / eliminar proyectos + gestión de fuentes
 - [x] Landing pública
 - [x] "Analizar todo" + re-análisis programado (cron diario)
+- [x] Agenda inteligente por dispositivo (vista en la app)
+- [ ] Agenda → sincronización con Google Calendar
 - [ ] Verificación de la app en Google (para abrirla a otros usuarios)
 - [ ] Dominio propio
 
