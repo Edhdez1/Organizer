@@ -41,7 +41,17 @@ archivos **JSON** para los datos (misiones, perfil del usuario). Iremos viendo s
 | 03 | [Funciones, listas y diccionarios](03-funciones-listas-diccionarios.md) | `def`, listas, diccionarios |
 | 04 | [Archivos y JSON](04-archivos-y-json.md) | Leer/escribir archivos, el módulo `json` (PolyPaw) |
 | 05 | [Apps con Flet](05-apps-con-flet.md) | Qué es Flet, controles, cómo se arma PolyPaw |
+| 06 | [Cadenas de texto a fondo](06-cadenas-a-fondo.md) | f-strings, métodos, slicing, inmutabilidad |
+| 07 | [Listas, tuplas y conjuntos](07-listas-tuplas-conjuntos.md) | Métodos, comprensiones, `enumerate`, `zip` |
+| 08 | [Diccionarios a fondo](08-diccionarios-a-fondo.md) | `get`, recorrer, anidar, JSON de PolyPaw |
+| 09 | [Funciones a fondo](09-funciones-a-fondo.md) | `*args`/`**kwargs`, scope, `lambda`, type hints |
+| 10 | [Módulos y entornos](10-modulos-y-entornos.md) | `import`, `pip`, `venv`, `requirements.txt` |
+| 11 | [Clases y objetos (POO)](11-clases-y-objetos.md) | `class`, `__init__`, `self`, herencia |
+| 12 | [Errores y excepciones](12-errores-y-excepciones.md) | `try/except`, leer el traceback, `raise` |
+| 13 | [Flet a fondo](13-flet-a-fondo.md) | `page`, controles, eventos, estado, navegación |
+| 14 | [Mini-proyecto: quiz de vocabulario](14-mini-proyecto-quiz.md) | Una app de quiz con Flet + JSON |
+| 15 | [Glosario de Python](15-glosario-python.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 04 — versión ampliada (capítulos 01–15, ~100 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es Python?](01-que-es-python.md)**.
