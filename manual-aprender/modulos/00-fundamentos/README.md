@@ -30,8 +30,7 @@ aquí están las ideas que harán que los demás módulos se entiendan solos.
 | 04 | [La terminal](04-la-terminal.md) | Qué es, por qué se usa, comandos básicos para sobrevivir |
 | 05 | [Git y GitHub](05-git-y-github.md) | Control de versiones, commits, ramas, repositorios |
 
-> Los capítulos 03, 04 y 05 se completan en la siguiente tanda de generación. Este archivo y
-> los capítulos 01 y 02 son la **muestra** para que apruebes el formato.
+> ✅ **Módulo 00 completo** (capítulos 01–05). Es la base de todos los módulos siguientes.
 
 ---
 
