@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 02 — Tipos y control de flujo — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-02-tipos-y-control-de-flujo">Capítulo 02 — Tipos y control de flujo</h1>
+<blockquote>
+<p>Aquí verás los tipos de dato de Python y cómo tomar decisiones y repetir. Como ya lo viviste
+en JavaScript, irá rápido: nos centramos en <strong>las diferencias</strong> de escritura. Ten a mano la
+idea: <em>mismos conceptos, distinta forma</em>.</p>
+</blockquote>
+<hr />
+<h2 id="1-tipos-de-dato-en-python">1. Tipos de dato en Python</h2>
+<blockquote class="def">
+<h3 id="que-significa-los-tipos-basicos">🟦 ¿Qué significa? — <em>Los tipos básicos</em></h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Qué es</th>
+<th>Ejemplo</th>
+<th>En JS era</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>str</code></td>
+<td>texto (string)</td>
+<td><code>"Hola"</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>número entero</td>
+<td><code>25</code></td>
+<td>number</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>número decimal</td>
+<td><code>3.14</code></td>
+<td>number</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td>verdadero/falso</td>
+<td><code>True</code> / <code>False</code></td>
+<td>boolean</td>
+</tr>
+<tr>
+<td><code>None</code></td>
+<td>sin valor</td>
+<td><code>None</code></td>
+<td>null</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td>lista ordenada</td>
+<td><code>[1, 2, 3]</code></td>
+<td>array</td>
+</tr>
+<tr>
+<td><code>dict</code></td>
+<td>datos con etiquetas</td>
+<td><code>{"nombre": "Edwar"}</code></td>
+<td>object</td>
+</tr>
+<tr>
+<td>Python distingue <strong>enteros</strong> (<code>int</code>) de <strong>decimales</strong> (<code>float</code>); JavaScript los mezclaba en</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>"number". Listas y diccionarios los vemos en el próximo capítulo.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="que-significa-saber-el-tipo-de-algo-type">🟦 ¿Qué significa? — <em>Saber el tipo de algo: <code>type()</code></em></h3>
+<p>La función <code>type(valor)</code> te dice de qué tipo es:
+<code>python
+print(type(25))        # &lt;class 'int'&gt;
+print(type("hola"))    # &lt;class 'str'&gt;
+print(type(True))      # &lt;class 'bool'&gt;</code></p>
+<h3 id="que-significa-convertir-entre-tipos-casting">🟦 ¿Qué significa? — <em>Convertir entre tipos (casting)</em></h3>
+<p>A veces necesitas pasar un texto a número o viceversa:
+<code>python
+int("25")      # 25  (texto a entero)
+str(25)        # "25" (número a texto)
+float("3.14")  # 3.14</code>
+<strong>¿Por qué importa?</strong> Lo que el usuario escribe siempre llega como <strong>texto</strong>. Si pide una
+edad y vas a comparar números, debes convertir: <code>edad = int(entrada)</code>.</p>
+</blockquote>
+<hr />
+<h2 id="2-texto-en-python-f-strings">2. Texto en Python: f-strings</h2>
+<blockquote class="def">
+<h3 id="que-significa-f-string-texto-con-variables">🟦 ¿Qué significa? — <em>f-string (texto con variables)</em></h3>
+<p>El equivalente a los <em>template strings</em> de JavaScript. Pones una <code>f</code> antes de las comillas y
+metes variables entre llaves <code>{ }</code>:
+<code>python
+nombre = "Edwar"
+edad = 25
+print(f"{nombre} tiene {edad} años.")   # Edwar tiene 25 años.</code>
+| Idea | JavaScript | Python |
+|---|---|---|
+| Texto con variables | <code>`Hola ${nombre}`</code> | <code>f"Hola {nombre}"</code> |
+Es la forma recomendada de armar textos en Python moderno.</p>
+</blockquote>
+<hr />
+<h2 id="3-operadores-casi-iguales-con-dos-diferencias">3. Operadores: casi iguales, con dos diferencias</h2>
+<p>Los operadores aritméticos (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>**</code>) y de comparación (<code>==</code>, <code>!=</code>, <code>&lt;</code>,
+<code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>) son <strong>iguales</strong> que en JavaScript, con dos diferencias clave:</p>
+<blockquote class="warn">
+<h3 id="cuidado-en-python-la-igualdad-es-no">⚠️ Cuidado — En Python la igualdad es <code>==</code> (¡no <code>===</code>!)</h3>
+<p>Recuerda que en JS usábamos <code>===</code> (tres iguales) para comparar bien. <strong>Python no tiene <code>===</code></strong>:
+usa <code>==</code> (dos iguales) para comparar, y funciona correctamente (no tiene la "comparación laxa"
+problemática de JS). Resumen:
+| | Comparar igualdad | Distinto |
+|---|---|---|
+| JavaScript | <code>===</code> | <code>!==</code> |
+| Python | <code>==</code> | <code>!=</code> |</p>
+<h3 id="que-significa-los-logicos-se-escriben-con-palabras">🟦 ¿Qué significa? — <em>Los lógicos se escriben con palabras</em></h3>
+<p>Donde JavaScript usaba símbolos, Python usa <strong>palabras en inglés</strong>:
+| Idea | JavaScript | Python |
+|---|---|---|
+| Y | <code>&amp;&amp;</code> | <code>and</code> |
+| O | <code>\|\|</code> | <code>or</code> |
+| NO | <code>!</code> | <code>not</code> |
+<code>python
+if edad &gt;= 18 and tiene_entrada:
+    print("Bienvenido")</code>
+Esto refuerza por qué Python "se lee como inglés".</p>
+</blockquote>
+<hr />
+<h2 id="4-decisiones-if-elif-else">4. Decisiones: <code>if</code>, <code>elif</code>, <code>else</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-ifelifelse">🟦 ¿Qué significa? — <em><code>if/elif/else</code></em></h3>
+<p>Igual que en JavaScript, pero con tres diferencias de forma: <strong>sin paréntesis</strong> en la
+condición (opcionales), <strong>dos puntos <code>:</code></strong> al final, <strong>sangría</strong> en vez de llaves, y
+<code>elif</code> en lugar de <code>else if</code>:
+```python
+nota = 85</p>
+<p>if nota &gt;= 90:
+    print("Excelente")
+elif nota &gt;= 70:
+    print("Aprobado")
+else:
+    print("Reprobado")
+```
+Compáralo con el JavaScript del Módulo 03: la lógica es idéntica; solo cambió la "puntuación".</p>
+</blockquote>
+<hr />
+<h2 id="5-bucles-en-python">5. Bucles en Python</h2>
+<h3 id="el-bucle-for-recorre-una-secuencia">El bucle <code>for</code> (recorre una secuencia)</h3>
+<blockquote class="def">
+<h3 id="que-significa-for-en-python">🟦 ¿Qué significa? — <em><code>for</code> en Python</em></h3>
+<p>El <code>for</code> de Python es distinto al de JavaScript: en vez de un contador con condición, <strong>recorre
+directamente los elementos</strong> de una lista (o secuencia):
+```python
+servicios = ["Diseño web", "IA", "Marketing"]
+for servicio in servicios:
+    print(servicio)</p>
+<h1 id="imprime-cada-servicio-en-una-linea">imprime cada servicio en una línea</h1>
+<p><code>``
+Se lee: "para cada servicio en la lista de servicios, imprímelo". Mucho más directo que el</code>for (let i = 0; ...)` de JavaScript.</p>
+<h3 id="que-significa-range-repetir-n-veces">🟦 ¿Qué significa? — <em><code>range()</code> (repetir N veces)</em></h3>
+<p>Si quieres repetir un número de veces (como el <code>for</code> clásico), usas <code>range()</code>:
+<code>python
+for i in range(5):       # 0, 1, 2, 3, 4
+    print(i)
+for i in range(1, 6):    # 1, 2, 3, 4, 5
+    print(i)</code>
+<code>range(5)</code> genera los números de 0 a 4 (empieza en 0, como siempre).</p>
+</blockquote>
+<h3 id="el-bucle-while">El bucle <code>while</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-while-en-python">🟦 ¿Qué significa? — <em><code>while</code> en Python</em></h3>
+<p>Idéntico en concepto a JavaScript (repite mientras la condición sea verdadera), con la forma
+de Python (dos puntos y sangría):
+<code>python
+saldo = 100
+while saldo &gt; 0:
+    print(f"Saldo: {saldo}")
+    saldo -= 25</code>
+El mismo cuidado de siempre: que algo dentro acerque el fin, o tendrás un <strong>bucle infinito</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="6-un-ejemplo-con-todo-comparalo-con-el-de-js">6. Un ejemplo con todo (compáralo con el de JS)</h2>
+<pre><code class="language-python">def clasificar(nota):
+    if nota &gt;= 90:
+        return &quot;Excelente&quot;
+    if nota &gt;= 70:
+        return &quot;Aprobado&quot;
+    return &quot;Reprobado&quot;
+
+notas = [95, 82, 60, 75]
+
+for nota in notas:
+    resultado = clasificar(nota)
+    print(f&quot;Nota {nota}: {resultado}&quot;)
+</code></pre>
+<p>Es el <strong>mismo programa</strong> que cerró el capítulo de funciones en JavaScript, ahora en Python.
+Nota lo limpio que se ve: sin llaves, sin <code>;</code>, el <code>for</code> recorre la lista directamente.
+(Las funciones con <code>def</code> las vemos a fondo en el próximo capítulo.)</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Conozco los tipos <code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code>, <code>None</code>, <code>list</code>, <code>dict</code> y uso <code>type()</code>.</li>
+<li>[ ] Convierto tipos con <code>int()</code>, <code>str()</code>, <code>float()</code> y sé por qué (la entrada llega como texto).</li>
+<li>[ ] Uso <strong>f-strings</strong> (<code>f"...{var}..."</code>).</li>
+<li>[ ] Comparo con <code>==</code>/<code>!=</code> (¡no <code>===</code>!) y uso <code>and</code>/<code>or</code>/<code>not</code>.</li>
+<li>[ ] Escribo <code>if/elif/else</code> con <code>:</code> y sangría.</li>
+<li>[ ] Uso <code>for ... in ...</code> para recorrer listas y <code>range()</code> para repetir N veces.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Traduce.</strong> Pasa a Python este JavaScript:
+   <code>javascript
+   if (edad &gt;= 18 &amp;&amp; tieneEntrada) { console.log("Pasa"); } else { console.log("No pasa"); }</code></li>
+<li><strong>Casting.</strong> El usuario escribió <code>"30"</code> (texto). Escribe el código para convertirlo a número
+   y comprobar si es mayor que 18.</li>
+<li><strong>for con lista.</strong> Escribe un <code>for</code> que recorra <code>["rojo", "verde", "azul"]</code> e imprima cada uno.</li>
+<li><strong>range.</strong> ¿Qué números imprime <code>for i in range(2, 7)</code>?</li>
+<li>💻 <strong>FizzBuzz sencillo.</strong> Recorre del 1 al 20 con <code>range</code>; por cada número, si es divisible
+   entre 3 (<code>i % 3 == 0</code>) imprime "Fizz", si no, imprime el número. (Un clásico para practicar
+   bucles y condiciones.)</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="03-funciones-listas-diccionarios.html">Capítulo 03 — Funciones, listas y diccionarios</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
