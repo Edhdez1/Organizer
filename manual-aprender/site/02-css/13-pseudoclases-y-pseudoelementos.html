@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 13 — Pseudo-clases y pseudo-elementos — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-pseudo-clases-y-pseudo-elementos">Capítulo 13 — Pseudo-clases y pseudo-elementos</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora, cuando escribías CSS, le hablabas a elementos que existen tal cual en tu HTML: un <code>&lt;button&gt;</code>, un <code>&lt;p&gt;</code>, un <code>&lt;a&gt;</code>. Pero la web es viva: el ratón pasa por encima de las cosas, los formularios se enfocan, las casillas se marcan, hay un primer hijo y un último hijo en cada lista. Las <strong>pseudo-clases</strong> te dejan reaccionar a todo eso. Y los <strong>pseudo-elementos</strong> te dejan dibujar trozos nuevos que ni siquiera están en el HTML, como ese iconito que ves al lado de cada recuadro de este mismo manual. Bit el ajolote está moviendo sus branquias de emoción: este capítulo es donde el CSS deja de ser una foto fija y empieza a sentirse interactivo. 🦎</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-una-pseudo-clase-y-por-que-la-necesitas">1. ¿Qué es una pseudo-clase y por qué la necesitas?</h2>
+<p>Imagina que tienes un botón. En reposo es azul. Pero quieres que, <em>cuando el usuario pase el ratón por encima</em>, se ponga un poco más oscuro para avisar «sí, esto se puede pulsar». Ese «cuando pase el ratón por encima» no es un elemento distinto del HTML: es el <strong>mismo botón</strong> en un <strong>estado distinto</strong>. Las pseudo-clases existen justamente para apuntar a esos estados.</p>
+<blockquote class="def">
+<h3 id="que-significa-pseudo-clase">🟦 ¿Qué significa? — <em>Pseudo-clase</em></h3>
+<p>Una pseudo-clase es una palabra clave que añades a un selector con dos puntos (<code>:</code>) para apuntar a un elemento <strong>en un estado o posición especial</strong>, sin necesidad de añadir una clase en el HTML. «Pseudo» significa «falso» o «aparente»: parece una clase, pero no la escribes tú en el <code>class="..."</code>, la pone el navegador según lo que esté pasando.
+<strong>Para qué sirve:</strong> cambiar el aspecto de algo según lo que el usuario hace (pasar el ratón, hacer clic, enfocar) o según dónde está (el primero de la lista, el último, los pares).
+<strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital/styles.css</code>, los enlaces del menú y los botones de contacto usan <code>:hover</code> para reaccionar al ratón; en <code>RachaSimple</code> y <code>Faro</code>, Tailwind genera estas mismas pseudo-clases bajo el capó cuando escribes <code>hover:bg-blue-700</code>.</p>
+</blockquote>
+<p>La forma general es siempre la misma:</p>
+<pre><code class="language-css">selector:pseudo-clase {
+  /* estilos que aplican solo cuando se cumple ese estado */
+}
+</code></pre>
+<p>Fíjate en el detalle: <strong>un solo punto y coma de dos puntos</strong> (<code>:</code>). Más adelante verás los pseudo-elementos, que usan <strong>dos</strong> (<code>::</code>). Esa diferencia de uno contra dos es la pista visual para saber con cuál estás trabajando.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No confundas la pseudo-clase <code>:hover</code> con una clase normal <code>.hover</code>. La primera lleva dos puntos y la controla el navegador; la segunda lleva un punto y la controlas tú en el HTML. Son cosas completamente distintas aunque se parezcan al escribirlas.</p>
+</blockquote>
+<hr />
+<h2 id="2-estados-del-raton-y-del-teclado-hover-active-focus">2. Estados del ratón y del teclado: <code>:hover</code>, <code>:active</code>, <code>:focus</code></h2>
+<p>Estas tres son las pseudo-clases más usadas del mundo, porque hacen que tu página se sienta «viva» al tocarla.</p>
+<blockquote class="def">
+<h3 id="que-significa-hover">🟦 ¿Qué significa? — <em><code>:hover</code></em></h3>
+<p>Apunta a un elemento <strong>mientras el cursor del ratón está encima</strong> de él. En cuanto el ratón se va, deja de aplicar.
+<strong>Para qué sirve:</strong> dar retroalimentación visual de «esto es interactivo». Botones que se oscurecen, enlaces que se subrayan, tarjetas que se levantan un poquito.
+<strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital/styles.css</code> los botones del menú cambian de color al pasar el ratón.</p>
+<h3 id="que-significa-active">🟦 ¿Qué significa? — <em><code>:active</code></em></h3>
+<p>Apunta a un elemento <strong>en el instante exacto en que se está pulsando</strong> (el botón del ratón está hundido sobre él). Dura solo mientras mantienes el clic.
+<strong>Para qué sirve:</strong> dar la sensación de que el botón «se hunde» físicamente cuando lo aprietas.
+<strong>Dónde se usa en un repo real:</strong> en cualquier botón de <code>tunal-digital</code>, para que el clic se sienta físico.</p>
+<h3 id="que-significa-focus">🟦 ¿Qué significa? — <em><code>:focus</code></em></h3>
+<p>Apunta a un elemento <strong>que tiene el foco</strong>: es donde irían tus teclas si empiezas a escribir. Un <code>&lt;input&gt;</code> enfocado, un botón al que llegaste con la tecla Tab, etc.
+<strong>Para qué sirve:</strong> mostrar dónde está «parado» el teclado. Es fundamental para personas que navegan sin ratón.
+<strong>Dónde se usa en un repo real:</strong> en los formularios de contacto de <code>tunal-digital</code> y en los campos de login de <code>Faro</code> (aunque ahí Tailwind lo escribe como <code>focus:ring-2</code>).</p>
+</blockquote>
+<p>Veamos los tres juntos sobre un botón de <code>tunal-digital</code>:</p>
+<pre><code class="language-css">/* Estado normal, en reposo */
+.boton-contacto {
+  background-color: #1d4ed8;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.2s; /* suaviza el cambio */
+}
+
+/* El ratón está encima */
+.boton-contacto:hover {
+  background-color: #1e40af; /* un azul más oscuro */
+}
+
+/* Justo mientras lo pulsas */
+.boton-contacto:active {
+  background-color: #1e3a8a; /* aún más oscuro */
+}
+
+/* Llegaste con Tab o haciendo clic */
+.boton-contacto:focus {
+  outline: 3px solid #93c5fd; /* un halo claro alrededor */
+}
+</code></pre>
+<p>El <code>transition</code> de la primera regla es lo que hace que el cambio de color sea suave en vez de brusco. No es obligatorio, pero se siente mucho mejor.</p>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Nunca borres el indicador de foco con <code>outline: none;</code> sin poner algo en su lugar. Si lo haces, las personas que navegan con teclado se quedan «ciegas»: no ven dónde están paradas. Si el contorno por defecto no te gusta, reemplázalo por uno propio, no lo elimines a secas.</p>
+</blockquote>
+<hr />
+<h2 id="3-el-foco-mas-educado-focus-visible">3. El foco más educado: <code>:focus-visible</code></h2>
+<p>Hay un problema clásico: cuando haces clic con el ratón en un botón, a veces aparece ese halo de foco, y se ve raro («yo solo hice clic, no quiero el halo»). Pero cuando llegas con Tab, sí lo quieres. ¿Cómo distinguir un caso del otro? Para eso nació <code>:focus-visible</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-focus-visible">🟦 ¿Qué significa? — <em><code>:focus-visible</code></em></h3>
+<p>Es como <code>:focus</code>, pero el navegador solo lo aplica <strong>cuando tiene sentido mostrar el foco visualmente</strong>, normalmente al navegar con teclado, no al hacer clic con el ratón.
+<strong>Para qué sirve:</strong> mostrar el halo de accesibilidad a quien navega con teclado, sin molestar con halos a quien usa el ratón. Lo mejor de los dos mundos.
+<strong>Dónde se usa en un repo real:</strong> ideal para los botones y enlaces de <code>tunal-digital</code>, donde quieres accesibilidad sin que cada clic deje un contorno colgando.</p>
+</blockquote>
+<pre><code class="language-css">/* Quitamos el contorno feo en clics... */
+.boton-contacto:focus {
+  outline: none;
+}
+
+/* ...pero lo devolvemos cuando llegan con teclado */
+.boton-contacto:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Si tuvieras que elegir solo uno, hoy en día se recomienda estilizar <code>:focus-visible</code> antes que <code>:focus</code> para el contorno de teclado. Es el estándar moderno y lo soportan todos los navegadores actuales. Bit lo llama «el foco con buenos modales». 🦎</p>
+</blockquote>
+<hr />
+<h2 id="4-posicion-entre-hermanos-first-child-last-child-nth-child">4. Posición entre hermanos: <code>:first-child</code>, <code>:last-child</code>, <code>:nth-child</code></h2>
+<p>Estas pseudo-clases no miran estados, sino <strong>lugares</strong>: ¿este elemento es el primero de su grupo?, ¿el último?, ¿uno de los pares? Para entenderlas, piensa en una lista de hijos dentro de un mismo padre, como los <code>&lt;li&gt;</code> dentro de un <code>&lt;ul&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-first-child">🟦 ¿Qué significa? — <em><code>:first-child</code></em></h3>
+<p>Apunta a un elemento <strong>solo si es el primer hijo</strong> de su contenedor padre.
+<strong>Para qué sirve:</strong> quitar el margen superior del primer elemento, redondear la esquina de arriba de una lista, casos donde «el primero es especial».
+<strong>Dónde se usa en un repo real:</strong> en una lista de servicios en <code>tunal-digital</code>, para que el primer ítem no tenga línea separadora arriba.</p>
+<h3 id="que-significa-last-child">🟦 ¿Qué significa? — <em><code>:last-child</code></em></h3>
+<p>Igual que el anterior, pero apunta al elemento <strong>solo si es el último hijo</strong> de su padre.
+<strong>Para qué sirve:</strong> quitar el borde inferior del último ítem de una lista, o el margen sobrante al final.
+<strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital</code>, para que el último ítem del menú no deje un separador colgando.</p>
+<h3 id="que-significa-nth-childn">🟦 ¿Qué significa? — <em><code>:nth-child(n)</code></em></h3>
+<p>Apunta a hijos <strong>según un patrón numérico</strong>: el tercero, los pares, los impares, uno de cada tres... El patrón va entre paréntesis.
+<strong>Para qué sirve:</strong> filas alternadas de color en tablas («cebra»), cuadrículas con ritmo visual, resaltar cada cierto número.
+<strong>Dónde se usa en un repo real:</strong> en una tabla de precios o de proyectos en <code>tunal-digital</code>, para pintar las filas pares de un gris suave y que se lean mejor.</p>
+</blockquote>
+<p>Mira cómo se usan sobre una lista de servicios:</p>
+<pre><code class="language-css">/* El primero no lleva línea arriba */
+.servicios li:first-child {
+  border-top: none;
+}
+
+/* El último no lleva línea abajo */
+.servicios li:last-child {
+  border-bottom: none;
+}
+
+/* Filas pares con fondo suave (efecto cebra) */
+.tabla-proyectos tr:nth-child(even) {
+  background-color: #f3f4f6;
+}
+
+/* Filas impares en blanco (es el valor por defecto, pero queda explícito) */
+.tabla-proyectos tr:nth-child(odd) {
+  background-color: white;
+}
+</code></pre>
+<p>Las palabras <code>even</code> (pares) y <code>odd</code> (impares) son atajos cómodos. Pero <code>:nth-child</code> acepta fórmulas más potentes con la letra <code>n</code>, que representa «0, 1, 2, 3...» en orden:</p>
+<pre><code class="language-css">/* Cada tercer elemento: el 3, el 6, el 9... */
+.galeria div:nth-child(3n) {
+  margin-right: 0;
+}
+
+/* Los tres primeros: el 1, 2 y 3 */
+.galeria div:nth-child(-n + 3) {
+  border: 2px solid gold;
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>:nth-child</code> cuenta <strong>todos</strong> los hermanos, no solo los del mismo tipo de etiqueta. Si dentro de un <code>&lt;div&gt;</code> mezclas un <code>&lt;h2&gt;</code> y varios <code>&lt;p&gt;</code>, el primer <code>&lt;p&gt;</code> podría ser en realidad el «segundo hijo» porque el <code>&lt;h2&gt;</code> ocupa la posición uno. Si eso te confunde, existe la prima <code>:nth-of-type()</code>, que cuenta solo elementos del mismo tipo.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <code>RachaSimple</code> o <code>Faro</code>, que usan Tailwind, esto mismo se logra con utilidades como <code>odd:bg-gray-100</code> y <code>even:bg-white</code>, o con <code>first:mt-0</code> y <code>last:mb-0</code>. Por dentro Tailwind está generando exactamente estas pseudo-clases que acabas de ver. Saber qué hacen «por debajo» te ayuda a entender qué escribe Tailwind por ti.</p>
+</blockquote>
+<hr />
+<h2 id="5-negar-y-filtrar-not">5. Negar y filtrar: <code>:not()</code></h2>
+<p>A veces quieres decir «todos estos, <strong>menos</strong> aquel». Esa palabra «menos» es <code>:not()</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-notselector">🟦 ¿Qué significa? — <em><code>:not(selector)</code></em></h3>
+<p>Apunta a todos los elementos que <strong>NO</strong> coinciden con el selector que pones dentro del paréntesis. Es una negación.
+<strong>Para qué sirve:</strong> aplicar un estilo a un grupo excepto a algunos casos, sin tener que crear una clase aparte para los excluidos.
+<strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital</code>, para poner un margen a todos los botones <strong>menos</strong> al último, o estilizar todos los enlaces <strong>menos</strong> los que están deshabilitados.</p>
+</blockquote>
+<pre><code class="language-css">/* Todos los botones llevan margen a la derecha... menos el último */
+.barra-botones button:not(:last-child) {
+  margin-right: 12px;
+}
+
+/* Todos los enlaces se subrayan al pasar el ratón, menos los desactivados */
+nav a:not(.desactivado):hover {
+  text-decoration: underline;
+}
+</code></pre>
+<p>Fíjate en algo bonito: dentro de <code>:not()</code> puedes meter <strong>otra pseudo-clase</strong> (<code>:not(:last-child)</code>) o una clase normal (<code>:not(.desactivado)</code>). Se combinan sin problema.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p><code>:not(:last-child)</code> es uno de los trucos más útiles que aprenderás. Te ahorra el clásico problema del «espacio de más al final»: pones la separación a todos menos al último, y queda perfecto sin retoques manuales.</p>
+</blockquote>
+<hr />
+<h2 id="6-estados-de-formulario-checked-y-amigos">6. Estados de formulario: <code>:checked</code> (y amigos)</h2>
+<p>Los formularios tienen estados propios que el HTML conoce: ¿está marcada esta casilla?, ¿está deshabilitado este campo? Las pseudo-clases te dejan reaccionar a ellos.</p>
+<blockquote class="def">
+<h3 id="que-significa-checked">🟦 ¿Qué significa? — <em><code>:checked</code></em></h3>
+<p>Apunta a una casilla (<code>checkbox</code>), un botón de radio o una opción que <strong>está marcada/seleccionada</strong> en ese momento.
+<strong>Para qué sirve:</strong> cambiar el aspecto de lo que rodea a una casilla marcada, hacer interruptores tipo «switch» solo con CSS, resaltar la opción elegida.
+<strong>Dónde se usa en un repo real:</strong> en un formulario de <code>tunal-digital</code> con casillas «Quiero recibir novedades», para resaltar visualmente la opción cuando el usuario la activa.</p>
+</blockquote>
+<pre><code class="language-css">/* La etiqueta que sigue a un radio marcado se pone en negrita y azul */
+input[type=&quot;radio&quot;]:checked + label {
+  font-weight: bold;
+  color: #1d4ed8;
+}
+</code></pre>
+<p>El <code>+ label</code> de ahí significa «el <code>&lt;label&gt;</code> que viene justo después»: es un selector hermano que verás más a fondo en otro capítulo. Por ahora quédate con la idea: cuando el radio se marca, su etiqueta vecina cambia.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <code>Faro</code> y <code>RachaSimple</code>, los formularios suelen manejarse con estado de React (<code>useState</code>) en lugar de depender solo de CSS, porque necesitan guardar datos en Supabase. Aun así, <code>:checked</code> sigue siendo útil para el aspecto puramente visual de la casilla, mientras React se encarga de la lógica. CSS para verse bien, React para recordar qué pasó.</p>
+</blockquote>
+<p>Hay más pseudo-clases de formulario que conviene que reconozcas aunque no las domines hoy: <code>:disabled</code> (campo desactivado), <code>:enabled</code> (activado), <code>:required</code> (obligatorio), <code>:valid</code> y <code>:invalid</code> (si lo escrito cumple las reglas). Todas siguen la misma lógica de «reacciona a un estado del campo».</p>
+<hr />
+<h2 id="7-pseudo-elementos-dibujar-lo-que-no-esta-en-el-html">7. Pseudo-elementos: dibujar lo que no está en el HTML</h2>
+<p>Cambiamos de tema, y este es el favorito de Bit. Hasta ahora reaccionábamos a elementos que ya existían. Los <strong>pseudo-elementos</strong> hacen algo distinto: <strong>crean</strong> o <strong>apuntan a partes</strong> que no escribiste como etiquetas.</p>
+<blockquote class="def">
+<h3 id="que-significa-pseudo-elemento">🟦 ¿Qué significa? — <em>Pseudo-elemento</em></h3>
+<p>Es una palabra clave que se añade a un selector con <strong>dos</strong> dos puntos (<code>::</code>) para estilizar <strong>una parte específica</strong> de un elemento, o para <strong>inventar contenido nuevo</strong> que no existe en el HTML. El navegador lo «materializa» por ti.
+<strong>Para qué sirve:</strong> poner iconos decorativos, comillas, líneas, o estilizar partes internas como el texto de ayuda de un input o el texto que el usuario selecciona con el ratón.
+<strong>Dónde se usa en un repo real:</strong> en el propio <code>site/estilos.css</code> de este manual, los iconos que ves junto a cada recuadro (💡, ⚠️, 🔎) se ponen con <code>::before</code>. ¡Estás leyendo pseudo-elementos ahora mismo!</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Regla mnemotécnica de Bit: <strong>pseudo-CLASE</strong> con <strong>un</strong> dos-puntos (<code>:hover</code>), porque reacciona a algo que ya está. <strong>Pseudo-ELEMENTO</strong> con <strong>dos</strong> dos-puntos (<code>::before</code>), porque «duplicas» los dos puntos para «crear» algo nuevo. Un punto = estado, doble punto = pieza nueva. 🦎</p>
+</blockquote>
+<hr />
+<h2 id="8-before-y-after-los-gemelos-decoradores">8. <code>::before</code> y <code>::after</code>: los gemelos decoradores</h2>
+<p>Estos dos son los pseudo-elementos estrella. Crean una cajita invisible <strong>antes</strong> o <strong>después</strong> del contenido de un elemento, y tú la rellenas.</p>
+<blockquote class="def">
+<h3 id="que-significa-before">🟦 ¿Qué significa? — <em><code>::before</code></em></h3>
+<p>Inserta un trozo de contenido <strong>justo antes</strong> del contenido real de un elemento, sin que tengas que escribirlo en el HTML.
+<strong>Para qué sirve:</strong> iconos a la izquierda de un texto, viñetas personalizadas, comillas de apertura, etiquetas decorativas.
+<strong>Dónde se usa en un repo real:</strong> los recuadros de este manual usan <code>::before</code> para colocar el emoji de icono al inicio de cada caja.</p>
+<h3 id="que-significa-after">🟦 ¿Qué significa? — <em><code>::after</code></em></h3>
+<p>Igual que <code>::before</code>, pero inserta el contenido <strong>justo después</strong> del contenido real del elemento.
+<strong>Para qué sirve:</strong> flechitas al final de un enlace, líneas decorativas de cierre, el símbolo de «enlace externo».
+<strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital</code>, para añadir una flecha «→» al final de los enlaces de «Ver más» sin tocar el HTML.</p>
+</blockquote>
+<p>Y aquí llega el detalle más importante de todos:</p>
+<blockquote class="def">
+<h3 id="que-significa-content">🟦 ¿Qué significa? — <em><code>content</code></em></h3>
+<p>Es la propiedad CSS que dice <strong>qué texto o símbolo</strong> va a mostrar un <code>::before</code> o un <code>::after</code>. <strong>Sin <code>content</code>, el pseudo-elemento no aparece</strong>, ni siquiera vacío.
+<strong>Para qué sirve:</strong> definir el contenido de los pseudo-elementos. Puede ser un texto, un emoji, comillas, o <code>""</code> (vacío) si solo lo quieres como adorno geométrico.
+<strong>Dónde se usa en un repo real:</strong> en <code>site/estilos.css</code>, cada recuadro define algo como <code>content: "💡"</code> para su icono.</p>
+</blockquote>
+<p>Veamos cómo el manual pone el icono de los recuadros:</p>
+<pre><code class="language-css">/* La cajita de &quot;Tip&quot; */
+.recuadro-tip {
+  position: relative;
+  padding-left: 48px; /* dejamos hueco a la izquierda para el icono */
+  background-color: #eff6ff;
+  border-left: 4px solid #3b82f6;
+}
+
+/* El icono, creado con ::before */
+.recuadro-tip::before {
+  content: &quot;💡&quot;;        /* SIN esto, no aparece nada */
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  font-size: 20px;
+}
+</code></pre>
+<p>Lo mágico: el emoji 💡 <strong>no está en el HTML</strong>. El HTML solo tiene <code>&lt;div class="recuadro-tip"&gt;...texto...&lt;/div&gt;</code>. El icono lo «inventa» el CSS. Si mañana quieres cambiar todos los iconos de tip a 📌, cambias una sola línea y se actualizan todos. Eso es poder.</p>
+<p>Otro ejemplo, la flecha al final de un enlace:</p>
+<pre><code class="language-css">.ver-mas::after {
+  content: &quot; →&quot;;     /* un espacio y una flecha */
+  font-weight: bold;
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Si olvidas la propiedad <code>content</code>, tu <code>::before</code> o <code>::after</code> <strong>no se mostrará en absoluto</strong>, aunque le pongas colores, tamaños y bordes. Es el error número uno de los principiantes con pseudo-elementos. Cuando algo «no aparece», lo primero que revisa Bit es si falta <code>content</code>. Para adornos puramente geométricos (una línea, un cuadrito), usa <code>content: "";</code> con las comillas vacías: vacío, pero presente.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>El contenido que metes con <code>content</code> es <strong>decorativo</strong> y los lectores de pantalla suelen ignorarlo. Por eso es perfecto para iconos bonitos, pero <strong>nunca</strong> pongas ahí información importante (como un precio o una instrucción). El texto que importa va en el HTML de verdad.</p>
+</blockquote>
+<hr />
+<h2 id="9-estilizar-partes-internas-placeholder-y-selection">9. Estilizar partes internas: <code>::placeholder</code> y <code>::selection</code></h2>
+<p>Estos dos no crean contenido nuevo: apuntan a partes que ya existen «dentro» de un elemento, pero que normalmente no podrías tocar.</p>
+<blockquote class="def">
+<h3 id="que-significa-placeholder">🟦 ¿Qué significa? — <em><code>::placeholder</code></em></h3>
+<p>Apunta al <strong>texto de ayuda gris</strong> que aparece dentro de un campo de formulario cuando está vacío (el <code>placeholder="Tu correo"</code>).
+<strong>Para qué sirve:</strong> cambiar el color, la cursiva o el tamaño de ese texto guía, para que combine con tu diseño.
+<strong>Dónde se usa en un repo real:</strong> en los formularios de contacto de <code>tunal-digital</code> y en los campos de login de <code>Faro</code>, para que el texto guía se vea acorde a la marca.</p>
+</blockquote>
+<pre><code class="language-css">.campo-formulario::placeholder {
+  color: #9ca3af;     /* gris suave */
+  font-style: italic; /* en cursiva */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-selection">🟦 ¿Qué significa? — <em><code>::selection</code></em></h3>
+<p>Apunta al <strong>texto que el usuario ha resaltado</strong> con el ratón (cuando arrastras para seleccionar y se pone de color).
+<strong>Para qué sirve:</strong> personalizar el color del resaltado para que use los colores de tu marca en vez del azul por defecto del navegador.
+<strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital</code> o en el <code>site/estilos.css</code> del manual, para que al seleccionar texto el resaltado sea del color de la marca.</p>
+</blockquote>
+<pre><code class="language-css">::selection {
+  background-color: #1d4ed8; /* fondo de la marca */
+  color: white;              /* texto en blanco al resaltar */
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Con Tailwind (en <code>RachaSimple</code> y <code>Faro</code>) estos pseudo-elementos también están disponibles: escribes <code>placeholder:text-gray-400</code> o <code>selection:bg-blue-700</code>. De nuevo, Tailwind es solo un atajo para escribir el mismo CSS que viste arriba. El concepto es idéntico; cambia la forma de escribirlo.</p>
+</blockquote>
+<hr />
+<h2 id="10-encadenar-y-combinar-el-poder-de-juntarlo-todo">10. Encadenar y combinar: el poder de juntarlo todo</h2>
+<p>Lo más bonito es que estas piezas se combinan. Puedes pegar varias pseudo-clases, o mezclar pseudo-clase con pseudo-elemento:</p>
+<pre><code class="language-css">/* Un enlace que NO esté deshabilitado, al pasar el ratón,
+   muestra una flecha animada al final */
+nav a:not(.desactivado):hover::after {
+  content: &quot; →&quot;;
+  margin-left: 4px;
+}
+
+/* El primer botón de la barra, al enfocarse con teclado */
+.barra button:first-child:focus-visible {
+  outline: 3px solid #93c5fd;
+}
+</code></pre>
+<p>Leído en voz alta, el primero dice: «para los enlaces de <code>nav</code> que no tengan la clase desactivado, cuando el ratón esté encima, dibuja una flecha después». Cada pieza se va sumando como ladritos. No te asustes por la longitud: se lee de izquierda a derecha como una frase.</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Si una regla se vuelve tan larga que no la entiendes ni tú, probablemente sea señal de que conviene añadir una clase normal en el HTML para simplificar. Las pseudo-clases son potentes, pero la claridad siempre gana. Bit prefiere tres reglas legibles que una imposible. 🦎</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé explicar qué es una pseudo-clase y por qué se escribe con <strong>un</strong> dos-puntos.</li>
+<li>[ ] Distingo <code>:hover</code>, <code>:active</code> y <code>:focus</code>, y sé cuándo aplica cada uno.</li>
+<li>[ ] Entiendo por qué <code>:focus-visible</code> es más amable que <code>:focus</code> para el contorno de teclado.</li>
+<li>[ ] Nunca borro el indicador de foco sin poner uno propio en su lugar.</li>
+<li>[ ] Sé usar <code>:first-child</code>, <code>:last-child</code> y <code>:nth-child(even/odd)</code> para posiciones entre hermanos.</li>
+<li>[ ] Entiendo que <code>:not()</code> sirve para excluir y que puede llevar otra pseudo-clase dentro.</li>
+<li>[ ] Sé que <code>:checked</code> apunta a casillas y radios marcados.</li>
+<li>[ ] Distingo pseudo-elemento (dos dos-puntos <code>::</code>) de pseudo-clase (uno <code>:</code>).</li>
+<li>[ ] Sé que <code>::before</code> y <code>::after</code> <strong>necesitan <code>content</code></strong> o no aparecen.</li>
+<li>[ ] Entiendo que <code>::placeholder</code> y <code>::selection</code> estilizan partes internas existentes.</li>
+<li>[ ] Reconozco que en Tailwind (<code>hover:</code>, <code>first:</code>, <code>placeholder:</code>) esto es el mismo CSS por debajo.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>De memoria (sin compu).</strong> Escribe en un papel la diferencia entre <code>:hover</code>, <code>:active</code> y <code>:focus</code>, con un ejemplo de cuándo se activa cada uno. Luego explica por qué <code>::before</code> lleva dos dos-puntos y <code>:hover</code> solo uno.</p>
+</li>
+<li>
+<p>💻 <strong>Botón vivo en tunal-digital.</strong> En <code>styles.css</code>, toma un botón existente y dale los tres estados: un color base, uno más oscuro en <code>:hover</code>, otro aún más oscuro en <code>:active</code>, y un <code>outline</code> claro en <code>:focus-visible</code>. Añade <code>transition: background-color 0.2s;</code> y observa la diferencia con y sin él.</p>
+</li>
+<li>
+<p>💻 <strong>Efecto cebra.</strong> Crea (o usa) una tabla de proyectos en <code>tunal-digital</code> y pinta las filas pares de un gris suave con <code>tr:nth-child(even)</code>. Comprueba que las impares quedan en blanco. Bonus: resalta solo la primera fila con <code>:first-child</code>.</p>
+</li>
+<li>
+<p>💻 <strong>El truco del último.</strong> En una barra con varios botones, dale <code>margin-right</code> a todos <strong>menos al último</strong> usando <code>button:not(:last-child)</code>. Confirma que no queda espacio sobrante al final.</p>
+</li>
+<li>
+<p>💻 <strong>Icono con <code>::before</code>.</strong> Recrea un recuadro tipo «Tip» como los de este manual: un <code>&lt;div&gt;</code> con clase, fondo suave, borde izquierdo de color, y un icono emoji puesto con <code>::before</code> y <code>content</code>. Luego prueba a <strong>borrar la línea <code>content</code></strong> y observa cómo el icono desaparece por completo: así interiorizas por qué es obligatoria.</p>
+</li>
+<li>
+<p>💻 <strong>Marca tu selección.</strong> Añade a <code>styles.css</code> una regla <code>::selection</code> que cambie el color de fondo al resaltar texto, usando un color de tu marca. Selecciona texto con el ratón en tu página y comprueba que el resaltado ya no es el azul por defecto del navegador.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. Hoy tu CSS dejó de ser una estatua y aprendió a reaccionar: sabe cuándo lo tocan, sabe quién va primero y quién va último, y hasta sabe dibujar iconos que no existían en el HTML. La próxima vez que veas el 💡 al lado de un recuadro, ya sabes el secreto: es un <code>::before</code> con su <code>content</code> haciendo su trabajo en silencio. Bit chapotea de orgullo. Nos vemos en el siguiente capítulo. 🦎</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

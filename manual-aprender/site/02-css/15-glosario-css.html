@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 15 — Glosario de CSS y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-css-y-mapa">Capítulo 15 — Glosario de CSS y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote class="exito">
+<p>¡Llegaste al final del módulo de CSS! 🎉 Bit, el ajolote, está flotando feliz en su pecera porque ya recorrieron juntos un montón de conceptos: selectores, cajas, colores, flexbox, grid, variables y más. Este capítulo es distinto a los demás: no aprenderás cosas nuevas, sino que <strong>ordenarás</strong> lo que ya sabes. Es como cuando terminas de armar un rompecabezas y por fin lo ves completo. Aquí tienes un <strong>glosario alfabético</strong> con cada término explicado en pocas líneas, un <strong>mapa mental</strong> para ver cómo se conecta todo, y un <strong>repaso final</strong> para confirmar que dominas el módulo. Tómalo con calma, como un café tranquilo: lee, asiente con la cabeza y date cuenta de cuánto avanzaste.</p>
+</blockquote>
+<hr />
+<h2 id="1-como-usar-este-glosario">1. Cómo usar este glosario</h2>
+<p>Imagina que CSS es una ciudad y cada término es una calle. Durante el módulo caminaste por ellas una por una. Ahora vamos a colgar el mapa en la pared para que veas la ciudad entera desde arriba.</p>
+<p>Cada entrada del glosario sigue esta forma:</p>
+<ul>
+<li><strong>Definición simple</strong>: qué es, en palabras de todos los días.</li>
+<li><strong>Para qué sirve</strong>: por qué te importa.</li>
+<li><strong>Dónde se usa en un repo real</strong>: en cuál de tus proyectos (tunal-digital, RachaSimple, Faro/Organizer) aparece de verdad.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No intentes memorizar el glosario de golpe. Léelo hoy, vuelve mañana y fíjate cuántos términos ya te suenan familiares. La memoria de los conceptos de programación se construye por repetición espaciada, no por atracones.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Casi todos los ejemplos de este capítulo apuntan a <code>styles.css</code> de <strong>tunal-digital</strong>, que fue el archivo principal del módulo. Tenlo abierto en otra pestaña mientras lees: ver el término real en su contexto vale por mil definiciones.</p>
+</blockquote>
+<hr />
+<h2 id="2-glosario-alfabetico">2. Glosario alfabético</h2>
+<p>Vamos por orden alfabético, para que puedas volver a buscar cualquier palabra rápido, como en un diccionario.</p>
+<h3 id="a-b">A — B</h3>
+<blockquote class="def">
+<h3 id="que-significa-atributo-selector-de-atributo">🟦 ¿Qué significa? — <em>Atributo (selector de atributo)</em></h3>
+<p>Un selector que apunta a elementos según un atributo HTML, como <code>[type="email"]</code> o <code>[href]</code>. Sirve para estilar elementos sin necesidad de ponerles una clase. En <code>styles.css</code> de <strong>tunal-digital</strong> podrías usar <code>input[type="text"]</code> para dar el mismo borde a todos los campos de texto del formulario de contacto.</p>
+<h3 id="que-significa-border-borde">🟦 ¿Qué significa? — <em>Border (borde)</em></h3>
+<p>Es la línea que rodea una caja, entre el padding y el margin. Sirve para separar visualmente elementos y darles forma. En <strong>tunal-digital</strong>, las tarjetas de servicios suelen llevar <code>border: 1px solid #ddd;</code> para que se note dónde empieza y termina cada una.</p>
+<h3 id="que-significa-box-model-modelo-de-cajas">🟦 ¿Qué significa? — <em>Box model (modelo de cajas)</em></h3>
+<p>El modelo que dice que cada elemento es una caja con cuatro capas: contenido, padding, border y margin. Sirve para entender el espacio que ocupa cualquier cosa en la página. Es la base de <strong>todo</strong> el layout de <code>styles.css</code>: sin entenderlo, los espacios se vuelven un misterio.</p>
+<h3 id="que-significa-box-sizing">🟦 ¿Qué significa? — <em>box-sizing</em></h3>
+<p>Una propiedad que decide si el ancho que escribes incluye el padding y el border (<code>border-box</code>) o no (<code>content-box</code>). Sirve para que las cajas no se "inflen" inesperadamente. En <code>styles.css</code> casi siempre se pone <code>box-sizing: border-box;</code> al inicio para que medir sea predecible.</p>
+</blockquote>
+<pre><code class="language-css">/* Patrón clásico al inicio de styles.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+</code></pre>
+<h3 id="c">C</h3>
+<blockquote class="def">
+<h3 id="que-significa-cascada-cascade">🟦 ¿Qué significa? — <em>Cascada (cascade)</em></h3>
+<p>Es el conjunto de reglas que decide qué estilo gana cuando varios apuntan al mismo elemento. Sirve para resolver conflictos de forma ordenada (importa el origen, la especificidad y el orden). La "C" de CSS viene justamente de "Cascading". En <code>styles.css</code> la cascada decide, por ejemplo, si gana el color del <code>body</code> o el de una clase más específica.</p>
+<h3 id="que-significa-clase-class">🟦 ¿Qué significa? — <em>Clase (class)</em></h3>
+<p>Un selector que empieza con punto, como <code>.boton</code>, y apunta a todos los elementos con ese <code>class</code> en el HTML. Sirve para reutilizar el mismo estilo en muchos sitios. En <strong>tunal-digital</strong>, <code>.tarjeta-servicio</code> se aplica a cada bloque de servicio repetido.</p>
+<h3 id="que-significa-color">🟦 ¿Qué significa? — <em>Color</em></h3>
+<p>El valor que define tonos de texto, fondos y bordes. Se escribe con nombres (<code>red</code>), hex (<code>#3b82f6</code>), <code>rgb()</code> o <code>hsl()</code>. Sirve para dar identidad visual. En <code>styles.css</code> los colores de marca de <strong>tunal-digital</strong> suelen guardarse en variables para no repetir el hex por todos lados.</p>
+<h3 id="que-significa-comentario">🟦 ¿Qué significa? — <em>Comentario</em></h3>
+<p>Texto que el navegador ignora, escrito entre <code>/* */</code>. Sirve para dejar notas a tu yo del futuro o a tu equipo. En cualquier <code>styles.css</code> ordenado verás comentarios como <code>/* Sección hero */</code> separando bloques.</p>
+</blockquote>
+<h3 id="d-e">D — E</h3>
+<blockquote class="def">
+<h3 id="que-significa-declaracion">🟦 ¿Qué significa? — <em>Declaración</em></h3>
+<p>La pareja de una propiedad y su valor, como <code>color: blue;</code>. Sirve como la unidad mínima de estilo: una orden concreta. Cada línea dentro de las llaves <code>{ }</code> de <code>styles.css</code> es una declaración.</p>
+<h3 id="que-significa-display">🟦 ¿Qué significa? — <em>display</em></h3>
+<p>La propiedad que decide cómo se comporta una caja: en bloque (<code>block</code>), en línea (<code>inline</code>), como contenedor flexible (<code>flex</code>) o de rejilla (<code>grid</code>). Sirve para controlar el flujo del layout. En <code>styles.css</code>, <code>display: flex;</code> en el <code>&lt;nav&gt;</code> de <strong>tunal-digital</strong> pone los enlaces en fila.</p>
+<h3 id="que-significa-especificidad-specificity">🟦 ¿Qué significa? — <em>Especificidad (specificity)</em></h3>
+<p>Un sistema de "puntos" que mide qué tan específico es un selector; el más específico gana en la cascada. Sirve para predecir qué estilo se aplica. Un id (<code>#hero</code>) pesa más que una clase (<code>.hero</code>), y esa pesa más que una etiqueta (<code>section</code>). Saber esto evita horas de pelea con <code>styles.css</code>.</p>
+</blockquote>
+<pre><code class="language-css">/* Más específico (id) gana sobre menos específico (etiqueta) */
+section { color: gray; }   /* especificidad baja */
+#hero   { color: black; }  /* especificidad alta: este gana */
+</code></pre>
+<h3 id="f">F</h3>
+<blockquote class="def">
+<h3 id="que-significa-flexbox">🟦 ¿Qué significa? — <em>Flexbox</em></h3>
+<p>Un sistema de layout en <strong>una dimensión</strong> (fila o columna) que reparte el espacio entre elementos. Sirve para alinear y distribuir cosas con facilidad, como una barra de navegación o una fila de botones. En <strong>tunal-digital</strong>, el menú superior usa flexbox; en <strong>RachaSimple</strong>, Tailwind lo expresa con clases como <code>flex items-center</code>.</p>
+<h3 id="que-significa-flex-direction">🟦 ¿Qué significa? — <em>flex-direction</em></h3>
+<p>La propiedad de flexbox que decide si los hijos van en fila (<code>row</code>) o en columna (<code>column</code>). Sirve para cambiar la orientación sin tocar el HTML. En <code>styles.css</code>, cambiar a <code>flex-direction: column;</code> apila el menú en pantallas pequeñas.</p>
+<h3 id="que-significa-fuente-font-family">🟦 ¿Qué significa? — <em>Fuente (font-family)</em></h3>
+<p>La propiedad que elige el tipo de letra. Sirve para darle voz y carácter al texto. En <strong>tunal-digital</strong> se suele definir <code>font-family</code> en el <code>body</code> para que toda la página herede la misma tipografía.</p>
+</blockquote>
+<h3 id="g">G</h3>
+<blockquote class="def">
+<h3 id="que-significa-grid-css-grid">🟦 ¿Qué significa? — <em>Grid (CSS Grid)</em></h3>
+<p>Un sistema de layout en <strong>dos dimensiones</strong> (filas y columnas a la vez). Sirve para construir cuadrículas completas, como una galería o un dashboard. En <strong>tunal-digital</strong>, la sección de servicios puede ser una rejilla con <code>display: grid; grid-template-columns: repeat(3, 1fr);</code>.</p>
+<h3 id="que-significa-gap">🟦 ¿Qué significa? — <em>gap</em></h3>
+<p>La propiedad que pone espacio <strong>entre</strong> los elementos de un flexbox o grid, sin afectar los bordes externos. Sirve para separar tarjetas o columnas limpiamente. Reemplaza el truco viejo de poner margin a cada hijo. En <code>styles.css</code>, <code>gap: 1rem;</code> separa las tarjetas de servicios.</p>
+</blockquote>
+<pre><code class="language-css">.servicios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+  gap: 1.5rem;                            /* espacio entre tarjetas */
+}
+</code></pre>
+<h3 id="h">H</h3>
+<blockquote class="def">
+<h3 id="que-significa-herencia-inheritance">🟦 ¿Qué significa? — <em>Herencia (inheritance)</em></h3>
+<p>El mecanismo por el que algunos estilos pasan de un elemento padre a sus hijos automáticamente (como <code>color</code> o <code>font-family</code>). Sirve para no repetir reglas. En <code>styles.css</code>, si pones <code>color</code> en el <code>body</code>, casi todo el texto de <strong>tunal-digital</strong> lo hereda sin que escribas nada más.</p>
+<h3 id="que-significa-hex-color-hexadecimal">🟦 ¿Qué significa? — <em>Hex (color hexadecimal)</em></h3>
+<p>Una forma de escribir colores con <code>#</code> y seis dígitos, como <code>#3b82f6</code>. Sirve para precisar tonos exactos de marca. En las variables de color de <strong>tunal-digital</strong> los valores de marca casi siempre están en hex.</p>
+<h3 id="que-significa-hover-pseudo-clase-hover">🟦 ¿Qué significa? — <em>hover (pseudo-clase :hover)</em></h3>
+<p>Un estado que se activa cuando el cursor pasa por encima de un elemento. Sirve para dar feedback al usuario, como cambiar el color de un botón al apuntarlo. En <code>styles.css</code>, <code>.boton:hover { background: #2563eb; }</code> hace que el botón reaccione al ratón.</p>
+</blockquote>
+<h3 id="i-l">I — L</h3>
+<blockquote class="def">
+<h3 id="que-significa-id-selector-de-id">🟦 ¿Qué significa? — <em>id (selector de id)</em></h3>
+<p>Un selector que empieza con <code>#</code>, como <code>#hero</code>, y apunta a <strong>un único</strong> elemento. Sirve para estilar algo que aparece una sola vez. Pesa mucho en especificidad, así que se usa con cuidado en <code>styles.css</code>.</p>
+<h3 id="que-significa-inline-display-inline">🟦 ¿Qué significa? — <em>inline (display inline)</em></h3>
+<p>Un comportamiento de caja que fluye dentro del texto, sin saltos de línea, como un <code>&lt;span&gt;</code> o un <code>&lt;a&gt;</code>. Sirve para resaltar palabras sin romper el párrafo. En <code>styles.css</code>, los enlaces dentro de un texto son inline por defecto.</p>
+<h3 id="que-significa-important">🟦 ¿Qué significa? — <em>!important</em></h3>
+<p>Una marca que fuerza a que una declaración gane casi siempre, saltándose la especificidad normal. Sirve para emergencias, pero conviene evitarla porque ensucia la cascada. Si ves <code>!important</code> por todos lados en un <code>styles.css</code>, suele ser señal de problemas de orden.</p>
+</blockquote>
+<h3 id="m">M</h3>
+<blockquote class="def">
+<h3 id="que-significa-margin-margen">🟦 ¿Qué significa? — <em>Margin (margen)</em></h3>
+<p>El espacio <strong>por fuera</strong> del borde de una caja, que la separa de sus vecinas. Sirve para dar aire entre elementos. En <code>styles.css</code>, <code>margin: 0 auto;</code> es el truco clásico para centrar un contenedor horizontalmente en <strong>tunal-digital</strong>.</p>
+<h3 id="que-significa-media-query">🟦 ¿Qué significa? — <em>Media query</em></h3>
+<p>Una regla <code>@media</code> que aplica estilos solo si se cumple una condición, como un ancho de pantalla. Sirve para hacer diseño <strong>responsive</strong> (que se adapte a móvil y escritorio). En <code>styles.css</code>, <code>@media (max-width: 600px)</code> reacomoda el menú de <strong>tunal-digital</strong> en celulares.</p>
+</blockquote>
+<pre><code class="language-css">/* Responsive: en pantallas pequeñas, una sola columna */
+@media (max-width: 600px) {
+  .servicios {
+    grid-template-columns: 1fr;
+  }
+}
+</code></pre>
+<h3 id="o-p">O — P</h3>
+<blockquote class="def">
+<h3 id="que-significa-padding-relleno">🟦 ¿Qué significa? — <em>Padding (relleno)</em></h3>
+<p>El espacio <strong>por dentro</strong> de la caja, entre el contenido y el borde. Sirve para que el texto no quede pegado al borde. En <code>styles.css</code>, las tarjetas de <strong>tunal-digital</strong> llevan <code>padding: 1rem;</code> para respirar por dentro.</p>
+<h3 id="que-significa-position">🟦 ¿Qué significa? — <em>position</em></h3>
+<p>La propiedad que controla cómo se ubica una caja: <code>static</code> (normal), <code>relative</code>, <code>absolute</code>, <code>fixed</code> o <code>sticky</code>. Sirve para sacar elementos del flujo o fijarlos en pantalla. En <code>styles.css</code>, un encabezado que se queda arriba al hacer scroll usa <code>position: sticky; top: 0;</code>.</p>
+<h3 id="que-significa-propiedad">🟦 ¿Qué significa? — <em>Propiedad</em></h3>
+<p>El nombre de la característica que quieres cambiar, como <code>color</code>, <code>margin</code> o <code>display</code>. Sirve como la "qué" de cada orden de estilo. En la declaración <code>color: blue;</code>, la propiedad es <code>color</code>.</p>
+<h3 id="que-significa-pseudo-clase">🟦 ¿Qué significa? — <em>Pseudo-clase</em></h3>
+<p>Una palabra clave con <code>:</code> que apunta a un <strong>estado</strong> del elemento, como <code>:hover</code>, <code>:focus</code> o <code>:first-child</code>. Sirve para estilar según lo que ocurre o la posición. En <code>styles.css</code>, <code>:focus</code> mejora la accesibilidad de los campos del formulario de <strong>tunal-digital</strong>.</p>
+<h3 id="que-significa-pseudo-elemento">🟦 ¿Qué significa? — <em>Pseudo-elemento</em></h3>
+<p>Una palabra clave con <code>::</code> que apunta a una <strong>parte</strong> del elemento o crea contenido, como <code>::before</code>, <code>::after</code> o <code>::placeholder</code>. Sirve para decorar sin tocar el HTML. En <code>styles.css</code>, <code>::after</code> puede añadir un pequeño adorno a un título.</p>
+</blockquote>
+<h3 id="r-s">R — S</h3>
+<blockquote class="def">
+<h3 id="que-significa-rem-em-unidades-relativas">🟦 ¿Qué significa? — <em>rem / em (unidades relativas)</em></h3>
+<p>Unidades de tamaño que dependen de la fuente: <code>rem</code> se basa en el tamaño raíz del documento, <code>em</code> en el del elemento. Sirven para escalar de forma consistente y accesible. En <code>styles.css</code>, usar <code>rem</code> para <code>padding</code> y tipografía mantiene <strong>tunal-digital</strong> proporcionado al cambiar el zoom.</p>
+<h3 id="que-significa-regla-rule">🟦 ¿Qué significa? — <em>Regla (rule)</em></h3>
+<p>El bloque completo: un selector más sus declaraciones entre llaves. Sirve como la unidad que el navegador lee y aplica. Cada <code>selector { ... }</code> de <code>styles.css</code> es una regla.</p>
+<h3 id="que-significa-selector">🟦 ¿Qué significa? — <em>Selector</em></h3>
+<p>El patrón que decide <strong>a qué</strong> elementos se aplica un estilo, como <code>.boton</code>, <code>#hero</code> o <code>p</code>. Sirve para apuntar con precisión. Es el primer ingrediente de toda regla en <code>styles.css</code>.</p>
+</blockquote>
+<h3 id="t">T</h3>
+<blockquote class="def">
+<h3 id="que-significa-tailwind-css-de-utilidades">🟦 ¿Qué significa? — <em>Tailwind (CSS de utilidades)</em></h3>
+<p>Un framework que te da clases pequeñas listas para usar (<code>p-4</code>, <code>flex</code>, <code>text-blue-500</code>) que escribes directo en el HTML/JSX. Sirve para estilar rápido sin escribir CSS a mano. <strong>RachaSimple</strong> y <strong>Faro/Organizer</strong> lo usan; <strong>tunal-digital</strong> no (ahí escribes <code>styles.css</code> directo).</p>
+<h3 id="que-significa-transition">🟦 ¿Qué significa? — <em>transition</em></h3>
+<p>La propiedad que hace que un cambio de estilo ocurra de forma <strong>gradual</strong> en vez de instantánea. Sirve para suavizar efectos, como un botón que cambia de color despacio al pasar el cursor. En <code>styles.css</code>, <code>transition: background 0.2s;</code> hace que el <code>:hover</code> se sienta suave.</p>
+</blockquote>
+<pre><code class="language-css">.boton {
+  background: #3b82f6;
+  transition: background 0.2s ease; /* cambio suave */
+}
+.boton:hover {
+  background: #2563eb;
+}
+</code></pre>
+<h3 id="u-v">U — V</h3>
+<blockquote class="def">
+<h3 id="que-significa-unidad">🟦 ¿Qué significa? — <em>Unidad</em></h3>
+<p>El sufijo que da medida a un número: <code>px</code>, <code>%</code>, <code>rem</code>, <code>em</code>, <code>vh</code>, <code>vw</code>. Sirve para decir "cuánto" de forma exacta o relativa. En <code>styles.css</code>, mezclas <code>px</code> para detalles finos y <code>%</code> o <code>rem</code> para tamaños que se adaptan.</p>
+<h3 id="que-significa-valor">🟦 ¿Qué significa? — <em>Valor</em></h3>
+<p>El "cuánto" o "cuál" de una declaración, como <code>blue</code> en <code>color: blue;</code> o <code>1rem</code> en <code>padding: 1rem;</code>. Sirve como la respuesta concreta a la propiedad. Cada propiedad acepta sus propios tipos de valor.</p>
+<h3 id="que-significa-variable-css-custom-property">🟦 ¿Qué significa? — <em>Variable CSS (custom property)</em></h3>
+<p>Un valor con nombre que defines una vez (<code>--color-marca: #3b82f6;</code>) y reutilizas con <code>var(--color-marca)</code>. Sirve para cambiar toda la paleta desde un solo lugar y para hacer <strong>temas</strong> (claro/oscuro). El propio <code>estilos.css</code> de este manual usa variables para sus temas; en <code>styles.css</code> de <strong>tunal-digital</strong> guardan los colores de marca así.</p>
+</blockquote>
+<pre><code class="language-css">:root {
+  --color-marca: #3b82f6;
+  --espacio: 1rem;
+}
+.boton {
+  background: var(--color-marca);
+  padding: var(--espacio);
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-vh-vw-viewport-heightwidth">🟦 ¿Qué significa? — <em>vh / vw (viewport height/width)</em></h3>
+<p>Unidades relativas al tamaño de la <strong>ventana</strong>: <code>100vh</code> es toda la altura visible, <code>100vw</code> todo el ancho. Sirven para secciones a pantalla completa. En <code>styles.css</code>, una sección hero a <code>min-height: 100vh;</code> ocupa toda la pantalla al cargar <strong>tunal-digital</strong>.</p>
+</blockquote>
+<h3 id="z">Z</h3>
+<blockquote class="def">
+<h3 id="que-significa-z-index">🟦 ¿Qué significa? — <em>z-index</em></h3>
+<p>Un número que decide qué elemento queda <strong>encima</strong> de otro cuando se superponen. Sirve para controlar capas, como un menú que debe tapar el contenido. En <code>styles.css</code>, un encabezado <code>sticky</code> suele llevar un <code>z-index</code> alto para que nada lo cubra. Solo funciona en elementos con <code>position</code> distinto de <code>static</code>.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p><code>z-index</code> solo tiene efecto si el elemento tiene <code>position: relative</code>, <code>absolute</code>, <code>fixed</code> o <code>sticky</code>. Si pones <code>z-index</code> sobre un elemento <code>static</code>, no pasa nada y te volverás loco buscando el porqué. Bit ya cayó en esa trampa varias veces. 🐾</p>
+</blockquote>
+<hr />
+<h2 id="3-mapa-mental-de-css">3. Mapa mental de CSS</h2>
+<p>Aquí está la ciudad vista desde arriba. Léelo de arriba hacia abajo: las ramas grandes son los grandes temas del módulo, y las hojas son los términos que ya conoces.</p>
+<pre><code>                        ┌─────────────────────────┐
+                        │           CSS           │
+                        │ (dar estilo al HTML)     │
+                        └────────────┬────────────┘
+                                     │
+        ┌────────────┬───────────────┼───────────────┬────────────────┐
+        │            │               │               │                │
+   ┌────▼────┐  ┌────▼─────┐   ┌─────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
+   │ SINTAXIS│  │ CÓMO GANA│   │   CAJAS    │  │   LAYOUT    │  │ DINÁMICO Y  │
+   │         │  │ UN ESTILO│   │ (box model)│  │             │  │ REUTILIZAR  │
+   └────┬────┘  └────┬─────┘   └─────┬──────┘  └──────┬──────┘  └──────┬──────┘
+        │            │               │                │                │
+   • selector   • cascada       • content        • display       • variables
+   • propiedad  • especificidad • padding         • flexbox         (var/--)
+   • valor      • herencia      • border          • grid          • transition
+   • declaración• !important    • margin          • gap           • pseudo-clase
+   • regla                      • box-sizing      • position        (:hover)
+   • comentario                 • width/height    • z-index       • pseudo-elemento
+                                                  • media query     (::before)
+                                                                  • Tailwind
+                                                                    (en RachaSimple/
+                                                                     Faro)
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Fíjate en cómo las cinco ramas cuentan una historia: primero <strong>escribes</strong> una regla (sintaxis), luego el navegador decide <strong>cuál gana</strong> (cascada), esa regla afecta una <strong>caja</strong>, las cajas se acomodan con <strong>layout</strong>, y finalmente le das vida y orden con cosas <strong>dinámicas y reutilizables</strong>. Si entiendes esa secuencia, entiendes CSS.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>El mapa aplica igual aunque uses Tailwind. Cuando en <strong>RachaSimple</strong> escribes <code>class="flex gap-4 p-2 hover:bg-blue-600"</code>, estás usando display + gap + padding + pseudo-clase, exactamente los mismos conceptos del mapa, solo que con nombres cortos. Tailwind no reemplaza CSS: lo empaqueta.</p>
+</blockquote>
+<hr />
+<h2 id="4-repaso-final-en-vez-de-teoria-nueva">4. Repaso final (en vez de teoría nueva)</h2>
+<p>En lugar de enseñarte algo nuevo, recorramos rápido los puntos clave del módulo, como quien repasa apuntes antes de cerrar el cuaderno.</p>
+<p><strong>1. Toda regla tiene tres partes.</strong> Selector, propiedad y valor. Si te pierdes, vuelve a esto: <code>¿a quién?</code> (selector), <code>¿qué le cambio?</code> (propiedad), <code>¿a cuánto?</code> (valor).</p>
+<p><strong>2. Cuando dos estilos pelean, gana la combinación de cascada + especificidad + orden.</strong> Lo más específico, y a igual especificidad, lo que aparece <strong>después</strong> en el archivo. La herencia rellena lo que no especificas.</p>
+<p><strong>3. Todo es una caja.</strong> Contenido, padding, border, margin. Con <code>box-sizing: border-box;</code> medir se vuelve sencillo.</p>
+<p><strong>4. Para acomodar cajas usas flexbox (una dimensión) o grid (dos dimensiones).</strong> Y <code>gap</code> para separarlas con elegancia.</p>
+<p><strong>5. Para que se adapte a móvil, usas media queries.</strong> Y para reutilizar valores y hacer temas, usas variables CSS.</p>
+<blockquote class="def">
+<h3 id="que-significa-responsive-diseno-adaptable">🟦 ¿Qué significa? — <em>Responsive (diseño adaptable)</em></h3>
+<p>Un sitio que se ve bien en cualquier tamaño de pantalla, de celular a monitor grande. Se logra con media queries y unidades relativas. Sirve para no dejar fuera a quien navega desde el móvil, que hoy es la mayoría. En <strong>tunal-digital</strong>, el responsive es lo que hace que el menú se reacomode en pantallas pequeñas.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>No confundas <strong>padding</strong> (espacio por dentro) con <strong>margin</strong> (espacio por fuera). Es el error más común al empezar. Truco de Bit: padding es el <strong>acolchado dentro</strong> de un sobre; margin es la <strong>distancia entre dos sobres</strong> en la mesa. ✉️</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Si alguna vez un estilo "no funciona", revisa en este orden: (1) ¿el selector apunta bien? (2) ¿hay otra regla más específica ganándole? (3) ¿el elemento tiene el <code>display</code> o <code>position</code> correcto para lo que intentas? El 90% de los problemas de CSS están en uno de esos tres.</p>
+</blockquote>
+<hr />
+<h2 id="5-lo-que-sigue">5. Lo que sigue</h2>
+<p>Cerraste el módulo de CSS con un mapa completo en la cabeza. Ya sabes escribir reglas, ganar peleas de cascada, construir layouts y reutilizar estilos. Cuando entres a frameworks como Tailwind en <strong>RachaSimple</strong> o <strong>Faro/Organizer</strong>, no estarás aprendiendo algo nuevo desde cero: estarás aplicando estos mismos conceptos con otra ropa. Y eso, créeme, es una ventaja enorme.</p>
+<p>Bit te choca la patita. 🐾 Próxima parada: dar interactividad de verdad con JavaScript, donde el <code>main.js</code> de <strong>tunal-digital</strong> por fin tendrá su capítulo. Pero eso es otra historia.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé nombrar las tres partes de una regla: selector, propiedad y valor.</li>
+<li>[ ] Puedo explicar con mis palabras qué es la cascada y la especificidad.</li>
+<li>[ ] Distingo padding de margin sin dudar.</li>
+<li>[ ] Entiendo el modelo de cajas y para qué sirve <code>box-sizing: border-box;</code>.</li>
+<li>[ ] Sé cuándo usar flexbox (una dimensión) y cuándo grid (dos dimensiones).</li>
+<li>[ ] Puedo escribir una media query básica para hacer un sitio responsive.</li>
+<li>[ ] Sé declarar y reutilizar una variable CSS con <code>var()</code>.</li>
+<li>[ ] Reconozco pseudo-clases (<code>:hover</code>) y pseudo-elementos (<code>::before</code>).</li>
+<li>[ ] Entiendo que Tailwind en RachaSimple y Faro usa estos mismos conceptos con clases cortas.</li>
+<li>[ ] Puedo dibujar de memoria el mapa mental de las cinco ramas de CSS.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Sin computadora.</strong> En una hoja, escribe los cinco grandes temas del mapa mental (sintaxis, cascada, cajas, layout, dinámico) y cuelga al menos cuatro términos bajo cada uno, de memoria. Luego compara con el mapa del capítulo.</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> Explícale a alguien (o a Bit en voz alta) la diferencia entre padding y margin usando tu propia analogía, distinta a la del sobre.</p>
+</li>
+<li>
+<p>💻 Abre <code>styles.css</code> de <strong>tunal-digital</strong> y busca un ejemplo real de cada uno de estos términos: una clase, una pseudo-clase, una media query y una variable CSS. Anota en qué línea está cada uno.</p>
+</li>
+<li>
+<p>💻 En <code>styles.css</code>, encuentra una regla y reescríbela en un comentario nombrando sus partes, así: <code>/* selector: .boton | propiedad: color | valor: white */</code>. Hazlo con tres reglas distintas.</p>
+</li>
+<li>
+<p>💻 Toma un componente de <strong>RachaSimple</strong> con clases de Tailwind (por ejemplo algo con <code>flex gap-4 p-2</code>) y, debajo, escribe en un comentario el CSS "tradicional" equivalente que harías en <code>styles.css</code>. Comprueba que entiendes la traducción.</p>
+</li>
+<li>
+<p>💻 Crea un archivo nuevo <code>repaso.css</code> y, sin mirar el manual, escribe de memoria: una variable en <code>:root</code>, una regla con <code>:hover</code> y <code>transition</code>, y una media query. Luego revisa el glosario para verificar que la sintaxis quedó bien.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+# Capítulo 07 — La cascada y la herencia
+
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> Bienvenido de nuevo. En este capítulo vamos a descubrir el corazón secreto de CSS: por qué se llama así (la "C" de *Cascading*, en cascada) y cómo el navegador decide qué regla gana cuando dos reglas se pelean por el mismo elemento. Spoiler: no es magia ni azar, es un conjunto de reglas claras que vas a poder predecir. Bit, nuestro ajolote favorito, dice que esto es como ordenar la fila del recreo: hay que saber quién va primero. Vamos despacio y con calma.
+
+---
+
+## 1. Por qué CSS se llama "cascada"
+
+Las siglas **CSS** significan *Cascading Style Sheets*: "Hojas de estilo en cascada". Esa palabra, **cascada**, no está ahí de adorno. Describe exactamente cómo funciona la herramienta: los estilos caen desde varias fuentes (el navegador, tu archivo `styles.css`, los atributos en el HTML) y se van apilando como el agua que baja por escalones, hasta que para cada propiedad de cada elemento queda **un único valor ganador**.
+
+> ### 🟦 ¿Qué significa? — *Cascada*
+> La **cascada** es el proceso por el que el navegador combina todas las reglas CSS que existen y, cuando varias quieren cambiar lo mismo (por ejemplo, el color de un párrafo), elige una sola usando criterios de prioridad. Sirve para que nunca haya empate ni confusión: siempre hay un ganador definido.
+> En `tunal-digital`, tu archivo `styles.css` participa en la cascada junto con los estilos por defecto del navegador. Por eso un enlace `<a>` es azul aunque tú no escribas nada: ese azul viene del navegador, y tu CSS puede sobrescribirlo.
+
+Imagina que tienes estas dos reglas en el `styles.css` de tunal-digital:
+
+```css
+p {
+  color: gray;
+}
+
+p {
+  color: navy;
+}
+```
+
+Las dos apuntan al mismo elemento (`p`) y a la misma propiedad (`color`). No pueden ganar las dos. La cascada decide: como tienen la **misma importancia** y la **misma especificidad** (ya veremos qué es eso), gana **la que aparece después**. Resultado: los párrafos serán `navy` (azul marino).
+
+> ### 💡 Tip
+> Cuando algo "no se aplica" en tu CSS, casi nunca es un bug del navegador. Es la cascada haciendo su trabajo: otra regla está ganando. Aprender este capítulo te ahorrará horas de frustración.
+
+---
+
+## 2. Los tres criterios que deciden el ganador
+
+Cuando dos o más reglas afectan a la misma propiedad del mismo elemento, el navegador aplica **tres criterios en orden**. Solo pasa al siguiente si el anterior queda empatado:
+
+1. **Importancia** (¿alguna regla usa `!important`?).
+2. **Especificidad** (¿qué tan "específico" es el selector?).
+3. **Orden de aparición** (¿cuál se escribió después?).
+
+Vamos uno por uno.
+
+### 2.1 Importancia
+
+> ### 🟦 ¿Qué significa? — *!important*
+> `!important` es una marca que añades al final de una declaración para decirle al navegador: "esta gana, pase lo que pase". Sirve para forzar un estilo por encima de todos los demás. Se usa muy poco a propósito, porque rompe el flujo normal de la cascada.
+> En `tunal-digital` podrías sentir la tentación de poner `!important` para "arreglar" algo rápido, pero suele ser señal de que conviene revisar el orden o el selector.
+
+```css
+p {
+  color: red !important; /* esta gana aunque otra regla diga otra cosa */
+}
+
+p {
+  color: green; /* pierde, aunque esté después */
+}
+```
+
+Aquí los párrafos serán **rojos**, porque `!important` rompe la regla normal del orden. Por eso decimos que la importancia se evalúa **primero**.
+
+> ### ⚠️ Cuidado
+> `!important` es como gritar en una conversación: si todos gritan, nadie se entiende. Úsalo solo en casos muy puntuales (por ejemplo, sobrescribir un estilo de una librería que no puedes editar). En tus propios archivos, casi siempre hay una solución más limpia.
+
+### 2.2 Especificidad
+
+Si ninguna regla usa `!important` (lo normal), el navegador mira la **especificidad**: qué tan preciso es el selector. Un selector más específico le gana a uno más general.
+
+> ### 🟦 ¿Qué significa? — *Especificidad*
+> La **especificidad** es un puntaje que el navegador calcula para cada selector según los "ingredientes" que usa. A más puntaje, más prioridad. Sirve para que un estilo dirigido a un elemento concreto pese más que un estilo genérico.
+> En el `styles.css` de tunal-digital, una regla `.boton-cta` (clase) gana sobre una regla `button` (etiqueta), porque la clase es más específica.
+
+La especificidad se calcula con tres "columnas" que puedes imaginar como un marcador `(A, B, C)`:
+
+- **A — IDs**: cuántos `#identificador` hay en el selector.
+- **B — clases, atributos y pseudo-clases**: cuántos `.clase`, `[type="text"]`, `:hover` hay.
+- **C — etiquetas y pseudo-elementos**: cuántos `p`, `div`, `::before` hay.
+
+> ### 🟦 ¿Qué significa? — *Pseudo-clase y pseudo-elemento*
+> Una **pseudo-clase** es una palabra que se añade a un selector con dos puntos (`:`) para apuntar a un elemento cuando está en cierto **estado**: `:hover` (el ratón encima), `:focus` (tiene el foco del teclado), `:first-child` (es el primer hijo). Un **pseudo-elemento** se escribe con dos puntos dobles (`::`) y apunta a una **parte virtual** del elemento que no existe como etiqueta propia: `::before` y `::after` (contenido generado antes o después), `::first-line` (la primera línea de texto). Sirven para estilar estados y trozos sin tener que crear más HTML.
+> En el `styles.css` de tunal-digital, `.boton-cta:hover { background: navy; }` cambia el fondo del botón solo mientras el visitante pasa el ratón por encima. Para la especificidad, una pseudo-clase cuenta como clase (columna B) y un pseudo-elemento como etiqueta (columna C).
+
+Se comparan de izquierda a derecha. Quien tenga más en la columna A gana; si empatan en A, se mira B; si empatan en B, se mira C.
+
+| Selector | IDs (A) | Clases (B) | Etiquetas (C) | Marcador |
+|---|---|---|---|---|
+| `p` | 0 | 0 | 1 | (0,0,1) |
+| `.intro` | 0 | 1 | 0 | (0,1,0) |
+| `p.intro` | 0 | 1 | 1 | (0,1,1) |
+| `#cabecera` | 1 | 0 | 0 | (1,0,0) |
+| `#cabecera .intro` | 1 | 1 | 0 | (1,1,0) |
+
+Veamos un ejemplo real con un fragmento estilo tunal-digital:
+
+```css
+/* C = 1 etiqueta → (0,0,1) */
+a {
+  color: gray;
+}
+
+/* B = 1 clase → (0,1,0), gana a lo anterior */
+.menu a {
+  color: white;
+}
+
+/* A = 1 id → (1,0,0), gana a todo lo anterior */
+#nav-principal a {
+  color: gold;
+}
+```
+
+Un enlace dentro de `#nav-principal` será **dorado**, porque `(1,0,0)` le gana a `(0,1,0)` y a `(0,0,1)`. Aunque la regla `a { color: gray }` esté escrita después, pierde: el orden solo decide cuando la especificidad empata.
+
+> ### 💡 Tip
+> Para comparar dos selectores, no sumes los números de las columnas como si fueran un total. `(1,0,0)` siempre gana a `(0,9,9)`. Un solo ID pesa más que muchísimas clases. Por eso conviene no abusar de los IDs en CSS: vuelven los estilos muy difíciles de sobrescribir después.
+
+### 2.3 Orden de aparición
+
+Si dos reglas tienen la **misma importancia** y la **misma especificidad**, entonces —y solo entonces— gana **la última que aparece**. Esto incluye el orden dentro de un archivo y el orden en que cargas varios archivos en el HTML.
+
+```css
+.boton {
+  background: blue;
+}
+
+.boton {
+  background: orange; /* misma especificidad, está después → gana */
+}
+```
+
+El botón será **naranja**. Este es el criterio que usaste sin saberlo en el primer ejemplo del capítulo.
+
+> ### 🔎 En tu código
+> En `tunal-digital`, el orden en que enlazas tus hojas en el `<head>` importa. Si tienes `<link rel="stylesheet" href="reset.css">` antes de `<link rel="stylesheet" href="styles.css">`, las reglas de `styles.css` pueden sobrescribir a las de `reset.css` cuando empatan en especificidad. Por eso los "reset" o "normalize" se cargan siempre **primero**.
+
+---
+
+## 3. Cómo Tailwind se relaciona con la cascada
+
+En `RachaSimple` (React + TS + Tailwind) y en `Faro/Organizer` (Next.js + Tailwind) no escribes selectores como en tunal-digital, sino **clases utilitarias** directamente en el HTML/JSX: `class="text-blue-600 bg-white p-4"`. Pero por dentro, eso sigue siendo CSS y sigue obedeciendo la cascada.
+
+> ### 🟦 ¿Qué significa? — *Clase utilitaria (utility class)*
+> Una **clase utilitaria** es una clase de CSS pequeñita que hace una sola cosa: `p-4` añade padding, `text-center` centra el texto. Tailwind te da cientos de ellas listas para usar. Sirve para estilar sin salir del HTML/JSX y sin inventar nombres de clases.
+> En `RachaSimple`, un botón puede ser `<button className="bg-green-500 text-white rounded">`. Cada utilidad es, por debajo, una regla CSS normal con su especificidad.
+
+Aquí aparece una duda muy común: si pongo `class="text-red-500 text-blue-500"`, ¿de qué color queda el texto? Mucha gente cree que gana el que escribe **último en el HTML**. Falso. Lo que gana es el que aparece **último en el archivo CSS generado por Tailwind**, no el orden en que escribiste las clases en el atributo.
+
+> ### ⚠️ Cuidado
+> En Tailwind, el orden de las clases en el atributo `class`/`className` **no decide** quién gana, porque todas tienen la misma especificidad y lo que manda es el orden en la hoja de estilos final. Si necesitas garantizar que una utilidad gane (por ejemplo, en estados como `hover:` o `md:`), usa los prefijos y variantes que Tailwind provee, no reordenes clases al azar.
+
+---
+
+## 4. La herencia: cuando los hijos copian a los padres
+
+Hasta ahora hablamos de conflictos entre reglas. Ahora viene la otra mitad mágica de CSS: la **herencia**. Es la razón por la que pones un `color` en `body` y, de repente, **todo el texto de la página** cambia, sin que toques cada elemento.
+
+> ### 🟦 ¿Qué significa? — *Herencia*
+> La **herencia** es el mecanismo por el que ciertos elementos hijos toman automáticamente el valor de una propiedad de su elemento padre, si tú no se lo defines explícitamente. Sirve para no tener que repetir estilos en cada etiqueta. Es como un apellido: lo recibes de tu familia sin pedirlo.
+> En el `styles.css` de tunal-digital, si pones `body { color: #333; font-family: sans-serif; }`, todos los `<p>`, `<h1>`, `<li>`, etc., heredan ese gris oscuro y esa tipografía. No tienes que escribirlo cien veces.
+
+### 4.1 Padre e hijo: el árbol del HTML
+
+Para entender la herencia, piensa en el HTML como un árbol genealógico. Cada elemento está dentro de otro:
+
+```html
+<body>            <!-- abuelo -->
+  <article>       <!-- padre -->
+    <p>Hola</p>   <!-- hijo -->
+  </article>
+</body>
+```
+
+Aquí `body` es ancestro de `article`, y `article` es el padre directo de `p`. Las propiedades que se heredan **bajan** por este árbol, de arriba hacia abajo.
+
+```css
+body {
+  color: #2c3e50;          /* heredable */
+  font-family: Georgia, serif; /* heredable */
+}
+```
+
+El `<p>Hola</p>` saldrá con texto color `#2c3e50` y fuente Georgia, **aunque nunca le escribiste una regla propia**, porque heredó esos valores pasando por `article` y `body`.
+
+> ### 💡 Tip
+> Poner las propiedades de texto (color, fuente, tamaño base, interlineado) en `body` es una práctica excelente. Defines el "tono general" una sola vez y dejas que la herencia lo reparta. Luego solo sobrescribes las excepciones: un título más grande, un aviso en rojo, etc.
+
+### 4.2 Qué se hereda y qué no
+
+No todas las propiedades se heredan. Hay una lógica detrás:
+
+- **Se heredan** sobre todo las propiedades de **texto**: `color`, `font-family`, `font-size`, `font-weight`, `line-height`, `text-align`, `letter-spacing`, `visibility`, `cursor`.
+- **NO se heredan** las propiedades de **caja y layout**: `margin`, `padding`, `border`, `width`, `height`, `background`, `display`, `position`.
+
+¿Por qué? Imagina que `border` se heredara: si pones un borde en `body`, ¡cada párrafo, cada palabra envuelta, cada lista tendría su propio borde! Sería un caos. En cambio, que el color del texto se herede es comodísimo. Las personas que diseñaron CSS eligieron heredar lo que casi siempre quieres compartir, y no heredar lo que casi nunca quieres repetir.
+
+> ### ⚠️ Cuidado
+> `background` no se hereda, pero a veces *parece* que sí. Si pones `background: yellow` en `body`, los párrafos se ven amarillos porque su fondo es **transparente** por defecto y deja ver el amarillo del padre. No es herencia: es que no tienen fondo propio. Es un detalle sutil pero importante.
+
+> ### 🔎 En tu código
+> En `PolyPaw` (Python/Flet) no escribes CSS, pero el concepto de heredar estilo de un contenedor padre a sus hijos existe igual: defines propiedades en un control contenedor y los controles internos las toman. Y en `RachaSimple`/`Faro` con Tailwind, también puedes apoyarte en la herencia: si pones `text-gray-800` en un contenedor, el texto de los hijos sin clase de color la hereda igual que en CSS puro.
+
+---
+
+## 5. Las palabras clave: inherit, initial, unset (y revert)
+
+CSS te da palabras especiales para **controlar la herencia a mano**. Sirven para forzar que algo herede, o para borrarle lo heredado y dejarlo "de fábrica".
+
+### 5.1 inherit
+
+> ### 🟦 ¿Qué significa? — *inherit*
+> `inherit` le dice a una propiedad: "toma el mismo valor que tenga mi padre, sea cual sea". Sirve para forzar la herencia incluso en propiedades que normalmente no se heredan, o para reconectar un hijo con su padre.
+> En `tunal-digital`, los `<button>` no heredan el color del texto del padre (los navegadores les ponen el suyo). Con `button { color: inherit; }` haces que el botón use el mismo color que el resto del texto alrededor.
+
+```css
+article {
+  color: darkgreen;
+}
+
+article button {
+  color: inherit; /* el botón se vuelve darkgreen como su contexto */
+}
+```
+
+### 5.2 initial
+
+> ### 🟦 ¿Qué significa? — *initial*
+> `initial` reinicia una propiedad a su **valor inicial de fábrica** definido por la especificación de CSS (no por el navegador ni por tu CSS). Sirve para "limpiar" un valor heredado o anterior y volver al punto de partida.
+> En `Faro`, si un componente hereda un `color` que no quieres, `color: initial` lo devuelve a su valor por defecto del estándar (que para `color` es negro).
+
+```css
+.aviso {
+  color: initial; /* ignora lo heredado, vuelve al valor de fábrica */
+}
+```
+
+> ### 💡 Tip
+> Ojo: el valor `initial` es el del **estándar CSS**, que no siempre coincide con lo que muestra el navegador por defecto. Por ejemplo, el `display` inicial de cualquier elemento es `inline`, aunque un `<div>` se vea como bloque por la hoja de estilos del navegador. Por eso `display: initial` en un `div` puede sorprenderte.
+
+### 5.3 unset
+
+> ### 🟦 ¿Qué significa? — *unset*
+> `unset` es un comodín inteligente: si la propiedad **es heredable**, se comporta como `inherit`; si **no es heredable**, se comporta como `initial`. Sirve para "quitar tu intervención" y dejar que la propiedad haga lo que naturalmente haría.
+> En `RachaSimple`, si una librería te metió un `color` o un `border` que no quieres, `unset` deja cada uno en su comportamiento natural sin que tengas que recordar cuál hereda y cuál no.
+
+```css
+.reiniciado {
+  color: unset;  /* color hereda → actúa como inherit */
+  border: unset; /* border no hereda → actúa como initial (sin borde) */
+}
+```
+
+### 5.4 revert (mención rápida)
+
+> ### 🟦 ¿Qué significa? — *revert*
+> `revert` devuelve la propiedad al valor que tendría según la **hoja de estilos del navegador** (no la del estándar puro). Sirve cuando quieres "deshacer tus reglas" pero conservar lo que el navegador hace por defecto, como el aspecto normal de un `<button>` o un `<h1>`.
+
+```css
+h1 {
+  font-size: revert; /* vuelve al tamaño grande por defecto del navegador */
+}
+```
+
+> ### ⚠️ Cuidado
+> `inherit`, `initial`, `unset` y `revert` se parecen y es fácil confundirlas. Una guía mental: `inherit` = "como mi padre"; `initial` = "como el estándar de fábrica"; `unset` = "lo natural según si hereda o no"; `revert` = "como lo deja el navegador". No necesitas usarlas todos los días, pero saber que existen te saca de apuros.
+
+---
+
+## 6. Juntándolo todo: un ejemplo que pelea
+
+Veamos un caso completo, parecido a lo que tendrías en el `styles.css` de tunal-digital, donde la cascada y la herencia trabajan juntas:
+
+```css
+/* (0,0,1) — texto general por herencia desde body */
+body {
+  color: #333;
+  font-family: system-ui, sans-serif;
+}
+
+/* (0,0,1) — los enlaces normales */
+a {
+  color: #0066cc;
+}
+
+/* (0,1,0) — enlaces dentro del menú: más específico, gana sobre 'a' */
+.menu a {
+  color: #ffffff;
+}
+
+/* (0,1,1) — el enlace activo del menú: aún más específico */
+.menu a.activo {
+  color: #ffd166;
+}
+```
+
+Recorramos qué le pasa a un párrafo y a tres enlaces:
+
+- Un `<p>` cualquiera: no tiene regla propia de color, así que **hereda** `#333` desde `body`. La herencia resuelve el caso sin conflicto.
+- Un `<a>` suelto en el contenido: gana `a { color: #0066cc }` → azul.
+- Un `<a>` dentro de `.menu`: compiten `a` `(0,0,1)` y `.menu a` `(0,1,0)`. Gana la clase → blanco.
+- Un `<a class="activo">` dentro de `.menu`: compiten `.menu a` `(0,1,0)` y `.menu a.activo` `(0,1,1)`. Gana la última, más específica → amarillo dorado.
+
+Fíjate cómo **nunca hubo azar**: cada decisión salió de los tres criterios (importancia → especificidad → orden) o de la herencia. Eso es CSS bajo control.
+
+> ### 🔎 En tu código
+> El propio sitio de este manual (`site/estilos.css`) usa **variables CSS** y temas. Las variables CSS (como `--color-texto`) también se apoyan en la herencia: una variable definida en `:root` (que representa el `<html>`, el ancestro de todo) está disponible para todos los descendientes. Cuando cambias el tema, cambias la variable en un ancestro y la cascada/herencia la reparte a todos los hijos automáticamente. Es la herencia trabajando a tu favor.
+
+> Bit asoma la cabeza entre tus pestañas del navegador y comenta: "¿Ves? La cascada no es un río salvaje. Es más bien una escalera de agua bien ordenada. Si sabes en qué escalón está cada regla, siempre adivinas dónde cae la gota." Luego se va a tomar una siesta sobre tu teclado, justo encima de la tecla Enter.
+
+---
+
+## ✅ Checklist — ¿ya domino esto?
+
+- [ ] Sé que CSS significa "hojas de estilo en cascada" y qué quiere decir "cascada".
+- [ ] Conozco los **tres criterios** para resolver conflictos: importancia → especificidad → orden.
+- [ ] Entiendo qué hace `!important` y por qué conviene evitarlo.
+- [ ] Sé calcular la especificidad como un marcador `(IDs, clases, etiquetas)` y comparar dos selectores.
+- [ ] Recuerdo que el **orden de aparición** solo decide cuando hay empate de especificidad e importancia.
+- [ ] Entiendo qué es la **herencia** y por qué un `color` en `body` afecta a toda la página.
+- [ ] Distingo propiedades que se heredan (texto) de las que no (caja/layout).
+- [ ] Sé qué hacen `inherit`, `initial`, `unset` y `revert`, aunque sea en líneas generales.
+- [ ] Entiendo que en Tailwind el orden de las clases en el atributo no decide el ganador.
+
+---
+
+## 🧪 Ejercicios
+
+1. **En papel (sin compu):** calcula el marcador de especificidad `(A,B,C)` de estos selectores y ordénalos de menor a mayor prioridad: `p`, `.intro`, `#main .intro`, `ul li a`, `a.activo:hover`. Explica con tus palabras por qué `#main .intro` le gana a `a.activo:hover`.
+
+2. **En papel (sin compu):** dibuja un árbol HTML con `body > section > p` y, dado `body { color: teal; font-size: 18px; }`, escribe qué color y tamaño tendrá el `<p>` si no le defines ninguna regla. Justifica usando la palabra "herencia".
+
+3. 💻 En el `styles.css` de **tunal-digital** (o un archivo de práctica), escribe dos reglas para `p` con colores distintos y misma especificidad. Confirma en el navegador que gana la última. Luego cambia el orden y verifica que cambia el resultado.
+
+4. 💻 Crea un `.menu` con varios `<a>`. Dale color con `a`, luego con `.menu a`, y observa cómo la clase gana sobre la etiqueta. Añade un `<a class="activo">` con regla `.menu a.activo` y comprueba que ese gana a todos.
+
+5. 💻 Pon un `background: #fffae6` en `body` y comprueba que los párrafos "se ven" amarillos sin tener fondo propio. Luego dale a un `<p>` su propio `background: white` y observa la diferencia. Explica por qué esto NO es herencia.
+
+6. 💻 Toma un `<button>` dentro de un contenedor con `color: crimson`. Verás que el botón no toma ese color. Añade `button { color: inherit; }` y observa cómo ahora sí lo hereda. Bonus: prueba `unset` en `border` y `color` del botón y describe qué pasa con cada uno.

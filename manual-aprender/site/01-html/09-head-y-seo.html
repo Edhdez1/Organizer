@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 09 — El head completo y el SEO — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-09-el-head-completo-y-el-seo">Capítulo 09 — El head completo y el SEO</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora has trabajado mucho en el <code>&lt;body&gt;</code>: lo que se ve. Pero hay una parte de tu página que <strong>nadie ve directamente</strong> y que, sin embargo, decide cómo se muestra tu pestaña, qué aparece cuando alguien comparte tu enlace en WhatsApp y si Google entiende de qué trata tu sitio. Esa parte es el <code>&lt;head&gt;</code>. En este capítulo Bit, nuestro ajolote pixelado, te lleva de la mano por cada línea del <code>&lt;head&gt;</code> de <strong>tunal-digital</strong> para que dejes de copiarlas "porque sí" y empieces a entender qué hace cada una.</p>
+</blockquote>
+<h2 id="1-que-es-el-head-y-por-que-importa-tanto">1. ¿Qué es el <code>&lt;head&gt;</code> y por qué importa tanto?</h2>
+<p>En el Capítulo 02 viste que un documento HTML se divide en dos grandes zonas: el <code>&lt;head&gt;</code> y el <code>&lt;body&gt;</code>. Vamos a refrescarlo, porque ahora le vamos a sacar todo el jugo al primero.</p>
+<blockquote class="def">
+<h3 id="que-significa-head">🟦 ¿Qué significa? — <em>head</em></h3>
+<p>El <code>&lt;head&gt;</code> (en inglés, "cabeza") es la sección del HTML donde pones <strong>información sobre la página</strong>, no el contenido visible. Le habla al navegador y a otros programas (como Google o WhatsApp): "esta página se llama así, está en español, usa estos caracteres, esta es su imagen de portada...".
+<strong>¿Para qué sirve?</strong> Para que tu página se entienda, se vea bien en el móvil, aparezca correctamente en buscadores y se muestre bonita al compartirla.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code>, dentro de <code>sitio-web/index.html</code>, todo lo que está entre <code>&lt;head&gt;</code> y <code>&lt;/head&gt;</code>, justo arriba del contenido que el visitante ve.</p>
+</blockquote>
+<p>La palabra clave aquí es <strong>metadatos</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-metadato">🟦 ¿Qué significa? — <em>metadato</em></h3>
+<p>Un metadato es "un dato sobre un dato". El contenido de tu página es el dato; el metadato es la información <em>acerca</em> de ese contenido: su título, su idioma, su descripción.
+<strong>¿Para qué sirve?</strong> Para que las máquinas (navegadores, buscadores, redes sociales) sepan cómo tratar tu página sin tener que "leerla" entera.</p>
+</blockquote>
+<p>La mayoría de los metadatos se escriben con una etiqueta especial: <code>&lt;meta&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-meta">🟦 ¿Qué significa? — <em>etiqueta <code>&lt;meta&gt;</code></em></h3>
+<p>Es una etiqueta que vive dentro del <code>&lt;head&gt;</code> y sirve para declarar un metadato. No se cierra (no lleva <code>&lt;/meta&gt;</code>); es una etiqueta "vacía" que solo aporta atributos.
+<strong>¿Para qué sirve?</strong> Cada <code>&lt;meta&gt;</code> declara una pieza de información: el juego de caracteres, la descripción, cómo se ve en el móvil, etc.</p>
+</blockquote>
+<p>Un <code>&lt;head&gt;</code> básico se ve así:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;Tunal Digital&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!-- Aquí va lo que el visitante ve --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-el-orden-si-importa-un-poco">💡 Tip — El orden sí importa (un poco)</h3>
+<p>Pon <code>&lt;meta charset&gt;</code> lo más arriba posible dentro del <code>&lt;head&gt;</code>, antes que el <code>&lt;title&gt;</code>. Así el navegador sabe desde el primer momento cómo leer las letras (incluidas las tildes y la ñ).</p>
+</blockquote>
+<h2 id="2-charset-que-las-tildes-y-la-n-no-se-rompan">2. <code>charset</code>: que las tildes y la ñ no se rompan</h2>
+<blockquote class="def">
+<h3 id="que-significa-charset-utf-8">🟦 ¿Qué significa? — <em>charset (UTF-8)</em></h3>
+<p><code>charset</code> es el "juego de caracteres": la tabla que el navegador usa para convertir los unos y ceros del archivo en letras. <code>UTF-8</code> es la tabla universal moderna, que incluye tildes, ñ, signos de apertura (¿ ¡) y hasta emojis.
+<strong>¿Para qué sirve?</strong> Para que "Diseño y programación" no se vea como "DiseÃ±o y programaciÃ³n".
+<strong>¿Dónde se usa en tu proyecto?</strong> En la primera línea del <code>&lt;head&gt;</code> de <code>tunal-digital</code>: <code>&lt;meta charset="UTF-8" /&gt;</code>.</p>
+</blockquote>
+<pre><code class="language-html">&lt;meta charset=&quot;UTF-8&quot; /&gt;
+</code></pre>
+<p>Como tu sitio está en <strong>español</strong> (la regla del proyecto Faro lo pide para toda la documentación, y tu web también lo está), <code>UTF-8</code> no es opcional: es lo que evita que tu landing se llene de símbolos raros.</p>
+<blockquote class="warn">
+<h3 id="cuidado-guarda-el-archivo-en-utf-8">⚠️ Cuidado — Guarda el archivo en UTF-8</h3>
+<p>Declarar <code>charset="UTF-8"</code> no basta si tu editor guarda el archivo en otra codificación. Por suerte, editores como VS Code usan UTF-8 por defecto. Si ves caracteres rotos, revisa abajo a la derecha en VS Code que diga "UTF-8".</p>
+</blockquote>
+<h2 id="3-viewport-que-se-vea-bien-en-el-movil">3. <code>viewport</code>: que se vea bien en el móvil</h2>
+<blockquote class="def">
+<h3 id="que-significa-viewport">🟦 ¿Qué significa? — <em>viewport</em></h3>
+<p>El viewport es el "área visible" de la página dentro de la pantalla del dispositivo. Esta <code>&lt;meta&gt;</code> le dice al móvil: "no encojas mi página para que quepa entera; muéstrala al ancho real del teléfono".
+<strong>¿Para qué sirve?</strong> Para que en el celular tu web no se vea diminuta y haya que hacer zoom. Es la base del <strong>diseño responsive</strong> (que se adapta a cualquier pantalla).
+<strong>¿Dónde se usa en tu proyecto?</strong> En el <code>&lt;head&gt;</code> de <code>tunal-digital</code>, junto al charset.</p>
+</blockquote>
+<pre><code class="language-html">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+</code></pre>
+<p>Desglosemos el atributo <code>content</code>:</p>
+<ul>
+<li><code>width=device-width</code>: el ancho de la página = el ancho real del dispositivo.</li>
+<li><code>initial-scale=1.0</code>: el zoom inicial es 100% (ni acercado ni alejado).</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip-sin-viewport-no-hay-movil-bonito">💡 Tip — Sin viewport, no hay móvil bonito</h3>
+<p>Si olvidas esta línea, tu CSS responsive (los famosos "media queries" que verás en el Módulo de CSS) puede que ni se note en el teléfono. Es de las líneas más importantes del <code>&lt;head&gt;</code> para un sitio como <code>tunal-digital</code>, que la gente verá mucho desde el móvil.</p>
+</blockquote>
+<h2 id="4-title-el-nombre-de-tu-pestana">4. <code>&lt;title&gt;</code>: el nombre de tu pestaña</h2>
+<blockquote class="def">
+<h3 id="que-significa-title">🟦 ¿Qué significa? — <em>title</em></h3>
+<p>El <code>&lt;title&gt;</code> es el texto que aparece en la <strong>pestaña del navegador</strong> y, muy importante, el título azul que aparece en los resultados de Google.
+<strong>¿Para qué sirve?</strong> Para identificar tu página de un vistazo y para que el buscador sepa cómo titularla.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code>: <code>&lt;title&gt;Tunal Digital — ...&lt;/title&gt;</code> dentro del <code>&lt;head&gt;</code>.</p>
+</blockquote>
+<pre><code class="language-html">&lt;title&gt;Tunal Digital — Diseño web para pequeños negocios&lt;/title&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-un-buen-titulo-describe-no-solo-nombra">💡 Tip — Un buen título describe, no solo nombra</h3>
+<p>"Tunal Digital" está bien, pero "Tunal Digital — Diseño web para pequeños negocios" le dice a la persona (y a Google) qué ofreces. Apunta a unos 50-60 caracteres: si es muy largo, Google lo corta con "...".</p>
+</blockquote>
+<p>A diferencia de <code>&lt;meta&gt;</code>, el <code>&lt;title&gt;</code> <strong>sí</strong> lleva etiqueta de apertura y cierre, y solo puede haber <strong>uno</strong> por página.</p>
+<h2 id="5-meta-description-el-textito-gris-de-google">5. <code>meta description</code>: el textito gris de Google</h2>
+<blockquote class="def">
+<h3 id="que-significa-meta-description">🟦 ¿Qué significa? — <em>meta description</em></h3>
+<p>Es un resumen corto de tu página. No se ve en la página en sí, pero Google suele mostrarlo como el <strong>párrafo gris</strong> debajo del título en los resultados de búsqueda.
+<strong>¿Para qué sirve?</strong> Para convencer a la persona de hacer clic. Es como el "subtítulo comercial" de tu página.
+<strong>¿Dónde se usa en tu proyecto?</strong> En el <code>&lt;head&gt;</code> de <code>tunal-digital</code>, para describir qué hace el estudio.</p>
+</blockquote>
+<pre><code class="language-html">&lt;meta
+  name=&quot;description&quot;
+  content=&quot;Tunal Digital crea sitios web rápidos y a medida para pequeños negocios. Diseño, desarrollo y resultados.&quot;
+/&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-escribe-para-humanos">💡 Tip — Escribe para humanos</h3>
+<p>La descripción ideal tiene entre 120 y 155 caracteres, está en español claro y promete algo concreto. No la rellenes de palabras sueltas; escríbela como si se la contaras a un cliente.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Abre <code>sitio-web/index.html</code> de <code>tunal-digital</code> y busca tu <code>&lt;title&gt;</code> y tu <code>&lt;meta name="description"&gt;</code>. Léelos en voz alta: ¿le dirían a un desconocido qué ofreces? Si no, ya tienes tu primera mejora.</p>
+</blockquote>
+<h2 id="6-favicon-el-iconito-de-la-pestana">6. <code>favicon</code>: el iconito de la pestaña</h2>
+<blockquote class="def">
+<h3 id="que-significa-favicon">🟦 ¿Qué significa? — <em>favicon</em></h3>
+<p>Es el pequeño icono que aparece a la izquierda del título en la pestaña del navegador y en los marcadores. "Favicon" viene de "favorite icon".
+<strong>¿Para qué sirve?</strong> Para que tu sitio se reconozca de un vistazo entre muchas pestañas abiertas. Da imagen de marca y profesionalidad.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code>, podrías añadir un <code>favicon.ico</code> o <code>favicon.png</code> dentro de la carpeta <code>sitio-web/</code> y enlazarlo desde el <code>&lt;head&gt;</code>.</p>
+</blockquote>
+<p>El favicon se enlaza con la etiqueta <code>&lt;link&gt;</code>:</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-link">🟦 ¿Qué significa? — <em>etiqueta <code>&lt;link&gt;</code></em></h3>
+<p><code>&lt;link&gt;</code> conecta tu HTML con un archivo externo. Ya la usaste para enlazar tu hoja de estilos (<code>styles.css</code>). También sirve para el favicon, las fuentes y el "canonical" (lo verás abajo). Como <code>&lt;meta&gt;</code>, no se cierra.
+<strong>¿Para qué sirve?</strong> Para "traer" recursos externos sin escribirlos dentro del HTML.</p>
+</blockquote>
+<pre><code class="language-html">&lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; href=&quot;favicon.png&quot; /&gt;
+</code></pre>
+<p>El atributo <code>rel</code> (de "relation", relación) dice qué tipo de enlace es. <code>rel="icon"</code> significa "esto es el icono de la página". El mismo <code>&lt;link&gt;</code> que usas para tu CSS lleva <code>rel="stylesheet"</code>:</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot; /&gt;
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <code>tunal-digital</code>, ese <code>&lt;link rel="stylesheet" href="styles.css" /&gt;</code> del <code>&lt;head&gt;</code> es justo lo que conecta tu <code>index.html</code> con tu <code>styles.css</code>. El favicon usa la misma etiqueta <code>&lt;link&gt;</code>, solo cambia el <code>rel</code>.</p>
+</blockquote>
+<h2 id="7-cargar-una-fuente-con-link">7. Cargar una fuente con <code>&lt;link&gt;</code></h2>
+<p>Si quieres usar una tipografía de Google Fonts (por ejemplo, "Inter" o "Poppins"), también se trae con <code>&lt;link&gt;</code> en el <code>&lt;head&gt;</code>:</p>
+<pre><code class="language-html">&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot; /&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin /&gt;
+&lt;link
+  href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap&quot;
+  rel=&quot;stylesheet&quot;
+/&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-preconnect">🟦 ¿Qué significa? — <em>preconnect</em></h3>
+<p>Un <code>&lt;link rel="preconnect"&gt;</code> le pide al navegador que vaya "calentando" la conexión con el servidor de las fuentes antes de necesitarlas, para que carguen más rápido.
+<strong>¿Para qué sirve?</strong> Para que el texto aparezca con su tipografía bonita lo antes posible y se note menos el "salto" de fuente.</p>
+</blockquote>
+<p>No necesitas entender cada parte de la URL de Google Fonts: es código que tú copias y pegas desde la web de Google Fonts. Lo importante es saber <strong>dónde va</strong> (en el <code>&lt;head&gt;</code>) y <strong>con qué etiqueta</strong> (<code>&lt;link&gt;</code>).</p>
+<blockquote class="warn">
+<h3 id="cuidado-cada-link-externo-cuesta-tiempo">⚠️ Cuidado — Cada <code>&lt;link&gt;</code> externo cuesta tiempo</h3>
+<p>Cargar fuentes externas vuelve tu página un poco más lenta. Para <code>tunal-digital</code>, que presume de ser "rápido", usa pocas fuentes (una o dos) y pocos grosores. Menos es más.</p>
+</blockquote>
+<h2 id="8-open-graph-como-se-ve-tu-enlace-al-compartirlo">8. Open Graph: cómo se ve tu enlace al compartirlo</h2>
+<p>Aquí viene la parte más vistosa. ¿Has notado que cuando pegas un enlace en WhatsApp, Facebook o LinkedIn, aparece una tarjetita con imagen, título y descripción? Eso <strong>no es magia</strong>: lo controlas tú desde el <code>&lt;head&gt;</code> con las etiquetas <strong>Open Graph</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-open-graph-og">🟦 ¿Qué significa? — <em>Open Graph (OG)</em></h3>
+<p>Open Graph es un conjunto de metadatos (creado por Facebook, hoy usado por casi todas las redes) que define cómo se ve tu página cuando alguien la comparte: qué imagen, qué título y qué descripción mostrar.
+<strong>¿Para qué sirve?</strong> Para que tu enlace de <code>tunal-digital</code> se vea profesional y atractivo al compartirlo, en lugar de aparecer como un link pelado y feo.
+<strong>¿Dónde se usa en tu proyecto?</strong> En el <code>&lt;head&gt;</code> de <code>tunal-digital</code>, y la imagen apunta a tu <strong>og-image.png</strong>.</p>
+</blockquote>
+<p>Las etiquetas Open Graph son <code>&lt;meta&gt;</code> con un atributo especial llamado <code>property</code> (en lugar de <code>name</code>), y todas empiezan por <code>og:</code>.</p>
+<pre><code class="language-html">&lt;meta property=&quot;og:title&quot; content=&quot;Tunal Digital — Diseño web para pequeños negocios&quot; /&gt;
+&lt;meta property=&quot;og:description&quot; content=&quot;Sitios web rápidos y a medida que hacen crecer tu negocio.&quot; /&gt;
+&lt;meta property=&quot;og:type&quot; content=&quot;website&quot; /&gt;
+&lt;meta property=&quot;og:url&quot; content=&quot;https://tunaldigital.com&quot; /&gt;
+&lt;meta property=&quot;og:image&quot; content=&quot;https://tunaldigital.com/og-image.png&quot; /&gt;
+</code></pre>
+<p>Vamos una por una:</p>
+<ul>
+<li><code>og:title</code>: el título de la tarjeta (puede ser igual a tu <code>&lt;title&gt;</code>).</li>
+<li><code>og:description</code>: la descripción de la tarjeta.</li>
+<li><code>og:type</code>: qué tipo de contenido es; para un sitio normal, <code>website</code>.</li>
+<li><code>og:url</code>: la dirección oficial de la página.</li>
+<li><code>og:image</code>: <strong>la imagen de la tarjeta</strong>. Aquí entra tu <code>og-image.png</code>.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-og-imagepng">🟦 ¿Qué significa? — <em>og-image.png</em></h3>
+<p>Es la imagen que se muestra en la tarjeta de previsualización al compartir tu enlace. Suele ser un PNG de <strong>1200 × 630 píxeles</strong> con tu logo y un texto corto.
+<strong>¿Para qué sirve?</strong> Es la "carátula" de tu sitio en redes. Una buena <code>og-image</code> hace que la gente quiera hacer clic.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code>, el archivo <code>og-image.png</code> (junto a tu <code>index.html</code>, en <code>sitio-web/</code>) referenciado por <code>og:image</code>.</p>
+<h3 id="cuidado-la-url-de-la-imagen-debe-ser-absoluta">⚠️ Cuidado — La URL de la imagen debe ser absoluta</h3>
+<p>En <code>og:image</code>, no uses <code>href="og-image.png"</code> a secas. Las redes sociales viven en sus propios servidores y necesitan la <strong>dirección completa</strong>: <code>https://tunaldigital.com/og-image.png</code>. Si pones una ruta relativa, la imagen no aparecerá en WhatsApp ni en Facebook.</p>
+<h3 id="que-significa-ruta-absoluta-vs-relativa">🟦 ¿Qué significa? — <em>ruta absoluta vs. relativa</em></h3>
+<p>Una ruta <strong>relativa</strong> (<code>og-image.png</code>) dice "el archivo está aquí al lado". Una ruta <strong>absoluta</strong> (<code>https://tunaldigital.com/og-image.png</code>) da la dirección completa desde internet. Para Open Graph siempre se usa la absoluta.</p>
+</blockquote>
+<h2 id="9-twitter-cards-lo-mismo-pero-para-x-twitter">9. Twitter Cards: lo mismo, pero para X (Twitter)</h2>
+<p>X (antes Twitter) usa Open Graph, pero también tiene sus propias etiquetas para afinar cómo se ve la tarjeta. Se llaman <strong>Twitter Cards</strong> y usan <code>name="twitter:..."</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-twitter-card">🟦 ¿Qué significa? — <em>Twitter Card</em></h3>
+<p>Son metadatos para controlar cómo aparece tu enlace al compartirlo en X. Definen el tipo de tarjeta, el título, la descripción y la imagen.
+<strong>¿Para qué sirve?</strong> Para que tu enlace luzca bien también en X, con una imagen grande en lugar de un recuadro pequeño.</p>
+</blockquote>
+<pre><code class="language-html">&lt;meta name=&quot;twitter:card&quot; content=&quot;summary_large_image&quot; /&gt;
+&lt;meta name=&quot;twitter:title&quot; content=&quot;Tunal Digital — Diseño web para pequeños negocios&quot; /&gt;
+&lt;meta name=&quot;twitter:description&quot; content=&quot;Sitios web rápidos y a medida que hacen crecer tu negocio.&quot; /&gt;
+&lt;meta name=&quot;twitter:image&quot; content=&quot;https://tunaldigital.com/og-image.png&quot; /&gt;
+</code></pre>
+<ul>
+<li><code>twitter:card</code>: el formato. <code>summary_large_image</code> muestra la imagen grande (lo más vistoso).</li>
+<li>Los demás reutilizan tu mismo título, descripción e imagen.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip-reaprovecha-tu-og-image">💡 Tip — Reaprovecha tu og-image</h3>
+<p>No necesitas una imagen distinta para Twitter. La misma <code>og-image.png</code> de 1200×630 funciona perfecto en X, Facebook, LinkedIn y WhatsApp. Una sola imagen, todas las redes.</p>
+<h3 id="que-significa-property-vs-name">🟦 ¿Qué significa? — <em>property vs. name</em></h3>
+<p>Te habrás fijado: Open Graph usa <code>property="og:..."</code> y Twitter usa <code>name="twitter:..."</code>. Es solo una diferencia de convención entre los dos sistemas. No te preocupes por el porqué; recuerda el patrón: <strong>OG con <code>property</code>, Twitter con <code>name</code></strong>.</p>
+</blockquote>
+<h2 id="10-canonical-esta-es-la-version-oficial">10. <code>canonical</code>: "esta es la versión oficial"</h2>
+<p>A veces una misma página es accesible desde varias direcciones (con <code>www</code> y sin <code>www</code>, con o sin <code>/</code> al final...). Para que los buscadores no se confundan creyendo que son páginas distintas, se usa el <strong>canonical</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-canonical">🟦 ¿Qué significa? — <em>canonical</em></h3>
+<p>Es un <code>&lt;link&gt;</code> que le dice a Google: "de todas las direcciones posibles de esta página, <strong>esta</strong> es la oficial". 
+<strong>¿Para qué sirve?</strong> Para evitar contenido duplicado y concentrar la "fuerza" de tu página en una sola URL.
+<strong>¿Dónde se usa en tu proyecto?</strong> En el <code>&lt;head&gt;</code> de <code>tunal-digital</code>, apuntando a tu dirección preferida.</p>
+</blockquote>
+<pre><code class="language-html">&lt;link rel=&quot;canonical&quot; href=&quot;https://tunaldigital.com&quot; /&gt;
+</code></pre>
+<p>Para un sitio pequeño de una página como <code>tunal-digital</code>, basta con apuntar el canonical a tu dirección principal. Es un detalle pequeño, pero es de los que Google agradece.</p>
+<h2 id="11-que-es-el-seo-y-como-influye-el-html">11. ¿Qué es el SEO y cómo influye el HTML?</h2>
+<p>Hemos mencionado mucho a Google. Es hora de ponerle nombre a todo esto.</p>
+<blockquote class="def">
+<h3 id="que-significa-seo">🟦 ¿Qué significa? — <em>SEO</em></h3>
+<p>SEO son las siglas en inglés de <em>Search Engine Optimization</em>: "optimización para motores de búsqueda". Es el conjunto de cosas que haces para que tu página aparezca <strong>más arriba</strong> en Google cuando alguien busca algo relacionado.
+<strong>¿Para qué sirve?</strong> Para que clientes potenciales encuentren <code>tunal-digital</code> sin que tengas que pagar anuncios.</p>
+</blockquote>
+<p>El SEO tiene muchas partes (contenido, velocidad, enlaces de otros sitios...), pero una base fundamental es <strong>el HTML bien hecho</strong>. Tú ya estás haciendo SEO sin saberlo cuando:</p>
+<ul>
+<li>Pones un <code>&lt;title&gt;</code> claro y descriptivo.</li>
+<li>Escribes una <code>meta description</code> que invita al clic.</li>
+<li>Usas un solo <code>&lt;h1&gt;</code> con el tema principal y <code>&lt;h2&gt;</code>/<code>&lt;h3&gt;</code> ordenados (lo viste en el capítulo de encabezados).</li>
+<li>Pones <code>alt</code> descriptivo en tus imágenes (capítulo de imágenes).</li>
+<li>Declaras el idioma con <code>&lt;html lang="es"&gt;</code>.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-atributo-lang">🟦 ¿Qué significa? — <em>atributo <code>lang</code></em></h3>
+<p><code>lang="es"</code> en la etiqueta <code>&lt;html&gt;</code> declara que tu página está en español. 
+<strong>¿Para qué sirve?</strong> Para que Google la ofrezca a hispanohablantes y para que los lectores de pantalla (que ayudan a personas ciegas) la pronuncien en español. 
+<strong>¿Dónde se usa en tu proyecto?</strong> En la etiqueta de apertura <code>&lt;html lang="es"&gt;</code> de <code>tunal-digital</code>, en línea con la regla del proyecto de trabajar todo en español.</p>
+<h3 id="tip-el-seo-empieza-por-el-html-semantico">💡 Tip — El SEO empieza por el HTML semántico</h3>
+<p>No hace falta "truco" alguno: un HTML claro, con encabezados bien jerarquizados, títulos honestos y descripciones reales, ya es buen SEO. Los buscadores premian a quien escribe páginas que las personas entienden.</p>
+<h3 id="cuidado-no-enganes-a-google">⚠️ Cuidado — No engañes a Google</h3>
+<p>Poner texto oculto, repetir palabras a lo loco o prometer en el <code>&lt;title&gt;</code> algo que la página no cumple <strong>perjudica</strong> tu SEO. Google lo detecta y te castiga. Sé honesto: di lo que ofreces y cúmplelo.</p>
+</blockquote>
+<h2 id="12-el-head-completo-de-tunal-digital">12. El <code>&lt;head&gt;</code> completo de tunal-digital</h2>
+<p>Juntando todo lo del capítulo, así quedaría un <code>&lt;head&gt;</code> profesional y completo para tu <code>sitio-web/index.html</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+  &lt;head&gt;
+    &lt;!-- Básicos --&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+
+    &lt;!-- SEO --&gt;
+    &lt;title&gt;Tunal Digital — Diseño web para pequeños negocios&lt;/title&gt;
+    &lt;meta
+      name=&quot;description&quot;
+      content=&quot;Tunal Digital crea sitios web rápidos y a medida para pequeños negocios. Diseño, desarrollo y resultados.&quot;
+    /&gt;
+    &lt;link rel=&quot;canonical&quot; href=&quot;https://tunaldigital.com&quot; /&gt;
+
+    &lt;!-- Favicon --&gt;
+    &lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; href=&quot;favicon.png&quot; /&gt;
+
+    &lt;!-- Open Graph (Facebook, WhatsApp, LinkedIn) --&gt;
+    &lt;meta property=&quot;og:title&quot; content=&quot;Tunal Digital — Diseño web para pequeños negocios&quot; /&gt;
+    &lt;meta property=&quot;og:description&quot; content=&quot;Sitios web rápidos y a medida que hacen crecer tu negocio.&quot; /&gt;
+    &lt;meta property=&quot;og:type&quot; content=&quot;website&quot; /&gt;
+    &lt;meta property=&quot;og:url&quot; content=&quot;https://tunaldigital.com&quot; /&gt;
+    &lt;meta property=&quot;og:image&quot; content=&quot;https://tunaldigital.com/og-image.png&quot; /&gt;
+
+    &lt;!-- Twitter Card --&gt;
+    &lt;meta name=&quot;twitter:card&quot; content=&quot;summary_large_image&quot; /&gt;
+    &lt;meta name=&quot;twitter:title&quot; content=&quot;Tunal Digital — Diseño web para pequeños negocios&quot; /&gt;
+    &lt;meta name=&quot;twitter:description&quot; content=&quot;Sitios web rápidos y a medida que hacen crecer tu negocio.&quot; /&gt;
+    &lt;meta name=&quot;twitter:image&quot; content=&quot;https://tunaldigital.com/og-image.png&quot; /&gt;
+
+    &lt;!-- Estilos --&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot; /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!-- Tu contenido --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Fíjate en los comentarios (<code>&lt;!-- ... --&gt;</code>): no son obligatorios, pero ordenan el <code>&lt;head&gt;</code> por bloques para que tú —y tu yo del futuro— encuentren las cosas rápido.</p>
+<blockquote class="tip">
+<h3 id="tip-comprueba-tu-tarjeta-antes-de-presumirla">💡 Tip — Comprueba tu tarjeta antes de presumirla</h3>
+<p>Antes de compartir tu enlace, pega la URL en un "validador de Open Graph" (hay varios gratis en internet, como el de OpenGraph.xyz o el debugger de Facebook). Te muestran exactamente cómo se verá tu tarjeta. Si la <code>og-image</code> no aparece, casi siempre es porque la URL no era absoluta o la imagen aún no estaba publicada.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Aunque tus otros proyectos no son de HTML puro, el concepto del <code>&lt;head&gt;</code> sigue ahí: en <code>RachaSimple</code> (React + Vite) hay un <code>index.html</code> con su <code>&lt;head&gt;</code>, y en <code>Faro</code> (Next.js) los metadatos se definen en código pero generan exactamente estas mismas etiquetas <code>&lt;meta&gt;</code>. Lo que aprendes hoy te servirá en todos.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé qué es el <code>&lt;head&gt;</code> y en qué se diferencia del <code>&lt;body&gt;</code>.</li>
+<li>[ ] Entiendo qué es un metadato y para qué sirve la etiqueta <code>&lt;meta&gt;</code>.</li>
+<li>[ ] Sé por qué <code>charset="UTF-8"</code> evita que se rompan las tildes y la ñ.</li>
+<li>[ ] Entiendo qué hace la <code>&lt;meta&gt;</code> de <code>viewport</code> y por qué importa en el móvil.</li>
+<li>[ ] Distingo el <code>&lt;title&gt;</code> de la <code>meta description</code> y sé dónde aparece cada uno en Google.</li>
+<li>[ ] Sé enlazar un favicon, una fuente y mi CSS con la etiqueta <code>&lt;link&gt;</code> y su atributo <code>rel</code>.</li>
+<li>[ ] Entiendo qué es Open Graph y cómo <code>og:image</code> usa mi <code>og-image.png</code>.</li>
+<li>[ ] Sé que la URL de <code>og:image</code> debe ser absoluta.</li>
+<li>[ ] Conozco las Twitter Cards y <code>summary_large_image</code>.</li>
+<li>[ ] Sé qué es el <code>canonical</code> y para qué sirve.</li>
+<li>[ ] Entiendo qué es el SEO y cómo mi HTML (title, description, encabezados, <code>alt</code>, <code>lang</code>) influye en él.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>(Sin computadora)</strong> Explica con tus palabras, como si se lo contaras a un amigo, la diferencia entre el <code>&lt;title&gt;</code> y la <code>meta description</code>. ¿Dónde se ve cada uno?</p>
+</li>
+<li>
+<p><strong>(Sin computadora)</strong> Mira la tarjeta que aparece cuando un enlace cualquiera se comparte en WhatsApp. Identifica en ella qué parte viene del <code>og:title</code>, cuál del <code>og:description</code> y cuál del <code>og:image</code>.</p>
+</li>
+<li>
+<p><strong>💻</strong> Abre <code>sitio-web/index.html</code> de <code>tunal-digital</code> y revisa tu <code>&lt;head&gt;</code>. Anota qué etiquetas de este capítulo ya tienes y cuáles te faltan.</p>
+</li>
+<li>
+<p><strong>💻</strong> Escribe (o mejora) tu <code>&lt;title&gt;</code> y tu <code>meta description</code> para que describan de verdad lo que ofrece <code>tunal-digital</code>. Cuida la longitud: título ~50-60 caracteres, descripción ~120-155.</p>
+</li>
+<li>
+<p><strong>💻</strong> Añade el bloque completo de Open Graph y Twitter Card a tu <code>&lt;head&gt;</code>, apuntando <code>og:image</code> y <code>twitter:image</code> a tu <code>og-image.png</code> con una URL <strong>absoluta</strong>. Guarda el archivo.</p>
+</li>
+<li>
+<p><strong>💻</strong> Pega la URL de tu sitio en un validador de Open Graph gratuito y comprueba cómo se ve la tarjeta. Si la imagen no aparece, revisa que la URL sea absoluta y que la imagen exista. Cuando Bit vea esa tarjeta bien hecha, moverá la colita feliz.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

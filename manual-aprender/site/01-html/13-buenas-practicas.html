@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 13 — Buenas prácticas y errores comunes — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-buenas-practicas-y-errores-comunes">Capítulo 13 — Buenas prácticas y errores comunes</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Ya sabes escribir HTML que funciona. Ahora vamos a dar un paso más: escribir HTML que funciona <strong>bien</strong>. En este capítulo Bit, nuestro ajolote pixelado, te enseñará a revisar tu código con el validador W3C, a ordenarlo para que cualquiera (incluido tu yo del futuro) lo entienda, a elegir buenos nombres y a esquivar los errores que tropiezan a casi todos los principiantes. Nada de magia: solo costumbres pequeñas que, juntas, hacen una diferencia enorme. Usaremos como ejemplo principal tu propio sitio <strong>tunal-digital</strong> (el archivo <code>index.html</code>).</p>
+</blockquote>
+<h2 id="1-por-que-buenas-practicas">1. ¿Por qué "buenas prácticas"?</h2>
+<p>Un sitio puede verse perfecto en tu navegador y, aun así, estar lleno de problemas escondidos: etiquetas mal cerradas, código imposible de leer, imágenes que nadie puede entender. El navegador es muy paciente y "perdona" muchos errores: intenta mostrar la página de todos modos. El problema es que ese perdón es engañoso. El día que algo se rompe, no sabes por qué.</p>
+<p>Las <strong>buenas prácticas</strong> son acuerdos que la comunidad de programadores ha ido puliendo durante años para que el código sea:</p>
+<ul>
+<li><strong>Correcto</strong>: cumple las reglas oficiales de HTML.</li>
+<li><strong>Legible</strong>: una persona lo entiende de un vistazo.</li>
+<li><strong>Accesible</strong>: lo pueden usar también personas con discapacidad.</li>
+<li><strong>Mantenible</strong>: lo puedes cambiar mañana sin miedo.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-mantenible">🟦 ¿Qué significa? — <em>Mantenible</em></h3>
+<p>Un código es <strong>mantenible</strong> cuando es fácil de modificar más adelante sin romper nada. Sirve para que, cuando vuelvas a tocar tu proyecto dentro de tres meses, no tengas que adivinar qué hace cada línea.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, si tu <code>index.html</code> está ordenado, agregar una sección nueva mañana será cuestión de minutos en lugar de una tarde entera de pelea.</p>
+</blockquote>
+<p>Bit lo resume así: <em>"El navegador te perdona; tu yo del futuro, no tanto."</em></p>
+<h2 id="2-validar-tu-html-con-el-validador-w3c">2. Validar tu HTML con el validador W3C</h2>
+<p>La primera buena práctica es <strong>validar</strong>. Validar significa pasar tu archivo por una herramienta oficial que revisa si cumple las reglas del lenguaje.</p>
+<blockquote class="def">
+<h3 id="que-significa-validar-html">🟦 ¿Qué significa? — <em>Validar HTML</em></h3>
+<p><strong>Validar</strong> es comprobar de forma automática que tu HTML respeta las reglas oficiales: que las etiquetas estén bien escritas, bien cerradas y bien anidadas. Sirve para encontrar errores que el navegador esconde.
+<strong>¿Dónde se usa en tu proyecto?</strong> Pasarías <code>sitio-web/index.html</code> de <strong>tunal-digital</strong> por el validador para cazar errores antes de publicarlo en Cloudflare.</p>
+<h3 id="que-significa-w3c">🟦 ¿Qué significa? — <em>W3C</em></h3>
+<p>El <strong>W3C</strong> (World Wide Web Consortium) es la organización internacional que define los estándares de la web, incluido HTML. Es como la institución que decide "las reglas del juego" para todos los navegadores.</p>
+</blockquote>
+<p>La herramienta se llama <strong>W3C Markup Validation Service</strong> y vive en <code>https://validator.w3.org</code>. Tiene tres modos:</p>
+<ol>
+<li><strong>Validate by URI</strong>: le das la dirección de un sitio ya publicado.</li>
+<li><strong>Validate by File Upload</strong>: le subes tu archivo <code>index.html</code>.</li>
+<li><strong>Validate by Direct Input</strong>: pegas tu código en una caja de texto.</li>
+</ol>
+<p>Para tunal-digital, mientras trabajas en tu computadora, lo más cómodo es <strong>subir el archivo</strong> o <strong>pegar el código</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-uri">🟦 ¿Qué significa? — <em>URI</em></h3>
+<p>Una <strong>URI</strong> es, en la práctica, una dirección que identifica un recurso en la web (puedes pensarla como un primo de la URL). Sirve para que el validador sepa qué página visitar.</p>
+</blockquote>
+<p>Cuando validas, recibes dos tipos de avisos:</p>
+<blockquote class="def">
+<h3 id="que-significa-error-vs-warning-advertencia">🟦 ¿Qué significa? — <em>Error vs. Warning (advertencia)</em></h3>
+<p>Un <strong>error</strong> es algo que rompe las reglas y deberías arreglar siempre. Un <strong>warning</strong> (advertencia) es algo que no está prohibido, pero que podría mejorarse o que es sospechoso. Sirve para que priorices: primero los errores, luego las advertencias.</p>
+</blockquote>
+<p>Mira este HTML con un error típico:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Tunal Digital&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Bienvenido a Tunal Digital
+    &lt;p&gt;Creamos sitios web para tu negocio.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>El validador te diría algo como: <em>"Unclosed element h1"</em> (elemento <code>h1</code> sin cerrar). Falta el <code>&lt;/h1&gt;</code>. Corregido:</p>
+<pre><code class="language-html">&lt;h1&gt;Bienvenido a Tunal Digital&lt;/h1&gt;
+&lt;p&gt;Creamos sitios web para tu negocio.&lt;/p&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-valida-temprano-y-seguido">💡 Tip — Valida temprano y seguido</h3>
+<p>No esperes a tener 300 líneas para validar. Hazlo cada vez que termines una sección. Encontrar un error entre 20 líneas es fácil; entre 300, es una pesadilla.</p>
+<h3 id="cuidado-el-idioma-de-la-pagina">⚠️ Cuidado — El idioma de la página</h3>
+<p>Fíjate en <code>&lt;html lang="es"&gt;</code>. El atributo <code>lang</code> le dice al navegador y a los lectores de pantalla que la página está en español. Si lo omites, el validador lo marca y la accesibilidad empeora. En tunal-digital, como el contenido es en español, debe ser <code>lang="es"</code>.</p>
+</blockquote>
+<h2 id="3-indentacion-y-legibilidad">3. Indentación y legibilidad</h2>
+<p><strong>Indentar</strong> es dejar espacios al principio de cada línea para mostrar qué etiqueta está dentro de cuál. El navegador ignora esos espacios, pero para tus ojos hacen toda la diferencia.</p>
+<blockquote class="def">
+<h3 id="que-significa-indentacion-sangria">🟦 ¿Qué significa? — <em>Indentación (sangría)</em></h3>
+<p>La <strong>indentación</strong> es el espacio en blanco al inicio de una línea que indica el nivel de anidamiento. Sirve para ver de un vistazo qué elementos están "dentro" de otros.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>index.html</code> de <strong>tunal-digital</strong>, cada vez que metes una etiqueta dentro de otra (por ejemplo un <code>&lt;p&gt;</code> dentro de una <code>&lt;section&gt;</code>), la corres un nivel más a la derecha.</p>
+</blockquote>
+<p>Compara. Sin indentar es un muro ilegible:</p>
+<pre><code class="language-html">&lt;section&gt;
+&lt;h2&gt;Servicios&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Diseño web&lt;/li&gt;
+&lt;li&gt;Mantenimiento&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/section&gt;
+</code></pre>
+<p>Indentado, la estructura se "ve":</p>
+<pre><code class="language-html">&lt;section&gt;
+  &lt;h2&gt;Servicios&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Diseño web&lt;/li&gt;
+    &lt;li&gt;Mantenimiento&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+</code></pre>
+<p>La regla más común es <strong>2 espacios por nivel</strong> (también se usan 4 o un tabulador; lo importante es ser <strong>consistente</strong>: elige uno y no lo mezcles).</p>
+<blockquote class="def">
+<h3 id="que-significa-anidamiento">🟦 ¿Qué significa? — <em>Anidamiento</em></h3>
+<p><strong>Anidar</strong> es colocar una etiqueta dentro de otra, como cajas dentro de cajas. La etiqueta de afuera es la "madre" y la de adentro es la "hija". Sirve para construir la estructura de la página.</p>
+<h3 id="tip-deja-que-el-editor-te-ayude">💡 Tip — Deja que el editor te ayude</h3>
+<p>Editores como VS Code formatean tu HTML automáticamente. Busca la opción <em>"Format Document"</em> (suele estar en <code>Shift + Alt + F</code>). Extensiones como <strong>Prettier</strong> lo hacen al guardar. Así nunca peleas con la indentación a mano.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Abre <code>sitio-web/index.html</code> de tunal-digital y, si lo ves desordenado, ejecuta <em>Format Document</em>. Verás cómo las secciones quedan alineadas y de pronto entiendes la estructura de toda la página.</p>
+</blockquote>
+<p>Otras costumbres de legibilidad:</p>
+<ul>
+<li><strong>Una etiqueta de bloque por línea</strong> (no amontones diez <code>&lt;div&gt;</code> en una sola línea).</li>
+<li><strong>Líneas en blanco</strong> para separar secciones grandes (la cabecera, el menú, el contenido).</li>
+<li><strong>Minúsculas</strong> en nombres de etiquetas y atributos: <code>&lt;section&gt;</code>, no <code>&lt;SECTION&gt;</code>.</li>
+<li><strong>Comillas siempre</strong> en los valores de atributos: <code>class="boton"</code>, no <code>class=boton</code>.</li>
+</ul>
+<h2 id="4-buenos-nombres-de-clases">4. Buenos nombres de clases</h2>
+<p>Las <strong>clases</strong> son etiquetas que les pones a tus elementos para luego darles estilo con CSS o seleccionarlos con JavaScript. El nombre que elijas importa muchísimo.</p>
+<blockquote class="def">
+<h3 id="que-significa-clase-class">🟦 ¿Qué significa? — <em>Clase (class)</em></h3>
+<p>Una <strong>clase</strong> es un nombre que asignas a uno o varios elementos con el atributo <code>class</code>. Sirve para agruparlos y aplicarles el mismo estilo o comportamiento. Por ejemplo, todos los botones con <code>class="boton-principal"</code> pueden compartir color y forma.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, <code>styles.css</code> aplica reglas a las clases que pongas en <code>index.html</code>, y <code>main.js</code> puede buscar elementos por su clase para hacerlos interactivos.</p>
+</blockquote>
+<p>Un buen nombre describe <strong>qué es</strong> el elemento o <strong>qué papel cumple</strong>, no cómo se ve hoy:</p>
+<pre><code class="language-html">&lt;!-- ❌ Nombres que envejecen mal --&gt;
+&lt;button class=&quot;azul-grande&quot;&gt;Contáctanos&lt;/button&gt;
+
+&lt;!-- ✅ Nombres que describen el papel --&gt;
+&lt;button class=&quot;boton-contacto&quot;&gt;Contáctanos&lt;/button&gt;
+</code></pre>
+<p>¿Por qué? Si mañana decides que el botón sea verde, <code>class="azul-grande"</code> se vuelve una mentira. <code>boton-contacto</code> sigue siendo verdad.</p>
+<p>Convenciones útiles:</p>
+<ul>
+<li>Usa <strong>minúsculas</strong> y separa palabras con <strong>guiones</strong>: <code>tarjeta-servicio</code>, <code>menu-principal</code>. Este estilo se llama <em>kebab-case</em> (como palabras unidas por guiones, igual que las brochetas).</li>
+<li>Sé <strong>específico pero corto</strong>: <code>precio-plan</code> es mejor que <code>el-texto-que-muestra-el-precio</code>.</li>
+<li>Sé <strong>consistente</strong>: si usas español, usa español en todas. No mezcles <code>boton</code> y <code>button</code>.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-kebab-case">🟦 ¿Qué significa? — <em>kebab-case</em></h3>
+<p><strong>kebab-case</strong> es una forma de escribir nombres compuestos usando minúsculas y guiones entre palabras, por ejemplo <code>menu-principal</code>. Sirve para que los nombres de clase sean legibles y compatibles con CSS.</p>
+<h3 id="tip-piensa-en-el-componente-no-en-la-pagina">💡 Tip — Piensa en el componente, no en la página</h3>
+<p>En <strong>RachaSimple</strong> (React + TypeScript) trabajas con componentes <code>.tsx</code>. Aunque ahí el estilo se hace con Tailwind, la idea de nombrar por función y no por apariencia es la misma que en HTML puro. Buen hábito que viaja entre proyectos.</p>
+</blockquote>
+<h2 id="5-html-semantico-vs-divitis">5. HTML semántico vs. "divitis"</h2>
+<p>Esta es, quizá, la práctica que más distingue a un principiante de alguien con oficio.</p>
+<blockquote class="def">
+<h3 id="que-significa-html-semantico">🟦 ¿Qué significa? — <em>HTML semántico</em></h3>
+<p><strong>HTML semántico</strong> es usar etiquetas que describen el <strong>significado</strong> del contenido, no solo su apariencia. Por ejemplo <code>&lt;nav&gt;</code> para el menú, <code>&lt;header&gt;</code> para la cabecera, <code>&lt;footer&gt;</code> para el pie. Sirve para que el navegador, Google y los lectores de pantalla entiendan tu página.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, tu <code>index.html</code> debería usar <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code> y <code>&lt;footer&gt;</code> en vez de un mar de <code>&lt;div&gt;</code>.</p>
+<h3 id="que-significa-divitis">🟦 ¿Qué significa? — <em>"Divitis"</em></h3>
+<p><strong>Divitis</strong> es el apodo (medio en broma) para la mala costumbre de construir toda la página solo con etiquetas <code>&lt;div&gt;</code>, sin usar etiquetas semánticas. Se llama así porque parece una "enfermedad" de tantos <code>&lt;div&gt;</code>. El problema: nadie entiende qué es cada parte.</p>
+</blockquote>
+<p>Mira el mismo encabezado de dos formas. Con divitis:</p>
+<pre><code class="language-html">&lt;div class=&quot;cabecera&quot;&gt;
+  &lt;div class=&quot;logo&quot;&gt;Tunal Digital&lt;/div&gt;
+  &lt;div class=&quot;menu&quot;&gt;
+    &lt;div class=&quot;enlace&quot;&gt;&lt;a href=&quot;#servicios&quot;&gt;Servicios&lt;/a&gt;&lt;/div&gt;
+    &lt;div class=&quot;enlace&quot;&gt;&lt;a href=&quot;#contacto&quot;&gt;Contacto&lt;/a&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Con HTML semántico:</p>
+<pre><code class="language-html">&lt;header&gt;
+  &lt;h1&gt;Tunal Digital&lt;/h1&gt;
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#servicios&quot;&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#contacto&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+<p>La segunda versión le dice a todo el mundo: "esto es la cabecera, esto es la navegación, esto es una lista de enlaces". La primera solo dice "div, div, div".</p>
+<blockquote class="def">
+<h3 id="que-significa-lector-de-pantalla">🟦 ¿Qué significa? — <em>Lector de pantalla</em></h3>
+<p>Un <strong>lector de pantalla</strong> es un programa que lee en voz alta el contenido de la página para personas con discapacidad visual. Sirve para que tu sitio sea usable por todos. El HTML semántico le permite anunciar "menú de navegación", "encabezado", etc.</p>
+<h3 id="tip-preguntate-que-es-esto">💡 Tip — Pregúntate "¿qué es esto?"</h3>
+<p>Antes de escribir <code>&lt;div&gt;</code>, pregúntate qué papel cumple. ¿Es el menú? <code>&lt;nav&gt;</code>. ¿El contenido principal? <code>&lt;main&gt;</code>. ¿Un bloque temático? <code>&lt;section&gt;</code>. Solo usa <code>&lt;div&gt;</code> cuando de verdad sea una caja genérica sin significado especial (por ejemplo, para agrupar cosas solo por motivos de diseño).</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Revisa el <code>index.html</code> de tunal-digital y cuenta cuántos <code>&lt;div&gt;</code> tienes. Cada uno que puedas reemplazar por una etiqueta semántica mejora el SEO, la accesibilidad y la legibilidad de un solo golpe.</p>
+<h3 id="que-significa-seo">🟦 ¿Qué significa? — <em>SEO</em></h3>
+<p><strong>SEO</strong> (Search Engine Optimization, optimización para motores de búsqueda) es el conjunto de prácticas que ayudan a que tu sitio aparezca mejor posicionado en buscadores como Google. El HTML semántico ayuda al SEO porque Google entiende mejor tu contenido.</p>
+</blockquote>
+<h2 id="6-los-errores-mas-frecuentes-y-como-evitarlos">6. Los errores más frecuentes (y cómo evitarlos)</h2>
+<p>Bit ha visto estos cuatro errores miles de veces. Si los conoces, ya vas un paso adelante.</p>
+<h3 id="61-etiquetas-sin-cerrar">6.1 Etiquetas sin cerrar</h3>
+<p>La mayoría de las etiquetas vienen en pareja: apertura y cierre. Olvidar el cierre descoloca toda la página.</p>
+<pre><code class="language-html">&lt;!-- ❌ Falta cerrar el &lt;a&gt; --&gt;
+&lt;p&gt;Visita nuestra &lt;a href=&quot;#contacto&quot;&gt;página de contacto.&lt;/p&gt;
+
+&lt;!-- ✅ Correcto --&gt;
+&lt;p&gt;Visita nuestra &lt;a href=&quot;#contacto&quot;&gt;página de contacto&lt;/a&gt;.&lt;/p&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-de-cierre">🟦 ¿Qué significa? — <em>Etiqueta de cierre</em></h3>
+<p>Una <strong>etiqueta de cierre</strong> es la versión con barra (<code>&lt;/p&gt;</code>, <code>&lt;/a&gt;</code>) que marca dónde termina un elemento. Sirve para que el navegador sepa hasta dónde llega su contenido.</p>
+</blockquote>
+<p>Hay etiquetas que <strong>no se cierran</strong> porque no tienen contenido dentro, como <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code> y <code>&lt;meta&gt;</code>. Se llaman elementos vacíos y eso es normal, no un error.</p>
+<h3 id="62-atributo-alt-faltante-en-imagenes">6.2 Atributo <code>alt</code> faltante en imágenes</h3>
+<p>Toda imagen debería llevar un atributo <code>alt</code> con una descripción de lo que muestra.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributo-alt">🟦 ¿Qué significa? — <em>Atributo alt</em></h3>
+<p>El atributo <strong>alt</strong> (texto alternativo) es una descripción de la imagen en palabras. Sirve para tres cosas: lo lee el lector de pantalla, se muestra si la imagen no carga, y ayuda al SEO.
+<strong>¿Dónde se usa en tu proyecto?</strong> Cada <code>&lt;img&gt;</code> del <code>index.html</code> de <strong>tunal-digital</strong> (un logo, una foto de un servicio) debe tener su <code>alt</code>.</p>
+</blockquote>
+<pre><code class="language-html">&lt;!-- ❌ Sin alt: invisible para quien no ve la imagen --&gt;
+&lt;img src=&quot;logo.png&quot;&gt;
+
+&lt;!-- ✅ Con alt descriptivo --&gt;
+&lt;img src=&quot;logo.png&quot; alt=&quot;Logo de Tunal Digital&quot;&gt;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado-alt-vacio-si-existe-pero-con-criterio">⚠️ Cuidado — <code>alt</code> vacío sí existe, pero con criterio</h3>
+<p>Si una imagen es puramente decorativa (un adorno sin información), se usa <code>alt=""</code> (vacío) para que el lector de pantalla la ignore. Pero ese vacío debe ser una decisión, no un olvido. Si la imagen comunica algo, el <code>alt</code> describe ese algo.</p>
+</blockquote>
+<h3 id="63-id-duplicados">6.3 <code>id</code> duplicados</h3>
+<p>Un <strong>id</strong> es un identificador único para un elemento. La palabra clave es <strong>único</strong>: no puede repetirse en la misma página.</p>
+<blockquote class="def">
+<h3 id="que-significa-id">🟦 ¿Qué significa? — <em>id</em></h3>
+<p>Un <strong>id</strong> es un nombre único que identifica a un solo elemento de la página, usando el atributo <code>id</code>. Sirve para enlazar (por ejemplo <code>&lt;a href="#contacto"&gt;</code> salta al elemento con <code>id="contacto"</code>) y para que JavaScript lo encuentre.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, <code>main.js</code> puede buscar un elemento por su <code>id</code> para hacerlo interactivo; si hay dos <code>id</code> iguales, JavaScript solo encuentra el primero y el segundo queda "muerto".</p>
+</blockquote>
+<pre><code class="language-html">&lt;!-- ❌ Dos elementos con el mismo id --&gt;
+&lt;section id=&quot;servicios&quot;&gt;...&lt;/section&gt;
+&lt;section id=&quot;servicios&quot;&gt;...&lt;/section&gt;
+
+&lt;!-- ✅ ids únicos --&gt;
+&lt;section id=&quot;servicios&quot;&gt;...&lt;/section&gt;
+&lt;section id=&quot;servicios-premium&quot;&gt;...&lt;/section&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-id-unico-class-repetible">💡 Tip — id único, class repetible</h3>
+<p>Recuerda la diferencia: el <strong>id</strong> es para uno solo (como tu número de cédula). La <strong>class</strong> se puede repetir en muchos elementos (como "estudiante", que describe a muchas personas). Si necesitas marcar varios elementos parecidos, usa <code>class</code>.</p>
+</blockquote>
+<h3 id="64-anidamiento-invalido">6.4 Anidamiento inválido</h3>
+<p>Algunas etiquetas no pueden ir dentro de otras. El caso clásico: un elemento de bloque dentro de un <code>&lt;p&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-elemento-de-bloque-vs-en-linea">🟦 ¿Qué significa? — <em>Elemento de bloque vs. en línea</em></h3>
+<p>Un <strong>elemento de bloque</strong> (como <code>&lt;div&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;ul&gt;</code>) ocupa todo el ancho disponible y empieza en una línea nueva. Un <strong>elemento en línea</strong> (como <code>&lt;a&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;strong&gt;</code>) fluye dentro del texto. Sirve saber la diferencia porque ciertas combinaciones de anidamiento están prohibidas.</p>
+</blockquote>
+<pre><code class="language-html">&lt;!-- ❌ Una &lt;ul&gt; (bloque) dentro de un &lt;p&gt; es inválido --&gt;
+&lt;p&gt;Nuestros servicios:
+  &lt;ul&gt;
+    &lt;li&gt;Diseño&lt;/li&gt;
+    &lt;li&gt;Soporte&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/p&gt;
+
+&lt;!-- ✅ Saca la lista fuera del párrafo --&gt;
+&lt;p&gt;Nuestros servicios:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Diseño&lt;/li&gt;
+  &lt;li&gt;Soporte&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>El validador W3C caza estos errores enseguida. Por eso la sección 2 y esta van de la mano: validar es tu red de seguridad contra el anidamiento inválido.</p>
+<blockquote class="warn">
+<h3 id="cuidado-cierra-en-orden-inverso-al-que-abriste">⚠️ Cuidado — Cierra en orden inverso al que abriste</h3>
+<p>Si abres <code>&lt;p&gt;&lt;strong&gt;</code>, debes cerrar <code>&lt;/strong&gt;&lt;/p&gt;</code>, no <code>&lt;/p&gt;&lt;/strong&gt;</code>. Lo último que abres es lo primero que cierras. Como ponerte y quitarte ropa: primero la camisa, después la chaqueta; al quitarte, primero la chaqueta.</p>
+</blockquote>
+<h2 id="7-rendimiento-basico-desde-el-html">7. Rendimiento básico desde el HTML</h2>
+<p>El <strong>rendimiento</strong> es qué tan rápido carga y responde tu página. Aunque mucho del rendimiento se afina con CSS y JavaScript, hay decisiones que se toman ya en el HTML.</p>
+<blockquote class="def">
+<h3 id="que-significa-rendimiento">🟦 ¿Qué significa? — <em>Rendimiento</em></h3>
+<p>El <strong>rendimiento</strong> mide qué tan rápido tu página se carga y funciona. Sirve porque una página lenta espanta visitantes. En <strong>tunal-digital</strong>, publicado en Cloudflare, un HTML liviano carga más rápido para tus clientes.</p>
+</blockquote>
+<p>Cosas sencillas que ayudan:</p>
+<ul>
+<li><strong>Imágenes con tamaño adecuado</strong>: no subas una foto de 4000 píxeles si se va a mostrar a 400. Pesa de más y carga lento.</li>
+<li><strong>Carga diferida de imágenes</strong>: el atributo <code>loading="lazy"</code> le dice al navegador que cargue una imagen solo cuando el usuario esté a punto de verla.</li>
+</ul>
+<pre><code class="language-html">&lt;img src=&quot;foto-servicio.jpg&quot; alt=&quot;Equipo trabajando&quot; loading=&quot;lazy&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-carga-diferida-lazy-loading">🟦 ¿Qué significa? — <em>Carga diferida (lazy loading)</em></h3>
+<p>La <strong>carga diferida</strong> retrasa la carga de un recurso (como una imagen) hasta que de verdad se necesita. Sirve para que la página aparezca más rápido al inicio, porque no descarga de golpe todo lo que está más abajo.</p>
+</blockquote>
+<ul>
+<li><strong>Coloca los scripts al final</strong> del <code>&lt;body&gt;</code> o usa el atributo <code>defer</code>, para que el contenido visible aparezca antes de cargar el JavaScript.</li>
+</ul>
+<pre><code class="language-html">&lt;script src=&quot;main.js&quot; defer&gt;&lt;/script&gt;
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong>, revisa cómo cargas <code>main.js</code>. Si lo incluyes con <code>defer</code> o justo antes de <code>&lt;/body&gt;</code>, el texto de tu página aparece sin esperar a que el JavaScript termine de descargarse. Pequeño cambio, sensación de velocidad mucho mayor.</p>
+<h3 id="tip-menos-es-mas">💡 Tip — Menos es más</h3>
+<p>El HTML más rápido es el que no tiene basura: etiquetas vacías que no sirven, capas y capas de <code>&lt;div&gt;</code> innecesarios, comentarios viejos. Limpiar tu HTML también lo hace más liviano.</p>
+</blockquote>
+<h2 id="8-comentarios-utiles">8. Comentarios útiles</h2>
+<p>Un <strong>comentario</strong> es texto en tu código que el navegador ignora; sirve solo para que los humanos lean.</p>
+<blockquote class="def">
+<h3 id="que-significa-comentario-en-html">🟦 ¿Qué significa? — <em>Comentario en HTML</em></h3>
+<p>Un <strong>comentario</strong> es una nota dentro del código, escrita entre <code>&lt;!--</code> y <code>--&gt;</code>, que el navegador no muestra. Sirve para explicar partes del código o marcar secciones.
+<strong>¿Dónde se usa en tu proyecto?</strong> En el <code>index.html</code> de <strong>tunal-digital</strong> puedes marcar dónde empieza cada sección para orientarte rápido.</p>
+</blockquote>
+<pre><code class="language-html">&lt;!-- ===== Cabecera y menú ===== --&gt;
+&lt;header&gt;
+  ...
+&lt;/header&gt;
+
+&lt;!-- ===== Sección de servicios ===== --&gt;
+&lt;section id=&quot;servicios&quot;&gt;
+  ...
+&lt;/section&gt;
+</code></pre>
+<p>Pero ojo: un buen comentario explica <strong>por qué</strong>, no <strong>qué</strong>. El código ya dice qué hace; el comentario aporta cuando explica una decisión.</p>
+<pre><code class="language-html">&lt;!-- ❌ Comentario inútil: repite lo obvio --&gt;
+&lt;!-- Aquí hay un título --&gt;
+&lt;h1&gt;Tunal Digital&lt;/h1&gt;
+
+&lt;!-- ✅ Comentario útil: explica una decisión --&gt;
+&lt;!-- Este bloque se llena desde main.js con la respuesta de la API de Claude --&gt;
+&lt;div id=&quot;respuesta-ia&quot;&gt;&lt;/div&gt;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado-los-comentarios-se-ven-en-el-codigo-fuente">⚠️ Cuidado — Los comentarios se ven en el código fuente</h3>
+<p>Cualquiera puede ver tus comentarios HTML con "Ver código fuente" en el navegador. <strong>Nunca</strong> escribas en ellos contraseñas, claves de API ni información privada. Recuerda la regla de tu propio proyecto Faro: los secretos van solo en el servidor, jamás en el cliente.</p>
+<h3 id="tip-borra-los-comentarios-zombi">💡 Tip — Borra los comentarios "zombi"</h3>
+<p>Cuando comentas un bloque de código para "probarlo desactivado" y luego lo dejas ahí para siempre, se convierte en ruido. Si ya no lo usas, bórralo. Tu archivo estará más limpio y liviano.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé pasar mi <code>index.html</code> por el validador W3C y distinguir un error de una advertencia.</li>
+<li>[ ] Indento mi código con un número de espacios consistente y sé usar <em>Format Document</em>.</li>
+<li>[ ] Pongo <code>&lt;html lang="es"&gt;</code> en mis páginas en español.</li>
+<li>[ ] Nombro mis clases por su función (no por su color) y uso kebab-case.</li>
+<li>[ ] Reconozco la "divitis" y la cambio por etiquetas semánticas (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;footer&gt;</code>).</li>
+<li>[ ] Cierro todas mis etiquetas y las cierro en el orden correcto.</li>
+<li>[ ] Pongo <code>alt</code> descriptivo en cada imagen con información.</li>
+<li>[ ] Uso <code>id</code> únicos y entiendo cuándo conviene <code>class</code> en su lugar.</li>
+<li>[ ] Evito el anidamiento inválido (por ejemplo, listas dentro de <code>&lt;p&gt;</code>).</li>
+<li>[ ] Conozco trucos básicos de rendimiento: tamaño de imágenes, <code>loading="lazy"</code>, <code>defer</code>.</li>
+<li>[ ] Escribo comentarios que explican el porqué y nunca pongo secretos en ellos.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>💻 Valida tu sitio.</strong> Toma el <code>index.html</code> de tunal-digital, pégalo en <code>https://validator.w3.org</code> (modo <em>Direct Input</em>) y anota todos los errores y advertencias que aparezcan. Haz una lista de cuántos hay de cada tipo.</p>
+</li>
+<li>
+<p><strong>💻 Corrige y revalida.</strong> Arregla al menos tres de los errores que encontraste en el ejercicio anterior y vuelve a validar. Tu meta: bajar el número de errores. Apunta cuántos eliminaste.</p>
+</li>
+<li>
+<p><strong>💻 Caza la divitis.</strong> Cuenta cuántos <code>&lt;div&gt;</code> tiene tu <code>index.html</code>. Reemplaza al menos dos por etiquetas semánticas (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;section&gt;</code> o <code>&lt;footer&gt;</code>) y comprueba que la página se sigue viendo igual.</p>
+</li>
+<li>
+<p><strong>💻 Imágenes accesibles.</strong> Revisa todas las etiquetas <code>&lt;img&gt;</code> de tu sitio. Asegúrate de que cada imagen con información tenga un <code>alt</code> descriptivo y de que las decorativas tengan <code>alt=""</code>. Añade <code>loading="lazy"</code> a las que estén más abajo en la página.</p>
+</li>
+<li>
+<p><strong>Detective de errores.</strong> Sin usar la computadora, escribe en papel qué está mal en este fragmento y cómo lo arreglarías: <code>&lt;p&gt;Bienvenido &lt;a href="#"&gt;aquí&lt;p&gt;</code> y <code>&lt;img src="banner.jpg"&gt;</code> y dos secciones con <code>id="info"</code>.</p>
+</li>
+<li>
+<p><strong>💻 Comentarios con criterio.</strong> Añade comentarios de sección a tu <code>index.html</code> (cabecera, servicios, contacto, pie) y borra cualquier comentario "zombi" o código comentado que ya no uses. Verifica que no haya quedado ningún dato sensible en ellos.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

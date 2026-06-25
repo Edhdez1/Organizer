@@ -43,7 +43,17 @@ donde tu sitio pasa de verse "feo y plano" a verse como tú quieres.
 | 03 | [El modelo de cajas](03-modelo-de-cajas.md) | content, padding, border, margin |
 | 04 | [Layout con Flexbox](04-flexbox.md) | Filas/columnas flexibles, alineación |
 | 05 | [Diseño responsive](05-responsive.md) | Media queries, mobile-first, viewport |
+| 06 | [Selectores y especificidad](06-selectores-y-especificidad.md) | Combinadores, por atributo, quién gana |
+| 07 | [La cascada y la herencia](07-cascada-y-herencia.md) | Conflictos, herencia, inherit/initial |
+| 08 | [Posicionamiento](08-posicionamiento.md) | position, z-index, float, overflow |
+| 09 | [CSS Grid a fondo](09-grid.md) | Cuadrículas en 2D, fr, areas, Grid vs Flexbox |
+| 10 | [Transiciones y animaciones](10-transiciones-y-animaciones.md) | transition, transform, @keyframes |
+| 11 | [Unidades modernas y funciones](11-unidades-y-funciones.md) | clamp, min/max, calc, vw/vh |
+| 12 | [Variables CSS y temas](12-variables-y-temas.md) | Custom properties, tema claro/oscuro |
+| 13 | [Pseudo-clases y pseudo-elementos](13-pseudoclases-y-pseudoelementos.md) | `:hover`, `::before`, `:nth-child` |
+| 14 | [Mini-proyecto: una tarjeta con estilo](14-mini-proyecto-tarjeta.md) | Construir una tarjeta bonita paso a paso |
+| 15 | [Glosario de CSS y mapa](15-glosario-css.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 02 — versión ampliada (capítulos 01–15, ~95 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es CSS?](01-que-es-css.md)**.

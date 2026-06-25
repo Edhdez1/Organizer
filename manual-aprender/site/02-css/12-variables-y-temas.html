@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 12 — Variables CSS y temas — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-12-variables-css-y-temas">Capítulo 12 — Variables CSS y temas</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap12.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora has repetido colores y medidas una y otra vez por todo tu CSS. Si el verde de tu marca aparece en treinta sitios y tu jefe (o tú mismo) decide que ahora es azul, te toca cazar treinta lugares. En este capítulo Bit, nuestro ajolote favorito, te muestra cómo guardar un valor en una sola caja con nombre y reutilizarlo en todas partes: las <strong>variables CSS</strong>. Con ellas vas a construir, paso a paso, un tema claro y un tema oscuro de verdad. Es uno de los superpoderes más satisfactorios del CSS moderno.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-problema-resuelven-las-variables">1. ¿Qué problema resuelven las variables?</h2>
+<p>Imagina el <code>styles.css</code> de <strong>tunal-digital</strong>. En el header pintas el verde de marca. En los botones, el mismo verde. En los enlaces al pasar el ratón, otra vez el verde. Tres lugares, tres veces el código <code>#1f9d55</code>.</p>
+<p>El problema no es escribirlo tres veces. El problema es <strong>mantenerlo</strong>: el día que cambie el verde, tienes que acordarte de todos los rincones donde lo pusiste, y seguro se te escapa alguno. Las variables convierten ese verde en un nombre, lo defines <strong>una vez</strong>, y donde antes había treinta copias del color ahora hay treinta referencias al mismo nombre. Cambias el nombre en un sitio y todo el sitio web cambia con él.</p>
+<blockquote class="def">
+<h3 id="que-significa-variable-css-custom-property">🟦 ¿Qué significa? — <em>Variable CSS (custom property)</em></h3>
+<p>Una <strong>variable CSS</strong>, también llamada <em>custom property</em> (propiedad personalizada), es un nombre que tú inventas y al que le guardas un valor: un color, un tamaño, una fuente, lo que sea. Su nombre <strong>siempre empieza con dos guiones</strong>, por ejemplo <code>--color-marca</code>. Sirve para no repetir valores y para poder cambiarlos en un solo lugar. En un repo real como <strong>tunal-digital</strong> la usarías para guardar los colores y espaciados de la marca; el propio <code>site/estilos.css</code> de este manual las usa para definir sus colores y sus temas.</p>
+</blockquote>
+<p>Bit lo resume así: una variable es como ponerle una etiqueta a un frasco. En vez de decir "el líquido verde del frasco número 47", dices "salsa". Y si un día cambias el contenido del frasco "salsa", todas las recetas que pedían "salsa" usan el nuevo contenido sin que toques las recetas.</p>
+<hr />
+<h2 id="2-declarar-una-variable-nombre">2. Declarar una variable: <code>--nombre</code></h2>
+<p>Una variable se <strong>declara</strong> (se crea) escribiendo su nombre con dos guiones al frente y dándole un valor, igual que cualquier propiedad CSS:</p>
+<pre><code class="language-css">:root {
+  --color-marca: #1f9d55;
+  --color-texto: #1a1a1a;
+  --espacio-base: 16px;
+  --radio-borde: 8px;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-declarar">🟦 ¿Qué significa? — <em>Declarar</em></h3>
+<p><strong>Declarar</strong> una variable es crearla y darle un valor por primera vez. Lo haces escribiendo <code>--nombre: valor;</code> dentro de un bloque de reglas. Sirve para que la variable exista y tenga un contenido. En <strong>tunal-digital</strong> declararías al inicio de <code>styles.css</code> todas las variables de la paleta antes de empezar a usarlas.</p>
+</blockquote>
+<p>Fíjate en los detalles, porque importan:</p>
+<ul>
+<li>El nombre empieza con <code>--</code> (dos guiones). Sin eso, no es una variable.</li>
+<li>Distingue mayúsculas de minúsculas: <code>--Color</code> y <code>--color</code> son <strong>dos variables distintas</strong>.</li>
+<li>Puedes usar guiones para separar palabras: <code>--color-marca</code>, <code>--espacio-base</code>. Es la costumbre más común.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Ponles nombres que digan <strong>para qué sirven</strong>, no qué color son. <code>--color-marca</code> es mejor que <code>--verde</code>, porque si mañana la marca cambia a azul, el nombre <code>--color-marca</code> sigue teniendo sentido y <code>--verde: blue</code> quedaría ridículo.</p>
+</blockquote>
+<hr />
+<h2 id="3-root-el-lugar-donde-viven-las-variables-globales">3. <code>:root</code>: el lugar donde viven las variables globales</h2>
+<p>¿Qué es ese <code>:root</code> donde declaramos las variables arriba? Es el sitio habitual para las variables que quieres usar <strong>en toda la página</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-root">🟦 ¿Qué significa? — <em><code>:root</code></em></h3>
+<p><code>:root</code> es un <strong>selector</strong> especial que apunta al elemento más alto del documento: la etiqueta <code>&lt;html&gt;</code>. Sirve para declarar variables que quieres que estén disponibles en <strong>toda</strong> la página. Se usa al principio del CSS para definir la paleta y las medidas globales. En el <code>site/estilos.css</code> de este manual, los colores del tema viven dentro de <code>:root</code>.</p>
+</blockquote>
+<p>Técnicamente <code>:root</code> es lo mismo que el selector <code>html</code>, pero tiene un pelín más de prioridad y, sobre todo, es la convención: cuando alguien lee tu CSS y ve <code>:root</code>, entiende al instante "aquí están las variables globales del proyecto". Por eso casi todo el mundo lo usa para esto.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Abre el <code>styles.css</code> de <strong>tunal-digital</strong>. Si todavía no tiene un bloque <code>:root</code>, ese es tu primer ejercicio del capítulo: crea uno y mete ahí los colores que más repites. Verás que el archivo empieza a leerse como una receta con su lista de ingredientes arriba.</p>
+</blockquote>
+<hr />
+<h2 id="4-usar-una-variable-var">4. Usar una variable: <code>var()</code></h2>
+<p>Declarar la variable no pinta nada por sí solo. Para <strong>usar</strong> su valor llamas a la función <code>var()</code> con el nombre de la variable dentro:</p>
+<pre><code class="language-css">:root {
+  --color-marca: #1f9d55;
+  --color-texto: #1a1a1a;
+  --espacio-base: 16px;
+}
+
+body {
+  color: var(--color-texto);
+}
+
+.boton {
+  background-color: var(--color-marca);
+  padding: var(--espacio-base);
+}
+
+.enlace:hover {
+  color: var(--color-marca);
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-var">🟦 ¿Qué significa? — <em><code>var()</code></em></h3>
+<p><code>var()</code> es la <strong>función</strong> que lee el valor guardado en una variable y lo coloca donde la escribes. Le pasas el nombre de la variable entre paréntesis: <code>var(--color-marca)</code>. Sirve para reutilizar el valor sin repetirlo. En <strong>tunal-digital</strong>, cada botón, enlace y borde que use la marca llamará a <code>var(--color-marca)</code> en lugar de copiar el código de color.</p>
+</blockquote>
+<p>Ahora viene lo bonito. Si mañana el verde cambia a otro tono, editas <strong>una sola línea</strong>:</p>
+<pre><code class="language-css">:root {
+  --color-marca: #0d6efd; /* antes era verde, ahora es azul */
+}
+</code></pre>
+<p>…y el header, los botones, los enlaces y todo lo que use <code>var(--color-marca)</code> cambian solos. Eso es lo que Bit llama "tocar un interruptor y que se encienda toda la casa".</p>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>No confundas declarar con usar. <strong>Declarar</strong> lleva dos guiones y dos puntos: <code>--color-marca: green;</code>. <strong>Usar</strong> lleva <code>var()</code>: <code>color: var(--color-marca);</code>. Si escribes <code>color: --color-marca;</code> (sin <code>var()</code>), no funciona y no salta ningún error rojo: simplemente el color no se aplica. Es uno de los despistes más comunes al empezar.</p>
+</blockquote>
+<hr />
+<h2 id="5-valor-de-respaldo-el-segundo-argumento-de-var">5. Valor de respaldo: el segundo argumento de <code>var()</code></h2>
+<p>¿Y qué pasa si llamas a una variable que no existe o que se te olvidó declarar? Por defecto, esa propiedad no recibe ningún valor y se queda como estaba. Para protegerte, <code>var()</code> acepta un <strong>valor de respaldo</strong>:</p>
+<pre><code class="language-css">.tarjeta {
+  /* Si --color-borde no existe, usa #ddd */
+  border: 1px solid var(--color-borde, #ddd);
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-valor-de-respaldo-fallback">🟦 ¿Qué significa? — <em>Valor de respaldo (fallback)</em></h3>
+<p>El <strong>valor de respaldo</strong> es un segundo valor que pones dentro de <code>var()</code>, separado por una coma, y que se usa <strong>solo si la variable no está definida</strong>. Sirve de red de seguridad para que tu estilo nunca quede roto si falta una variable. Se usa cuando no estás seguro de que la variable exista, por ejemplo en componentes reutilizables o cuando un compañero podría no haber declarado todas las variables.</p>
+</blockquote>
+<p>Lo lees así: "usa <code>--color-borde</code>; y si no existe, usa <code>#ddd</code>". El respaldo incluso puede ser otra variable:</p>
+<pre><code class="language-css">.tarjeta {
+  border: 1px solid var(--color-borde, var(--color-marca, #ddd));
+}
+</code></pre>
+<p>Eso encadena respaldos: intenta <code>--color-borde</code>; si no, <code>--color-marca</code>; y si tampoco, el gris <code>#ddd</code>. Bit te avisa de que tres niveles ya son bastantes; más que eso y nadie entiende qué color saldrá.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>El respaldo es perfecto para componentes que quieres compartir entre proyectos. Si copias una tarjeta de <strong>tunal-digital</strong> a otro sitio que no tiene las mismas variables, el fallback evita que la tarjeta se vea rota mientras configuras los colores nuevos.</p>
+</blockquote>
+<hr />
+<h2 id="6-alcance-hasta-donde-llega-una-variable">6. Alcance: ¿hasta dónde llega una variable?</h2>
+<p>Las variables CSS <strong>se heredan</strong>. Esto suena técnico pero es muy intuitivo: una variable declarada en un elemento está disponible en ese elemento <strong>y en todo lo que tenga dentro</strong> (sus hijos, nietos, etc.). Por eso <code>:root</code> (que es el ancestro de todo) las reparte a toda la página.</p>
+<blockquote class="def">
+<h3 id="que-significa-alcance-scope">🟦 ¿Qué significa? — <em>Alcance (scope)</em></h3>
+<p>El <strong>alcance</strong> de una variable es la zona del documento donde se puede usar. Si la declaras en <code>:root</code>, su alcance es toda la página. Si la declaras dentro de <code>.tarjeta</code>, su alcance es solo esa tarjeta y lo que esté dentro de ella. Sirve para tener valores diferentes en diferentes partes sin que se pisen. Se usa, por ejemplo, para que una sección "destacada" de <strong>tunal-digital</strong> tenga su propia variante de color sin afectar al resto.</p>
+</blockquote>
+<p>Mira este ejemplo: una misma variable con valores distintos según dónde la declares.</p>
+<pre><code class="language-css">:root {
+  --fondo: white;   /* por defecto, todo es blanco */
+}
+
+.seccion-oscura {
+  --fondo: #111;    /* aquí dentro, --fondo vale negro */
+}
+
+.caja {
+  background-color: var(--fondo);
+}
+</code></pre>
+<p>Una <code>.caja</code> que esté suelta en la página será blanca. La misma <code>.caja</code> colocada <strong>dentro</strong> de <code>.seccion-oscura</code> será negra, porque ahí dentro <code>--fondo</code> tiene otro valor. No tocaste la regla de <code>.caja</code>: solo cambió el ambiente que la rodea. A esto se le llama <strong>redefinir</strong> la variable en un alcance más pequeño, y es la base de los temas que haremos enseguida.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Una variable declarada dentro de <code>.tarjeta</code> <strong>no existe</strong> fuera de <code>.tarjeta</code>. Si intentas usarla en otro lado, recibirás su valor de respaldo (si lo pusiste) o nada. Es decir, las variables bajan a los hijos pero no suben a los padres ni saltan a los hermanos.</p>
+</blockquote>
+<hr />
+<h2 id="7-cambiar-variables-con-javascript">7. Cambiar variables con JavaScript</h2>
+<p>Aquí es donde las variables CSS se vuelven mágicas. Como son propiedades del documento, <strong>JavaScript puede cambiarlas en vivo</strong>, y todo lo que las usa se actualiza al instante sin recargar la página.</p>
+<p>Esto es justo lo que necesita el <code>main.js</code> de <strong>tunal-digital</strong> para, por ejemplo, un botón que cambie el tema.</p>
+<pre><code class="language-js">// Cambiar una variable global (la de :root) desde JS
+document.documentElement.style.setProperty(&quot;--color-marca&quot;, &quot;#0d6efd&quot;);
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-setproperty">🟦 ¿Qué significa? — <em><code>setProperty</code></em></h3>
+<p><code>setProperty</code> es una función de JavaScript que asigna un valor a una propiedad CSS de un elemento, incluidas las variables. La usas como <code>elemento.style.setProperty("--nombre", "valor")</code>. Sirve para cambiar estilos desde el código en tiempo real. En el <code>main.js</code> de <strong>tunal-digital</strong> la usarías para que un clic cambie un color o el tamaño de la fuente.</p>
+</blockquote>
+<p>Desglosemos esa línea, porque tiene tres piezas:</p>
+<blockquote class="def">
+<h3 id="que-significa-documentdocumentelement">🟦 ¿Qué significa? — <em><code>document.documentElement</code></em></h3>
+<p><code>document.documentElement</code> es la forma en que JavaScript se refiere a la etiqueta <code>&lt;html&gt;</code>, que es el mismo elemento al que apunta <code>:root</code> en CSS. Sirve para leer o cambiar las variables globales desde el código. Se usa cuando quieres que un cambio de JS afecte a toda la página, no solo a un trozo.</p>
+</blockquote>
+<p>Entonces <code>document.documentElement.style.setProperty("--color-marca", "#0d6efd")</code> se lee así: "en el <code>&lt;html&gt;</code>, pon la variable <code>--color-marca</code> en azul". Como esa variable la usa todo el sitio vía <code>var()</code>, todo el sitio se pone azul de golpe.</p>
+<p>También puedes <strong>leer</strong> el valor actual de una variable:</p>
+<pre><code class="language-js">const estilos = getComputedStyle(document.documentElement);
+const verde = estilos.getPropertyValue(&quot;--color-marca&quot;).trim();
+console.log(verde); // &quot;#1f9d55&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-getcomputedstyle">🟦 ¿Qué significa? — <em><code>getComputedStyle</code></em></h3>
+<p><code>getComputedStyle</code> es una función de JavaScript que devuelve <strong>todos los estilos finales</strong> que el navegador ha calculado para un elemento, ya resueltos. Le pasas el elemento entre paréntesis: <code>getComputedStyle(document.documentElement)</code>. Sirve para <strong>leer</strong> valores (incluidas las variables CSS) tal y como están aplicados en ese momento. En el <code>main.js</code> de <strong>tunal-digital</strong> la usarías para averiguar qué color de marca está activo antes de decidir si lo cambias.</p>
+<h3 id="que-significa-getpropertyvalue">🟦 ¿Qué significa? — <em><code>getPropertyValue</code></em></h3>
+<p><code>getPropertyValue</code> es la función que, sobre los estilos que te dio <code>getComputedStyle</code>, <strong>extrae el valor de una propiedad concreta</strong> por su nombre. La usas como <code>estilos.getPropertyValue("--color-marca")</code> y te devuelve el valor guardado en esa variable. Sirve para leer una variable desde JavaScript. En <strong>tunal-digital</strong> la combinarías con <code>getComputedStyle</code> para consultar el valor actual de cualquier variable de tu paleta.</p>
+</blockquote>
+<p>El <code>.trim()</code> quita los espacios sobrantes que a veces vienen con el valor. Bit recomienda acostumbrarse a ponerlo siempre que leas variables, para no llevarte sorpresas con un espacio invisible.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <strong>RachaSimple</strong> (React + TS + Tailwind), normalmente no escribes <code>setProperty</code> a mano para los temas: Tailwind y su clase <code>dark</code> se encargan. Pero entender este mecanismo te ayuda a saber qué hace Tailwind por debajo. En <strong>tunal-digital</strong>, que es JS vanilla, sí escribirías <code>setProperty</code> tú mismo en <code>main.js</code>. Misma idea, distinto nivel de ayuda.</p>
+</blockquote>
+<hr />
+<h2 id="8-tu-primer-tema-claro-y-oscuro-a-mano">8. Tu primer tema: claro y oscuro a mano</h2>
+<p>Ya tienes todas las piezas para construir un tema. La idea central es: <strong>no cambies cien propiedades; cambia las variables</strong>. Defines tus colores como variables, y el "tema oscuro" no es más que el mismo conjunto de variables con otros valores.</p>
+<blockquote class="def">
+<h3 id="que-significa-tema-theme">🟦 ¿Qué significa? — <em>Tema (theme)</em></h3>
+<p>Un <strong>tema</strong> es un conjunto coordinado de colores (y a veces fuentes o sombras) que le dan un aspecto unificado a la interfaz. Lo típico es tener un tema <strong>claro</strong> (fondo claro, texto oscuro) y uno <strong>oscuro</strong> (fondo oscuro, texto claro). Sirve para que la app se vea bien y sea cómoda en distintos ambientes. <strong>RachaSimple</strong> y el <code>site/estilos.css</code> de este manual tienen temas claro y oscuro.</p>
+</blockquote>
+<p>Primero, las variables del tema claro en <code>:root</code>:</p>
+<pre><code class="language-css">:root {
+  --fondo: #ffffff;
+  --texto: #1a1a1a;
+  --color-marca: #1f9d55;
+  --borde: #e2e2e2;
+}
+
+body {
+  background-color: var(--fondo);
+  color: var(--texto);
+}
+</code></pre>
+<p>Fíjate en que <code>body</code> <strong>no menciona ningún color directo</strong>: solo usa variables. Esa disciplina es lo que hace que cambiar de tema sea trivial.</p>
+<p>Ahora el tema oscuro. La forma más sencilla de activarlo a mano es ponerle una clase al <code>&lt;html&gt;</code> o al <code>&lt;body&gt;</code> (por ejemplo <code>tema-oscuro</code>) y redefinir las variables dentro de esa clase:</p>
+<pre><code class="language-css">.tema-oscuro {
+  --fondo: #121212;
+  --texto: #f0f0f0;
+  --color-marca: #34d27b;
+  --borde: #2a2a2a;
+}
+</code></pre>
+<p>Y un botón en <code>main.js</code> que ponga o quite esa clase:</p>
+<pre><code class="language-js">const boton = document.querySelector(&quot;#cambiar-tema&quot;);
+
+boton.addEventListener(&quot;click&quot;, () =&gt; {
+  document.documentElement.classList.toggle(&quot;tema-oscuro&quot;);
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-classlisttoggle">🟦 ¿Qué significa? — <em><code>classList.toggle</code></em></h3>
+<p><code>classList.toggle</code> es una función de JavaScript que <strong>añade</strong> una clase a un elemento si no la tiene, y la <strong>quita</strong> si ya la tenía. La usas como <code>elemento.classList.toggle("nombre-clase")</code>. Sirve para encender y apagar algo con el mismo botón. En <strong>tunal-digital</strong> la usarías para alternar entre tema claro y oscuro con un solo clic.</p>
+</blockquote>
+<p>¿Ves la elegancia? El botón solo pone o quita una clase. Esa clase redefine cuatro variables. Esas cuatro variables las usan decenas de elementos vía <code>var()</code>. Un clic, toda la página cambia de piel. Bit aplaude con sus manitas de ajolote.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Pon todas las variables del tema en un mismo bloque y mantén el <strong>mismo conjunto de nombres</strong> en el claro y en el oscuro. Si en <code>:root</code> tienes <code>--fondo</code> y <code>--texto</code>, en <code>.tema-oscuro</code> deben aparecer exactamente esos mismos nombres con otros valores. Así nunca se te queda un color "a medias".</p>
+</blockquote>
+<hr />
+<h2 id="9-prefers-color-scheme-respetar-lo-que-el-usuario-ya-eligio">9. <code>prefers-color-scheme</code>: respetar lo que el usuario ya eligió</h2>
+<p>Hay un detalle precioso: muchos usuarios <strong>ya</strong> tienen su teléfono o su computadora configurados en modo oscuro. Sería ideal que tu sitio respetara esa preferencia sin que tengan que tocar nada. Para eso existe <code>prefers-color-scheme</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-prefers-color-scheme">🟦 ¿Qué significa? — <em><code>prefers-color-scheme</code></em></h3>
+<p><code>prefers-color-scheme</code> es una <strong>media query</strong> (consulta de medios) que pregunta si el sistema del usuario está en modo claro u oscuro. Sirve para mostrar automáticamente el tema que la persona ya prefiere. Se usa dentro de <code>@media (prefers-color-scheme: dark) { ... }</code> y es justo el mecanismo que el <code>site/estilos.css</code> de este manual usa para su tema oscuro automático.</p>
+<h3 id="que-significa-media-query">🟦 ¿Qué significa? — <em>Media query</em></h3>
+<p>Una <strong>media query</strong> es una regla CSS que aplica estilos <strong>solo cuando se cumple una condición</strong>, como el ancho de la pantalla o, aquí, la preferencia de color. Se escribe <code>@media (condición) { reglas }</code>. Sirve para adaptar el diseño a distintas situaciones. La verás mucho más en el capítulo de diseño responsivo; aquí la usamos solo para detectar el modo oscuro.</p>
+</blockquote>
+<p>Así se ve un tema oscuro <strong>automático</strong>:</p>
+<pre><code class="language-css">:root {
+  --fondo: #ffffff;
+  --texto: #1a1a1a;
+  --color-marca: #1f9d55;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #121212;
+    --texto: #f0f0f0;
+    --color-marca: #34d27b;
+  }
+}
+
+body {
+  background-color: var(--fondo);
+  color: var(--texto);
+}
+</code></pre>
+<p>Con esto, una persona con el móvil en modo oscuro abre tu sitio y lo ve oscuro <strong>sin pulsar nada</strong>. Una persona en modo claro lo ve claro. Tú no escribiste ningún JavaScript: el navegador hace el trabajo leyendo la preferencia del sistema.</p>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p><code>prefers-color-scheme</code> lee la preferencia del <strong>sistema operativo</strong>, no de tu sitio. No puedes cambiarla desde CSS ni "forzarla" desde tu página; solo puedes reaccionar a ella. Si quieres un botón que el usuario controle dentro de tu sitio, eso es el método de la clase con JavaScript de la sección anterior.</p>
+</blockquote>
+<hr />
+<h2 id="10-lo-mejor-de-los-dos-mundos-automatico-boton">10. Lo mejor de los dos mundos: automático + botón</h2>
+<p>En la práctica, los sitios serios combinan ambas cosas: <strong>empiezan respetando el sistema</strong> con <code>prefers-color-scheme</code>, y además ofrecen un <strong>botón</strong> por si el usuario quiere lo contrario en ese sitio concreto. La estrategia típica:</p>
+<ol>
+<li>Por defecto, el CSS sigue la preferencia del sistema (<code>prefers-color-scheme</code>).</li>
+<li>Un botón en JS añade una clase como <code>tema-oscuro</code> o <code>tema-claro</code> al <code>&lt;html&gt;</code> para forzar uno u otro.</li>
+<li>La clase "gana" porque la pusiste tú a propósito, así que sobrescribe lo automático.</li>
+</ol>
+<pre><code class="language-css">:root {
+  --fondo: #ffffff;
+  --texto: #1a1a1a;
+}
+
+/* Automático según el sistema */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #121212;
+    --texto: #f0f0f0;
+  }
+}
+
+/* Forzado por el usuario, gana sobre lo automático */
+.tema-oscuro {
+  --fondo: #121212;
+  --texto: #f0f0f0;
+}
+.tema-claro {
+  --fondo: #ffffff;
+  --texto: #1a1a1a;
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>RachaSimple</strong> y <strong>Faro/Organizer</strong> (ambos con Tailwind), Tailwind ya trae el "modo oscuro" listo: pones la clase <code>dark</code> en el <code>&lt;html&gt;</code> y usas utilidades como <code>dark:bg-gray-900</code>. Por debajo, eso hace exactamente lo que viste aquí: detecta o fuerza un tema y reasigna colores. En <strong>tunal-digital</strong>, sin framework, tú escribes a mano las variables, la media query y el <code>classList.toggle</code>. Saber el mecanismo "crudo" te hace entender mucho mejor lo que Tailwind te regala hecho.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Si quieres que la elección del usuario <strong>se recuerde</strong> entre visitas, en <strong>tunal-digital</strong> guardarías la preferencia en <code>localStorage</code> desde <code>main.js</code> y, al cargar la página, leerías ese valor para volver a poner la clase. No te preocupes si aún no sabes qué es <code>localStorage</code>: por ahora basta con que sepas que el botón cambia una clase y la clase cambia las variables.</p>
+</blockquote>
+<hr />
+<h2 id="11-variables-mas-alla-del-color">11. Variables más allá del color</h2>
+<p>Aunque los temas son el uso estrella, las variables sirven para <strong>cualquier valor</strong> que repitas. Una pequeña "escala" de espaciado y de tamaños mantiene todo el sitio coherente:</p>
+<pre><code class="language-css">:root {
+  --espacio-1: 4px;
+  --espacio-2: 8px;
+  --espacio-3: 16px;
+  --espacio-4: 32px;
+  --radio: 8px;
+  --fuente-base: system-ui, sans-serif;
+}
+
+.tarjeta {
+  padding: var(--espacio-3);
+  border-radius: var(--radio);
+  font-family: var(--fuente-base);
+  margin-bottom: var(--espacio-4);
+}
+</code></pre>
+<p>Cuando todos tus márgenes y rellenos salen de una escala de variables, tu diseño se ve ordenado casi sin esfuerzo, porque los espacios siempre son "uno de los de la lista" en lugar de números inventados al azar. Esta idea de tener una escala fija es, por cierto, justo lo que hace Tailwind en <strong>RachaSimple</strong> y <strong>Faro</strong>: te da una escala de espaciados predefinida para que no inventes valores raros.</p>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Empieza con pocas variables. No conviertas en variable cada número del CSS desde el primer día; eso satura. Convierte en variable lo que <strong>se repite</strong> y lo que querrías cambiar de golpe: colores de marca, espaciados base, radios de borde, la fuente. El resto puede esperar.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé declarar una variable con <code>--nombre: valor;</code> dentro de un bloque.</li>
+<li>[ ] Sé que <code>:root</code> es el lugar para las variables globales de toda la página.</li>
+<li>[ ] Uso una variable con <code>var(--nombre)</code> y entiendo que sin <code>var()</code> no funciona.</li>
+<li>[ ] Sé poner un valor de respaldo: <code>var(--nombre, valorPorDefecto)</code>.</li>
+<li>[ ] Entiendo el alcance: una variable vive en el elemento donde la declaro y en sus hijos.</li>
+<li>[ ] Puedo redefinir una variable dentro de una clase para crear una variante.</li>
+<li>[ ] Sé cambiar una variable global desde JS con <code>document.documentElement.style.setProperty</code>.</li>
+<li>[ ] Sé alternar un tema con <code>classList.toggle("tema-oscuro")</code>.</li>
+<li>[ ] Sé crear un tema oscuro automático con <code>@media (prefers-color-scheme: dark)</code>.</li>
+<li>[ ] Entiendo que Tailwind (en RachaSimple y Faro) hace todo esto por debajo con la clase <code>dark</code>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Tu paleta en <code>:root</code>.</strong> 💻 Abre el <code>styles.css</code> de <strong>tunal-digital</strong> y crea un bloque <code>:root</code> con al menos cuatro variables: <code>--color-marca</code>, <code>--texto</code>, <code>--fondo</code> y <code>--borde</code>. Después busca en el archivo los colores que repetías "a mano" y reemplázalos por <code>var(...)</code>. Recarga y comprueba que el sitio se ve igual que antes.</p>
+</li>
+<li>
+<p><strong>El interruptor mágico.</strong> 💻 En ese mismo <code>:root</code>, cambia solo el valor de <code>--color-marca</code> por otro color muy distinto (por ejemplo de verde a morado). Recarga y observa cuántos elementos cambiaron de una sola línea. Anota cuáles para confirmar que las variables están bien conectadas.</p>
+</li>
+<li>
+<p><strong>Respaldo a prueba de fallos.</strong> Crea una regla <code>.aviso</code> con <code>border: 2px solid var(--color-aviso, orange);</code> <strong>sin</strong> declarar <code>--color-aviso</code> en ningún lado. Comprueba que el borde sale naranja. Luego declara <code>--color-aviso: red;</code> en <code>:root</code> y verifica que ahora sale rojo. Acabas de ver el fallback en acción.</p>
+</li>
+<li>
+<p><strong>Alcance local.</strong> Crea una clase <code>.destacado</code> que redefina <code>--fondo</code> y <code>--texto</code> con colores llamativos, y dentro de un elemento con esa clase coloca una <code>.tarjeta</code> que use <code>var(--fondo)</code> y <code>var(--texto)</code>. Comprueba que la tarjeta cambia solo cuando está dentro de <code>.destacado</code>, y no fuera.</p>
+</li>
+<li>
+<p><strong>Tema oscuro con botón.</strong> 💻 En <strong>tunal-digital</strong>, define una clase <code>.tema-oscuro</code> que redefina tus variables de color, añade un botón en el HTML y, en <code>main.js</code>, usa <code>classList.toggle("tema-oscuro")</code> sobre <code>document.documentElement</code> al hacer clic. Verifica que el sitio entero cambia de piel con cada pulsación.</p>
+</li>
+<li>
+<p><strong>Tema oscuro automático.</strong> 💻 Añade al <code>styles.css</code> un bloque <code>@media (prefers-color-scheme: dark) { :root { ... } }</code> que redefina las mismas variables. Cambia el modo claro/oscuro de tu sistema operativo y comprueba que el sitio responde solo, sin tocar el botón. Si combinas esto con el ejercicio 5, fíjate en cómo conviven lo automático y lo forzado.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

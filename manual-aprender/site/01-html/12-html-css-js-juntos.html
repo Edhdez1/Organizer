@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 12 — Cómo se unen HTML, CSS y JavaScript — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-12-como-se-unen-html-css-y-javascript">Capítulo 12 — Cómo se unen HTML, CSS y JavaScript</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap12.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta aquí has aprendido HTML solito: etiquetas, texto, formularios, tablas, accesibilidad. Pero una página real nunca vive sola. El HTML es solo uno de tres amigos que trabajan juntos. En este capítulo verás cómo el HTML llama al CSS para vestir la página y al JavaScript para darle vida, en qué orden cargan, y qué es ese "DOM" del que tanto se habla. Bit, el ajolote pixelado, dice que este es el capítulo donde por fin se ve "la foto completa". Respira, que vamos despacio.</p>
+</blockquote>
+<h2 id="1-tres-amigos-tres-trabajos">1. Tres amigos, tres trabajos</h2>
+<p>Imagina que construyes una casa. Necesitas tres cosas distintas: los <strong>muros y las habitaciones</strong> (la estructura), la <strong>pintura y los muebles</strong> (el aspecto), y los <strong>interruptores y la puerta automática</strong> (lo que reacciona cuando alguien toca algo). En una página web esos tres papeles tienen nombre:</p>
+<ul>
+<li><strong>HTML</strong> = la estructura. Qué hay en la página: títulos, párrafos, botones, imágenes.</li>
+<li><strong>CSS</strong> = el estilo. Cómo se ve: colores, tamaños, espacios, tipografías.</li>
+<li><strong>JavaScript</strong> = el comportamiento. Qué pasa cuando el usuario hace algo: clics, menús que se abren, cambios de idioma.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-css">🟦 ¿Qué significa? — <em>CSS</em></h3>
+<p>CSS son las siglas de <em>Cascading Style Sheets</em> ("hojas de estilo en cascada"). Es un lenguaje aparte del HTML que sirve para decir <strong>cómo se ve</strong> cada cosa: este texto en color naranja, este recuadro con bordes redondeados, esta sección con fondo oscuro.
+<strong>¿Para qué sirve?</strong> Para separar el aspecto del contenido. El HTML dice "esto es un título"; el CSS dice "los títulos van grandes y en color crema".
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong> está en el archivo <code>sitio-web/styles.css</code>. Ahí empieza definiendo los colores de marca (el "carbón" oscuro del fondo, el naranja del amanecer).</p>
+<h3 id="que-significa-javascript-js">🟦 ¿Qué significa? — <em>JavaScript (JS)</em></h3>
+<p>JavaScript es un lenguaje de programación que el navegador entiende y ejecuta. Mientras el HTML y el CSS solo "describen", JavaScript <strong>actúa</strong>: puede cambiar textos, abrir y cerrar menús, reaccionar a clics.
+<strong>¿Para qué sirve?</strong> Para que la página haga cosas en vivo, sin recargarse.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, el archivo <code>sitio-web/main.js</code> cambia el idioma del sitio entre español e inglés, abre el menú de navegación y hace que el fondo reaccione al cursor.</p>
+<h3 id="tip-la-regla-de-oro-de-la-separacion">💡 Tip — La regla de oro de la separación</h3>
+<p>Una página bien hecha mantiene los tres separados: el <strong>qué</strong> en el HTML, el <strong>cómo se ve</strong> en el CSS, el <strong>qué hace</strong> en el JS. Si mezclas todo en un solo archivo, funciona, pero después es un dolor de cabeza cambiar algo. Por eso tunal-digital tiene tres archivos distintos: <code>index.html</code>, <code>styles.css</code> y <code>main.js</code>.</p>
+</blockquote>
+<p>Lo bonito es que <strong>el HTML es el jefe de la reunión</strong>: es el archivo que el navegador abre primero, y es el HTML quien dice "oye, también carga este CSS y este JavaScript". Veamos cómo lo hace.</p>
+<h2 id="2-como-el-html-llama-al-css">2. Cómo el HTML llama al CSS</h2>
+<p>El HTML enlaza una hoja de estilos con la etiqueta <code>&lt;link&gt;</code>, que ya viste de pasada en el capítulo del <code>&lt;head&gt;</code>. Aquí está, sacada del archivo real de tunal-digital:</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css?v=20260605&quot;&gt;
+</code></pre>
+<p>Vamos palabra por palabra, porque cada parte importa.</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-link">🟦 ¿Qué significa? — <em>etiqueta <code>&lt;link&gt;</code></em></h3>
+<p><code>&lt;link&gt;</code> es una etiqueta de HTML que conecta el documento con un archivo externo. No muestra nada en pantalla por sí misma; solo dice "tráete este recurso".
+<strong>¿Para qué sirve?</strong> El uso más común es enlazar la hoja de estilos CSS. También sirve para íconos, fuentes, etc.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>sitio-web/index.html</code> de tunal-digital hay varios <code>&lt;link&gt;</code>: uno para el ícono de la pestaña, otros para las fuentes de Google, y el de <code>styles.css</code>.</p>
+<h3 id="que-significa-atributo-rel">🟦 ¿Qué significa? — <em>atributo <code>rel</code></em></h3>
+<p>Un <strong>atributo</strong> es información extra que va dentro de una etiqueta. <code>rel</code> significa <em>relation</em> (relación) y explica <strong>qué tipo de conexión</strong> es. Cuando vale <code>rel="stylesheet"</code>, le dice al navegador: "este link es una hoja de estilos, aplícala".
+<strong>¿Para qué sirve?</strong> Para que el navegador sepa qué hacer con el archivo enlazado. Sin <code>rel="stylesheet"</code>, el navegador no entendería que ese CSS hay que aplicarlo.</p>
+<h3 id="que-significa-atributo-href">🟦 ¿Qué significa? — <em>atributo <code>href</code></em></h3>
+<p><code>href</code> significa <em>hypertext reference</em> (referencia de hipertexto). Es <strong>la dirección del archivo</strong> que quieres traer: aquí, <code>styles.css</code>, que vive junto al <code>index.html</code>.
+<strong>¿Para qué sirve?</strong> Para indicar dónde está el recurso. Ya lo conocías de los enlaces <code>&lt;a href="..."&gt;</code>; aquí cumple el mismo papel: apunta a un destino.</p>
+</blockquote>
+<p>¿Y qué es ese <code>?v=20260605</code> al final? Es un truco muy útil.</p>
+<blockquote class="def">
+<h3 id="que-significa-cache-buster-rompe-cache">🟦 ¿Qué significa? — <em>cache-buster (rompe-caché)</em></h3>
+<p>El navegador <strong>guarda copias</strong> de los archivos para no descargarlos cada vez (eso es la <em>caché</em>, su memoria temporal). El problema: si cambias el CSS, el usuario puede seguir viendo la copia vieja. Añadir <code>?v=20260605</code> (una "versión") hace que el navegador crea que es un archivo nuevo y lo vuelva a descargar.
+<strong>¿Para qué sirve?</strong> Para forzar que los visitantes vean tus cambios de estilo recientes.
+<strong>¿Dónde se usa en tu proyecto?</strong> En tunal-digital se usa en <code>styles.css?v=20260605</code> y también en los scripts: <code>main.js?v=20260607</code>. Cada vez que Edwar cambia el archivo, sube ese número.</p>
+<h3 id="cuidado-link-no-se-cierra">⚠️ Cuidado — <code>&lt;link&gt;</code> no se cierra</h3>
+<p><code>&lt;link&gt;</code> es una etiqueta <strong>vacía</strong>: no lleva contenido dentro ni etiqueta de cierre <code>&lt;/link&gt;</code>. Se escribe sola. Lo mismo pasaba con <code>&lt;img&gt;</code> y <code>&lt;meta&gt;</code>. Si intentas cerrarla, no rompe nada, pero no es necesario.</p>
+</blockquote>
+<h3 id="donde-va-el-link-del-css">¿Dónde va el <code>&lt;link&gt;</code> del CSS?</h3>
+<p>Va <strong>dentro del <code>&lt;head&gt;</code></strong>, antes de que empiece el <code>&lt;body&gt;</code>. ¿Por qué tan arriba? Porque quieres que los estilos estén listos <strong>antes</strong> de que el navegador dibuje el contenido. Si el CSS llegara tarde, verías por un instante la página "desnuda" (texto negro sobre blanco) antes de que se vista. Eso se llama, en jerga, "flash de contenido sin estilo", y queda feo.</p>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Tunal Digital&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css?v=20260605&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Abre <code>sitio-web/index.html</code> de tunal-digital y busca la línea del <code>&lt;link rel="stylesheet"&gt;</code>. Verás que está dentro del <code>&lt;head&gt;</code>, junto a los <code>&lt;meta&gt;</code> y al <code>&lt;title&gt;</code>. Justo arriba hay otros <code>&lt;link&gt;</code> que traen las fuentes de Google (la tipografía Fraunces para los títulos y Hanken Grotesk para el cuerpo). Todo el "vestuario" se carga aquí.</p>
+</blockquote>
+<h2 id="3-como-el-html-llama-al-javascript">3. Cómo el HTML llama al JavaScript</h2>
+<p>El JavaScript se enlaza con la etiqueta <code>&lt;script&gt;</code>. En tunal-digital la línea real es:</p>
+<pre><code class="language-html">&lt;script defer src=&quot;main.js?v=20260607&quot;&gt;&lt;/script&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-script">🟦 ¿Qué significa? — <em>etiqueta <code>&lt;script&gt;</code></em></h3>
+<p><code>&lt;script&gt;</code> es la etiqueta que carga y ejecuta código JavaScript en la página. Puede tener el código escrito dentro, o (lo más común y ordenado) apuntar a un archivo externo con el atributo <code>src</code>.
+<strong>¿Para qué sirve?</strong> Para darle comportamiento a la página: que reaccione a clics, cambie textos, valide formularios.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>index.html</code> de tunal-digital hay un <code>&lt;script defer src="main.js"&gt;</code> que trae toda la lógica del sitio (menú, cambio de idioma, animaciones).</p>
+<h3 id="que-significa-atributo-src">🟦 ¿Qué significa? — <em>atributo <code>src</code></em></h3>
+<p><code>src</code> significa <em>source</em> (fuente, origen). Es <strong>la dirección del archivo de código</strong> que quieres cargar, igual que <code>href</code> lo es para el CSS. Aquí apunta a <code>main.js</code>.
+<strong>¿Para qué sirve?</strong> Para no escribir todo el JavaScript dentro del HTML, sino tenerlo en su propio archivo, ordenado y reutilizable.</p>
+<h3 id="cuidado-script-src-si-se-cierra">⚠️ Cuidado — <code>&lt;script src&gt;</code> SÍ se cierra</h3>
+<p>A diferencia de <code>&lt;link&gt;</code>, la etiqueta <code>&lt;script&gt;</code> <strong>sí lleva cierre</strong>: <code>&lt;/script&gt;</code>. Aunque uses <code>src</code> y no escribas nada dentro, debes ponerlo: <code>&lt;script src="main.js"&gt;&lt;/script&gt;</code>. Si lo olvidas, el navegador se confunde y a veces "se come" el resto de la página. Bit ha visto a más de un principiante pelear una hora con esto.</p>
+</blockquote>
+<h3 id="el-problema-del-orden-y-la-solucion-defer">El problema del orden y la solución <code>defer</code></h3>
+<p>Aquí viene la parte más importante del capítulo, así que vamos con calma. El navegador lee el HTML <strong>de arriba hacia abajo</strong>, línea por línea. Cuando se topa con un <code>&lt;script&gt;</code> normal (sin nada especial), se <strong>detiene</strong>, descarga el archivo, lo ejecuta, y solo entonces sigue leyendo el resto del HTML.</p>
+<p>Eso causa dos problemas:</p>
+<ol>
+<li><strong>Lentitud:</strong> mientras el script descarga, el usuario ve una página congelada.</li>
+<li><strong>Elementos que aún no existen:</strong> si tu JavaScript intenta tocar un botón que está más abajo en el HTML y el script se ejecutó antes de que ese botón existiera... no lo encuentra, y falla.</li>
+</ol>
+<p>Aquí entra <code>defer</code>, que es la solución limpia.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributo-defer">🟦 ¿Qué significa? — <em>atributo <code>defer</code></em></h3>
+<p><code>defer</code> significa "aplazar". Le dice al navegador: "descarga este script en segundo plano mientras sigues leyendo el HTML, y <strong>ejecútalo al final</strong>, cuando toda la página ya esté construida".
+<strong>¿Para qué sirve?</strong> Para dos cosas a la vez: que la página no se congele, y que cuando tu código corra, <strong>todos los elementos ya existan</strong> y los pueda encontrar.
+<strong>¿Dónde se usa en tu proyecto?</strong> En tunal-digital, <code>main.js</code> se carga con <code>defer</code>. Por eso su código puede buscar el botón del menú o los enlaces de idioma con total confianza: para cuando corre, ya están todos ahí.</p>
+</blockquote>
+<p>Existe un primo de <code>defer</code> llamado <code>async</code>. Conviene saber qué hace, aunque casi siempre quieras <code>defer</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributo-async">🟦 ¿Qué significa? — <em>atributo <code>async</code></em></h3>
+<p><code>async</code> significa "asíncrono". También descarga el script en segundo plano sin congelar la página, <strong>pero lo ejecuta apenas termina de descargar</strong>, sin esperar a nada ni respetar el orden con otros scripts.
+<strong>¿Para qué sirve?</strong> Para scripts <strong>independientes</strong> que no dependen del resto de la página ni de otros scripts: por ejemplo, herramientas de medición o estadísticas.
+<strong>¿Dónde se usa en tu proyecto?</strong> En tunal-digital, el script de estadísticas de Cloudflare se carga con <code>async</code> (línea <code>&lt;script defer src='...beacon.min.js' ...&gt;</code> para las analíticas): no toca tu contenido, así que da igual cuándo corra.</p>
+</blockquote>
+<p>Aquí va la diferencia en una tabla mental sencilla:</p>
+<table>
+<thead>
+<tr>
+<th>Cómo lo escribes</th>
+<th>¿Congela la página?</th>
+<th>¿Cuándo se ejecuta?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;script src="..."&gt;</code> (normal)</td>
+<td>Sí, se detiene a esperarlo</td>
+<td>En el momento, antes de seguir el HTML</td>
+</tr>
+<tr>
+<td><code>&lt;script defer src="..."&gt;</code></td>
+<td>No</td>
+<td>Al final, con la página ya completa, en orden</td>
+</tr>
+<tr>
+<td><code>&lt;script async src="..."&gt;</code></td>
+<td>No</td>
+<td>Apenas termina de descargar, sin orden</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="tip">
+<h3 id="tip-tu-regla-por-defecto">💡 Tip — Tu regla por defecto</h3>
+<p>Para tu propio código (como <code>main.js</code>), usa <strong><code>defer</code></strong>. Es el que respeta el orden y garantiza que la página esté lista. Reserva <code>async</code> para scripts ajenos que no dependan de tu HTML. Y evita el <code>&lt;script&gt;</code> normal sin nada: es el más lento.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <code>index.html</code> de tunal-digital, los scripts de marca van al final del <code>&lt;body&gt;</code>, ambos con <code>defer</code>:</p>
+<p><code>html
+&lt;script defer src="lib/manifest.js?v=20260607"&gt;&lt;/script&gt;
+&lt;script defer src="main.js?v=20260607"&gt;&lt;/script&gt;</code></p>
+<p>Fíjate que <code>manifest.js</code> (los datos de la marca) va <strong>antes</strong> que <code>main.js</code> (la lógica que los usa). Con <code>defer</code>, el orden de escritura se respeta: primero se ejecuta uno, luego el otro. Si los hubieran cargado con <code>async</code>, ese orden no estaría garantizado y podría romperse.</p>
+</blockquote>
+<h3 id="al-final-del-body-o-con-defer">¿Al final del <code>&lt;body&gt;</code> o con <code>defer</code>?</h3>
+<p>Históricamente, mucha gente ponía los <code>&lt;script&gt;</code> justo antes de <code>&lt;/body&gt;</code> (al fondo de la página) para que el HTML cargara primero. Sigue siendo válido. Pero con <code>defer</code> ya no hace falta ese truco: puedes ponerlo donde quieras y se comportará bien. tunal-digital combina ambas costumbres: pone los scripts al final <strong>y</strong> les agrega <code>defer</code>, por seguridad y claridad. No es contradictorio, es ser cuidadoso.</p>
+<h2 id="4-el-dom-el-puente-entre-los-tres">4. El DOM: el puente entre los tres</h2>
+<p>Llegamos al concepto que conecta todo. Cuando el navegador lee tu HTML, no se queda con el texto plano: construye en memoria una versión "viva" de la página, un árbol de cajitas donde cada etiqueta es un nodo. A eso se le llama <strong>DOM</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-dom-document-object-model">🟦 ¿Qué significa? — <em>DOM (Document Object Model)</em></h3>
+<p>El DOM es la representación <strong>en memoria</strong> de tu página: el navegador convierte tu HTML en un árbol de objetos que puede consultar y modificar mientras la página está abierta. <em>Document Object Model</em> significa "modelo de objetos del documento".
+<strong>¿Para qué sirve?</strong> Es <strong>el puente</strong>. El CSS mira el DOM para saber a qué pintar de qué color. El JavaScript mira y <strong>modifica</strong> el DOM para cambiar la página en vivo: cambiar un texto, abrir un menú, ocultar una sección.
+<strong>¿Dónde se usa en tu proyecto?</strong> Todo <code>main.js</code> de tunal-digital trabaja sobre el DOM. Por ejemplo, busca elementos con <code>document.querySelector(...)</code> y los cambia. Cuando cambias el idioma, JavaScript recorre el DOM y reemplaza los textos de español a inglés.</p>
+</blockquote>
+<p>Piénsalo así: el HTML es la <strong>receta escrita</strong>; el DOM es el <strong>plato ya servido en la mesa</strong>, que aún puedes condimentar. El JavaScript es el cocinero que se acerca con la sal.</p>
+<h3 id="como-javascript-encuentra-un-elemento">Cómo JavaScript "encuentra" un elemento</h3>
+<p>Para que JavaScript pueda cambiar algo, primero tiene que <strong>encontrarlo</strong> en el DOM. Y para encontrarlo, el elemento HTML suele tener un <code>id</code> o una <code>class</code> que sirve de etiqueta de identificación.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributo-id">🟦 ¿Qué significa? — <em>atributo <code>id</code></em></h3>
+<p>Un <code>id</code> es un nombre <strong>único</strong> que le pones a un elemento HTML para identificarlo, como el número de cédula de una persona. No debe repetirse en la página.
+<strong>¿Para qué sirve?</strong> Para que el CSS o el JavaScript puedan apuntar exactamente a ese elemento.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <code>index.html</code> de tunal-digital, el menú de navegación es <code>&lt;nav id="navLinks"&gt;</code>. Desde <code>main.js</code>, JavaScript busca ese <code>id</code> para abrir y cerrar el menú en el celular.</p>
+<h3 id="que-significa-atributo-class">🟦 ¿Qué significa? — <em>atributo <code>class</code></em></h3>
+<p>Una <code>class</code> ("clase") es también un nombre que le pones a un elemento HTML, pero a diferencia del <code>id</code>, <strong>se puede repetir</strong> en muchos elementos a la vez. Es como una etiqueta de grupo: "todos los que lleven esta clase pertenecen al mismo conjunto".
+<strong>¿Para qué sirve?</strong> Para aplicar el mismo estilo o el mismo comportamiento a varios elementos de golpe. Por ejemplo, "todas las tarjetas con <code>class="glass"</code> van con fondo translúcido".
+<strong>¿Dónde se usa en tu proyecto?</strong> En tunal-digital, muchísimos bloques comparten <code>class="glass"</code> para verse como tarjetas de vidrio. El CSS las apunta a todas juntas escribiendo <code>.glass</code> (con un punto delante, igual que el <code>#</code> apunta a un <code>id</code>).</p>
+</blockquote>
+<p>Mira cómo se conectan las tres piezas alrededor de un mismo elemento. Primero el HTML define un botón con un <code>id</code>:</p>
+<pre><code class="language-html">&lt;button id=&quot;menuBtn&quot;&gt;Menú&lt;/button&gt;
+</code></pre>
+<p>El CSS lo viste usando ese mismo <code>id</code> con una almohadilla <code>#</code>:</p>
+<pre><code class="language-css">#menuBtn {
+  background: orange;
+  border-radius: 8px;
+}
+</code></pre>
+<p>Y el JavaScript lo encuentra en el DOM y le añade comportamiento (esto ya es código JS, lo verás de verdad en el módulo siguiente; aquí solo para que veas la unión):</p>
+<pre><code class="language-javascript">const boton = document.querySelector(&quot;#menuBtn&quot;);
+boton.addEventListener(&quot;click&quot;, abrirMenu);
+</code></pre>
+<p>Tres archivos, tres lenguajes, <strong>un solo botón</strong>. El <code>id="menuBtn"</code> es el hilo que los cose. Esa es, en una imagen, toda la integración.</p>
+<blockquote class="tip">
+<h3 id="tip-id-para-javascript-class-para-estilos-repetidos">💡 Tip — <code>id</code> para JavaScript, <code>class</code> para estilos repetidos</h3>
+<p>Como <code>id</code> es único, va perfecto cuando hay <strong>un solo</strong> elemento (un botón concreto, una sección concreta). Cuando quieres aplicar el mismo estilo a <strong>muchos</strong> elementos (todas las tarjetas, todos los botones de un tipo), se usa <code>class</code>, que sí se puede repetir. tunal-digital usa muchísimas clases para sus tarjetas de "vidrio" (<code>class="glass"</code>).</p>
+</blockquote>
+<h2 id="5-la-foto-completa-paso-a-paso">5. La foto completa, paso a paso</h2>
+<p>Juntemos todo en el orden real en que ocurre cuando alguien abre tunal-digital en su navegador. Bit te lo narra como una pequeña película:</p>
+<ol>
+<li>El navegador <strong>pide y recibe el <code>index.html</code></strong>. Empieza a leerlo de arriba abajo.</li>
+<li>Dentro del <code>&lt;head&gt;</code> encuentra el <code>&lt;link rel="stylesheet" href="styles.css"&gt;</code> y <strong>descarga el CSS</strong>.</li>
+<li>También ve los <code>&lt;script defer&gt;</code> y los <strong>empieza a descargar en segundo plano</strong>, sin detenerse (gracias a <code>defer</code>).</li>
+<li>Sigue leyendo el <code>&lt;body&gt;</code> y <strong>construye el DOM</strong>: el árbol de cajitas con header, secciones, botones.</li>
+<li>Con el DOM listo, <strong>aplica el CSS</strong>: pinta el fondo oscuro, el naranja de marca, las tipografías.</li>
+<li>Cuando el HTML termina de leerse, recién ahí <strong>ejecuta los scripts <code>defer</code></strong>, en orden: primero <code>manifest.js</code>, luego <code>main.js</code>.</li>
+<li><code>main.js</code> <strong>recorre el DOM</strong>, conecta los botones, prepara el cambio de idioma y las animaciones. La página queda viva.</li>
+</ol>
+<p>Aquí está el esqueleto mínimo que une los tres mundos, que podrías escribir tú mismo:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Mi página&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 id=&quot;saludo&quot;&gt;Hola&lt;/h1&gt;
+  &lt;button id=&quot;menuBtn&quot;&gt;Menú&lt;/button&gt;
+
+  &lt;script defer src=&quot;main.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Estructura (HTML), estilo enlazado en el <code>&lt;head&gt;</code> (CSS), comportamiento enlazado al final con <code>defer</code> (JS). Ese patrón, idéntico, es el que usa tunal-digital, solo que con muchísimo más contenido.</p>
+<blockquote class="warn">
+<h3 id="cuidado-rutas-donde-esta-el-archivo">⚠️ Cuidado — Rutas: ¿dónde está el archivo?</h3>
+<p>En <code>href="styles.css"</code> y <code>src="main.js"</code> no hay carpetas, lo que significa "el archivo está <strong>al lado</strong> del HTML, en la misma carpeta". Si tu CSS estuviera en una subcarpeta <code>css/</code>, escribirías <code>href="css/styles.css"</code>. En tunal-digital, <code>manifest.js</code> está en una subcarpeta y por eso se escribe <code>src="lib/manifest.js"</code>. Si la ruta está mal, el navegador no encuentra el archivo y la página sale sin estilos o sin funcionar, sin avisar en voz alta. Revisa siempre las rutas.</p>
+</blockquote>
+<h2 id="6-un-vistazo-a-tus-otros-proyectos-sin-asustarte">6. Un vistazo a tus otros proyectos (sin asustarte)</h2>
+<p>Lo que acabas de ver es la forma "clásica" o <strong>vanilla</strong>, la base de todo. Tus otros proyectos hacen lo mismo por debajo, aunque lo escondan tras herramientas más modernas.</p>
+<blockquote class="def">
+<h3 id="que-significa-vanilla">🟦 ¿Qué significa? — <em>vanilla</em></h3>
+<p>"Vanilla" (vainilla, el sabor más básico) describe usar HTML, CSS y JavaScript <strong>puros</strong>, sin librerías ni herramientas que automaticen el enlazado. Es exactamente lo que hace tunal-digital.
+<strong>¿Para qué sirve?</strong> Para entender lo que de verdad pasa. Las herramientas modernas hacen este mismo trabajo por ti, pero conviene conocer el fondo.</p>
+</blockquote>
+<p>En <strong>RachaSimple</strong> y <strong>Faro</strong> (la carpeta Organizer) no escribes el <code>&lt;link&gt;</code> y el <code>&lt;script&gt;</code> a mano: usas React, que reparte la página en piezas llamadas componentes (archivos <code>.tsx</code>), y una herramienta (Vite en RachaSimple, Next.js en Faro) se encarga de inyectar el CSS y el JS por ti en un HTML que genera automáticamente. Y para los estilos, RachaSimple usa Tailwind, que es CSS organizado de otra manera. Pero el resultado final que llega al navegador es siempre lo mismo: un HTML que enlaza CSS y JS, y un DOM que JavaScript manipula. <strong>Lo que aprendiste aquí no caduca: es el cimiento de todo lo demás.</strong></p>
+<blockquote class="tip">
+<h3 id="tip-no-corras-todavia">💡 Tip — No corras todavía</h3>
+<p>No necesitas entender React, Vite ni Next.js ahora mismo. Solo quédate con la idea: por mucho que cambie la herramienta, los tres amigos (HTML, CSS, JS) y el puente (DOM) siempre están. Cuando llegues a esos módulos, reconocerás el patrón.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que HTML es estructura, CSS es estilo y JavaScript es comportamiento.</li>
+<li>[ ] Sé enlazar una hoja de estilos con <code>&lt;link rel="stylesheet" href="..."&gt;</code> dentro del <code>&lt;head&gt;</code>.</li>
+<li>[ ] Sé enlazar un script con <code>&lt;script src="..."&gt;&lt;/script&gt;</code> y que <strong>sí</strong> se cierra.</li>
+<li>[ ] Entiendo qué hace <code>defer</code> y por qué lo prefiero para mi propio código.</li>
+<li>[ ] Sé la diferencia entre <code>defer</code> (espera y respeta el orden) y <code>async</code> (corre apenas baja, sin orden).</li>
+<li>[ ] Entiendo que el DOM es la página "viva" en memoria y que JavaScript lo modifica.</li>
+<li>[ ] Sé que un <code>id</code> único cose el mismo elemento entre HTML, CSS y JavaScript.</li>
+<li>[ ] Entiendo por qué una ruta mal escrita deja la página sin estilos o sin función.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Sin computadora.</strong> Explica con tus palabras, a un amigo imaginario, qué hace cada uno de los tres: HTML, CSS y JavaScript. Usa la metáfora de la casa (muros, pintura, interruptores).</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> Mira esta línea y di qué está mal: <code>&lt;script src="main.js"&gt;</code>. Pista: piensa en lo que aprendiste sobre cerrar la etiqueta.</p>
+</li>
+<li>
+<p>💻 Abre <code>sitio-web/index.html</code> de <strong>tunal-digital</strong> en tu editor. Busca el <code>&lt;link rel="stylesheet"&gt;</code> y los dos <code>&lt;script defer&gt;</code>. Anota en qué parte del archivo está cada uno: ¿el CSS está en el <code>&lt;head&gt;</code>? ¿Los scripts están al final del <code>&lt;body&gt;</code>?</p>
+</li>
+<li>
+<p>💻 Crea una carpeta nueva con tres archivos: <code>index.html</code>, <code>styles.css</code> y <code>main.js</code>. En el HTML, enlaza el CSS en el <code>&lt;head&gt;</code> y el JS al final con <code>defer</code>. Pon en el HTML un <code>&lt;h1 id="titulo"&gt;Hola&lt;/h1&gt;</code>. En el CSS, escribe <code>#titulo { color: orange; }</code>. Abre el HTML en el navegador y comprueba que el título sale naranja: acabas de unir HTML y CSS tú mismo.</p>
+</li>
+<li>
+<p>💻 En el mismo <code>main.js</code> del ejercicio anterior, escribe esta única línea: <code>document.querySelector("#titulo").textContent = "Hola desde JavaScript";</code>. Recarga la página. Si el texto cambió, ¡JavaScript ya está tocando tu DOM! Si no cambió, revisa que el <code>&lt;script defer&gt;</code> esté bien escrito y que el <code>id</code> coincida.</p>
+</li>
+<li>
+<p>💻 Experimento del <code>defer</code>. En el ejercicio anterior, quita el <code>defer</code> del <code>&lt;script&gt;</code> y <strong>muévelo al <code>&lt;head&gt;</code></strong>, antes del <code>&lt;h1&gt;</code>. Recarga. Lo más probable es que el texto <strong>ya no cambie</strong>, porque el script corre antes de que el <code>&lt;h1&gt;</code> exista en el DOM. Vuelve a poner <code>defer</code> (o devuelve el script al final) y verás que funciona otra vez. Acabas de comprobar, con tus propias manos, por qué <code>defer</code> importa.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 08 — Posicionamiento — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-08-posicionamiento">Capítulo 08 — Posicionamiento</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora, tus elementos se han colocado solos: uno debajo del otro, uno al lado del otro, siguiendo el orden natural del HTML. Eso está muy bien para el 90% de los casos. Pero llega un momento en que necesitas que algo <strong>se quede pegado arriba mientras haces scroll</strong>, o que un pequeño globo de notificación se monte <strong>encima</strong> de un botón, o que una insignia "Nuevo" flote en la esquina de una tarjeta. Para eso existe el <strong>posicionamiento</strong>. Bit, nuestro ajolote, dice que el posicionamiento es como decirle a un elemento: "tú no sigas la fila, ponte exactamente aquí". Usado con cabeza, es magia. Usado a lo loco, es un desastre. En este capítulo aprenderás a usarlo con cabeza.</p>
+</blockquote>
+<hr />
+<h2 id="1-la-idea-grande-que-es-posicionar">1. La idea grande: ¿qué es "posicionar"?</h2>
+<p>Por defecto, el navegador acomoda cada elemento en lo que se llama el <strong>flujo normal del documento</strong>: de arriba hacia abajo, respetando si son de bloque o de línea (lo viste en capítulos anteriores). Posicionar significa cambiar ese comportamiento para un elemento concreto.</p>
+<p>La herramienta central es la propiedad <code>position</code>. Acepta cinco valores que vamos a recorrer uno por uno: <code>static</code>, <code>relative</code>, <code>absolute</code>, <code>fixed</code> y <code>sticky</code>. Junto a ella trabajan otras cuatro propiedades de desplazamiento (<code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code>), un sistema de capas (<code>z-index</code>) y dos técnicas más antiguas que conviene reconocer (<code>float</code> y <code>overflow</code>).</p>
+<blockquote class="def">
+<h3 id="que-significa-flujo-normal-del-documento">🟦 ¿Qué significa? — <em>Flujo normal del documento</em></h3>
+<p>Es el orden automático con el que el navegador coloca los elementos cuando no le dices nada especial: los bloques se apilan verticalmente y el contenido en línea fluye como texto. <strong>Sirve</strong> para que una página tenga estructura sin esfuerzo. <strong>Dónde se usa en un repo real:</strong> en <code>tunal-digital</code>, casi todo el <code>styles.css</code> confía en el flujo normal; solo unos pocos elementos (como un botón flotante o una barra superior) rompen ese flujo a propósito.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Antes de tocar <code>position</code>, pregúntate si Flexbox o Grid (capítulos siguientes o anteriores según tu ruta) no resuelven mejor el problema. El posicionamiento es para casos puntuales de "ponte exactamente aquí", no para construir layouts completos.</p>
+</blockquote>
+<hr />
+<h2 id="2-position-static-el-valor-por-defecto">2. <code>position: static</code> — el valor por defecto</h2>
+<p>Todos los elementos empiezan con <code>position: static</code>. Significa "compórtate normal, sigue el flujo". Es tan normal que casi nunca lo escribes tú; ya está puesto de fábrica.</p>
+<pre><code class="language-css">.tarjeta {
+  position: static; /* esto es lo que ya tenían sin escribirlo */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-static">🟦 ¿Qué significa? — <em>static</em></h3>
+<p>Es la posición normal de un elemento: ocupa su lugar en la fila y <strong>no</strong> reacciona a <code>top</code>, <code>right</code>, <code>bottom</code> ni <code>left</code>. <strong>Sirve</strong> como punto de partida y como forma de "resetear" un posicionamiento que ya no quieres. <strong>Dónde se usa:</strong> la inmensa mayoría de los párrafos, títulos e imágenes de <code>tunal-digital</code> son <code>static</code> sin que nadie lo escriba.</p>
+</blockquote>
+<p>El dato clave: en <code>static</code>, las propiedades <code>top/right/bottom/left</code> <strong>no hacen nada</strong>. Si las escribes, el navegador las ignora. Esto confunde a muchos principiantes: "le puse <code>top: 20px</code> y no se movió". Casi siempre es porque el elemento sigue siendo <code>static</code>.</p>
+<hr />
+<h2 id="3-las-cuatro-propiedades-de-desplazamiento-top-right-bottom-left">3. Las cuatro propiedades de desplazamiento: <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code></h2>
+<p>Antes de seguir con los otros valores de <code>position</code>, necesitas entender estas cuatro, porque son las que mueven el elemento una vez que dejó de ser <code>static</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-top-right-bottom-left">🟦 ¿Qué significa? — <em>top / right / bottom / left</em></h3>
+<p>Son cuatro propiedades que indican <strong>a qué distancia</strong> se separa un elemento posicionado de un borde de referencia. <code>top: 10px</code> significa "10 píxeles desde arriba"; <code>left: 0</code> significa "pegado a la izquierda". <strong>Sirven</strong> para colocar con precisión un elemento que ya no está en el flujo normal. <strong>Dónde se usa:</strong> para clavar una insignia "Nuevo" en la esquina superior derecha de una tarjeta de proyecto en <code>Faro</code>.</p>
+</blockquote>
+<p>La referencia de "desde dónde se mide" depende del valor de <code>position</code>, y eso es justo lo que veremos en las siguientes secciones. Un detalle importante: estas propiedades <strong>solo funcionan</strong> si <code>position</code> es <code>relative</code>, <code>absolute</code>, <code>fixed</code> o <code>sticky</code>. Con <code>static</code>, mudas.</p>
+<hr />
+<h2 id="4-position-relative-muevete-respecto-a-ti-mismo">4. <code>position: relative</code> — muévete respecto a ti mismo</h2>
+<p>Con <code>relative</code>, el elemento sigue ocupando su lugar en el flujo (su hueco no desaparece), pero puedes empujarlo desde su propia posición original usando <code>top/right/bottom/left</code>.</p>
+<pre><code class="language-css">.boton-destacado {
+  position: relative;
+  top: -4px;   /* sube 4px respecto a donde estaba */
+  left: 8px;   /* se corre 8px a la derecha */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-relative">🟦 ¿Qué significa? — <em>relative</em></h3>
+<p>Posiciona el elemento <strong>en relación a sí mismo</strong>: parte de donde el flujo lo puso y se desplaza desde ahí. El hueco que ocupaba se queda reservado. <strong>Sirve</strong> para ajustes finos de posición y, sobre todo, para crear un "marco de referencia" para hijos absolutos (lo verás en la sección 5). <strong>Dónde se usa:</strong> en <code>tunal-digital</code>, una tarjeta con <code>position: relative</code> para que dentro pueda flotar una etiqueta de precio absoluta.</p>
+</blockquote>
+<p>El superpoder de <code>relative</code> no es tanto moverse a sí mismo (eso se usa poco), sino que <strong>convierte al elemento en el punto de referencia de sus hijos <code>absolute</code></strong>. Guarda esta idea, la usaremos enseguida.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <code>RachaSimple</code> (React + Tailwind), <code>position: relative</code> se escribe simplemente como la clase <code>relative</code>, y <code>top: 0; right: 0</code> se vuelven <code>top-0 right-0</code>. Mismos conceptos, nombres más cortos. Lo que aprendas aquí en CSS puro se traduce directo a Tailwind.</p>
+</blockquote>
+<hr />
+<h2 id="5-position-absolute-sacame-del-flujo-y-colocame">5. <code>position: absolute</code> — sácame del flujo y colócame</h2>
+<p>Aquí empieza lo interesante. Con <code>absolute</code>, el elemento <strong>sale del flujo normal</strong>: deja de ocupar su hueco (los demás se cierran como si no existiera) y se coloca respecto a su <strong>ancestro posicionado</strong> más cercano.</p>
+<pre><code class="language-css">.tarjeta {
+  position: relative; /* este es el ancestro de referencia */
+}
+
+.tarjeta .insignia-nuevo {
+  position: absolute;
+  top: 8px;
+  right: 8px;       /* esquina superior derecha de la tarjeta */
+  background: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-absolute">🟦 ¿Qué significa? — <em>absolute</em></h3>
+<p>Saca al elemento del flujo normal y lo posiciona respecto al ancestro más cercano que tenga <code>position</code> distinta de <code>static</code> (es decir, <code>relative</code>, <code>absolute</code>, <code>fixed</code> o <code>sticky</code>). Si no encuentra ninguno, usa la página entera. <strong>Sirve</strong> para superponer elementos: insignias, globos, menús desplegables, iconos en esquinas. <strong>Dónde se usa:</strong> la insignia "Nuevo" sobre una tarjeta de proyecto en <code>Faro</code>, o un icono de candado sobre una miniatura en <code>tunal-digital</code>.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>El error número uno con <code>absolute</code>: olvidar poner <code>position: relative</code> en el contenedor padre. Si lo olvidas, tu insignia no se coloca respecto a la tarjeta, sino respecto a toda la página, y aparece en una esquina rarísima. Regla mental: <strong>padre <code>relative</code>, hijo <code>absolute</code></strong>.</p>
+<h3 id="que-significa-ancestro-posicionado-bloque-contenedor">🟦 ¿Qué significa? — <em>Ancestro posicionado (bloque contenedor)</em></h3>
+<p>Es el elemento de referencia que un hijo <code>absolute</code> usa para medir su <code>top/left/etc.</code>. Es el ancestro más cercano con <code>position</code> distinta de <code>static</code>. <strong>Sirve</strong> para controlar exactamente "respecto a qué" se coloca un elemento absoluto. <strong>Dónde se usa:</strong> en <code>Faro</code>, la tarjeta de proyecto es <code>relative</code> justamente para ser el ancestro de su insignia de estado.</p>
+</blockquote>
+<p>Un detalle: cuando pones un elemento <code>absolute</code>, si no le das ni <code>top/bottom</code> ni <code>left/right</code>, se queda más o menos donde estaba pero ya fuera del flujo. Lo normal es darle al menos dos coordenadas (una vertical y una horizontal) para clavarlo donde quieres.</p>
+<hr />
+<h2 id="6-position-fixed-quedate-pegado-a-la-pantalla">6. <code>position: fixed</code> — quédate pegado a la pantalla</h2>
+<p>Con <code>fixed</code>, el elemento también sale del flujo, pero su referencia no es un ancestro: es la <strong>ventana del navegador</strong> (el viewport). Resultado: se queda quieto en la pantalla aunque hagas scroll.</p>
+<pre><code class="language-css">.boton-subir {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;     /* siempre visible en la esquina inferior derecha */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-fixed">🟦 ¿Qué significa? — <em>fixed</em></h3>
+<p>Posiciona el elemento respecto a la ventana visible del navegador y lo mantiene fijo aunque el usuario haga scroll. <strong>Sirve</strong> para botones flotantes "volver arriba", barras de cookies, chats de ayuda en la esquina. <strong>Dónde se usa:</strong> un botón flotante de WhatsApp en la esquina de <code>tunal-digital</code> que acompaña al usuario por toda la página.</p>
+<h3 id="que-significa-viewport">🟦 ¿Qué significa? — <em>Viewport</em></h3>
+<p>Es el área visible de la página dentro de la ventana del navegador, sin contar lo que queda fuera por scroll. <strong>Sirve</strong> como marco de referencia para <code>fixed</code> y como unidad de medida (<code>vh</code>, <code>vw</code>). <strong>Dónde se usa:</strong> el botón flotante de <code>tunal-digital</code> se mide respecto al viewport, por eso no se mueve al hacer scroll.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Un elemento <code>fixed</code> puede tapar contenido importante en pantallas pequeñas. Si pones una barra fija arriba, recuerda dejar espacio (por ejemplo, un <code>padding-top</code> en el body) para que el primer título no quede oculto debajo.</p>
+</blockquote>
+<hr />
+<h2 id="7-position-sticky-lo-mejor-de-dos-mundos">7. <code>position: sticky</code> — lo mejor de dos mundos</h2>
+<p><code>sticky</code> es el valor más nuevo y, para muchos, el más útil. El elemento se comporta como <code>relative</code> (ocupa su hueco, fluye normal) <strong>hasta</strong> que llega a cierto punto del scroll; ahí se "pega" como si fuera <code>fixed</code>, y se queda fijo mientras su contenedor siga visible.</p>
+<pre><code class="language-css">.barra-manual {
+  position: sticky;
+  top: 0;          /* se pega al borde superior al hacer scroll */
+  background: var(--color-fondo);
+  z-index: 10;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-sticky">🟦 ¿Qué significa? — <em>sticky</em></h3>
+<p>Mezcla <code>relative</code> y <code>fixed</code>: el elemento fluye normal hasta alcanzar un umbral (<code>top</code>, <code>bottom</code>, etc.) y entonces se queda pegado en pantalla mientras su contenedor esté visible. <strong>Sirve</strong> para barras de navegación que acompañan al lector, encabezados de tabla que no se pierden, índices laterales. <strong>Dónde se usa:</strong> ¡la propia barra superior de este manual! En <code>site/estilos.css</code>, la barra usa <code>position: sticky</code> con <code>top: 0</code> para quedarse arriba mientras lees.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p><code>sticky</code> <strong>necesita</strong> que le des un umbral, normalmente <code>top: 0</code>. Si pones <code>position: sticky</code> pero olvidas <code>top</code>, no se pega a nada y parece que no funciona. Es la causa más común de "mi sticky está roto".</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p><code>sticky</code> deja de pegarse cuando su contenedor padre termina y se sale de la pantalla. Si tu barra "sticky" no se queda fija todo lo que esperas, revisa que su contenedor sea suficientemente alto (a menudo el culpable es un padre con <code>overflow: hidden</code> o una altura pequeña).</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>¿Sale del flujo?</th>
+<th>Referencia</th>
+<th>Caso típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>No</td>
+<td>—</td>
+<td>Todo por defecto</td>
+</tr>
+<tr>
+<td><code>relative</code></td>
+<td>No</td>
+<td>Su propia posición</td>
+<td>Empujones finos / ser padre de absolutos</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>Sí</td>
+<td>Ancestro posicionado</td>
+<td>Insignia en esquina de tarjeta</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>Sí</td>
+<td>Viewport</td>
+<td>Botón flotante "volver arriba"</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td>No (luego sí)</td>
+<td>Scroll del contenedor</td>
+<td>Barra superior del manual</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-z-index-y-el-apilamiento-quien-va-encima">8. <code>z-index</code> y el apilamiento: ¿quién va encima?</h2>
+<p>Cuando varios elementos se superponen, ¿cuál se ve por encima? Para controlarlo existe <code>z-index</code>. Piensa en un eje invisible que sale de la pantalla hacia ti: mayor número, más cerca de tus ojos.</p>
+<pre><code class="language-css">.barra-manual {
+  position: sticky;
+  top: 0;
+  z-index: 100;   /* por encima del contenido normal */
+}
+
+.menu-desplegable {
+  position: absolute;
+  z-index: 200;   /* por encima incluso de la barra */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-z-index">🟦 ¿Qué significa? — <em>z-index</em></h3>
+<p>Es un número que decide el orden de apilamiento (qué elemento se dibuja encima de cuál) cuando se superponen. Mayor <code>z-index</code>, más al frente. <strong>Sirve</strong> para que menús, modales y barras no queden tapados por el contenido. <strong>Dónde se usa:</strong> en <code>Faro</code>, un menú desplegable de opciones necesita un <code>z-index</code> alto para no quedar oculto bajo las tarjetas de proyecto.</p>
+<h3 id="que-significa-contexto-de-apilamiento">🟦 ¿Qué significa? — <em>Contexto de apilamiento</em></h3>
+<p>Es un "grupo de capas" independiente. Un elemento posicionado con <code>z-index</code> crea su propio contexto, y dentro de él sus hijos se apilan entre sí, sin importar números de fuera. <strong>Sirve</strong> para entender por qué a veces un <code>z-index: 9999</code> no funciona (está atrapado dentro de un contexto que en su conjunto va por debajo). <strong>Dónde se usa:</strong> explica esos misterios de "le puse z-index altísimo y sigue abajo" en cualquiera de tus proyectos.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p><code>z-index</code> <strong>solo funciona en elementos posicionados</strong> (no <code>static</code>). Si pones <code>z-index: 50</code> en un elemento sin <code>position</code>, no pasa nada. Primero <code>position: relative</code> (o el que toque), luego <code>z-index</code>.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>No uses números gigantes como <code>z-index: 99999</code>. Cuando todo el equipo hace eso, nadie gana y se vuelve un caos. Usa una escala sencilla y consistente: contenido <code>0</code>, barra <code>100</code>, menús <code>200</code>, modales <code>1000</code>. En <code>Faro</code> o <code>RachaSimple</code> esto mantiene el orden bajo control.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Tailwind (en <code>RachaSimple</code> y <code>Faro</code>) ofrece clases como <code>z-10</code>, <code>z-20</code>, <code>z-50</code>. Son exactamente <code>z-index: 10</code>, <code>20</code>, <code>50</code>. Y <code>sticky top-0 z-50</code> es el equivalente directo de nuestra barra del manual.</p>
+</blockquote>
+<hr />
+<h2 id="9-overflow-que-pasa-cuando-el-contenido-no-cabe">9. <code>overflow</code> — qué pasa cuando el contenido no cabe</h2>
+<p><code>overflow</code> no es de posicionamiento estricto, pero va de la mano: controla qué ocurre cuando el contenido de un elemento es más grande que su caja.</p>
+<pre><code class="language-css">.lista-scroll {
+  height: 200px;
+  overflow-y: auto;   /* si la lista crece, aparece scroll dentro */
+}
+
+.recorte {
+  overflow: hidden;   /* lo que se salga, se oculta */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-overflow">🟦 ¿Qué significa? — <em>overflow</em></h3>
+<p>Decide qué hacer con el contenido que se desborda de su caja: <code>visible</code> (se ve y se sale, por defecto), <code>hidden</code> (se recorta), <code>scroll</code> (siempre muestra barras) o <code>auto</code> (muestra barras solo si hace falta). <strong>Sirve</strong> para crear áreas con scroll propio, recortar imágenes a una forma o esconder desbordes. <strong>Dónde se usa:</strong> en <code>Faro</code>, una lista de roadmap larga dentro de una tarjeta usa <code>overflow-y: auto</code> para tener su propio scroll sin estirar la tarjeta.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p><code>overflow: hidden</code> es el truco clásico para que una imagen rectangular se recorte dentro de un contenedor redondeado (<code>border-radius</code>). Sin él, las esquinas de la imagen asoman fuera del círculo.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>Si tu barra <code>sticky</code> "deja de pegarse", revisa si algún ancestro tiene <code>overflow: hidden</code> (o <code>auto</code>/<code>scroll</code>). Ese ajuste cambia el contenedor de scroll y suele romper el <code>sticky</code>. Es uno de los bugs más confusos para principiantes; ahora ya lo conoces.</p>
+</blockquote>
+<hr />
+<h2 id="10-float-y-clear-el-legado-que-conviene-reconocer">10. <code>float</code> y <code>clear</code> — el legado que conviene reconocer</h2>
+<p>Antes de que existieran Flexbox y Grid, los layouts de varias columnas se hacían con <code>float</code>. Hoy <strong>no</strong> lo usamos para layout, pero todavía te lo encontrarás en código antiguo, así que vale la pena reconocerlo.</p>
+<pre><code class="language-css">.imagen-articulo {
+  float: left;       /* el texto fluye a su alrededor */
+  margin: 0 16px 8px 0;
+}
+
+.fin-de-seccion {
+  clear: both;       /* fuerza a empezar debajo de los floats */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-float">🟦 ¿Qué significa? — <em>float</em></h3>
+<p>Saca parcialmente un elemento del flujo y lo empuja a la izquierda o derecha, dejando que el contenido siguiente lo rodee. <strong>Sirve</strong> hoy casi solo para su uso original: que un texto envuelva una imagen. <strong>Dónde se usa:</strong> si retomas un sitio viejo o una plantilla heredada antes de <code>tunal-digital</code>, podrías ver <code>float</code> armando columnas; lo reconoces y, si puedes, lo migras a Flexbox/Grid.</p>
+<h3 id="que-significa-clear">🟦 ¿Qué significa? — <em>clear</em></h3>
+<p>Indica que un elemento no debe colocarse junto a elementos flotantes anteriores, sino debajo de ellos. <code>clear: both</code> los evita por ambos lados. <strong>Sirve</strong> para "cerrar" una zona con floats y que lo siguiente baje correctamente. <strong>Dónde se usa:</strong> acompaña siempre a <code>float</code> en código antiguo; sin él, los diseños flotados se descuadran.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Regla práctica para hoy: <strong>usa <code>float</code> solo para envolver texto alrededor de una imagen.</strong> Para columnas y rejillas, Flexbox o Grid. Si ves <code>float</code> haciendo layout, es código viejo, no un modelo a imitar.</p>
+</blockquote>
+<hr />
+<h2 id="11-cuando-uso-cada-uno-guia-rapida-de-decision">11. ¿Cuándo uso cada uno? Guía rápida de decisión</h2>
+<p>Bit te resume el árbol de decisión que usan los desarrolladores con experiencia:</p>
+<ul>
+<li>¿Solo quiero acomodar cosas en filas/columnas? → <strong>No uses <code>position</code>. Usa Flexbox o Grid.</strong></li>
+<li>¿Quiero clavar algo en la esquina de un contenedor (insignia, icono)? → Padre <code>relative</code>, hijo <code>absolute</code>.</li>
+<li>¿Quiero un botón que me siga por toda la pantalla? → <code>fixed</code>.</li>
+<li>¿Quiero una barra que se pegue arriba al hacer scroll? → <code>sticky</code> con <code>top: 0</code> (como la barra de este manual).</li>
+<li>¿Quiero empujar un elemento unos pocos píxeles? → <code>relative</code> con <code>top/left</code>.</li>
+<li>¿Quiero que un área tenga su propio scroll o recortar contenido? → <code>overflow</code>.</li>
+<li>¿Necesito que algo se vea por encima de otra cosa? → <code>position</code> + <code>z-index</code>.</li>
+</ul>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>La barra superior de tu manual (<code>site/estilos.css</code>) combina varias cosas de este capítulo a la vez: <code>position: sticky</code>, <code>top: 0</code>, un <code>z-index</code> para ir por encima del texto, y variables CSS para el color de fondo según el tema. Es un ejemplo real y pequeño de todo junto.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo qué es el flujo normal y qué significa "salir" de él.</li>
+<li>[ ] Sé que <code>top/right/bottom/left</code> no hacen nada con <code>position: static</code>.</li>
+<li>[ ] Distingo <code>relative</code> (no sale del flujo) de <code>absolute</code> (sí sale).</li>
+<li>[ ] Recuerdo la regla "padre <code>relative</code>, hijo <code>absolute</code>".</li>
+<li>[ ] Sé qué hace <code>fixed</code> y cuál es su referencia (el viewport).</li>
+<li>[ ] Entiendo <code>sticky</code> y por qué necesita un umbral como <code>top: 0</code>.</li>
+<li>[ ] Sé que <code>z-index</code> solo funciona en elementos posicionados.</li>
+<li>[ ] Conozco los cuatro valores de <code>overflow</code> y para qué sirve cada uno.</li>
+<li>[ ] Reconozco <code>float</code>/<code>clear</code> como legado y sé cuándo (no) usarlos.</li>
+<li>[ ] Sé elegir la herramienta correcta según el problema.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>(En papel o mental)</strong> Para cada caso, di qué <code>position</code> usarías: (a) un sello "Agotado" en la esquina de una foto de producto; (b) un botón de ayuda siempre visible abajo a la derecha; (c) una barra de navegación que se pega arriba al hacer scroll; (d) mover un icono 3px hacia arriba para alinearlo con un texto.</p>
+</li>
+<li>
+<p>💻 En el <code>styles.css</code> de <code>tunal-digital</code>, crea una tarjeta con <code>position: relative</code> y dentro una insignia con <code>position: absolute; top: 8px; right: 8px;</code>. Comprueba que la insignia se clava en la esquina de la tarjeta. Luego quita el <code>relative</code> del padre y observa adónde salta la insignia.</p>
+</li>
+<li>
+<p>💻 Añade a tu página un botón "volver arriba" con <code>position: fixed; bottom: 24px; right: 24px;</code>. Haz que la página sea larga (mucho texto) y verifica que el botón no se mueve al hacer scroll.</p>
+</li>
+<li>
+<p>💻 Crea una barra superior con <code>position: sticky; top: 0;</code> y dale un <code>z-index: 100</code>. Llena la página de contenido y comprueba que la barra se queda pegada arriba. Después, quítale el <code>top: 0</code> y observa que deja de pegarse: esa es la lección clave de <code>sticky</code>.</p>
+</li>
+<li>
+<p>💻 Haz un contenedor de <code>height: 150px</code> con una lista larga dentro y aplícale <code>overflow-y: auto</code>. Verifica que aparece un scroll interno sin que crezca el contenedor. Cámbialo a <code>overflow: hidden</code> y observa cómo el contenido sobrante desaparece.</p>
+</li>
+<li>
+<p>💻 Crea dos elementos superpuestos (ambos <code>position: absolute</code> en el mismo sitio) con colores distintos. Usa <code>z-index</code> para decidir cuál va encima, e intercámbialos cambiando solo los números. Bonus: pon <code>z-index</code> sin <code>position</code> y confirma que no hace nada.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. El posicionamiento asusta al principio porque rompe el orden cómodo del flujo normal, pero como viste, cada valor tiene un trabajo muy concreto. Bit te deja un recordatorio: <strong>el mejor posicionamiento es el que casi no usas.</strong> Apóyate en Flexbox y Grid para los layouts, y reserva <code>position</code> para esos detalles que de verdad lo necesitan: la insignia, el botón flotante y, cómo no, la barra <code>sticky</code> que te acompaña arriba mientras lees este mismo manual. Nos vemos en el siguiente capítulo.</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

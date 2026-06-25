@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 09 — CSS Grid a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-09-css-grid-a-fondo">Capítulo 09 — CSS Grid a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>¡Hola de nuevo! Soy <strong>Bit</strong>, tu ajolote acompañante. 🦎 En el capítulo anterior aprendimos a alinear cosas en una sola dirección con Flexbox. Hoy subimos de nivel: vamos a dibujar <strong>cuadrículas de verdad</strong>, con filas <em>y</em> columnas al mismo tiempo. Imagina papel cuadriculado: tú decides cuántas casillas hay y dónde se coloca cada cosa. Eso es <strong>CSS Grid</strong>, y es la herramienta más potente que tiene CSS para maquetar páginas. Respira hondo, sirve agua, y vamos despacio. No hay prisa: cada concepto lo veremos con calma y con ejemplos de tus propios proyectos.</p>
+</blockquote>
+<hr />
+<h2 id="1-por-que-existe-css-grid">1. ¿Por qué existe CSS Grid?</h2>
+<p>Antes de Grid, maquetar una página en dos dimensiones (filas y columnas a la vez) era un dolor de cabeza. Se usaban trucos con <code>float</code>, con tablas o con cálculos manuales de porcentajes. Funcionaba... a medias, y se rompía con facilidad.</p>
+<p>CSS Grid llegó para resolver justo eso: <strong>organizar el espacio en dos dimensiones</strong> de forma clara y predecible. Tú defines una rejilla (la cuadrícula) y luego dices qué va en cada casilla.</p>
+<blockquote class="def">
+<h3 id="que-significa-css-grid">🟦 ¿Qué significa? — <em>CSS Grid</em></h3>
+<p>Es un sistema de diseño (layout) de CSS que organiza elementos en <strong>filas y columnas</strong> al mismo tiempo, como una cuadrícula. Sirve para crear la estructura general de una página: cabecera, menú lateral, contenido y pie; o para distribuir un conjunto de tarjetas de forma ordenada. En tu proyecto <strong>tunal-digital</strong>, la sección de servicios con varias tarjetas alineadas es un caso perfecto para Grid: una rejilla de tarjetas que se reacomoda sola según el ancho de la pantalla.</p>
+<h3 id="que-significa-layout-maquetacion">🟦 ¿Qué significa? — <em>Layout (maquetación)</em></h3>
+<p>"Layout" es simplemente la <strong>distribución de los elementos</strong> en la pantalla: dónde va cada bloque, cuánto espacio ocupa y cómo se relaciona con los demás. Cuando hablamos de "maquetar", nos referimos a construir ese layout. Grid y Flexbox son las dos herramientas principales de CSS para maquetar.</p>
+</blockquote>
+<p>La idea central de Grid es esta: hay un <strong>contenedor</strong> (el elemento padre, al que le pones <code>display: grid</code>) y dentro están los <strong>ítems</strong> (los hijos directos, que se acomodan en la cuadrícula). Todo lo que vamos a ver gira en torno a esos dos roles.</p>
+<hr />
+<h2 id="2-tu-primera-cuadricula-display-grid">2. Tu primera cuadrícula: <code>display: grid</code></h2>
+<p>Empecemos con lo mínimo. Tienes un contenedor con varios hijos:</p>
+<pre><code class="language-html">&lt;div class=&quot;tarjetas&quot;&gt;
+  &lt;div class=&quot;tarjeta&quot;&gt;Uno&lt;/div&gt;
+  &lt;div class=&quot;tarjeta&quot;&gt;Dos&lt;/div&gt;
+  &lt;div class=&quot;tarjeta&quot;&gt;Tres&lt;/div&gt;
+  &lt;div class=&quot;tarjeta&quot;&gt;Cuatro&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Y en tu <code>styles.css</code>:</p>
+<pre><code class="language-css">.tarjetas {
+  display: grid;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-display-grid">🟦 ¿Qué significa? — <em><code>display: grid</code></em></h3>
+<p>Es la propiedad que <strong>convierte un elemento en contenedor de cuadrícula</strong>. En cuanto la pones, sus hijos directos pasan a ser ítems de la rejilla y obedecen las reglas de Grid. Sirve para "activar" todo el sistema. En el manual, la clase <code>.tarjetas</code> usa exactamente esto para colocar las tarjetas de contenido en cuadrícula.</p>
+</blockquote>
+<p>Si solo pones <code>display: grid</code>, por defecto verás una sola columna con cada hijo en su propia fila (uno debajo de otro). No es muy emocionante todavía: falta decirle <strong>cuántas columnas</strong> queremos. Eso lo hacemos en la siguiente sección.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p><code>display: grid</code> afecta solo a los <strong>hijos directos</strong> del contenedor, no a los nietos. Si una tarjeta tiene cosas dentro, esas cosas no entran en la cuadrícula del padre; siguen sus propias reglas. Grid organiza un nivel a la vez.</p>
+</blockquote>
+<hr />
+<h2 id="3-definir-columnas-con-grid-template-columns">3. Definir columnas con <code>grid-template-columns</code></h2>
+<p>Aquí empieza la magia. Le decimos a la cuadrícula cuántas columnas tiene y de qué ancho:</p>
+<pre><code class="language-css">.tarjetas {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+}
+</code></pre>
+<p>Eso crea <strong>tres columnas de 200 píxeles cada una</strong>. Los ítems se reparten de izquierda a derecha y, cuando se llenan las tres columnas, salta a una fila nueva.</p>
+<blockquote class="def">
+<h3 id="que-significa-grid-template-columns">🟦 ¿Qué significa? — <em><code>grid-template-columns</code></em></h3>
+<p>Define <strong>cuántas columnas tiene la cuadrícula y qué ancho tiene cada una</strong>. Le das una lista de medidas separadas por espacios; cada medida es una columna. Sirve para controlar la estructura horizontal del diseño. En <strong>tunal-digital</strong>, podrías usarlo para que la sección de servicios siempre muestre, por ejemplo, tres tarjetas por fila en pantallas grandes.</p>
+</blockquote>
+<p>Cada valor que escribes es una columna. <code>200px 200px 200px</code> son tres columnas; <code>100px 300px</code> serían dos columnas (una angosta y una ancha). Puedes mezclar unidades:</p>
+<pre><code class="language-css">grid-template-columns: 150px 300px 150px;
+</code></pre>
+<p>Eso da una columna central más ancha, rodeada de dos angostas. Útil para layouts tipo "barra lateral + contenido + barra lateral".</p>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pones medidas fijas en píxeles y la suma de columnas es más ancha que la pantalla, el contenido se desbordará (saldrá de la pantalla y aparecerá una barra de desplazamiento horizontal). Por eso casi nunca usamos solo píxeles fijos para el layout completo. Enseguida veremos una unidad mucho más amigable: <code>fr</code>.</p>
+</blockquote>
+<hr />
+<h2 id="4-la-unidad-magica-fr">4. La unidad mágica: <code>fr</code></h2>
+<p>Las medidas fijas (como <code>200px</code>) tienen un problema: no se adaptan. Si la pantalla es más grande, sobra espacio; si es más pequeña, falta. CSS Grid trae una unidad pensada para esto: <code>fr</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-fr-fraccion">🟦 ¿Qué significa? — <em><code>fr</code> (fracción)</em></h3>
+<p>Es una unidad que representa <strong>una fracción del espacio disponible</strong> dentro de la cuadrícula. No es un tamaño fijo: reparte el espacio sobrante de forma proporcional. Sirve para que las columnas crezcan o se encojan solas según el ancho de la pantalla. Es la unidad estrella de Grid para diseños fluidos.</p>
+</blockquote>
+<p>Mira la diferencia:</p>
+<pre><code class="language-css">.tarjetas {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+</code></pre>
+<p>Esto crea <strong>tres columnas iguales</strong> que juntas ocupan todo el ancho disponible. Si la pantalla mide 900px, cada columna mide 300px; si mide 600px, cada una mide 200px. Se adapta sola. ✨</p>
+<p>El número antes de <code>fr</code> es la <strong>proporción</strong>. Por ejemplo:</p>
+<pre><code class="language-css">grid-template-columns: 2fr 1fr;
+</code></pre>
+<p>Aquí la primera columna recibe <strong>el doble de espacio</strong> que la segunda. Si hay 900px disponibles, la primera mide 600px y la segunda 300px. Piensa en <code>fr</code> como "partes de una torta": <code>2fr 1fr</code> son tres partes en total, dos para una columna y una para la otra.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Puedes mezclar <code>fr</code> con medidas fijas. Por ejemplo <code>grid-template-columns: 250px 1fr</code> crea una barra lateral fija de 250px y un área de contenido que ocupa todo el resto. Este patrón es clásico para dashboards, y se parece mucho a la estructura de <strong>Faro/Organizer</strong>: un menú lateral de ancho fijo y un área principal flexible.</p>
+</blockquote>
+<hr />
+<h2 id="5-espacios-entre-celdas-gap">5. Espacios entre celdas: <code>gap</code></h2>
+<p>Hasta ahora nuestras tarjetas están pegadas unas a otras. Para separarlas usamos <code>gap</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-gap">🟦 ¿Qué significa? — <em><code>gap</code></em></h3>
+<p>Define el <strong>espacio (el hueco) entre las celdas</strong> de la cuadrícula, tanto entre columnas como entre filas. Sirve para dar aire al diseño sin tener que poner márgenes a cada ítem. En cualquier rejilla de tarjetas (como la <code>.tarjetas</code> del manual) es lo que separa una tarjeta de otra de forma uniforme.</p>
+</blockquote>
+<pre><code class="language-css">.tarjetas {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+</code></pre>
+<p>Eso pone 16px de separación entre todas las tarjetas, tanto horizontal como verticalmente. Limpio y consistente.</p>
+<p>Si quieres separaciones distintas para filas y columnas, puedes dar dos valores:</p>
+<pre><code class="language-css">gap: 24px 16px; /* 24px entre filas, 16px entre columnas */
+</code></pre>
+<p>El primer valor es para las filas (vertical), el segundo para las columnas (horizontal).</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p><code>gap</code> solo crea espacio <strong>entre</strong> celdas, nunca en los bordes externos de la cuadrícula. Para separar la rejilla del borde de la página usa <code>padding</code> en el contenedor. Así controlas por separado el "aire interno" (gap) y el "aire alrededor" (padding).</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Si tu proyecto <strong>RachaSimple</strong> usa Tailwind, esta misma idea aparece con clases como <code>grid grid-cols-3 gap-4</code>. <code>grid</code> es <code>display: grid</code>, <code>grid-cols-3</code> es tres columnas iguales y <code>gap-4</code> es el <code>gap</code>. ¡Es exactamente lo mismo que estás aprendiendo, solo con nombres más cortos! Entender Grid "puro" te hace entender Tailwind al instante.</p>
+</blockquote>
+<hr />
+<h2 id="6-menos-repeticion-repeat">6. Menos repetición: <code>repeat()</code></h2>
+<p>Escribir <code>1fr 1fr 1fr 1fr</code> para cuatro columnas funciona, pero imagina doce columnas. Sería tedioso. Para eso existe <code>repeat()</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-repeat">🟦 ¿Qué significa? — <em><code>repeat()</code></em></h3>
+<p>Es una función de CSS que <strong>repite un patrón de columnas (o filas) un número de veces</strong>, para no tener que escribirlo a mano. Sirve para acortar y hacer más legible la definición de la cuadrícula. Cuanto más grande es la rejilla, más útil es.</p>
+</blockquote>
+<pre><code class="language-css">.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+</code></pre>
+<p><code>repeat(3, 1fr)</code> significa "repite <code>1fr</code> tres veces", o sea, es idéntico a <code>1fr 1fr 1fr</code> pero más corto. La sintaxis es <code>repeat(cuántas-veces, qué-medida)</code>.</p>
+<p>También puedes repetir patrones más complejos:</p>
+<pre><code class="language-css">grid-template-columns: repeat(2, 200px 1fr);
+</code></pre>
+<p>Eso repite el patrón <code>200px 1fr</code> dos veces, dando cuatro columnas en total: <code>200px 1fr 200px 1fr</code>. Pero no te compliques al principio; el uso más común y más útil es <code>repeat(N, 1fr)</code>.</p>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p><code>repeat()</code> no es solo para columnas: también funciona en <code>grid-template-rows</code> para repetir filas. La lógica es exactamente la misma.</p>
+</blockquote>
+<hr />
+<h2 id="7-columnas-que-se-adaptan-minmax-auto-fill-y-auto-fit">7. Columnas que se adaptan: <code>minmax()</code>, <code>auto-fill</code> y <code>auto-fit</code></h2>
+<p>Aquí llegamos a una de las partes más bonitas de Grid: <strong>rejillas que se reacomodan solas</strong> según el espacio, sin escribir media query para cada tamaño de pantalla. Vamos por partes.</p>
+<blockquote class="def">
+<h3 id="que-significa-media-query-consulta-de-medios">🟦 ¿Qué significa? — <em>media query (consulta de medios)</em></h3>
+<p>Es una regla de CSS que aplica estilos <strong>solo cuando se cumple una condición</strong>, normalmente el ancho de la pantalla (por ejemplo: "si la pantalla mide menos de 600px, haz esto"). Tradicionalmente se usaban para cambiar el número de columnas según el dispositivo. Lo interesante de lo que vas a ver ahora es que Grid puede lograr ese mismo efecto responsivo <strong>sin escribir ni una sola media query</strong>, lo que ahorra muchísimo código.</p>
+</blockquote>
+<h3 id="minmax"><code>minmax()</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-minmax">🟦 ¿Qué significa? — <em><code>minmax()</code></em></h3>
+<p>Es una función que define un <strong>rango de tamaño</strong>: un mínimo y un máximo. Le dices "esta columna nunca debe ser más angosta que X ni más ancha que Y". Sirve para que las columnas se adapten pero sin volverse ni demasiado pequeñas ni demasiado grandes.</p>
+</blockquote>
+<pre><code class="language-css">grid-template-columns: minmax(200px, 1fr);
+</code></pre>
+<p>Esto dice: "la columna mide como mínimo 200px y como máximo 1fr (todo el espacio disponible)". Es decir, nunca baja de 200px, pero si hay espacio de sobra, crece.</p>
+<h3 id="auto-fill-y-auto-fit"><code>auto-fill</code> y <code>auto-fit</code></h3>
+<p>Ahora combinamos <code>repeat()</code> con <code>minmax()</code> y una palabra clave especial. Este es <strong>el patrón estrella</strong> para rejillas de tarjetas responsivas:</p>
+<pre><code class="language-css">.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+</code></pre>
+<p>¡Vamos a desmenuzarlo despacio porque es importante! 🦎</p>
+<blockquote class="def">
+<h3 id="que-significa-auto-fit">🟦 ¿Qué significa? — <em><code>auto-fit</code></em></h3>
+<p>Es una palabra clave que va dentro de <code>repeat()</code> en lugar de un número. Le dice a Grid: <strong>"crea tantas columnas como quepan"</strong> en el espacio disponible, y haz que las columnas existentes <strong>se estiren</strong> para llenar todo el ancho. Sirve para rejillas que cambian de número de columnas solas, sin media queries.</p>
+<h3 id="que-significa-auto-fill">🟦 ¿Qué significa? — <em><code>auto-fill</code></em></h3>
+<p>Es muy parecido a <code>auto-fit</code>, pero con una diferencia: cuando sobra espacio, <code>auto-fill</code> <strong>deja columnas vacías</strong> (huecos invisibles) en lugar de estirar las que tienen contenido. <code>auto-fit</code>, en cambio, colapsa esos huecos y estira las tarjetas. Para galerías de tarjetas, casi siempre querrás <code>auto-fit</code>.</p>
+</blockquote>
+<p>Leído en español, <code>repeat(auto-fit, minmax(220px, 1fr))</code> significa:</p>
+<blockquote>
+<p>"Crea tantas columnas como quepan, donde cada una mide mínimo 220px y máximo 1fr; y estira las que haya para llenar el ancho."</p>
+</blockquote>
+<p>El resultado: en una pantalla ancha verás 4 o 5 tarjetas por fila; en una tablet, 2 o 3; en un móvil, 1. <strong>Todo automático</strong>, sin escribir ni una sola media query. Esto es lo que hace que la <code>.tarjetas</code> del manual se vea bien en cualquier dispositivo.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>La diferencia entre <code>auto-fit</code> y <code>auto-fill</code> solo se nota cuando hay <strong>pocas tarjetas y mucho espacio</strong>. Con <code>auto-fit</code>, dos tarjetas se estiran para ocupar toda la fila. Con <code>auto-fill</code>, esas dos tarjetas se quedan de su tamaño mínimo y dejan el resto de la fila vacío. Si tu galería se ve con tarjetas "demasiado estiradas", quizá quieres <code>auto-fill</code>; si se ven "apretadas a la izquierda con hueco a la derecha", quieres <code>auto-fit</code>.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Este patrón es ideal para la lista de proyectos de <strong>Faro/Organizer</strong>, donde cada proyecto es una tarjeta y no sabes cuántos habrá. Una sola línea de Grid y la rejilla se acomoda sola tenga 2 proyectos o 20. En Tailwind harías algo similar con utilidades de grid responsivas, pero saber el CSS de base te permite entender qué está pasando por debajo.</p>
+</blockquote>
+<hr />
+<h2 id="8-definir-filas-con-grid-template-rows">8. Definir filas con <code>grid-template-rows</code></h2>
+<p>Hasta ahora nos enfocamos en columnas porque las filas suelen crecer solas según el contenido. Pero a veces quieres controlar la altura de las filas explícitamente.</p>
+<blockquote class="def">
+<h3 id="que-significa-grid-template-rows">🟦 ¿Qué significa? — <em><code>grid-template-rows</code></em></h3>
+<p>Es el equivalente vertical de <code>grid-template-columns</code>: define <strong>cuántas filas tiene la cuadrícula y qué altura tiene cada una</strong>. Sirve cuando necesitas filas de altura específica, por ejemplo una cabecera de 80px, un cuerpo flexible y un pie de 60px.</p>
+</blockquote>
+<pre><code class="language-css">.layout {
+  display: grid;
+  grid-template-rows: 80px 1fr 60px;
+  min-height: 100vh;
+}
+</code></pre>
+<p>Eso crea una página con tres filas: cabecera de 80px arriba, contenido que ocupa todo el espacio sobrante (<code>1fr</code>) en medio, y pie de 60px abajo. El <code>min-height: 100vh</code> hace que la cuadrícula ocupe al menos toda la altura de la ventana.</p>
+<blockquote class="def">
+<h3 id="que-significa-vh-viewport-height">🟦 ¿Qué significa? — <em><code>vh</code> (viewport height)</em></h3>
+<p>Es una unidad donde <code>100vh</code> equivale al <strong>100% de la altura visible de la ventana</strong> del navegador. <code>50vh</code> sería la mitad de la pantalla. Sirve para que un elemento ocupe la altura de la pantalla sin importar el tamaño del dispositivo. Es muy común en cabeceras "a pantalla completa".</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Existe también <code>grid-template-areas</code>, una forma de nombrar zonas de la cuadrícula con palabras. Lo veremos en la sección 10. Por ahora, recuerda: columnas con <code>grid-template-columns</code>, filas con <code>grid-template-rows</code>. Mismo concepto, distinto eje.</p>
+</blockquote>
+<hr />
+<h2 id="9-colocar-elementos-a-mano-grid-column-y-grid-row">9. Colocar elementos a mano: <code>grid-column</code> y <code>grid-row</code></h2>
+<p>Hasta ahora dejábamos que Grid colocara las tarjetas automáticamente, en orden. Pero a veces quieres que <strong>un ítem en concreto ocupe más de una columna o fila</strong>, o que vaya a una posición específica. Para eso usamos <code>grid-column</code> y <code>grid-row</code> en el ítem (no en el contenedor).</p>
+<p>Para entenderlo necesitamos un concepto clave: las <strong>líneas de la cuadrícula</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-lineas-de-la-cuadricula-grid-lines">🟦 ¿Qué significa? — <em>Líneas de la cuadrícula (grid lines)</em></h3>
+<p>Son las <strong>líneas imaginarias que separan las columnas y filas</strong>, numeradas empezando en 1. En una rejilla de 3 columnas hay 4 líneas verticales: la línea 1 está antes de la primera columna, la 2 entre la primera y la segunda, y así hasta la 4 al final. Para colocar un ítem, le dices entre qué líneas debe ir. Sirve para posicionar elementos con precisión.</p>
+</blockquote>
+<p>Imagina una rejilla de 3 columnas. Las líneas verticales se numeran 1, 2, 3, 4:</p>
+<pre><code>1   2   3   4
+| A | B | C |
+</code></pre>
+<p>Si quiero que un ítem ocupe <strong>desde la línea 1 hasta la línea 3</strong> (es decir, las dos primeras columnas), escribo:</p>
+<pre><code class="language-css">.tarjeta-destacada {
+  grid-column: 1 / 3;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-grid-column">🟦 ¿Qué significa? — <em><code>grid-column</code></em></h3>
+<p>Indica <strong>en qué columnas se coloca un ítem</strong>, usando los números de línea: <code>inicio / fin</code>. <code>1 / 3</code> significa "empieza en la línea 1 y termina en la línea 3", ocupando todo lo que haya en medio (dos columnas). Sirve para que un elemento abarque varias columnas o se ubique en una posición concreta. Útil, por ejemplo, para una tarjeta destacada que ocupe el doble de ancho.</p>
+<h3 id="que-significa-grid-row">🟦 ¿Qué significa? — <em><code>grid-row</code></em></h3>
+<p>Es lo mismo que <code>grid-column</code> pero en vertical: indica <strong>en qué filas se coloca un ítem</strong>, también con <code>inicio / fin</code>. <code>grid-row: 1 / 3</code> haría que el ítem ocupe dos filas de alto. Sirve para elementos altos, como una barra lateral que abarca varias filas.</p>
+</blockquote>
+<p>Hay un atajo muy cómodo con <code>span</code>:</p>
+<pre><code class="language-css">.tarjeta-destacada {
+  grid-column: span 2; /* ocupa 2 columnas, empezando donde toque */
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-span">🟦 ¿Qué significa? — <em><code>span</code></em></h3>
+<p>Es una palabra clave que significa <strong>"abarca esta cantidad de celdas"</strong> sin tener que pensar en números de línea exactos. <code>span 2</code> quiere decir "ocupa 2 columnas (o filas) a partir de donde el ítem caiga naturalmente". Sirve para hacer que un elemento sea más ancho o más alto sin calcular líneas.</p>
+</blockquote>
+<pre><code class="language-css">.layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.banner {
+  grid-column: span 4; /* ocupa las 4 columnas: ancho completo */
+}
+
+.principal {
+  grid-column: span 3; /* ocupa 3 de las 4 columnas */
+}
+
+.lateral {
+  grid-column: span 1; /* ocupa 1 columna */
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong>, podrías hacer que el primer servicio (el más importante) ocupe el doble de ancho que los demás con <code>grid-column: span 2</code>. Es una forma de crear jerarquía visual sin tocar el HTML: solo CSS. El contenido manda, la presentación la decide la hoja de estilos.</p>
+</blockquote>
+<hr />
+<h2 id="10-zonas-con-nombre-grid-template-areas">10. Zonas con nombre: <code>grid-template-areas</code></h2>
+<p>Esta es, para mí, la forma más bonita y legible de maquetar páginas completas. En vez de pensar en números de línea, <strong>dibujas el layout con palabras</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-grid-template-areas">🟦 ¿Qué significa? — <em><code>grid-template-areas</code></em></h3>
+<p>Es una propiedad que te deja <strong>nombrar zonas de la cuadrícula y dibujar su disposición</strong> como si fuera un mapa de texto. Cada palabra es una celda; palabras repetidas significan que esa zona se extiende. Sirve para definir layouts complejos de forma muy visual y fácil de leer. Es ideal para la estructura general de una app como <strong>Faro/Organizer</strong>.</p>
+</blockquote>
+<p>Primero, en cada ítem le das un nombre con <code>grid-area</code>:</p>
+<pre><code class="language-css">.cabecera { grid-area: cabecera; }
+.menu     { grid-area: menu; }
+.contenido { grid-area: contenido; }
+.pie      { grid-area: pie; }
+</code></pre>
+<p>Y luego, en el contenedor, dibujas el mapa:</p>
+<pre><code class="language-css">.app {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 80px 1fr 60px;
+  grid-template-areas:
+    &quot;cabecera cabecera&quot;
+    &quot;menu     contenido&quot;
+    &quot;pie      pie&quot;;
+  min-height: 100vh;
+}
+</code></pre>
+<p>Lee ese bloque de comillas como un dibujo:</p>
+<ul>
+<li>Fila 1: <code>cabecera cabecera</code> → la cabecera ocupa las <strong>dos columnas</strong> (ancho completo).</li>
+<li>Fila 2: <code>menu contenido</code> → el menú a la izquierda (200px), el contenido a la derecha (1fr).</li>
+<li>Fila 3: <code>pie pie</code> → el pie ocupa las dos columnas.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-grid-area">🟦 ¿Qué significa? — <em><code>grid-area</code></em></h3>
+<p>Es la propiedad que le pone un <strong>nombre a un ítem</strong> para que <code>grid-template-areas</code> sepa dónde colocarlo. El nombre que escribas aquí debe coincidir con el que uses en el mapa de zonas. Sirve para conectar cada elemento con su lugar en la cuadrícula.</p>
+</blockquote>
+<p>¿No es precioso? Cualquiera que lea ese CSS entiende de un vistazo cómo se ve la página. Es prácticamente un dibujo en texto.</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Si quieres dejar una celda <strong>vacía</strong> en el mapa, usa un punto <code>.</code> en su lugar. Por ejemplo <code>"menu ."</code> deja la zona de la derecha vacía en esa fila. Y recuerda: todas las filas del mapa deben tener el <strong>mismo número de columnas</strong>, o el navegador ignorará la regla.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Los nombres en <code>grid-template-areas</code> no llevan comillas individuales ni comas: cada fila completa va entre comillas dobles, y las filas se ponen una debajo de otra. Un error común es olvidar las comillas o poner comas entre palabras. Si tu layout "no hace nada", revisa primero la sintaxis del mapa.</p>
+</blockquote>
+<hr />
+<h2 id="11-grid-vs-flexbox-cuando-uso-cada-uno">11. Grid vs Flexbox: ¿cuándo uso cada uno?</h2>
+<p>Esta es la pregunta del millón, y la respuesta es más sencilla de lo que parece. 🦎</p>
+<blockquote class="def">
+<h3 id="que-significa-flexbox">🟦 ¿Qué significa? — <em>Flexbox</em></h3>
+<p>Es el otro gran sistema de layout de CSS (lo viste en el capítulo anterior). Organiza elementos en <strong>una sola dirección a la vez</strong>: una fila <em>o</em> una columna. Sirve para alinear y distribuir un grupo de elementos en línea, como los botones de una barra o los ítems de un menú.</p>
+</blockquote>
+<p>La regla mental que te recomiendo:</p>
+<ul>
+<li><strong>Flexbox = una dimensión.</strong> Una fila o una columna. Ideal para: barras de navegación, alinear un icono junto a un texto, distribuir botones, centrar una cosa en su contenedor.</li>
+<li><strong>Grid = dos dimensiones.</strong> Filas y columnas a la vez. Ideal para: la estructura general de la página, galerías de tarjetas, dashboards, cualquier cosa que sea una "cuadrícula" de verdad.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Situación</th>
+<th>Mejor herramienta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Barra de navegación horizontal</td>
+<td>Flexbox</td>
+</tr>
+<tr>
+<td>Centrar un botón dentro de una caja</td>
+<td>Flexbox</td>
+</tr>
+<tr>
+<td>Galería de tarjetas que se reacomoda</td>
+<td>Grid</td>
+</tr>
+<tr>
+<td>Layout cabecera + menú + contenido + pie</td>
+<td>Grid</td>
+</tr>
+<tr>
+<td>Lista de etiquetas (tags) en línea</td>
+<td>Flexbox</td>
+</tr>
+<tr>
+<td>Tablero con muchas zonas</td>
+<td>Grid</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>No es "Grid contra Flexbox": <strong>se usan juntos todo el tiempo</strong>. Es muy común usar Grid para la estructura grande de la página y, dentro de cada tarjeta o celda, usar Flexbox para alinear su contenido interno. Piensa en Grid como los planos de la casa y en Flexbox como cómo acomodas los muebles dentro de cada habitación.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu código</h3>
+<p>En <strong>RachaSimple</strong> (React + Tailwind), verás muchísimo esta combinación: una rejilla de tarjetas con clases de grid, y dentro de cada tarjeta un <code>flex</code> para alinear el título, el icono y el botón. Saber distinguir cuándo toca uno u otro te hará escribir mucho menos CSS y más limpio.</p>
+</blockquote>
+<hr />
+<h2 id="12-juntandolo-todo-la-cuadricula-tarjetas">12. Juntándolo todo: la cuadrícula <code>.tarjetas</code></h2>
+<p>Vamos a reconstruir paso a paso la rejilla de tarjetas que usa este manual, para que veas todas las piezas trabajando juntas:</p>
+<pre><code class="language-css">.tarjetas {
+  display: grid;                                       /* activa Grid */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* columnas adaptables */
+  gap: 1rem;                                           /* aire entre tarjetas */
+  padding: 1rem;                                       /* aire alrededor de la rejilla */
+}
+
+.tarjeta {
+  background: var(--color-tarjeta);                    /* color según el tema */
+  border-radius: 8px;
+  padding: 1rem;
+}
+</code></pre>
+<p>Repasemos qué hace cada línea, ahora que ya conoces todos los conceptos:</p>
+<ol>
+<li><code>display: grid</code> activa la cuadrícula.</li>
+<li><code>repeat(auto-fit, minmax(220px, 1fr))</code> crea tantas columnas como quepan, de mínimo 220px, estirándose para llenar el ancho.</li>
+<li><code>gap: 1rem</code> separa las tarjetas entre sí.</li>
+<li><code>padding: 1rem</code> separa la rejilla del borde del contenedor.</li>
+</ol>
+<blockquote class="def">
+<h3 id="que-significa-var-color-tarjeta">🟦 ¿Qué significa? — <em><code>var(--color-tarjeta)</code></em></h3>
+<p>Es una <strong>variable CSS</strong>: un valor guardado bajo un nombre (que empieza con <code>--</code>) y reutilizado con <code>var()</code>. Sirve para no repetir el mismo color en mil sitios y para cambiar de tema (claro/oscuro) modificando una sola línea. El propio <code>estilos.css</code> de este manual usa variables CSS justo para sus temas, igual que aquí.</p>
+</blockquote>
+<p>Con esas pocas líneas tienes una galería profesional, responsiva y que se adapta sola a cualquier pantalla. <strong>Esa es la elegancia de Grid.</strong> Antes esto requería decenas de líneas y trucos frágiles; hoy son cuatro propiedades bien elegidas.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_4">🔎 En tu código</h3>
+<p>Si abres el <code>styles.css</code> de <strong>tunal-digital</strong> y tienes una sección con varias cajas alineadas a mano (con floats o porcentajes), este es el momento perfecto para reemplazarla por una rejilla <code>auto-fit</code>. Menos código, más robusto y responsivo desde el primer momento. Pruébalo y verás cuántas líneas borras.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que <code>display: grid</code> convierte un elemento en contenedor de cuadrícula y afecta a sus hijos directos.</li>
+<li>[ ] Entiendo que <code>grid-template-columns</code> define el número y ancho de las columnas.</li>
+<li>[ ] Sé qué es la unidad <code>fr</code> y cómo reparte el espacio disponible de forma proporcional.</li>
+<li>[ ] Puedo usar <code>gap</code> para separar las celdas entre sí.</li>
+<li>[ ] Sé acortar definiciones con <code>repeat(N, 1fr)</code>.</li>
+<li>[ ] Entiendo <code>minmax()</code> y el patrón <code>repeat(auto-fit, minmax(220px, 1fr))</code> para rejillas responsivas.</li>
+<li>[ ] Distingo <code>auto-fit</code> de <code>auto-fill</code>.</li>
+<li>[ ] Puedo colocar un ítem con <code>grid-column</code> / <code>grid-row</code> y con <code>span</code>.</li>
+<li>[ ] Sé dibujar un layout con <code>grid-template-areas</code> y <code>grid-area</code>.</li>
+<li>[ ] Tengo claro cuándo usar Grid (dos dimensiones) y cuándo Flexbox (una dimensión).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>En papel (sin computadora).</strong> Dibuja una rejilla de 3 columnas y 2 filas. Numera todas las líneas verticales y horizontales. Luego marca qué celdas ocuparía un ítem con <code>grid-column: 1 / 3</code> y <code>grid-row: 1 / 2</code>. Esto entrena tu intuición sobre las líneas de la cuadrícula.</p>
+</li>
+<li>
+<p><strong>💻 Primera rejilla.</strong> En un archivo HTML con un <code>&lt;div class="tarjetas"&gt;</code> que contenga 6 <code>&lt;div class="tarjeta"&gt;</code>, escribe en CSS una cuadrícula de 3 columnas iguales con <code>repeat(3, 1fr)</code> y <code>gap: 16px</code>. Observa cómo se acomodan las 6 tarjetas en dos filas de tres.</p>
+</li>
+<li>
+<p><strong>💻 Rejilla responsiva.</strong> Cambia el ejercicio anterior a <code>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))</code>. Redimensiona la ventana del navegador (hazla angosta y luego ancha) y observa cómo cambia el número de columnas <strong>sin tocar nada más</strong>. Anota cuántas tarjetas por fila ves en cada tamaño.</p>
+</li>
+<li>
+<p><strong>💻 Tarjeta destacada.</strong> Sobre la rejilla del ejercicio 2, haz que la primera tarjeta ocupe dos columnas usando <code>grid-column: span 2</code>. Comprueba cómo el resto se reacomoda alrededor.</p>
+</li>
+<li>
+<p><strong>💻 Layout completo con áreas.</strong> Crea una página con cuatro zonas: <code>cabecera</code>, <code>menu</code>, <code>contenido</code> y <code>pie</code>. Usa <code>grid-template-areas</code> para que la cabecera y el pie ocupen todo el ancho, y el menú quede a la izquierda del contenido. Pista: revisa el ejemplo de la sección 10.</p>
+</li>
+<li>
+<p><strong>💻 Grid + Flexbox juntos.</strong> Toma cualquier tarjeta de tu rejilla y, dentro de ella, usa Flexbox (<code>display: flex</code>) para alinear un título arriba y un botón abajo del todo. Así practicas la combinación real que verás en proyectos como <strong>RachaSimple</strong> y <strong>Faro/Organizer</strong>.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>¡Lo lograste! 🦎 Hoy aprendiste la herramienta más poderosa de CSS para maquetar. Si al principio <code>repeat(auto-fit, minmax(...))</code> te pareció un trabalenguas, no te preocupes: con dos o tres ejercicios se vuelve tu mejor amiga. La próxima vez que veas una galería de tarjetas perfectamente alineada en cualquier web, sabrás exactamente cómo está hecha. Descansa, hidrátate, y nos vemos en el siguiente capítulo. — Bit</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

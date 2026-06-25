@@ -43,8 +43,18 @@ hay HTML dentro de tus apps de React (módulos 05–06), aunque ahí se escribe 
 | 03 | [La estructura de un documento](03-estructura-documento.md) | `head`, `body`, metadatos, HTML semántico |
 | 04 | [Formularios](04-formularios.md) | Inputs, botones, validación; el formulario de tu sitio |
 | 05 | [Accesibilidad y buenas prácticas](05-accesibilidad.md) | ARIA, alt, contraste, HTML que sirve a todos |
+| 06 | [Tablas en HTML](06-tablas.md) | `table`, filas y celdas, datos tabulares, accesibilidad |
+| 07 | [Multimedia: imágenes, audio y video](07-multimedia.md) | Formatos, responsive, `srcset`, video, iframe |
+| 08 | [Formularios avanzados](08-formularios-avanzados.md) | Todos los `input`, `select`, validación, accesibilidad |
+| 09 | [El head completo y el SEO](09-head-y-seo.md) | Metadatos, Open Graph, favicon, SEO |
+| 10 | [Accesibilidad y ARIA a fondo](10-accesibilidad-aria.md) | Lectores de pantalla, roles, foco, WCAG |
+| 11 | [Entidades, símbolos y texto](11-entidades-y-texto.md) | `&amp;`, caracteres especiales, etiquetas de texto |
+| 12 | [Cómo se unen HTML, CSS y JavaScript](12-html-css-js-juntos.md) | El trío: estructura, estilo, comportamiento |
+| 13 | [Buenas prácticas y errores comunes](13-buenas-practicas.md) | Validar, semántica, errores típicos |
+| 14 | [Mini-proyecto: una landing completa](14-mini-proyecto-landing.md) | Construir una página real paso a paso |
+| 15 | [Glosario de HTML y mapa](15-glosario-html.md) | Todos los términos + mapa mental |
 
-> Los capítulos se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 01 — versión ampliada (capítulos 01–15, ~90 páginas).**
 
 ---
 

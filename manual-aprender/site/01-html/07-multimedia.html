@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 07 — Multimedia: imágenes, audio y video — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-07-multimedia-imagenes-audio-y-video">Capítulo 07 — Multimedia: imágenes, audio y video</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Una página solo con texto es como un cuento sin dibujos: se entiende, pero no enamora. En este capítulo aprenderás a poner imágenes que cargan rápido y se ven bien en cualquier pantalla, a meter audio y video con sus botones de play, y a incrustar mapas o videos de YouTube usando un <code>iframe</code>. Bit, nuestro ajolote pixelado, te acompaña: él es, literalmente, una imagen, así que de esto sabe un montón.</p>
+</blockquote>
+<h2 id="1-la-etiqueta-img-tu-primera-imagen">1. La etiqueta <code>&lt;img&gt;</code>: tu primera imagen</h2>
+<p>Para mostrar una imagen en HTML se usa la etiqueta <code>&lt;img&gt;</code>. Es una etiqueta <em>vacía</em> (no tiene cierre <code>&lt;/img&gt;</code>) y necesita dos cosas mínimas: de dónde sale la imagen (<code>src</code>) y qué describe (<code>alt</code>).</p>
+<pre><code class="language-html">&lt;img src=&quot;bit.png&quot; alt=&quot;Bit, el ajolote de pixel art, saludando con la patita&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-atributo">🟦 ¿Qué significa? — <em>atributo</em></h3>
+<p>Un <strong>atributo</strong> es información extra que le das a una etiqueta, escrita dentro de la etiqueta de apertura con la forma <code>nombre="valor"</code>. En <code>&lt;img src="bit.png"&gt;</code>, <code>src</code> es un atributo y <code>"bit.png"</code> es su valor.
+<strong>¿Para qué sirve?</strong> Para configurar cómo se comporta o qué muestra una etiqueta.</p>
+<h3 id="que-significa-src-source-fuente">🟦 ¿Qué significa? — <em><code>src</code> (source / fuente)</em></h3>
+<p>El atributo <strong><code>src</code></strong> indica la ruta o dirección del archivo de imagen que quieres mostrar. Puede ser un archivo de tu propio proyecto (<code>src="imagenes/bit.png"</code>) o una dirección de internet (<code>src="https://..."</code>).
+<strong>¿Para qué sirve?</strong> Le dice al navegador <em>qué</em> imagen cargar y <em>desde dónde</em>.</p>
+<h3 id="que-significa-alt-texto-alternativo">🟦 ¿Qué significa? — <em><code>alt</code> (texto alternativo)</em></h3>
+<p>El atributo <strong><code>alt</code></strong> es un texto que describe la imagen con palabras. Se muestra si la imagen no carga, y lo leen en voz alta los lectores de pantalla que usan las personas con discapacidad visual.
+<strong>¿Para qué sirve?</strong> Para accesibilidad (que todo el mundo entienda la página) y como respaldo si la imagen falla. Google también lo usa para entender de qué trata la imagen.</p>
+<h3 id="cuidado-el-alt-no-es-opcional">⚠️ Cuidado — El <code>alt</code> no es opcional</h3>
+<p>Toda imagen con significado debe tener <code>alt</code>. Describe lo que la imagen <em>comunica</em>, no escribas "imagen de..." (el lector de pantalla ya dice que es una imagen). Si la imagen es pura decoración (un adorno sin información), deja el atributo vacío: <code>alt=""</code>. Así el lector de pantalla la ignora en vez de leer el nombre del archivo.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>) cada logo, ícono o foto del sitio debería llevar su <code>alt</code>. Es lo primero que revisa cualquier auditoría de accesibilidad: una página con imágenes sin <code>alt</code> pierde puntos al instante.</p>
+</blockquote>
+<h3 id="rutas-donde-esta-la-imagen">Rutas: ¿dónde está la imagen?</h3>
+<p>La <strong>ruta</strong> es el "camino" hasta el archivo. Hay dos tipos que verás todo el tiempo:</p>
+<ul>
+<li><strong>Ruta relativa</strong>: parte desde donde está tu archivo HTML. <code>src="imagenes/bit.png"</code> significa "entra a la carpeta <code>imagenes</code> y busca <code>bit.png</code>". Y <code>src="../logo.png"</code> significa "sube una carpeta y busca <code>logo.png</code>" (los dos puntos <code>..</code> quieren decir "carpeta de arriba").</li>
+<li><strong>Ruta absoluta</strong>: una dirección completa de internet. <code>src="https://tunal.digital/logo.png"</code>.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip-tamano-con-width-y-height">💡 Tip — Tamaño con <code>width</code> y <code>height</code></h3>
+<p>Conviene decirle al navegador el tamaño de la imagen con <code>width</code> (ancho) y <code>height</code> (alto) en píxeles:
+<code>html
+&lt;img src="bit.png" alt="Bit saludando" width="200" height="200"&gt;</code>
+Así el navegador reserva ese hueco <em>antes</em> de que la imagen cargue, y la página no "salta" mientras se descarga. Ese salto molesto tiene nombre técnico: <em>layout shift</em> (desplazamiento de diseño).</p>
+</blockquote>
+<h2 id="2-los-formatos-de-imagen-jpg-png-webp-y-svg">2. Los formatos de imagen: jpg, png, webp y svg</h2>
+<p>No todas las imágenes son iguales. El <strong>formato</strong> (la extensión del archivo: <code>.jpg</code>, <code>.png</code>, etc.) decide qué tan pesa, si tiene transparencia y para qué sirve mejor.</p>
+<blockquote class="def">
+<h3 id="que-significa-formato-de-imagen">🟦 ¿Qué significa? — <em>formato de imagen</em></h3>
+<p>Un <strong>formato</strong> es la forma en que el archivo guarda la imagen por dentro. Lo reconoces por la extensión del nombre: <code>foto.jpg</code>, <code>logo.png</code>, <code>imagen.webp</code>, <code>dibujo.svg</code>. Cada formato comprime y guarda los colores de manera distinta.</p>
+</blockquote>
+<p>Aquí va la guía rápida:</p>
+<ul>
+<li><strong>JPG</strong> (o <code>.jpeg</code>): ideal para <strong>fotografías</strong> (paisajes, retratos). Comprime mucho y pesa poco, pero <strong>no admite transparencia</strong> y al comprimir demasiado se ve "sucio" (con manchas). Úsalo para fotos reales.</li>
+<li><strong>PNG</strong>: admite <strong>transparencia</strong> (fondos transparentes) y se ve nítido. Pesa más que JPG. Ideal para <strong>logos, íconos y capturas de pantalla</strong> con texto.</li>
+<li><strong>WebP</strong>: un formato moderno que pesa <strong>menos</strong> que JPG y PNG manteniendo buena calidad, y <em>sí</em> admite transparencia. Lo entienden todos los navegadores actuales. Es la mejor opción por defecto hoy en día.</li>
+<li><strong>SVG</strong>: es <strong>diferente</strong>. No guarda píxeles, guarda <em>instrucciones de dibujo</em> (líneas, curvas, colores). Por eso se puede agrandar infinitamente sin pixelarse. Ideal para <strong>logos, íconos y gráficos</strong> de formas planas.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-pixel">🟦 ¿Qué significa? — <em>píxel</em></h3>
+<p>Un <strong>píxel</strong> es cada puntito de color de una pantalla. Una imagen "de píxeles" (jpg, png, webp) es una rejilla de puntitos: si la agrandas mucho, los puntos se hacen visibles y se ve "cuadriculada" o borrosa.</p>
+<h3 id="que-significa-transparencia">🟦 ¿Qué significa? — <em>transparencia</em></h3>
+<p>Una imagen con <strong>transparencia</strong> tiene zonas "vacías" que dejan ver lo que hay detrás. Por ejemplo, el logo de Tunal Digital con fondo transparente se ve bien sobre cualquier color de página, sin un recuadro blanco alrededor.</p>
+<h3 id="que-significa-vectorial-svg">🟦 ¿Qué significa? — <em>vectorial (SVG)</em></h3>
+<p>Una imagen <strong>vectorial</strong> está hecha de fórmulas matemáticas (puntos y líneas) en vez de píxeles. Por eso un SVG se ve perfecto en una pantalla pequeña y en una pantalla gigante con el mismo archivo, sin pesar más.
+<strong>¿Dónde se usa en tu proyecto?</strong> Los íconos de la interfaz de <strong>RachaSimple</strong> (React + TypeScript) suelen ser SVG: nítidos en cualquier pantalla y muy livianos.</p>
+<h3 id="tip-cual-elijo-regla-de-bolsillo-de-bit">💡 Tip — ¿Cuál elijo? Regla de bolsillo de Bit</h3>
+<ul>
+<li>¿Es una <strong>foto</strong>? → WebP (o JPG si necesitas máxima compatibilidad).</li>
+<li>¿Es un <strong>logo o ícono</strong> de formas planas? → SVG.</li>
+<li>¿Necesitas <strong>transparencia</strong> en algo con muchos detalles? → PNG o WebP.
+Bit, al ser pixel art, vive feliz como <strong>PNG</strong> con fondo transparente.</li>
+</ul>
+<h3 id="cuidado-el-peso-importa">⚠️ Cuidado — El peso importa</h3>
+<p>Una foto de 5 MB sacada del celular hace que tu página tarde <em>segundos</em> en cargar. Antes de subir una imagen, redúcela: que mida lo que de verdad va a ocupar en pantalla y guárdala en WebP. Una página rápida retiene visitantes; una lenta los espanta.</p>
+</blockquote>
+<h2 id="3-imagenes-responsive-srcset-y-picture">3. Imágenes responsive: <code>srcset</code> y <code>&lt;picture&gt;</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-responsive-adaptable">🟦 ¿Qué significa? — <em>responsive (adaptable)</em></h3>
+<p>Una página <strong>responsive</strong> se <em>adapta</em> al tamaño de la pantalla: se ve bien en el celular, en la tablet y en el computador. Para las imágenes, ser responsive significa enviar una imagen pequeña a pantallas pequeñas y una grande a pantallas grandes, sin desperdiciar datos.</p>
+</blockquote>
+<p>Enviar una foto enorme a un celular gasta los datos del usuario y carga lento. La solución es darle al navegador <strong>varias versiones</strong> de la misma imagen y dejar que elija la mejor. Para eso existe <code>srcset</code>.</p>
+<h3 id="srcset-varias-resoluciones-de-la-misma-imagen"><code>srcset</code>: varias resoluciones de la misma imagen</h3>
+<pre><code class="language-html">&lt;img
+  src=&quot;bit-800.png&quot;
+  srcset=&quot;bit-400.png 400w, bit-800.png 800w, bit-1200.png 1200w&quot;
+  sizes=&quot;(max-width: 600px) 100vw, 50vw&quot;
+  alt=&quot;Bit, el ajolote de pixel art&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-srcset">🟦 ¿Qué significa? — <em><code>srcset</code></em></h3>
+<p>El atributo <strong><code>srcset</code></strong> es una lista de versiones de la imagen, cada una con su ancho real en píxeles seguido de la letra <code>w</code> (de <em>width</em>, ancho). En el ejemplo, <code>bit-400.png 400w</code> quiere decir "esta versión mide 400 píxeles de ancho".
+<strong>¿Para qué sirve?</strong> El navegador mira la pantalla del usuario y descarga <em>solo</em> la versión que mejor le sirve. Ahorra datos y carga más rápido.</p>
+<h3 id="que-significa-sizes">🟦 ¿Qué significa? — <em><code>sizes</code></em></h3>
+<p>El atributo <strong><code>sizes</code></strong> le dice al navegador <em>cuánto espacio</em> va a ocupar la imagen en pantalla, para que elija bien de la lista <code>srcset</code>. <code>100vw</code> significa "el 100% del ancho de la ventana"; <code>50vw</code>, "la mitad".</p>
+<h3 id="que-significa-vw-viewport-width">🟦 ¿Qué significa? — <em><code>vw</code> (viewport width)</em></h3>
+<p><strong><code>vw</code></strong> es una unidad de medida: <code>1vw</code> es el 1% del ancho de la ventana del navegador. Así, <code>100vw</code> es todo el ancho visible y <code>50vw</code> la mitad. La ventana visible se llama <em>viewport</em>.</p>
+</blockquote>
+<p>No te agobies si <code>sizes</code> se ve raro al principio: el <code>src</code> normal siempre funciona como respaldo. <code>srcset</code> y <code>sizes</code> son una mejora encima.</p>
+<h3 id="picture-imagenes-distintas-segun-el-caso"><code>&lt;picture&gt;</code>: imágenes distintas según el caso</h3>
+<p>A veces no quieres solo <em>otro tamaño</em>, sino <em>otra imagen</em> o <em>otro formato</em>. Para eso está <code>&lt;picture&gt;</code>.</p>
+<pre><code class="language-html">&lt;picture&gt;
+  &lt;source srcset=&quot;hero.webp&quot; type=&quot;image/webp&quot;&gt;
+  &lt;source srcset=&quot;hero.jpg&quot; type=&quot;image/jpeg&quot;&gt;
+  &lt;img src=&quot;hero.jpg&quot; alt=&quot;Equipo de Tunal Digital trabajando&quot;&gt;
+&lt;/picture&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-picture">🟦 ¿Qué significa? — <em><code>&lt;picture&gt;</code></em></h3>
+<p>La etiqueta <strong><code>&lt;picture&gt;</code></strong> envuelve varias opciones de imagen. Dentro pones varias etiquetas <code>&lt;source&gt;</code> (las opciones) y <em>siempre</em> un <code>&lt;img&gt;</code> al final como respaldo obligatorio. El navegador prueba las <code>&lt;source&gt;</code> de arriba hacia abajo y usa la primera que entienda.
+<strong>¿Para qué sirve?</strong> Para servir WebP a quien lo soporte y JPG a quien no, o para cambiar de imagen según el tamaño de pantalla (una foto horizontal en computador y una cuadrada en móvil, por ejemplo).</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>La portada de <strong>tunal-digital</strong> (la imagen grande de arriba, el <em>hero</em>) es candidata perfecta para <code>&lt;picture&gt;</code>: WebP optimizado para quien lo soporte, con un JPG de respaldo en el <code>&lt;img&gt;</code>. Resultado: carga rápida sin dejar a nadie fuera.</p>
+<h3 id="tip-picture-vs-srcset">💡 Tip — <code>&lt;picture&gt;</code> vs <code>srcset</code></h3>
+<ul>
+<li>Si solo cambias <strong>tamaño</strong> de la <em>misma</em> imagen → usa <code>srcset</code> + <code>sizes</code> en un <code>&lt;img&gt;</code>.</li>
+<li>Si cambias de <strong>formato</strong> o de <strong>imagen</strong> según el caso → usa <code>&lt;picture&gt;</code> con varias <code>&lt;source&gt;</code>.</li>
+</ul>
+</blockquote>
+<h2 id="4-lazy-loading-cargar-imagenes-cuando-se-necesitan">4. Lazy loading: cargar imágenes cuando se necesitan</h2>
+<blockquote class="def">
+<h3 id="que-significa-lazy-loading-carga-perezosa">🟦 ¿Qué significa? — <em>lazy loading (carga perezosa)</em></h3>
+<p><strong>Lazy loading</strong> significa que el navegador <em>no descarga</em> una imagen hasta que el usuario está a punto de verla al hacer scroll. Las imágenes de más abajo esperan su turno.
+<strong>¿Para qué sirve?</strong> Para que la página cargue rápido al principio: solo baja lo que se ve, no las 30 imágenes que están metros más abajo.</p>
+</blockquote>
+<p>Activarlo es de una sola palabra:</p>
+<pre><code class="language-html">&lt;img src=&quot;foto-galeria.webp&quot; alt=&quot;Caso de éxito de un cliente&quot; loading=&quot;lazy&quot;&gt;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado-no-uses-lazy-en-la-imagen-principal">⚠️ Cuidado — No uses <code>lazy</code> en la imagen principal</h3>
+<p>A la imagen grande de arriba del todo (el <em>hero</em>, lo primero que se ve) <strong>no</strong> le pongas <code>loading="lazy"</code>. Esa la quieres cargar de inmediato. El lazy loading es para las imágenes que están <em>más abajo</em>, fuera de la pantalla inicial.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>Faro</strong> (la carpeta <em>Organizer</em>, hecho con Next.js) y en <strong>RachaSimple</strong> notarás que el framework ofrece su propio componente de imagen optimizada (<code>next/image</code> en el caso de Next.js) que aplica lazy loading, <code>srcset</code> y formatos modernos casi solos. Aun así, entender qué hace por debajo (esto que acabas de aprender) te vuelve mucho mejor para depurar cuando algo se ve mal.</p>
+</blockquote>
+<h2 id="5-audio-con-audio">5. Audio con <code>&lt;audio&gt;</code></h2>
+<p>Para reproducir sonido se usa la etiqueta <code>&lt;audio&gt;</code>.</p>
+<pre><code class="language-html">&lt;audio src=&quot;bienvenida.mp3&quot; controls&gt;&lt;/audio&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-controls">🟦 ¿Qué significa? — <em><code>controls</code></em></h3>
+<p>El atributo <strong><code>controls</code></strong> le dice al navegador que muestre los botones de reproducción (play, pausa, volumen, barra de avance). Sin <code>controls</code>, el reproductor existe pero es invisible.
+<strong>¿Para qué sirve?</strong> Para que el usuario pueda controlar el sonido. Casi siempre lo querrás.</p>
+</blockquote>
+<p>Como no todos los navegadores entienden los mismos formatos de audio, puedes ofrecer varias opciones con <code>&lt;source&gt;</code> dentro:</p>
+<pre><code class="language-html">&lt;audio controls&gt;
+  &lt;source src=&quot;bienvenida.mp3&quot; type=&quot;audio/mpeg&quot;&gt;
+  &lt;source src=&quot;bienvenida.ogg&quot; type=&quot;audio/ogg&quot;&gt;
+  Tu navegador no soporta audio. &lt;a href=&quot;bienvenida.mp3&quot;&gt;Descárgalo aquí.&lt;/a&gt;
+&lt;/audio&gt;
+</code></pre>
+<p>El texto del final solo se ve si el navegador no entiende <code>&lt;audio&gt;</code>: es un respaldo amable.</p>
+<blockquote class="def">
+<h3 id="que-significa-type-en-source">🟦 ¿Qué significa? — <em><code>type</code> (en source)</em></h3>
+<p>El atributo <strong><code>type</code></strong> le dice al navegador qué tipo de archivo es <em>antes</em> de descargarlo (<code>audio/mpeg</code> para MP3, <code>audio/ogg</code> para OGG). Así elige el primero que sepa reproducir sin malgastar descarga.</p>
+<h3 id="cuidado-autoplay-molesta">⚠️ Cuidado — <code>autoplay</code> molesta</h3>
+<p>Existe el atributo <code>autoplay</code>, que arranca el sonido solo al cargar la página. <strong>Evítalo.</strong> Que una página empiece a sonar sin permiso es de las cosas que más irritan a la gente, y los navegadores modernos suelen bloquearlo de todas formas. Deja que el usuario apriete play.</p>
+</blockquote>
+<h2 id="6-video-con-video">6. Video con <code>&lt;video&gt;</code></h2>
+<p>El video funciona casi igual que el audio, con la etiqueta <code>&lt;video&gt;</code>:</p>
+<pre><code class="language-html">&lt;video controls width=&quot;640&quot; poster=&quot;portada-video.webp&quot;&gt;
+  &lt;source src=&quot;demo.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  &lt;source src=&quot;demo.webm&quot; type=&quot;video/webm&quot;&gt;
+  Tu navegador no soporta video.
+&lt;/video&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-poster">🟦 ¿Qué significa? — <em><code>poster</code></em></h3>
+<p>El atributo <strong><code>poster</code></strong> es la imagen que se muestra <em>antes</em> de darle play al video (como la "carátula"). Sin <code>poster</code>, suele verse un cuadro negro o el primer fotograma.
+<strong>¿Para qué sirve?</strong> Para que el video se vea atractivo aunque no haya empezado a reproducirse.</p>
+</blockquote>
+<p>Atributos útiles del video:</p>
+<ul>
+<li><code>controls</code>: muestra los botones (igual que en audio).</li>
+<li><code>width</code> / <code>height</code>: tamaño del reproductor.</li>
+<li><code>muted</code>: arranca sin sonido.</li>
+<li><code>loop</code>: lo repite en bucle al terminar.</li>
+<li><code>playsinline</code>: en móviles, lo reproduce dentro de la página en vez de a pantalla completa.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip-el-truco-del-video-de-fondo">💡 Tip — El truco del video de fondo</h3>
+<p>¿Has visto webs con un video de fondo silencioso que se repite solo? El secreto es combinar <code>autoplay muted loop playsinline</code>. La clave es <strong><code>muted</code></strong>: los navegadores <em>sí</em> permiten autoplay si el video va en silencio (porque entonces no molesta). Sin <code>muted</code>, el autoplay se bloquea.</p>
+<h3 id="cuidado-el-video-pesa-y-mucho">⚠️ Cuidado — El video pesa, y mucho</h3>
+<p>Un video tuyo alojado en tu propio servidor puede pesar decenas de megas y encarecer el ancho de banda. Si es un video largo o importante, casi siempre conviene subirlo a YouTube o Vimeo e <strong>incrustarlo</strong> (lo vemos ahora) en vez de servirlo tú mismo.</p>
+</blockquote>
+<h2 id="7-iframe-incrustar-mapas-y-videos-de-youtube">7. <code>iframe</code>: incrustar mapas y videos de YouTube</h2>
+<blockquote class="def">
+<h3 id="que-significa-iframe-marco-en-linea">🟦 ¿Qué significa? — <em><code>iframe</code> (marco en línea)</em></h3>
+<p>Un <strong><code>iframe</code></strong> es una "ventana" dentro de tu página que muestra <em>otra</em> página web completa por dentro. Como un cuadro que abre otro sitio.
+<strong>¿Para qué sirve?</strong> Para incrustar contenido externo: un mapa de Google Maps, un video de YouTube, un formulario, etc., sin tener que construirlo tú.</p>
+</blockquote>
+<p>Un video de YouTube incrustado se ve así (YouTube te da este código en su botón "Compartir → Insertar"):</p>
+<pre><code class="language-html">&lt;iframe
+  width=&quot;560&quot; height=&quot;315&quot;
+  src=&quot;https://www.youtube.com/embed/VIDEO_ID&quot;
+  title=&quot;Video de presentación de Tunal Digital&quot;
+  loading=&quot;lazy&quot;
+  allowfullscreen&gt;&lt;/iframe&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-allowfullscreen">🟦 ¿Qué significa? — <em><code>allowfullscreen</code></em></h3>
+<p>El atributo <strong><code>allowfullscreen</code></strong> permite que el contenido del iframe (el video) pueda ponerse a pantalla completa cuando el usuario aprieta ese botón. Sin él, el botón no funciona.</p>
+</blockquote>
+<p>Un mapa de Google Maps se incrusta igual: copias el código de "Compartir → Insertar un mapa" y pegas el <code>&lt;iframe&gt;</code> que te dan. La estructura es la misma; solo cambia el <code>src</code>.</p>
+<blockquote class="tip">
+<h3 id="tip-pon-siempre-title-en-tus-iframes">💡 Tip — Pon siempre <code>title</code> en tus iframes</h3>
+<p>El atributo <strong><code>title</code></strong> describe qué contiene el iframe (por ejemplo <code>title="Mapa de nuestra oficina"</code>). Los lectores de pantalla lo necesitan para anunciar de qué es ese marco. Y, como con el <code>alt</code>, suma puntos de accesibilidad.</p>
+</blockquote>
+<h3 id="los-riesgos-del-iframe">Los riesgos del <code>iframe</code></h3>
+<p>Incrustar contenido de <em>otros</em> tiene su lado peligroso, porque estás metiendo código ajeno en tu página.</p>
+<blockquote class="warn">
+<h3 id="cuidado-solo-incrusta-fuentes-en-las-que-confies">⚠️ Cuidado — Solo incrusta fuentes en las que confíes</h3>
+<p>El contenido de un iframe viene de otro sitio. Si ese sitio es malicioso o lo hackean, puedes acabar mostrando algo dañino a tus visitantes. Incrusta solo de fuentes serias y conocidas (YouTube, Google Maps, Vimeo). Nunca pegues un <code>&lt;iframe&gt;</code> de una web random que no conoces.</p>
+<h3 id="que-significa-sandbox-caja-de-arena">🟦 ¿Qué significa? — <em><code>sandbox</code> (caja de arena)</em></h3>
+<p>El atributo <strong><code>sandbox</code></strong> encierra el iframe en una "caja de arena": limita lo que el contenido externo puede hacer (por ejemplo, le impide abrir ventanas emergentes o ejecutar ciertos scripts).
+<strong>¿Para qué sirve?</strong> Para protegerte: aunque el contenido incrustado intente algo raro, queda restringido. Es una capa de seguridad cuando incrustas algo en lo que no confías al 100%.</p>
+<h3 id="tip-loadinglazy-tambien-en-iframes">💡 Tip — <code>loading="lazy"</code> también en iframes</h3>
+<p>Un iframe de YouTube descarga <em>mucho</em> (el reproductor entero). Ponerle <code>loading="lazy"</code> hace que no se cargue hasta que el usuario haga scroll hasta él. Tu página agradecerá la velocidad.</p>
+</blockquote>
+<h2 id="8-la-imagen-que-nunca-se-ve-en-la-pagina-ogimage">8. La imagen que nunca se ve en la página: <code>og:image</code></h2>
+<p>Hay una imagen importantísima que el visitante <strong>no ve dentro de tu web</strong>, pero que aparece cuando alguien comparte tu enlace en WhatsApp, Facebook, LinkedIn o X: es la imagen de la <strong>tarjeta de previsualización</strong>. Esa imagen se define con <code>og:image</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-ogimage-open-graph-image">🟦 ¿Qué significa? — <em><code>og:image</code> (Open Graph image)</em></h3>
+<p><strong><code>og:image</code></strong> es una etiqueta especial que pones en el <code>&lt;head&gt;</code> (la cabeza del documento) para decir qué imagen mostrar cuando tu enlace se comparte en redes sociales. "Open Graph" es el sistema que usan Facebook y otras redes para leer estos datos.
+<strong>¿Para qué sirve?</strong> Para que tu enlace, al compartirse, salga con una imagen atractiva en vez de un recuadro vacío. Da confianza y atrae clics.</p>
+</blockquote>
+<p>Se define así, dentro del <code>&lt;head&gt;</code>:</p>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;meta property=&quot;og:title&quot; content=&quot;Tunal Digital — Sitios web para tu negocio&quot;&gt;
+  &lt;meta property=&quot;og:description&quot; content=&quot;Creamos páginas rápidas y modernas.&quot;&gt;
+  &lt;meta property=&quot;og:image&quot; content=&quot;https://tunal.digital/og-image.png&quot;&gt;
+  &lt;meta property=&quot;og:url&quot; content=&quot;https://tunal.digital&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-meta-metadato">🟦 ¿Qué significa? — <em><code>&lt;meta&gt;</code> (metadato)</em></h3>
+<p>Una etiqueta <strong><code>&lt;meta&gt;</code></strong> guarda información <em>sobre</em> la página que no se muestra en pantalla: para buscadores, redes sociales o el navegador. La pareja <code>property="..."</code> + <code>content="..."</code> dice "esta propiedad vale esto".</p>
+<h3 id="en-tu-codigo_3">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>), el <code>og:image</code> es el que define cómo se ve el sitio cuando lo compartes. Recomendaciones reales:
+- Tamaño ideal: <strong>1200 × 630 píxeles</strong>.
+- Formato: PNG o JPG (las redes no siempre leen WebP en esta etiqueta).
+- Usa una <strong>URL absoluta completa</strong> (<code>https://tunal.digital/og-image.png</code>), no una ruta relativa: las redes la leen desde sus propios servidores y necesitan la dirección entera.
+- Que la imagen tenga el logo y un mensaje claro: es la primera impresión de tu marca en el chat de alguien.</p>
+<h3 id="tip-pruebalo-antes-de-presumir">💡 Tip — Pruébalo antes de presumir</h3>
+<p>Antes de compartir tu enlace por todos lados, comprueba cómo se verá la tarjeta con un "depurador" (por ejemplo el <em>Sharing Debugger</em> de Facebook o el <em>Post Inspector</em> de LinkedIn). Pegas tu URL y te muestran exactamente la previsualización. Así no te llevas sorpresas.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé poner una imagen con <code>&lt;img&gt;</code> usando <code>src</code> y <code>alt</code>, y entiendo por qué el <code>alt</code> es obligatorio.</li>
+<li>[ ] Distingo cuándo usar JPG, PNG, WebP y SVG.</li>
+<li>[ ] Entiendo qué es una imagen responsive y para qué sirven <code>srcset</code> y <code>sizes</code>.</li>
+<li>[ ] Sé cuándo usar <code>&lt;picture&gt;</code> en vez de <code>srcset</code> solo.</li>
+<li>[ ] Aplico <code>loading="lazy"</code> a las imágenes de abajo, pero no al <em>hero</em>.</li>
+<li>[ ] Puedo insertar audio y video con <code>&lt;audio&gt;</code> y <code>&lt;video&gt;</code>, con <code>controls</code> y <code>&lt;source&gt;</code> de respaldo.</li>
+<li>[ ] Sé por qué <code>autoplay</code> con sonido es mala idea y cómo hacer un video de fondo con <code>muted</code>.</li>
+<li>[ ] Entiendo qué es un <code>iframe</code>, cómo incrustar YouTube/Maps y los riesgos de incrustar fuentes desconocidas.</li>
+<li>[ ] Sé qué es <code>og:image</code> y por qué importa para compartir el enlace de tunal-digital.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>💻 Galería responsive.</strong> Crea un archivo <code>galeria.html</code>. Mete tres imágenes diferentes, cada una con su <code>alt</code> descriptivo y <code>width</code>/<code>height</code>. Ponle <code>loading="lazy"</code> a la segunda y la tercera. Ábrelo en el navegador y verifica que se ven.</p>
+</li>
+<li>
+<p><strong>💻 El reto del formato.</strong> Toma una foto tuya (jpg) y un logo o ícono. Para cada uno, escribe en un comentario HTML (<code>&lt;!-- ... --&gt;</code>) qué formato sería el mejor y por qué. Si puedes, convierte la foto a WebP con una herramienta online y compara cuánto bajó de peso.</p>
+</li>
+<li>
+<p><strong>💻 Picture con respaldo.</strong> Escribe un bloque <code>&lt;picture&gt;</code> que ofrezca una versión <code>.webp</code> y una <code>.jpg</code> de la misma imagen, con su <code>&lt;img&gt;</code> de respaldo. No necesitas tener los dos archivos reales para escribir la estructura correctamente.</p>
+</li>
+<li>
+<p><strong>💻 Video con carátula.</strong> Inserta un <code>&lt;video&gt;</code> con <code>controls</code> y un <code>poster</code>. Añade dos <code>&lt;source&gt;</code> (un <code>.mp4</code> y un <code>.webm</code>) y un texto de respaldo por si el navegador no soporta video.</p>
+</li>
+<li>
+<p><strong>💻 Incrusta un mapa.</strong> Ve a Google Maps, busca un lugar, usa "Compartir → Insertar un mapa", copia el <code>&lt;iframe&gt;</code> y pégalo en una página. Añádele <code>title</code> y <code>loading="lazy"</code>. Reflexiona: ¿confías en la fuente? (Sí: es Google).</p>
+</li>
+<li>
+<p><strong>Diseña tu <code>og:image</code>.</strong> En papel o en una herramienta de diseño, esboza la tarjeta de previsualización de tunal-digital en 1200 × 630: ¿qué logo, qué frase y qué colores pondrías para que alguien quiera hacer clic al verla en un chat?</p>
+</li>
+</ol>
+<blockquote>
+<p>Bit te despide moviendo sus branquias rosas: «Una imagen bien hecha pesa poco, dice mucho y se ve en cualquier pantalla. ¡Esa es la magia! Nos vemos en el próximo capítulo. 🐾»</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
