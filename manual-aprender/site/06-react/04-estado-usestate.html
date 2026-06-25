@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 04 — Estado con useState — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-04-estado-con-usestate">Capítulo 04 — Estado con useState</h1>
+<blockquote>
+<p>Las props son datos que <strong>llegan de afuera</strong> y no cambian. Pero una app viva necesita datos
+que <strong>cambian con el tiempo</strong>: un contador que sube, un campo que el usuario escribe, un menú
+que se abre. Eso es el <strong>estado</strong>, y se maneja con tu primer <strong>hook</strong>: <code>useState</code>. Es el
+concepto que hace que React sea "reactivo".</p>
+</blockquote>
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/estado-rerender.png" alt="Bit pulsa un botón y el contador en pantalla cambia de 2 a 3: la interfaz se redibuja al cambiar el estado" width="640">
+</p>
+
+<hr />
+<h2 id="1-que-es-el-estado">1. Qué es el estado</h2>
+<blockquote class="def">
+<h3 id="que-significa-estado-state">🟦 ¿Qué significa? — <em>Estado (state)</em></h3>
+<p>El <strong>estado</strong> son los <strong>datos que cambian con el tiempo</strong> dentro de un componente y que, al
+cambiar, hacen que la interfaz se <strong>vuelva a dibujar</strong> para reflejarlos. Si las props son "lo
+que me dan desde afuera (no lo toco)", el estado es "lo mío, que evoluciona aquí adentro".
+Ejemplos: el número de un contador, si un menú está abierto, lo que hay escrito en un input.</p>
+<h3 id="que-significa-re-render-volver-a-renderizar">🟦 ¿Qué significa? — <em>Re-render (volver a renderizar)</em></h3>
+<p><strong>Renderizar</strong> es "dibujar" el componente en pantalla. Cuando el estado cambia, React
+<strong>vuelve a ejecutar</strong> la función del componente y actualiza solo lo que cambió en la pantalla.
+A eso se le llama <strong>re-render</strong>. Esta es la magia declarativa del Módulo 06-cap.01: tú cambias
+el dato, React redibuja; no tocas el DOM a mano.</p>
+</blockquote>
+<hr />
+<h2 id="2-usestate-tu-primer-hook">2. <code>useState</code>: tu primer hook</h2>
+<blockquote class="def">
+<h3 id="que-significa-hook">🟦 ¿Qué significa? — <em>Hook</em></h3>
+<p>Un <strong>hook</strong> ("gancho") es una <strong>función especial de React</strong> cuyo nombre empieza por <code>use...</code> y
+que le da "superpoderes" a un componente (recordar datos, ejecutar efectos…). El primero y más
+importante es <code>useState</code>.</p>
+<h3 id="que-significa-usestate">🟦 ¿Qué significa? — <em><code>useState</code></em></h3>
+<p><code>useState</code> crea una variable de <strong>estado</strong> dentro de un componente. Devuelve <strong>dos cosas</strong> en
+un array: el <strong>valor actual</strong> y una <strong>función para cambiarlo</strong>.
+```tsx
+import { useState } from "react";</p>
+<p>function Contador() {
+  const [cuenta, setCuenta] = useState(0);   // valor inicial: 0</p>
+<p>return (
+    <button onClick={() => setCuenta(cuenta + 1)}&gt;
+      Has hecho clic {cuenta} veces
+    </button>
+  );
+}
+<code>``
+-</code>cuenta<code>→ el valor actual del estado (empieza en</code>0<code>).
+-</code>setCuenta<code>→ la función que lo cambia. **Siempre** se usa esta función para cambiarlo, nunca</code>cuenta = cuenta + 1<code>directamente.
+-</code>useState(0)<code>→ el</code>0<code>es el valor inicial.
+Cada vez que pulsas el botón,</code>setCuenta` actualiza el estado, React <strong>re-renderiza</strong>, y el
+número en pantalla sube. Sin tocar el DOM. Eso es React.</p>
+<h3 id="que-significa-la-desestructuracion-valor-setvalor">🟦 ¿Qué significa? — <em>La desestructuración <code>[valor, setValor]</code></em></h3>
+<p><code>const [cuenta, setCuenta] = useState(0)</code> usa <strong>desestructuración de array</strong> (saca dos cosas de
+la lista que devuelve <code>useState</code>, por su posición). Convención: la función se llama igual que
+el estado con <code>set</code> delante (<code>cuenta</code> → <code>setCuenta</code>).</p>
+</blockquote>
+<hr />
+<h2 id="3-la-regla-de-oro-nunca-cambies-el-estado-directamente">3. La regla de oro: nunca cambies el estado directamente</h2>
+<blockquote class="warn">
+<h3 id="cuidado-usa-siempre-la-funcion-set">⚠️ Cuidado — Usa SIEMPRE la función <code>set...</code></h3>
+<p>```tsx
+// ❌ MAL: React no se entera, la pantalla no se actualiza
+cuenta = cuenta + 1;</p>
+<p>// ✅ BIEN: avisa a React, que re-renderiza
+setCuenta(cuenta + 1);
+<code>``
+¿Por qué? Porque la función</code>set...` es la que le <strong>avisa a React</strong> que algo cambió para que
+redibuje. Si modificas la variable a mano, React no se entera y la pantalla se queda igual. Es
+el error nº 1 al empezar con estado.</p>
+<h3 id="tip-estado-basado-en-el-anterior">💡 Tip — Estado basado en el anterior</h3>
+<p>Cuando el nuevo valor depende del actual, pásale a <code>set...</code> una función:
+<code>tsx
+setCuenta((anterior) =&gt; anterior + 1);</code>
+Es la forma segura cuando haces varios cambios seguidos. Por ahora, reconócela; la verás mucho.</p>
+</blockquote>
+<hr />
+<h2 id="4-eventos-en-react">4. Eventos en React</h2>
+<p>Para que el estado cambie, normalmente respondes a un <strong>evento</strong> del usuario (un clic, escribir).
+Es como el <code>addEventListener</code> del Módulo 03, pero más directo.</p>
+<blockquote class="def">
+<h3 id="que-significa-manejadores-de-eventos-en-jsx">🟦 ¿Qué significa? — <em>Manejadores de eventos en JSX</em></h3>
+<p>En JSX, los eventos se ponen como props con <code>on...</code> y reciben una función:
+<code>tsx
+&lt;button onClick={() =&gt; setAbierto(!abierto)}&gt;Abrir/cerrar&lt;/button&gt;
+&lt;input onChange={(e) =&gt; setTexto(e.target.value)} /&gt;</code>
+- <code>onClick</code> → al hacer clic.
+- <code>onChange</code> → al cambiar un campo (escribir). <code>e.target.value</code> es lo que el usuario escribió.
+Fíjate: se pasa <strong>una función</strong> (<code>() =&gt; ...</code>), no se ejecuta en el momento. (Camel-case:
+<code>onClick</code>, no <code>onclick</code>.)</p>
+</blockquote>
+<hr />
+<h2 id="5-un-formulario-controlado-caso-real">5. Un formulario controlado (caso real)</h2>
+<p>Juntando estado + eventos, así se maneja un campo de texto en React:</p>
+<pre><code class="language-tsx">function Saludo() {
+  const [nombre, setNombre] = useState(&quot;&quot;);
+
+  return (
+    &lt;div&gt;
+      &lt;input
+        value={nombre}
+        onChange={(e) =&gt; setNombre(e.target.value)}
+        placeholder=&quot;Tu nombre&quot;
+      /&gt;
+      &lt;p&gt;Hola, {nombre || &quot;desconocido&quot;} 👋&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-componenteinput-controlado">🟦 ¿Qué significa? — <em>Componente/input controlado</em></h3>
+<p>Un <strong>input controlado</strong> es uno cuyo valor <strong>lo gobierna el estado de React</strong> (<code>value={nombre}</code>),
+y cada tecla actualiza ese estado (<code>onChange</code>). Así, la "fuente de la verdad" de lo que hay en
+el campo es tu estado, no el DOM. Es como RachaSimple maneja sus formularios (crear hábito,
+check-in). El <code>&lt;p&gt;</code> de abajo se actualiza <strong>en vivo</strong> mientras escribes: estado → re-render.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Cada vez que en RachaSimple escribes el nombre de un hábito o eliges su color, hay un
+<code>useState</code> detrás guardando ese valor y re-renderizando la vista previa. Ya entiendes el motor.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Distingo <strong>estado</strong> (cambia adentro) de <strong>props</strong> (llegan de afuera).</li>
+<li>[ ] Sé qué es un <strong>re-render</strong> y por qué React lo hace al cambiar el estado.</li>
+<li>[ ] Uso <strong><code>useState</code></strong>: <code>const [valor, setValor] = useState(inicial)</code>.</li>
+<li>[ ] <strong>Nunca</strong> cambio el estado directo; siempre con la función <code>set...</code>.</li>
+<li>[ ] Manejo <strong>eventos</strong> con <code>onClick</code>, <code>onChange</code> y <code>e.target.value</code>.</li>
+<li>[ ] Entiendo qué es un <strong>input controlado</strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Lee el contador.</strong> En <code>const [cuenta, setCuenta] = useState(0)</code>, ¿qué es <code>cuenta</code>, qué es
+   <code>setCuenta</code> y qué es el <code>0</code>?</li>
+<li><strong>Encuentra el error.</strong> ¿Por qué la pantalla no cambia? <code>&lt;button onClick={() =&gt; { abierto =
+   !abierto; }}&gt;</code></li>
+<li><strong>Interruptor.</strong> Escribe un componente con un estado booleano <code>encendido</code> y un botón que lo
+   alterne (de <code>true</code> a <code>false</code>), mostrando "💡 Encendido" o "🌑 Apagado".</li>
+<li><strong>Input controlado.</strong> Escribe un componente con un <code>&lt;input&gt;</code> controlado y un <code>&lt;p&gt;</code> que muestre
+   en vivo cuántos caracteres llevas escritos (pista: <code>texto.length</code>).</li>
+<li>💻 <strong>Contador real.</strong> Cuando tengas la computadora y un proyecto React, crea el <code>Contador</code> de
+   la sección 2 y compruébalo: cada clic sube el número sin recargar la página.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="05-hooks-y-efectos.html">Capítulo 05 — Hooks y efectos</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

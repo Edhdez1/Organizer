@@ -4,6 +4,10 @@
 > `HabitCard` sirve para "Leer", "Ejercicio" o "Meditar". Eso se logra con **props**, los datos
 > que un componente recibe de quien lo usa. Es el segundo concepto más importante de React.
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/props-flujo.png" alt="Bit reparte tarjetas de datos desde una caja 'padre' hacia tres cajas 'hijas' por tubos: el flujo de props de padre a hijo" width="640">
+</p>
+
 ---
 
 ## 1. Qué son las props
