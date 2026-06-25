@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 03 — El modelo de cajas — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-03-el-modelo-de-cajas">Capítulo 03 — El modelo de cajas</h1>
+<blockquote>
+<p>Esta es <strong>la idea más importante de todo CSS</strong>. Si entiendes el modelo de cajas, entiendes el
+80% de por qué las cosas se ven y se espacian como se ven. Si no lo entiendes, CSS te
+parecerá magia caótica. Vamos despacio porque vale oro.</p>
+</blockquote>
+<hr />
+<h2 id="1-todo-en-una-pagina-es-una-caja">1. Todo en una página es una caja</h2>
+<blockquote class="def">
+<h3 id="que-significa-el-modelo-de-cajas-box-model">🟦 ¿Qué significa? — <em>El modelo de cajas (box model)</em></h3>
+<p>En CSS, <strong>cada elemento HTML es una caja rectangular</strong>, aunque no lo parezca. Un párrafo, una
+imagen, un botón, un <code>&lt;div&gt;</code>: todos son cajas. Y cada caja tiene <strong>cuatro capas</strong>, de adentro
+hacia afuera:</p>
+<p><code>┌──────────────────────── margin (margen) ────────────────────────┐
+│   espacio EXTERIOR, separa esta caja de las demás                │
+│   ┌──────────────── border (borde) ────────────────┐            │
+│   │   la línea del borde                            │            │
+│   │   ┌──────────── padding (relleno) ──────────┐   │            │
+│   │   │   espacio INTERIOR, entre borde y texto  │   │            │
+│   │   │   ┌──────── content (contenido) ──────┐  │   │            │
+│   │   │   │   el texto, la imagen, lo de adentro │ │   │            │
+│   │   │   └──────────────────────────────────┘  │   │            │
+│   │   └──────────────────────────────────────────┘   │            │
+│   └──────────────────────────────────────────────────┘            │
+└──────────────────────────────────────────────────────────────────┘</code></p>
+</blockquote>
+<p>Memoriza el orden de adentro hacia afuera: <strong>contenido → padding → borde → margen</strong>.</p>
+<hr />
+<h2 id="2-las-cuatro-capas-una-por-una">2. Las cuatro capas, una por una</h2>
+<blockquote class="def">
+<h3 id="que-significa-content-contenido">🟦 ¿Qué significa? — <em>Content (contenido)</em></h3>
+<p>Es lo de adentro: el texto, la imagen. Su tamaño base se controla con <code>width</code> (ancho) y
+<code>height</code> (alto), aunque muchas veces se ajusta solo al contenido.</p>
+<h3 id="que-significa-padding-relleno">🟦 ¿Qué significa? — <em>Padding (relleno)</em></h3>
+<p>El <strong>padding</strong> es el espacio <strong>dentro</strong> de la caja, entre el contenido y el borde. Es lo que
+hace que un botón no tenga el texto pegado a sus bordes (le da "aire" por dentro).
+<code>css
+.boton { padding: 12px; }            /* 12px por los cuatro lados */
+.boton { padding: 12px 20px; }       /* 12px arriba/abajo, 20px izq/der */</code></p>
+<h3 id="que-significa-border-borde">🟦 ¿Qué significa? — <em>Border (borde)</em></h3>
+<p>El <strong>borde</strong> es la línea que rodea el padding. Se define con grosor, estilo y color:
+<code>css
+.tarjeta { border: 2px solid #1B6B6B; }   /* 2px, línea sólida, color teal */</code>
+Relacionado: <code>border-radius</code> redondea las esquinas (lo que da el look "suave" moderno):
+<code>css
+.tarjeta { border-radius: 12px; }</code></p>
+<h3 id="que-significa-margin-margen">🟦 ¿Qué significa? — <em>Margin (margen)</em></h3>
+<p>El <strong>margen</strong> es el espacio <strong>fuera</strong> de la caja, que la separa de las cajas vecinas. Es lo
+que pones para que dos tarjetas no estén pegadas.
+<code>css
+.tarjeta { margin: 16px; }            /* separación por los cuatro lados */
+.tarjeta { margin-bottom: 24px; }     /* solo por abajo */</code></p>
+<h3 id="tip-padding-vs-margin-la-confusion-eterna">💡 Tip — Padding vs. margin, la confusión eterna</h3>
+<ul>
+<li><strong>Padding</strong> = espacio <strong>por dentro</strong> (entre el contenido y el borde). Empuja el contenido
+  hacia el centro; el fondo del elemento <strong>sí</strong> llega hasta el borde.</li>
+<li><strong>Margin</strong> = espacio <strong>por fuera</strong> (entre esta caja y las demás). Es transparente.
+Regla mental: <em>"padding = relleno de la caja; margin = distancia entre cajas."</em></li>
+</ul>
+<h3 id="que-significa-la-notacion-de-cuatro-lados">🟦 ¿Qué significa? — <em>La notación de cuatro lados</em></h3>
+<p>Muchas propiedades aceptan de 1 a 4 valores, en sentido del reloj desde arriba:
+<code>css
+padding: 10px;                /* los 4 lados igual */
+padding: 10px 20px;           /* arriba/abajo | izquierda/derecha */
+padding: 10px 20px 30px 40px; /* arriba | derecha | abajo | izquierda */</code>
+Lo mismo aplica a <code>margin</code>. También existen <code>padding-top</code>, <code>margin-left</code>, etc., para un solo lado.</p>
+</blockquote>
+<hr />
+<h2 id="3-el-truco-que-evita-dolores-de-cabeza-box-sizing">3. El truco que evita dolores de cabeza: <code>box-sizing</code></h2>
+<p>Hay una trampa clásica. Por defecto, cuando defines <code>width: 300px</code>, ese ancho es <strong>solo del
+contenido</strong>; el padding y el borde se <strong>suman aparte</strong>, y la caja real acaba siendo más ancha
+de 300px. Esto descuadra los diseños y vuelve loco a todo principiante.</p>
+<blockquote class="def">
+<h3 id="que-significa-box-sizing-border-box">🟦 ¿Qué significa? — <em><code>box-sizing: border-box</code></em></h3>
+<p>La propiedad <code>box-sizing: border-box</code> cambia ese comportamiento: hace que <code>width</code> incluya el
+<strong>contenido + padding + borde</strong>. Es decir, "300px de ancho" significa 300px de verdad, pase
+lo que pase con el padding. Es tan útil que prácticamente <strong>todos</strong> los sitios lo activan para
+todo, al inicio del CSS:
+<code>css
+* {
+  box-sizing: border-box;
+}</code>
+(El <code>*</code> es el "selector universal": afecta a <strong>todos</strong> los elementos.) <strong>Recomendación:</strong>
+empieza siempre tu CSS con esa regla y te ahorrarás horas de confusión. Tu propio
+<code>tunal-digital/sitio-web/styles.css</code> lo hace.</p>
+</blockquote>
+<hr />
+<h2 id="4-bloque-vs-en-linea-por-que-unas-cajas-se-apilan-y-otras-no">4. Bloque vs. en línea: por qué unas cajas se apilan y otras no</h2>
+<blockquote class="def">
+<h3 id="que-significa-elementos-de-bloque-e-inline">🟦 ¿Qué significa? — <em>Elementos de bloque e inline</em></h3>
+<ul>
+<li>Un elemento <strong>de bloque</strong> (<code>block</code>) ocupa <strong>todo el ancho disponible</strong> y empuja lo siguiente
+  a una nueva línea. Ejemplos: <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;section&gt;</code>. Por eso los párrafos se
+  apilan uno debajo de otro.</li>
+<li>Un elemento <strong>en línea</strong> (<code>inline</code>) ocupa <strong>solo lo que necesita</strong> y convive en la misma
+  línea con texto. Ejemplos: <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;span&gt;</code>.
+Esto se puede cambiar con la propiedad <code>display</code> (<code>display: block</code>, <code>display: inline</code>), y muy
+importante, <code>display: flex</code>, que es el tema del próximo capítulo.</li>
+</ul>
+<h3 id="que-significa-span-la-caja-inline-generica">🟦 ¿Qué significa? — <em><code>&lt;span&gt;</code> (la caja inline genérica)</em></h3>
+<p>Igual que <code>&lt;div&gt;</code> es la caja de bloque sin significado, <code>&lt;span&gt;</code> es su equivalente <strong>en línea</strong>:
+sirve para envolver un trozo de texto dentro de una línea y darle estilo (por ejemplo, colorear
+una palabra) sin romper el flujo.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que <strong>cada elemento es una caja</strong> con 4 capas.</li>
+<li>[ ] Sé el orden: <strong>contenido → padding → borde → margen</strong>.</li>
+<li>[ ] Distingo <strong>padding</strong> (espacio interior) de <strong>margin</strong> (espacio exterior).</li>
+<li>[ ] Sé redondear esquinas con <code>border-radius</code> y usar la notación de 4 lados.</li>
+<li>[ ] Entiendo por qué conviene <code>box-sizing: border-box</code> en todo el sitio.</li>
+<li>[ ] Distingo elementos <strong>de bloque</strong> (se apilan) de <strong>inline</strong> (misma línea).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Etiqueta las capas.</strong> Dibuja una caja y rotula sus cuatro capas de adentro hacia afuera.</li>
+<li><strong>¿Padding o margin?</strong> Para cada caso elige uno: (a) dar aire dentro de un botón; (b) separar
+   dos tarjetas entre sí; (c) que el texto no toque el borde de una caja con fondo de color.</li>
+<li><strong>Lee la notación.</strong> ¿Qué significa <code>padding: 8px 16px;</code>? ¿Y <code>margin: 0 auto;</code>? (la segunda es
+   un truco famoso para centrar; investiga o dedúcelo).</li>
+<li><strong>El descuadre.</strong> Explica con tus palabras por qué una caja con <code>width: 200px; padding: 20px;</code>
+   mide 240px de ancho <strong>sin</strong> <code>border-box</code>, y 200px <strong>con</strong> <code>border-box</code>.</li>
+<li>💻 <strong>Tarjeta.</strong> Crea una <code>.tarjeta</code> con: fondo crema, <code>padding</code> de 20px, <code>border</code> teal de 2px,
+   <code>border-radius</code> de 12px y <code>margin-bottom</code> de 16px. Aplícala a dos <code>&lt;div&gt;</code> y observa cómo se
+   ven y se separan.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="04-flexbox.html">Capítulo 04 — Layout con Flexbox</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>

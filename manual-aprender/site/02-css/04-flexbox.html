@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 04 — Layout con Flexbox — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-04-layout-con-flexbox">Capítulo 04 — Layout con Flexbox</h1>
+<blockquote>
+<p>Hasta ahora las cajas se apilaban una sobre otra. Pero ¿cómo pones tres tarjetas <strong>en fila</strong>?
+¿Cómo centras algo perfectamente? ¿Cómo haces una barra de menú con el logo a la izquierda y
+los enlaces a la derecha? La respuesta moderna es <strong>Flexbox</strong>, y es más fácil de lo que temes.</p>
+</blockquote>
+<hr />
+<h2 id="1-el-problema-que-resuelve-flexbox">1. El problema que resuelve Flexbox</h2>
+<p>Durante años, alinear cosas en CSS era un dolor (trucos raros, elementos que no se centraban).
+<strong>Flexbox</strong> nació para resolverlo: es un sistema para <strong>distribuir y alinear</strong> un grupo de
+cajas dentro de un contenedor, en fila o en columna, repartiendo el espacio de forma
+inteligente y <strong>adaptable</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-flexbox">🟦 ¿Qué significa? — <em>Flexbox</em></h3>
+<p><strong>Flexbox</strong> (<em>Flexible Box Layout</em>) es un modo de organización en el que un <strong>contenedor</strong>
+ordena a sus <strong>elementos hijos</strong> a lo largo de un eje (horizontal o vertical), controlando
+cómo se alinean y cómo se reparten el espacio sobrante. "Flexible" porque los hijos pueden
+crecer o encogerse para llenar el espacio disponible.</p>
+</blockquote>
+<hr />
+<h2 id="2-activarlo-display-flex">2. Activarlo: <code>display: flex</code></h2>
+<p>Flexbox siempre involucra dos papeles: <strong>un contenedor</strong> (el padre) y <strong>sus hijos</strong> (los
+elementos directos dentro de él).</p>
+<blockquote class="def">
+<h3 id="que-significa-contenedor-flex-y-elementos-flex">🟦 ¿Qué significa? — <em>Contenedor flex y elementos flex</em></h3>
+<p>Pones <code>display: flex</code> en el <strong>contenedor</strong>; automáticamente, sus <strong>hijos directos</strong> se vuelven
+"elementos flex" y se colocan en fila.
+<code>html
+&lt;div class="fila"&gt;
+  &lt;div class="caja"&gt;1&lt;/div&gt;
+  &lt;div class="caja"&gt;2&lt;/div&gt;
+  &lt;div class="caja"&gt;3&lt;/div&gt;
+&lt;/div&gt;</code>
+<code>css
+.fila { display: flex; }   /* las tres .caja ahora van en fila, lado a lado */</code>
+Sin <code>display: flex</code>, esos tres <code>&lt;div&gt;</code> se apilarían (porque son de bloque). Con él, se ponen
+en hilera. Ese es el "¡ajá!" de Flexbox.</p>
+</blockquote>
+<hr />
+<h2 id="3-las-propiedades-clave-del-contenedor">3. Las propiedades clave del contenedor</h2>
+<p>Casi todo Flexbox se controla con cinco propiedades en el <strong>contenedor</strong>. Estas son las que
+usarás siempre:</p>
+<blockquote class="def">
+<h3 id="que-significa-flex-direction-la-direccion-del-eje">🟦 ¿Qué significa? — <em><code>flex-direction</code> (la dirección del eje)</em></h3>
+<p>Define si los hijos van en <strong>fila</strong> (por defecto) o en <strong>columna</strong>:
+<code>css
+.fila { display: flex; flex-direction: row; }     /* → horizontal (defecto) */
+.col  { display: flex; flex-direction: column; }  /* ↓ vertical */</code></p>
+<h3 id="que-significa-justify-content-reparto-en-el-eje-principal">🟦 ¿Qué significa? — <em><code>justify-content</code> (reparto en el eje principal)</em></h3>
+<p>Controla cómo se distribuyen los hijos <strong>a lo largo</strong> del eje (horizontal si es fila):
+| Valor | Efecto |
+|---|---|
+| <code>flex-start</code> | Todos al inicio (izquierda) |
+| <code>center</code> | Todos al centro |
+| <code>flex-end</code> | Todos al final (derecha) |
+| <code>space-between</code> | Repartidos, pegados a los extremos |
+| <code>space-around</code> | Repartidos con espacio alrededor de cada uno |
+<code>css
+.barra { display: flex; justify-content: space-between; }  /* logo a la izq, menú a la der */</code></p>
+<h3 id="que-significa-align-items-alineacion-en-el-eje-cruzado">🟦 ¿Qué significa? — <em><code>align-items</code> (alineación en el eje cruzado)</em></h3>
+<p>Controla la alineación en el eje <strong>perpendicular</strong> (vertical si los hijos van en fila):
+<code>css
+.fila { display: flex; align-items: center; }  /* centra verticalmente los hijos */</code></p>
+<h3 id="tip-el-centrado-perfecto-el-truco-mas-buscado-de-css">💡 Tip — El centrado perfecto (el truco más buscado de CSS)</h3>
+<p>Centrar algo horizontal <strong>y</strong> verticalmente, que durante años fue una pesadilla, hoy es:
+<code>css
+.centro {
+  display: flex;
+  justify-content: center;   /* centra en horizontal */
+  align-items: center;       /* centra en vertical */
+}</code>
+Guárdate esta receta: la usarás muchísimo.</p>
+<h3 id="que-significa-gap-espacio-entre-hijos">🟦 ¿Qué significa? — <em><code>gap</code> (espacio entre hijos)</em></h3>
+<p>El <code>gap</code> pone un espacio uniforme <strong>entre</strong> los elementos, sin tener que usar márgenes uno por
+uno:
+<code>css
+.fila { display: flex; gap: 16px; }   /* 16px de separación entre cada caja */</code></p>
+<h3 id="que-significa-flex-wrap-saltar-de-linea">🟦 ¿Qué significa? — <em><code>flex-wrap</code> (saltar de línea)</em></h3>
+<p>Por defecto, los hijos intentan caber en una sola línea aunque se aprieten. <code>flex-wrap: wrap</code>
+les permite <strong>pasar a la línea siguiente</strong> si no caben. Es clave para que un grid de tarjetas
+se reacomode en pantallas pequeñas:
+<code>css
+.galeria { display: flex; flex-wrap: wrap; gap: 16px; }</code></p>
+</blockquote>
+<hr />
+<h2 id="4-un-ejemplo-real-la-barra-de-navegacion">4. Un ejemplo real: la barra de navegación</h2>
+<p>Juntando lo aprendido, así se hace una barra con el logo a la izquierda y los enlaces a la
+derecha, todo centrado verticalmente:</p>
+<pre><code class="language-css">.barra {
+  display: flex;
+  justify-content: space-between;  /* separa logo (izq) y menú (der) */
+  align-items: center;             /* los centra verticalmente */
+  padding: 16px 24px;
+  gap: 16px;
+}
+</code></pre>
+<pre><code class="language-html">&lt;nav class=&quot;barra&quot;&gt;
+  &lt;div class=&quot;logo&quot;&gt;Tunal Digital&lt;/div&gt;
+  &lt;ul class=&quot;menu&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>La barra superior de tu sitio y las tarjetas de servicios usan Flexbox exactamente así. Y en
+la hoja de estilos de <strong>este manual</strong> (<code>site/estilos.css</code>), la clase <code>.tarjetas</code> usa una
+técnica hermana (CSS Grid) para la cuadrícula del índice. Cuando inspecciones con <code>F12</code> y veas
+<code>display: flex</code>, ya sabrás qué está pasando.</p>
+<h3 id="tip-y-css-grid">💡 Tip — ¿Y CSS Grid?</h3>
+<p>Existe otro sistema, <strong>CSS Grid</strong>, para diseños en <strong>dos dimensiones</strong> (filas <em>y</em> columnas a la
+vez, como una cuadrícula). Flexbox es ideal para <strong>una</strong> dimensión (una fila o una columna);
+Grid, para rejillas completas. Domina Flexbox primero (cubre la mayoría de casos) y luego
+explora Grid; son complementarios, no rivales.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que Flexbox tiene <strong>un contenedor</strong> (<code>display: flex</code>) y <strong>sus hijos</strong>.</li>
+<li>[ ] Sé cambiar la dirección con <code>flex-direction</code> (row / column).</li>
+<li>[ ] Uso <code>justify-content</code> (eje principal) y <code>align-items</code> (eje cruzado).</li>
+<li>[ ] Conozco la receta del <strong>centrado perfecto</strong>.</li>
+<li>[ ] Uso <code>gap</code> para separar y <code>flex-wrap</code> para que salten de línea.</li>
+<li>[ ] Sé que <strong>Grid</strong> existe para diseños de dos dimensiones.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Predice.</strong> Si pongo <code>display: flex</code> en un <code>&lt;div&gt;</code> con tres hijos, ¿cómo se colocan? ¿Y si
+   añado <code>flex-direction: column</code>?</li>
+<li><strong>Elige la propiedad.</strong> ¿Cuál usarías para: (a) centrar tres botones horizontalmente; (b)
+   poner el logo a la izquierda y el menú a la derecha; (c) separar las cajas 20px entre sí?</li>
+<li><strong>Centrado.</strong> Escribe el CSS de una caja <code>.hero</code> que centre su contenido horizontal y
+   verticalmente.</li>
+<li><strong>Lee una barra.</strong> Explica qué hace este CSS:
+   <code>.nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; }</code></li>
+<li>💻 <strong>Tres tarjetas en fila.</strong> Crea un contenedor con tres <code>.tarjeta</code> (las del capítulo
+   anterior) y ponlas en fila con <code>display: flex</code> y <code>gap: 16px</code>. Luego añade <code>flex-wrap: wrap</code> y
+   reduce el ancho de la ventana para ver cómo saltan de línea.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="05-responsive.html">Capítulo 05 — Diseño responsive</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
