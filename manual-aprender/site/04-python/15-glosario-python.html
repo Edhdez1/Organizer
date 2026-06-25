@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Glosario de Python y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-python-y-mapa">Capitulo 15 — Glosario de Python y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>¡Hola de nuevo! Soy <strong>Bit</strong>, tu ajolote guia. Llegaste al final del modulo de Python, y eso merece una celebracion (imaginame moviendo mis branquias de la emocion). Este capitulo es distinto a los demas: no vamos a aprender nada nuevo, vamos a <strong>ordenar todo lo que ya sabes</strong>. Piensa en este capitulo como el cajon donde guardas las herramientas despues de un proyecto: cada termino tiene su sitio, su etiqueta y una nota de "para que sirve esto". Lo usaras como diccionario cuando se te olvide algo (y se te va a olvidar, a todos nos pasa, no pasa nada). Al final hay un mapa mental, un repaso y la puerta hacia el <strong>Modulo 05: TypeScript</strong>. Respira, agarra agua, y vamos.</p>
+</blockquote>
+<hr />
+<h2 id="1-como-usar-este-glosario">1. Como usar este glosario</h2>
+<p>Cada termino esta en un recuadro azul que empieza con <code>🟦 ¿Que significa?</code>. Dentro encontraras tres cosas: una <strong>definicion simple</strong> (1-2 lineas), <strong>para que sirve</strong> y <strong>donde aparece en un repo real</strong>. El repo estrella de este modulo es <strong>PolyPaw</strong>, una app para aprender idiomas hecha <strong>integramente en Python</strong> con el framework <strong>Flet</strong> y datos guardados en archivos <strong>JSON</strong> (<code>main.py</code>, <code>database_manager.py</code>, <code>missions/*.json</code>). Cuando algo se parezca a lo que viste en JavaScript (Modulo 03), te lo digo en una frase corta para que conectes ideas.</p>
+<p>No tienes que leerlo de corrido. Salta al termino que necesites. Pero la primera vez, dale una pasada completa: vas a decir "ah, ya entiendo como encaja todo".</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Marca con un lapiz (o con un comentario <code># revisar</code>) los terminos que aun te suenan borrosos. Volver a un glosario tres veces es normal y sano.</p>
+</blockquote>
+<hr />
+<h2 id="2-fundamentos-del-lenguaje">2. Fundamentos del lenguaje</h2>
+<p>Empezamos por lo mas basico: las piezas con las que se construye cualquier programa en Python.</p>
+<blockquote class="def">
+<h3 id="que-significa-variable">🟦 ¿Que significa? — <em>Variable</em></h3>
+<p>Un nombre que guarda un valor para usarlo despues. <strong>Para que sirve:</strong> etiquetar datos (un texto, un numero) y reutilizarlos sin repetirlos. <strong>En PolyPaw:</strong> <code>idioma = "nahuatl"</code> guarda el idioma que eligio el usuario para mostrarselo en pantalla.</p>
+</blockquote>
+<pre><code class="language-python">nombre_usuario = &quot;Edwar&quot;
+puntos = 0
+puntos = puntos + 10   # ahora puntos vale 10
+</code></pre>
+<p>En JavaScript escribias <code>let puntos = 0;</code>. En Python no hay <code>let</code> ni <code>;</code>: solo el nombre, el <code>=</code> y el valor.</p>
+<blockquote class="def">
+<h3 id="que-significa-tipo-de-dato">🟦 ¿Que significa? — <em>Tipo (de dato)</em></h3>
+<p>La clase de informacion que contiene un valor: texto, numero, verdadero/falso, lista, etc. <strong>Para que sirve:</strong> Python sabe que operaciones puede hacer segun el tipo (sumar numeros, unir textos). <strong>En PolyPaw:</strong> el puntaje es un tipo numero (<code>int</code>), el idioma es un tipo texto (<code>str</code>).</p>
+<h3 id="que-significa-str-cadena-string">🟦 ¿Que significa? — <em>str (cadena / string)</em></h3>
+<p>Un tipo de dato que representa texto, escrito entre comillas. <strong>Para que sirve:</strong> guardar palabras, frases, nombres de archivo. <strong>En PolyPaw:</strong> <code>"Buenos dias"</code> es el texto de una leccion.</p>
+<h3 id="que-significa-int-entero">🟦 ¿Que significa? — <em>int (entero)</em></h3>
+<p>Un numero sin decimales. <strong>Para que sirve:</strong> contar cosas: puntos, intentos, indice de una mision. <strong>En PolyPaw:</strong> <code>vidas = 3</code>.</p>
+<h3 id="que-significa-float-decimal">🟦 ¿Que significa? — <em>float (decimal)</em></h3>
+<p>Un numero con punto decimal. <strong>Para que sirve:</strong> medir cosas que no son enteras, como un porcentaje de progreso. <strong>En PolyPaw:</strong> <code>progreso = 0.75</code> (75% de la mision completada).</p>
+<h3 id="que-significa-bool-booleano">🟦 ¿Que significa? — <em>bool (booleano)</em></h3>
+<p>Un tipo que solo puede ser <code>True</code> o <code>False</code>. <strong>Para que sirve:</strong> representar respuestas de si/no para tomar decisiones. <strong>En PolyPaw:</strong> <code>mision_completada = True</code>.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>En Python se escriben con mayuscula inicial: <code>True</code> y <code>False</code>. En JavaScript era <code>true</code> y <code>false</code> en minuscula. Es un error clasico al cambiar de lenguaje.</p>
+<h3 id="que-significa-none">🟦 ¿Que significa? — <em>None</em></h3>
+<p>Un valor especial que significa "nada" o "sin valor todavia". <strong>Para que sirve:</strong> indicar que algo aun no tiene contenido. <strong>En PolyPaw:</strong> un usuario nuevo puede tener <code>ultima_leccion = None</code> hasta que termine la primera. (En JavaScript esto era <code>null</code>.)</p>
+<h3 id="que-significa-sangria-indentacion">🟦 ¿Que significa? — <em>Sangria (indentacion)</em></h3>
+<p>Los espacios al inicio de una linea que indican que ese codigo pertenece a un bloque. <strong>Para que sirve:</strong> en Python la sangria <strong>sustituye a las llaves <code>{}</code></strong> de JavaScript; define que esta dentro de un <code>if</code>, un <code>for</code> o una funcion. <strong>En PolyPaw:</strong> todo el cuerpo de una funcion va sangrado.</p>
+</blockquote>
+<pre><code class="language-python">if puntos &gt;= 100:
+    print(&quot;¡Subiste de nivel!&quot;)   # esta linea pertenece al if por la sangria
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Usa siempre <strong>4 espacios</strong> y no mezcles espacios con tabuladores. Una sangria inconsistente rompe el programa con un <code>IndentationError</code>. Bit ha llorado lagrimas de ajolote por esto.</p>
+<h3 id="que-significa-comentario">🟦 ¿Que significa? — <em>Comentario</em></h3>
+<p>Texto que Python ignora, escrito despues de <code>#</code>. <strong>Para que sirve:</strong> explicarle a un humano (o a ti del futuro) que hace el codigo. <strong>En PolyPaw:</strong> <code># carga las misiones del idioma elegido</code>.</p>
+<h3 id="que-significa-operador">🟦 ¿Que significa? — <em>Operador</em></h3>
+<p>Un simbolo que opera sobre valores: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>==</code>, <code>and</code>, <code>or</code>, <code>not</code>. <strong>Para que sirve:</strong> hacer cuentas y comparaciones. <strong>En PolyPaw:</strong> <code>if vidas &gt; 0 and not fin_del_juego:</code>.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En PolyPaw, abre <code>main.py</code> y busca la primera linea sangrada despues de un <code>def</code>. Esa sangria es la frontera invisible que en JavaScript marcabas con <code>{</code>. Si la entiendes, entiendes la mitad de Python.</p>
+</blockquote>
+<hr />
+<h2 id="3-colecciones-guardar-muchos-datos">3. Colecciones: guardar muchos datos</h2>
+<p>Cuando necesitas guardar varios valores juntos, usas una <strong>coleccion</strong>. Python tiene cuatro principales.</p>
+<blockquote class="def">
+<h3 id="que-significa-lista-list">🟦 ¿Que significa? — <em>Lista (list)</em></h3>
+<p>Una coleccion ordenada de valores que puedes cambiar, escrita entre corchetes <code>[]</code>. <strong>Para que sirve:</strong> guardar secuencias: las palabras de una leccion, los pasos de una mision. <strong>En PolyPaw:</strong> <code>opciones = ["agua", "fuego", "tierra"]</code> para una pregunta de opcion multiple.</p>
+</blockquote>
+<pre><code class="language-python">misiones = [&quot;saludos&quot;, &quot;comida&quot;, &quot;colores&quot;]
+misiones.append(&quot;animales&quot;)   # agregar al final
+primera = misiones[0]          # acceder por posicion (empieza en 0)
+</code></pre>
+<p>Es practicamente el mismo concepto que el <strong>array</strong> de JavaScript.</p>
+<blockquote class="def">
+<h3 id="que-significa-tupla-tuple">🟦 ¿Que significa? — <em>Tupla (tuple)</em></h3>
+<p>Una coleccion ordenada que <strong>no se puede cambiar</strong>, escrita entre parentesis <code>()</code>. <strong>Para que sirve:</strong> guardar datos fijos que no deben modificarse, como una coordenada. <strong>En PolyPaw:</strong> <code>tamano_ventana = (400, 800)</code> (ancho y alto que no cambian).</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>¿Lista o tupla? Si los datos van a cambiar, usa <strong>lista</strong>. Si son fijos para siempre, usa <strong>tupla</strong>. La tupla ademas es un poquito mas rapida.</p>
+<h3 id="que-significa-conjunto-set">🟦 ¿Que significa? — <em>Conjunto (set)</em></h3>
+<p>Una coleccion <strong>sin orden y sin duplicados</strong>, escrita entre llaves <code>{}</code>. <strong>Para que sirve:</strong> guardar elementos unicos, como los idiomas que un usuario ya desbloqueo (sin repetir). <strong>En PolyPaw:</strong> <code>idiomas_desbloqueados = {"nahuatl", "maya"}</code>.</p>
+<h3 id="que-significa-diccionario-dict">🟦 ¿Que significa? — <em>Diccionario (dict)</em></h3>
+<p>Una coleccion de pares <strong>clave: valor</strong>, escrita entre llaves <code>{}</code>. <strong>Para que sirve:</strong> guardar datos etiquetados, como una ficha. <strong>En PolyPaw:</strong> cada mision es un diccionario: <code>{"titulo": "Saludos", "nivel": 1, "completada": False}</code>.</p>
+</blockquote>
+<pre><code class="language-python">mision = {
+    &quot;titulo&quot;: &quot;Saludos&quot;,
+    &quot;nivel&quot;: 1,
+    &quot;completada&quot;: False
+}
+print(mision[&quot;titulo&quot;])   # accedes por la clave, no por posicion
+</code></pre>
+<p>Es muy parecido al <strong>objeto</strong> literal de JavaScript (<code>{ clave: valor }</code>). El diccionario es el corazon de PolyPaw, porque cada archivo de <code>missions/*.json</code> se convierte en un diccionario al cargarlo.</p>
+<blockquote class="def">
+<h3 id="que-significa-clave-key">🟦 ¿Que significa? — <em>Clave (key)</em></h3>
+<p>El nombre con el que buscas un valor dentro de un diccionario. <strong>Para que sirve:</strong> etiquetar cada dato. <strong>En PolyPaw:</strong> <code>"titulo"</code>, <code>"nivel"</code> y <code>"completada"</code> son las claves de una mision.</p>
+<h3 id="que-significa-indice-index">🟦 ¿Que significa? — <em>Indice (index)</em></h3>
+<p>El numero de posicion de un elemento en una lista o tupla, <strong>empezando en 0</strong>. <strong>Para que sirve:</strong> acceder a un elemento concreto. <strong>En PolyPaw:</strong> <code>opciones[0]</code> es la primera opcion de respuesta.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>El primer elemento es el indice <code>0</code>, no el <code>1</code>. Si una lista tiene 3 elementos, los indices validos son 0, 1 y 2. Pedir <code>opciones[3]</code> da un error <code>IndexError</code>.</p>
+</blockquote>
+<hr />
+<h2 id="4-control-de-flujo-y-bucles">4. Control de flujo y bucles</h2>
+<p>Estas son las estructuras que deciden <strong>que</strong> se ejecuta y <strong>cuantas veces</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-condicional-if-elif-else">🟦 ¿Que significa? — <em>Condicional (if / elif / else)</em></h3>
+<p>Una estructura que ejecuta codigo solo si se cumple una condicion. <strong>Para que sirve:</strong> tomar decisiones. <strong>En PolyPaw:</strong> mostrar "¡Correcto!" solo si la respuesta del usuario coincide con la esperada.</p>
+</blockquote>
+<pre><code class="language-python">if respuesta == correcta:
+    print(&quot;¡Correcto!&quot;)
+elif intentos &gt; 0:
+    print(&quot;Intenta de nuevo&quot;)
+else:
+    print(&quot;Sin intentos&quot;)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-bucle-for">🟦 ¿Que significa? — <em>Bucle for</em></h3>
+<p>Una estructura que repite codigo una vez por cada elemento de una coleccion. <strong>Para que sirve:</strong> recorrer listas y diccionarios. <strong>En PolyPaw:</strong> recorrer todas las misiones para mostrarlas en el menu.</p>
+</blockquote>
+<pre><code class="language-python">for mision in misiones:
+    print(mision[&quot;titulo&quot;])
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-bucle-while">🟦 ¿Que significa? — <em>Bucle while</em></h3>
+<p>Una estructura que repite codigo <strong>mientras</strong> una condicion sea verdadera. <strong>Para que sirve:</strong> repetir sin saber cuantas veces de antemano. <strong>En PolyPaw:</strong> seguir pidiendo respuesta mientras al usuario le queden vidas.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Si la condicion de un <code>while</code> nunca se vuelve <code>False</code>, el programa se queda atrapado para siempre (bucle infinito). Asegurate de que algo cambie dentro del bucle.</p>
+</blockquote>
+<hr />
+<h2 id="5-funciones-empaquetar-instrucciones">5. Funciones: empaquetar instrucciones</h2>
+<blockquote class="def">
+<h3 id="que-significa-funcion">🟦 ¿Que significa? — <em>Funcion</em></h3>
+<p>Un bloque de codigo con nombre que hace una tarea y puedes reutilizar. Se define con <code>def</code>. <strong>Para que sirve:</strong> evitar repetir codigo y organizar el programa en piezas. <strong>En PolyPaw:</strong> <code>cargar_misiones()</code> lee los archivos JSON y devuelve las misiones.</p>
+</blockquote>
+<pre><code class="language-python">def saludar(nombre):
+    return &quot;Hola, &quot; + nombre
+
+mensaje = saludar(&quot;Bit&quot;)
+</code></pre>
+<p>En JavaScript escribias <code>function saludar(nombre) { ... }</code>. En Python es <code>def</code> y dos puntos, y el cuerpo va sangrado.</p>
+<blockquote class="def">
+<h3 id="que-significa-parametro">🟦 ¿Que significa? — <em>Parametro</em></h3>
+<p>El nombre que aparece entre los parentesis al <strong>definir</strong> una funcion; es como una caja vacia que se llenara al llamarla. <strong>Para que sirve:</strong> que la funcion reciba datos. <strong>En PolyPaw:</strong> en <code>def cargar_idioma(codigo):</code>, <code>codigo</code> es el parametro.</p>
+<h3 id="que-significa-argumento">🟦 ¿Que significa? — <em>Argumento</em></h3>
+<p>El valor real que le pasas a una funcion <strong>al llamarla</strong>. <strong>Para que sirve:</strong> darle el dato concreto con el que trabajara. <strong>En PolyPaw:</strong> en <code>cargar_idioma("nahuatl")</code>, el argumento es <code>"nahuatl"</code>.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Parametro vs argumento: el <strong>parametro</strong> es la caja vacia (al definir); el <strong>argumento</strong> es lo que metes en la caja (al llamar). Misma caja, distinto momento.</p>
+<h3 id="que-significa-return">🟦 ¿Que significa? — <em>return</em></h3>
+<p>La palabra que devuelve un resultado desde una funcion hacia quien la llamo. <strong>Para que sirve:</strong> sacar el resultado del trabajo. <strong>En PolyPaw:</strong> <code>cargar_misiones()</code> hace <code>return misiones</code> para entregar la lista.</p>
+<h3 id="que-significa-print">🟦 ¿Que significa? — <em>print()</em></h3>
+<p>Una funcion incorporada que muestra texto en la consola. <strong>Para que sirve:</strong> ver valores y depurar. <strong>En PolyPaw:</strong> util durante el desarrollo para revisar que datos llegan antes de mostrarlos en la interfaz.</p>
+<h3 id="que-significa-f-string">🟦 ¿Que significa? — <em>f-string</em></h3>
+<p>Un texto que empieza con <code>f</code> y permite insertar variables dentro con <code>{}</code>. <strong>Para que sirve:</strong> construir frases con datos sin pegar textos a mano. <strong>En PolyPaw:</strong> <code>f"Nivel {nivel}: {titulo}"</code>.</p>
+</blockquote>
+<pre><code class="language-python">nivel = 3
+titulo = &quot;Comida&quot;
+print(f&quot;Nivel {nivel}: {titulo}&quot;)   # Nivel 3: Comida
+</code></pre>
+<p>Es el equivalente a las <em>template literals</em> de JavaScript (<code>`Nivel ${nivel}`</code>), pero con <code>f</code> y llaves simples.</p>
+<blockquote class="def">
+<h3 id="que-significa-comprension-de-lista">🟦 ¿Que significa? — <em>Comprension (de lista)</em></h3>
+<p>Una forma corta de crear una lista en una sola linea recorriendo otra. <strong>Para que sirve:</strong> transformar o filtrar colecciones de manera compacta. <strong>En PolyPaw:</strong> <code>titulos = [m["titulo"] for m in misiones]</code> saca solo los titulos.</p>
+</blockquote>
+<pre><code class="language-python">numeros = [1, 2, 3, 4]
+dobles = [n * 2 for n in numeros]   # [2, 4, 6, 8]
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Una comprension es genial para tareas simples. Si necesitas mucha logica o condiciones complicadas, usa un <code>for</code> normal: se lee mejor.</p>
+</blockquote>
+<hr />
+<h2 id="6-modulos-paquetes-y-entorno">6. Modulos, paquetes y entorno</h2>
+<p>Aqui esta lo que hace que Python sea tan potente: poder usar codigo de otros y organizar el tuyo.</p>
+<blockquote class="def">
+<h3 id="que-significa-modulo">🟦 ¿Que significa? — <em>Modulo</em></h3>
+<p>Un archivo <code>.py</code> con codigo (funciones, variables) que puedes importar en otro. <strong>Para que sirve:</strong> dividir el programa en archivos con responsabilidades claras. <strong>En PolyPaw:</strong> <code>database_manager.py</code> es un modulo que se encarga de leer y guardar datos.</p>
+<h3 id="que-significa-import">🟦 ¿Que significa? — <em>import</em></h3>
+<p>La instruccion que trae a tu archivo el codigo de otro modulo o paquete. <strong>Para que sirve:</strong> reutilizar funciones sin reescribirlas. <strong>En PolyPaw:</strong> <code>main.py</code> hace <code>import flet</code> y <code>import database_manager</code>.</p>
+</blockquote>
+<pre><code class="language-python">import json
+import database_manager
+from missions import cargar_misiones
+</code></pre>
+<p>En JavaScript era <code>import ... from "..."</code>. En Python es <code>import</code> o <code>from ... import ...</code>, sin llaves ni comillas en el nombre.</p>
+<blockquote class="def">
+<h3 id="que-significa-paquete">🟦 ¿Que significa? — <em>Paquete</em></h3>
+<p>Una carpeta que agrupa varios modulos relacionados. <strong>Para que sirve:</strong> organizar proyectos grandes. <strong>En PolyPaw:</strong> la carpeta <code>missions/</code> agrupa los datos y la logica de las misiones.</p>
+<h3 id="que-significa-biblioteca-estandar">🟦 ¿Que significa? — <em>Biblioteca estandar</em></h3>
+<p>El conjunto de modulos que vienen incluidos con Python sin instalar nada. <strong>Para que sirve:</strong> tareas comunes ya resueltas (leer JSON, fechas, archivos). <strong>En PolyPaw:</strong> el modulo <code>json</code> (de la biblioteca estandar) convierte los archivos <code>.json</code> en diccionarios.</p>
+<h3 id="que-significa-pip">🟦 ¿Que significa? — <em>pip</em></h3>
+<p>El instalador de paquetes de Python; descarga librerias de internet. <strong>Para que sirve:</strong> agregar herramientas que no vienen incluidas. <strong>En PolyPaw:</strong> <code>pip install flet</code> instala el framework de la interfaz.</p>
+<h3 id="que-significa-pypi">🟦 ¿Que significa? — <em>PyPI</em></h3>
+<p>El gran almacen en linea de donde <code>pip</code> descarga los paquetes (Python Package Index). <strong>Para que sirve:</strong> es la fuente oficial de librerias. <strong>En PolyPaw:</strong> Flet vive en PyPI; de ahi lo baja <code>pip</code>. (Es el equivalente a npm en JavaScript.)</p>
+<h3 id="que-significa-venv-entorno-virtual">🟦 ¿Que significa? — <em>venv (entorno virtual)</em></h3>
+<p>Una "burbuja" aislada con su propia version de Python y sus paquetes, separada del sistema. <strong>Para que sirve:</strong> que cada proyecto tenga sus librerias sin chocar con otros. <strong>En PolyPaw:</strong> se crea con <code>python -m venv .venv</code> para instalar Flet solo ahi.</p>
+</blockquote>
+<pre><code class="language-bash">python -m venv .venv
+source .venv/bin/activate   # activarlo (Linux/Mac)
+pip install flet
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>El entorno virtual es como una <code>node_modules</code> con superpoderes: ademas de las librerias, aisla la version de Python. Crea uno por proyecto, siempre.</p>
+<h3 id="que-significa-requirementstxt">🟦 ¿Que significa? — <em>requirements.txt</em></h3>
+<p>Un archivo de texto que lista los paquetes que necesita el proyecto. <strong>Para que sirve:</strong> que otra persona instale todo de golpe con <code>pip install -r requirements.txt</code>. <strong>En PolyPaw:</strong> ahi aparece <code>flet</code> con su version. (Es el primo del <code>package.json</code>.)</p>
+</blockquote>
+<hr />
+<h2 id="7-clases-y-objetos-programacion-orientada-a-objetos">7. Clases y objetos (programacion orientada a objetos)</h2>
+<blockquote class="def">
+<h3 id="que-significa-clase">🟦 ¿Que significa? — <em>Clase</em></h3>
+<p>Un molde para crear objetos con datos y comportamientos propios. Se define con <code>class</code>. <strong>Para que sirve:</strong> representar cosas del mundo real con estructura. <strong>En PolyPaw:</strong> una clase <code>Usuario</code> que agrupa nombre, puntos e idioma.</p>
+</blockquote>
+<pre><code class="language-python">class Usuario:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.puntos = 0
+
+    def sumar_puntos(self, cantidad):
+        self.puntos = self.puntos + cantidad
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-objeto-instancia">🟦 ¿Que significa? — <em>Objeto (instancia)</em></h3>
+<p>Una "cosa" concreta creada a partir de una clase. <strong>Para que sirve:</strong> tener ejemplares reales del molde. <strong>En PolyPaw:</strong> <code>u = Usuario("Edwar")</code> crea un objeto usuario con sus propios puntos.</p>
+<h3 id="que-significa-atributo">🟦 ¿Que significa? — <em>Atributo</em></h3>
+<p>Un dato guardado dentro de un objeto. <strong>Para que sirve:</strong> que cada objeto recuerde su estado. <strong>En PolyPaw:</strong> <code>u.nombre</code> y <code>u.puntos</code> son atributos del usuario.</p>
+<h3 id="que-significa-metodo">🟦 ¿Que significa? — <em>Metodo</em></h3>
+<p>Una funcion que pertenece a una clase y actua sobre el objeto. <strong>Para que sirve:</strong> darle comportamientos al objeto. <strong>En PolyPaw:</strong> <code>u.sumar_puntos(10)</code> es un metodo.</p>
+<h3 id="que-significa-self">🟦 ¿Que significa? — <em>self</em></h3>
+<p>La palabra que, dentro de una clase, se refiere al objeto concreto que esta usando el metodo. <strong>Para que sirve:</strong> acceder a los atributos de ese objeto en particular. <strong>En PolyPaw:</strong> <code>self.puntos</code> son los puntos de ese usuario, no de otro.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p><code>self</code> debe ser el <strong>primer parametro</strong> de todos los metodos de una clase, y se escribe explicitamente. En JavaScript esto era <code>this</code> y aparecia solo; en Python tienes que ponerlo a mano. Olvidarlo es un error muy comun al empezar.</p>
+<h3 id="que-significa-init-constructor">🟦 ¿Que significa? — <em><strong>init</strong> (constructor)</em></h3>
+<p>Un metodo especial que se ejecuta al crear un objeto y prepara sus atributos iniciales. <strong>Para que sirve:</strong> dejar el objeto listo para usar. <strong>En PolyPaw:</strong> <code>__init__</code> de <code>Usuario</code> pone <code>puntos = 0</code> al nacer el usuario.</p>
+</blockquote>
+<hr />
+<h2 id="8-errores-y-robustez">8. Errores y robustez</h2>
+<blockquote class="def">
+<h3 id="que-significa-excepcion">🟦 ¿Que significa? — <em>Excepcion</em></h3>
+<p>Un error que ocurre mientras el programa corre y, si no se atiende, lo detiene. <strong>Para que sirve:</strong> avisarte de que algo salio mal (un archivo que no existe, una division por cero). <strong>En PolyPaw:</strong> si falta un archivo de <code>missions/</code>, Python lanza una excepcion <code>FileNotFoundError</code>.</p>
+<h3 id="que-significa-try-except">🟦 ¿Que significa? — <em>try / except</em></h3>
+<p>Una estructura para intentar codigo que podria fallar y reaccionar si falla, sin que el programa muera. <strong>Para que sirve:</strong> manejar errores con elegancia. <strong>En PolyPaw:</strong> intentar cargar un JSON y, si esta corrupto, mostrar un mensaje en vez de cerrar la app.</p>
+</blockquote>
+<pre><code class="language-python">try:
+    datos = cargar_misiones(&quot;nahuatl&quot;)
+except FileNotFoundError:
+    print(&quot;No encontre las misiones de ese idioma&quot;)
+</code></pre>
+<p>Es el primo del <code>try/catch</code> de JavaScript; aqui se llama <code>try/except</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-traceback">🟦 ¿Que significa? — <em>Traceback</em></h3>
+<p>El reporte que Python imprime cuando un error no se atiende, mostrando donde ocurrio. <strong>Para que sirve:</strong> encontrar la linea exacta del problema. <strong>En PolyPaw:</strong> si <code>main.py</code> falla, el traceback te dice el archivo y la linea culpable.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>No le tengas miedo al traceback. Leelo <strong>de abajo hacia arriba</strong>: la ultima linea suele decir el tipo de error, y arriba esta el rastro de como se llego ahi.</p>
+</blockquote>
+<hr />
+<h2 id="9-datos-externos-json-y-flet">9. Datos externos: JSON y Flet</h2>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p>Un formato de texto para guardar datos estructurados (claves y valores), facil de leer por humanos y maquinas. <strong>Para que sirve:</strong> guardar y compartir informacion entre archivos o programas. <strong>En PolyPaw:</strong> cada archivo de <code>missions/*.json</code> guarda una mision; el modulo <code>json</code> lo convierte en un diccionario de Python.</p>
+</blockquote>
+<pre><code class="language-python">import json
+
+with open(&quot;missions/saludos.json&quot;) as archivo:
+    mision = json.load(archivo)   # ahora mision es un diccionario
+print(mision[&quot;titulo&quot;])
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>JSON y los diccionarios de Python se parecen muchisimo: ambos usan <code>clave: valor</code>. Por eso <code>json.load()</code> te devuelve un diccionario casi sin esfuerzo. En JavaScript usabas <code>JSON.parse()</code>; aqui es <code>json.load()</code> (de archivo) o <code>json.loads()</code> (de texto).</p>
+<h3 id="que-significa-flet">🟦 ¿Que significa? — <em>Flet</em></h3>
+<p>Un framework de Python para crear interfaces graficas (botones, textos, pantallas) sin escribir HTML ni CSS. <strong>Para que sirve:</strong> construir apps con ventana y botones usando solo Python. <strong>En PolyPaw:</strong> <strong>toda</strong> la interfaz (menus, lecciones, botones de respuesta) esta hecha con Flet en <code>main.py</code>.</p>
+</blockquote>
+<pre><code class="language-python">import flet as ft
+
+def main(page: ft.Page):
+    page.add(ft.Text(&quot;¡Bienvenido a PolyPaw!&quot;))
+
+ft.app(target=main)
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>A diferencia de <strong>tunal-digital</strong>, que dibuja su interfaz con HTML, CSS y JavaScript en el navegador, o de <strong>RachaSimple</strong> y <strong>Faro</strong>, que usan React, PolyPaw arma toda su pantalla con codigo Python y Flet. Mismo objetivo (una interfaz bonita), distinto camino. Por eso PolyPaw es nuestro ejemplo estrella: te muestra que con Python puro se puede hacer una app completa.</p>
+<h3 id="que-significa-with-gestor-de-contexto">🟦 ¿Que significa? — <em>with (gestor de contexto)</em></h3>
+<p>Una estructura que abre un recurso (como un archivo) y lo cierra solo al terminar, aunque haya error. <strong>Para que sirve:</strong> manejar archivos de forma segura sin olvidar cerrarlos. <strong>En PolyPaw:</strong> se usa <code>with open(...)</code> cada vez que se lee un JSON de misiones.</p>
+</blockquote>
+<hr />
+<h2 id="10-mapa-mental-de-python">10. Mapa mental de Python</h2>
+<p>Aqui tienes todo el modulo de un vistazo. Leelo de arriba hacia abajo: cada rama agrupa terminos que ya definimos.</p>
+<pre><code class="language-text">                           PYTHON (Modulo 04)
+                                  │
+   ┌──────────────┬──────────────┼──────────────┬───────────────┐
+   │              │              │              │               │
+FUNDAMENTOS   COLECCIONES     FLUJO         FUNCIONES        ESTRUCTURA
+   │              │              │              │               │
+ variable       lista          if/elif       def            modulo
+ tipo           tupla          else          parametro      paquete
+ str/int        conjunto       for           argumento      import
+ float/bool     diccionario    while         return         pip / PyPI
+ None           clave          condicion     f-string       venv
+ sangria        indice                        comprension    requirements
+ comentario
+ operador
+                                  │
+                  ┌───────────────┼────────────────┐
+                  │               │                │
+            OBJETOS (POO)      ERRORES          DATOS / UI
+                  │               │                │
+              class           excepcion          JSON
+              objeto          try/except         json.load
+              atributo        traceback          Flet
+              metodo                             with / open
+              self
+              __init__
+                                  │
+                          ┌───────┴────────┐
+                          │   PolyPaw       │
+                          │  main.py        │
+                          │  database_      │
+                          │   manager.py    │
+                          │  missions/*.json│
+                          └─────────────────┘
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_7">💡 Tip</h3>
+<p>Imprime o copia este mapa. Cuando estes programando y no recuerdes "¿como recorria una lista?", localiza la rama (FLUJO → for) y vuelve a la seccion 4. El mapa es tu indice mental.</p>
+</blockquote>
+<hr />
+<h2 id="11-repaso-final-del-modulo">11. Repaso final del modulo</h2>
+<p>Hagamos memoria juntos de lo que construiste a lo largo del Modulo 04:</p>
+<ul>
+<li>Aprendiste a guardar datos en <strong>variables</strong> y a distinguir sus <strong>tipos</strong> (<code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code>, <code>None</code>).</li>
+<li>Dominaste la <strong>sangria</strong>, que en Python reemplaza a las llaves de JavaScript.</li>
+<li>Usaste las cuatro <strong>colecciones</strong>: lista, tupla, conjunto y diccionario, y entendiste que el diccionario es la base de cada mision de PolyPaw.</li>
+<li>Tomaste decisiones con <code>if/elif/else</code> y repetiste con <code>for</code> y <code>while</code>.</li>
+<li>Creaste <strong>funciones</strong> con <code>def</code>, distinguiste <strong>parametro</strong> de <strong>argumento</strong> y devolviste resultados con <code>return</code>.</li>
+<li>Escribiste <strong>f-strings</strong> y <strong>comprensiones</strong> para hacer codigo mas limpio.</li>
+<li>Organizaste codigo en <strong>modulos</strong> y <strong>paquetes</strong>, instalaste librerias con <strong>pip</strong> y aislaste todo en un <strong>venv</strong>.</li>
+<li>Modelaste el mundo con <strong>clases</strong> y <strong>objetos</strong>, usando <strong>self</strong> y <code>__init__</code>.</li>
+<li>Manejaste errores con <strong>try/except</strong> y aprendiste a leer un <strong>traceback</strong>.</li>
+<li>Leiste datos en <strong>JSON</strong> y construiste una interfaz completa con <strong>Flet</strong>, igual que PolyPaw.</li>
+</ul>
+<p>Si lees esta lista y la mayoria te suena familiar, estas listo para avanzar. Si algo te chirria, vuelve a su seccion del glosario. No hay prisa: Bit te espera en el agua.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>Como ultimo repaso, abre PolyPaw e intenta localizar <strong>un ejemplo de cada cosa</strong> de la lista de arriba. Encontraras <code>import</code> arriba de <code>main.py</code>, diccionarios en <code>missions/*.json</code>, una clase o funciones en <code>database_manager.py</code> y componentes de Flet en la interfaz. Ver los terminos "en vivo" sella el aprendizaje.</p>
+</blockquote>
+<hr />
+<h2 id="12-como-seguir-hacia-el-modulo-05-typescript">12. Como seguir: hacia el Modulo 05 (TypeScript)</h2>
+<p>Hiciste algo grande: aprendiste un lenguaje <strong>completo</strong> y viste como se construye una app real (PolyPaw) de principio a fin con Python. Ahora, ¿hacia donde?</p>
+<p>El <strong>Modulo 05 es TypeScript</strong>, y no es casualidad. En el Modulo 03 conociste JavaScript; TypeScript es JavaScript <strong>con tipos</strong>, es decir, le agrega esas etiquetas de tipo que en Python eran implicitas. Muchas ideas que aprendiste aqui se transfieren:</p>
+<ul>
+<li><strong>Variables y tipos</strong> seran familiares; en TypeScript escribiras <code>let puntos: number = 0</code>, declarando el tipo a proposito.</li>
+<li>Las <strong>funciones</strong>, <strong>listas</strong> (arrays) y <strong>objetos</strong> (diccionarios) tienen equivalentes casi directos.</li>
+<li>La idea de organizar codigo en <strong>modulos</strong> con <code>import</code> es practicamente igual.</li>
+</ul>
+<p>Y lo mejor: vas a ver TypeScript en proyectos reales de este mismo manual. <strong>RachaSimple</strong> (React + TypeScript + Supabase) y <strong>Faro/Organizer</strong> (Next.js + React + TypeScript + Supabase + OpenAI) estan construidos con el. Despues de Python puro, daras el salto al mundo web moderno con tipos que te protegen de errores antes de ejecutar.</p>
+<blockquote class="tip">
+<h3 id="tip_8">💡 Tip</h3>
+<p>Antes de empezar TypeScript, deja descansar lo aprendido un dia o dos. El cerebro consolida mejor con pausas. Cuando vuelvas, traeras Python bien asentado y veras TypeScript con ojos mas agudos.</p>
+</blockquote>
+<p>Gracias por llegar hasta aqui. Fue un honor ser tu guia anfibia en Python. Nos vemos en el Modulo 05. — Bit 🐾</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Explico que es una <strong>variable</strong> y nombro al menos cuatro <strong>tipos</strong> de dato.</li>
+<li>[ ] Entiendo que la <strong>sangria</strong> reemplaza a las llaves <code>{}</code> y uso 4 espacios.</li>
+<li>[ ] Distingo <strong>lista</strong>, <strong>tupla</strong>, <strong>conjunto</strong> y <strong>diccionario</strong> y se cuando usar cada uno.</li>
+<li>[ ] Diferencio <strong>parametro</strong> de <strong>argumento</strong> y se que hace <strong>return</strong>.</li>
+<li>[ ] Se que son las <strong>f-strings</strong> y una <strong>comprension</strong> de lista.</li>
+<li>[ ] Explico la diferencia entre <strong>modulo</strong>, <strong>paquete</strong>, <strong>pip</strong> y <strong>venv</strong>.</li>
+<li>[ ] Entiendo <strong>clase</strong>, <strong>objeto</strong>, <strong>atributo</strong>, <strong>metodo</strong>, <strong>self</strong> y <strong><strong>init</strong></strong>.</li>
+<li>[ ] Se manejar errores con <strong>try/except</strong> y leer un <strong>traceback</strong>.</li>
+<li>[ ] Explico que es <strong>JSON</strong> y como <strong>Flet</strong> crea la interfaz de PolyPaw.</li>
+<li>[ ] Puedo leer el <strong>mapa mental</strong> y ubicar cualquier termino en su rama.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Glosario propio.</strong> Sin mirar este capitulo, escribe con tus palabras la definicion de estos cinco terminos: variable, diccionario, funcion, self y JSON. Luego comparalas con las del glosario y corrige lo que falte.</p>
+</li>
+<li>
+<p><strong>Caza de equivalencias.</strong> Para cada concepto de Python, escribe su equivalente en JavaScript: lista, diccionario, f-string, <code>import</code>, <code>try/except</code>. (Pista: array, objeto, template literal...).</p>
+</li>
+<li>
+<p>💻 <strong>Identifica en PolyPaw.</strong> Abre los archivos de PolyPaw y localiza, anotando el nombre del archivo y la linea aproximada: un <code>import</code>, un diccionario, una funcion <code>def</code> y un componente de Flet.</p>
+</li>
+<li>
+<p>💻 <strong>Mini-diccionario.</strong> Crea un archivo <code>usuario.py</code> y dentro un diccionario <code>usuario</code> con las claves <code>nombre</code>, <code>idioma</code> y <code>puntos</code>. Imprimelo con una <strong>f-string</strong> que diga: <code>"&lt;nombre&gt; aprende &lt;idioma&gt; con &lt;puntos&gt; puntos"</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Lee un JSON.</strong> Crea un archivo <code>mision.json</code> con <code>{"titulo": "Colores", "nivel": 2}</code>. Desde un <code>leer.py</code>, usa <code>with open(...)</code> y <code>json.load()</code> para cargarlo en un diccionario e imprime su titulo. Envuelvelo en un <code>try/except FileNotFoundError</code> que avise si el archivo no existe.</p>
+</li>
+<li>
+<p><strong>Mapa a mano.</strong> Dibuja de memoria el mapa mental de la seccion 10 con solo las cinco ramas principales (Fundamentos, Colecciones, Flujo, Funciones, Estructura) y cuelga al menos dos terminos de cada una. Comparalo con el original.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 13 — Flet a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-flet-a-fondo">Capítulo 13 — Flet a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>En el Capítulo 05 conociste Flet de lejos: viste que PolyPaw es una app hecha <strong>solo con
+Python</strong> y que la pantalla son objetos. Hoy bajamos al detalle. Vas a entender qué hace
+de verdad <code>main(page)</code>, qué es esa <code>page</code> que tanto se nombra, por qué hay que llamar a
+<code>page.update()</code>, cómo se colocan los controles, cómo responden a un clic y cómo se pasa de
+una pantalla a otra. Al final, leerás el <code>main.py</code> de PolyPaw sin perderte.
+Bit, nuestro ajolote, ya tiene puesto el casco: vamos a meter las manos en la interfaz.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-flet-en-serio">1. ¿Qué es Flet, en serio?</h2>
+<p>En el módulo 03 (JavaScript) y en el de HTML/CSS viste que para hacer una página web necesitas
+<strong>tres lenguajes a la vez</strong>: HTML para la estructura, CSS para el aspecto y JavaScript para el
+comportamiento. El repo <strong>tunal-digital</strong> es justo eso: un sitio en HTML/CSS/JS vanilla.</p>
+<p>Flet propone algo distinto: <strong>una sola cosa, Python, para todo</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-flet">🟦 ¿Qué significa? — <em>Flet</em></h3>
+<p><strong>Flet</strong> es un framework de Python para construir <strong>interfaces gráficas</strong> (pantallas con
+textos, botones, imágenes, listas) que funcionan en escritorio, web y móvil con el mismo
+código. Tú escribes solo Python; Flet se encarga de <strong>dibujar</strong> la interfaz y de <strong>escuchar</strong>
+lo que hace el usuario.
+<strong>¿Para qué sirve?</strong> Para crear apps con ventanas y botones sin aprender HTML, CSS ni
+JavaScript.
+<strong>¿Dónde se usa en un repo real?</strong> <strong>PolyPaw</strong>, la app de aprendizaje de idiomas, está hecha
+<strong>íntegramente</strong> con Flet. Toda su pantalla nace en <code>main.py</code>.</p>
+<h3 id="que-significa-framework">🟦 ¿Qué significa? — <em>Framework</em></h3>
+<p>Un <strong>framework</strong> es un esqueleto de programa ya construido: te da la estructura y las reglas,
+y tú rellenas lo que falta. Si una librería es una caja de herramientas que tú usas cuando
+quieres, un framework es el taller entero que te dice "tú pon tu código aquí, yo me encargo
+del resto". Flet es el framework; tu <code>main.py</code> es lo que pones dentro.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Una buena forma de pensarlo: en una web vanilla <strong>tú</strong> mueves el HTML con JavaScript. En Flet
+<strong>describes</strong> cómo se ve la pantalla con objetos de Python y Flet la pinta por ti. Cambias el
+objeto, avisas a Flet, y Flet redibuja.</p>
+</blockquote>
+<hr />
+<h2 id="2-la-estructura-minima-mainpage-y-ftapp">2. La estructura mínima: <code>main(page)</code> y <code>ft.app</code></h2>
+<p>Toda app de Flet arranca igual. Mira el patrón base:</p>
+<pre><code class="language-python">import flet as ft
+
+def main(page):
+    page.title = &quot;Mi primera app&quot;
+    page.add(ft.Text(&quot;¡Hola desde Flet!&quot;))
+
+ft.app(target=main)
+</code></pre>
+<p>Tres ideas viven aquí: la función <code>main</code>, el parámetro <code>page</code> y la llamada <code>ft.app</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-la-funcion-mainpage">🟦 ¿Qué significa? — <em>La función <code>main(page)</code></em></h3>
+<p><code>main</code> es la función que <strong>construye tu app</strong>. Flet la llama una vez, al arrancar, y le pasa
+un objeto: la página. El nombre <code>main</code> es por convención (puede ser otro), pero <strong>siempre
+recibe la página como primer parámetro</strong>.
+<strong>¿Para qué sirve?</strong> Es el punto de entrada: todo lo que quieras mostrar lo agregas aquí
+dentro.
+<strong>¿Dónde se usa en un repo real?</strong> En <code>main.py</code> de PolyPaw existe una función <code>main(page)</code>
+que prepara la ventana y muestra la primera pantalla.</p>
+<h3 id="que-significa-ftapptargetmain">🟦 ¿Qué significa? — <em><code>ft.app(target=main)</code></em></h3>
+<p><code>ft.app</code> es la orden que <strong>enciende</strong> la aplicación. El argumento <code>target=main</code> le dice a Flet
+"la función que arma mi app es <code>main</code>, llámala". Es la última línea del archivo y la que pone
+todo en marcha.
+<strong>¿Para qué sirve?</strong> Sin esta línea, definiste la función pero nadie la ejecuta; la ventana
+nunca aparecería.</p>
+<h3 id="que-significa-import-flet-as-ft">🟦 ¿Qué significa? — <em><code>import flet as ft</code></em></h3>
+<p>Esta línea trae la librería Flet y le pone el apodo corto <code>ft</code>. A partir de ahí, en vez de
+escribir <code>flet.Text(...)</code> escribes <code>ft.Text(...)</code>. Es el mismo <code>import ... as ...</code> que ya
+conoces del módulo de Python; el apodo <code>ft</code> es la costumbre de toda la comunidad Flet.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En PolyPaw, abre <code>main.py</code> y busca al final del archivo la línea que invoca <code>ft.app(...)</code>. Esa
+es la chispa: lo que la ejecuta cuando haces correr la app. Y arriba del todo verás
+<code>import flet as ft</code>, igual que en el ejemplo.</p>
+</blockquote>
+<hr />
+<h2 id="3-la-pagina-page-el-lienzo-de-tu-app">3. La página (<code>page</code>): el lienzo de tu app</h2>
+<p><code>page</code> no es una variable cualquiera. Es <strong>el objeto más importante</strong> de toda app Flet.</p>
+<blockquote class="def">
+<h3 id="que-significa-la-pagina-page">🟦 ¿Qué significa? — <em>La página (<code>page</code>)</em></h3>
+<p>La <code>page</code> es el <strong>lienzo</strong> donde vive tu interfaz: la ventana completa de la app. Es un objeto
+de Python con propiedades que puedes ajustar (título, color de fondo, alineación) y métodos
+para meter o quitar controles.
+<strong>¿Para qué sirve?</strong> Es tu mando a distancia de la ventana: todo lo que el usuario ve está,
+directa o indirectamente, dentro de <code>page</code>.
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, <code>main(page)</code> configura <code>page.title</code>, agrega los
+controles iniciales y se va pasando a otras funciones para que cada pantalla pueda dibujarse.</p>
+</blockquote>
+<p>Algunas propiedades típicas de la página:</p>
+<pre><code class="language-python">def main(page):
+    page.title = &quot;PolyPaw&quot;              # texto de la barra de la ventana
+    page.bgcolor = &quot;#0f172a&quot;            # color de fondo
+    page.horizontal_alignment = &quot;center&quot;  # centra los controles a lo ancho
+    page.vertical_alignment = &quot;center&quot;    # centra a lo alto
+    page.add(ft.Text(&quot;Aprende idiomas con Balam y Andy&quot;))
+
+ft.app(target=main)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-pageadd">🟦 ¿Qué significa? — <em><code>page.add(...)</code></em></h3>
+<p><code>page.add(control)</code> <strong>mete un control dentro de la página</strong>. Le pasas un objeto (un <code>Text</code>, un
+botón, una columna) y aparece en pantalla.
+<strong>¿Para qué sirve?</strong> Es la forma más directa de mostrar algo. Si comparas con la web: es
+parecido a hacer <code>appendChild</code> en JavaScript, pero aquí agregas objetos de Python, no nodos de
+HTML.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p><code>page.add(...)</code> ya redibuja la pantalla por ti. Pero cuando <strong>modifiques</strong> algo que ya estaba
+(cambiar un texto, ocultar un botón), <code>add</code> no basta: ahí entra <code>page.update()</code>, que vemos
+ahora mismo.</p>
+</blockquote>
+<hr />
+<h2 id="4-pageupdate-avisar-para-que-se-redibuje">4. <code>page.update()</code>: avisar para que se redibuje</h2>
+<p>Este es el concepto que más confunde al principio, así que vamos despacio.</p>
+<blockquote class="def">
+<h3 id="que-significa-pageupdate">🟦 ¿Qué significa? — <em><code>page.update()</code></em></h3>
+<p><code>page.update()</code> le dice a Flet: "cambié algo de la pantalla, <strong>vuelve a dibujarla</strong>". Tú
+modificas las propiedades de los controles en Python (por ejemplo <code>texto.value = "Nuevo"</code>) y
+esos cambios <strong>no se ven</strong> hasta que llamas a <code>update()</code>.
+<strong>¿Para qué sirve?</strong> Para refrescar la interfaz tras un cambio. Es el "guardar y mostrar" de
+Flet.
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, cada vez que respondes una pregunta de una
+misión y el marcador sube, hay que llamar a <code>update()</code> para que el número nuevo aparezca.</p>
+</blockquote>
+<p>Mira la diferencia. Esto <strong>no funciona</strong> como esperas:</p>
+<pre><code class="language-python">def main(page):
+    texto = ft.Text(&quot;Cuenta: 0&quot;)
+    page.add(texto)
+    texto.value = &quot;Cuenta: 1&quot;   # cambiaste el objeto...
+    # ...pero nunca avisaste a Flet, así que en pantalla sigue diciendo &quot;Cuenta: 0&quot;
+</code></pre>
+<p>Esto <strong>sí</strong>:</p>
+<pre><code class="language-python">def main(page):
+    texto = ft.Text(&quot;Cuenta: 0&quot;)
+    page.add(texto)
+    texto.value = &quot;Cuenta: 1&quot;
+    page.update()   # ahora Flet redibuja y se ve &quot;Cuenta: 1&quot;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Regla mental de oro: <strong>"cambié algo → llamo a <code>update()</code>"</strong>. Si tocaste el <code>value</code>, el color o
+la visibilidad de un control que ya estaba en pantalla, termina con <code>page.update()</code>. Si te
+olvidas, lo más típico es "mi código está bien pero la pantalla no se mueve". Casi siempre es
+un <code>update()</code> que falta.</p>
+<h3 id="que-significa-renderizar-redibujar">🟦 ¿Qué significa? — <em>Renderizar (redibujar)</em></h3>
+<p><strong>Renderizar</strong> es el acto de convertir tus objetos de Python en píxeles reales en la pantalla.
+Flet renderiza al iniciar y cada vez que llamas a <code>update()</code>. Tú no dibujas a mano: describes
+y Flet renderiza.</p>
+</blockquote>
+<hr />
+<h2 id="5-los-controles-principales">5. Los controles principales</h2>
+<p>Recordemos: en Flet <strong>cada elemento de la pantalla es un control</strong>, un objeto de Python.</p>
+<blockquote class="def">
+<h3 id="que-significa-control">🟦 ¿Qué significa? — <em>Control</em></h3>
+<p>Un <strong>control</strong> es un objeto que representa una pieza de la interfaz: un texto, un campo para
+escribir, un botón, una fila, una columna o una caja. Construyes la pantalla <strong>creando estos
+objetos y combinándolos</strong>.</p>
+</blockquote>
+<p>Vamos uno por uno con los más usados.</p>
+<h3 id="51-text-mostrar-texto">5.1 <code>Text</code> — mostrar texto</h3>
+<blockquote class="def">
+<h3 id="que-significa-fttext">🟦 ¿Qué significa? — <em><code>ft.Text</code></em></h3>
+<p><code>ft.Text("...")</code> crea un control que <strong>muestra texto</strong> en pantalla. Su propiedad principal es
+<code>value</code> (lo que dice) y acepta extras como <code>size</code> (tamaño) o <code>color</code>.
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, los enunciados de cada misión y la puntuación
+son controles <code>Text</code>.</p>
+</blockquote>
+<pre><code class="language-python">titulo = ft.Text(&quot;Misión 1: Saludos&quot;, size=24, color=&quot;white&quot;)
+titulo.value = &quot;Misión 2: Comida&quot;   # luego puedes cambiar lo que dice (+ page.update())
+</code></pre>
+<h3 id="52-textfield-recibir-texto-del-usuario">5.2 <code>TextField</code> — recibir texto del usuario</h3>
+<blockquote class="def">
+<h3 id="que-significa-fttextfield">🟦 ¿Qué significa? — <em><code>ft.TextField</code></em></h3>
+<p><code>ft.TextField</code> es una <strong>caja donde el usuario escribe</strong>. Su propiedad <code>label</code> pone una
+etiqueta y <code>value</code> guarda lo que el usuario tecleó.
+<strong>¿Para qué sirve?</strong> Para pedir datos: un nombre, una respuesta, una traducción.
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, cuando una misión pide que el usuario escriba
+la palabra correcta, ese cuadro es un <code>TextField</code>.</p>
+</blockquote>
+<pre><code class="language-python">respuesta = ft.TextField(label=&quot;Escribe la traducción&quot;)
+# más tarde, en un botón, lees lo que puso:
+texto_escrito = respuesta.value
+</code></pre>
+<h3 id="53-elevatedbutton-un-boton-que-se-pulsa">5.3 <code>ElevatedButton</code> — un botón que se pulsa</h3>
+<blockquote class="def">
+<h3 id="que-significa-ftelevatedbutton">🟦 ¿Qué significa? — <em><code>ft.ElevatedButton</code></em></h3>
+<p><code>ft.ElevatedButton("texto")</code> crea un <strong>botón con relieve</strong>. Su propiedad clave es <code>on_click</code>:
+la función que se ejecuta al pulsarlo (lo vemos en la sección de eventos).
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, los botones "Comprobar", "Siguiente" o el de
+elegir idioma son <code>ElevatedButton</code>.</p>
+</blockquote>
+<pre><code class="language-python">boton = ft.ElevatedButton(&quot;Comprobar&quot;)
+</code></pre>
+<h3 id="54-column-y-row-apilar-y-alinear">5.4 <code>Column</code> y <code>Row</code> — apilar y alinear</h3>
+<blockquote class="def">
+<h3 id="que-significa-ftcolumn-y-ftrow">🟦 ¿Qué significa? — <em><code>ft.Column</code> y <code>ft.Row</code></em></h3>
+<p><code>ft.Column</code> apila controles <strong>en vertical</strong> (uno debajo de otro). <code>ft.Row</code> los pone <strong>en
+horizontal</strong> (uno al lado de otro). A ambos les pasas una <strong>lista de controles</strong>.
+Si vienes del módulo de CSS: es la misma idea que <strong>Flexbox</strong>, pero escrita en Python.</p>
+</blockquote>
+<pre><code class="language-python">ft.Column([
+    ft.Text(&quot;¿Cómo se dice 'hola' en maya?&quot;),
+    ft.TextField(label=&quot;Tu respuesta&quot;),
+    ft.Row([
+        ft.ElevatedButton(&quot;Comprobar&quot;),
+        ft.ElevatedButton(&quot;Saltar&quot;),
+    ]),
+])
+</code></pre>
+<p>Aquí los dos botones quedan lado a lado (van en una <code>Row</code>), y esa fila queda debajo del texto y
+del campo (porque todo está dentro de una <code>Column</code>).</p>
+<h3 id="55-container-la-caja-que-envuelve-y-decora">5.5 <code>Container</code> — la caja que envuelve y decora</h3>
+<blockquote class="def">
+<h3 id="que-significa-ftcontainer">🟦 ¿Qué significa? — <em><code>ft.Container</code></em></h3>
+<p>Un <code>ft.Container</code> es una <strong>caja</strong> que envuelve un control (o un grupo) y le da estilo: color de
+fondo (<code>bgcolor</code>), márgenes internos (<code>padding</code>), bordes redondeados o alineación interna.
+<strong>¿Para qué sirve?</strong> Para dar espacio y aspecto. Es el primo de la etiqueta <code>&lt;div&gt;</code> de HTML
+con su CSS, pero en Python.
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, las tarjetas de cada misión suelen ser un
+<code>Container</code> con fondo y padding alrededor del contenido.</p>
+</blockquote>
+<pre><code class="language-python">tarjeta = ft.Container(
+    content=ft.Text(&quot;Lección de hoy&quot;),
+    bgcolor=&quot;#1e293b&quot;,
+    padding=20,
+    border_radius=12,
+)
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Un <code>Container</code> envuelve <strong>un solo</strong> <code>content</code>. Si quieres meter varios controles dentro, pon
+primero una <code>Column</code> o una <code>Row</code> como su <code>content</code>, y dentro de esa la lista de controles.</p>
+</blockquote>
+<hr />
+<h2 id="6-layout-alineacion-y-espaciado">6. Layout: alineación y espaciado</h2>
+<blockquote class="def">
+<h3 id="que-significa-layout-disposicion">🟦 ¿Qué significa? — <em>Layout (disposición)</em></h3>
+<p>El <strong>layout</strong> es <strong>cómo se acomodan</strong> los controles en la pantalla: dónde se centran, cuánto
+espacio hay entre ellos, qué tan separados de los bordes están. En Flet se controla con
+propiedades de <code>Column</code>, <code>Row</code>, <code>Container</code> y de la propia <code>page</code>.</p>
+</blockquote>
+<p>Las dos propiedades de alineación que más usarás:</p>
+<blockquote class="def">
+<h3 id="que-significa-alignment-y-horizontal_alignment">🟦 ¿Qué significa? — <em><code>alignment</code> y <code>horizontal_alignment</code></em></h3>
+<p>En una <code>Column</code>, <code>alignment</code> controla la posición <strong>vertical</strong> (arriba, centro, abajo) y
+<code>horizontal_alignment</code> la posición <strong>a lo ancho</strong>. En una <code>Row</code> es al revés. Se usan con
+valores de Flet como <code>ft.MainAxisAlignment.CENTER</code>.</p>
+</blockquote>
+<pre><code class="language-python">ft.Column(
+    [
+        ft.Text(&quot;Bienvenido a PolyPaw&quot;),
+        ft.ElevatedButton(&quot;Empezar&quot;),
+    ],
+    alignment=ft.MainAxisAlignment.CENTER,            # centrado vertical
+    horizontal_alignment=ft.CrossAxisAlignment.CENTER, # centrado horizontal
+    spacing=20,                                        # separación entre controles
+)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-spacing-y-padding">🟦 ¿Qué significa? — <em><code>spacing</code> y <code>padding</code></em></h3>
+<p><code>spacing</code> es el <strong>hueco entre</strong> los controles de una <code>Column</code> o <code>Row</code>. <code>padding</code> es el
+<strong>margen interno</strong> dentro de un <code>Container</code> (entre el borde de la caja y su contenido).
+Si recuerdas el "modelo de caja" de CSS, es exactamente la misma intuición.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Para centrar toda tu app en mitad de la ventana, lo más cómodo es ajustar
+<code>page.horizontal_alignment</code> y <code>page.vertical_alignment</code> directamente. Así no tienes que
+centrar control por control.</p>
+</blockquote>
+<hr />
+<h2 id="7-eventos-que-la-app-reaccione-on_click">7. Eventos: que la app reaccione (<code>on_click</code>)</h2>
+<p>Una pantalla bonita pero muerta no sirve. Necesitamos que <strong>responda</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-evento">🟦 ¿Qué significa? — <em>Evento</em></h3>
+<p>Un <strong>evento</strong> es algo que ocurre en la app: un clic, un texto que cambia, una tecla. Tú
+"escuchas" un evento conectándole una <strong>función</strong> que se ejecuta cuando sucede. Es la misma
+idea de los <em>event listeners</em> del módulo de JavaScript, pero en Python.</p>
+<h3 id="que-significa-on_click">🟦 ¿Qué significa? — <em><code>on_click</code></em></h3>
+<p><code>on_click</code> es la propiedad de un botón donde pones <strong>qué función llamar al pulsarlo</strong>. Flet,
+al producirse el clic, ejecuta esa función y le pasa un objeto con datos del evento (por
+convención lo llamamos <code>e</code>).
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, el botón "Comprobar" tiene un <code>on_click</code> que
+revisa la respuesta y actualiza el marcador.</p>
+<h3 id="que-significa-manejador-de-evento-handler">🟦 ¿Qué significa? — <em>Manejador de evento (handler)</em></h3>
+<p>El <strong>manejador</strong> es la función que responde a un evento. Recibe un parámetro (normalmente <code>e</code>,
+de <em>event</em>) con la información de lo que pasó.</p>
+</blockquote>
+<p>Ejemplo completo y mínimo: un contador.</p>
+<pre><code class="language-python">import flet as ft
+
+def main(page):
+    page.title = &quot;Contador&quot;
+    cuenta = 0
+    marcador = ft.Text(f&quot;Clics: {cuenta}&quot;, size=20)
+
+    def sumar(e):                 # este es el manejador
+        nonlocal cuenta           # quiero modificar la variable de fuera
+        cuenta += 1
+        marcador.value = f&quot;Clics: {cuenta}&quot;
+        page.update()             # avisar para redibujar
+
+    boton = ft.ElevatedButton(&quot;Sumar&quot;, on_click=sumar)
+
+    page.add(marcador, boton)
+
+ft.app(target=main)
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>En <code>on_click=sumar</code> se escribe el nombre de la función <strong>sin paréntesis</strong>. Si pusieras
+<code>on_click=sumar()</code>, Python la ejecutaría <strong>inmediatamente</strong> y le pasaría a <code>on_click</code> el
+resultado (probablemente <code>None</code>), no la función. Le entregas la función para que Flet la llame
+luego, no el resultado de llamarla ahora.</p>
+<h3 id="que-significa-nonlocal">🟦 ¿Qué significa? — <em><code>nonlocal</code></em></h3>
+<p><code>nonlocal</code> le dice a una función interna: "la variable <code>cuenta</code> <strong>no es nueva</strong>, es la de la
+función de afuera; déjame modificarla". Sin <code>nonlocal</code>, Python crearía una <code>cuenta</code> local y la
+de fuera no cambiaría. Lo necesitas cuando un manejador modifica una variable definida en
+<code>main</code>.</p>
+</blockquote>
+<hr />
+<h2 id="8-manejar-el-estado-de-la-interfaz">8. Manejar el estado de la interfaz</h2>
+<blockquote class="def">
+<h3 id="que-significa-estado-state">🟦 ¿Qué significa? — <em>Estado (state)</em></h3>
+<p>El <strong>estado</strong> son los <strong>datos que tu app recuerda y que cambian con el tiempo</strong>: la puntuación
+actual, qué misión estás resolviendo, qué idioma elegiste. Cuando el estado cambia, la
+pantalla debe reflejarlo.
+<strong>¿Dónde se usa en un repo real?</strong> En PolyPaw, el estado incluye el progreso del usuario y la
+misión activa; al avanzar, esos datos cambian y la pantalla se actualiza.</p>
+</blockquote>
+<p>El ciclo en Flet es siempre el mismo, y conviene memorizarlo:</p>
+<ol>
+<li>Guardas el estado en variables de Python (<code>cuenta = 0</code>, <code>mision_actual = 1</code>).</li>
+<li>Un evento (clic) cambia ese estado.</li>
+<li>Actualizas los controles que dependen de ese estado (<code>marcador.value = ...</code>).</li>
+<li>Llamas a <code>page.update()</code> para que se vea.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Si vienes de React (lo verás en el módulo 06, y RachaSimple y Faro lo usan), notarás algo: en
+React la pantalla <strong>se redibuja sola</strong> cuando cambia el estado. En Flet, en cambio, <strong>tú</strong>
+avisas con <code>page.update()</code>. Más manual, pero más fácil de seguir paso a paso.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>PolyPaw guarda los datos de las misiones en <strong>archivos JSON</strong> (carpeta <code>missions/</code>). Un módulo
+aparte, <code>database_manager.py</code>, se encarga de <strong>leer y escribir</strong> esos datos. Esa es una idea
+clave: el estado del <em>contenido</em> (las misiones, el progreso) vive en JSON y en Python, no
+"dentro" de los controles. Los controles solo <strong>muestran</strong> lo que el estado dice en cada
+momento.</p>
+<h3 id="que-significa-database_managerpy">🟦 ¿Qué significa? — <em><code>database_manager.py</code></em></h3>
+<p>En PolyPaw, <code>database_manager.py</code> es el módulo que <strong>gestiona los datos</strong>: abre los archivos
+JSON de <code>missions/</code>, devuelve la información de cada misión y guarda el progreso. Separar esto
+de la interfaz mantiene el código ordenado: <code>main.py</code> dibuja, <code>database_manager.py</code> recuerda.</p>
+</blockquote>
+<hr />
+<h2 id="9-navegacion-entre-pantallas">9. Navegación entre pantallas</h2>
+<p>Una app real tiene varias pantallas: inicio, elegir idioma, misión, resultados. ¿Cómo se pasa
+de una a otra en Flet?</p>
+<blockquote class="def">
+<h3 id="que-significa-navegacion">🟦 ¿Qué significa? — <em>Navegación</em></h3>
+<p>La <strong>navegación</strong> es el paso de una pantalla a otra dentro de la app. En Flet, la técnica más
+sencilla para principiantes es: <strong>borrar lo que hay en la página y dibujar la pantalla nueva</strong>.</p>
+<h3 id="que-significa-pagecontrols-y-pageclean">🟦 ¿Qué significa? — <em><code>page.controls</code> y <code>page.clean()</code></em></h3>
+<p><code>page.controls</code> es la <strong>lista</strong> de todos los controles que hay ahora mismo en la página.
+<code>page.clean()</code> la <strong>vacía</strong> (quita todo lo que se ve). Combinadas con <code>page.add(...)</code>, te
+permiten reemplazar una pantalla entera por otra.</p>
+</blockquote>
+<p>Patrón clásico: una función por pantalla.</p>
+<pre><code class="language-python">import flet as ft
+
+def main(page):
+    page.title = &quot;PolyPaw&quot;
+
+    def mostrar_inicio():
+        page.clean()                      # borra lo anterior
+        page.add(
+            ft.Text(&quot;PolyPaw&quot;, size=30),
+            ft.ElevatedButton(&quot;Empezar misión&quot;, on_click=ir_a_mision),
+        )
+        page.update()
+
+    def mostrar_mision():
+        page.clean()
+        page.add(
+            ft.Text(&quot;Misión 1: Saludos&quot;, size=24),
+            ft.TextField(label=&quot;Traduce 'hola'&quot;),
+            ft.ElevatedButton(&quot;Volver al inicio&quot;, on_click=ir_a_inicio),
+        )
+        page.update()
+
+    def ir_a_mision(e):
+        mostrar_mision()
+
+    def ir_a_inicio(e):
+        mostrar_inicio()
+
+    mostrar_inicio()   # arrancamos en la pantalla de inicio
+
+ft.app(target=main)
+</code></pre>
+<p>Cada pantalla es <strong>una función</strong> que limpia la página y dibuja lo suyo. Los botones de una
+pantalla llaman a la función de otra. Así de simple es saltar entre vistas.</p>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Fíjate en el truco: <code>ir_a_mision(e)</code> recibe el <code>e</code> del clic (Flet siempre lo pasa) y por
+dentro llama a <code>mostrar_mision()</code>, que <strong>no</strong> necesita <code>e</code>. Separar el manejador (que recibe
+<code>e</code>) de la función que dibuja (que no lo necesita) mantiene todo limpio y reutilizable.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Si después de <code>page.clean()</code> y <code>page.add(...)</code> se te olvida <code>page.update()</code>, la pantalla se
+queda en blanco o congelada. Otra vez la regla de oro: cambiaste algo, llama a <code>update()</code>.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Para Flet más avanzado existe un sistema de rutas con <code>page.go(...)</code> y vistas. PolyPaw, siendo
+una app de aprendizaje, se entiende muy bien con el patrón "una función por pantalla" que
+acabas de ver. Cuando leas <code>main.py</code>, busca funciones cuyo nombre empiece por <code>mostrar_</code>,
+<code>pantalla_</code> o similar: cada una arma una vista.</p>
+</blockquote>
+<hr />
+<h2 id="10-como-se-arma-la-interfaz-real-de-polypaw">10. Cómo se arma la interfaz real de PolyPaw</h2>
+<p>Juntemos todo en un mapa mental de cómo encaja PolyPaw, la app de idiomas hecha 100% en Python
+con Flet:</p>
+<ul>
+<li><strong><code>main.py</code></strong> es el corazón. Tiene la función <code>main(page)</code> y la línea <code>ft.app(target=main)</code>
+  al final. Configura la <code>page</code> (título, colores) y muestra la primera pantalla.</li>
+<li>Las <strong>pantallas</strong> se arman combinando los controles que ya conoces: <code>Text</code> para enunciados,
+  <code>TextField</code> para respuestas, <code>ElevatedButton</code> para acciones, todo organizado con <code>Column</code>,
+  <code>Row</code> y <code>Container</code>.</li>
+<li>Los <strong>eventos</strong> (<code>on_click</code>) conectan los botones con funciones que comprueban respuestas,
+  suben la puntuación y navegan a la siguiente misión.</li>
+<li>El <strong>estado</strong> (progreso, misión actual) vive en variables de Python y, de forma persistente,
+  en los <strong>archivos JSON</strong> de <code>missions/</code>, gestionados por <strong><code>database_manager.py</code></strong>.</li>
+<li>Cada cambio visible termina con <strong><code>page.update()</code></strong>.</li>
+</ul>
+<blockquote class="code">
+<h3 id="en-tu-codigo_3">🔎 En tu código</h3>
+<p>Recorrido sugerido para leer PolyPaw con lo aprendido hoy: (1) abre <code>main.py</code> y localiza
+<code>main(page)</code> y <code>ft.app(...)</code>; (2) identifica dónde se crean los controles de la primera
+pantalla; (3) sigue un <code>on_click</code> hasta su función manejadora; (4) mira cómo esa función pide
+datos a <code>database_manager.py</code> (que lee de <code>missions/*.json</code>) y cómo cierra con <code>page.update()</code>.
+Con ese recorrido entiendes la app completa.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>Compara con los otros repos del manual para ver por qué Flet es especial: <strong>tunal-digital</strong> es
+HTML/CSS/JS; <strong>RachaSimple</strong> es React + TypeScript; <strong>Faro/Organizer</strong> es Next.js + React +
+TypeScript. Todos esos usan tecnologías web. <strong>PolyPaw es el único que hace una app completa
+con interfaz usando solo Python</strong>, gracias a Flet. Ese es su superpoder.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé explicar qué es Flet y por qué deja hacer interfaces sin HTML/CSS/JS.</li>
+<li>[ ] Entiendo qué hace la función <code>main(page)</code> y para qué sirve <code>ft.app(target=main)</code>.</li>
+<li>[ ] Sé qué es la <code>page</code> y nombro tres propiedades suyas.</li>
+<li>[ ] Tengo clarísima la regla de oro: cambié algo → llamo a <code>page.update()</code>.</li>
+<li>[ ] Reconozco y sé usar <code>Text</code>, <code>TextField</code>, <code>ElevatedButton</code>, <code>Column</code>, <code>Row</code> y <code>Container</code>.</li>
+<li>[ ] Puedo centrar y espaciar controles con <code>alignment</code>, <code>spacing</code> y <code>padding</code>.</li>
+<li>[ ] Sé conectar un botón a una función con <code>on_click</code> (sin paréntesis) y entiendo <code>nonlocal</code>.</li>
+<li>[ ] Comprendo qué es el estado y el ciclo cambiar estado → actualizar control → <code>update()</code>.</li>
+<li>[ ] Sé navegar entre pantallas con <code>page.clean()</code> + <code>page.add(...)</code> + <code>page.update()</code>.</li>
+<li>[ ] Puedo ubicar en <code>main.py</code> de PolyPaw el <code>main(page)</code>, un control y un <code>on_click</code>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>(En papel)</strong> Explica con tus palabras la diferencia entre <code>page.add(...)</code> y <code>page.update()</code>.
+   ¿Cuándo basta solo con <code>add</code> y cuándo necesitas <code>update</code>?</p>
+</li>
+<li>
+<p>💻 Escribe la app mínima de Flet: importa Flet, crea <code>main(page)</code>, ponle un título a la
+   página, agrega un <code>Text</code> que diga "Hola, soy Bit" y enciéndela con <code>ft.app(target=main)</code>.</p>
+</li>
+<li>
+<p>💻 Construye un contador como el de la sección 7, pero con <strong>dos botones</strong>: uno que sume y
+   otro que reste. Acuérdate de <code>nonlocal</code> y de <code>page.update()</code> en cada manejador.</p>
+</li>
+<li>
+<p>💻 Arma una pantalla de "registro": un <code>TextField</code> con etiqueta "Tu nombre" y un
+   <code>ElevatedButton</code> "Saludar". Al pulsarlo, un <code>Text</code> debe cambiar para decir "¡Hola, <nombre>!"
+   usando el <code>value</code> del <code>TextField</code>.</p>
+</li>
+<li>
+<p>💻 Crea dos pantallas con el patrón "una función por pantalla": <code>mostrar_inicio()</code> con un
+   botón "Ir a misión" y <code>mostrar_mision()</code> con un botón "Volver". Comprueba que puedes ir y
+   volver sin que la pantalla se quede en blanco.</p>
+</li>
+<li>
+<p>💻 Abre el <code>main.py</code> de PolyPaw (o léelo en el repo) y localiza: dónde se llama a
+   <code>ft.app(...)</code>, un control <code>Text</code>, un <code>on_click</code> y, si lo encuentras, una llamada a
+   <code>database_manager.py</code>. Anota en una lista qué hace cada uno. (No hace falta que lo modifiques;
+   el objetivo es <strong>leer</strong> y entender.)</p>
+</li>
+</ol>
+<blockquote>
+<p>Bit te choca la patita: hoy pasaste de "ver" Flet a <strong>entender cómo respira</strong> una app real.
+Con <code>main(page)</code>, los controles, los eventos y <code>page.update()</code> ya tienes las cuatro patas de
+la mesa. Lo demás es práctica.</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

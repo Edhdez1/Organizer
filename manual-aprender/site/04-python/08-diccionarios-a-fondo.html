@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 08 — Diccionarios a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-08-diccionarios-a-fondo">Capitulo 08 — Diccionarios a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola, soy Bit, tu ajolote guia. En el capitulo anterior aprendiste a guardar muchas cosas en orden con las listas. Hoy damos un salto que lo cambia todo: vamos a guardar cosas <strong>con nombre</strong>. En vez de decir "el elemento numero 3 de la lista", vas a decir "el campo <code>nombre</code>" o "el campo <code>puntos</code>". Eso es un <strong>diccionario</strong>, y es la estructura con la que esta construido casi todo PolyPaw por dentro: el perfil del usuario, las misiones, la configuracion... todo. Respira hondo, mueve las branquias y vamos.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-problema-resuelve-un-diccionario">1. ¿Que problema resuelve un diccionario?</h2>
+<p>Imagina que quieres guardar los datos de un usuario de PolyPaw: su nombre, su idioma, sus puntos y su nivel. Con lo que sabes hasta ahora podrias usar una lista:</p>
+<pre><code class="language-python">usuario = [&quot;Edwar&quot;, &quot;ingles&quot;, 1500, 3]
+</code></pre>
+<p>El problema salta enseguida: ¿que es el <code>1500</code>? ¿Y el <code>3</code>? Tienes que <strong>recordar de memoria</strong> que la posicion 2 son los puntos y la 3 el nivel. Si manana agregas un dato en medio, todas las posiciones se mueven y se rompe tu codigo. Es fragil y confuso.</p>
+<p>Un diccionario resuelve esto poniendo una <strong>etiqueta</strong> a cada dato:</p>
+<pre><code class="language-python">usuario = {
+    &quot;nombre&quot;: &quot;Edwar&quot;,
+    &quot;idioma&quot;: &quot;ingles&quot;,
+    &quot;puntos&quot;: 1500,
+    &quot;nivel&quot;: 3,
+}
+</code></pre>
+<p>Ahora se lee solo. <code>usuario["puntos"]</code> es 1500, sin contar posiciones. Esto es exactamente lo que hace PolyPaw para representar al estudiante.</p>
+<blockquote class="def">
+<h3 id="que-significa-diccionario">🟦 ¿Que significa? — <em>Diccionario</em></h3>
+<p>Un <strong>diccionario</strong> es una coleccion que guarda parejas de <strong>clave</strong> y <strong>valor</strong>. La clave es la etiqueta (como <code>"nombre"</code>) y el valor es el dato que esa etiqueta guarda (como <code>"Edwar"</code>). Sirve para almacenar informacion donde cada dato tiene un significado claro y lo buscas por su nombre, no por su posicion. En PolyPaw, el perfil del usuario y cada mision son diccionarios; cuando <code>database_manager.py</code> lee un archivo JSON, lo convierte en un diccionario de Python.</p>
+<h3 id="que-significa-clave-y-valor">🟦 ¿Que significa? — <em>Clave y valor</em></h3>
+<p>La <strong>clave</strong> (en ingles <em>key</em>) es el nombre que identifica un dato dentro del diccionario; el <strong>valor</strong> (<em>value</em>) es el dato en si. En <code>"puntos": 1500</code>, la clave es <code>"puntos"</code> y el valor es <code>1500</code>. Las claves suelen ser texto (cadenas) y deben ser unicas: no puede haber dos claves <code>"puntos"</code> en el mismo diccionario. Sirve para que cada pieza de informacion tenga una direccion con nombre.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Fijate en las <strong>llaves</strong> <code>{ }</code>. Las listas usan corchetes <code>[ ]</code>, las tuplas usan parentesis <code>( )</code>, y los diccionarios usan llaves <code>{ }</code> con parejas <code>clave: valor</code>. Esa pareja separada por dos puntos es la marca registrada del diccionario.</p>
+</blockquote>
+<p>Si vienes del modulo de JavaScript, esto te va a sonar muchisimo: un diccionario de Python es practicamente lo mismo que un <strong>objeto</strong> de JavaScript (<code>{ nombre: "Edwar" }</code>). La diferencia mas visible es que en Python las claves van casi siempre entre comillas (<code>"nombre"</code>).</p>
+<hr />
+<h2 id="2-crear-y-leer-un-diccionario">2. Crear y leer un diccionario</h2>
+<p>Crear uno es escribir las parejas entre llaves. Tambien puedes empezar con uno vacio y llenarlo despues:</p>
+<pre><code class="language-python"># Diccionario con datos desde el inicio
+mision = {
+    &quot;id&quot;: &quot;saludos_01&quot;,
+    &quot;titulo&quot;: &quot;Saludos basicos&quot;,
+    &quot;idioma&quot;: &quot;ingles&quot;,
+    &quot;puntos&quot;: 50,
+}
+
+# Diccionario vacio que llenamos despues
+progreso = {}
+progreso[&quot;misiones_completadas&quot;] = 0
+progreso[&quot;racha&quot;] = 1
+</code></pre>
+<p>Para <strong>leer</strong> un valor, escribes el diccionario seguido de la clave entre corchetes:</p>
+<pre><code class="language-python">print(mision[&quot;titulo&quot;])   # Saludos basicos
+print(mision[&quot;puntos&quot;])   # 50
+</code></pre>
+<p>Para <strong>cambiar</strong> un valor o <strong>agregar</strong> uno nuevo, usas la misma sintaxis pero con un <code>=</code>:</p>
+<pre><code class="language-python">mision[&quot;puntos&quot;] = 75          # cambia un valor existente
+mision[&quot;dificultad&quot;] = &quot;facil&quot; # agrega una clave nueva
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pides una clave que <strong>no existe</strong> con corchetes, Python lanza un error y el programa se detiene:
+<code>python
+print(mision["autor"])   # KeyError: 'autor'</code>
+Ese <code>KeyError</code> significa "no encontre esa clave". En la siguiente seccion veras la forma segura de evitarlo.</p>
+<h3 id="que-significa-keyerror">🟦 ¿Que significa? — <em>KeyError</em></h3>
+<p>Un <strong>KeyError</strong> es el error que Python muestra cuando intentas leer una clave que no esta en el diccionario. "Key" es clave en ingles y "Error" es error. Sirve como aviso de que pediste algo que no existe. En una app real como PolyPaw, un <code>KeyError</code> no atendido puede tumbar la pantalla del usuario, por eso conviene leer las claves de forma segura.</p>
+</blockquote>
+<hr />
+<h2 id="3-acceso-seguro-con-get">3. Acceso seguro con <code>.get()</code></h2>
+<p>A veces no estas seguro de si una clave existe. Por ejemplo, un usuario nuevo de PolyPaw quizas todavia no tiene el campo <code>"racha"</code>. Para esos casos usas <code>.get()</code> en lugar de los corchetes.</p>
+<pre><code class="language-python">usuario = {&quot;nombre&quot;: &quot;Edwar&quot;, &quot;puntos&quot;: 1500}
+
+# Con corchetes, esto reventaria:
+# print(usuario[&quot;racha&quot;])   # KeyError
+
+# Con .get() devuelve None si no existe, sin error:
+print(usuario.get(&quot;racha&quot;))        # None
+</code></pre>
+<p>Lo mas util es que puedes dar un <strong>valor por defecto</strong>: si la clave no existe, <code>.get()</code> te devuelve lo que tu indiques en vez de <code>None</code>.</p>
+<pre><code class="language-python">racha = usuario.get(&quot;racha&quot;, 0)
+print(racha)   # 0  -&gt; usuario nuevo, asumimos racha cero
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-metodo-get">🟦 ¿Que significa? — <em>Metodo <code>.get()</code></em></h3>
+<p>El <strong>metodo <code>.get()</code></strong> es una herramienta del diccionario que busca una clave y devuelve su valor; si la clave no existe, devuelve <code>None</code> (o el valor por defecto que le pases como segundo argumento) en lugar de provocar un error. Sirve para leer datos que <strong>podrian no estar</strong> sin arriesgarte a un <code>KeyError</code>. PolyPaw lo usa para leer campos opcionales del perfil, como configuraciones que un usuario nuevo aun no ha tocado.</p>
+<h3 id="que-significa-valor-por-defecto">🟦 ¿Que significa? — <em>Valor por defecto</em></h3>
+<p>Un <strong>valor por defecto</strong> es el valor que se usa cuando no hay otro disponible. En <code>usuario.get("racha", 0)</code>, ese <code>0</code> es el valor por defecto: "si no hay racha guardada, considerala 0". Sirve para que tu programa siempre tenga algo razonable con que trabajar y no se quede con un <code>None</code> que despues cause problemas.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Regla practica: usa <strong>corchetes</strong> <code>[ ]</code> cuando estes seguro de que la clave existe (porque tu mismo la creaste), y usa <strong><code>.get()</code></strong> cuando el dato venga de afuera (un archivo JSON, lo que escribio el usuario, una respuesta de internet) y no tengas garantia de que este.</p>
+</blockquote>
+<p>En JavaScript, leer una propiedad ausente te da <code>undefined</code> sin reventar; en Python los corchetes <strong>si</strong> revientan, por eso <code>.get()</code> es tan importante.</p>
+<hr />
+<h2 id="4-recorrer-un-diccionario-items-keys-values">4. Recorrer un diccionario: <code>.items()</code>, <code>.keys()</code>, <code>.values()</code></h2>
+<p>Muchas veces quieres pasar por <strong>todo</strong> el diccionario, dato por dato. Hay tres formas, segun lo que necesites.</p>
+<p>Partimos de este perfil:</p>
+<pre><code class="language-python">usuario = {
+    &quot;nombre&quot;: &quot;Edwar&quot;,
+    &quot;idioma&quot;: &quot;ingles&quot;,
+    &quot;puntos&quot;: 1500,
+    &quot;nivel&quot;: 3,
+}
+</code></pre>
+<h3 id="recorrer-las-claves-con-keys">Recorrer las claves con <code>.keys()</code></h3>
+<pre><code class="language-python">for clave in usuario.keys():
+    print(clave)
+# nombre
+# idioma
+# puntos
+# nivel
+</code></pre>
+<p>De hecho, si recorres un diccionario directamente, Python te da las claves sin necesidad de <code>.keys()</code>:</p>
+<pre><code class="language-python">for clave in usuario:
+    print(clave)   # mismo resultado
+</code></pre>
+<h3 id="recorrer-los-valores-con-values">Recorrer los valores con <code>.values()</code></h3>
+<pre><code class="language-python">for valor in usuario.values():
+    print(valor)
+# Edwar
+# ingles
+# 1500
+# 3
+</code></pre>
+<h3 id="recorrer-claves-y-valores-juntos-con-items">Recorrer claves y valores juntos con <code>.items()</code></h3>
+<p>Esta es la mas usada. Te da las dos cosas a la vez:</p>
+<pre><code class="language-python">for clave, valor in usuario.items():
+    print(f&quot;{clave}: {valor}&quot;)
+# nombre: Edwar
+# idioma: ingles
+# puntos: 1500
+# nivel: 3
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-metodo-items">🟦 ¿Que significa? — <em>Metodo <code>.items()</code></em></h3>
+<p>El <strong>metodo <code>.items()</code></strong> devuelve todas las parejas clave-valor del diccionario para poder recorrerlas en un bucle. En cada vuelta del <code>for</code> recibes dos cosas: la clave y el valor. Sirve cuando necesitas tanto el nombre del dato como el dato mismo, por ejemplo para mostrar en pantalla "Puntos: 1500". PolyPaw lo usa para pintar la pantalla de perfil recorriendo cada campo del usuario.</p>
+<h3 id="que-significa-metodos-keys-y-values">🟦 ¿Que significa? — <em>Metodos <code>.keys()</code> y <code>.values()</code></em></h3>
+<p>El <strong>metodo <code>.keys()</code></strong> devuelve solo las claves (los nombres) y el <strong>metodo <code>.values()</code></strong> devuelve solo los valores (los datos). Sirven cuando te interesa una sola de las dos partes; por ejemplo, <code>.values()</code> para sumar todos los puntos de un conjunto, o <code>.keys()</code> para revisar que campos tiene un perfil.</p>
+<h3 id="que-significa-desempaquetado">🟦 ¿Que significa? — <em>Desempaquetado</em></h3>
+<p>El <strong>desempaquetado</strong> es cuando Python toma un grupo de valores que vienen juntos (como la pareja clave-valor que entrega <code>.items()</code>) y los reparte en varias variables de una sola vez. En <code>for clave, valor in usuario.items()</code>, cada vuelta trae una pareja y Python la "desempaqueta": pone la clave en <code>clave</code> y el valor en <code>valor</code>. Sirve para escribir codigo mas limpio sin tener que sacar cada pieza a mano.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>El truco <code>for clave, valor in ...items()</code> se apoya en ese desempaquetado: Python toma la pareja y la reparte en dos variables de un solo golpe. Le puedes poner los nombres que quieras (<code>for k, v in ...</code>), pero <code>clave, valor</code> se lee mucho mejor.</p>
+</blockquote>
+<hr />
+<h2 id="5-diccionarios-anidados-el-corazon-del-json-de-polypaw">5. Diccionarios anidados: el corazon del JSON de PolyPaw</h2>
+<p>Aqui viene lo importante. Un valor de un diccionario puede ser <strong>cualquier cosa</strong>: un numero, un texto, una lista... o <strong>otro diccionario</strong>. Cuando metes diccionarios dentro de diccionarios, decimos que estan <strong>anidados</strong>. Asi es exactamente como lucen los archivos <code>missions/*.json</code> de PolyPaw.</p>
+<pre><code class="language-python">mision = {
+    &quot;id&quot;: &quot;saludos_01&quot;,
+    &quot;titulo&quot;: &quot;Saludos basicos&quot;,
+    &quot;puntos&quot;: 50,
+    &quot;autor&quot;: {
+        &quot;nombre&quot;: &quot;Edwar&quot;,
+        &quot;pais&quot;: &quot;Colombia&quot;,
+    },
+    &quot;ejercicios&quot;: [
+        {&quot;pregunta&quot;: &quot;Hello&quot;, &quot;respuesta&quot;: &quot;Hola&quot;},
+        {&quot;pregunta&quot;: &quot;Goodbye&quot;, &quot;respuesta&quot;: &quot;Adios&quot;},
+    ],
+}
+</code></pre>
+<p>Mira la estructura: la clave <code>"autor"</code> guarda <strong>otro diccionario</strong>, y la clave <code>"ejercicios"</code> guarda <strong>una lista de diccionarios</strong>. Esto es lo normal en datos del mundo real.</p>
+<blockquote class="def">
+<h3 id="que-significa-diccionario-anidado">🟦 ¿Que significa? — <em>Diccionario anidado</em></h3>
+<p>Un <strong>diccionario anidado</strong> es un diccionario que tiene, dentro de alguno de sus valores, otro diccionario (o una lista de diccionarios). "Anidar" es meter una cosa dentro de otra, como cajas dentro de cajas. Sirve para representar informacion que tiene estructura por niveles: una mision que a su vez contiene varios ejercicios, cada uno con su propia pregunta y respuesta. Casi todos los archivos JSON de PolyPaw son diccionarios anidados.</p>
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p><strong>JSON</strong> (se lee "yeison") es un formato de texto para guardar datos organizados, muy parecido a como se escribe un diccionario de Python con sus llaves, claves y valores. Sirve para guardar informacion en archivos o enviarla entre programas. PolyPaw guarda cada paquete de misiones en archivos <code>missions/*.json</code>, y <code>database_manager.py</code> los lee y los convierte en diccionarios de Python para que <code>main.py</code> los pueda usar.</p>
+</blockquote>
+<p>Para llegar a un dato hondo, <strong>encadenas</strong> los corchetes, un nivel a la vez:</p>
+<pre><code class="language-python">print(mision[&quot;autor&quot;][&quot;nombre&quot;])              # Edwar
+print(mision[&quot;ejercicios&quot;][0][&quot;pregunta&quot;])    # Hello
+print(mision[&quot;ejercicios&quot;][1][&quot;respuesta&quot;])   # Adios
+</code></pre>
+<p>Leelo de izquierda a derecha como una direccion: "de la mision, entra en autor, y de ahi saca el nombre". El <code>[0]</code> del segundo ejemplo es porque <code>"ejercicios"</code> es una <strong>lista</strong>, asi que primero eliges el ejercicio por posicion y luego entras a su clave.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Cada <code>[ ]</code> que encadenas puede fallar si esa pieza no existe. <code>mision["autor"]["telefono"]</code> reventaria porque el autor no tiene <code>"telefono"</code>. Para datos anidados inseguros, encadena <code>.get()</code> con cuidado:
+<code>python
+pais = mision.get("autor", {}).get("pais", "desconocido")</code>
+Ese <code>{}</code> (diccionario vacio) de en medio es un truco: si <code>"autor"</code> no existe, devuelve un diccionario vacio para que el siguiente <code>.get()</code> tenga sobre que trabajar y no reviente.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En PolyPaw, cuando el codigo necesita mostrar la primera pregunta de una mision, hace algo muy parecido a <code>mision["ejercicios"][0]["pregunta"]</code>. Si abres un archivo de <code>missions/</code> veras esa estructura de mision con su lista de ejercicios anidados. Entender este encadenamiento es entender como fluyen los datos por toda la app.</p>
+</blockquote>
+<hr />
+<h2 id="6-modificar-diccionarios-agregar-cambiar-y-borrar">6. Modificar diccionarios: agregar, cambiar y borrar</h2>
+<p>Ya viste como agregar y cambiar con <code>=</code>. Para <strong>borrar</strong> una clave tienes <code>del</code> y el metodo <code>.pop()</code>:</p>
+<pre><code class="language-python">usuario = {&quot;nombre&quot;: &quot;Edwar&quot;, &quot;puntos&quot;: 1500, &quot;nivel&quot;: 3}
+
+del usuario[&quot;nivel&quot;]          # elimina la clave &quot;nivel&quot;
+puntos = usuario.pop(&quot;puntos&quot;) # elimina y ADEMAS te devuelve el valor
+print(puntos)                  # 1500
+print(usuario)                 # {'nombre': 'Edwar'}
+</code></pre>
+<p>Para comprobar si una clave existe <strong>antes</strong> de tocarla, usa <code>in</code>:</p>
+<pre><code class="language-python">if &quot;racha&quot; in usuario:
+    print(&quot;El usuario tiene racha&quot;)
+else:
+    print(&quot;Usuario nuevo, sin racha aun&quot;)
+</code></pre>
+<p>Y para sumar a un valor existente (muy comun: sumar puntos cuando se completa una mision):</p>
+<pre><code class="language-python">usuario = {&quot;nombre&quot;: &quot;Edwar&quot;, &quot;puntos&quot;: 1500}
+usuario[&quot;puntos&quot;] = usuario[&quot;puntos&quot;] + 50   # ahora 1550
+# o mas corto:
+usuario[&quot;puntos&quot;] += 50                        # ahora 1600
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-operador-in-en-diccionarios">🟦 ¿Que significa? — <em>Operador <code>in</code> en diccionarios</em></h3>
+<p>El <strong>operador <code>in</code></strong> comprueba si una clave existe dentro de un diccionario y devuelve <code>True</code> o <code>False</code>. ("in" es "en" en ingles.) Ojo: revisa las <strong>claves</strong>, no los valores. Sirve para preguntar "¿tiene este usuario el campo racha?" antes de usarlo, y asi evitar un <code>KeyError</code>. PolyPaw lo usa para saber si un perfil ya tiene cierta configuracion guardada.</p>
+<h3 id="que-significa-instruccion-del">🟦 ¿Que significa? — <em>Instruccion <code>del</code></em></h3>
+<p>La <strong>instruccion <code>del</code></strong> (abreviatura de "delete", borrar en ingles) elimina una clave del diccionario y su valor, sin devolverte nada. Se escribe <code>del usuario["nivel"]</code>. Sirve cuando solo quieres deshacerte de un dato y no necesitas usarlo despues. Si lo que buscas es borrarlo y al mismo tiempo quedarte con su valor, entonces usas <code>.pop()</code> en lugar de <code>del</code>.</p>
+<h3 id="que-significa-metodo-pop">🟦 ¿Que significa? — <em>Metodo <code>.pop()</code></em></h3>
+<p>El <strong>metodo <code>.pop()</code></strong> elimina una clave del diccionario y, a la vez, te entrega el valor que tenia. "Pop" es "sacar" en ingles. Sirve cuando quieres quitar un dato pero todavia necesitas usarlo una ultima vez, por ejemplo sacar una mision de la lista de pendientes y guardarla en las completadas.</p>
+</blockquote>
+<hr />
+<h2 id="7-comprensiones-de-diccionario">7. Comprensiones de diccionario</h2>
+<p>En el capitulo de listas viste las <strong>comprensiones de lista</strong>, esa forma compacta de construir una lista en una sola linea. Los diccionarios tienen su version equivalente: las <strong>comprensiones de diccionario</strong>.</p>
+<p>Supongamos que tienes una lista de idiomas y quieres un diccionario que diga cuantas letras tiene cada uno:</p>
+<pre><code class="language-python">idiomas = [&quot;ingles&quot;, &quot;frances&quot;, &quot;aleman&quot;]
+
+longitudes = {idioma: len(idioma) for idioma in idiomas}
+print(longitudes)
+# {'ingles': 6, 'frances': 7, 'aleman': 6}
+</code></pre>
+<p>La forma general es <code>{clave: valor for elemento in coleccion}</code>. Comparalo con la version larga, que hace exactamente lo mismo:</p>
+<pre><code class="language-python">longitudes = {}
+for idioma in idiomas:
+    longitudes[idioma] = len(idioma)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-comprension-de-diccionario">🟦 ¿Que significa? — <em>Comprension de diccionario</em></h3>
+<p>Una <strong>comprension de diccionario</strong> es una forma corta de crear un diccionario nuevo a partir de otra coleccion, escribiendo en una sola linea la clave y el valor que tendra cada pareja. "Comprension" aqui no significa "entender", es el nombre tecnico de esta tecnica. Sirve para transformar datos rapidamente: por ejemplo, a partir de una lista de misiones, armar un diccionario que las indexe por su <code>id</code> para encontrarlas al instante.</p>
+</blockquote>
+<p>Un caso muy de PolyPaw: tienes una lista de misiones y quieres poder buscarlas por su <code>id</code> sin recorrer toda la lista cada vez. Una comprension lo arma de un tiron:</p>
+<pre><code class="language-python">misiones = [
+    {&quot;id&quot;: &quot;saludos_01&quot;, &quot;titulo&quot;: &quot;Saludos basicos&quot;},
+    {&quot;id&quot;: &quot;comida_01&quot;, &quot;titulo&quot;: &quot;En el restaurante&quot;},
+]
+
+por_id = {m[&quot;id&quot;]: m for m in misiones}
+print(por_id[&quot;comida_01&quot;][&quot;titulo&quot;])   # En el restaurante
+</code></pre>
+<p>Tambien puedes filtrar con un <code>if</code> al final, igual que en las comprensiones de lista:</p>
+<pre><code class="language-python">usuario = {&quot;nombre&quot;: &quot;Edwar&quot;, &quot;puntos&quot;: 1500, &quot;nivel&quot;: 3, &quot;racha&quot;: 0}
+
+# Solo los campos numericos mayores que cero
+positivos = {k: v for k, v in usuario.items() if isinstance(v, int) and v &gt; 0}
+print(positivos)   # {'puntos': 1500, 'nivel': 3}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-funcion-isinstance">🟦 ¿Que significa? — <em>Funcion <code>isinstance()</code></em></h3>
+<p>La <strong>funcion <code>isinstance()</code></strong> comprueba si un valor es de cierto tipo y devuelve <code>True</code> o <code>False</code>. En <code>isinstance(v, int)</code> pregunta "¿este valor <code>v</code> es un numero entero?". El nombre viene de "is instance" ("es una instancia de" en ingles). Sirve para filtrar datos por su tipo, por ejemplo quedarte solo con los campos numericos de un perfil e ignorar los de texto.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>No te obsesiones con meter todo en una sola linea. Si la comprension se vuelve dificil de leer, un <code>for</code> normal de varias lineas es perfectamente valido y muchas veces mas claro. Lo legible le gana a lo corto.</p>
+</blockquote>
+<hr />
+<h2 id="8-diccionario-o-lista-cuando-usar-cada-uno">8. ¿Diccionario o lista? Cuando usar cada uno</h2>
+<p>Esta es una decision que tomaras todo el tiempo. La regla mas simple:</p>
+<ul>
+<li>Usa una <strong>lista</strong> cuando tienes <strong>muchas cosas del mismo tipo en orden</strong> y las recorres o las cuentas. Ejemplo: la lista de todas las misiones de un idioma, los ejercicios de una mision.</li>
+<li>Usa un <strong>diccionario</strong> cuando tienes <strong>un conjunto de datos con nombre</strong> que describen <strong>una sola cosa</strong>, y los buscas por etiqueta. Ejemplo: el perfil de un usuario, una mision individual con su titulo, puntos y autor.</li>
+</ul>
+<p>Muy a menudo se <strong>combinan</strong>: una lista de diccionarios. Eso es justo el caso de PolyPaw: una <strong>lista</strong> de misiones, donde cada mision es un <strong>diccionario</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Si...</th>
+<th>Usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Importa el orden y son del mismo tipo?</td>
+<td>si</td>
+<td>lista</td>
+</tr>
+<tr>
+<td>¿Cada dato tiene un nombre distinto?</td>
+<td>si</td>
+<td>diccionario</td>
+</tr>
+<tr>
+<td>¿Necesitas buscar por etiqueta rapido?</td>
+<td>si</td>
+<td>diccionario</td>
+</tr>
+<tr>
+<td>¿Es una coleccion para recorrer y contar?</td>
+<td>si</td>
+<td>lista</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"># Lista de diccionarios: el patron mas comun de PolyPaw
+misiones = [
+    {&quot;id&quot;: &quot;saludos_01&quot;, &quot;titulo&quot;: &quot;Saludos basicos&quot;, &quot;puntos&quot;: 50},
+    {&quot;id&quot;: &quot;comida_01&quot;,  &quot;titulo&quot;: &quot;En el restaurante&quot;, &quot;puntos&quot;: 70},
+]
+
+# La lista nos deja recorrer y contar:
+total = len(misiones)                        # 2 misiones
+suma = sum(m[&quot;puntos&quot;] for m in misiones)    # 120 puntos en total
+
+# Cada diccionario nos deja leer campos por nombre:
+print(misiones[0][&quot;titulo&quot;])                 # Saludos basicos
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Cuando <code>database_manager.py</code> de PolyPaw carga un archivo <code>missions/*.json</code>, normalmente obtiene una <strong>lista de diccionarios</strong>: la lista son todas las misiones del paquete, y cada diccionario es una mision con sus claves (<code>id</code>, <code>titulo</code>, <code>puntos</code>, <code>ejercicios</code>...). El resto de la app recorre esa lista con un <code>for</code> y lee cada mision por sus claves. Si entiendes este capitulo, entiendes el formato de datos central de toda la aplicacion.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No abuses de los diccionarios para cosas que son claramente una secuencia. Guardar tus ejercicios como <code>{"1": ..., "2": ..., "3": ...}</code> con claves que son numeros disfrazados de texto es senal de que en realidad querias una <strong>lista</strong>. Si lo unico que distingue a tus datos es un orden, usa lista.</p>
+</blockquote>
+<p>Si recuerdas el modulo de JavaScript: alla tambien combinabas <strong>arrays</strong> (las listas de Python) con <strong>objetos</strong> (los diccionarios de Python) exactamente igual, un array de objetos. El concepto es identico; solo cambia un poco la sintaxis.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se que un diccionario guarda parejas de <strong>clave</strong> y <strong>valor</strong> entre llaves <code>{ }</code>.</li>
+<li>[ ] Puedo crear un diccionario, leer un valor con <code>[ ]</code> y agregar o cambiar valores con <code>=</code>.</li>
+<li>[ ] Entiendo que pedir una clave inexistente con <code>[ ]</code> lanza un <strong>KeyError</strong>.</li>
+<li>[ ] Se usar <code>.get()</code> y darle un <strong>valor por defecto</strong> para leer sin riesgo.</li>
+<li>[ ] Puedo recorrer un diccionario con <code>.items()</code>, <code>.keys()</code> y <code>.values()</code>.</li>
+<li>[ ] Entiendo los <strong>diccionarios anidados</strong> y se encadenar <code>[ ]</code> para llegar a datos profundos.</li>
+<li>[ ] Relaciono el JSON de PolyPaw con un diccionario (o lista de diccionarios) de Python.</li>
+<li>[ ] Se borrar claves con <code>del</code> y <code>.pop()</code>, y comprobar existencia con <code>in</code>.</li>
+<li>[ ] Puedo escribir una <strong>comprension de diccionario</strong> sencilla.</li>
+<li>[ ] Se decidir entre <strong>lista</strong> y <strong>diccionario</strong> segun la forma de mis datos.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>(En papel)</strong> Escribe a mano un diccionario llamado <code>perfil</code> con tu nombre, tu idioma favorito y un numero de puntos inventado. Marca con un circulo cuales son las <strong>claves</strong> y cuales los <strong>valores</strong>.</p>
+</li>
+<li>
+<p>💻 Crea el diccionario <code>usuario = {"nombre": "Edwar", "puntos": 1500}</code>. Imprime el nombre con corchetes. Luego intenta leer <code>usuario["racha"]</code> con <code>.get()</code> dando <code>0</code> como valor por defecto, e imprime el resultado. Comprueba que <strong>no</strong> se rompe el programa.</p>
+</li>
+<li>
+<p>💻 Con el diccionario del ejercicio anterior, recorrelo con <code>.items()</code> e imprime cada pareja en el formato <code>clave -&gt; valor</code>. Despues suma 100 a los puntos usando <code>+=</code> y vuelve a imprimir el diccionario completo.</p>
+</li>
+<li>
+<p>💻 Crea una <strong>lista de diccionarios</strong> con al menos tres misiones, cada una con <code>id</code>, <code>titulo</code> y <code>puntos</code> (imitando los <code>missions/*.json</code> de PolyPaw). Usa un <code>for</code> para imprimir el titulo de cada mision y, al final, imprime la <strong>suma total</strong> de puntos.</p>
+</li>
+<li>
+<p>💻 Usando la lista de misiones del ejercicio 4, escribe una <strong>comprension de diccionario</strong> que cree un nuevo diccionario <code>por_id</code> donde la clave sea el <code>id</code> de cada mision y el valor sea la mision completa. Luego busca una mision por su <code>id</code> e imprime su titulo.</p>
+</li>
+<li>
+<p>💻 <strong>(Reto)</strong> Crea una mision <strong>anidada</strong> que tenga una clave <code>"autor"</code> (un diccionario con <code>nombre</code> y <code>pais</code>) y una clave <code>"ejercicios"</code> (una lista de al menos dos diccionarios con <code>pregunta</code> y <code>respuesta</code>). Imprime el pais del autor y la respuesta del segundo ejercicio encadenando corchetes. Bonus: usa <code>.get()</code> encadenado para leer un campo del autor que <strong>no exista</strong> sin que el programa reviente.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. Los diccionarios son, sin exagerar, la estructura mas importante que vas a usar en Python para datos del mundo real, y acabas de ver justo como PolyPaw los usa para el perfil, las misiones y todo el JSON. La proxima vez que abras un archivo de <code>missions/</code> ya no veras un texto raro: veras claves, valores y anidamiento que entiendes. Nos vemos en el siguiente capitulo. — Bit 🐾</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

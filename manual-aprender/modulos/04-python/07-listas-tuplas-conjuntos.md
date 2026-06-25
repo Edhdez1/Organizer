@@ -1,5 +1,10 @@
 # Capitulo 07 — Listas, tuplas y conjuntos a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora guardaste datos de uno en uno: una variable, un numero, un texto. Pero un programa real casi nunca trabaja con cosas sueltas. PolyPaw no guarda *una* mision: guarda *muchas*. No guarda *una* palabra para aprender: guarda *listas enteras* de palabras. En este capitulo aprenderemos las tres formas mas importantes que tiene Python para guardar *colecciones* de cosas: las **listas**, las **tuplas** y los **conjuntos**. Y de paso conoceremos un truco precioso que en JavaScript ni existia con esta elegancia: las *comprensiones de lista*. Bit, nuestro ajolote, ya tiene su libreta lista para anotar misiones. Vamos.
 
 ---

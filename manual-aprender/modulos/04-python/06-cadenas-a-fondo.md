@@ -1,5 +1,10 @@
 # Capítulo 06 — Cadenas de texto a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Casi todo lo que ve un usuario es **texto**: el título de una misión, una pista, un mensaje de
 > error, el nombre de un idioma. En Python ese texto vive en las **cadenas** (strings). Ya las
 > usaste de pasada en capítulos anteriores; aquí las miramos a fondo, porque en **PolyPaw** los

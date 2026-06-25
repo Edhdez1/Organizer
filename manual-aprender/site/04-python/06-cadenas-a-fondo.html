@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 06 — Cadenas de texto a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-06-cadenas-de-texto-a-fondo">Capítulo 06 — Cadenas de texto a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Casi todo lo que ve un usuario es <strong>texto</strong>: el título de una misión, una pista, un mensaje de
+error, el nombre de un idioma. En Python ese texto vive en las <strong>cadenas</strong> (strings). Ya las
+usaste de pasada en capítulos anteriores; aquí las miramos a fondo, porque en <strong>PolyPaw</strong> los
+textos de las misiones (guardados en archivos <code>missions/*.json</code>) se leen, se limpian, se cortan
+y se arman constantemente. Bit, nuestro ajolote, dice que las cadenas son como el agua de su
+pecera: están en todas partes y conviene saber nadar en ellas.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-una-cadena-y-como-se-escribe">1. Qué es una cadena y cómo se escribe</h2>
+<blockquote class="def">
+<h3 id="que-significa-cadena-string">🟦 ¿Qué significa? — <em>Cadena (string)</em></h3>
+<p>Una <strong>cadena</strong> es un valor que representa <strong>texto</strong>: una secuencia de caracteres (letras,
+números, espacios, símbolos) en un orden concreto. Sirve para guardar cualquier cosa escrita:
+un nombre, una frase, una palabra de vocabulario.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>PolyPaw</strong>, el título de cada misión y cada palabra del
+idioma que se aprende son cadenas; viven dentro de los archivos <code>missions/*.json</code> y <code>main.py</code>
+las muestra en pantalla.</p>
+</blockquote>
+<p>En Python escribes una cadena rodeando el texto con <strong>comillas</strong>. Tienes tres formas:</p>
+<pre><code class="language-python">simple = 'Hola, PolyPaw'
+doble = &quot;Hola, PolyPaw&quot;
+triple = &quot;&quot;&quot;Hola,
+PolyPaw&quot;&quot;&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-comillas-simples-y-dobles">🟦 ¿Qué significa? — <em>Comillas simples y dobles</em></h3>
+<p>Las <strong>comillas simples</strong> (<code>'...'</code>) y las <strong>comillas dobles</strong> (<code>"..."</code>) hacen exactamente lo
+mismo: marcan dónde empieza y dónde termina el texto. Eliges una u otra según convenga.
+<strong>¿Para qué sirve tener dos?</strong> Para poder incluir el otro tipo de comilla <strong>dentro</strong> del texto
+sin romperlo:
+<code>python
+frase = "Bit dijo: 'aprende una palabra al día'"
+otra = 'La palabra "casa" en inglés es "house"'</code>
+Si usas comillas dobles por fuera, puedes escribir comillas simples por dentro, y viceversa.</p>
+<h3 id="que-significa-comillas-triples">🟦 ¿Qué significa? — <em>Comillas triples</em></h3>
+<p>Las <strong>comillas triples</strong> (<code>'''...'''</code> o <code>"""..."""</code>) permiten una cadena que ocupa <strong>varias
+líneas</strong>. Todo lo que escribas dentro, incluidos los saltos de línea, forma parte del texto.
+<strong>¿Dónde se usa en tu proyecto?</strong> Son perfectas para un texto largo de explicación de una
+misión, o para escribir un comentario largo dentro de <code>database_manager.py</code>:
+<code>python
+instruccion = """Bienvenido a la misión.
+Escucha la palabra y elige la traducción correcta.
+¡Tienes tres intentos!"""</code></p>
+<h3 id="tip">💡 Tip</h3>
+<p>En JavaScript (lo viste en el Módulo 03) usabas comillas o <em>backticks</em> <code>`</code> para textos.
+En Python no hay backticks: para texto multilínea se usan las <strong>comillas triples</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="2-f-strings-meter-variables-dentro-del-texto">2. f-strings: meter variables dentro del texto</h2>
+<p>Imagina que quieres saludar con el nombre del jugador. Podrías pegar trozos, pero hay una forma
+mucho más limpia.</p>
+<blockquote class="def">
+<h3 id="que-significa-f-string-cadena-formateada">🟦 ¿Qué significa? — <em>f-string (cadena formateada)</em></h3>
+<p>Una <strong>f-string</strong> es una cadena que empieza con la letra <code>f</code> antes de la comilla. Dentro puedes
+poner <strong>variables entre llaves <code>{}</code></strong> y Python las reemplaza por su valor.
+<strong>¿Para qué sirve?</strong> Para construir mensajes que cambian según los datos, sin pegar trozos a
+mano. Es la forma recomendada de armar texto en Python moderno.
+<code>python
+nombre = "Edwar"
+aciertos = 3
+mensaje = f"¡Bien hecho, {nombre}! Llevas {aciertos} aciertos."
+print(mensaje)   # ¡Bien hecho, Edwar! Llevas 3 aciertos.</code></p>
+<h3 id="que-significa-formateo">🟦 ¿Qué significa? — <em>Formateo</em></h3>
+<p><strong>Formatear</strong> significa armar un texto combinando partes fijas con valores que cambian, y darle
+la forma que quieres. La f-string es la herramienta de formateo más usada.</p>
+</blockquote>
+<p>Si conoces JavaScript, una f-string es el equivalente de las <em>template literals</em>: allí escribías
+<code>`Hola ${nombre}`</code>; en Python es <code>f"Hola {nombre}"</code>. Misma idea, distinta sintaxis: <code>f</code> al
+inicio y llaves <code>{}</code> en vez de <code>${}</code>.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Dentro de las llaves no solo caben variables: cabe cualquier expresión que produzca un valor.
+<code>python
+precio = 5
+print(f"Total: {precio * 2} monedas")   # Total: 10 monedas</code></p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>PolyPaw</strong>, cuando una misión muestra "Pregunta 2 de 10", ese texto se arma con una f-string
+como <code>f"Pregunta {actual} de {total}"</code>, donde <code>actual</code> y <code>total</code> son números que cambian
+mientras juegas.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si <strong>olvidas la <code>f</code></strong>, las llaves no se reemplazan: el texto saldrá literal con las llaves.
+<code>python
+nombre = "Bit"
+print("Hola {nombre}")    # Hola {nombre}   ← mal, faltó la f
+print(f"Hola {nombre}")   # Hola Bit        ← correcto</code></p>
+</blockquote>
+<hr />
+<h2 id="3-concatenacion-unir-cadenas">3. Concatenación: unir cadenas</h2>
+<blockquote class="def">
+<h3 id="que-significa-concatenar">🟦 ¿Qué significa? — <em>Concatenar</em></h3>
+<p><strong>Concatenar</strong> es <strong>pegar</strong> dos o más cadenas para formar una sola, usando el signo <code>+</code>.
+<strong>¿Para qué sirve?</strong> Para juntar trozos de texto. Aunque las f-strings suelen ser más cómodas,
+verás <code>+</code> en mucho código:
+<code>python
+saludo = "Hola"
+nombre = "Bit"
+completo = saludo + ", " + nombre + "!"
+print(completo)   # Hola, Bit!</code></p>
+</blockquote>
+<p>También puedes <strong>repetir</strong> una cadena con <code>*</code>:</p>
+<pre><code class="language-python">linea = &quot;-&quot; * 20
+print(linea)   # --------------------
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Con <code>+</code> solo puedes unir cadena <strong>con cadena</strong>. Si intentas pegar una cadena y un número, Python
+da error. Primero convierte el número a texto con <code>str(...)</code>, o mejor usa una f-string:
+```python
+aciertos = 3</p>
+<h1 id="printaciertos-aciertos-typeerror">print("Aciertos: " + aciertos)        # ❌ TypeError</h1>
+<p>print("Aciertos: " + str(aciertos))     # ✅ Aciertos: 3
+print(f"Aciertos: {aciertos}")          # ✅ más limpio
+```</p>
+<h3 id="que-significa-str-conversion-a-cadena">🟦 ¿Qué significa? — <em><code>str()</code> (conversión a cadena)</em></h3>
+<p><code>str()</code> es una función que <strong>convierte</strong> cualquier valor (un número, por ejemplo) en su versión
+de texto. <code>str(3)</code> produce la cadena <code>"3"</code>. Sirve justo para casos como el de arriba.</p>
+</blockquote>
+<hr />
+<h2 id="4-indexacion-llegar-a-un-caracter">4. Indexación: llegar a un carácter</h2>
+<p>Una cadena es una <strong>secuencia ordenada</strong>: cada carácter tiene una posición.</p>
+<blockquote class="def">
+<h3 id="que-significa-indice-index">🟦 ¿Qué significa? — <em>Índice (index)</em></h3>
+<p>El <strong>índice</strong> es el <strong>número de posición</strong> de un carácter dentro de la cadena. Python empieza a
+contar <strong>desde 0</strong>: el primer carácter es el índice <code>0</code>, el segundo el <code>1</code>, y así.
+<strong>¿Para qué sirve?</strong> Para leer un carácter concreto.
+<code>python
+palabra = "PolyPaw"
+print(palabra[0])   # P   (el primero)
+print(palabra[1])   # o
+print(palabra[3])   # y</code></p>
+<h3 id="que-significa-indice-negativo">🟦 ¿Qué significa? — <em>Índice negativo</em></h3>
+<p>Un <strong>índice negativo</strong> cuenta desde el <strong>final</strong>: <code>-1</code> es el último carácter, <code>-2</code> el penúltimo.
+<strong>¿Para qué sirve?</strong> Para tomar el final sin saber cuántos caracteres hay.
+<code>python
+palabra = "PolyPaw"
+print(palabra[-1])   # w   (el último)
+print(palabra[-2])   # a</code></p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Si pides un índice que no existe (por ejemplo <code>palabra[50]</code> en una cadena corta), Python lanza
+el error <code>IndexError: string index out of range</code>. Asegúrate de que la posición exista.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Para saber cuántos caracteres tiene una cadena, usa <code>len()</code>:
+<code>python
+print(len("PolyPaw"))   # 7</code>
+El último índice válido siempre es <code>len(cadena) - 1</code> (aquí, <code>6</code>).</p>
+</blockquote>
+<hr />
+<h2 id="5-slicing-cortar-un-trozo">5. Slicing: cortar un trozo</h2>
+<p>A veces no quieres un carácter, sino <strong>un pedazo</strong> de la cadena.</p>
+<blockquote class="def">
+<h3 id="que-significa-slicing-rebanado">🟦 ¿Qué significa? — <em>Slicing (rebanado)</em></h3>
+<p>El <strong>slicing</strong> es cortar una <strong>porción</strong> de la cadena indicando posiciones entre corchetes con
+la forma <code>[inicio:fin:paso]</code>. Te devuelve una nueva cadena con ese trozo.
+- <strong>inicio</strong>: posición donde empieza el corte (se incluye).
+- <strong>fin</strong>: posición donde termina (se <strong>excluye</strong>, no se incluye).
+- <strong>paso</strong>: de cuánto en cuánto avanza (opcional; por defecto 1).
+<code>python
+texto = "PolyPaw"
+print(texto[0:4])    # Poly   (del 0 al 3; el 4 NO entra)
+print(texto[4:7])    # Paw</code></p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>El <strong>fin se excluye</strong>. <code>texto[0:4]</code> toma los caracteres <code>0, 1, 2, 3</code> pero <strong>no</strong> el <code>4</code>. Esto
+confunde al principio; piénsalo como "hasta justo antes del fin".</p>
+</blockquote>
+<p>Puedes omitir partes y Python asume valores razonables:</p>
+<pre><code class="language-python">texto = &quot;PolyPaw&quot;
+print(texto[:4])     # Poly    (desde el inicio)
+print(texto[4:])     # Paw     (hasta el final)
+print(texto[:])      # PolyPaw (copia completa)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-paso-step">🟦 ¿Qué significa? — <em>Paso (step)</em></h3>
+<p>El <strong>paso</strong> dice cada cuántos caracteres tomar uno. Con <code>2</code> toma uno sí y uno no. Con <code>-1</code>
+recorre <strong>al revés</strong>, lo que sirve para invertir una cadena:
+<code>python
+texto = "PolyPaw"
+print(texto[::2])    # PlPw   (de dos en dos)
+print(texto[::-1])   # waPyloP (invertida)</code></p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <strong>PolyPaw</strong>, si un código de idioma viene como <code>"es-MX"</code> y solo necesitas el idioma base
+<code>"es"</code>, un slicing como <code>codigo[:2]</code> te lo entrega al instante.</p>
+</blockquote>
+<hr />
+<h2 id="6-metodos-esenciales-de-las-cadenas">6. Métodos esenciales de las cadenas</h2>
+<blockquote class="def">
+<h3 id="que-significa-metodo">🟦 ¿Qué significa? — <em>Método</em></h3>
+<p>Un <strong>método</strong> es una función que <strong>pertenece</strong> a un valor y se llama con un punto: <code>valor.metodo()</code>.
+Las cadenas traen muchos métodos listos para transformarlas o consultarlas.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>PolyPaw</strong>, antes de comparar lo que escribe el usuario
+con la respuesta correcta, se limpian y normalizan ambos textos usando estos métodos.</p>
+</blockquote>
+<h3 id="cambiar-mayusculas-y-minusculas">Cambiar mayúsculas y minúsculas</h3>
+<blockquote class="def">
+<h3 id="que-significa-upper-y-lower">🟦 ¿Qué significa? — <em><code>upper()</code> y <code>lower()</code></em></h3>
+<p><code>upper()</code> devuelve la cadena en <strong>MAYÚSCULAS</strong>; <code>lower()</code> la devuelve en <strong>minúsculas</strong>.
+<strong>¿Para qué sirve?</strong> Para comparar sin que importe cómo escribió el usuario.
+<code>python
+print("PolyPaw".upper())   # POLYPAW
+print("PolyPaw".lower())   # polypaw</code></p>
+</blockquote>
+<h3 id="limpiar-espacios">Limpiar espacios</h3>
+<blockquote class="def">
+<h3 id="que-significa-strip">🟦 ¿Qué significa? — <em><code>strip()</code></em></h3>
+<p><code>strip()</code> <strong>quita los espacios</strong> (y saltos de línea) que sobran al <strong>inicio y al final</strong> de la
+cadena. No toca los del medio.
+<strong>¿Para qué sirve?</strong> El usuario suele dejar un espacio de más al escribir; <code>strip()</code> lo elimina
+para que la comparación sea justa.
+<code>python
+escrito = "   hola   "
+print(escrito.strip())   # 'hola'</code></p>
+</blockquote>
+<h3 id="partir-y-unir">Partir y unir</h3>
+<blockquote class="def">
+<h3 id="que-significa-split">🟦 ¿Qué significa? — <em><code>split()</code></em></h3>
+<p><code>split()</code> <strong>parte</strong> una cadena en una <strong>lista</strong> de trozos, cortando por un separador (por
+defecto, los espacios).
+<strong>¿Para qué sirve?</strong> Para separar una frase en palabras, o un dato como <code>"es,en,fr"</code> en sus
+partes.
+<code>python
+frase = "aprende una palabra"
+print(frase.split())          # ['aprende', 'una', 'palabra']
+print("es,en,fr".split(","))  # ['es', 'en', 'fr']</code></p>
+<h3 id="que-significa-join">🟦 ¿Qué significa? — <em><code>join()</code></em></h3>
+<p><code>join()</code> hace lo contrario de <code>split()</code>: <strong>une</strong> una lista de cadenas en una sola, poniendo un
+separador entre ellas. Se escribe <code>separador.join(lista)</code>.
+<strong>¿Para qué sirve?</strong> Para volver a armar texto a partir de partes.
+<code>python
+palabras = ["aprende", "una", "palabra"]
+print(" ".join(palabras))    # aprende una palabra
+print("-".join(["es", "en"]))  # es-en</code></p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Fíjate en el orden: <code>join</code> se llama <strong>sobre el separador</strong>, no sobre la lista. Se lee como
+"con un espacio, une estas palabras": <code>" ".join(palabras)</code>.</p>
+</blockquote>
+<h3 id="reemplazar">Reemplazar</h3>
+<blockquote class="def">
+<h3 id="que-significa-replace">🟦 ¿Qué significa? — <em><code>replace()</code></em></h3>
+<p><code>replace(viejo, nuevo)</code> devuelve una cadena donde <strong>todas</strong> las apariciones de un texto se
+cambian por otro.
+<strong>¿Para qué sirve?</strong> Para corregir o sustituir partes de un texto.
+<code>python
+print("Hola mundo".replace("mundo", "PolyPaw"))   # Hola PolyPaw</code></p>
+</blockquote>
+<h3 id="buscar-y-comprobar">Buscar y comprobar</h3>
+<blockquote class="def">
+<h3 id="que-significa-find">🟦 ¿Qué significa? — <em><code>find()</code></em></h3>
+<p><code>find(texto)</code> devuelve el <strong>índice</strong> donde empieza la primera aparición del texto buscado, o
+<code>-1</code> si no lo encuentra.
+<strong>¿Para qué sirve?</strong> Para saber si algo está dentro de una cadena y en qué posición.
+<code>python
+print("PolyPaw".find("Paw"))   # 4
+print("PolyPaw".find("zzz"))   # -1  (no está)</code></p>
+<h3 id="que-significa-startswith">🟦 ¿Qué significa? — <em><code>startswith()</code></em></h3>
+<p><code>startswith(texto)</code> devuelve <code>True</code> o <code>False</code> según si la cadena <strong>empieza</strong> por ese texto.
+<strong>¿Para qué sirve?</strong> Para filtrar o clasificar. En <strong>PolyPaw</strong>, podrías saber si el nombre de un
+archivo de misión empieza por <code>"es-"</code> para detectar las misiones de español:
+<code>python
+archivo = "es-saludos.json"
+print(archivo.startswith("es-"))   # True</code></p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Para preguntar simplemente "¿está este texto dentro?" sin importar la posición, Python tiene el
+operador <code>in</code>, aún más legible que <code>find</code>:
+<code>python
+print("Paw" in "PolyPaw")   # True</code></p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Un flujo típico al revisar una respuesta en <strong>PolyPaw</strong>: tomar lo que escribió el usuario,
+aplicar <code>.strip().lower()</code> para limpiar y normalizar, y recién entonces compararlo con la
+respuesta correcta (también normalizada). Así "  Casa " y "casa" cuentan como iguales.
+<code>python
+respuesta_usuario = "  Casa "
+correcta = "casa"
+print(respuesta_usuario.strip().lower() == correcta)   # True</code>
+Observa el <strong>encadenado</strong>: <code>.strip()</code> limpia y, sobre el resultado, <code>.lower()</code> pasa a minúsculas.</p>
+</blockquote>
+<hr />
+<h2 id="7-caracteres-de-escape">7. Caracteres de escape</h2>
+<p>¿Cómo metes un salto de línea, o unas comillas dobles dentro de una cadena con comillas dobles?
+Con un <strong>carácter de escape</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-caracter-de-escape">🟦 ¿Qué significa? — <em>Carácter de escape</em></h3>
+<p>Un <strong>carácter de escape</strong> es una combinación que empieza con la <strong>barra invertida <code>\</code></strong> y
+representa un carácter especial difícil de teclear directamente.
+<strong>¿Para qué sirve?</strong> Para incluir saltos de línea, tabulaciones o comillas dentro del texto.
+Los más comunes:
+- <code>\n</code> → salto de línea (nueva línea).
+- <code>\t</code> → tabulación (un espacio grande).
+- <code>\"</code> → una comilla doble literal.
+- <code>\\</code> → una barra invertida literal.
+<code>python
+print("Línea 1\nLínea 2")     # imprime en dos líneas
+print("Nombre:\tBit")         # Nombre:    Bit
+print("Dijo \"hola\"")        # Dijo "hola"</code></p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>Si tu texto tiene <strong>muchas</strong> barras invertidas (por ejemplo, una ruta de Windows), puedes usar
+una cadena <em>cruda</em> poniendo <code>r</code> antes: <code>r"C:\carpeta\nombre"</code> evita que <code>\n</code> se interprete como
+salto de línea.</p>
+</blockquote>
+<hr />
+<h2 id="8-inmutabilidad-las-cadenas-no-se-modifican">8. Inmutabilidad: las cadenas no se modifican</h2>
+<p>Este punto sorprende a muchos principiantes, así que vamos despacio.</p>
+<blockquote class="def">
+<h3 id="que-significa-inmutable">🟦 ¿Qué significa? — <em>Inmutable</em></h3>
+<p>Que una cadena sea <strong>inmutable</strong> quiere decir que <strong>no se puede cambiar por dentro</strong> una vez
+creada. No puedes reemplazar un carácter suelto: lo que haces es <strong>crear una cadena nueva</strong> a
+partir de la original.
+```python
+palabra = "polypaw"</p>
+<h1 id="palabra0-p-typeerror-las-cadenas-no-se-modifican">palabra[0] = "P"        # ❌ TypeError: las cadenas no se modifican</h1>
+<p>palabra = "P" + palabra[1:]   # ✅ creamos una nueva: 'Polypaw'
+print(palabra)
+```</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>Métodos como <code>upper()</code>, <code>strip()</code> o <code>replace()</code> <strong>no cambian</strong> la cadena original: devuelven una
+<strong>cadena nueva</strong>. Si no la guardas, el cambio se pierde:
+<code>python
+nombre = "bit"
+nombre.upper()          # produce 'BIT' pero NO se guarda en ninguna parte
+print(nombre)           # bit   ← sigue igual
+nombre = nombre.upper() # ahora sí lo guardamos
+print(nombre)           # BIT</code></p>
+<h3 id="tip_6">💡 Tip</h3>
+<p>Compara con las <strong>listas</strong> (Capítulo 03): las listas <strong>sí</strong> son mutables, puedes cambiar un
+elemento con <code>lista[0] = ...</code>. Las cadenas no. Es una diferencia importante a recordar.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu código</h3>
+<p>En <strong>PolyPaw</strong>, cuando los textos de las misiones se cargan desde los archivos <code>missions/*.json</code>
+con ayuda de <code>database_manager.py</code>, esos textos llegan como cadenas. Cada vez que se "limpian" o
+"formatean" para mostrarlos, en realidad se generan cadenas nuevas; el dato original del JSON
+queda intacto hasta que decidas guardarlo de otra forma.</p>
+</blockquote>
+<hr />
+<h2 id="9-un-mini-ejemplo-que-junta-todo">9. Un mini-ejemplo que junta todo</h2>
+<p>Veamos cómo una sola función de revisión usa varias piezas a la vez. Es el tipo de lógica que vive
+detrás de las misiones de <strong>PolyPaw</strong>:</p>
+<pre><code class="language-python">def revisar_respuesta(escrito, correcta):
+    # 1. Limpiamos y normalizamos lo que escribió el usuario
+    limpio = escrito.strip().lower()
+    correcta = correcta.strip().lower()
+
+    # 2. Comparamos
+    if limpio == correcta:
+        return f&quot;¡Correcto! '{escrito.strip()}' es la respuesta.&quot;
+    else:
+        return f&quot;Casi. Escribiste '{limpio}', pero era '{correcta}'.&quot;
+
+print(revisar_respuesta(&quot;  Casa &quot;, &quot;casa&quot;))
+print(revisar_respuesta(&quot;perro&quot;, &quot;gato&quot;))
+</code></pre>
+<p>Aquí ves juntos: métodos encadenados (<code>strip().lower()</code>), comparación, e f-strings para armar el
+mensaje. Bit aplaude desde su pecera.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé escribir cadenas con comillas simples, dobles y triples, y cuándo conviene cada una.</li>
+<li>[ ] Puedo meter variables dentro de un texto con una <strong>f-string</strong> (<code>f"... {variable} ..."</code>).</li>
+<li>[ ] Sé concatenar con <code>+</code> y entiendo por qué hay que convertir números con <code>str()</code>.</li>
+<li>[ ] Entiendo la <strong>indexación</strong> desde 0 y los índices negativos.</li>
+<li>[ ] Sé hacer <strong>slicing</strong> <code>[inicio:fin:paso]</code> y recuerdo que el fin se excluye.</li>
+<li>[ ] Conozco y uso <code>upper</code>, <code>lower</code>, <code>strip</code>, <code>split</code>, <code>join</code>, <code>replace</code>, <code>find</code>, <code>startswith</code>.</li>
+<li>[ ] Reconozco los caracteres de escape <code>\n</code>, <code>\t</code>, <code>\"</code>.</li>
+<li>[ ] Entiendo que las cadenas son <strong>inmutables</strong> y que los métodos devuelven cadenas nuevas.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 Crea una variable <code>nombre</code> con tu nombre y muestra con una <strong>f-string</strong> el mensaje
+   <code>"¡Hola, NOMBRE! Bienvenido a PolyPaw."</code>.</p>
+</li>
+<li>
+<p>💻 Dada la cadena <code>palabra = "aprendizaje"</code>, imprime: su longitud con <code>len()</code>, su primer
+   carácter, su último carácter (con índice negativo) y los primeros 7 caracteres con slicing.</p>
+</li>
+<li>
+<p>💻 Toma la cadena <code>"  Hola Mundo  "</code> y, encadenando métodos, conviértela en <code>"hola mundo"</code>
+   (sin espacios sobrantes y en minúsculas). Imprime el resultado.</p>
+</li>
+<li>
+<p>💻 Parte la cadena <code>"es,en,fr,pt"</code> con <code>split(",")</code> para obtener una lista de idiomas y luego
+   vuelve a unirlos con <code>join</code> usando <code>" - "</code> como separador, para imprimir <code>"es - en - fr - pt"</code>.</p>
+</li>
+<li>
+<p>💻 Escribe una función <code>es_mision_de(archivo, prefijo)</code> que devuelva <code>True</code> si el nombre del
+   archivo <strong>empieza</strong> por el prefijo (usa <code>startswith</code>). Pruébala con <code>"es-saludos.json"</code> y el
+   prefijo <code>"es-"</code>.</p>
+</li>
+<li>
+<p>Sin ejecutar nada, predice qué imprime este código y explica por qué. Luego compruébalo:
+   <code>python
+   texto = "PolyPaw"
+   texto.upper()
+   print(texto)</code>
+   (Pista: recuerda la <strong>inmutabilidad</strong> y que los métodos devuelven una cadena nueva.)</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 11 — Clases y objetos (POO) — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-11-clases-y-objetos-poo">Capitulo 11 — Clases y objetos (POO)</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap11.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guia. Hasta ahora has guardado datos en variables, listas y diccionarios, y has escrito funciones para hacer cosas con esos datos. Funciona... pero cuando una app crece, esos datos sueltos se vuelven un charco de variables que nadie entiende. En este capitulo vas a aprender a <strong>agrupar datos y comportamiento en un mismo molde</strong>: eso se llama Programacion Orientada a Objetos (POO). Es justo lo que hace <strong>PolyPaw</strong> por dentro, y tambien lo que hace <strong>Flet</strong> para dibujar botones y textos en pantalla. Respira, mueve la colita y vamos despacio. 🐾</p>
+</blockquote>
+<hr />
+<h2 id="1-el-problema-que-la-poo-viene-a-resolver">1. El problema que la POO viene a resolver</h2>
+<p>Imagina que en PolyPaw quieres representar a un <strong>usuario</strong> que esta aprendiendo idiomas. Cada usuario tiene un nombre, un idioma que estudia, un puntaje y un nivel. Sin POO, terminarias con algo asi:</p>
+<pre><code class="language-python">nombre_usuario = &quot;Ana&quot;
+idioma_usuario = &quot;ingles&quot;
+puntaje_usuario = 0
+nivel_usuario = 1
+</code></pre>
+<p>Cuatro variables sueltas para <strong>un</strong> usuario. ¿Y si hay 50 usuarios? ¿Y si cada uno ademas puede ganar puntos? El charco crece y se vuelve imposible de cuidar.</p>
+<p>La POO te deja crear un <strong>molde</strong> llamado <code>Usuario</code>. Ese molde dice "todo usuario tiene nombre, idioma, puntaje y nivel, y ademas sabe ganar puntos". Despues fabricas usuarios concretos a partir del molde, tantos como quieras, y cada uno cuida sus propios datos.</p>
+<blockquote class="def">
+<h3 id="que-significa-programacion-orientada-a-objetos-poo">🟦 ¿Que significa? — <em>Programacion Orientada a Objetos (POO)</em></h3>
+<p>Es una forma de organizar el codigo agrupando los <strong>datos</strong> (lo que algo "es") y las <strong>acciones</strong> (lo que algo "sabe hacer") dentro de una misma unidad llamada objeto. <strong>Para que sirve:</strong> mantener apps grandes ordenadas, donde cada pieza tiene su sitio. <strong>Donde se usa en un repo real:</strong> <strong>PolyPaw</strong> la usa para representar misiones, usuarios y la base de datos; su archivo <code>database_manager.py</code> es practicamente una clase que gestiona todo el guardado.</p>
+</blockquote>
+<hr />
+<h2 id="2-clase-y-objeto-el-molde-y-la-galleta">2. Clase y objeto: el molde y la galleta</h2>
+<p>La idea central de la POO son dos palabras: <strong>clase</strong> y <strong>objeto</strong>. La forma mas facil de entenderlas es pensar en moldes de galletas.</p>
+<ul>
+<li>La <strong>clase</strong> es el molde de galletas. Define la forma: "esta galleta tendra forma de estrella".</li>
+<li>El <strong>objeto</strong> es cada galleta concreta que sacas del molde. Todas comparten la forma, pero cada una es una galleta distinta (una con mas azucar, otra mas dorada).</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-clase">🟦 ¿Que significa? — <em>Clase</em></h3>
+<p>Es la plantilla o molde que describe como sera algo: que datos tendra y que podra hacer. <strong>Para que sirve:</strong> definir una sola vez la estructura y reutilizarla cuantas veces quieras. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, una clase <code>DatabaseManager</code> describe como se guarda el progreso del jugador; se escribe una vez y la usa toda la app.</p>
+<h3 id="que-significa-objeto">🟦 ¿Que significa? — <em>Objeto</em></h3>
+<p>Es una cosa concreta creada a partir de una clase; tiene sus propios valores. <strong>Para que sirve:</strong> representar elementos individuales (un usuario, un boton, una mision) que comparten estructura pero no datos. <strong>Donde se usa en un repo real:</strong> cada control que ves en la pantalla de <strong>PolyPaw</strong> (un boton, un texto) es un objeto creado por <strong>Flet</strong>.</p>
+<h3 id="que-significa-instancia">🟦 ¿Que significa? — <em>Instancia</em></h3>
+<p>Es otra palabra para "objeto creado a partir de una clase". Decimos "instancia de Usuario" igual que "objeto Usuario". <strong>Para que sirve:</strong> hablar con precision cuando programas. <strong>Donde se usa en un repo real:</strong> en <code>main.py</code> de <strong>PolyPaw</strong> se crea una instancia de <code>DatabaseManager</code> al arrancar la app.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Una frase para no olvidarlo nunca: <strong>la clase es la receta, el objeto es el pastel</strong>. Puedes hornear muchos pasteles con la misma receta.</p>
+</blockquote>
+<hr />
+<h2 id="3-tu-primera-clase">3. Tu primera clase</h2>
+<p>Vamos a escribir el molde <code>Usuario</code>. En Python una clase se define con la palabra <code>class</code> y, por convencion, su nombre empieza con <strong>mayuscula</strong>.</p>
+<pre><code class="language-python">class Usuario:
+    pass
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-class">🟦 ¿Que significa? — <em><code>class</code></em></h3>
+<p>Es la palabra clave de Python para empezar a definir una clase. <strong>Para que sirve:</strong> decirle a Python "aqui empieza un molde nuevo". <strong>Donde se usa en un repo real:</strong> en <code>database_manager.py</code> de <strong>PolyPaw</strong>, la linea <code>class DatabaseManager:</code> abre la clase que controla el guardado.</p>
+<h3 id="que-significa-pass">🟦 ¿Que significa? — <em><code>pass</code></em></h3>
+<p>Es un relleno que significa "aqui no hago nada todavia". Python no permite bloques vacios, asi que <code>pass</code> ocupa el hueco. <strong>Para que sirve:</strong> dejar una clase o funcion a medio escribir sin que reviente. <strong>Donde se usa en un repo real:</strong> en cualquier proyecto Python (como <strong>PolyPaw</strong>) mientras se esboza codigo que aun no esta listo.</p>
+</blockquote>
+<p>Esa clase no hace nada util todavia, pero ya es valida. Para crear un objeto a partir de ella, <strong>llamas a la clase como si fuera una funcion</strong>:</p>
+<pre><code class="language-python">ana = Usuario()
+print(ana)   # &lt;__main__.Usuario object at 0x7f...&gt;
+</code></pre>
+<p><code>ana</code> es ahora un objeto de tipo <code>Usuario</code>. Lo que ves al imprimirlo es la direccion en memoria; aun no tiene datos. Vamos a darle datos.</p>
+<hr />
+<h2 id="4-__init__-el-constructor-donde-nace-el-objeto">4. <code>__init__</code>: el constructor, donde nace el objeto</h2>
+<p>Para que cada usuario nazca con su nombre y su idioma, usamos un metodo especial llamado <code>__init__</code>. Se ejecuta <strong>automaticamente</strong> cada vez que creas un objeto.</p>
+<pre><code class="language-python">class Usuario:
+    def __init__(self, nombre, idioma):
+        self.nombre = nombre
+        self.idioma = idioma
+        self.puntaje = 0
+        self.nivel = 1
+</code></pre>
+<p>Ahora cuando hagas <code>Usuario("Ana", "ingles")</code>, Python llama a <code>__init__</code> por ti y guarda esos valores dentro del objeto.</p>
+<pre><code class="language-python">ana = Usuario(&quot;Ana&quot;, &quot;ingles&quot;)
+luis = Usuario(&quot;Luis&quot;, &quot;frances&quot;)
+
+print(ana.nombre)    # Ana
+print(luis.idioma)   # frances
+print(ana.puntaje)   # 0
+</code></pre>
+<p>¡Mira eso! Dos usuarios, cada uno con sus propios datos, fabricados con el mismo molde.</p>
+<blockquote class="def">
+<h3 id="que-significa-__init__-constructor">🟦 ¿Que significa? — <em><code>__init__</code> (constructor)</em></h3>
+<p>Es un metodo especial que se ejecuta solo, en el momento exacto en que creas el objeto, para darle sus valores iniciales. <strong>Para que sirve:</strong> asegurar que todo objeto nace "completo" y nunca a medias. <strong>Donde se usa en un repo real:</strong> el <code>__init__</code> de <code>DatabaseManager</code> en <strong>PolyPaw</strong> prepara la ruta del archivo JSON donde se guardara el progreso, en cuanto la base de datos se crea.</p>
+<h3 id="que-significa-constructor">🟦 ¿Que significa? — <em>Constructor</em></h3>
+<p>Es el nombre general (en muchos lenguajes) del codigo que construye un objeto nuevo. En Python ese codigo es <code>__init__</code>. <strong>Para que sirve:</strong> distinguir el momento de "nacimiento" del objeto del resto de su vida. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, cada vez que arranca <code>main.py</code> el constructor de <code>DatabaseManager</code> corre una sola vez.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Esos dos guiones bajos antes y despues (<code>__init__</code>) se leen en voz alta como "dunder init" (de <em>double underscore</em>, doble guion bajo). Python tiene varios metodos "dunder" con poderes especiales; este es el mas importante para empezar.</p>
+<p>Comparado con <strong>JavaScript</strong> (lo viste en el modulo 03): alli el constructor de una clase se llama literalmente <code>constructor()</code>. En Python se llama <code>__init__</code>. La idea es la misma; cambia el nombre.</p>
+</blockquote>
+<hr />
+<h2 id="5-self-el-objeto-hablando-de-si-mismo">5. <code>self</code>: el objeto hablando de si mismo</h2>
+<p>Habras notado la palabra <code>self</code> por todas partes. Es la que mas confunde al principio, asi que vamos despacito.</p>
+<p>Cuando escribes <code>self.nombre = nombre</code>, le dices a Python: "guarda este nombre <strong>dentro de este objeto en concreto</strong>". <code>self</code> es el propio objeto, refiriendose a si mismo.</p>
+<p>Piensa en Bit (¡yo!) diciendo "<strong>mi</strong> colita", "<strong>mi</strong> nombre". Esa palabra "mi" es <code>self</code>. Cuando Ana habla, su <code>self</code> es Ana; cuando Luis habla, su <code>self</code> es Luis. El mismo codigo, distinto dueño.</p>
+<pre><code class="language-python">class Usuario:
+    def __init__(self, nombre, idioma):
+        self.nombre = nombre      # &quot;mi nombre es...&quot;
+        self.idioma = idioma      # &quot;mi idioma es...&quot;
+        self.puntaje = 0
+        self.nivel = 1
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-self">🟦 ¿Que significa? — <em><code>self</code></em></h3>
+<p>Es el nombre que usa Python, dentro de la clase, para referirse al objeto concreto sobre el que se esta trabajando. <strong>Para que sirve:</strong> que cada objeto guarde y lea <strong>sus propios</strong> datos sin confundirse con los de otro. <strong>Donde se usa en un repo real:</strong> en <code>database_manager.py</code> de <strong>PolyPaw</strong>, lineas como <code>self.archivo = ...</code> guardan la ruta del JSON dentro de esa instancia de la base de datos.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p><code>self</code> <strong>siempre</strong> es el primer parametro de los metodos de una clase, pero <strong>nunca</strong> lo pasas tu al llamarlos. Escribes <code>ana.saludar()</code>, no <code>ana.saludar(ana)</code>. Python pone el <code>self</code> por ti, automaticamente. Olvidar <code>self</code> en la definicion es el error numero uno de quien empieza con POO.</p>
+<p>Comparado con <strong>JavaScript</strong>: alli existe <code>this</code>, que es parecido pero invisible (no aparece como parametro). En Python <code>self</code> se escribe explicitamente en cada metodo. Es mas verboso, pero tambien mas claro.</p>
+</blockquote>
+<hr />
+<h2 id="6-atributos-los-datos-del-objeto">6. Atributos: los datos del objeto</h2>
+<p>Cada <code>self.algo = valor</code> que pusiste crea un <strong>atributo</strong>. Los atributos son las "cajitas de datos" que viven dentro del objeto.</p>
+<pre><code class="language-python">ana = Usuario(&quot;Ana&quot;, &quot;ingles&quot;)
+print(ana.nombre)    # Ana       &lt;- atributo nombre
+print(ana.puntaje)   # 0         &lt;- atributo puntaje
+print(ana.nivel)     # 1         &lt;- atributo nivel
+</code></pre>
+<p>Accedes a un atributo con un <strong>punto</strong>: <code>objeto.atributo</code>. Tambien puedes cambiarlo:</p>
+<pre><code class="language-python">ana.puntaje = 50
+print(ana.puntaje)   # 50
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-atributo">🟦 ¿Que significa? — <em>Atributo</em></h3>
+<p>Es una variable que vive dentro de un objeto y guarda parte de su estado (su nombre, su puntaje, su idioma...). <strong>Para que sirve:</strong> que cada objeto recuerde sus propios datos a lo largo del programa. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, un control de <strong>Flet</strong> tiene atributos como <code>text</code> (el texto que muestra) o <code>bgcolor</code> (su color de fondo).</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <strong>PolyPaw</strong>, los archivos de misiones (<code>missions/*.json</code>) guardan datos como el titulo de la mision o las palabras a aprender. Cuando esos datos se cargan en Python, lo natural es meterlos en los atributos de un objeto <code>Mision</code>, para que la app trabaje con misiones como objetos y no con diccionarios sueltos.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>¿Atributo o variable? Una <strong>variable</strong> vive suelta en tu programa. Un <strong>atributo</strong> es una variable que pertenece a un objeto. La diferencia es de quien "tiene la caja".</p>
+</blockquote>
+<hr />
+<h2 id="7-metodos-las-acciones-del-objeto">7. Metodos: las acciones del objeto</h2>
+<p>Un objeto no solo guarda datos: tambien sabe <strong>hacer cosas</strong>. Esas acciones se llaman <strong>metodos</strong> y son funciones definidas dentro de la clase.</p>
+<p>Demos a <code>Usuario</code> la capacidad de ganar puntos y de subir de nivel.</p>
+<pre><code class="language-python">class Usuario:
+    def __init__(self, nombre, idioma):
+        self.nombre = nombre
+        self.idioma = idioma
+        self.puntaje = 0
+        self.nivel = 1
+
+    def ganar_puntos(self, cantidad):
+        self.puntaje = self.puntaje + cantidad
+        print(f&quot;{self.nombre} gano {cantidad} puntos. Total: {self.puntaje}&quot;)
+
+    def subir_nivel(self):
+        self.nivel = self.nivel + 1
+        print(f&quot;{self.nombre} subio al nivel {self.nivel}!&quot;)
+</code></pre>
+<p>Y asi se usan, otra vez con el <strong>punto</strong>:</p>
+<pre><code class="language-python">ana = Usuario(&quot;Ana&quot;, &quot;ingles&quot;)
+ana.ganar_puntos(30)    # Ana gano 30 puntos. Total: 30
+ana.ganar_puntos(20)    # Ana gano 20 puntos. Total: 50
+ana.subir_nivel()       # Ana subio al nivel 2!
+</code></pre>
+<p>Fijate: dentro de <code>ganar_puntos</code> usamos <code>self.puntaje</code> para leer y modificar el puntaje <strong>de ese mismo usuario</strong>. Si lo llamas en <code>luis</code>, tocara el puntaje de Luis, no el de Ana.</p>
+<blockquote class="def">
+<h3 id="que-significa-metodo">🟦 ¿Que significa? — <em>Metodo</em></h3>
+<p>Es una funcion que pertenece a una clase y describe algo que el objeto sabe hacer. <strong>Para que sirve:</strong> poner las acciones junto a los datos que esas acciones usan, en vez de tenerlos separados. <strong>Donde se usa en un repo real:</strong> <code>database_manager.py</code> de <strong>PolyPaw</strong> ofrece metodos como guardar y cargar el progreso; la app llama a esos metodos en vez de tocar el archivo JSON a mano.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Regla rapida: si esta dentro de una clase y empieza con <code>def</code>, es un <strong>metodo</strong>. Si esta suelto, fuera de cualquier clase, es una <strong>funcion</strong>. Por dentro se escriben igual; cambia donde viven.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Cuando en <strong>PolyPaw</strong> el jugador completa una mision, la app no escribe directamente en el JSON. Llama a un metodo del gestor de base de datos (algo como <code>guardar_progreso(...)</code>). Ese metodo concentra toda la logica de guardado en un solo sitio: si algun dia cambias como se guarda, lo cambias una vez y listo.</p>
+</blockquote>
+<hr />
+<h2 id="8-por-que-la-poo-ordena-apps-grandes">8. Por que la POO ordena apps grandes</h2>
+<p>Imagina <strong>PolyPaw</strong> sin clases: el codigo para guardar progreso estaria copiado en diez pantallas distintas. Si un dia decides cambiar de archivos JSON a otra forma de guardar, tendrias que corregir diez sitios y seguro olvidas uno. 🫠</p>
+<p>Con una clase <code>DatabaseManager</code>, <strong>toda</strong> la logica de guardar y cargar vive en un solo archivo (<code>database_manager.py</code>). El resto de la app solo dice "oye, gestor, guarda esto" y no le importa el como. Eso tiene un nombre bonito: <strong>encapsulamiento</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-encapsulamiento">🟦 ¿Que significa? — <em>Encapsulamiento</em></h3>
+<p>Es esconder los detalles internos de algo y ofrecer solo un par de acciones simples para usarlo. <strong>Para que sirve:</strong> poder cambiar el "como" por dentro sin romper al resto del programa. <strong>Donde se usa en un repo real:</strong> <code>DatabaseManager</code> en <strong>PolyPaw</strong> encapsula el manejo de archivos JSON; las pantallas solo piden guardar o cargar, sin saber donde esta el archivo.</p>
+<h3 id="que-significa-estado">🟦 ¿Que significa? — <em>Estado</em></h3>
+<p>Es el conjunto de valores que un objeto tiene <strong>ahora mismo</strong> (el puntaje actual de Ana, su nivel actual). <strong>Para que sirve:</strong> que el programa recuerde en que punto va cada cosa. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, el progreso del jugador (misiones completadas, puntos) es estado que <code>DatabaseManager</code> guarda y restaura.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>Faro/Organizer y RachaSimple estan hechos en <strong>TypeScript con React</strong>, no en Python; alli no usaras <code>class Usuario</code> de esta forma. Pero el concepto de agrupar datos y comportamiento aparece igual (en componentes y objetos). La POO de este capitulo es sobre todo para tu codigo <strong>Python</strong>, como <strong>PolyPaw</strong>. Y ojo: <strong>tunal-digital</strong> es HTML/CSS/JS plano y <strong>polypaw-nas</strong> es configuracion de servidor (Ubuntu, Samba, Cockpit, Tailscale); ninguno de esos dos usa clases de Python.</p>
+</blockquote>
+<hr />
+<h2 id="9-herencia-basica-moldes-que-nacen-de-otros-moldes">9. Herencia basica: moldes que nacen de otros moldes</h2>
+<p>A veces necesitas un molde que es <strong>casi</strong> igual a otro, pero con algo extra. En PolyPaw, un usuario normal y un usuario <strong>premium</strong> comparten casi todo, pero el premium tiene alguna ventaja. En vez de copiar toda la clase <code>Usuario</code>, la <strong>heredas</strong>.</p>
+<pre><code class="language-python">class UsuarioPremium(Usuario):
+    def __init__(self, nombre, idioma):
+        super().__init__(nombre, idioma)
+        self.es_premium = True
+
+    def ganar_puntos(self, cantidad):
+        # El premium gana el doble de puntos
+        super().ganar_puntos(cantidad * 2)
+</code></pre>
+<p><code>UsuarioPremium(Usuario)</code> significa "este molde <strong>hereda</strong> del molde <code>Usuario</code>". Asi obtiene gratis su <code>__init__</code>, sus atributos y sus metodos. Despues le anadimos lo nuestro.</p>
+<pre><code class="language-python">vip = UsuarioPremium(&quot;Sara&quot;, &quot;aleman&quot;)
+vip.ganar_puntos(30)    # Sara gano 60 puntos. Total: 60
+print(vip.es_premium)   # True
+print(vip.nivel)        # 1   &lt;- heredado de Usuario sin escribir nada
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-herencia">🟦 ¿Que significa? — <em>Herencia</em></h3>
+<p>Es crear una clase nueva basada en otra ya existente, reutilizando sus atributos y metodos y anadiendo o cambiando lo necesario. <strong>Para que sirve:</strong> evitar copiar codigo cuando dos cosas se parecen mucho. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, los controles de <strong>Flet</strong> (Boton, Texto, Columna...) heredan todos de un control base comun; por eso todos comparten propiedades como el color o el tamano.</p>
+<h3 id="que-significa-super">🟦 ¿Que significa? — <em><code>super()</code></em></h3>
+<p>Es una funcion que llama al metodo de la clase <strong>padre</strong> (la clase de la que heredas). <strong>Para que sirve:</strong> reaprovechar lo que el padre ya hace en vez de reescribirlo. <strong>Donde se usa en un repo real:</strong> al crear clases en <strong>PolyPaw</strong> sobre <strong>Flet</strong>, se usa <code>super().__init__()</code> para que el control base se prepare correctamente antes de anadir lo propio.</p>
+<h3 id="que-significa-clase-padre-y-clase-hija">🟦 ¿Que significa? — <em>Clase padre y clase hija</em></h3>
+<p>La <strong>clase padre</strong> (o base) es de la que se hereda; la <strong>clase hija</strong> (o derivada) es la que hereda. Aqui <code>Usuario</code> es el padre y <code>UsuarioPremium</code> la hija. <strong>Para que sirve:</strong> describir relaciones tipo "esto es un tipo especial de aquello". <strong>Donde se usa en un repo real:</strong> en <strong>Flet</strong>, un Boton es una clase hija de un control mas general; "un boton es un tipo de control".</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>No abuses de la herencia. Solo tiene sentido cuando de verdad puedes decir "X <strong>es un tipo de</strong> Y" (un usuario premium <strong>es un</strong> usuario). Si te descubres heredando solo para ahorrar dos lineas, probablemente sea mejor un atributo o un metodo normal. La herencia mal usada enreda mas de lo que ayuda.</p>
+<p>Comparado con <strong>JavaScript</strong>: alli heredas con <code>class Hija extends Padre</code> y llamas al padre con <code>super(...)</code>. En Python escribes <code>class Hija(Padre)</code> y usas <code>super().__init__(...)</code>. Mismo concepto, sintaxis distinta.</p>
+</blockquote>
+<hr />
+<h2 id="10-como-se-conecta-esto-con-flet-lo-que-usa-polypaw">10. Como se conecta esto con Flet (lo que usa PolyPaw)</h2>
+<p><strong>PolyPaw</strong> esta hecho integramente en Python con el framework <strong>Flet</strong>, que sirve para construir interfaces graficas (botones, textos, columnas). Y aqui esta lo bonito: <strong>todo en Flet es un objeto de una clase</strong>.</p>
+<p>Cuando en PolyPaw aparece un boton para empezar una mision, por dentro hay algo como:</p>
+<pre><code class="language-python">import flet as ft
+
+boton = ft.ElevatedButton(text=&quot;Empezar mision&quot;, on_click=iniciar)
+texto = ft.Text(value=&quot;Hola, Sara&quot;)
+</code></pre>
+<p><code>ft.ElevatedButton</code> y <code>ft.Text</code> son <strong>clases</strong> que viven dentro de Flet. Cada vez que escribes <code>ft.Text(...)</code> estas <strong>creando un objeto</strong> (una instancia), igual que hiciste con <code>Usuario("Ana", "ingles")</code>. Y <code>text=</code> o <code>value=</code> son <strong>atributos</strong> que le pasas, igual que <code>nombre</code> e <code>idioma</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-framework">🟦 ¿Que significa? — <em>Framework</em></h3>
+<p>Es un conjunto grande de codigo ya hecho (con sus clases y metodos) sobre el que construyes tu app, siguiendo sus reglas. <strong>Para que sirve:</strong> no reinventar lo basico (dibujar botones, manejar clics) y concentrarte en lo tuyo. <strong>Donde se usa en un repo real:</strong> <strong>PolyPaw</strong> usa el framework <strong>Flet</strong> para toda su interfaz; <strong>Faro/Organizer</strong> y <strong>RachaSimple</strong> usan otros (React) en TypeScript.</p>
+<h3 id="que-significa-control-en-flet">🟦 ¿Que significa? — <em>Control (en Flet)</em></h3>
+<p>Es cada pieza visual de la interfaz (un boton, un texto, una imagen), representada como un objeto de una clase de Flet. <strong>Para que sirve:</strong> construir la pantalla juntando controles como piezas de Lego. <strong>Donde se usa en un repo real:</strong> la pantalla de misiones de <strong>PolyPaw</strong> se arma colocando controles <code>Text</code>, <code>ElevatedButton</code>, <code>Column</code> y similares.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>Cuando entiendes que <code>ft.Text(...)</code> es "crear un objeto de la clase <code>Text</code>", la documentacion de Flet deja de dar miedo: cada control es una clase con sus atributos (que ves) y sus metodos (que hace). Lo que aprendiste con <code>Usuario</code> se aplica tal cual a cada control de <strong>PolyPaw</strong>.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Asi todo encaja: en <code>main.py</code> de <strong>PolyPaw</strong> se crea una instancia de <code>DatabaseManager</code> (tu propia clase) <strong>y</strong> se crean muchos controles de Flet (clases ajenas). Tus clases y las del framework conviven como objetos en el mismo programa. Eso es POO trabajando a tu favor.</p>
+</blockquote>
+<hr />
+<h2 id="11-juntando-todo-un-mini-ejemplo-estilo-polypaw">11. Juntando todo: un mini ejemplo estilo PolyPaw</h2>
+<p>Cerremos con un ejemplo que combina lo aprendido: una clase <code>Mision</code> y una clase <code>Jugador</code> que la completa.</p>
+<pre><code class="language-python">class Mision:
+    def __init__(self, titulo, recompensa):
+        self.titulo = titulo
+        self.recompensa = recompensa
+        self.completada = False
+
+    def completar(self):
+        self.completada = True
+        print(f&quot;Mision '{self.titulo}' completada!&quot;)
+
+
+class Jugador:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.puntos = 0
+
+    def jugar(self, mision):
+        mision.completar()
+        self.puntos = self.puntos + mision.recompensa
+        print(f&quot;{self.nombre} ahora tiene {self.puntos} puntos.&quot;)
+
+
+# Usamos las clases:
+sara = Jugador(&quot;Sara&quot;)
+saludos = Mision(&quot;Aprender saludos en aleman&quot;, recompensa=25)
+
+sara.jugar(saludos)
+# Mision 'Aprender saludos en aleman' completada!
+# Sara ahora tiene 25 puntos.
+
+print(saludos.completada)   # True
+</code></pre>
+<p>Mira como un objeto (<code>sara</code>) recibe a otro objeto (<code>saludos</code>) y trabaja con el. Asi se comunican los objetos en una app real: cada uno cuida lo suyo y se piden cosas con metodos. Eso, multiplicado por muchas clases, es <strong>PolyPaw</strong> por dentro. 🐾</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Cuando una clase te quede grande y confusa, hazte esta pregunta: "¿esto es <strong>lo que la cosa es</strong> (atributo) o <strong>lo que la cosa hace</strong> (metodo)?". Esa sola pregunta ordena casi cualquier clase.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar con mis palabras la diferencia entre <strong>clase</strong> y <strong>objeto</strong> (molde y galleta).</li>
+<li>[ ] Se que <strong>instancia</strong> es lo mismo que objeto creado desde una clase.</li>
+<li>[ ] Defino una clase con <code>class</code> y le doy un nombre con mayuscula inicial.</li>
+<li>[ ] Entiendo que <code>__init__</code> es el <strong>constructor</strong> y corre solo al crear el objeto.</li>
+<li>[ ] Se que <code>self</code> es "el propio objeto" y va como primer parametro de los metodos.</li>
+<li>[ ] Distingo un <strong>atributo</strong> (dato) de un <strong>metodo</strong> (accion) y accedo a ambos con el <strong>punto</strong>.</li>
+<li>[ ] Puedo crear varios objetos del mismo molde, cada uno con sus propios datos.</li>
+<li>[ ] Entiendo la <strong>herencia</strong> y para que sirve <code>super()</code>.</li>
+<li>[ ] Veo por que la POO ayuda a ordenar apps grandes (encapsulamiento).</li>
+<li>[ ] Reconozco que en <strong>PolyPaw</strong> cada control de <strong>Flet</strong> es un objeto de una clase.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>En papel (sin computadora).</strong> Escribe la diferencia entre clase y objeto usando tu propio ejemplo de la vida real (por ejemplo: molde de coches y los coches concretos). No vale el ejemplo de las galletas. </p>
+</li>
+<li>
+<p><strong>En papel.</strong> Dada la clase <code>Usuario</code> del capitulo, di que valores tendran <code>ana.nombre</code>, <code>ana.puntaje</code> y <code>ana.nivel</code> justo despues de hacer <code>ana = Usuario("Ana", "ingles")</code>. Explica de donde sale cada uno.</p>
+</li>
+<li>
+<p>💻 <strong>Crea una clase <code>Mascota</code></strong> con <code>__init__</code> que reciba <code>nombre</code> y <code>tipo</code> (por ejemplo "ajolote"), y guarde un atributo <code>energia = 100</code>. Anade un metodo <code>jugar()</code> que reste 10 a la energia e imprima <code>"{nombre} jugo, energia: {energia}"</code>. Crea un objeto llamado <code>bit</code> de tipo ajolote y haz que juegue tres veces. 🐾</p>
+</li>
+<li>
+<p>💻 <strong>Anade un metodo <code>comer(cantidad)</code></strong> a tu clase <code>Mascota</code> que <strong>sume</strong> energia (sin pasar de 100). Pruebalo: deja a Bit con poca energia jugando y luego dale de comer. Imprime la energia final.</p>
+</li>
+<li>
+<p>💻 <strong>Crea una clase <code>MascotaMagica</code></strong> que <strong>herede</strong> de <code>Mascota</code>. En su <code>__init__</code> usa <code>super().__init__(...)</code> y anade un atributo <code>hechizos = 0</code>. Anade un metodo <code>lanzar_hechizo()</code> que sume 1 a <code>hechizos</code> e imprima un mensaje. Comprueba que <code>MascotaMagica</code> tambien puede <code>jugar()</code> aunque no escribiste ese metodo en ella (lo heredo).</p>
+</li>
+<li>
+<p>💻 <strong>Mini reto estilo PolyPaw.</strong> Crea una clase <code>Mision</code> (con <code>titulo</code> y <code>recompensa</code>) y una clase <code>Jugador</code> (con <code>nombre</code> y <code>puntos</code>). Dale al <code>Jugador</code> un metodo <code>completar(mision)</code> que sume la recompensa a sus puntos e imprima el total. Crea un jugador y dos misiones, y completalas. Compara tu solucion con el ejemplo de la seccion 11.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. Hoy pasaste de tener datos sueltos en un charco a tener <strong>moldes que fabrican objetos ordenados</strong>, justo como <strong>PolyPaw</strong> organiza su base de datos y sus pantallas. La POO es de esas ideas que al principio cuesta ver y de repente, un dia, lo ves en todas partes. Cuando vuelvas a abrir <code>database_manager.py</code>, ya no veras codigo raro: veras una clase con su <code>__init__</code>, su <code>self</code> y sus metodos, contandote una historia que ahora entiendes. Nos vemos en el siguiente capitulo. — Bit 🐾</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
