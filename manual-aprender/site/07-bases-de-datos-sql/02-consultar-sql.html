@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 02 — Consultar con SQL — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-02-consultar-con-sql">Capítulo 02 — Consultar con SQL</h1>
+<blockquote>
+<p>SQL se aprende rápido porque se lee casi como inglés. En este capítulo dominas la operación
+más usada de todas: <strong>pedir datos</strong> (consultar). Con <code>SELECT</code>, <code>WHERE</code> y <code>ORDER BY</code> ya puedes
+sacar de una base de datos justo lo que necesitas.</p>
+</blockquote>
+<hr />
+<h2 id="1-select-pedir-datos">1. <code>SELECT</code>: pedir datos</h2>
+<blockquote class="def">
+<h3 id="que-significa-select-from">🟦 ¿Qué significa? — <em><code>SELECT ... FROM</code></em></h3>
+<p><code>SELECT</code> elige <strong>qué columnas</strong> quieres; <code>FROM</code> dice <strong>de qué tabla</strong>. Es la consulta base:
+<code>sql
+SELECT nombre, color FROM habitos;</code>
+"Dame las columnas nombre y color, de la tabla habitos." Para pedir <strong>todas</strong> las columnas se
+usa el asterisco <code>*</code>:
+<code>sql
+SELECT * FROM habitos;</code></p>
+<h3 id="tip-la-convencion-de-sql">💡 Tip — La convención de SQL</h3>
+<p>Las palabras clave de SQL (<code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>…) suelen escribirse en <strong>MAYÚSCULAS</strong> por
+costumbre, para distinguirlas de los nombres de tus tablas/columnas. No es obligatorio (SQL no
+distingue mayúsculas en las palabras clave), pero se lee mejor. Cada consulta termina en <code>;</code>.</p>
+</blockquote>
+<hr />
+<h2 id="2-where-filtrar-filas">2. <code>WHERE</code>: filtrar filas</h2>
+<p>Casi nunca quieres <strong>todas</strong> las filas; quieres las que cumplen una condición.</p>
+<blockquote class="def">
+<h3 id="que-significa-where">🟦 ¿Qué significa? — <em><code>WHERE</code></em></h3>
+<p><code>WHERE</code> filtra: solo devuelve las filas que <strong>cumplen una condición</strong> (¿recuerdas las
+condiciones del Módulo 03?). 
+<code>sql
+SELECT * FROM habitos WHERE usuario_id = 7;</code>
+"Dame los hábitos cuyo usuario_id sea 7." Operadores de comparación (parecidos a los que ya
+conoces):
+| Operador | Significa | Ejemplo |
+|---|---|---|
+| <code>=</code> | igual | <code>meta = 20</code> |
+| <code>&lt;&gt;</code> o <code>!=</code> | distinto | <code>color &lt;&gt; '#000000'</code> |
+| <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> | mayor/menor | <code>meta &gt;= 15</code> |
+| <code>BETWEEN</code> | en un rango | <code>meta BETWEEN 10 AND 30</code> |
+| <code>LIKE</code> | coincide con un patrón de texto | <code>nombre LIKE 'Le%'</code> |
+| <code>IN</code> | está en una lista | <code>usuario_id IN (7, 9)</code> |</p>
+<h3 id="cuidado-en-sql-la-igualdad-es-un-solo">⚠️ Cuidado — En SQL, la igualdad es UN solo <code>=</code></h3>
+<p>Ojo con esto si vienes de JavaScript: en SQL, comparar es con <strong>un</strong> <code>=</code> (no <code>===</code> ni <code>==</code>).
+Y el texto va entre <strong>comillas simples</strong>: <code>WHERE nombre = 'Leer'</code> (no comillas dobles).</p>
+<h3 id="que-significa-like-y-los-comodines">🟦 ¿Qué significa? — <em><code>LIKE</code> y los comodines</em></h3>
+<p><code>LIKE</code> busca por <strong>patrón</strong> de texto. El comodín <code>%</code> representa "cualquier cosa":
+- <code>'Le%'</code> → empieza por "Le" (Leer, Lectura…).
+- <code>'%ar'</code> → termina en "ar".
+- <code>'%jercicio%'</code> → contiene "jercicio".
+Útil para buscadores.</p>
+</blockquote>
+<hr />
+<h2 id="3-combinar-condiciones-and-or">3. Combinar condiciones: <code>AND</code> / <code>OR</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-and-y-or">🟦 ¿Qué significa? — <em><code>AND</code> y <code>OR</code></em></h3>
+<p>Igual que <code>&amp;&amp;</code> y <code>||</code> del Módulo 03, pero escritos como palabras:
+<code>sql
+SELECT * FROM habitos WHERE usuario_id = 7 AND meta &gt; 15;
+SELECT * FROM habitos WHERE color = '#1B6B6B' OR color = '#D98A3D';</code>
+<code>AND</code> exige que se cumplan <strong>ambas</strong>; <code>OR</code>, que se cumpla <strong>al menos una</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="4-ordenar-y-limitar-order-by-y-limit">4. Ordenar y limitar: <code>ORDER BY</code> y <code>LIMIT</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-order-by">🟦 ¿Qué significa? — <em><code>ORDER BY</code></em></h3>
+<p>Ordena los resultados por una columna, ascendente (<code>ASC</code>, por defecto) o descendente (<code>DESC</code>):
+<code>sql
+SELECT * FROM habitos ORDER BY meta DESC;</code>
+"Dame los hábitos ordenados por meta, de mayor a menor."</p>
+<h3 id="que-significa-limit">🟦 ¿Qué significa? — <em><code>LIMIT</code></em></h3>
+<p>Limita cuántas filas devuelve. Útil para "los 5 primeros":
+<code>sql
+SELECT * FROM habitos ORDER BY meta DESC LIMIT 5;</code></p>
+</blockquote>
+<hr />
+<h2 id="5-contar-y-agrupar-un-vistazo">5. Contar y agrupar (un vistazo)</h2>
+<blockquote class="def">
+<h3 id="que-significa-funciones-de-agregacion-y-count">🟦 ¿Qué significa? — <em>Funciones de agregación y <code>COUNT</code></em></h3>
+<p>A veces no quieres las filas, sino un <strong>resumen</strong>: cuántas hay, el promedio, el total. Eso son
+las <strong>funciones de agregación</strong>. La más común es <code>COUNT</code> (contar):
+<code>sql
+SELECT COUNT(*) FROM habitos WHERE usuario_id = 7;</code>
+"¿Cuántos hábitos tiene el usuario 7?" Otras: <code>SUM</code> (suma), <code>AVG</code> (promedio), <code>MAX</code>, <code>MIN</code>.</p>
+<h3 id="que-significa-group-by">🟦 ¿Qué significa? — <em><code>GROUP BY</code></em></h3>
+<p><code>GROUP BY</code> agrupa filas para resumir <strong>por categoría</strong>. Por ejemplo, "cuántos hábitos tiene
+cada usuario":
+<code>sql
+SELECT usuario_id, COUNT(*) FROM habitos GROUP BY usuario_id;</code>
+No necesitas dominarlo ahora; reconócelo como "resumir datos por grupos".</p>
+</blockquote>
+<hr />
+<h2 id="6-como-se-ve-esto-en-tus-apps">6. Cómo se ve esto en tus apps</h2>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En RachaSimple y Faro no escribes SQL "a mano" en la mayoría de sitios: usas el <strong>cliente de
+Supabase</strong>, que traduce a SQL por debajo. Por ejemplo, esto de la app:
+<code>js
+supabase.from('habitos').select('*').eq('usuario_id', 7)</code>
+es, en el fondo, <code>SELECT * FROM habitos WHERE usuario_id = 7;</code>. Entender el SQL te permite
+saber <strong>qué hace realmente</strong> ese código y depurarlo. (El cliente de Supabase lo verás en el
+capítulo 04.) Además, Supabase tiene un <strong>editor SQL</strong> donde puedes escribir consultas
+directas, ideal para practicar.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Uso <code>SELECT columnas FROM tabla;</code> y <code>SELECT *</code>.</li>
+<li>[ ] Filtro con <code>WHERE</code> y los operadores (<code>=</code>, <code>&gt;</code>, <code>LIKE</code>, <code>IN</code>, <code>BETWEEN</code>).</li>
+<li>[ ] Recuerdo que en SQL la igualdad es <strong>un</strong> <code>=</code> y el texto va en <strong>comillas simples</strong>.</li>
+<li>[ ] Combino condiciones con <code>AND</code> / <code>OR</code>.</li>
+<li>[ ] Ordeno con <code>ORDER BY ... ASC/DESC</code> y limito con <code>LIMIT</code>.</li>
+<li>[ ] Reconozco <code>COUNT</code>/agregaciones y <code>GROUP BY</code> para resumir.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<p>Usa la tabla <code>habitos</code> del capítulo anterior (id, nombre, meta, color, usuario_id).</p>
+<ol>
+<li><strong>SELECT básico.</strong> Escribe la consulta que devuelve solo el <code>nombre</code> de todos los hábitos.</li>
+<li><strong>Filtra.</strong> Escribe la consulta de los hábitos del usuario 7 con <code>meta</code> mayor o igual a 20.</li>
+<li><strong>LIKE.</strong> Escribe la consulta de los hábitos cuyo nombre empiece por "M".</li>
+<li><strong>Ordena y limita.</strong> Los 3 hábitos con mayor <code>meta</code>, de mayor a menor.</li>
+<li><strong>Traduce al cliente.</strong> Escribe el equivalente en SQL de
+   <code>supabase.from('habitos').select('nombre').eq('color', '#1B6B6B')</code>.</li>
+<li>💻 <strong>Practica de verdad.</strong> Si tienes cuenta de Supabase (la de RachaSimple), entra al <strong>SQL
+   Editor</strong> y prueba un <code>SELECT * FROM ... LIMIT 5;</code> sobre una tabla real. (Solo lectura, sin
+   miedo.)</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="03-modificar-y-relacionar.html">Capítulo 03 — Modificar y relacionar</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
