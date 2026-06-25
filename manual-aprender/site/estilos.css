@@ -1,49 +1,69 @@
 /* ============================================================
-   Manuales de Aprendizaje — hoja de estilos común
-   Diseño legible, calmado, con modo claro y oscuro automático.
+   Manuales de Aprendizaje — hoja de estilos
+   Estilo: vibrante, profesional pero divertido, energía "retro-arcade"
+   coherente con el pixel art de Bit. Con modo claro y oscuro.
    ============================================================ */
 
 :root {
-  --fondo: #fbf9f4;
-  --texto: #1f2733;
-  --texto-suave: #51607a;
-  --primario: #1b6b6b;     /* verde-azulado calmado */
-  --primario-claro: #e3f0ee;
-  --acento: #d98a3d;       /* atardecer cálido */
-  --borde: #e4ded2;
-  --codigo-fondo: #f3efe6;
-  --recuadro-def: #eef4fb;
-  --recuadro-def-borde: #9cc2ec;
-  --recuadro-tip: #eefaf0;
-  --recuadro-tip-borde: #8fd9a4;
-  --recuadro-warn: #fdf3e7;
-  --recuadro-warn-borde: #e9b877;
-  --recuadro-codigo: #eef2f7;
-  --recuadro-codigo-borde: #9fb4d0;
-  --max-ancho: 820px;
-  --radio: 12px;
-  --fuente: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --fuente-codigo: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --fondo: #fff8f0;
+  --fondo-2: #fdeede;
+  --texto: #241c2b;
+  --texto-suave: #6b5f73;
+  --primario: #0e8a8a;        /* teal vivo */
+  --primario-fuerte: #0a6e6e;
+  --acento: #f0883e;          /* naranja atardecer */
+  --acento-2: #ff5d8f;        /* rosa pixel */
+  --violeta: #7a5cff;         /* violeta arcade */
+  --amarillo: #ffc83d;        /* amarillo monedita */
+  --verde: #2bb673;
+  --borde: #f0d8bf;
+  --tarjeta: #ffffff;
+
+  /* Recuadros didácticos */
+  --def-bg: #eaf3ff;    --def-bd: #3d7bd6;   /* azul: definición */
+  --tip-bg: #e8fbef;    --tip-bd: #18a05a;   /* verde: tip */
+  --warn-bg: #fff2e0;   --warn-bd: #e8881f;  /* naranja: cuidado */
+  --code-bg: #f3ecff;   --code-bd: #7a5cff;  /* violeta: en tu código */
+  --exito-bg: #fff7da;  --exito-bd: #f0b400;  /* amarillo: checklist/celebración */
+
+  /* Bloques de código: tema oscuro tipo editor */
+  --pre-bg: #1e1b2e;
+  --pre-texto: #e8e3ff;
+  --pre-borde: #34304d;
+
+  --max-ancho: 860px;
+  --radio: 16px;
+  --sombra: 0 6px 22px rgba(120, 70, 30, 0.10);
+  --sombra-fuerte: 0 10px 30px rgba(120, 70, 30, 0.16);
+  --fuente: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fuente-titulo: "Baloo 2", "Inter", sans-serif;
+  --fuente-pixel: "Press Start 2P", monospace;
+  --fuente-codigo: "JetBrains Mono", "SFMono-Regular", Consolas, Menlo, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --fondo: #141a22;
-    --texto: #e7ecf3;
-    --texto-suave: #a9b6c9;
-    --primario: #5bc4be;
-    --primario-claro: #1c2b2b;
-    --acento: #e8a45e;
-    --borde: #2a3340;
-    --codigo-fondo: #1d2530;
-    --recuadro-def: #182434;
-    --recuadro-def-borde: #3f6da3;
-    --recuadro-tip: #15271c;
-    --recuadro-tip-borde: #3d7d52;
-    --recuadro-warn: #2a2113;
-    --recuadro-warn-borde: #9b7338;
-    --recuadro-codigo: #1a222e;
-    --recuadro-codigo-borde: #41597a;
+    --fondo: #14101c;
+    --fondo-2: #1c1630;
+    --texto: #f0ecf7;
+    --texto-suave: #a99fb8;
+    --primario: #2fd4cf;
+    --primario-fuerte: #5be0db;
+    --acento: #ffa45e;
+    --acento-2: #ff7aa6;
+    --violeta: #a48bff;
+    --amarillo: #ffd766;
+    --verde: #43d68d;
+    --borde: #2e2740;
+    --tarjeta: #1d1730;
+    --def-bg: #16233a;   --def-bd: #5a92e6;
+    --tip-bg: #122a1d;   --tip-bd: #34c878;
+    --warn-bg: #2c2110;  --warn-bd: #e8a040;
+    --code-bg: #211a3a;  --code-bd: #9d86ff;
+    --exito-bg: #2a2410; --exito-bd: #ffce4a;
+    --pre-bg: #0e0b1a;   --pre-texto: #e8e3ff; --pre-borde: #2a2540;
+    --sombra: 0 6px 22px rgba(0,0,0,0.35);
+    --sombra-fuerte: 0 10px 30px rgba(0,0,0,0.45);
   }
 }
 
@@ -51,103 +71,166 @@
 
 body {
   margin: 0;
-  background: var(--fondo);
+  background:
+    radial-gradient(1200px 400px at 100% -10%, var(--fondo-2), transparent),
+    var(--fondo);
   color: var(--texto);
   font-family: var(--fuente);
   font-size: 18px;
-  line-height: 1.7;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
 }
 
-.contenedor {
-  max-width: var(--max-ancho);
-  margin: 0 auto;
-  padding: 32px 20px 96px;
-}
+.contenedor { max-width: var(--max-ancho); margin: 0 auto; padding: 28px 20px 120px; }
 
-/* Barra superior */
+/* ---------- Barra superior ---------- */
 .barra {
-  position: sticky;
-  top: 0;
-  background: var(--fondo);
-  border-bottom: 1px solid var(--borde);
+  position: sticky; top: 0; z-index: 20;
+  display: flex; gap: 18px; align-items: center;
   padding: 12px 20px;
-  display: flex;
-  gap: 16px;
-  align-items: center;
+  background: color-mix(in srgb, var(--fondo) 86%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid var(--primario);
   font-size: 15px;
-  z-index: 10;
 }
-.barra a { color: var(--primario); text-decoration: none; font-weight: 600; }
-.barra a:hover { text-decoration: underline; }
+.barra a { color: var(--primario-fuerte); text-decoration: none; font-weight: 700; }
+.barra a:hover { color: var(--acento-2); }
+.barra .marca { font-family: var(--fuente-pixel); font-size: 11px; color: var(--violeta); letter-spacing: .5px; }
 
-h1, h2, h3 { line-height: 1.3; }
-h1 { font-size: 2rem; color: var(--texto); margin-top: 0; }
-h2 { font-size: 1.5rem; border-bottom: 2px solid var(--primario-claro); padding-bottom: 6px; margin-top: 2.4em; }
-h3 { font-size: 1.2rem; color: var(--primario); margin-top: 1.8em; }
+/* Barra de progreso de lectura */
+#progreso { position: fixed; top: 0; left: 0; height: 4px; width: 0;
+  background: linear-gradient(90deg, var(--acento-2), var(--amarillo), var(--primario)); z-index: 30; transition: width .1s; }
 
-a { color: var(--primario); }
+/* ---------- Títulos ---------- */
+h1, h2, h3, h4 { font-family: var(--fuente-titulo); line-height: 1.2; font-weight: 800; }
+h1 {
+  font-size: 2.3rem; margin: .2em 0 .6em;
+  background: linear-gradient(90deg, var(--primario), var(--violeta) 60%, var(--acento-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+h2 {
+  font-size: 1.7rem; margin-top: 2.2em; color: var(--texto);
+  padding-bottom: 8px; border-bottom: 4px solid; border-image: linear-gradient(90deg, var(--acento), var(--amarillo)) 1;
+}
+h3 { font-size: 1.3rem; color: var(--primario-fuerte); margin-top: 1.8em; }
+h2::before { content: "▸ "; color: var(--acento); }
 
+a { color: var(--primario-fuerte); text-underline-offset: 3px; }
+a:hover { color: var(--acento-2); }
+
+p { margin: 1em 0; }
+strong { color: var(--texto); }
+
+/* ---------- Código ---------- */
 code {
   font-family: var(--fuente-codigo);
-  background: var(--codigo-fondo);
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-size: 0.9em;
+  background: var(--code-bg);
+  color: var(--violeta);
+  padding: 2px 7px; border-radius: 7px; font-size: .88em; font-weight: 600;
 }
 pre {
-  background: var(--codigo-fondo);
-  border: 1px solid var(--borde);
+  position: relative;
+  background: var(--pre-bg); color: var(--pre-texto);
+  border: 1px solid var(--pre-borde);
   border-radius: var(--radio);
-  padding: 16px;
-  overflow-x: auto;
+  padding: 18px 18px; margin: 1.4em 0; overflow-x: auto;
+  box-shadow: var(--sombra);
 }
-pre code { background: none; padding: 0; }
+pre code { background: none; color: inherit; padding: 0; font-weight: 500; font-size: .92em; }
+/* puntitos estilo "ventana" */
+pre::before {
+  content: ""; position: absolute; top: 12px; left: 16px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #ff5f57; box-shadow: 18px 0 #febc2e, 36px 0 #28c840;
+  opacity: .9;
+}
+pre { padding-top: 38px; }
+.btn-copiar {
+  position: absolute; top: 8px; right: 8px;
+  font-family: var(--fuente); font-size: 12px; font-weight: 700;
+  color: var(--pre-texto); background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.22); border-radius: 8px;
+  padding: 4px 10px; cursor: pointer; transition: all .15s;
+}
+.btn-copiar:hover { background: var(--acento-2); border-color: var(--acento-2); color: #fff; }
 
-/* Recuadros didácticos: se generan a partir de blockquotes con clase */
+/* ---------- Recuadros didácticos (blockquotes) ---------- */
 blockquote {
-  margin: 1.5em 0;
-  padding: 14px 18px;
-  border-left: 5px solid var(--primario);
-  background: var(--primario-claro);
-  border-radius: 0 var(--radio) var(--radio) 0;
+  margin: 1.6em 0; padding: 16px 20px 16px 54px; position: relative;
+  background: var(--def-bg);
+  border: 1px solid color-mix(in srgb, var(--def-bd) 35%, transparent);
+  border-left: 6px solid var(--def-bd);
+  border-radius: 14px; box-shadow: var(--sombra);
 }
-blockquote.def  { background: var(--recuadro-def);  border-left-color: var(--recuadro-def-borde); }
-blockquote.tip  { background: var(--recuadro-tip);  border-left-color: var(--recuadro-tip-borde); }
-blockquote.warn { background: var(--recuadro-warn); border-left-color: var(--recuadro-warn-borde); }
-blockquote.code { background: var(--recuadro-codigo); border-left-color: var(--recuadro-codigo-borde); }
-blockquote p:first-child { margin-top: 0; }
-blockquote p:last-child { margin-bottom: 0; }
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 1.5em 0;
-  font-size: 0.95em;
+blockquote::before {
+  content: "💬"; position: absolute; left: 14px; top: 14px; font-size: 1.4rem;
 }
-th, td { border: 1px solid var(--borde); padding: 8px 12px; text-align: left; }
-th { background: var(--primario-claro); }
+blockquote p:first-child { margin-top: 0; } blockquote p:last-child { margin-bottom: 0; }
+blockquote.def  { background: var(--def-bg);  border-left-color: var(--def-bd); }
+blockquote.def::before  { content: "🟦"; }
+blockquote.tip  { background: var(--tip-bg);  border-left-color: var(--tip-bd); }
+blockquote.tip::before  { content: "💡"; }
+blockquote.warn { background: var(--warn-bg); border-left-color: var(--warn-bd); }
+blockquote.warn::before { content: "⚠️"; }
+blockquote.code { background: var(--code-bg); border-left-color: var(--code-bd); }
+blockquote.code::before { content: "🔎"; }
+blockquote.exito{ background: var(--exito-bg);border-left-color: var(--exito-bd); }
+blockquote.exito::before{ content: "✅"; }
+blockquote h3 { margin-top: .2em; }
 
-img { max-width: 100%; height: auto; border-radius: var(--radio); display: block; margin: 1.5em auto; }
+/* ---------- Tablas ---------- */
+table { border-collapse: collapse; width: 100%; margin: 1.6em 0; font-size: .95em;
+  border-radius: 12px; overflow: hidden; box-shadow: var(--sombra); }
+th, td { border: 1px solid var(--borde); padding: 10px 14px; text-align: left; }
+thead th { background: linear-gradient(90deg, var(--primario), var(--primario-fuerte)); color: #fff; border-color: transparent; }
+tbody tr:nth-child(even) { background: color-mix(in srgb, var(--primario) 7%, transparent); }
+
+/* ---------- Imágenes ---------- */
+img { max-width: 100%; height: auto; border-radius: var(--radio); display: block; margin: 1.6em auto; box-shadow: var(--sombra-fuerte); }
 figure { margin: 1.8em 0; text-align: center; }
-figcaption { color: var(--texto-suave); font-size: 0.9em; margin-top: 8px; }
+figcaption { color: var(--texto-suave); font-size: .9em; margin-top: 8px; font-style: italic; }
 
-hr { border: none; border-top: 1px solid var(--borde); margin: 2.5em 0; }
+hr { border: none; height: 3px; margin: 2.6em 0; border-radius: 3px;
+  background: repeating-linear-gradient(90deg, var(--acento) 0 14px, transparent 14px 26px); opacity: .6; }
 
-/* Tarjetas del índice */
-.tarjetas { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); margin: 24px 0; }
+/* ---------- Listas ---------- */
+ul, ol { padding-left: 1.4em; }
+li { margin: .35em 0; }
+ul li::marker { color: var(--acento-2); }
+ol li::marker { color: var(--primario); font-weight: 700; }
+
+/* ---------- Soluciones plegables ---------- */
+details { margin: 1.2em 0; border: 2px dashed var(--acento); border-radius: 14px; padding: 0 18px; background: color-mix(in srgb, var(--amarillo) 10%, transparent); }
+details[open] { padding-bottom: 10px; }
+summary { cursor: pointer; font-weight: 800; padding: 14px 0; color: var(--primario-fuerte); list-style: none; }
+summary::before { content: "🧩 "; }
+details[open] summary::before { content: "✅ "; }
+
+/* ---------- Tarjetas del índice ---------- */
+.tarjetas { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); margin: 28px 0; }
 .tarjeta {
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  padding: 18px;
-  background: var(--codigo-fondo);
-  text-decoration: none;
-  color: var(--texto);
-  display: block;
-  transition: transform .12s ease, border-color .12s ease;
+  border: 1px solid var(--borde); border-radius: var(--radio); padding: 20px;
+  background: var(--tarjeta); text-decoration: none; color: var(--texto);
+  box-shadow: var(--sombra); transition: transform .15s, box-shadow .15s, border-color .15s;
+  border-top: 5px solid var(--acento);
 }
-.tarjeta:hover { transform: translateY(-2px); border-color: var(--primario); }
-.tarjeta .num { color: var(--acento); font-weight: 700; font-size: 0.85em; letter-spacing: .05em; }
-.tarjeta h3 { margin: 4px 0 6px; }
-.tarjeta p { margin: 0; color: var(--texto-suave); font-size: 0.92em; }
+.tarjeta:hover { transform: translateY(-4px); box-shadow: var(--sombra-fuerte); border-top-color: var(--acento-2); }
+.tarjeta .num { font-family: var(--fuente-pixel); font-size: 9px; color: var(--violeta); letter-spacing: .5px; }
+.tarjeta h3 { margin: 10px 0 6px; color: var(--primario-fuerte); }
+.tarjeta p { margin: 0; color: var(--texto-suave); font-size: .92em; }
 
-footer { color: var(--texto-suave); font-size: 0.85em; text-align: center; margin-top: 64px; }
+footer { color: var(--texto-suave); font-size: .85em; text-align: center; margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--borde); }
+
+/* Botón "subir" */
+#arriba { position: fixed; right: 18px; bottom: 18px; z-index: 25;
+  background: var(--violeta); color: #fff; border: none; border-radius: 50%;
+  width: 46px; height: 46px; font-size: 20px; cursor: pointer; box-shadow: var(--sombra-fuerte);
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .15s; }
+#arriba.visible { opacity: 1; pointer-events: auto; }
+#arriba:hover { transform: scale(1.1); background: var(--acento-2); }
+
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  h1 { font-size: 1.8rem; }
+  .contenedor { padding: 20px 16px 100px; }
+}
