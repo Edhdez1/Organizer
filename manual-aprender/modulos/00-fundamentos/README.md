@@ -1,5 +1,9 @@
 # Módulo 00 — Fundamentos
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/portada.png" alt="Bit junto a una computadora retro y un mapa pixelado de internet" width="640">
+</p>
+
 > **Objetivo del módulo:** entender, sin tecnicismos vacíos, *qué* es programar, *cómo*
 > funciona una computadora, *cómo* funciona internet y la web, y aprender a usar las dos
 > herramientas base de todo programador: **la terminal** y **Git**. Al terminar, tendrás el
@@ -30,8 +34,7 @@ aquí están las ideas que harán que los demás módulos se entiendan solos.
 | 04 | [La terminal](04-la-terminal.md) | Qué es, por qué se usa, comandos básicos para sobrevivir |
 | 05 | [Git y GitHub](05-git-y-github.md) | Control de versiones, commits, ramas, repositorios |
 
-> Los capítulos 03, 04 y 05 se completan en la siguiente tanda de generación. Este archivo y
-> los capítulos 01 y 02 son la **muestra** para que apruebes el formato.
+> ✅ **Módulo 00 completo** (capítulos 01–05). Es la base de todos los módulos siguientes.
 
 ---
 

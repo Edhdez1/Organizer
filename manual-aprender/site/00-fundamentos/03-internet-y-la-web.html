@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 03 — Internet y la web — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-03-internet-y-la-web">Capítulo 03 — Internet y la web</h1>
+<blockquote>
+<p>Tus cuatro proyectos viven en internet o se conectan a él. Aquí entenderás, sin magia, qué
+pasa exactamente desde que escribes una dirección hasta que aparece una página. Este capítulo
+es la base del módulo de NAS y redes (09) y de todo lo "web".</p>
+</blockquote>
+<hr />
+<h2 id="1-internet-no-es-lo-mismo-que-la-web">1. Internet no es lo mismo que "la web"</h2>
+<p>Se usan como sinónimos, pero no lo son.</p>
+<blockquote class="def">
+<h3 id="que-significa-internet">🟦 ¿Qué significa? — <em>Internet</em></h3>
+<p><strong>Internet</strong> es la <strong>red física</strong> que conecta millones de computadoras de todo el mundo
+mediante cables, fibra óptica, antenas y satélites. Es la "carretera". Por ella viajan
+muchas cosas: correos, videollamadas, juegos, mensajes… <strong>y</strong> páginas web.</p>
+<h3 id="que-significa-la-web-world-wide-web">🟦 ¿Qué significa? — <em>La web (World Wide Web)</em></h3>
+<p>La <strong>web</strong> es <strong>uno de los servicios</strong> que funcionan <em>sobre</em> internet: el de las páginas
+que ves en un navegador, enlazadas entre sí. La web usa internet como la carretera, pero no
+es la carretera. WhatsApp, por ejemplo, también usa internet, pero no es "la web".</p>
+</blockquote>
+<p>Analogía: internet es el <strong>sistema de carreteras</strong>; la web es <strong>uno de los servicios</strong> que
+circulan por ellas (como el correo postal usa las carreteras pero no <em>es</em> la carretera).</p>
+<hr />
+<h2 id="2-el-modelo-clienteservidor-la-idea-mas-importante-del-capitulo">2. El modelo cliente–servidor (la idea más importante del capítulo)</h2>
+<p>Casi todo en la web funciona con dos papeles: <strong>cliente</strong> y <strong>servidor</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-cliente">🟦 ¿Qué significa? — <em>Cliente</em></h3>
+<p>El <strong>cliente</strong> es quien <strong>pide</strong> algo. En la web, el cliente más común es tu <strong>navegador</strong>
+(Chrome, Firefox…). Cuando abres una página, tu navegador <em>pide</em> esa página.</p>
+<h3 id="que-significa-servidor">🟦 ¿Qué significa? — <em>Servidor</em></h3>
+<p>El <strong>servidor</strong> es la computadora (siempre encendida) que <strong>recibe la petición y responde</strong>
+enviando lo pedido: el texto, las imágenes, los datos.
+<strong>¿Dónde se usa en tu proyecto?</strong> Cuando alguien entra a <code>tunaldigital.com</code>, el servidor de
+<strong>Cloudflare</strong> le envía tu <code>index.html</code>, <code>styles.css</code> y <code>main.js</code>. Tu <strong>NAS</strong> <code>polypaw-nas</code>
+también es un servidor: responde cuando le pides archivos por Samba.</p>
+<h3 id="tip-una-misma-computadora-puede-ser-cliente-y-servidor">💡 Tip — Una misma computadora puede ser cliente y servidor</h3>
+<p>Tu laptop es <strong>cliente</strong> cuando navega, pero puede ser <strong>servidor</strong> si instalas algo que
+"sirva" a otros (como tu Acer Nitro convertido en NAS). El papel depende de qué hace en
+cada momento, no del aparato.</p>
+</blockquote>
+<p>El flujo básico es siempre: <strong>el cliente pide → el servidor responde</strong>. A esto se le llama
+<em>petición y respuesta</em> (en inglés, <em>request</em> y <em>response</em>).</p>
+<hr />
+<h2 id="3-direcciones-ip-dominios-y-dns">3. Direcciones: IP, dominios y DNS</h2>
+<p>Para que una carta llegue, necesitas una dirección. En internet pasa igual.</p>
+<blockquote class="def">
+<h3 id="que-significa-direccion-ip">🟦 ¿Qué significa? — <em>Dirección IP</em></h3>
+<p>Una <strong>IP</strong> (<em>Internet Protocol address</em>) es el <strong>número que identifica</strong> a cada dispositivo
+en una red, como <code>192.168.1.50</code> (en tu casa) o <code>172.67.12.34</code> (en internet). Sirve para que
+los datos sepan a qué máquina ir.
+<strong>¿Dónde se usa en tu proyecto?</strong> Tu NAS tiene una IP dentro de tu red local; por ella lo
+encuentran tus otros dispositivos.</p>
+<h3 id="que-significa-dominio">🟦 ¿Qué significa? — <em>Dominio</em></h3>
+<p>Un <strong>dominio</strong> es el <strong>nombre fácil de recordar</strong> que usamos en lugar del número IP, como
+<code>tunaldigital.com</code> o <code>google.com</code>. Las personas recordamos nombres, no números.</p>
+<h3 id="que-significa-dns-sistema-de-nombres-de-dominio">🟦 ¿Qué significa? — <em>DNS (sistema de nombres de dominio)</em></h3>
+<p>El <strong>DNS</strong> (<em>Domain Name System</em>) es la <strong>"agenda de contactos" de internet</strong>: traduce un
+dominio (nombre) a su IP (número). Cuando escribes <code>tunaldigital.com</code>, tu computadora le
+pregunta a un servidor DNS "¿cuál es la IP de esto?", y con esa IP ya sabe a dónde ir.
+<strong>¿Dónde se usa en tu proyecto?</strong> <strong>AdGuard Home</strong>, instalado en tu NAS, es precisamente un
+servidor DNS: traduce nombres a IPs y, de paso, <strong>bloquea</strong> los dominios de anuncios
+(responde "no existe" para ellos). Lo verás a fondo en el módulo 09.</p>
+<h3 id="que-significa-puerto">🟦 ¿Qué significa? — <em>Puerto</em></h3>
+<p>Si la IP es la dirección de un edificio, el <strong>puerto</strong> es <strong>el número de apartamento</strong>: un
+número que indica <em>qué servicio</em> dentro de esa máquina debe atender. Las webs normales usan
+el puerto <strong>80</strong> (HTTP) o <strong>443</strong> (HTTPS); tu panel <strong>Cockpit</strong> usa el <strong>9090</strong>. Por eso lo
+abres como <code>https://polypaw-nas:9090</code>: la máquina + el apartamento.</p>
+</blockquote>
+<hr />
+<h2 id="4-http-y-https-el-idioma-de-la-web">4. HTTP y HTTPS: el idioma de la web</h2>
+<p>Cliente y servidor necesitan hablar el mismo idioma para entenderse. En la web, ese idioma es
+HTTP.</p>
+<blockquote class="def">
+<h3 id="que-significa-http">🟦 ¿Qué significa? — <em>HTTP</em></h3>
+<p><strong>HTTP</strong> (<em>HyperText Transfer Protocol</em>, "protocolo de transferencia de hipertexto") son las
+<strong>reglas</strong> con las que el navegador pide y el servidor responde páginas y datos. Un
+<em>protocolo</em> es simplemente un conjunto de reglas acordadas para comunicarse.</p>
+<h3 id="que-significa-https-y-por-que-la-s-importa">🟦 ¿Qué significa? — <em>HTTPS y por qué la "s" importa</em></h3>
+<p><strong>HTTPS</strong> es HTTP <strong>seguro</strong>: la "s" es de <em>secure</em>. Cifra (codifica) la información para que
+nadie en el camino pueda leerla ni alterarla. Por eso ves un <strong>candado</strong> 🔒 en el navegador.
+<strong>Regla práctica:</strong> cualquier sitio que pida datos (contraseñas, formularios) <strong>debe</strong> usar
+HTTPS. El sitio de Tunal Digital lo usa.</p>
+<h3 id="que-significa-metodos-http-get-post">🟦 ¿Qué significa? — <em>Métodos HTTP (GET, POST…)</em></h3>
+<p>Cada petición HTTP tiene un <strong>método</strong> que dice <em>qué quieres hacer</em>:
+- <strong>GET</strong> → "dame" algo (leer una página o datos). Es lo más común.
+- <strong>POST</strong> → "toma" estos datos (enviar un formulario, crear algo).
+- <strong>PUT</strong> → "actualiza" algo existente.  <strong>DELETE</strong> → "borra" algo.
+<strong>¿Dónde se usa en tu proyecto?</strong> En Faro, <code>src/app/api/projects/</code> responde a GET (listar
+proyectos), POST (crear), PUT (editar) y DELETE (borrar). Lo verás en el módulo 08 (APIs).</p>
+<h3 id="que-significa-codigo-de-estado-http">🟦 ¿Qué significa? — <em>Código de estado HTTP</em></h3>
+<p>Cada respuesta trae un <strong>número de estado</strong> que resume qué pasó:
+- <strong>200</strong> → todo bien.
+- <strong>404</strong> → "no encontrado" (la página/recurso no existe).
+- <strong>403</strong> → "prohibido" (no tienes permiso). <em>(Justo este error apareció cuando intenté
+  acceder a un repositorio fuera de mi alcance.)</em>
+- <strong>500</strong> → error del servidor.
+Memorizar estos cuatro te ahorra muchísimo tiempo depurando.</p>
+</blockquote>
+<hr />
+<h2 id="5-que-pasa-paso-a-paso-al-abrir-una-pagina">5. Qué pasa, paso a paso, al abrir una página</h2>
+<p>Juntemos todo. Cuando escribes <code>tunaldigital.com</code> y presionas Enter:</p>
+<ol>
+<li><strong>DNS:</strong> tu computadora pregunta "¿cuál es la IP de <code>tunaldigital.com</code>?" y recibe, por
+   ejemplo, <code>172.67.12.34</code>.</li>
+<li><strong>Conexión:</strong> tu navegador (cliente) abre una conexión a esa IP, al puerto 443 (HTTPS).</li>
+<li><strong>Petición:</strong> el navegador envía una petición HTTP <code>GET /</code> ("dame la página principal").</li>
+<li><strong>Respuesta:</strong> el servidor responde con estado <code>200</code> y el contenido: el archivo
+   <code>index.html</code>.</li>
+<li><strong>Lectura del HTML:</strong> el navegador lee el HTML y descubre que necesita más archivos
+   (el <code>styles.css</code> para los colores, el <code>main.js</code> para la interactividad). Por cada uno hace
+   <strong>otra</strong> petición GET.</li>
+<li><strong>Dibujado (render):</strong> con el HTML (estructura), el CSS (aspecto) y el JavaScript (lógica),
+   el navegador <strong>dibuja</strong> la página en tu pantalla.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip-esto-explica-el-orden-de-tus-modulos">💡 Tip — Esto explica el orden de tus módulos</h3>
+<p>Fíjate: el navegador necesita <strong>HTML + CSS + JavaScript</strong>. Por eso el manual los enseña en
+ese orden (módulos 01, 02, 03): es exactamente cómo se arma una página.</p>
+</blockquote>
+<hr />
+<h2 id="6-frontend-y-backend">6. Frontend y backend</h2>
+<p>Dos palabras que oirás constantemente.</p>
+<blockquote class="def">
+<h3 id="que-significa-frontend-la-parte-de-adelante">🟦 ¿Qué significa? — <em>Frontend (la parte de adelante)</em></h3>
+<p>El <strong>frontend</strong> es todo lo que ocurre <strong>en el navegador del usuario</strong>: lo que ve y toca
+(HTML, CSS, JavaScript). "Front" = frente, la cara visible.</p>
+<h3 id="que-significa-backend-la-parte-de-atras">🟦 ¿Qué significa? — <em>Backend (la parte de atrás)</em></h3>
+<p>El <strong>backend</strong> es lo que ocurre <strong>en el servidor</strong>, lejos de la vista: guardar datos,
+verificar contraseñas, hablar con la base de datos, llamar a la IA. "Back" = atrás.
+<strong>¿Dónde se usa en tu proyecto?</strong> En Faro, las carpetas <code>src/components/</code> son frontend
+(lo que se ve); <code>src/app/api/</code> es backend (lo que procesa en el servidor). Los <strong>Cloudflare
+Workers</strong> de tunal-digital también son backend.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Distingo <strong>internet</strong> (la red física) de <strong>la web</strong> (un servicio sobre ella).</li>
+<li>[ ] Explico el modelo <strong>cliente–servidor</strong> (pedir / responder).</li>
+<li>[ ] Sé qué son <strong>IP</strong>, <strong>dominio</strong>, <strong>DNS</strong> y <strong>puerto</strong>, y cómo se relacionan.</li>
+<li>[ ] Entiendo <strong>HTTP/HTTPS</strong>, los <strong>métodos</strong> (GET/POST…) y los <strong>estados</strong> (200/404/403/500).</li>
+<li>[ ] Puedo narrar, paso a paso, qué pasa al abrir una página.</li>
+<li>[ ] Diferencio <strong>frontend</strong> de <strong>backend</strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>La analogía de la carta.</strong> Explica, con la analogía del correo postal, qué papel juegan
+   la <strong>IP</strong>, el <strong>dominio</strong>, el <strong>DNS</strong> y el <strong>puerto</strong>.</li>
+<li><strong>Lee estados.</strong> ¿Qué significa cada uno y qué harías como programador? (a) 404 al cargar
+   una imagen, (b) 403 al entrar a una página, (c) 500 al enviar un formulario.</li>
+<li><strong>Frontend o backend.</strong> Clasifica: el color de un botón; verificar una contraseña; el texto
+   que ves; guardar un hábito en la base de datos; una animación al pasar el cursor.</li>
+<li>💻 <strong>Ver una petición real.</strong> En tu computadora, abre cualquier web, pulsa <code>F12</code> (Herramientas
+   de desarrollador), pestaña <strong>Network</strong> (Red) y recarga. Verás la lista de peticiones.
+   Anota: ¿cuántas hubo? ¿Ves alguna con estado 200? ¿Cuál fue la primera?</li>
+<li><strong>Tu propio NAS.</strong> Tu NAS usa el puerto 9090 para Cockpit. Si quisieras también servir una
+   web normal desde él, ¿qué puerto usarías y por qué?</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="04-la-terminal.html">Capítulo 04 — La terminal</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>

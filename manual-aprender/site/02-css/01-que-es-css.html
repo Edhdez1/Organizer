@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 01 — ¿Qué es CSS? — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-01-que-es-css">Capítulo 01 — ¿Qué es CSS?</h1>
+<blockquote>
+<p>En HTML aprendiste a poner contenido. Pero se veía sin gracia: texto negro, fondo blanco,
+todo apilado. CSS es lo que cambia eso. Aquí entenderás qué es, cómo se conecta a tu HTML y
+su sintaxis, que es sorprendentemente sencilla y lógica.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-css-y-para-que-sirve">1. Qué es CSS y para qué sirve</h2>
+<blockquote class="def">
+<h3 id="que-significa-css">🟦 ¿Qué significa? — <em>CSS</em></h3>
+<p><strong>CSS</strong> significa <em>Cascading Style Sheets</em> ("hojas de estilo en cascada"). Es el lenguaje que
+describe <strong>la presentación</strong> de una página: colores, tamaños, tipografías, espacios,
+posiciones, animaciones.
+<strong>¿Para qué sirve?</strong> Para separar el <strong>contenido</strong> (HTML) de su <strong>apariencia</strong> (CSS). El
+mismo HTML puede verse de mil formas distintas con solo cambiar el CSS.</p>
+<h3 id="que-significa-en-cascada-y-hoja-de-estilos">🟦 ¿Qué significa? — <em>"En cascada" y "hoja de estilos"</em></h3>
+<ul>
+<li><strong>Hoja de estilos</strong>: un archivo (normalmente <code>.css</code>) lleno de reglas de aspecto.</li>
+<li><strong>En cascada</strong>: cuando varias reglas afectan al mismo elemento, hay un sistema de
+  prioridades que decide cuál gana (la que "cae" con más fuerza). Lo verás en detalle más
+  adelante; por ahora quédate con que "cascada" = cómo se resuelven los conflictos de estilos.</li>
+</ul>
+<h3 id="tip-la-gran-idea-separar-contenido-y-presentacion">💡 Tip — La gran idea: separar contenido y presentación</h3>
+<p>Imagina una revista: el <strong>texto de los artículos</strong> es una cosa, y <strong>el diseño</strong> (tipografías,
+colores, columnas) es otra. En la web es igual: HTML es el texto/estructura, CSS es el diseño.
+Separarlos te permite rediseñar todo el sitio cambiando solo el CSS, sin tocar el contenido.</p>
+</blockquote>
+<hr />
+<h2 id="2-la-sintaxis-de-css-regla-selector-propiedad-valor">2. La sintaxis de CSS: regla, selector, propiedad, valor</h2>
+<p>CSS se escribe en <strong>reglas</strong>. Esta es la anatomía, que repetirás miles de veces:</p>
+<pre><code class="language-css">h1 {
+  color: #1B6B6B;
+  font-size: 32px;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-las-partes-de-una-regla-css">🟦 ¿Qué significa? — <em>Las partes de una regla CSS</em></h3>
+<ul>
+<li><strong>Selector</strong> (<code>h1</code>): <strong>a qué</strong> elementos del HTML afecta esta regla (aquí, a todos los <code>&lt;h1&gt;</code>).</li>
+<li><strong>Propiedad</strong> (<code>color</code>, <code>font-size</code>): <strong>qué</strong> característica cambias.</li>
+<li><strong>Valor</strong> (<code>#1B6B6B</code>, <code>32px</code>): <strong>cómo</strong> queda esa característica.</li>
+<li><strong>Declaración</strong>: una pareja <code>propiedad: valor;</code> (¡termina siempre en punto y coma <code>;</code>!).</li>
+<li>Las declaraciones van entre <strong>llaves</strong> <code>{ }</code>, que forman el <strong>bloque</strong> de la regla.</li>
+</ul>
+</blockquote>
+<p>Leído en español: <em>"a todos los <code>&lt;h1&gt;</code>, ponles el color #1B6B6B y un tamaño de letra de 32 píxeles."</em></p>
+<pre><code>selector    propiedad   valor
+   │            │          │
+  h1  {     color:    #1B6B6B;  }
+              └── declaración ──┘
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado-los-dos-errores-mas-comunes-de-principiante">⚠️ Cuidado — Los dos errores más comunes de principiante</h3>
+<ol>
+<li><strong>Olvidar el <code>;</code></strong> al final de una declaración: la siguiente regla puede romperse.</li>
+<li><strong>Confundir <code>:</code> con <code>=</code></strong>: en CSS se usa <strong>dos puntos</strong> (<code>color: red;</code>), no igual.
+El editor (VS Code) te marca estos errores en color, así que los detectarás rápido.</li>
+</ol>
+</blockquote>
+<hr />
+<h2 id="3-las-tres-formas-de-aplicar-css-y-cual-usar">3. Las tres formas de aplicar CSS (y cuál usar)</h2>
+<p>Hay tres maneras de meter CSS en una página. Las explico todas, pero <strong>una es la correcta</strong> en
+casi todos los casos.</p>
+<blockquote class="def">
+<h3 id="que-significa-css-en-linea-inline">🟦 ¿Qué significa? — <em>CSS en línea (inline)</em></h3>
+<p>Estilos escritos <strong>dentro</strong> de una etiqueta HTML, con el atributo <code>style</code>:
+<code>html
+&lt;h1 style="color: #1B6B6B;"&gt;Hola&lt;/h1&gt;</code>
+<strong>Cuándo usarlo:</strong> casi nunca. Mezcla contenido y aspecto, es difícil de mantener y no se
+reutiliza. Útil solo para pruebas rápidas.</p>
+<h3 id="que-significa-css-interno-en-el-head">🟦 ¿Qué significa? — <em>CSS interno (en el <code>&lt;head&gt;</code>)</em></h3>
+<p>Estilos dentro de una etiqueta <code>&lt;style&gt;</code> en el <code>&lt;head&gt;</code> de la página:
+<code>html
+&lt;head&gt;
+  &lt;style&gt;
+    h1 { color: #1B6B6B; }
+  &lt;/style&gt;
+&lt;/head&gt;</code>
+<strong>Cuándo usarlo:</strong> para páginas muy pequeñas de un solo archivo. Solo afecta a esa página.</p>
+<h3 id="que-significa-css-externo-archivo-css-el-recomendado">🟦 ¿Qué significa? — <em>CSS externo (archivo .css) — ✅ el recomendado</em></h3>
+<p>Los estilos viven en un <strong>archivo aparte</strong> (ej. <code>styles.css</code>) que conectas desde el <code>&lt;head&gt;</code>
+con <code>&lt;link&gt;</code> (¿recuerdas el módulo 01?):
+<code>html
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;</code>
+<code>css
+/* styles.css */
+h1 { color: #1B6B6B; }</code>
+<strong>Por qué es el mejor:</strong> un solo archivo de estilos sirve para <strong>todas</strong> las páginas del sitio;
+cambias un color ahí y se actualiza en todo el sitio. Es lo que hace tu
+<code>tunal-digital/sitio-web/styles.css</code>.</p>
+</blockquote>
+<hr />
+<h2 id="4-selectores-como-apuntar-a-lo-que-quieres">4. Selectores: cómo apuntar a lo que quieres</h2>
+<p>El selector decide a qué elementos afecta tu regla. Estos son los esenciales:</p>
+<blockquote class="def">
+<h3 id="que-significa-selector-de-etiqueta-de-clase-y-de-id">🟦 ¿Qué significa? — <em>Selector de etiqueta, de clase y de id</em></h3>
+<ul>
+<li><strong>Por etiqueta</strong> (<code>p</code>, <code>h1</code>, <code>a</code>): afecta a <strong>todos</strong> los elementos de ese tipo.
+  <code>css
+  p { color: gray; }   /* todos los párrafos */</code></li>
+<li><strong>Por clase</strong> (<code>.destacado</code>): afecta a los elementos con ese atributo <code>class</code>. Se escribe
+  con un <strong>punto</strong> delante. Es el más usado.
+  <code>css
+  .destacado { background: #FBF9F4; }</code>
+  <code>html
+  &lt;p class="destacado"&gt;Este párrafo resalta.&lt;/p&gt;</code></li>
+<li><strong>Por id</strong> (<code>#menu</code>): afecta al elemento con ese <code>id</code> único. Se escribe con <strong>almohadilla</strong>.
+  <code>css
+  #menu { font-weight: bold; }</code></li>
+</ul>
+<h3 id="que-significa-clase-class-en-html">🟦 ¿Qué significa? — <em>Clase (class) en HTML</em></h3>
+<p>Una <strong>clase</strong> es una "etiqueta de categoría" que le pones a uno o varios elementos HTML para
+poder darles estilo en grupo. Un elemento puede tener varias clases (separadas por espacios):
+<code>html
+&lt;button class="boton boton-primario"&gt;Enviar&lt;/button&gt;</code>
+<strong>¿Por qué la clase es la estrella?</strong> Porque puedes reutilizarla: defines <code>.boton</code> una vez y
+todos los botones con esa clase comparten estilo. Así trabajan tu sitio y, de forma extrema,
+Tailwind en RachaSimple/Faro (que es básicamente "muchas clases pequeñas").</p>
+<h3 id="tip-clase-vs-id-cuando-cada-uno">💡 Tip — Clase vs. id, ¿cuándo cada uno?</h3>
+<p>Usa <strong>clases</strong> para estilos que se repiten (botones, tarjetas, textos destacados). Reserva el
+<strong>id</strong> para algo único en la página (un ancla, un elemento que JavaScript controla). Para dar
+estilo, en la práctica casi siempre usarás <strong>clases</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="5-tu-primer-css-paso-a-paso">5. Tu primer CSS, paso a paso</h2>
+<p>Vamos a estilizar la página HTML que hiciste en el módulo 01.</p>
+<p><strong>Paso 1.</strong> Junto a tu <code>index.html</code>, crea un archivo <code>styles.css</code>.</p>
+<p><strong>Paso 2.</strong> Conéctalo: en el <code>&lt;head&gt;</code> de tu HTML, añade:</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+</code></pre>
+<p><strong>Paso 3.</strong> En <code>styles.css</code>, escribe:</p>
+<pre><code class="language-css">body {
+  background: #FBF9F4;
+  color: #1F2733;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: #1B6B6B;
+}
+
+.destacado {
+  background: #D98A3D;
+  color: white;
+}
+</code></pre>
+<p><strong>Paso 4.</strong> En tu HTML, ponle <code>class="destacado"</code> a algún párrafo. Guarda todo y recarga el
+navegador: verás el fondo crema, el título en verde-azulado y el párrafo destacado en naranja.
+<strong>Acabas de controlar el aspecto de tu página.</strong></p>
+<blockquote class="def">
+<h3 id="que-significa-comentario-en-css">🟦 ¿Qué significa? — <em>Comentario en CSS</em></h3>
+<p>En CSS, los comentarios (notas que el navegador ignora) se escriben entre <code>/*</code> y <code>*/</code>:
+<code>css
+/* Esto es un comentario en CSS */
+h1 { color: #1B6B6B; } /* también al final de una línea */</code>
+(Recuerda: en HTML era <code>&lt;!-- --&gt;</code>. Cada lenguaje tiene su forma.)</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que CSS controla la <strong>apariencia</strong> y por qué se separa del HTML.</li>
+<li>[ ] Reconozco la anatomía: <strong>selector { propiedad: valor; }</strong>.</li>
+<li>[ ] Sé las tres formas de incluir CSS y por qué la <strong>externa</strong> (<code>.css</code> + <code>&lt;link&gt;</code>) es la mejor.</li>
+<li>[ ] Uso selectores por <strong>etiqueta</strong>, <strong>clase</strong> (<code>.</code>) e <strong>id</strong> (<code>#</code>).</li>
+<li>[ ] Entiendo qué es una <strong>clase</strong> y por qué es la forma reutilizable de dar estilo.</li>
+<li>[ ] Pude conectar un <code>styles.css</code> y cambiar colores de mi página.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Lee una regla.</strong> Traduce a español qué hace:
+   <code>css
+   .tarjeta { background: #FBF9F4; font-size: 18px; }</code></li>
+<li><strong>Encuentra los errores.</strong> Corrige esta regla (tiene dos fallos):
+   <code>css
+   h2 { color = #1B6B6B  font-size: 24px }</code></li>
+<li><strong>Selector correcto.</strong> ¿Qué selector usarías para: (a) todos los enlaces, (b) los elementos
+   con <code>class="aviso"</code>, (c) el elemento con <code>id="cabecera"</code>?</li>
+<li><strong>Clase reutilizable.</strong> Escribe una clase <code>.boton</code> que dé fondo <code>#1B6B6B</code>, texto blanco y la
+   aplique a dos botones distintos en HTML.</li>
+<li>💻 <strong>Estiliza tu página.</strong> Conecta un <code>styles.css</code> a tu <code>index.html</code> del módulo 01 y cambia:
+   el color de fondo del <code>body</code>, el color de los <code>&lt;h1&gt;</code>, y crea una clase <code>.destacado</code> para un
+   párrafo. Experimenta cambiando los valores de color y recargando.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="02-colores-y-tipografia.html">Capítulo 02 — Colores, unidades y tipografía</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
