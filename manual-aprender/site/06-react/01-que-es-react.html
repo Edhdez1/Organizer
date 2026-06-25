@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 01 — ¿Qué es React? — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-01-que-es-react">Capítulo 01 — ¿Qué es React?</h1>
+<blockquote>
+<p>React es la pieza que conecta todo lo aprendido: usa JavaScript (Módulo 03) y TypeScript
+(Módulo 05) para construir interfaces como las del Módulo 01 (HTML) y 02 (CSS), pero de forma
+<strong>organizada y reactiva</strong>. Empecemos por la idea grande antes de tocar código.</p>
+</blockquote>
+<hr />
+<h2 id="1-el-problema-que-resuelve-react">1. El problema que resuelve React</h2>
+<p>Recuerda el Módulo 03: para cambiar la página, seleccionabas elementos del DOM y los modificabas
+a mano (<code>querySelector</code>, <code>textContent</code>, <code>classList</code>…). Funciona para cosas pequeñas, pero en una
+app grande (con listas que cambian, formularios, datos que llegan de internet) se vuelve un caos:
+miles de instrucciones de "busca esto y cámbialo", fáciles de romper.</p>
+<blockquote class="def">
+<h3 id="que-significa-react">🟦 ¿Qué significa? — <em>React</em></h3>
+<p><strong>React</strong> es una <strong>librería de JavaScript para construir interfaces de usuario</strong> a base de
+<strong>componentes</strong> reutilizables. Su gran idea: en vez de decir <em>cómo</em> cambiar el DOM paso a paso,
+tú describes <em>cómo debe verse</em> la interfaz según los datos, y React se encarga de actualizar la
+pantalla por ti cuando los datos cambian.</p>
+</blockquote>
+<hr />
+<h2 id="2-declarativo-vs-imperativo-la-idea-central">2. Declarativo vs. imperativo (la idea central)</h2>
+<blockquote class="def">
+<h3 id="que-significa-imperativo-vs-declarativo">🟦 ¿Qué significa? — <em>Imperativo vs. declarativo</em></h3>
+<ul>
+<li><strong>Imperativo</strong> = describes <strong>los pasos</strong>. "Busca el contador, lee su número, súmale 1,
+  escríbelo de vuelta." Así trabajabas con el DOM a mano.</li>
+<li><strong>Declarativo</strong> = describes <strong>el resultado deseado</strong>. "El contador muestra el valor actual."
+  Y cuando el valor cambia, React redibuja solo.</li>
+</ul>
+<p>Analogía: imperativo es dar indicaciones giro a giro ("derecha, luego izquierda, luego
+recto"); declarativo es decir la dirección de destino y dejar que el GPS calcule. React es el
+GPS: tú dices el destino (cómo debe verse), él calcula los cambios.</p>
+<h3 id="tip-por-que-esto-importa">💡 Tip — Por qué esto importa</h3>
+<p>El enfoque declarativo hace que las apps grandes sean <strong>manejables</strong>: no rastreas mil cambios
+manuales; solo describes "así se ve con estos datos", y confías en que React mantiene la
+pantalla sincronizada. Menos errores, código más claro.</p>
+</blockquote>
+<hr />
+<h2 id="3-componentes-construir-con-piezas">3. Componentes: construir con piezas</h2>
+<blockquote class="def">
+<h3 id="que-significa-componente">🟦 ¿Qué significa? — <em>Componente</em></h3>
+<p>Un <strong>componente</strong> es una <strong>pieza reutilizable de interfaz</strong>, con su propia estructura, estilo y
+lógica, que puedes usar muchas veces. Una tarjeta de hábito, un botón, una barra de navegación:
+cada uno es un componente.
+Analogía: son como <strong>bloques de LEGO</strong>. Construyes piezas pequeñas (un botón, una tarjeta) y
+las combinas para formar pantallas completas. Y como son reutilizables, defines la tarjeta
+<strong>una vez</strong> y la usas para los 20 hábitos de la lista.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <code>RachaSimple/src/components/racha/</code> cada archivo es un componente: <code>HabitCard.tsx</code> (una
+tarjeta de hábito), <code>MetricCard.tsx</code> (una métrica), <code>AppShell.tsx</code> (el armazón de la app). Las
+pantallas en <code>src/pages/</code> (como <code>Today.tsx</code>) <strong>combinan</strong> esos componentes. Faro hace lo mismo
+con <code>project-card.tsx</code>, <code>roadmap-view.tsx</code>, etc. Toda la app es un árbol de componentes.</p>
+<h3 id="que-significa-arbol-de-componentes">🟦 ¿Qué significa? — <em>Árbol de componentes</em></h3>
+<p>Los componentes se <strong>anidan</strong> unos dentro de otros, formando un árbol (como el DOM del Módulo
+01): un componente "App" contiene una "Página", que contiene una "Lista", que contiene muchas
+"Tarjetas". Pensar en árbol te ayuda a ubicar dónde vive cada cosa.</p>
+</blockquote>
+<hr />
+<h2 id="4-react-vite-y-nextjs-que-es-cada-uno">4. React, Vite y Next.js: ¿qué es cada uno?</h2>
+<p>Para no confundirte con los nombres que aparecen en tus proyectos:</p>
+<blockquote class="def">
+<h3 id="que-significa-react-vs-su-andamiaje">🟦 ¿Qué significa? — <em>React vs. su "andamiaje"</em></h3>
+<ul>
+<li><strong>React</strong> es la librería de componentes en sí.</li>
+<li><strong>Vite</strong> (en RachaSimple) es la <strong>herramienta de construcción</strong>: arranca el servidor de
+  desarrollo, compila el TypeScript, refresca el navegador al guardar. Es el "taller".</li>
+<li><strong>Next.js</strong> (en Faro) es un <strong>framework sobre React</strong> que añade más cosas (rutas por
+  carpetas, código de servidor, etc.). Es "React con baterías incluidas".
+Por ahora: <strong>React es lo que aprendes aquí</strong>; Vite y Next.js son envoltorios que lo hacen
+cómodo de usar. Los conceptos de componentes, props y estado son <strong>los mismos</strong> en ambos.</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="5-como-se-ve-un-componente-un-primer-vistazo">5. Cómo se ve un componente (un primer vistazo)</h2>
+<p>No te preocupes por entenderlo del todo aún; solo nota la forma:</p>
+<pre><code class="language-tsx">function Saludo() {
+  return &lt;h1&gt;¡Hola, Edwar!&lt;/h1&gt;;
+}
+</code></pre>
+<p>Eso es un componente: <strong>una función</strong> (¿recuerdas las funciones del Módulo 03?) que <strong>devuelve
+algo que parece HTML</strong>. Ese "HTML dentro de JavaScript" se llama <strong>JSX</strong>, y es el tema del
+próximo capítulo. Lo mágico: usas <code>&lt;Saludo /&gt;</code> como si fuera una etiqueta HTML nueva, y React
+pone ahí ese <code>&lt;h1&gt;</code>.</p>
+<blockquote class="tip">
+<h3 id="tip-un-componente-es-una-funcion-que-devuelve-interfaz">💡 Tip — Un componente es una función que devuelve interfaz</h3>
+<p>Si te quedas con una sola frase de este capítulo, que sea esta. Todo lo demás (props, estado,
+hooks) son añadidos sobre esta idea simple. Ya sabes hacer funciones; ahora devuelven pantalla.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo el problema que resuelve React (manipular el DOM a mano no escala).</li>
+<li>[ ] Distingo <strong>declarativo</strong> (describir el resultado) de <strong>imperativo</strong> (describir los pasos).</li>
+<li>[ ] Sé qué es un <strong>componente</strong> (pieza reutilizable, como un LEGO) y el <strong>árbol</strong> de componentes.</li>
+<li>[ ] Diferencio <strong>React</strong> (la librería) de <strong>Vite</strong> y <strong>Next.js</strong> (su andamiaje).</li>
+<li>[ ] Entiendo que un componente es <strong>una función que devuelve interfaz</strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Declarativo o imperativo.</strong> Clasifica: (a) "busca el título y cámbiale el texto"; (b) "el
+   título muestra el nombre del usuario". ¿Cuál es el estilo de React?</li>
+<li><strong>LEGO.</strong> Da tres ejemplos de "componentes" que verías en una app de hábitos (piensa en
+   piezas reutilizables de pantalla).</li>
+<li><strong>Nombres.</strong> Explica en una frase la diferencia entre React, Vite y Next.js.</li>
+<li><strong>La frase clave.</strong> Completa: "Un componente es, en esencia, una <strong><em>_</em></strong><em> que devuelve
+   <strong><em>_</em></strong></em>".</li>
+<li><strong>Explora tu app.</strong> Mira la lista de archivos en <code>RachaSimple/src/components/racha/</code>. Elige
+   tres nombres y adivina qué pieza de interfaz es cada uno.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="02-componentes-y-jsx.html">Capítulo 02 — Componentes y JSX</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

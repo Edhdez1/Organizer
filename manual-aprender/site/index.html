@@ -4,18 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manuales de Aprendizaje — Aprende a Programar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
+  <div id="progreso"></div>
   <nav class="barra">
     <a href="index.html">🏠 Inicio</a>
-    <span style="color:var(--texto-suave)">Manuales de Aprendizaje</span>
+    <span class="marca">🦎 BIT · MANUAL</span>
   </nav>
   <main class="contenedor">
+    <p align="center">
+      <img src="../recursos/imagenes/mascota/bit-referencia.png" alt="Bit, mascota del manual, un ajolote en pixel art" width="260">
+    </p>
     <h1>Aprende a Programar — con tus propios proyectos</h1>
     <p>Un curso completo en español, desde cero, que usa <strong>tu propio código</strong>
     (tunal-digital, PolyPaw, RachaSimple, Faro y tu NAS) como ejemplo real. La meta: que
-    dejes de depender del “vibe coding” y puedas dar órdenes precisas.</p>
+    dejes de depender del “vibe coding” y puedas dar órdenes precisas. Te guía
+    <strong>Bit</strong> 🦎, un ajolote pixel art.</p>
 
     <p><em>Antes de empezar, lee
     <a href="../COMO-ESTUDIAR.md">Cómo estudiar este manual</a> (en la carpeta del manual).</em></p>
@@ -34,7 +42,23 @@
       <a class="tarjeta" href="09-nas-y-servidores/index.html"><span class="num">MÓDULO 09</span><h3>NAS y servidores</h3><p>Tu servidor casero polypaw-nas, redes y self-hosting.</p></a>
     </div>
 
-    <footer>Manuales de Aprendizaje · Generado para Edwar · Idioma: español</footer>
+    <footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
   </main>
+  <button id="arriba" title="Subir" aria-label="Subir">▲</button>
+  <script>
+  (function () {
+    var prog = document.getElementById('progreso');
+    var arriba = document.getElementById('arriba');
+    function onScroll() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      if (prog) prog.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+      if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+    }
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    if (arriba) arriba.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  })();
+  </script>
 </body>
 </html>

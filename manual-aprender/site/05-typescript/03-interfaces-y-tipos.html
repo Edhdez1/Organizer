@@ -4,12 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capítulo 03 — Interfaces y tipos propios — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
+<div id="progreso"></div>
 <nav class="barra">
   <a href="../index.html">🏠 Inicio</a>
   <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-03-interfaces-y-tipos-propios">Capítulo 03 — Interfaces y tipos propios</h1>
@@ -140,8 +145,42 @@ agobies: lo importante es <strong>describir tus datos</strong>, con cualquiera d
 <li><strong>Lee tu app.</strong> ¿Qué crees que contiene la interface <code>Habit</code> en <code>database.ts</code> de RachaSimple?
    Enumera 3 o 4 propiedades que tendría y su tipo.</li>
 </ol>
-<p>➡️ Siguiente: <strong><a href="04-funciones-y-genericos.html">Capítulo 04 — Funciones tipadas y genéricos</a></strong>.</p>
-<footer>Manuales de Aprendizaje · Idioma: español</footer>
+<p>➡️ Siguiente: <strong><a href="04-funciones-y-genericos.html">Capítulo 04 — Funciones tipadas y genéricos</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
 </body>
 </html>

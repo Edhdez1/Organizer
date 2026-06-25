@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 05 — Hooks y efectos — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-05-hooks-y-efectos">Capítulo 05 — Hooks y efectos</h1>
+<blockquote>
+<p>Cierras React con los <strong>hooks</strong>: ya usaste <code>useState</code>; ahora verás <code>useEffect</code> (para
+"efectos" como cargar datos) y la idea de los <strong>hooks personalizados</strong>, que es como están
+organizados RachaSimple y Faro. Con esto entiendes el motor completo de tus apps.</p>
+</blockquote>
+<hr />
+<h2 id="1-repaso-que-es-un-hook">1. Repaso: qué es un hook</h2>
+<blockquote class="def">
+<h3 id="que-significa-hook-recordatorio">🟦 ¿Qué significa? — <em>Hook (recordatorio)</em></h3>
+<p>Un <strong>hook</strong> es una función de React que empieza por <code>use...</code> y le añade capacidades a un
+componente. Ya conoces <code>useState</code> (recordar datos). Hay varios más; aquí ves el segundo más
+importante, <code>useEffect</code>.</p>
+<h3 id="cuidado-las-reglas-de-los-hooks">⚠️ Cuidado — Las reglas de los hooks</h3>
+<p>Dos reglas que React exige:
+1. Los hooks se llaman <strong>siempre arriba</strong> del componente, no dentro de <code>if</code>, bucles ni
+   funciones anidadas.
+2. Solo se usan <strong>dentro de componentes</strong> (o de otros hooks).
+Si las rompes, React avisa con un error. Por ahora: pon tus <code>useState</code>/<code>useEffect</code> al
+principio del componente y listo.</p>
+</blockquote>
+<hr />
+<h2 id="2-useeffect-ejecutar-codigo-como-efecto">2. <code>useEffect</code>: ejecutar código "como efecto"</h2>
+<blockquote class="def">
+<h3 id="que-significa-efecto-secundario-side-effect">🟦 ¿Qué significa? — <em>Efecto secundario (side effect)</em></h3>
+<p>Un <strong>efecto secundario</strong> es algo que tu componente hace <strong>además</strong> de dibujar la interfaz, y
+que toca el "mundo exterior": pedir datos a una API, leer/escribir en el almacenamiento,
+poner un temporizador, suscribirse a algo. React separa "dibujar" (el <code>return</code> del componente)
+de "efectos" (con <code>useEffect</code>).</p>
+<h3 id="que-significa-useeffect">🟦 ¿Qué significa? — <em><code>useEffect</code></em></h3>
+<p><code>useEffect</code> ejecuta una función <strong>después</strong> de que el componente se dibuja, y la repite según
+una lista de <strong>dependencias</strong>:
+```tsx
+import { useState, useEffect } from "react";</p>
+<p>function Reloj() {
+  const [hora, setHora] = useState(new Date());</p>
+<p>useEffect(() =&gt; {
+    const id = setInterval(() =&gt; setHora(new Date()), 1000);
+    return () =&gt; clearInterval(id);   // limpieza
+  }, []);   // [] = ejecutar solo una vez, al montar</p>
+<p>return <p>Son las {hora.toLocaleTimeString()}</p>;
+}
+```</p>
+<h3 id="que-significa-el-array-de-dependencias">🟦 ¿Qué significa? — <em>El array de dependencias</em></h3>
+<p>El segundo argumento de <code>useEffect</code> (<code>[]</code> arriba) controla <strong>cuándo</strong> se repite el efecto:
+- <code>[]</code> (vacío) → se ejecuta <strong>una sola vez</strong>, cuando el componente aparece ("se monta").
+- <code>[algo]</code> → se repite cada vez que <code>algo</code> cambia.
+- sin array → se ejecuta tras <strong>cada</strong> render (rara vez lo quieres).
+El caso más común es <code>[]</code>: "haz esto una vez al cargar" (por ejemplo, pedir datos).</p>
+<h3 id="que-significa-la-funcion-de-limpieza">🟦 ¿Qué significa? — <em>La función de limpieza</em></h3>
+<p>Si tu efecto "engancha" algo (un temporizador, una suscripción), debe <strong>desengancharlo</strong> al
+desaparecer el componente. Para eso, el efecto <strong>devuelve una función</strong> de limpieza (el
+<code>return () =&gt; clearInterval(id)</code> de arriba). React la llama al "desmontar". Evita fugas y
+errores. Por ahora, recuerda: <em>si abro algo en el efecto, lo cierro en el return</em>.</p>
+</blockquote>
+<hr />
+<h2 id="3-cargar-datos-el-patron-clasico">3. Cargar datos: el patrón clásico</h2>
+<p>El uso más típico de <code>useEffect</code>: pedir datos a una API al cargar (uniendo el <code>fetch</code>/<code>async</code>
+del Módulo 03).</p>
+<pre><code class="language-tsx">function Perfil() {
+  const [datos, setDatos] = useState(null);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() =&gt; {
+    async function cargar() {
+      const r = await fetch(&quot;https://api.github.com/users/Edhdez1&quot;);
+      setDatos(await r.json());
+      setCargando(false);
+    }
+    cargar();
+  }, []);   // una vez al montar
+
+  if (cargando) return &lt;p&gt;Cargando…&lt;/p&gt;;
+  return &lt;h2&gt;{datos.name} — {datos.public_repos} repos&lt;/h2&gt;;
+}
+</code></pre>
+<p>Aquí ves casi todo el manual junto: estado (<code>useState</code>), efecto (<code>useEffect</code>), petición
+asíncrona (<code>fetch</code>/<code>await</code>), renderizado condicional (<code>if (cargando)</code>). <strong>Eso es una pantalla
+real.</strong></p>
+<hr />
+<h2 id="4-hooks-personalizados-tu-propia-logica-reutilizable">4. Hooks personalizados: tu propia lógica reutilizable</h2>
+<blockquote class="def">
+<h3 id="que-significa-hook-personalizado-custom-hook">🟦 ¿Qué significa? — <em>Hook personalizado (custom hook)</em></h3>
+<p>Un <strong>hook personalizado</strong> es una función tuya que <strong>empieza por <code>use</code></strong> y agrupa lógica con
+hooks, para <strong>reutilizarla</strong> en varios componentes. Si tienes que "cargar los hábitos" en tres
+pantallas, no copias el código: lo metes en un <code>useHabitos()</code> y lo usas en las tres.
+<code>tsx
+function useHabitos() {
+  const [habitos, setHabitos] = useState([]);
+  useEffect(() =&gt; { /* …cargar de la base de datos… */ }, []);
+  return habitos;
+}
+// en cualquier componente:
+const habitos = useHabitos();</code></p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Esto es <strong>exactamente</strong> cómo está organizado RachaSimple: la carpeta <code>src/hooks/</code> tiene
+<code>useHabits.ts</code>, <code>useCheckins.ts</code>, etc. Cada uno encapsula "cómo obtener y cambiar" un tipo de
+dato. Los componentes solo llaman al hook y reciben los datos, sin saber los detalles. Es orden
+y reutilización al máximo.</p>
+<h3 id="tip-tanstack-query-hooks-para-datos-del-servidor">💡 Tip — TanStack Query: hooks para datos del servidor</h3>
+<p>RachaSimple y Faro usan una librería, <strong>TanStack Query</strong>, que ofrece hooks como <code>useQuery</code> para
+pedir datos con súper poderes (caché, recarga automática, estados de carga/error) sin escribir
+todo el <code>useEffect</code>/<code>useState</code> a mano. No la necesitas para aprender; solo reconoce que
+<code>useQuery(...)</code> es "un hook para traer datos del servidor de forma inteligente". Aquí cierra el
+círculo con los genéricos de TypeScript: <code>useQuery&lt;Habito[]&gt;(...)</code>.</p>
+</blockquote>
+<hr />
+<h2 id="5-cierre-del-modulo">5. Cierre del módulo</h2>
+<pre><code>React
+├── Componentes: funciones que devuelven interfaz  (cap. 01)
+├── JSX: HTML en JS, {}, .map()/key                 (cap. 02)
+├── Props: datos de padre a hijo (tipados)          (cap. 03)
+├── Estado: useState, re-render, eventos            (cap. 04)
+└── Efectos y hooks: useEffect, custom hooks         (cap. 05)
+</code></pre>
+<p>Con esto puedes <strong>leer y entender</strong> los componentes de RachaSimple y Faro, y empezar a construir
+los tuyos. React no era un monstruo: era funciones (que ya sabías) que devuelven interfaz, con
+props (parámetros), estado (memoria) y efectos (acciones al mundo exterior).</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Recuerdo qué es un <strong>hook</strong> y sus dos <strong>reglas</strong> (arriba del componente, solo en componentes).</li>
+<li>[ ] Sé qué es un <strong>efecto secundario</strong> y uso <strong><code>useEffect</code></strong>.</li>
+<li>[ ] Entiendo el <strong>array de dependencias</strong> (<code>[]</code> = una vez) y la <strong>función de limpieza</strong>.</li>
+<li>[ ] Reconozco el patrón de <strong>cargar datos</strong> con <code>useEffect</code> + <code>fetch</code> + estado.</li>
+<li>[ ] Entiendo qué es un <strong>hook personalizado</strong> y por qué <code>src/hooks/</code> organiza así tu app.</li>
+<li>[ ] Sé, a grandes rasgos, qué es <code>useQuery</code> de TanStack Query.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Dependencias.</strong> ¿Qué diferencia hay entre <code>useEffect(fn, [])</code> y <code>useEffect(fn, [cuenta])</code>?</li>
+<li><strong>Limpieza.</strong> ¿Por qué el efecto del reloj devuelve <code>() =&gt; clearInterval(id)</code>? ¿Qué pasaría
+   sin esa línea?</li>
+<li><strong>Identifica las piezas.</strong> En el componente <code>Perfil</code> de la sección 3, señala dónde está: el
+   estado, el efecto, la petición asíncrona y el renderizado condicional.</li>
+<li><strong>Custom hook.</strong> Explica con tus palabras por qué <code>useHabitos()</code> es mejor que copiar el mismo
+   <code>useEffect</code> en tres componentes.</li>
+<li><strong>Lee tu app.</strong> Mira los nombres en <code>RachaSimple/src/hooks/</code>. ¿Qué crees que hace <code>useCheckins</code>
+   y por qué es un hook y no un componente?</li>
+</ol>
+<hr />
+<p>🎉 <strong>¡Terminaste el Módulo 06 — React!</strong> Y con él, los tres lenguajes del frontend moderno
+(JavaScript, TypeScript, React). Ya entiendes por dentro RachaSimple y la parte visual de Faro.
+Lo que falta es <strong>dónde viven los datos</strong>: las bases de datos. Eso es lo siguiente.</p>
+<p>➡️ Siguiente módulo: <strong><a href="../07-bases-de-datos-sql/README.html">07 — Bases de datos y SQL</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

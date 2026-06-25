@@ -4,12 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capítulo 05 — Git y GitHub — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
+<div id="progreso"></div>
 <nav class="barra">
   <a href="../index.html">🏠 Inicio</a>
   <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-git-y-github">Capítulo 05 — Git y GitHub</h1>
@@ -213,8 +218,42 @@ empezar. Lo demás lo aprenderás cuando lo necesites.</p>
 <p>🎉 <strong>¡Terminaste el Módulo 00!</strong> Ya tienes el mapa mental completo: sabes qué es programar,
 cómo funciona una computadora, cómo viaja la información por internet, cómo dar órdenes por
 terminal y cómo se guarda y comparte el código con Git. Con esta base, el resto encaja.</p>
-<p>➡️ Siguiente módulo: <strong><a href="../01-html/README.html">01 — HTML</a></strong> <em>(en preparación)</em>.</p>
-<footer>Manuales de Aprendizaje · Idioma: español</footer>
+<p>➡️ Siguiente módulo: <strong><a href="../01-html/README.html">01 — HTML</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
 </body>
 </html>

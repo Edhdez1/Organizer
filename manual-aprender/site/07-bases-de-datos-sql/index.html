@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 07 — Bases de datos y SQL — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="modulo-07-bases-de-datos-y-sql">Módulo 07 — Bases de datos y SQL</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/portada.png" alt="Bit como archivista organizando una base de datos pixel art con cajones etiquetados y un candado de seguridad" width="640">
+</p>
+
+<blockquote>
+<p><strong>Objetivo del módulo:</strong> entender <strong>dónde y cómo se guardan los datos</strong> de una app. Aprenderás
+qué es una base de datos, el lenguaje <strong>SQL</strong> para hablar con ella, y <strong>Supabase</strong> (la base de
+datos en la nube que usan RachaSimple y Faro), incluida la seguridad con <strong>RLS</strong>.</p>
+</blockquote>
+<p>Hasta ahora tus datos vivían en variables que <strong>desaparecen</strong> al recargar. Una base de datos los
+guarda <strong>para siempre</strong> y los comparte entre dispositivos y usuarios. Es la "memoria a largo
+plazo" de una app.</p>
+<hr />
+<h2 id="de-donde-sale-esto-en-tus-proyectos">¿De dónde sale esto en TUS proyectos?</h2>
+<p><code>RachaSimple</code> y <code>Faro</code> guardan todo en <strong>Supabase</strong> (una base de datos <strong>Postgres</strong>). Tus
+hábitos, check-ins, proyectos y fuentes viven en tablas, protegidas por <strong>RLS</strong> (cada usuario
+solo ve lo suyo). PolyPaw, en cambio, usa un archivo JSON local (Módulo 04): aquí verás la
+diferencia entre "guardar en un archivo" y "guardar en una base de datos de verdad".</p>
+<hr />
+<h2 id="que-vas-a-poder-hacer-al-terminar">¿Qué vas a poder hacer al terminar?</h2>
+<ul>
+<li>Explicar qué es una base de datos relacional: <strong>tablas, filas y columnas</strong>.</li>
+<li>Escribir <strong>SQL</strong> para consultar (<code>SELECT</code>), filtrar (<code>WHERE</code>) y ordenar datos.</li>
+<li>Insertar, actualizar y borrar datos (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>).</li>
+<li>Entender las <strong>relaciones</strong> entre tablas (claves primaria y foránea, <code>JOIN</code>).</li>
+<li>Saber qué es <strong>Supabase</strong> y cómo tus apps hablan con él.</li>
+<li>Entender <strong>RLS</strong> (seguridad por usuario) y por qué es vital.</li>
+</ul>
+<hr />
+<h2 id="capitulos">Capítulos</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Capítulo</th>
+<th>Qué cubre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td><a href="01-que-es-base-de-datos.html">¿Qué es una base de datos?</a></td>
+<td>Tablas/filas/columnas, relacional, por qué SQL</td>
+</tr>
+<tr>
+<td>02</td>
+<td><a href="02-consultar-sql.html">Consultar con SQL</a></td>
+<td><code>SELECT</code>, <code>WHERE</code>, <code>ORDER BY</code>, filtrar</td>
+</tr>
+<tr>
+<td>03</td>
+<td><a href="03-modificar-y-relacionar.html">Modificar y relacionar</a></td>
+<td><code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>, claves, <code>JOIN</code></td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="04-supabase.html">Supabase: Postgres en la nube</a></td>
+<td>Qué es, tablas, cómo la app se conecta</td>
+</tr>
+<tr>
+<td>05</td>
+<td><a href="05-rls-y-auth.html">Seguridad: RLS y autenticación</a></td>
+<td>Row-Level Security, login, por qué importa</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Se publican por tandas. Empieza por el 01.</p>
+</blockquote>
+<p>➡️ Empieza por <strong><a href="01-que-es-base-de-datos.html">Capítulo 01 — ¿Qué es una base de datos?</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
