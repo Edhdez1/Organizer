@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 01 — ¿Qué es una API? — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-01-que-es-una-api">Capítulo 01 — ¿Qué es una API?</h1>
+<blockquote>
+<p>La palabra "API" suena técnica e intimidante, pero la idea es de lo más cotidiana. Cuando la
+entiendas, verás APIs por todas partes: son cómo los programas se piden cosas entre sí. Ya
+tienes media batalla ganada con el modelo cliente–servidor del Módulo 00.</p>
+</blockquote>
+<hr />
+<h2 id="1-la-idea-como-dos-programas-se-piden-cosas">1. La idea: cómo dos programas se piden cosas</h2>
+<p>Imagina un restaurante. Tú (cliente) no entras a la cocina a cocinar: le dices al <strong>mesero</strong> lo
+que quieres, él lo lleva a la cocina y te trae el plato. El mesero es un <strong>intermediario</strong> con
+un <strong>menú</strong> de lo que puedes pedir y reglas de cómo pedirlo. Eso es una API.</p>
+<blockquote class="def">
+<h3 id="que-significa-api">🟦 ¿Qué significa? — <em>API</em></h3>
+<p><strong>API</strong> significa <em>Application Programming Interface</em> ("interfaz de programación de
+aplicaciones"). Es un <strong>conjunto de reglas y "puntos de entrada"</strong> que un programa ofrece para
+que <strong>otros programas</strong> le pidan datos o acciones, sin saber cómo funciona por dentro.
+En la analogía: el <strong>menú + el mesero</strong>. Tú pides del menú (las funciones disponibles) y
+recibes el plato (la respuesta), sin entrar a la cocina (el código interno).</p>
+<h3 id="tip-por-que-las-apis-lo-cambian-todo">💡 Tip — Por qué las APIs lo cambian todo</h3>
+<p>Gracias a las APIs, tu app no tiene que hacerlo todo. ¿Quieres mapas? Usas la API de Google
+Maps. ¿Pagos? La API de Stripe. ¿IA? La API de Claude. <strong>Te montas sobre el trabajo de otros</strong>,
+como bloques. Faro no "tiene" tus repos: se los <strong>pide</strong> a la API de GitHub. Es la diferencia
+entre construir todo desde cero y ensamblar piezas potentes.</p>
+</blockquote>
+<hr />
+<h2 id="2-apis-web-y-rest">2. APIs web y REST</h2>
+<p>Hay muchos tipos de API; la más común en la web es la <strong>API REST</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-api-web">🟦 ¿Qué significa? — <em>API web</em></h3>
+<p>Una <strong>API web</strong> es una API a la que se accede <strong>por internet</strong>, usando HTTP (Módulo 00). Tu app
+hace una petición HTTP a una dirección, y la API responde, normalmente con datos en <strong>JSON</strong>
+(Módulo 03). Es, literalmente, el modelo cliente–servidor aplicado entre programas.</p>
+<h3 id="que-significa-rest">🟦 ¿Qué significa? — <em>REST</em></h3>
+<p><strong>REST</strong> es un <strong>estilo</strong> muy usado para diseñar APIs web. No te agobies con la sigla; lo
+importante es su idea: organizar la API alrededor de <strong>recursos</strong> (cosas como "usuarios",
+"repos", "proyectos"), cada uno con su <strong>dirección</strong>, y usar los <strong>métodos HTTP</strong> que ya
+conoces (GET para leer, POST para crear, etc.). Una API que sigue ese estilo se llama "RESTful".</p>
+<h3 id="que-significa-endpoint-punto-de-acceso">🟦 ¿Qué significa? — <em>Endpoint (punto de acceso)</em></h3>
+<p>Un <strong>endpoint</strong> es <strong>una dirección concreta</strong> de la API para una cosa específica. Por ejemplo,
+en la API de GitHub:
+- <code>https://api.github.com/users/Edhdez1</code> → tus datos de usuario.
+- <code>https://api.github.com/users/Edhdez1/repos</code> → tus repositorios.
+Cada endpoint es un "plato del menú". Combinas el endpoint (qué recurso) con el método HTTP
+(qué hacer con él).</p>
+</blockquote>
+<hr />
+<h2 id="3-anatomia-de-una-llamada-a-una-api">3. Anatomía de una llamada a una API</h2>
+<p>Cuando tu app llama a una API, la petición tiene varias partes (todas ya las viste sueltas):</p>
+<blockquote class="def">
+<h3 id="que-significa-las-partes-de-una-peticion-a-una-api">🟦 ¿Qué significa? — <em>Las partes de una petición a una API</em></h3>
+<ul>
+<li><strong>URL/endpoint</strong>: a dónde (<code>https://api.github.com/users/Edhdez1</code>).</li>
+<li><strong>Método</strong>: qué hacer (<code>GET</code>, <code>POST</code>…).</li>
+<li><strong>Headers (cabeceras)</strong>: información extra de la petición; aquí suele ir la <strong>autenticación</strong>
+  (tu clave/token) y el formato.</li>
+<li><strong>Body (cuerpo)</strong>: los datos que envías (en POST/PUT), normalmente en JSON.</li>
+<li><strong>Respuesta</strong>: lo que devuelve la API: un <strong>código de estado</strong> (200, 404…) y un <strong>body</strong> con
+  los datos en JSON.</li>
+</ul>
+<h3 id="que-significa-header-cabecera">🟦 ¿Qué significa? — <em>Header (cabecera)</em></h3>
+<p>Un <strong>header</strong> es un par "nombre: valor" que acompaña a la petición o respuesta con metadatos:
+qué formato esperas, quién eres (autenticación), etc. Por ejemplo
+<code>Authorization: Bearer TU_TOKEN</code> le dice a la API "soy yo, aquí está mi credencial". Lo verás
+en el capítulo 02.</p>
+</blockquote>
+<hr />
+<h2 id="4-la-documentacion-el-menu-de-cada-api">4. La documentación: el "menú" de cada API</h2>
+<blockquote class="def">
+<h3 id="que-significa-documentacion-de-una-api">🟦 ¿Qué significa? — <em>Documentación de una API</em></h3>
+<p>Cada API publica su <strong>documentación</strong>: el "menú" que explica qué endpoints tiene, qué métodos
+aceptan, qué hay que enviar y qué devuelven. Aprender a <strong>leer la documentación</strong> de una API es
+una habilidad clave: no memorizas APIs, las consultas. Cuando uses una API nueva, lo primero es
+buscar "[nombre] API docs".</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Faro tiene, en <code>src/app/api/</code>, <strong>endpoints propios</strong> (su propia API) y, en <code>src/lib/</code>, código
+que <strong>consume APIs ajenas</strong>: <code>github.ts</code> (API de GitHub), <code>google-drive.ts</code> (API de Drive),
+<code>openai.ts</code> (API de OpenAI). Es decir, Faro <strong>es cliente</strong> de unas APIs <strong>y servidor</strong> de la
+suya. Las dos caras que verás en este módulo.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Explico qué es una <strong>API</strong> con la analogía del restaurante (menú + mesero).</li>
+<li>[ ] Entiendo qué es una <strong>API web</strong> y, a grandes rasgos, el estilo <strong>REST</strong>.</li>
+<li>[ ] Sé qué es un <strong>endpoint</strong> (una dirección para un recurso).</li>
+<li>[ ] Reconozco las partes de una petición: URL, método, <strong>headers</strong>, body, respuesta.</li>
+<li>[ ] Sé qué es un <strong>header</strong> y que la autenticación suele ir ahí.</li>
+<li>[ ] Entiendo que se <strong>lee la documentación</strong> de cada API, no se memoriza.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>La analogía.</strong> Explica con el restaurante qué representan: el menú, el mesero, la cocina y
+   el plato, en términos de una API.</li>
+<li><strong>Endpoints.</strong> Inventa dos endpoints REST para una API de una biblioteca (recursos: libros,
+   autores). Di qué método HTTP usarías para "ver todos los libros" y para "agregar un libro".</li>
+<li><strong>Partes.</strong> Para "crear un proyecto en Faro", ¿qué método HTTP sería y dónde irían los datos
+   del proyecto (en qué parte de la petición)?</li>
+<li><strong>Cliente y servidor.</strong> Explica la frase: "Faro es cliente de la API de GitHub y servidor de
+   su propia API".</li>
+<li>💻 <strong>Abre una API real.</strong> En el navegador, entra a <code>https://api.github.com/users/Edhdez1</code>.
+   Verás JSON crudo: esa es la respuesta de un endpoint GET, sin app de por medio.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="02-consumir-una-api.html">Capítulo 02 — Consumir una API</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

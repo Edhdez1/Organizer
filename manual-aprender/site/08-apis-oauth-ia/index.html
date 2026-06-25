@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 08 — APIs, OAuth e IA — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="modulo-08-apis-oauth-e-ia">Módulo 08 — APIs, OAuth e IA</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/portada.png" alt="Bit en un puente que conecta dos edificios (API), con una llave que cruza una puerta vigilada (OAuth) y un robot-cerebro (IA)" width="640">
+</p>
+
+<blockquote>
+<p><strong>Objetivo del módulo:</strong> entender cómo las apps <strong>se comunican con otros servicios</strong>: pedir
+datos a una <strong>API</strong>, dejar que el usuario inicie sesión con Google/GitHub (<strong>OAuth</strong>) e
+integrar <strong>inteligencia artificial</strong>. Es lo que hace especiales a Faro y al chat de tu sitio.</p>
+</blockquote>
+<p>Hasta ahora tus apps eran "islas". Aquí aprenden a <strong>hablar con el mundo</strong>: GitHub, Google
+Drive, OpenAI, Claude. Es el módulo que convierte una app en algo realmente poderoso.</p>
+<hr />
+<h2 id="de-donde-sale-esto-en-tus-proyectos">¿De dónde sale esto en TUS proyectos?</h2>
+<ul>
+<li><strong>Faro</strong> consume la <strong>API de GitHub</strong> (tus repos), la de <strong>Google Drive</strong> (tus carpetas) y la
+  de <strong>OpenAI</strong> (para analizar proyectos). Usa <strong>OAuth</strong> para que inicies sesión con Google y
+  GitHub.</li>
+<li><strong>tunal-digital</strong> integra la <strong>API de Claude</strong> (el chat con IA) mediante un Cloudflare Worker,
+  con seguridad (verificación de origen, límite de uso).</li>
+</ul>
+<hr />
+<h2 id="que-vas-a-poder-hacer-al-terminar">¿Qué vas a poder hacer al terminar?</h2>
+<ul>
+<li>Explicar qué es una <strong>API</strong> y cómo se consume (uniendo <code>fetch</code> del Módulo 03).</li>
+<li>Entender las <strong>claves de API</strong> y cómo se guardan de forma segura.</li>
+<li>Comprender el flujo de <strong>OAuth</strong> (login con terceros) sin que te asuste.</li>
+<li>Integrar un servicio de <strong>IA</strong> y escribir un buen <em>prompt</em>.</li>
+<li>Saber cómo se construye una <strong>API propia</strong> (rutas de Next.js, Workers) y protegerla.</li>
+</ul>
+<hr />
+<h2 id="capitulos">Capítulos</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Capítulo</th>
+<th>Qué cubre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td><a href="01-que-es-una-api.html">¿Qué es una API?</a></td>
+<td>API, REST, endpoints, contrato entre programas</td>
+</tr>
+<tr>
+<td>02</td>
+<td><a href="02-consumir-una-api.html">Consumir una API</a></td>
+<td><code>fetch</code>, métodos, headers, claves de API</td>
+</tr>
+<tr>
+<td>03</td>
+<td><a href="03-oauth.html">OAuth: login con terceros</a></td>
+<td>El flujo, tokens, Google/GitHub en Faro</td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="04-integrar-ia.html">Integrar IA</a></td>
+<td>Llamar a Claude/OpenAI, prompts, el chat de tu sitio</td>
+</tr>
+<tr>
+<td>05</td>
+<td><a href="05-construir-y-proteger.html">Construir y proteger una API</a></td>
+<td>Rutas Next.js, Workers, secretos, límites</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Se publican por tandas. Empieza por el 01.</p>
+</blockquote>
+<p>➡️ Empieza por <strong><a href="01-que-es-una-api.html">Capítulo 01 — ¿Qué es una API?</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

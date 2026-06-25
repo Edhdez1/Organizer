@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 05 — Seguridad: RLS y autenticación — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-05-seguridad-rls-y-autenticacion">Capítulo 05 — Seguridad: RLS y autenticación</h1>
+<blockquote>
+<p>Si la clave pública de Supabase está a la vista de cualquiera, ¿qué impide que un usuario lea
+los hábitos de otro? La respuesta es <strong>RLS</strong>, y es uno de los conceptos de seguridad más
+importantes que aprenderás. Cerramos el módulo entendiendo cómo tus datos se mantienen privados.</p>
+</blockquote>
+<hr />
+<h2 id="1-autenticacion-quien-eres">1. Autenticación: ¿quién eres?</h2>
+<blockquote class="def">
+<h3 id="que-significa-autenticacion-auth">🟦 ¿Qué significa? — <em>Autenticación (auth)</em></h3>
+<p>La <strong>autenticación</strong> es el proceso de <strong>comprobar quién es</strong> un usuario (que es quien dice
+ser): el <strong>login</strong>. Tras autenticarse (con correo y contraseña, o con Google/GitHub), Supabase
+sabe qué usuario es y le da una <strong>sesión</strong>.</p>
+<h3 id="que-significa-autenticacion-vs-autorizacion">🟦 ¿Qué significa? — <em>Autenticación vs. autorización</em></h3>
+<p>Dos palabras que se confunden:
+- <strong>Autenticación</strong> = <em>¿quién eres?</em> (login).
+- <strong>Autorización</strong> = <em>¿qué tienes permitido hacer?</em> (permisos).
+Primero te autenticas (demuestras tu identidad), luego el sistema decide qué estás autorizado a
+ver/hacer. RLS (lo que sigue) es <strong>autorización</strong>: una vez sé quién eres, decido qué filas
+puedes tocar.</p>
+<h3 id="que-significa-sesion-y-token">🟦 ¿Qué significa? — <em>Sesión y token</em></h3>
+<p>Al iniciar sesión, Supabase te entrega un <strong>token</strong>: una credencial temporal (un texto cifrado)
+que tu app envía en cada petición para demostrar "soy el usuario 7, ya autenticado". La
+<strong>sesión</strong> es ese estado de "estás dentro". El token caduca y se renueva solo. Por eso no
+tienes que poner la contraseña en cada clic.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-concepto-estrella-row-level-security-rls">2. El concepto estrella: Row-Level Security (RLS)</h2>
+<blockquote class="def">
+<h3 id="que-significa-rls-seguridad-a-nivel-de-fila">🟦 ¿Qué significa? — <em>RLS (seguridad a nivel de fila)</em></h3>
+<p><strong>RLS</strong> (<em>Row-Level Security</em>, "seguridad a nivel de fila") es una característica de Postgres
+que decide, <strong>fila por fila</strong>, quién puede verla o modificarla. En vez de "este usuario puede
+entrar a la tabla habitos", dice: "este usuario solo puede ver las <strong>filas</strong> de la tabla
+habitos <strong>cuyo <code>usuario_id</code> sea el suyo</strong>".
+Es lo que hace que, aunque todos usen la misma clave pública y la misma tabla, <strong>cada quien solo
+vea lo suyo</strong>. Sin RLS bien puesta, cualquiera podría leer los datos de todos: es el error de
+seguridad más grave (y común) en apps con Supabase.</p>
+<h3 id="que-significa-politica-policy">🟦 ¿Qué significa? — <em>Política (policy)</em></h3>
+<p>Una <strong>política</strong> es una <strong>regla SQL</strong> que define el permiso. Se lee casi como una condición
+<code>WHERE</code> que la base de datos añade <strong>automáticamente</strong> a cada consulta de ese usuario. Ejemplo:
+<code>sql
+-- "Un usuario solo puede LEER sus propios hábitos"
+CREATE POLICY "ver_mis_habitos"
+ON habitos FOR SELECT
+USING ( usuario_id = auth.uid() );</code>
+- <code>auth.uid()</code> → el <code>id</code> del usuario <strong>actualmente autenticado</strong> (lo da Supabase).
+- <code>USING ( usuario_id = auth.uid() )</code> → la condición que cada fila debe cumplir para ser
+  visible. Si no la cumple, <strong>para ese usuario es como si la fila no existiera</strong>.
+Se crean políticas para cada acción (SELECT, INSERT, UPDATE, DELETE).</p>
+<h3 id="cuidado-rls-hay-que-activarla">⚠️ Cuidado — RLS hay que ACTIVARLA</h3>
+<p>En Postgres/Supabase, RLS está <strong>apagada</strong> por defecto en una tabla nueva. Hay que activarla
+explícitamente y escribir las políticas. Una tabla con RLS apagada y clave pública = datos de
+todos expuestos. Activar RLS y revisar las políticas es lo <strong>primero</strong> que se audita en una app
+Supabase. Supabase incluso te avisa con "advisors" (avisos de seguridad) si una tabla quedó sin
+proteger.</p>
+</blockquote>
+<hr />
+<h2 id="3-como-encaja-todo-junto">3. Cómo encaja todo junto</h2>
+<p>El viaje completo de una petición segura en RachaSimple:</p>
+<pre><code>1. Te logueas        → Supabase Auth comprueba tu identidad y te da una sesión + token.
+2. Pides tus hábitos → el cliente envía: &quot;SELECT * FROM habitos&quot; + tu token.
+3. RLS entra en acción→ Postgres añade en automático: &quot;...WHERE usuario_id = auth.uid()&quot;.
+4. Recibes SOLO       → las filas que son tuyas. Las de otros ni se asoman.
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>La carpeta <code>supabase/migrations/</code> de Faro contiene el SQL que <strong>crea las tablas Y sus políticas
+RLS</strong>. Por eso, aunque la clave pública esté en el navegador, tus proyectos en Faro y tus
+hábitos en RachaSimple son privados: la base de datos misma los protege fila por fila. Es
+seguridad <strong>en el lugar correcto</strong> (el servidor/BD), no confiando en el frontend.</p>
+<h3 id="tip-la-regla-de-seguridad-que-te-llevas">💡 Tip — La regla de seguridad que te llevas</h3>
+<p><em>Nunca confíes en el frontend para la seguridad.</em> El navegador es del usuario; puede
+manipularlo. La verdad y los permisos viven en el <strong>servidor/base de datos</strong> (RLS, validación
+en el backend). El frontend valida por <strong>comodidad</strong> (avisar rápido), el backend por
+<strong>seguridad</strong> (de verdad). Lo viste con los formularios (Módulo 01) y aquí se confirma.</p>
+</blockquote>
+<hr />
+<h2 id="4-cierre-del-modulo">4. Cierre del módulo</h2>
+<pre><code>Bases de datos y SQL
+├── Qué es: tablas/filas/columnas, relacional, claves     (cap. 01)
+├── Consultar: SELECT/WHERE/ORDER BY                       (cap. 02)
+├── Modificar y relacionar: CRUD, INSERT/UPDATE/DELETE, JOIN (cap. 03)
+├── Supabase: Postgres en la nube, el cliente, BaaS        (cap. 04)
+└── Seguridad: autenticación, RLS y políticas             (cap. 05)
+</code></pre>
+<p>Ya sabes <strong>dónde viven los datos</strong> de tus apps y cómo se mantienen privados. Te falta una pieza
+para cerrar el círculo de cómo se comunican las apps con el mundo: las <strong>APIs</strong> (y cómo se
+integran servicios externos como la IA). Ese es el siguiente módulo.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Distingo <strong>autenticación</strong> (quién eres) de <strong>autorización</strong> (qué puedes hacer).</li>
+<li>[ ] Entiendo qué es una <strong>sesión</strong> y un <strong>token</strong>.</li>
+<li>[ ] Sé qué es <strong>RLS</strong> y por qué permite que cada usuario solo vea lo suyo.</li>
+<li>[ ] Entiendo qué es una <strong>política</strong> y el papel de <code>auth.uid()</code>.</li>
+<li>[ ] Sé que <strong>RLS hay que activarla</strong> y que olvidarlo expone los datos.</li>
+<li>[ ] Me llevo la regla: <strong>la seguridad vive en el servidor/BD, no en el frontend</strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Auth vs. authz.</strong> Clasifica como autenticación o autorización: (a) iniciar sesión con
+   Google; (b) que solo puedas editar tus propios hábitos; (c) escribir tu contraseña.</li>
+<li><strong>Lee la política.</strong> Explica en español qué permite esta política:
+   <code>CREATE POLICY ... ON checkins FOR SELECT USING ( usuario_id = auth.uid() );</code></li>
+<li><strong>El agujero.</strong> Una tabla <code>notas</code> tiene la clave pública expuesta y RLS <strong>apagada</strong>. ¿Qué
+   problema hay y cómo se arregla?</li>
+<li><strong>El flujo.</strong> Describe los 4 pasos desde que un usuario se loguea hasta que recibe solo sus
+   datos, nombrando dónde actúa RLS.</li>
+<li><strong>La regla de oro.</strong> Explica por qué validar "solo en el frontend" no es seguro, con un
+   ejemplo de cómo alguien podría saltárselo.</li>
+</ol>
+<hr />
+<p>🎉 <strong>¡Terminaste el Módulo 07 — Bases de datos y SQL!</strong> Ahora entiendes dónde y cómo se guardan
+los datos de tus apps, el lenguaje SQL, Supabase y la seguridad con RLS. Solo quedan dos módulos:
+conectar con servicios externos (APIs, OAuth, IA) y tu servidor NAS.</p>
+<p>➡️ Siguiente módulo: <strong><a href="../08-apis-oauth-ia/README.html">08 — APIs, OAuth e IA</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 02 — Consumir una API — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-02-consumir-una-api">Capítulo 02 — Consumir una API</h1>
+<blockquote>
+<p>"Consumir" una API es usarla desde tu código: hacerle peticiones y procesar sus respuestas.
+La buena noticia: ya sabes la herramienta (<code>fetch</code>, del Módulo 03). Aquí la juntamos con
+headers, métodos y <strong>claves de API</strong>, que es lo nuevo.</p>
+</blockquote>
+<hr />
+<h2 id="1-la-peticion-mas-simple-un-get-con-fetch">1. La petición más simple: un GET con fetch</h2>
+<p>Recuerda <code>fetch</code> del Módulo 03. Consumir una API GET es exactamente eso:</p>
+<pre><code class="language-js">async function verUsuario() {
+  const respuesta = await fetch(&quot;https://api.github.com/users/Edhdez1&quot;);
+  const datos = await respuesta.json();   // de JSON a objeto
+  console.log(datos.name, datos.public_repos);
+}
+</code></pre>
+<p>"Pide a este endpoint (espera), convierte la respuesta de JSON a objeto (espera), y úsala." Ya
+lo hiciste con la API de GitHub en el Módulo 03. Eso <strong>es</strong> consumir una API.</p>
+<blockquote class="def">
+<h3 id="que-significa-consumir-vs-exponer-una-api">🟦 ¿Qué significa? — <em>Consumir vs. exponer una API</em></h3>
+<ul>
+<li><strong>Consumir</strong> una API = ser el cliente: tú le pides cosas (lo de este capítulo).</li>
+<li><strong>Exponer</strong> una API = ser el servidor: tú la ofreces para que otros pidan (capítulo 05).
+En este módulo verás las dos caras.</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="2-enviar-datos-post-con-body-y-headers">2. Enviar datos: POST con body y headers</h2>
+<p>Para <strong>crear</strong> algo, usas POST y mandas datos en el <strong>body</strong>, además de indicar el formato con
+un <strong>header</strong>:</p>
+<pre><code class="language-js">const respuesta = await fetch(&quot;https://api.ejemplo.com/proyectos&quot;, {
+  method: &quot;POST&quot;,
+  headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+  body: JSON.stringify({ nombre: &quot;Mi proyecto&quot;, fase: &quot;idea&quot; })
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-las-opciones-de-fetch-metodo-headers-body">🟦 ¿Qué significa? — <em>Las opciones de fetch (método, headers, body)</em></h3>
+<p>El segundo argumento de <code>fetch</code> es un objeto con opciones:
+- <code>method</code>: el verbo HTTP (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>…). Si lo omites, es <code>GET</code>.
+- <code>headers</code>: las cabeceras. <code>"Content-Type": "application/json"</code> avisa "te mando JSON".
+- <code>body</code>: los datos a enviar. Se convierten a texto JSON con <code>JSON.stringify</code> (Módulo 03).
+¿Reconoces el patrón? Es la "anatomía de una petición" del capítulo anterior, en código.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>El chat de tu sitio (<code>main.js</code>) hace un <code>fetch</code> <strong>POST</strong> al Cloudflare Worker, con tu mensaje
+en el <code>body</code> como JSON. El Worker se lo pasa a Claude y devuelve la respuesta. Es este mismo
+patrón.</p>
+</blockquote>
+<hr />
+<h2 id="3-claves-de-api-identificarte-ante-el-servicio">3. Claves de API: identificarte ante el servicio</h2>
+<p>La mayoría de las APIs <strong>no son abiertas</strong>: necesitas una credencial para usarlas (para saber
+quién eres, controlar el uso y cobrar si aplica).</p>
+<blockquote class="def">
+<h3 id="que-significa-clave-de-api-api-key-y-token">🟦 ¿Qué significa? — <em>Clave de API (API key) y token</em></h3>
+<p>Una <strong>clave de API</strong> (o <strong>token</strong>) es un texto secreto, único para ti, que envías en cada
+petición para <strong>identificarte</strong> ante la API. Suele ir en un header de autorización:
+<code>js
+headers: { "Authorization": "Bearer sk-tu-clave-secreta" }</code>
+<code>Bearer</code> ("portador") es el esquema típico: "quien porta este token, es el autorizado".
+La API de OpenAI, la de Claude, etc., funcionan así: sin una clave válida, te rechazan (estado
+401 "no autorizado").</p>
+<h3 id="cuidado-las-claves-de-api-son-secretas-esto-es-crucial">⚠️ Cuidado — Las claves de API son SECRETAS (esto es crucial)</h3>
+<p>Una clave de API suele dar acceso de pago a tu cuenta. Si alguien la consigue, puede gastar tu
+dinero. Reglas inquebrantables (ya las viste en Git y Supabase, aquí se confirman):
+1. <strong>Nunca</strong> la escribas directamente en el código del frontend (cualquiera la vería en el
+   navegador).
+2. <strong>Nunca</strong> la subas a GitHub (queda en el historial para siempre).
+3. Guárdala en <strong>variables de entorno</strong> del <strong>servidor</strong> (<code>.env.local</code>, excluido por
+   <code>.gitignore</code>), y haz las llamadas desde ahí.
+Es exactamente por esto que tu chat usa un <strong>Cloudflare Worker</strong>: la clave de Claude vive en el
+Worker (servidor), nunca en la página. El navegador habla con tu Worker; tu Worker, con Claude.</p>
+<h3 id="que-significa-variable-de-entorno">🟦 ¿Qué significa? — <em>Variable de entorno</em></h3>
+<p>Una <strong>variable de entorno</strong> es un valor de configuración (como una clave secreta) que se guarda
+<strong>fuera del código</strong>, en el entorno donde corre el programa (el servidor, Vercel, el Worker).
+Así el código dice "usa la clave que está en la variable <code>OPENAI_API_KEY</code>" sin que la clave
+esté escrita en ningún archivo que se suba. Faro tiene un <code>.env.local.example</code> que lista qué
+variables necesita (sin los valores reales).</p>
+</blockquote>
+<hr />
+<h2 id="4-manejar-la-respuesta-y-los-errores">4. Manejar la respuesta y los errores</h2>
+<blockquote class="def">
+<h3 id="que-significa-revisar-el-estado-de-la-respuesta">🟦 ¿Qué significa? — <em>Revisar el estado de la respuesta</em></h3>
+<p>Una API puede responder con error (401 sin clave, 404 no existe, 429 demasiadas peticiones).
+Conviene revisar antes de usar los datos:
+<code>js
+const r = await fetch(url, opciones);
+if (!r.ok) {            // r.ok es true si el estado es 200-299
+  console.log("Error:", r.status);
+  return;
+}
+const datos = await r.json();</code>
+<code>r.ok</code> y <code>r.status</code> (¿recuerdas los códigos del Módulo 00?) te dicen si todo fue bien. Envuelve
+todo en <code>try/catch</code> (Módulo 03) para los fallos de red.</p>
+<h3 id="que-significa-limite-de-tasa-rate-limit">🟦 ¿Qué significa? — <em>Límite de tasa (rate limit)</em></h3>
+<p>Las APIs limitan cuántas peticiones puedes hacer por minuto/día (para no saturarse). Si te
+pasas, responden <strong>429</strong> ("demasiadas peticiones"). Por eso las apps serias controlan su ritmo.
+Tu Worker de Claude tiene su propio rate limiting <strong>por IP</strong> para que nadie abuse de tu chat y
+te dispare la factura.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Consumo una API GET con <code>fetch</code> + <code>.json()</code> (lo del Módulo 03).</li>
+<li>[ ] Hago un POST con <code>method</code>, <code>headers</code> (<code>Content-Type</code>) y <code>body</code> (<code>JSON.stringify</code>).</li>
+<li>[ ] Sé qué es una <strong>clave de API / token</strong> y que va en el header <code>Authorization: Bearer</code>.</li>
+<li>[ ] <strong>Nunca</strong> pongo claves en el frontend ni en GitHub; van en <strong>variables de entorno</strong> del servidor.</li>
+<li>[ ] Entiendo por qué el chat usa un <strong>Worker</strong> (para esconder la clave de Claude).</li>
+<li>[ ] Reviso <code>r.ok</code>/<code>r.status</code> y conozco el <strong>rate limit</strong> (429).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>GET.</strong> Escribe el <code>fetch</code> que pide <code>https://api.github.com/users/Edhdez1/repos</code> y muestra
+   cuántos repos llegaron (pista: la respuesta es un array; usa <code>.length</code>).</li>
+<li><strong>POST.</strong> Escribe el <code>fetch</code> para crear un hábito enviando <code>{ nombre: "Leer", meta: 20 }</code> en
+   el body, con el header de tipo JSON.</li>
+<li><strong>Seguridad.</strong> Tu compañero pegó la clave de OpenAI directamente en un archivo <code>.js</code> del
+   frontend. Lista tres razones por las que está mal y cómo debe hacerse.</li>
+<li><strong>Estados.</strong> ¿Qué significan, al llamar a una API, los estados 401, 404 y 429? ¿Qué harías en
+   cada caso?</li>
+<li>💻 <strong>Encadena.</strong> Cuando puedas, escribe una función que pida tus repos de GitHub y muestre el
+   nombre del primero. Revisa <code>r.ok</code> antes de leer los datos.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="03-oauth.html">Capítulo 03 — OAuth: login con terceros</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
