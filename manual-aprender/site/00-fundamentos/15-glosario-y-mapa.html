@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 15 — Glosario y mapa del módulo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-y-mapa-del-modulo">Capítulo 15 — Glosario y mapa del módulo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Llegaste al último capítulo del Módulo 00. Aquí no aprendes nada nuevo: aquí <em>ordenas</em> todo lo que ya viste. Este capítulo es tu diccionario de bolsillo (un glosario alfabético con cada palabra técnica del módulo explicada en una o dos líneas) y un mapa mental en texto que conecta los temas para que veas cómo encajan unos con otros. Importa porque la programación tiene un vocabulario propio: cuando dominas las palabras, dejas de "adivinar" y empiezas a <em>entender</em>. Bit, nuestro ajolote guía, dice que un buen glosario es como una linterna en un cuarto oscuro: no cambia el cuarto, pero ahora ves dónde pisas.</p>
+</blockquote>
+<h2 id="1-como-usar-este-capitulo">1. Cómo usar este capítulo</h2>
+<p>Este capítulo es distinto a los anteriores. No tiene una historia de principio a fin: es una <strong>referencia</strong>. Eso significa que está pensado para que vuelvas a él cuando una palabra se te olvide.</p>
+<p>Te sugiero tres formas de aprovecharlo:</p>
+<ol>
+<li><strong>Léelo entero una vez</strong>, sin prisa, para refrescar todo el módulo.</li>
+<li><strong>Vuelve cuando dudes.</strong> Si en el Módulo 01 lees "haz un commit en tu rama" y se te fue qué era una rama, abre este capítulo y búscala.</li>
+<li><strong>Tápate las definiciones.</strong> Lee solo el término e intenta explicarlo con tus palabras. Si puedes, lo dominas.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip-explicar-es-la-mejor-prueba">💡 Tip — Explicar es la mejor prueba</h3>
+<p>Si puedes explicarle un término a alguien que no programa (tu mamá, un amigo, hasta a Bit el ajolote), de verdad lo entendiste. Si solo puedes repetir la definición de memoria, todavía no.</p>
+</blockquote>
+<p>El glosario está ordenado alfabéticamente para que lo busques rápido. Después del glosario viene el mapa mental, que es lo contrario: ahí los términos están ordenados <em>por cómo se relacionan</em>, no por su letra inicial.</p>
+<h2 id="2-glosario-alfabetico">2. Glosario alfabético</h2>
+<p>Cada término viene en su recuadro azul. La definición es corta a propósito: para qué sirve, en palabras simples, y dónde aparece en tus proyectos reales cuando aplica.</p>
+<h3 id="a">A</h3>
+<blockquote class="def">
+<h3 id="que-significa-algoritmo">🟦 ¿Qué significa? — <em>Algoritmo</em></h3>
+<p>Una lista de pasos ordenados para resolver un problema, como una receta de cocina. Programar es, en el fondo, escribir algoritmos que la computadora pueda seguir.</p>
+<h3 id="que-significa-api">🟦 ¿Qué significa? — <em>API</em></h3>
+<p>Sigla de <em>Application Programming Interface</em> (interfaz de programación). Es la "ventanilla" por la que un programa le pide cosas a otro. <strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code>, <code>backend/worker.js</code> llama a la <strong>API de Claude</strong> para generar texto; en Faro, <code>src/app/api</code> llama a la API de OpenAI.</p>
+<h3 id="que-significa-archivo">🟦 ¿Qué significa? — <em>Archivo</em></h3>
+<p>Un conjunto de datos guardado con un nombre, dentro del disco. Tu código vive en archivos: <code>main.py</code>, <code>index.html</code>, <code>worker.js</code> son todos archivos.</p>
+</blockquote>
+<h3 id="b">B</h3>
+<blockquote class="def">
+<h3 id="que-significa-backend">🟦 ¿Qué significa? — <em>Backend</em></h3>
+<p>La parte de una aplicación que corre en un servidor, lejos del usuario, y hace el trabajo "oculto" (datos, lógica, seguridad). <strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code> el backend es <code>backend/worker.js</code>; en Faro es <code>src/app/api</code>.</p>
+<h3 id="que-significa-bit">🟦 ¿Qué significa? — <em>Bit</em></h3>
+<p>La unidad mínima de información en una computadora: vale 0 o 1, como un interruptor apagado o encendido. Todo lo digital, al final, son bits. (También es el nombre de tu ajolote guía.)</p>
+<h3 id="que-significa-byte">🟦 ¿Qué significa? — <em>Byte</em></h3>
+<p>Un grupo de 8 bits. Es la unidad con la que medimos el tamaño de archivos y memoria. Una letra suele ocupar 1 byte; mil bytes son un kilobyte (KB), un millón un megabyte (MB).</p>
+</blockquote>
+<h3 id="c">C</h3>
+<blockquote class="def">
+<h3 id="que-significa-cliente">🟦 ¿Qué significa? — <em>Cliente</em></h3>
+<p>El programa que <em>pide</em> algo: tu navegador, una app de celular, tu terminal. <strong>¿Dónde se usa en tu proyecto?</strong> El navegador que abre <code>sitio-web/index.html</code> de <code>tunal-digital</code> es el cliente.</p>
+<h3 id="que-significa-commit">🟦 ¿Qué significa? — <em>Commit</em></h3>
+<p>Una "foto" guardada de tu código en un momento dado, con un mensaje que explica qué cambiaste. Es la unidad básica del historial de Git. <strong>¿Dónde se usa en tu proyecto?</strong> Cada vez que guardas avances de Faro o RachaSimple en Git, haces un commit.</p>
+<h3 id="que-significa-cpu">🟦 ¿Qué significa? — <em>CPU</em></h3>
+<p>Sigla de <em>Central Processing Unit</em> (unidad central de proceso). Es el "cerebro" de la computadora: ejecuta las instrucciones de tus programas, una tras otra, muy rápido.</p>
+</blockquote>
+<h3 id="d">D</h3>
+<blockquote class="def">
+<h3 id="que-significa-disco">🟦 ¿Qué significa? — <em>Disco</em></h3>
+<p>La memoria que <strong>no</strong> se borra al apagar la computadora: ahí viven tus archivos y programas de forma permanente. Puede ser SSD (rápido) o HDD (más lento y barato). <strong>¿Dónde se usa en tu proyecto?</strong> Tu <code>polypaw-nas</code> tiene un SSD de 238 GB y un HDD de 954 GB montado en <code>/srv/nas</code>.</p>
+<h3 id="que-significa-dns">🟦 ¿Qué significa? — <em>DNS</em></h3>
+<p>Sigla de <em>Domain Name System</em>. Es la "agenda de contactos" de internet: traduce un nombre fácil de recordar (como <code>google.com</code>) a su número de IP. Sin DNS tendrías que memorizar números.</p>
+<h3 id="que-significa-docker-podman">🟦 ¿Qué significa? — <em>Docker / Podman</em></h3>
+<p>Herramientas para empaquetar un programa con todo lo que necesita y correrlo aislado en un "contenedor", como una cajita portátil. <strong>¿Dónde se usa en tu proyecto?</strong> Tu <code>polypaw-nas</code> tiene Docker/Podman instalado para correr servicios.</p>
+</blockquote>
+<h3 id="f">F</h3>
+<blockquote class="def">
+<h3 id="que-significa-framework">🟦 ¿Qué significa? — <em>Framework</em></h3>
+<p>Un conjunto de herramientas y reglas ya hechas que te ahorran trabajo al construir una app. <strong>¿Dónde se usa en tu proyecto?</strong> PolyPaw usa el framework <strong>Flet</strong> (Python); RachaSimple usa <strong>React</strong>; Faro usa <strong>Next.js</strong>.</p>
+<h3 id="que-significa-frontend">🟦 ¿Qué significa? — <em>Frontend</em></h3>
+<p>La parte de la app que el usuario ve y toca: botones, textos, colores. <strong>¿Dónde se usa en tu proyecto?</strong> En RachaSimple, <code>src/components</code> es el frontend; en <code>tunal-digital</code> lo son <code>index.html</code>, <code>styles.css</code> y <code>main.js</code>.</p>
+</blockquote>
+<h3 id="g">G</h3>
+<blockquote class="def">
+<h3 id="que-significa-git">🟦 ¿Qué significa? — <em>Git</em></h3>
+<p>Un programa que guarda el historial de tu código: quién cambió qué y cuándo, y te deja volver atrás. Es la "máquina del tiempo" de tu proyecto. <strong>¿Dónde se usa en tu proyecto?</strong> Lo usas (o lo usarás) en los cuatro proyectos de código: tunal-digital, PolyPaw, RachaSimple y Faro.</p>
+</blockquote>
+<h3 id="h">H</h3>
+<blockquote class="def">
+<h3 id="que-significa-hardware">🟦 ¿Qué significa? — <em>Hardware</em></h3>
+<p>Las partes físicas de la computadora: las que puedes tocar (CPU, RAM, disco, pantalla). Lo opuesto al software.</p>
+<h3 id="que-significa-html">🟦 ¿Qué significa? — <em>HTML</em></h3>
+<p>Sigla de <em>HyperText Markup Language</em>. Es el lenguaje que define la <strong>estructura</strong> de una página web (títulos, párrafos, botones). <strong>¿Dónde se usa en tu proyecto?</strong> En <code>tunal-digital</code>, el archivo <code>sitio-web/index.html</code>.</p>
+<h3 id="que-significa-http">🟦 ¿Qué significa? — <em>HTTP</em></h3>
+<p>Sigla de <em>HyperText Transfer Protocol</em>. Es el "idioma" con el que el cliente y el servidor se hablan en la web: el cliente pide y el servidor responde. Su versión segura es <strong>HTTPS</strong>.</p>
+</blockquote>
+<h3 id="i">I</h3>
+<blockquote class="def">
+<h3 id="que-significa-ip">🟦 ¿Qué significa? — <em>IP</em></h3>
+<p>Sigla de <em>Internet Protocol</em>. Es el número que identifica a cada dispositivo en una red, como la dirección de una casa. Sirve para que los datos lleguen al lugar correcto.</p>
+<h3 id="que-significa-json">🟦 ¿Qué significa? — <em>JSON</em></h3>
+<p>Un formato de texto para guardar datos organizados en pares "nombre: valor". Lo leen igual de bien las personas y las máquinas. <strong>¿Dónde se usa en tu proyecto?</strong> PolyPaw guarda sus misiones y su base de datos en JSON: <code>missions/*.json</code> y <code>polypaw_db.json</code>.</p>
+</blockquote>
+<h3 id="l">L</h3>
+<blockquote class="def">
+<h3 id="que-significa-lenguaje-de-programacion">🟦 ¿Qué significa? — <em>Lenguaje de programación</em></h3>
+<p>El idioma en que le escribes instrucciones a la computadora. <strong>¿Dónde se usa en tu proyecto?</strong> Usas JavaScript (tunal-digital), Python (PolyPaw) y TypeScript (RachaSimple, Faro).</p>
+</blockquote>
+<h3 id="o">O</h3>
+<blockquote class="def">
+<h3 id="que-significa-oauth">🟦 ¿Qué significa? — <em>OAuth</em></h3>
+<p>Un sistema para iniciar sesión usando otra cuenta (como "Entrar con Google") sin compartir tu contraseña. <strong>¿Dónde se usa en tu proyecto?</strong> Faro usa OAuth (vía Supabase Auth) para conectarse a tu GitHub y Google Drive.</p>
+<h3 id="que-significa-openai-claude-modelos-de-ia">🟦 ¿Qué significa? — <em>OpenAI / Claude (modelos de IA)</em></h3>
+<p>Servicios de inteligencia artificial a los que tu app les pide texto generado. <strong>¿Dónde se usa en tu proyecto?</strong> <code>tunal-digital</code> usa la API de Claude; Faro usa OpenAI para escribir descripciones y roadmaps.</p>
+</blockquote>
+<h3 id="p">P</h3>
+<blockquote class="def">
+<h3 id="que-significa-programar">🟦 ¿Qué significa? — <em>Programar</em></h3>
+<p>Escribir instrucciones (algoritmos) en un lenguaje que la computadora entiende, para que haga algo útil. Es lo que haces en cada uno de tus proyectos.</p>
+</blockquote>
+<h3 id="r">R</h3>
+<blockquote class="def">
+<h3 id="que-significa-ram">🟦 ¿Qué significa? — <em>RAM</em></h3>
+<p>Sigla de <em>Random Access Memory</em>. Es la memoria rápida y temporal donde la computadora pone lo que está usando <em>ahora</em>. Se borra al apagar. <strong>¿Dónde se usa en tu proyecto?</strong> Tu <code>polypaw-nas</code> tiene 8 GB de RAM.</p>
+<h3 id="que-significa-rama-branch">🟦 ¿Qué significa? — <em>Rama (branch)</em></h3>
+<p>Una línea de trabajo paralela en Git: te deja experimentar con cambios sin tocar la versión principal (<code>main</code>). Cuando funciona, la fusionas. <strong>¿Dónde se usa en tu proyecto?</strong> En Faro trabajas en una rama de sesión y abres un PR hacia <code>main</code>.</p>
+<h3 id="que-significa-repositorio-repo">🟦 ¿Qué significa? — <em>Repositorio (repo)</em></h3>
+<p>La carpeta de un proyecto con todo su código y su historial de Git. <strong>¿Dónde se usa en tu proyecto?</strong> Cada uno de tus proyectos (tunal-digital, PolyPaw, RachaSimple, Faro) es un repositorio.</p>
+<h3 id="que-significa-ruta-path">🟦 ¿Qué significa? — <em>Ruta (path)</em></h3>
+<p>La "dirección" que indica dónde está un archivo o carpeta dentro del disco, separada por barras. <strong>¿Dónde se usa en tu proyecto?</strong> <code>src/types/database.ts</code> en RachaSimple es una ruta; <code>/srv/nas</code> en tu NAS también.</p>
+</blockquote>
+<h3 id="s">S</h3>
+<blockquote class="def">
+<h3 id="que-significa-servidor">🟦 ¿Qué significa? — <em>Servidor</em></h3>
+<p>El programa (o la máquina) que <em>responde</em> a las peticiones del cliente: entrega páginas, datos o respuestas. <strong>¿Dónde se usa en tu proyecto?</strong> <code>backend/worker.js</code> de tunal-digital actúa como servidor; tu <code>polypaw-nas</code> es una máquina servidor.</p>
+<h3 id="que-significa-shell">🟦 ¿Qué significa? — <em>Shell</em></h3>
+<p>El programa que interpreta los comandos que escribes en la terminal y se los pasa al sistema operativo. La terminal es la ventana; el shell es quien "entiende" lo que tecleas.</p>
+<h3 id="que-significa-sistema-operativo-so">🟦 ¿Qué significa? — <em>Sistema operativo (SO)</em></h3>
+<p>El programa principal que controla toda la computadora y hace de puente entre tú, los programas y el hardware. Ejemplos: Windows, macOS, Linux. <strong>¿Dónde se usa en tu proyecto?</strong> Tu <code>polypaw-nas</code> corre <strong>Ubuntu Server 26.04</strong>, una versión de Linux.</p>
+<h3 id="que-significa-software">🟦 ¿Qué significa? — <em>Software</em></h3>
+<p>Los programas: las instrucciones que le dicen al hardware qué hacer. No lo puedes tocar; es lo opuesto al hardware.</p>
+</blockquote>
+<h3 id="t">T</h3>
+<blockquote class="def">
+<h3 id="que-significa-terminal">🟦 ¿Qué significa? — <em>Terminal</em></h3>
+<p>La ventana de texto donde escribes comandos para darle órdenes directas a la computadora, sin ratón. Dentro de ella corre un shell. <strong>¿Dónde se usa en tu proyecto?</strong> Administras tu <code>polypaw-nas</code> por terminal (vía Samba, Cockpit o SSH).</p>
+<h3 id="que-significa-typescript">🟦 ¿Qué significa? — <em>TypeScript</em></h3>
+<p>Una versión de JavaScript que añade "tipos" (avisa qué clase de dato espera cada cosa) para atrapar errores antes de ejecutar. <strong>¿Dónde se usa en tu proyecto?</strong> RachaSimple y Faro están escritos en TypeScript; mira <code>src/types/database.ts</code>.</p>
+</blockquote>
+<h3 id="v">V</h3>
+<blockquote class="def">
+<h3 id="que-significa-variable">🟦 ¿Qué significa? — <em>Variable</em></h3>
+<p>Una "caja con nombre" donde guardas un dato para usarlo después. El nombre te deja recuperar o cambiar lo que hay dentro. Las usas en todo tu código, en cualquier lenguaje.</p>
+<h3 id="que-significa-vpn">🟦 ¿Qué significa? — <em>VPN</em></h3>
+<p>Sigla de <em>Virtual Private Network</em>. Crea un "túnel" privado y seguro entre dispositivos a través de internet, como si estuvieran en la misma red local. <strong>¿Dónde se usa en tu proyecto?</strong> Tu <code>polypaw-nas</code> usa <strong>Tailscale</strong> como VPN para conectarte de forma segura desde fuera de casa.</p>
+<h3 id="que-significa-vanilla">🟦 ¿Qué significa? — <em>Vanilla</em></h3>
+<p>Adjetivo que significa "sin frameworks ni librerías extra, puro lenguaje base". <strong>¿Dónde se usa en tu proyecto?</strong> <code>tunal-digital</code> usa JavaScript <strong>vanilla</strong>: <code>main.js</code> no depende de React ni nada parecido.</p>
+</blockquote>
+<h2 id="3-terminos-del-entorno-de-tu-nas">3. Términos del entorno de tu NAS</h2>
+<p>Tu <code>polypaw-nas</code> trajo varias palabras nuevas. Las junto aquí porque pertenecen al mismo mundo: el de administrar un servidor en casa.</p>
+<blockquote class="def">
+<h3 id="que-significa-samba">🟦 ¿Qué significa? — <em>Samba</em></h3>
+<p>Un programa que permite compartir carpetas en red para que otras computadoras las abran como si fueran propias. <strong>¿Dónde se usa en tu proyecto?</strong> Tu NAS comparte la carpeta <code>PolyPawNAS</code> con Samba; el servicio se llama <code>smbd</code>.</p>
+<h3 id="que-significa-cockpit">🟦 ¿Qué significa? — <em>Cockpit</em></h3>
+<p>Un panel web para administrar un servidor Linux desde el navegador, sin memorizar comandos. <strong>¿Dónde se usa en tu proyecto?</strong> Lo abres en tu NAS por el puerto <code>:9090</code>.</p>
+<h3 id="que-significa-adguard-home">🟦 ¿Qué significa? — <em>AdGuard Home</em></h3>
+<p>Un servidor de DNS que bloquea anuncios y rastreadores para toda tu red. <strong>¿Dónde se usa en tu proyecto?</strong> Corre en tu <code>polypaw-nas</code>.</p>
+<h3 id="que-significa-puerto">🟦 ¿Qué significa? — <em>Puerto</em></h3>
+<p>Un número que identifica un servicio concreto dentro de una máquina, como la extensión telefónica de una oficina. <strong>¿Dónde se usa en tu proyecto?</strong> Cockpit responde en el puerto <code>9090</code> de tu NAS.</p>
+<h3 id="que-significa-supabase">🟦 ¿Qué significa? — <em>Supabase</em></h3>
+<p>Un servicio que te da base de datos, autenticación y APIs listas para usar. <strong>¿Dónde se usa en tu proyecto?</strong> RachaSimple y Faro guardan datos y manejan login con Supabase.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Mira cómo una misma idea aparece distinta en cada proyecto. Todas son rutas de archivo, pero cuentan historias diferentes:
+<code>text
+tunal-digital/sitio-web/main.js        ← JavaScript vanilla en el frontend
+PolyPaw/missions/mission-01.json       ← datos en JSON
+RachaSimple/src/repositories/...       ← TypeScript que habla con Supabase
+Organizer/src/app/api/...              ← el backend de Faro (Next.js)</code>
+Leer una ruta ya te dice mucho: lenguaje, parte de la app y para qué sirve.</p>
+</blockquote>
+<h2 id="4-mapa-mental-del-modulo-en-texto">4. Mapa mental del módulo (en texto)</h2>
+<p>El glosario ordena las palabras por su letra. El mapa las ordena por <em>cómo se conectan</em>. Recórrelo de arriba hacia abajo: cada nivel se apoya en el anterior.</p>
+<h3 id="nivel-1-la-maquina-fisica-hardware">Nivel 1 — La máquina física (hardware)</h3>
+<p>Todo empieza con una máquina. El <strong>hardware</strong> son las partes que tocas:</p>
+<ul>
+<li>La <strong>CPU</strong> ejecuta las instrucciones.</li>
+<li>La <strong>RAM</strong> guarda lo que se usa <em>ahora</em> (rápida, se borra al apagar).</li>
+<li>El <strong>disco</strong> guarda lo que se queda <em>para siempre</em> (más lento, no se borra).</li>
+</ul>
+<blockquote>
+<p>Recuerda con una imagen: la RAM es tu escritorio (lo que tienes a mano), el disco es el archivero (lo que guardas), la CPU eres tú trabajando.</p>
+</blockquote>
+<h3 id="nivel-2-el-software-que-manda-el-so">Nivel 2 — El software que manda: el SO</h3>
+<p>Sobre el hardware vive el <strong>sistema operativo (SO)</strong>, que reparte la CPU, la RAM y el disco entre los programas. Tu <code>polypaw-nas</code> corre Ubuntu (Linux). Para hablarle directo usas la <strong>terminal</strong>, donde un <strong>shell</strong> interpreta tus <strong>comandos</strong>, y navegas por <strong>rutas</strong> hasta tus <strong>archivos</strong>.</p>
+<h3 id="nivel-3-como-se-guarda-todo-bits-y-bytes">Nivel 3 — Cómo se guarda todo: bits y bytes</h3>
+<p>Bajo los archivos, todo es información: <strong>bits</strong> (0 o 1) agrupados en <strong>bytes</strong> (8 bits). Con bytes medimos cuánto pesan tus archivos y cuánta RAM tienes (los 8 GB de tu NAS son miles de millones de bytes).</p>
+<h3 id="nivel-4-escribir-instrucciones-programar">Nivel 4 — Escribir instrucciones: programar</h3>
+<p>Aquí entras tú. <strong>Programar</strong> es escribir <strong>algoritmos</strong> (pasos ordenados) en un <strong>lenguaje</strong> (JavaScript, Python, TypeScript). Guardas datos en <strong>variables</strong> y organizas el código en <strong>archivos</strong> dentro de un <strong>repositorio</strong>.</p>
+<pre><code class="language-text">algoritmo  →  lenguaje  →  archivos  →  repositorio
+ (la idea)    (el idioma)   (el texto)   (el proyecto entero)
+</code></pre>
+<h3 id="nivel-5-no-perder-tu-trabajo-git">Nivel 5 — No perder tu trabajo: Git</h3>
+<p>Tu repositorio lo cuida <strong>Git</strong>, la máquina del tiempo. Guardas avances en <strong>commits</strong> (fotos con mensaje) y experimentas en <strong>ramas</strong> sin romper <code>main</code>. Esto conecta los cuatro proyectos de código: tunal-digital, PolyPaw, RachaSimple y Faro.</p>
+<h3 id="nivel-6-hablar-con-otras-maquinas-la-red">Nivel 6 — Hablar con otras máquinas: la red</h3>
+<p>Tus programas no viven solos: se hablan por internet.</p>
+<ul>
+<li>El <strong>cliente</strong> pide; el <strong>servidor</strong> responde.</li>
+<li>Se entienden por <strong>HTTP</strong> (su versión segura, HTTPS).</li>
+<li>Cada máquina tiene una <strong>IP</strong> (su dirección); el <strong>DNS</strong> traduce nombres a IPs.</li>
+<li>Un servicio dentro de una máquina escucha en un <strong>puerto</strong>.</li>
+<li>Una <strong>API</strong> es la ventanilla por la que un programa le pide datos a otro.</li>
+</ul>
+<blockquote>
+<p>Une el hilo: tu navegador (<strong>cliente</strong>) pide por <strong>HTTP</strong> a la <strong>IP</strong> que el <strong>DNS</strong> encontró; el <strong>servidor</strong> (<code>worker.js</code>) responde y, por dentro, llama a una <strong>API</strong> (Claude). Toda la web es esta conversación, repetida millones de veces.</p>
+</blockquote>
+<h3 id="nivel-7-construir-mas-rapido-frameworks-y-servicios">Nivel 7 — Construir más rápido: frameworks y servicios</h3>
+<p>Para no empezar de cero usas <strong>frameworks</strong> (Flet, React, Next.js) y servicios externos (<strong>Supabase</strong> para datos y login, <strong>OpenAI</strong>/<strong>Claude</strong> para IA). Tu app se parte en <strong>frontend</strong> (lo que se ve) y <strong>backend</strong> (lo que trabaja oculto). El acceso seguro se maneja con <strong>OAuth</strong>, y los secretos viven en el servidor, nunca en el cliente.</p>
+<h3 id="el-mapa-completo-de-un-vistazo">El mapa completo, de un vistazo</h3>
+<pre><code class="language-text">HARDWARE (CPU · RAM · disco)
+   └─ SISTEMA OPERATIVO (terminal · shell · rutas · archivos)
+        └─ DATOS (bits → bytes)
+             └─ PROGRAMAR (algoritmo · lenguaje · variable)
+                  └─ GIT (repositorio · commit · rama)
+                       └─ RED (cliente ↔ servidor · HTTP · IP · DNS · API)
+                            └─ HERRAMIENTAS (frameworks · Supabase · IA · OAuth)
+                                 └─ TUS PROYECTOS: tunal-digital · PolyPaw · RachaSimple · Faro
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-de-abajo-hacia-arriba">💡 Tip — De abajo hacia arriba</h3>
+<p>Cuando algo falle en el futuro, recorre este mapa de abajo hacia arriba preguntando "¿en qué nivel está el problema?". ¿Es de red (no carga la página)? ¿De código (un error en tu archivo)? ¿De hardware (sin espacio en disco)? Ubicar el nivel es la mitad de la solución.</p>
+</blockquote>
+<h2 id="5-tus-cuatro-proyectos-vistos-por-el-mapa">5. Tus cuatro proyectos vistos por el mapa</h2>
+<p>Para cerrar, mira cómo cada proyecto toca distintas partes del mapa. Esto te muestra que no aprendiste cosas sueltas: aprendiste un sistema.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>```text
+tunal-digital → HTML/CSS/JS vanilla (frontend) + Cloudflare Workers (servidor)
+                + API de Claude. Toca: red, API, frontend, backend.</p>
+<p>PolyPaw       → Python + Flet + datos en JSON. Toca: lenguaje, framework,
+                archivos, variables.</p>
+<p>RachaSimple   → React + TypeScript + Supabase. Toca: framework, tipos,
+                frontend, base de datos.</p>
+<p>Faro          → Next.js + TypeScript + Supabase + OpenAI + OAuth.
+                Toca: casi todo el mapa, de frontend a IA.</p>
+<p>polypaw-nas   → Ubuntu + Samba + Cockpit + Tailscale + Docker.
+                Toca: hardware, SO, red, servidores, VPN.
+```</p>
+</blockquote>
+<p>Faro y tu NAS son los que más conceptos juntan: por eso, si los entiendes a ellos, entiendes el módulo entero.</p>
+<blockquote class="warn">
+<h3 id="cuidado-los-secretos-no-se-comparten">⚠️ Cuidado — Los secretos no se comparten</h3>
+<p>Hay una regla de oro del módulo que nunca debes olvidar: <strong>las claves y contraseñas viven solo en el servidor</strong>, en variables de entorno o protegidas con permisos. Nunca las escribas en el código que ve el cliente ni las subas a Git. En Faro, esto es una regla explícita del proyecto.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar, con mis palabras, la diferencia entre <strong>RAM</strong> y <strong>disco</strong>.</li>
+<li>[ ] Sé qué hace la <strong>CPU</strong> y por qué el <strong>SO</strong> está por encima del hardware.</li>
+<li>[ ] Entiendo que todo, al final, son <strong>bits</strong> agrupados en <strong>bytes</strong>.</li>
+<li>[ ] Sé qué es un <strong>algoritmo</strong> y por qué programar es escribir algoritmos.</li>
+<li>[ ] Distingo <strong>cliente</strong> de <strong>servidor</strong> y sé cómo se hablan por <strong>HTTP</strong>.</li>
+<li>[ ] Puedo explicar para qué sirven <strong>IP</strong> y <strong>DNS</strong> juntos.</li>
+<li>[ ] Sé qué es un <strong>commit</strong> y una <strong>rama</strong> en <strong>Git</strong>.</li>
+<li>[ ] Reconozco qué es una <strong>API</strong> y nombro una que usa un proyecto mío.</li>
+<li>[ ] Puedo leer una <strong>ruta</strong> de archivo y deducir qué contiene.</li>
+<li>[ ] Entiendo por qué los <strong>secretos</strong> nunca van en el cliente.</li>
+</ul>
+<h2 id="repaso-del-modulo">🔁 Repaso del módulo</h2>
+<p>Este capítulo es el cierre del Módulo 00, así que en vez de ejercicios nuevos te dejo un <strong>repaso</strong> que recorre todo lo que viste. No es para "estudiar de memoria": es para comprobar que las piezas encajan. Tómatelo como un paseo final por el mapa, con calma.</p>
+<h3 id="las-diez-ideas-que-no-se-te-pueden-olvidar">Las diez ideas que no se te pueden olvidar</h3>
+<p>Si de todo el módulo solo te quedaras con diez frases, que sean estas:</p>
+<ol>
+<li>La computadora es <strong>hardware</strong> (lo que tocas) gobernado por un <strong>sistema operativo</strong> (el software que reparte la CPU, la RAM y el disco).</li>
+<li>La <strong>RAM</strong> es rápida y se borra al apagar; el <strong>disco</strong> es más lento pero guarda para siempre. Escritorio contra archivero.</li>
+<li>Todo, al final, son <strong>bits</strong> (0 o 1) agrupados en <strong>bytes</strong> (8 bits). Con bytes medimos cuánto pesan las cosas.</li>
+<li><strong>Programar</strong> es escribir <strong>algoritmos</strong> (pasos ordenados) en un <strong>lenguaje</strong> que la máquina entiende.</li>
+<li>Guardas datos en <strong>variables</strong> (cajas con nombre) y tu código vive en <strong>archivos</strong> dentro de un <strong>repositorio</strong>.</li>
+<li><strong>Git</strong> es la máquina del tiempo: guardas avances en <strong>commits</strong> y experimentas en <strong>ramas</strong> sin romper <code>main</code>.</li>
+<li>En la red, el <strong>cliente</strong> pide y el <strong>servidor</strong> responde, hablándose por <strong>HTTP/HTTPS</strong>.</li>
+<li>Cada máquina tiene una <strong>IP</strong>; el <strong>DNS</strong> traduce nombres a IPs; un servicio escucha en un <strong>puerto</strong>.</li>
+<li>Una <strong>API</strong> es la ventanilla por la que un programa le pide datos a otro (como tu app a <strong>Claude</strong> u <strong>OpenAI</strong>).</li>
+<li>Los <strong>secretos</strong> (claves, contraseñas) viven solo en el servidor. Nunca en el cliente, nunca en Git.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip-el-repaso-de-la-patita">💡 Tip — El repaso de la patita</h3>
+<p>Lee las diez frases tapando la segunda mitad de cada una. Si puedes completarla con tus palabras, dominas la idea. Bit el ajolote dice que repasar así, en voz alta, vale por diez relecturas silenciosas.</p>
+</blockquote>
+<h3 id="comprueba-que-conectaste-los-temas">Comprueba que conectaste los temas</h3>
+<p>El módulo no es una lista de palabras sueltas: es un sistema. Estas preguntas de repaso te ayudan a ver los hilos que unen unos temas con otros. Respóndelas mentalmente o en voz alta:</p>
+<ul>
+<li>¿Por qué el <strong>sistema operativo</strong> tiene que estar <em>por encima</em> del hardware y no al revés?</li>
+<li>Cuando guardas un archivo de PolyPaw, ¿en qué pasa de estar en la <strong>RAM</strong> a quedarse en el <strong>disco</strong>?</li>
+<li>¿Qué relación hay entre un <strong>commit</strong> y una <strong>rama</strong> en Git? ¿Cuál contiene a cuál?</li>
+<li>Si abres <code>tunal-digital</code> en el navegador, ¿quién es el <strong>cliente</strong> y quién el <strong>servidor</strong>?</li>
+<li>¿Por qué <code>tunal-digital</code> usa JavaScript <strong>vanilla</strong> mientras RachaSimple usa un <strong>framework</strong> (React)? ¿Qué cambia?</li>
+<li>¿Qué tienen en común la <strong>API</strong> de Claude y la <strong>API</strong> de OpenAI, aunque sean servicios distintos?</li>
+</ul>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Para repasar con las manos, recorre estas cuatro rutas y di en voz alta qué término del glosario representa cada una:
+<code>text
+tunal-digital/sitio-web/index.html     ← HTML (estructura del frontend)
+PolyPaw/missions/mission-01.json       ← JSON (datos)
+RachaSimple/src/types/database.ts      ← TypeScript (tipos)
+Faro/src/app/api/...                   ← backend + API (Next.js)</code>
+Si puedes nombrar el término <strong>y</strong> explicar para qué sirve en ese proyecto, cerraste el círculo del módulo.</p>
+</blockquote>
+<h3 id="tu-mapa-una-ultima-vez">Tu mapa, una última vez</h3>
+<p>Antes de pasar de página, recorre el mapa completo de abajo hacia arriba y comprueba que cada nivel se apoya en el de abajo: <strong>hardware → SO → datos → programar → Git → red → herramientas → tus proyectos</strong>. Si en algún salto sientes un hueco, ese es exactamente el capítulo al que conviene volver. Para eso existe este glosario: es tu linterna para cuando el cuarto vuelva a quedar oscuro.</p>
+<blockquote>
+<p>Y con esto cierras el Módulo 00. Bit te choca la patita: ya tienes el mapa y el vocabulario. En el Módulo 01 dejamos de hablar <em>sobre</em> programar y empezamos a programar de verdad.</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
