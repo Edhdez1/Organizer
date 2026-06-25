@@ -40,7 +40,17 @@ describen cómo son un hábito, un usuario o un check-in.
 | 03 | [Interfaces y tipos propios](03-interfaces-y-tipos.md) | `interface`, `type`, opcionales, uniones |
 | 04 | [Funciones tipadas y genéricos](04-funciones-y-genericos.md) | Tipar parámetros/retornos, intro a genéricos |
 | 05 | [TypeScript en la práctica](05-typescript-en-practica.md) | `tsconfig` estricto, tipos reales de tus apps |
+| 06 | [Uniones, literales y estrechamiento](06-uniones-y-estrechamiento.md) | `A \| B`, tipos literales, narrowing, type guards |
+| 07 | [Tipos avanzados y utilitarios](07-tipos-avanzados.md) | `Partial`, `Pick`, `Omit`, `Record`, `keyof`, `&` |
+| 08 | [Genéricos a fondo](08-genericos-a-fondo.md) | `<T>`, restricciones, genéricos en arrays/promesas |
+| 09 | [Tipar datos y respuestas de API](09-tipos-en-datos-y-api.md) | JSON, `fetch`, Supabase, `unknown` vs `any`, `as` |
+| 10 | [Módulos y organización](10-modulos-y-organizacion.md) | `import type`, `.d.ts`, `types.ts`, alias `@/` |
+| 11 | [TypeScript con React](11-ts-con-react.md) | Tipar props, `children`, eventos, `useState` |
+| 12 | [tsconfig y el modo estricto](12-tsconfig-y-estricto.md) | `tsconfig.json`, `strict`, leer errores de `tsc` |
+| 13 | [Leer y resolver errores de tipos](13-errores-del-compilador.md) | Errores comunes, `?.`, `??`, cuándo NO usar `as` |
+| 14 | [Mini-proyecto: lista de tareas tipada](14-mini-proyecto-tipado.md) | La to-do del módulo 03, ahora con tipos |
+| 15 | [Glosario de TypeScript](15-glosario-typescript.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 05 — versión ampliada (capítulos 01–15, ~100 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es TypeScript?](01-que-es-typescript.md)**.
