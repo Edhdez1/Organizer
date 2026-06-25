@@ -1,0 +1,153 @@
+/* ============================================================
+   Manuales de Aprendizaje — hoja de estilos común
+   Diseño legible, calmado, con modo claro y oscuro automático.
+   ============================================================ */
+
+:root {
+  --fondo: #fbf9f4;
+  --texto: #1f2733;
+  --texto-suave: #51607a;
+  --primario: #1b6b6b;     /* verde-azulado calmado */
+  --primario-claro: #e3f0ee;
+  --acento: #d98a3d;       /* atardecer cálido */
+  --borde: #e4ded2;
+  --codigo-fondo: #f3efe6;
+  --recuadro-def: #eef4fb;
+  --recuadro-def-borde: #9cc2ec;
+  --recuadro-tip: #eefaf0;
+  --recuadro-tip-borde: #8fd9a4;
+  --recuadro-warn: #fdf3e7;
+  --recuadro-warn-borde: #e9b877;
+  --recuadro-codigo: #eef2f7;
+  --recuadro-codigo-borde: #9fb4d0;
+  --max-ancho: 820px;
+  --radio: 12px;
+  --fuente: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fuente-codigo: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #141a22;
+    --texto: #e7ecf3;
+    --texto-suave: #a9b6c9;
+    --primario: #5bc4be;
+    --primario-claro: #1c2b2b;
+    --acento: #e8a45e;
+    --borde: #2a3340;
+    --codigo-fondo: #1d2530;
+    --recuadro-def: #182434;
+    --recuadro-def-borde: #3f6da3;
+    --recuadro-tip: #15271c;
+    --recuadro-tip-borde: #3d7d52;
+    --recuadro-warn: #2a2113;
+    --recuadro-warn-borde: #9b7338;
+    --recuadro-codigo: #1a222e;
+    --recuadro-codigo-borde: #41597a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.contenedor {
+  max-width: var(--max-ancho);
+  margin: 0 auto;
+  padding: 32px 20px 96px;
+}
+
+/* Barra superior */
+.barra {
+  position: sticky;
+  top: 0;
+  background: var(--fondo);
+  border-bottom: 1px solid var(--borde);
+  padding: 12px 20px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 15px;
+  z-index: 10;
+}
+.barra a { color: var(--primario); text-decoration: none; font-weight: 600; }
+.barra a:hover { text-decoration: underline; }
+
+h1, h2, h3 { line-height: 1.3; }
+h1 { font-size: 2rem; color: var(--texto); margin-top: 0; }
+h2 { font-size: 1.5rem; border-bottom: 2px solid var(--primario-claro); padding-bottom: 6px; margin-top: 2.4em; }
+h3 { font-size: 1.2rem; color: var(--primario); margin-top: 1.8em; }
+
+a { color: var(--primario); }
+
+code {
+  font-family: var(--fuente-codigo);
+  background: var(--codigo-fondo);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+pre {
+  background: var(--codigo-fondo);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 16px;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+/* Recuadros didácticos: se generan a partir de blockquotes con clase */
+blockquote {
+  margin: 1.5em 0;
+  padding: 14px 18px;
+  border-left: 5px solid var(--primario);
+  background: var(--primario-claro);
+  border-radius: 0 var(--radio) var(--radio) 0;
+}
+blockquote.def  { background: var(--recuadro-def);  border-left-color: var(--recuadro-def-borde); }
+blockquote.tip  { background: var(--recuadro-tip);  border-left-color: var(--recuadro-tip-borde); }
+blockquote.warn { background: var(--recuadro-warn); border-left-color: var(--recuadro-warn-borde); }
+blockquote.code { background: var(--recuadro-codigo); border-left-color: var(--recuadro-codigo-borde); }
+blockquote p:first-child { margin-top: 0; }
+blockquote p:last-child { margin-bottom: 0; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+}
+th, td { border: 1px solid var(--borde); padding: 8px 12px; text-align: left; }
+th { background: var(--primario-claro); }
+
+img { max-width: 100%; height: auto; border-radius: var(--radio); display: block; margin: 1.5em auto; }
+figure { margin: 1.8em 0; text-align: center; }
+figcaption { color: var(--texto-suave); font-size: 0.9em; margin-top: 8px; }
+
+hr { border: none; border-top: 1px solid var(--borde); margin: 2.5em 0; }
+
+/* Tarjetas del índice */
+.tarjetas { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); margin: 24px 0; }
+.tarjeta {
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 18px;
+  background: var(--codigo-fondo);
+  text-decoration: none;
+  color: var(--texto);
+  display: block;
+  transition: transform .12s ease, border-color .12s ease;
+}
+.tarjeta:hover { transform: translateY(-2px); border-color: var(--primario); }
+.tarjeta .num { color: var(--acento); font-weight: 700; font-size: 0.85em; letter-spacing: .05em; }
+.tarjeta h3 { margin: 4px 0 6px; }
+.tarjeta p { margin: 0; color: var(--texto-suave); font-size: 0.92em; }
+
+footer { color: var(--texto-suave); font-size: 0.85em; text-align: center; margin-top: 64px; }
