@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 04 — Redes desde cero y acceso remoto — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-04-redes-desde-cero-y-acceso-remoto">Capítulo 04 — Redes desde cero y acceso remoto</h1>
+<blockquote>
+<p>Para usar tu NAS necesitas entender un poco de <strong>redes</strong>: cómo se encuentran los dispositivos,
+qué es una IP, un puerto, y —lo más jugoso— cómo entrar a tu NAS de forma <strong>segura desde fuera
+de casa</strong>. Tu equipo ya lo resuelve con <strong>Tailscale</strong> y administra con <strong>Cockpit</strong>. Aquí lo
+entiendes todo desde cero.</p>
+</blockquote>
+<hr />
+<h2 id="1-tu-red-de-casa-lan">1. Tu red de casa (LAN)</h2>
+<blockquote class="def">
+<h3 id="que-significa-red-local-lan">🟦 ¿Qué significa? — <em>Red local (LAN)</em></h3>
+<p>Una <strong>LAN</strong> (<em>Local Area Network</em>, "red de área local") es la red <strong>de tu casa</strong>: todos los
+dispositivos conectados a tu router (por wifi o cable) forman una LAN y pueden hablar entre sí.
+Tu NAS, tu teléfono y tu laptop están en la misma LAN; por eso el teléfono ve los archivos del
+NAS sin pasar por internet.</p>
+<h3 id="que-significa-ip-local-y-el-router">🟦 ¿Qué significa? — <em>IP local y el router</em></h3>
+<p>Recuerda la <strong>IP</strong> del Módulo 00 (la "dirección" de cada dispositivo). Dentro de tu casa, el
+<strong>router</strong> le da a cada aparato una <strong>IP local</strong> (suelen verse como <code>192.168.1.x</code>). El router es
+el "director de tráfico" de tu LAN y la puerta hacia internet. Tu NAS tiene una IP local fija (o
+casi) por la que lo encuentran los demás.</p>
+<h3 id="que-significa-nombre-de-host-hostname">🟦 ¿Qué significa? — <em>Nombre de host (hostname)</em></h3>
+<p>Recordar IPs es incómodo, así que cada equipo tiene un <strong>nombre</strong> (hostname). El de tu servidor
+es <strong><code>polypaw-nas</code></strong>. En muchas redes puedes usar el nombre en vez de la IP (<code>\\polypaw-nas</code> en
+vez de <code>\\192.168.1.50</code>). Más fácil de recordar.</p>
+</blockquote>
+<hr />
+<h2 id="2-puertos-las-puertas-de-un-servidor-repaso-aplicado">2. Puertos: las "puertas" de un servidor (repaso aplicado)</h2>
+<blockquote class="def">
+<h3 id="que-significa-puerto-aplicado-a-tu-nas">🟦 ¿Qué significa? — <em>Puerto (aplicado a tu NAS)</em></h3>
+<p>Como viste en el Módulo 00, si la IP es el edificio, el <strong>puerto</strong> es el apartamento: indica
+<strong>qué servicio</strong> atiende. Un mismo servidor ofrece varios servicios en puertos distintos:
+- Samba (archivos) usa los puertos 445/139.
+- <strong>Cockpit</strong> (panel web) usa el <strong>9090</strong> → por eso entras a <code>https://polypaw-nas:9090</code>.
+- AdGuard usa el suyo para su panel y el 53 (DNS).
+Cada servicio escucha en su puerto; el puerto enruta cada petición al programa correcto.</p>
+</blockquote>
+<hr />
+<h2 id="3-administrar-con-cockpit-sin-terminal">3. Administrar con Cockpit (sin terminal)</h2>
+<blockquote class="def">
+<h3 id="que-significa-cockpit-panel-web-de-administracion">🟦 ¿Qué significa? — <em>Cockpit (panel web de administración)</em></h3>
+<p><strong>Cockpit</strong> es una <strong>interfaz web</strong> para administrar tu servidor Linux <strong>sin</strong> escribir
+comandos: ves el uso de CPU/RAM, los discos, la red, los servicios, los logs, e incluso tienes
+una terminal dentro del navegador. Entras desde otro equipo a <strong><code>https://polypaw-nas:9090</code></strong> con
+tu usuario de Linux.
+Es el complemento perfecto a la terminal: la terminal da control total; Cockpit da una vista
+cómoda y visual. Para el día a día (¿cuánta RAM uso?, ¿está vivo este servicio?), Cockpit es
+ideal.</p>
+<h3 id="tip-https-y-el-aviso-de-no-seguro">💡 Tip — HTTPS y el aviso de "no seguro"</h3>
+<p>Cockpit usa <strong>HTTPS</strong> (Módulo 00) con un certificado <strong>autofirmado</strong> (hecho por tu propio
+servidor, no por una autoridad pública). Por eso el navegador muestra un aviso de "conexión no
+privada" la primera vez. <strong>Dentro de tu red, es normal y seguro</strong>: el aviso es porque el
+certificado no lo emitió una empresa externa, no porque haya peligro. Aceptas y entras.</p>
+</blockquote>
+<hr />
+<h2 id="4-el-reto-entrar-desde-fuera-de-casa-de-forma-segura">4. El reto: entrar desde FUERA de casa (de forma segura)</h2>
+<p>Dentro de casa es fácil (misma LAN). Pero ¿y si quieres tus archivos desde el trabajo? Tu NAS
+está detrás del router, "escondido" de internet. Hay dos caminos:</p>
+<blockquote class="warn">
+<h3 id="cuidado-el-camino-peligroso-abrir-puertos">⚠️ Cuidado — El camino peligroso: abrir puertos</h3>
+<p>La forma "antigua" es <strong>abrir puertos</strong> en el router (<em>port forwarding</em>): decirle "las
+peticiones de internet al puerto X mándalas al NAS". El problema: eso <strong>expone tu NAS a TODO
+internet</strong>, y los bots escanean constantemente buscando servidores expuestos para atacarlos. Es
+arriesgado y desaconsejado para principiantes. <strong>Tu NAS NO hace esto</strong> (bien hecho).</p>
+<h3 id="que-significa-vpn-red-privada-virtual">🟦 ¿Qué significa? — <em>VPN (red privada virtual)</em></h3>
+<p>Una <strong>VPN</strong> (<em>Virtual Private Network</em>) crea una <strong>red privada y cifrada</strong> que conecta tus
+dispositivos <strong>como si estuvieran en la misma LAN</strong>, aunque estén en lugares distintos del
+mundo. En vez de abrir tu NAS a internet, tus dispositivos entran a una "red privada" donde
+<strong>solo ellos</strong> se ven. Es como un túnel secreto entre tu teléfono y tu NAS.</p>
+<h3 id="que-significa-tailscale-tu-solucion-real">🟦 ¿Qué significa? — <em>Tailscale (tu solución real)</em></h3>
+<p><strong>Tailscale</strong> es una VPN modernísima y fácil: instalas su app en tu NAS y en tus dispositivos,
+inicias sesión con la misma cuenta, y todos quedan en una <strong>red privada</strong> entre ellos, sin abrir
+ni un puerto del router. Desde el trabajo, tu teléfono ve al <code>polypaw-nas</code> como si estuvieras en
+casa, <strong>cifrado</strong> y <strong>sin exponerlo</strong> a desconocidos.
+<strong>Tu NAS usa Tailscale</strong>: por eso te conectas a él de forma segura desde donde sea. Es, con
+diferencia, la forma recomendada hoy para acceso remoto casero. (Por debajo usa una tecnología
+llamada WireGuard; no necesitas dominarla, solo saber que Tailscale = "VPN fácil y segura".)</p>
+</blockquote>
+<hr />
+<h2 id="5-adguard-home-tu-nas-como-filtro-de-la-red">5. AdGuard Home: tu NAS como filtro de la red</h2>
+<blockquote class="def">
+<h3 id="que-significa-dns-repaso-y-adguard-home">🟦 ¿Qué significa? — <em>DNS (repaso) y AdGuard Home</em></h3>
+<p>Recuerda el <strong>DNS</strong> del Módulo 00: la "agenda" que traduce nombres (<code>google.com</code>) a IPs.
+<strong>AdGuard Home</strong> es un <strong>servidor DNS</strong> que instalas en tu NAS y que, además de traducir,
+<strong>bloquea</strong> los dominios de anuncios y rastreadores: cuando una web pide cargar un anuncio,
+AdGuard responde "ese dominio no existe" y el anuncio no aparece.
+Si configuras tu router para que use el AdGuard de tu NAS como DNS, <strong>todos</strong> los dispositivos de
+la casa navegan sin gran parte de los anuncios, sin instalar nada en cada uno. Tu NAS deja de ser
+solo "almacenamiento" y se vuelve <strong>infraestructura útil de tu hogar</strong>. Es un primer paso
+buenísimo en el mundo del <em>self-hosting</em> (capítulo 05).</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo qué es una <strong>LAN</strong>, la <strong>IP local</strong>, el <strong>router</strong> y el <strong>hostname</strong> (<code>polypaw-nas</code>).</li>
+<li>[ ] Sé que cada servicio escucha en un <strong>puerto</strong> (Samba, Cockpit <code>9090</code>, AdGuard/DNS).</li>
+<li>[ ] Sé qué es <strong>Cockpit</strong> y para qué sirve, y por qué su HTTPS da un aviso (certificado autofirmado).</li>
+<li>[ ] Entiendo por qué <strong>abrir puertos es arriesgado</strong> y por qué una <strong>VPN</strong> es mejor.</li>
+<li>[ ] Sé qué es <strong>Tailscale</strong> y cómo te deja entrar al NAS desde fuera <strong>sin exponerlo</strong>.</li>
+<li>[ ] Sé qué es <strong>AdGuard Home</strong> (DNS que bloquea anuncios para toda la casa).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>LAN.</strong> Explica por qué tu teléfono puede ver los archivos del NAS sin usar internet cuando
+   ambos están en casa.</li>
+<li><strong>Puertos.</strong> ¿Por qué entras a Cockpit como <code>polypaw-nas:9090</code> y no solo <code>polypaw-nas</code>? ¿Qué
+   indica el <code>9090</code>?</li>
+<li><strong>El aviso de Cockpit.</strong> Explica por qué el navegador avisa "no seguro" al entrar a Cockpit y
+   por qué, en tu red, está bien aceptar.</li>
+<li><strong>Puertos vs. VPN.</strong> Compara abrir puertos en el router con usar Tailscale: ¿por qué la VPN es
+   más segura?</li>
+<li><strong>AdGuard.</strong> Explica cómo un servidor DNS puede <strong>bloquear anuncios</strong> para todos los
+   dispositivos de la casa a la vez.</li>
+<li>💻 <strong>Explora.</strong> Entra a <code>https://polypaw-nas:9090</code> (Cockpit) y revisa el uso de RAM. ¿Cuánta de
+   tus 8 GB está libre?</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="05-usarlo-y-montar.html">Capítulo 05 — Usarlo y montar uno desde cero</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 09 — NAS y servidores — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="modulo-09-nas-y-servidores">Módulo 09 — NAS y servidores</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/portada.png" alt="Bit como administrador junto a un laptop Acer convertido en servidor casero, rodeado de una red de dispositivos y un escudo de seguridad" width="640">
+</p>
+
+<blockquote>
+<p><strong>Objetivo del módulo:</strong> entender <strong>servidores y redes</strong> desde cero, partiendo de tu NAS real,
+el <strong><code>polypaw-nas</code></strong>: un laptop Acer Nitro convertido en servidor con Ubuntu. Aprenderás qué es
+un servidor, Linux, cómo compartir archivos, redes, acceso remoto seguro, y cómo montar uno tú
+mismo entendiendo cada decisión.</p>
+</blockquote>
+<p>Este módulo es <strong>distinto</strong> a los anteriores: no es un lenguaje de programación, es
+<strong>infraestructura</strong>: las computadoras que hacen funcionar todo por detrás. Es el complemento
+perfecto a la programación, y te abre un mundo enorme (el <em>self-hosting</em>, tener tus propios
+servicios en casa).</p>
+<hr />
+<h2 id="tu-equipo-real-lo-usamos-como-ejemplo-en-todo-el-modulo">Tu equipo real (lo usamos como ejemplo en todo el módulo)</h2>
+<blockquote>
+<p>🖥️ <strong><code>polypaw-nas</code></strong> — un <strong>Acer Nitro AN515-54</strong> (laptop gaming) reconvertido en servidor:
+- <strong>CPU</strong> Intel Core i5-9300H (4 núcleos / 8 hilos), <strong>8 GB de RAM</strong>.
+- <strong>Discos</strong>: SSD NVMe de 238 GB (sistema) + HDD de 954 GB (datos, en <code>/srv/nas</code>).
+- <strong>Sistema</strong>: <strong>Ubuntu Server 26.04</strong> (Linux, sin escritorio).
+- <strong>Software</strong>: <strong>Samba</strong> (comparte la carpeta <code>PolyPawNAS</code>), <strong>Cockpit</strong> (panel web en el
+  puerto 9090), <strong>Tailscale</strong> (red privada para acceso remoto), <strong>AdGuard Home</strong> (bloqueo de
+  anuncios por DNS), y Docker/Podman instalados. Encima corre tu compañía de agentes OpenClaw.
+- 💡 Al ser laptop, su <strong>batería funciona como UPS</strong> (si se va la luz, no se apaga).</p>
+</blockquote>
+<hr />
+<h2 id="que-vas-a-poder-hacer-al-terminar">¿Qué vas a poder hacer al terminar?</h2>
+<ul>
+<li>Explicar qué es un <strong>servidor</strong> y qué es un <strong>NAS</strong>, y por qué un laptop sirve como tal.</li>
+<li>Moverte por <strong>Linux/Ubuntu Server</strong> por terminal (usuarios, permisos, discos, servicios).</li>
+<li>Entender y administrar <strong>Samba</strong> (compartir archivos) y <strong>Cockpit</strong> (panel web).</li>
+<li>Entender <strong>redes desde cero</strong>: IP, DNS, puertos, LAN vs internet.</li>
+<li>Acceder a tu NAS de forma <strong>segura desde fuera</strong> con <strong>Tailscale</strong> (VPN), y saber qué hace <strong>AdGuard</strong>.</li>
+<li>Usarlo para tus proyectos (respaldos, contenedores) y <strong>montar uno desde cero</strong>.</li>
+</ul>
+<hr />
+<h2 id="capitulos">Capítulos</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Capítulo</th>
+<th>Qué cubre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td><a href="01-servidor-y-nas.html">¿Qué es un servidor y un NAS?</a></td>
+<td>Servidor, NAS, tu Acer reconvertido, UPS</td>
+</tr>
+<tr>
+<td>02</td>
+<td><a href="02-linux-servidor.html">Linux y la terminal del servidor</a></td>
+<td>Ubuntu Server, usuarios/permisos, systemd, discos/LVM</td>
+</tr>
+<tr>
+<td>03</td>
+<td><a href="03-samba.html">Compartir archivos con Samba</a></td>
+<td>Protocolo SMB, recurso PolyPawNAS, conectarse</td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="04-redes-y-acceso-remoto.html">Redes desde cero y acceso remoto</a></td>
+<td>IP/DNS/puertos, Cockpit, Tailscale (VPN), AdGuard</td>
+</tr>
+<tr>
+<td>05</td>
+<td><a href="05-usarlo-y-montar.html">Usarlo y montar uno desde cero</a></td>
+<td>Respaldos, Docker, self-hosting, guía de instalación</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Se publican por tandas. Empieza por el 01.</p>
+</blockquote>
+<p>➡️ Empieza por <strong><a href="01-servidor-y-nas.html">Capítulo 01 — ¿Qué es un servidor y un NAS?</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

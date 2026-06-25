@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 02 — Linux y la terminal del servidor — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-02-linux-y-la-terminal-del-servidor">Capítulo 02 — Linux y la terminal del servidor</h1>
+<blockquote>
+<p>Tu NAS corre <strong>Ubuntu Server</strong>, una versión de Linux <strong>sin escritorio</strong>: se maneja escribiendo
+comandos. Ya viste la terminal en el Módulo 00; aquí la aplicas a administrar un servidor de
+verdad: usuarios, permisos, discos y servicios. Es la base de toda la administración de sistemas.</p>
+</blockquote>
+<hr />
+<h2 id="1-por-que-linux-y-por-que-sin-escritorio">1. Por qué Linux y por qué "sin escritorio"</h2>
+<blockquote class="def">
+<h3 id="que-significa-linux-y-distribucion">🟦 ¿Qué significa? — <em>Linux y "distribución"</em></h3>
+<p><strong>Linux</strong> es un sistema operativo (Módulo 00) gratuito, de código abierto y muy estable, que
+domina el mundo de los servidores (la mayoría de internet corre sobre Linux). Viene en muchas
+variantes llamadas <strong>distribuciones</strong> ("distros"): <strong>Ubuntu</strong>, Debian, Fedora… <strong>Ubuntu</strong> es de
+las más populares y fáciles. Tu NAS usa <strong>Ubuntu Server 26.04</strong>.</p>
+<h3 id="que-significa-ubuntu-server-sin-interfaz-grafica">🟦 ¿Qué significa? — <em>Ubuntu Server (sin interfaz gráfica)</em></h3>
+<p><strong>Ubuntu Server</strong> es Ubuntu <strong>sin escritorio</strong> (sin ventanas ni ratón): solo terminal. ¿Por
+qué? Porque un servidor no necesita pantalla bonita —nadie está sentado frente a él—, y quitar
+el escritorio <strong>ahorra RAM y recursos</strong> para lo importante: servir. Por eso administras tu NAS
+<strong>por terminal</strong>, normalmente conectándote desde otro equipo (lo verás abajo).</p>
+<h3 id="que-significa-ssh-conexion-remota-segura">🟦 ¿Qué significa? — <em>SSH (conexión remota segura)</em></h3>
+<p><strong>SSH</strong> (<em>Secure Shell</em>) es la forma estándar de <strong>conectarte a la terminal de un servidor a
+distancia</strong>, de forma cifrada. Desde tu laptop escribes algo como <code>ssh usuario@polypaw-nas</code> y
+obtienes la terminal del NAS como si estuvieras frente a él. Es la herramienta nº 1 de cualquier
+administrador. (En tu caso, además, te conectas a través de Tailscale, capítulo 04, lo que lo
+hace seguro incluso desde fuera de casa.)</p>
+</blockquote>
+<hr />
+<h2 id="2-usuarios-y-permisos-el-corazon-de-la-seguridad-en-linux">2. Usuarios y permisos: el corazón de la seguridad en Linux</h2>
+<p>Linux fue diseñado para que <strong>muchos usuarios</strong> compartan una máquina sin pisarse ni espiarse.
+Eso se basa en usuarios y permisos.</p>
+<blockquote class="def">
+<h3 id="que-significa-usuario-y-el-superusuario-root">🟦 ¿Qué significa? — <em>Usuario y el superusuario <code>root</code></em></h3>
+<p>Cada persona (o servicio) tiene un <strong>usuario</strong>. Hay uno especial, <strong><code>root</code></strong>, que es el
+<strong>administrador total</strong>: puede hacer absolutamente todo. Por eso <code>root</code> es peligroso: un error
+como <code>root</code> puede romper el sistema. Regla de oro: <strong>no trabajes como <code>root</code></strong> a diario.</p>
+<h3 id="que-significa-sudo-hacer-algo-como-administrador">🟦 ¿Qué significa? — <em><code>sudo</code> (hacer algo como administrador)</em></h3>
+<p><code>sudo</code> ("<em>superuser do</em>") ejecuta <strong>un solo comando</strong> con permisos de administrador, pidiéndote
+tu contraseña. Así trabajas como usuario normal (seguro) y solo "subes" a administrador para
+tareas concretas:
+<code>bash
+sudo apt update      # actualizar la lista de programas (necesita permisos)</code>
+Verás <code>sudo</code> delante de casi todo comando administrativo. Es el equilibrio entre poder y
+seguridad.</p>
+<h3 id="que-significa-permisos-de-archivos-lectura-escritura-ejecucion">🟦 ¿Qué significa? — <em>Permisos de archivos (lectura, escritura, ejecución)</em></h3>
+<p>Cada archivo y carpeta en Linux tiene permisos que dicen <strong>quién puede leerlo (r), escribirlo
+(w) o ejecutarlo (x)</strong>, para tres grupos: el <strong>dueño</strong>, su <strong>grupo</strong> y <strong>los demás</strong>. Cuando
+haces <code>ls -l</code> ves algo así:
+<code>drwxr-xr-x  edwar  edwar  /srv/nas</code>
+Esa cadena <code>rwxr-xr-x</code> son los permisos. No necesitas memorizarla ahora; lo importante es la
+idea: <strong>Linux controla, archivo por archivo, quién puede hacer qué</strong>. Es lo que evita que un
+usuario lea los datos de otro. (¿Te suena? Es el primo de la RLS del Módulo 07, pero para
+archivos.)</p>
+<h3 id="que-significa-chmod-y-chown">🟦 ¿Qué significa? — <em><code>chmod</code> y <code>chown</code></em></h3>
+<ul>
+<li><code>chmod</code> cambia los <strong>permisos</strong> de un archivo (quién puede leer/escribir/ejecutar).</li>
+<li><code>chown</code> cambia el <strong>dueño</strong> de un archivo.
+Se usan al configurar, por ejemplo, qué carpeta puede compartir Samba y quién puede escribir en
+ella. Reconócelos cuando los veas; los detalles se buscan al momento.</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="3-servicios-programas-que-corren-solos-en-segundo-plano">3. Servicios: programas que corren solos en segundo plano</h2>
+<blockquote class="def">
+<h3 id="que-significa-servicio-demonio-y-systemd">🟦 ¿Qué significa? — <em>Servicio (demonio) y <code>systemd</code></em></h3>
+<p>Un <strong>servicio</strong> (o <em>daemon</em>, "demonio") es un programa que corre <strong>en segundo plano</strong>, sin que
+nadie lo abra, atendiendo peticiones: Samba (compartir archivos), AdGuard (DNS), etc. En Ubuntu,
+los servicios los gestiona <strong><code>systemd</code></strong>, el "director de orquesta" que los arranca al encender
+y los mantiene vivos.
+Se controlan con <code>systemctl</code>:
+<code>bash
+systemctl status smbd     # ¿está corriendo Samba?
+sudo systemctl restart smbd   # reiniciarlo</code>
+En tu NAS, <code>smbd</code> (Samba) está <strong>activo</strong> como servicio: por eso comparte archivos siempre, sin
+que tengas que "abrirlo".</p>
+</blockquote>
+<hr />
+<h2 id="4-ver-y-entender-los-discos-los-tuyos">4. Ver y entender los discos (los tuyos)</h2>
+<blockquote class="def">
+<h3 id="que-significa-sistema-de-archivos-y-puntos-de-montaje">🟦 ¿Qué significa? — <em>Sistema de archivos y puntos de montaje</em></h3>
+<p>En Linux <strong>todo cuelga de una sola raíz <code>/</code></strong> (no hay "C:" ni "D:" como en Windows). Cada disco
+se <strong>"monta"</strong> en una carpeta. Tu HDD de datos está montado en <strong><code>/srv/nas</code></strong>: entrar a esa
+carpeta es entrar al disco grande. "Montar" = conectar un disco a un punto del árbol de carpetas.</p>
+<h3 id="que-significa-comandos-para-ver-discos">🟦 ¿Qué significa? — <em>Comandos para ver discos</em></h3>
+<p><code>bash
+df -h            # espacio libre/usado por disco, en formato legible
+lsblk            # lista los discos y sus particiones, en árbol</code>
+<code>df -h</code> en tu NAS mostraría el SSD del sistema (~98 GB, 12% usado) y el HDD en <code>/srv/nas</code>
+(954 GB, casi vacío). Son los comandos que usas para responder "¿cuánto espacio me queda?".</p>
+<h3 id="que-significa-lvm-gestion-flexible-de-discos">🟦 ¿Qué significa? — <em>LVM (gestión flexible de discos)</em></h3>
+<p><strong>LVM</strong> (<em>Logical Volume Manager</em>) es una capa que permite manejar el espacio de forma
+<strong>flexible</strong>: agrandar o combinar "volúmenes" sin reparticionar todo. Tu Ubuntu usa LVM para el
+sistema. Por ahora basta saber que existe y que da flexibilidad para crecer; sus detalles se
+aprenden cuando necesitas ampliar espacio.</p>
+</blockquote>
+<hr />
+<h2 id="5-mantener-el-servidor-actualizaciones">5. Mantener el servidor: actualizaciones</h2>
+<blockquote class="def">
+<h3 id="que-significa-gestor-de-paquetes-apt">🟦 ¿Qué significa? — <em>Gestor de paquetes (<code>apt</code>)</em></h3>
+<p>En Linux no descargas instaladores de webs: usas un <strong>gestor de paquetes</strong> que instala programas
+desde repositorios oficiales, con un comando. En Ubuntu es <strong><code>apt</code></strong>:
+<code>bash
+sudo apt update           # refresca la lista de versiones disponibles
+sudo apt upgrade          # actualiza los programas instalados
+sudo apt install programa # instala algo nuevo</code>
+Mantener el servidor <strong>actualizado</strong> (<code>update</code> + <code>upgrade</code>) es la tarea de mantenimiento más
+importante: corrige fallos de seguridad. Es como aplicar las actualizaciones del teléfono, pero
+por terminal.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé qué es <strong>Linux</strong>, una <strong>distribución</strong> y por qué <strong>Ubuntu Server</strong> no tiene escritorio.</li>
+<li>[ ] Entiendo <strong>SSH</strong> (conectarme a la terminal del servidor a distancia).</li>
+<li>[ ] Distingo un <strong>usuario</strong> normal de <strong><code>root</code></strong>, y uso <strong><code>sudo</code></strong> para tareas administrativas.</li>
+<li>[ ] Entiendo los <strong>permisos</strong> de archivos (rwx, dueño/grupo/otros) y para qué sirven.</li>
+<li>[ ] Sé qué es un <strong>servicio/demonio</strong> y que <strong><code>systemd</code>/<code>systemctl</code></strong> los gestiona (ej. <code>smbd</code>).</li>
+<li>[ ] Veo discos con <code>df -h</code>/<code>lsblk</code> y entiendo el <strong>montaje</strong> (<code>/srv/nas</code>) y, a grandes rasgos, LVM.</li>
+<li>[ ] Mantengo el sistema con <strong><code>apt update &amp;&amp; apt upgrade</code></strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<p>Marcados 💻 si requieren conectarte a tu NAS (cuando sepas cómo, capítulo 04) o cualquier Linux.</p>
+<ol>
+<li><strong>root y sudo.</strong> Explica por qué es mala idea trabajar siempre como <code>root</code> y qué problema
+   resuelve <code>sudo</code>.</li>
+<li><strong>Permisos.</strong> En <code>rwxr-xr-x</code>, ¿qué puede hacer el <strong>dueño</strong> y qué pueden hacer <strong>los demás</strong>?</li>
+<li><strong>Servicio.</strong> ¿Qué significa que <code>smbd</code> esté "activo" como servicio? ¿Por qué no tienes que
+   "abrir" Samba cada vez?</li>
+<li><strong>Montaje.</strong> Explica qué quiere decir que tu HDD esté "montado en <code>/srv/nas</code>".</li>
+<li>💻 <strong>Comandos reales.</strong> Cuando te conectes al NAS, ejecuta <code>df -h</code> y <code>lsblk</code> y anota: ¿cuánto
+   espacio libre tiene <code>/srv/nas</code>? ¿Cuántos discos ves?</li>
+<li>💻 <strong>Actualiza.</strong> Ejecuta <code>sudo apt update</code> y observa qué reporta (no hace falta <code>upgrade</code> si no
+   quieres).</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="03-samba.html">Capítulo 03 — Compartir archivos con Samba</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
