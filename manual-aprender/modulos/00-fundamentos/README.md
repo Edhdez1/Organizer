@@ -1,5 +1,9 @@
 # Módulo 00 — Fundamentos
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/portada.png" alt="Bit junto a una computadora retro y un mapa pixelado de internet" width="640">
+</p>
+
 > **Objetivo del módulo:** entender, sin tecnicismos vacíos, *qué* es programar, *cómo*
 > funciona una computadora, *cómo* funciona internet y la web, y aprender a usar las dos
 > herramientas base de todo programador: **la terminal** y **Git**. Al terminar, tendrás el

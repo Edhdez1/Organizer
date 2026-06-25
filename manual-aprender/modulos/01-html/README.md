@@ -1,5 +1,9 @@
 # Módulo 01 — HTML
 
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/portada.png" alt="Bit con casco construyendo una casa cuyas partes son etiquetas HTML (header, nav, main, footer)" width="640">
+</p>
+
 > **Objetivo del módulo:** aprender **HTML**, el lenguaje que define la **estructura** de
 > cualquier página web. Al terminar, podrás leer y escribir el "esqueleto" de una página, y
 > entenderás el archivo `tunal-digital/sitio-web/index.html` de tu propio sitio.

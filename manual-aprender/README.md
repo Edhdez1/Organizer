@@ -11,6 +11,19 @@ existe en tus cuatro proyectos. Cada concepto técnico se explica desde cero, co
 
 ---
 
+## Conoce a Bit 🦎
+
+<p align="center">
+  <img src="recursos/imagenes/mascota/bit-referencia.png" alt="Bit, la mascota del manual: un ajolote en pixel art en varias poses" width="320">
+</p>
+
+**Bit** es tu guía a lo largo del manual: un ajolote en *pixel art* (su nombre viene del
+*bit*, la unidad mínima de información que verás en el Módulo 00). Aparece en cada capítulo
+para acompañarte —pensando en las definiciones, con casco en las advertencias y celebrando
+cuando terminas un módulo—. No es un experto que presume: **aprende contigo**.
+
+---
+
 ## ¿Qué vas a aprender y de dónde sale cada cosa?
 
 Tus proyectos forman una "escalera" que va de lo más fácil a lo más avanzado:

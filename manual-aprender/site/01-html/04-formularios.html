@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 04 — Formularios — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-04-formularios">Capítulo 04 — Formularios</h1>
+<blockquote>
+<p>Los formularios son cómo tu página <strong>recibe datos</strong> del usuario: un nombre, un correo, un
+mensaje. Tu sitio tiene uno (el de contacto) que envía la info a tu WhatsApp. Aquí entenderás
+cada pieza y, de paso, conceptos que reaparecerán en React (módulo 06).</p>
+</blockquote>
+<hr />
+<h2 id="1-el-contenedor-form">1. El contenedor: <code>&lt;form&gt;</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-form-formulario">🟦 ¿Qué significa? — <em><code>&lt;form&gt;</code> (formulario)</em></h3>
+<p>La etiqueta <code>&lt;form&gt;</code> <strong>agrupa</strong> los campos que se enviarán juntos. Tiene dos atributos
+importantes:
+- <code>action</code> → <strong>a dónde</strong> se envían los datos (una URL que los procesa).
+- <code>method</code> → <strong>cómo</strong> se envían: normalmente <code>post</code> (recuerda los métodos HTTP del Módulo 00:
+  <code>POST</code> = "toma estos datos").
+<code>html
+&lt;form action="https://api.web3forms.com/submit" method="post"&gt;
+  …campos…
+&lt;/form&gt;</code>
+<strong>¿Dónde se usa en tu proyecto?</strong> Tu formulario de contacto envía los datos a <strong>Web3Forms</strong>
+(un servicio que recibe envíos sin que tengas que programar un servidor) y, mediante un
+Cloudflare Worker, te avisa por WhatsApp.</p>
+</blockquote>
+<hr />
+<h2 id="2-los-campos-input-y-sus-tipos">2. Los campos: <code>&lt;input&gt;</code> y sus tipos</h2>
+<blockquote class="def">
+<h3 id="que-significa-input-campo-de-entrada">🟦 ¿Qué significa? — <em><code>&lt;input&gt;</code> (campo de entrada)</em></h3>
+<p><code>&lt;input&gt;</code> es el campo donde el usuario escribe o elige algo. Es un elemento "vacío" (no se
+cierra). Su atributo <code>type</code> <strong>cambia por completo</strong> lo que hace:
+| <code>type</code> | Qué muestra |
+|---|---|
+| <code>text</code> | Una caja de texto normal |
+| <code>email</code> | Texto que <strong>valida</strong> que sea un correo (lleva @) |
+| <code>password</code> | Texto oculto con puntitos |
+| <code>tel</code> | Para teléfonos (en móvil abre el teclado numérico) |
+| <code>number</code> | Solo números |
+| <code>checkbox</code> | Una casilla para marcar |
+| <code>radio</code> | Botones de "elige uno" |
+| <code>date</code> | Un selector de fecha |
+| <code>submit</code> | El <strong>botón</strong> que envía el formulario |</p>
+<h3 id="que-significa-atributos-comunes-de-un-input">🟦 ¿Qué significa? — <em>Atributos comunes de un input</em></h3>
+<ul>
+<li><code>name</code> → <strong>el nombre del dato</strong> que se envía (imprescindible; sin <code>name</code> el dato no viaja).</li>
+<li><code>placeholder</code> → el texto gris de ejemplo dentro del campo ("tu@correo.com").</li>
+<li><code>required</code> → marca el campo como <strong>obligatorio</strong>; el navegador no deja enviar si está vacío.</li>
+<li><code>value</code> → un valor inicial.</li>
+</ul>
+</blockquote>
+<p>Ejemplo de un campo de correo obligatorio:</p>
+<pre><code class="language-html">&lt;input type=&quot;email&quot; name=&quot;correo&quot; placeholder=&quot;tu@correo.com&quot; required&gt;
+</code></pre>
+<hr />
+<h2 id="3-etiquetas-de-campo-label-no-opcional">3. Etiquetas de campo: <code>&lt;label&gt;</code> (no opcional)</h2>
+<blockquote class="def">
+<h3 id="que-significa-label-etiqueta-de-campo">🟦 ¿Qué significa? — <em><code>&lt;label&gt;</code> (etiqueta de campo)</em></h3>
+<p>Un <code>&lt;label&gt;</code> es el <strong>texto que describe</strong> un campo ("Nombre", "Correo"). Se conecta al
+<code>&lt;input&gt;</code> mediante el atributo <code>for</code>, que apunta al <code>id</code> del input:
+<code>html
+&lt;label for="correo"&gt;Tu correo&lt;/label&gt;
+&lt;input type="email" id="correo" name="correo" required&gt;</code>
+<strong>¿Por qué es obligatorio?</strong> Porque:
+1. Al tocar el <code>&lt;label&gt;</code>, el cursor salta al campo (más fácil en móvil).
+2. Los lectores de pantalla leen "Tu correo, campo de texto" en vez de un campo mudo.
+Un formulario sin <code>&lt;label&gt;</code> es inaccesible. (Lo profundizamos en el capítulo 05.)</p>
+</blockquote>
+<hr />
+<h2 id="4-areas-de-texto-y-botones">4. Áreas de texto y botones</h2>
+<blockquote class="def">
+<h3 id="que-significa-textarea-area-de-texto">🟦 ¿Qué significa? — <em><code>&lt;textarea&gt;</code> (área de texto)</em></h3>
+<p>Para textos largos (un mensaje), se usa <code>&lt;textarea&gt;</code> en vez de <code>&lt;input&gt;</code>. A diferencia de
+<code>&lt;input&gt;</code>, <strong>sí</strong> lleva etiqueta de cierre:
+<code>html
+&lt;label for="mensaje"&gt;Tu mensaje&lt;/label&gt;
+&lt;textarea id="mensaje" name="mensaje" rows="5"&gt;&lt;/textarea&gt;</code></p>
+<h3 id="que-significa-el-boton-de-envio">🟦 ¿Qué significa? — <em>El botón de envío</em></h3>
+<p>El botón que manda el formulario puede ser <code>&lt;input type="submit" value="Enviar"&gt;</code> o, más
+moderno y flexible, <code>&lt;button type="submit"&gt;Enviar&lt;/button&gt;</code>. Al pulsarlo, el navegador
+recoge todos los campos con <code>name</code> y los envía a la <code>action</code> del <code>&lt;form&gt;</code>.</p>
+</blockquote>
+<hr />
+<h2 id="5-un-formulario-de-contacto-completo">5. Un formulario de contacto completo</h2>
+<p>Juntando todo, un formulario como el de tu sitio:</p>
+<pre><code class="language-html">&lt;form action=&quot;https://api.web3forms.com/submit&quot; method=&quot;post&quot;&gt;
+  &lt;label for=&quot;nombre&quot;&gt;Nombre&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot; required&gt;
+
+  &lt;label for=&quot;correo&quot;&gt;Correo&lt;/label&gt;
+  &lt;input type=&quot;email&quot; id=&quot;correo&quot; name=&quot;correo&quot; placeholder=&quot;tu@correo.com&quot; required&gt;
+
+  &lt;label for=&quot;mensaje&quot;&gt;Mensaje&lt;/label&gt;
+  &lt;textarea id=&quot;mensaje&quot; name=&quot;mensaje&quot; rows=&quot;5&quot; required&gt;&lt;/textarea&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-validacion-del-lado-del-cliente">🟦 ¿Qué significa? — <em>Validación del lado del cliente</em></h3>
+<p>Cuando el navegador comprueba, <strong>antes de enviar</strong>, que el correo tiene formato válido o que
+un campo <code>required</code> no está vacío, eso es <strong>validación del lado del cliente</strong> ("cliente" =
+el navegador, como viste en el Módulo 00). Es cómoda y rápida, pero <strong>no es suficiente por sí
+sola</strong>: alguien malicioso podría saltársela. Por eso los datos también se validan en el
+<strong>servidor</strong>. Por ahora basta con que sepas que existen los dos niveles.</p>
+<h3 id="cuidado-el-honeypot-una-trampa-para-robots">⚠️ Cuidado — El honeypot: una trampa para robots</h3>
+<p>Los formularios reciben spam de robots automáticos. Un truco común es añadir un campo
+<strong>oculto</strong> que una persona nunca ve ni llena, pero que un robot tonto sí completa; si llega
+lleno, descartas el envío. Se llama <em>honeypot</em> ("tarro de miel"). Tu sitio usa esta técnica.
+No necesitas implementarla aún, pero reconоce el nombre.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé qué hacen <code>action</code> y <code>method</code> en un <code>&lt;form&gt;</code>.</li>
+<li>[ ] Conozco los <code>type</code> de <code>&lt;input&gt;</code> más útiles (text, email, password, submit…).</li>
+<li>[ ] Uso <code>name</code> (para enviar el dato), <code>placeholder</code> y <code>required</code>.</li>
+<li>[ ] Siempre conecto un <code>&lt;label for&gt;</code> con el <code>id</code> de su campo.</li>
+<li>[ ] Uso <code>&lt;textarea&gt;</code> para textos largos y un <code>&lt;button type="submit"&gt;</code> para enviar.</li>
+<li>[ ] Entiendo qué es la <strong>validación del lado del cliente</strong> y por qué no basta sola.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Elige el <code>type</code>.</strong> ¿Qué <code>type</code> de input usarías para: la edad, la contraseña, aceptar los
+   términos (sí/no), el correo, la fecha de nacimiento?</li>
+<li><strong>Conecta label e input.</strong> Escribe un campo "Teléfono" con su <code>&lt;label&gt;</code> correctamente
+   enlazado por <code>for</code>/<code>id</code>, de tipo teléfono y obligatorio.</li>
+<li><strong>Encuentra el error.</strong> ¿Por qué este campo no enviará su dato?
+   <code>&lt;input type="text" id="ciudad" placeholder="Ciudad"&gt;</code> (pista: le falta algo importante).</li>
+<li><strong>Cliente vs. servidor.</strong> Explica por qué la validación del navegador es cómoda pero
+   insuficiente, con un ejemplo de cómo alguien podría saltársela.</li>
+<li>💻 <strong>Tu formulario.</strong> Crea el formulario de contacto completo de la sección 5 dentro de una
+   página. Pruébalo en el navegador: deja el correo vacío e intenta enviar; observa cómo el
+   navegador te lo impide (esa es la validación del cliente en acción).</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="05-accesibilidad.html">Capítulo 05 — Accesibilidad y buenas prácticas</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
