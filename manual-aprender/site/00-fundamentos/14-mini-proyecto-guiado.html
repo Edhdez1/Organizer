@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 14 — Mini-proyecto guiado — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-mini-proyecto-guiado">Capítulo 14 — Mini-proyecto guiado</h1>
+<blockquote>
+<p>En este capítulo vas a juntar <strong>todo</strong> lo que aprendiste en el Módulo 00 y construir, con tus propias manos, un proyecto pequeño pero <strong>completo y real</strong>: una carpeta organizada, un archivo de notas, un repositorio de Git con su historial de cambios, y un script muy simple que el computador ejecutará y te responderá. No es un ejercicio de mentira: cuando termines, tendrás en tu disco un proyecto con la misma estructura básica que usan proyectos de verdad como <em>tunal-digital</em> o <em>PolyPaw</em>. Importa porque dejas de <em>leer</em> sobre programar y empiezas a <em>programar</em>. Bit, tu ajolote guía, te acompaña paso a paso. Respira: todo lo que sigue se hace despacio y sin prisa.</p>
+</blockquote>
+<h2 id="1-que-vamos-a-construir-el-plan-antes-que-el-teclado">1. Qué vamos a construir (el plan antes que el teclado)</h2>
+<p>Antes de tocar el teclado, conviene saber a dónde vamos. Un buen programador piensa primero y escribe después. Vamos a construir un mini-proyecto llamado <strong>mi-diario-de-codigo</strong>: una pequeña libreta digital donde anotarás tu avance aprendiendo a programar, con control de versiones (para no perder nada) y un programita que cuente cuántas notas llevas.</p>
+<p>El proyecto terminado se verá así:</p>
+<pre><code>mi-diario-de-codigo/
+├── README.md          (qué es este proyecto)
+├── notas.md           (tus anotaciones de aprendizaje)
+└── contar.js          (un script que cuenta tus notas)
+</code></pre>
+<p>Tres archivos. Nada más. Pero con esos tres archivos vas a practicar: crear carpetas, escribir archivos de texto, usar la terminal, inicializar Git, hacer <em>commits</em> y ejecutar un programa. Eso es muchísimo para un primer proyecto.</p>
+<blockquote class="def">
+<h3 id="que-significa-mini-proyecto">🟦 ¿Qué significa? — <em>Mini-proyecto</em></h3>
+<p>Un proyecto es un conjunto de archivos que trabajan juntos para lograr un objetivo. "Mini" solo quiere decir que es pequeño y abarcable en una sesión. Sirve para practicar el <em>ciclo completo</em> (crear, escribir, guardar, versionar, ejecutar) sin abrumarte. Tus proyectos reales como <strong>RachaSimple</strong> (una app de hábitos) son el mismo concepto, solo que con cientos de archivos en lugar de tres.</p>
+<h3 id="tip-lee-el-capitulo-entero-una-vez-antes-de-empezar">💡 Tip — Lee el capítulo entero una vez antes de empezar</h3>
+<p>Date una pasada de lectura sin teclear. Así tu cabeza tendrá el mapa completo, y cuando vuelvas al inicio para hacerlo "en serio", cada paso tendrá sentido. Bit insiste: el pánico nace de no saber qué viene después.</p>
+</blockquote>
+<h2 id="2-abrir-la-terminal-y-ubicarte">2. Abrir la terminal y ubicarte 💻</h2>
+<p>Todo empieza en la <strong>terminal</strong>, esa ventana de texto donde le hablas al computador escribiendo. Ábrela (en Windows puede ser <em>PowerShell</em> o <em>Git Bash</em>; en Mac o Linux, <em>Terminal</em>).</p>
+<blockquote class="def">
+<h3 id="que-significa-terminal">🟦 ¿Qué significa? — <em>Terminal</em></h3>
+<p>La terminal es un programa donde escribes órdenes en texto y el computador las ejecuta, en lugar de hacer clic con el ratón. Cada línea que escribes y confirmas con Enter es un <em>comando</em>. Sirve para trabajar rápido y para tareas que no tienen botones. Tu servidor <strong>polypaw-nas</strong> (un Acer con Ubuntu Server) se administra casi por completo desde la terminal, porque ni siquiera tiene pantalla con ventanas: solo texto.</p>
+</blockquote>
+<p>Lo primero es saber <strong>dónde estás parado</strong>. La terminal siempre está "dentro" de una carpeta, llamada <em>carpeta actual</em> o <em>directorio de trabajo</em>. Para verla:</p>
+<pre><code class="language-bash">pwd
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-pwd">🟦 ¿Qué significa? — <em>pwd</em></h3>
+<p>Significa <em>print working directory</em> (imprimir directorio de trabajo). Te muestra la ruta de la carpeta donde estás ahora mismo. Sirve para no perderte: antes de crear cosas, conviene saber dónde caerán.</p>
+</blockquote>
+<p>El resultado será algo como <code>/home/tu-usuario</code> o <code>/Users/tu-nombre</code> o <code>C:\Users\tu-nombre</code>. Esa es tu carpeta personal, un buen lugar para trabajar. Si quieres, muévete a tu carpeta de Documentos o Escritorio; lo importante es que recuerdes dónde quedó el proyecto.</p>
+<blockquote class="warn">
+<h3 id="cuidado-no-crees-el-proyecto-en-cualquier-parte">⚠️ Cuidado — No crees el proyecto "en cualquier parte"</h3>
+<p>Es muy fácil crear la carpeta, cerrar la terminal y luego no encontrarla nunca más. Anota mentalmente (o en un papel) la ruta que te dio <code>pwd</code>. Ahí va a vivir tu proyecto.</p>
+</blockquote>
+<h2 id="3-crear-la-carpeta-del-proyecto">3. Crear la carpeta del proyecto 💻</h2>
+<p>Ahora creamos la carpeta. El comando se llama <code>mkdir</code>.</p>
+<pre><code class="language-bash">mkdir mi-diario-de-codigo
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-mkdir">🟦 ¿Qué significa? — <em>mkdir</em></h3>
+<p>Significa <em>make directory</em> (crear directorio). Crea una carpeta nueva con el nombre que le des. "Directorio" y "carpeta" son la misma cosa: la palabra "directorio" es la versión técnica. Lo usas para organizar tus archivos en grupos.</p>
+</blockquote>
+<p>No verás nada en pantalla: en la terminal, <em>silencio suele ser señal de éxito</em>. Si algo sale mal, te avisará con un mensaje de error. Ahora entra en la carpeta recién creada:</p>
+<pre><code class="language-bash">cd mi-diario-de-codigo
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-cd">🟦 ¿Qué significa? — <em>cd</em></h3>
+<p>Significa <em>change directory</em> (cambiar de directorio). Te mueve "dentro" de una carpeta, como hacer doble clic para entrar en ella. A partir de ahí, todo lo que crees caerá dentro. Para salir y volver atrás un nivel se usa <code>cd ..</code> (los dos puntos significan "la carpeta de arriba").</p>
+</blockquote>
+<p>Confirma con <code>pwd</code> que ahora estás <em>dentro</em> de <code>mi-diario-de-codigo</code>. Debería aparecer el nombre de la carpeta al final de la ruta. ¡Estás dentro de tu proyecto!</p>
+<blockquote class="tip">
+<h3 id="tip-nombres-de-carpetas-sin-espacios-ni-tildes">💡 Tip — Nombres de carpetas sin espacios ni tildes</h3>
+<p>Fíjate que el proyecto se llama <code>mi-diario-de-codigo</code>, con guiones y sin tildes ni espacios. En programación esto evita dolores de cabeza: los espacios obligan a poner comillas, y las tildes a veces confunden a las herramientas. Es la misma razón por la que tus proyectos reales se llaman <code>tunal-digital</code> o <code>polypaw-nas</code> y no "Tunal Digital" con espacio.</p>
+</blockquote>
+<h2 id="4-crear-el-primer-archivo-readmemd">4. Crear el primer archivo: README.md 💻</h2>
+<p>Todo proyecto serio empieza con un <strong>README</strong>: un archivo que explica qué es el proyecto. La gente lo lee primero (de ahí su nombre, "léeme" en inglés).</p>
+<blockquote class="def">
+<h3 id="que-significa-readme">🟦 ¿Qué significa? — <em>README</em></h3>
+<p>Es un archivo de texto, casi siempre llamado <code>README.md</code>, que describe de qué trata el proyecto, cómo usarlo y qué necesita. Sirve para que cualquiera (incluido tú dentro de seis meses) entienda el proyecto sin leer todo el código. La regla del proyecto <strong>Faro</strong> (la carpeta Organizer) es tan estricta con esto que obliga a actualizar el README en cada cambio importante.</p>
+<h3 id="que-significa-markdown-la-md">🟦 ¿Qué significa? — <em>Markdown</em> (la <code>.md</code>)</h3>
+<p>Markdown es una forma sencilla de dar formato a un texto usando símbolos: <code>#</code> para títulos, <code>-</code> para listas, <code>**texto**</code> para negrita. La extensión <code>.md</code> indica que el archivo está en Markdown. Sirve para escribir documentos legibles tanto en crudo como ya "bonitos". Este mismo manual que lees está escrito en Markdown.</p>
+</blockquote>
+<p>Vamos a crear el archivo y abrirlo en tu editor de código (por ejemplo <strong>VS Code</strong>). Si tienes VS Code instalado con el comando <code>code</code>, escribe:</p>
+<pre><code class="language-bash">code README.md
+</code></pre>
+<p>Si eso no funciona, no pasa nada: abre tu editor de texto a mano, y guarda un archivo nuevo llamado <code>README.md</code> <em>dentro</em> de la carpeta <code>mi-diario-de-codigo</code>. Dentro del archivo, escribe esto:</p>
+<pre><code class="language-markdown"># Mi diario de código
+
+Este es mi primer proyecto mientras aprendo a programar.
+Aquí anoto lo que voy aprendiendo, día por día.
+
+## Qué contiene
+
+- `notas.md`: mis anotaciones de aprendizaje.
+- `contar.js`: un script que cuenta cuántas notas llevo.
+</code></pre>
+<p>Guarda el archivo (en VS Code, <code>Ctrl+S</code> o <code>Cmd+S</code>). ¡Felicidades, escribiste tu primera documentación!</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong>, el sitio web vive en archivos como <code>sitio-web/index.html</code>, <code>styles.css</code> y <code>main.js</code>. Cada uno tiene un propósito claro, igual que tus tres archivos aquí. La idea de "un archivo, una responsabilidad" es la misma sin importar el tamaño del proyecto.</p>
+</blockquote>
+<h2 id="5-crear-el-archivo-de-notas">5. Crear el archivo de notas 💻</h2>
+<p>Ahora el corazón del diario: <code>notas.md</code>. Créalo igual que antes (<code>code notas.md</code> o a mano) y escribe algo así:</p>
+<pre><code class="language-markdown"># Mis notas de aprendizaje
+
+- Aprendí qué es la terminal y cómo moverme con cd y pwd.
+- Creé mi primera carpeta con mkdir.
+- Entendí que README.md explica el proyecto.
+</code></pre>
+<p>Cada línea que empieza con <code>-</code> es un elemento de lista. Vamos a aprovechar ese detalle: nuestro futuro script contará cuántas líneas empiezan con <code>-</code> para saber cuántas notas tienes. Por ahora, guarda el archivo.</p>
+<blockquote class="tip">
+<h3 id="tip-escribe-notas-de-verdad">💡 Tip — Escribe notas de verdad</h3>
+<p>No copies mis líneas tal cual: escribe <strong>tus</strong> propias notas, con tus palabras y tus dudas. Un diario de aprendizaje solo sirve si es honesto. "Hoy no entendí qué es un commit" es una nota valiosísima.</p>
+</blockquote>
+<h2 id="6-inicializar-git">6. Inicializar Git 💻</h2>
+<p>Aquí entra una de las herramientas más importantes de tu vida como programador: <strong>Git</strong>. Hasta ahora tienes archivos sueltos; Git les va a dar memoria.</p>
+<blockquote class="def">
+<h3 id="que-significa-git">🟦 ¿Qué significa? — <em>Git</em></h3>
+<p>Git es un sistema de <em>control de versiones</em>: un programa que guarda fotos del estado de tu proyecto a lo largo del tiempo. Sirve para no perder trabajo, poder volver atrás si rompes algo, y ver qué cambió y cuándo. Todos tus proyectos serios (<strong>Faro</strong>, <strong>RachaSimple</strong>, <strong>tunal-digital</strong>) viven en Git.</p>
+<h3 id="que-significa-repositorio">🟦 ¿Qué significa? — <em>Repositorio</em></h3>
+<p>Un repositorio (o "repo") es una carpeta que Git está vigilando. Por dentro, Git guarda ahí todo el historial de cambios en una subcarpeta oculta llamada <code>.git</code>. Sirve para tener un proyecto entero, con su pasado completo, dentro de una sola carpeta.</p>
+</blockquote>
+<p>Asegúrate de estar dentro de <code>mi-diario-de-codigo</code> (usa <code>pwd</code> si dudas) y escribe:</p>
+<pre><code class="language-bash">git init
+</code></pre>
+<p>Verás un mensaje como <em>"Initialized empty Git repository"</em>. ¡Acabas de convertir tu carpeta en un repositorio! No cambió nada visible, pero ahora Git observa todo lo que pase aquí.</p>
+<blockquote class="warn">
+<h3 id="cuidado-git-init-se-hace-una-sola-vez-por-proyecto">⚠️ Cuidado — <code>git init</code> se hace UNA sola vez por proyecto</h3>
+<p>No necesitas repetir <code>git init</code> cada vez que trabajas. Solo se hace al nacer el proyecto. Si lo ejecutas dos veces no rompes nada grave, pero es señal de que perdiste el hilo de dónde estás.</p>
+</blockquote>
+<p>Ahora pregúntale a Git cómo ve tu proyecto:</p>
+<pre><code class="language-bash">git status
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-git-status">🟦 ¿Qué significa? — <em>git status</em></h3>
+<p>Muestra el estado actual del repositorio: qué archivos son nuevos, cuáles cambiaron y cuáles ya están guardados. Sirve para orientarte antes de guardar. Es el comando que más vas a usar en tu vida; cuando dudes, <code>git status</code>.</p>
+</blockquote>
+<p>Git te dirá que <code>README.md</code> y <code>notas.md</code> son archivos <em>"untracked"</em> (sin seguimiento): los ve, pero todavía no los está guardando en su historial. Eso lo arreglamos ahora.</p>
+<h2 id="7-tu-primer-commit">7. Tu primer commit 💻</h2>
+<p>Guardar en Git tiene <strong>dos pasos</strong>: primero eliges qué archivos quieres guardar (<code>git add</code>), y luego confirmas el guardado con un mensaje (<code>git commit</code>). Es como preparar una caja (add) y luego sellarla con una etiqueta (commit).</p>
+<blockquote class="def">
+<h3 id="que-significa-git-add">🟦 ¿Qué significa? — <em>git add</em></h3>
+<p>Marca uno o varios archivos para incluirlos en el próximo guardado. A esa zona de "listos para guardar" se le llama <em>staging</em> (área de preparación). Sirve para que tú decidas exactamente qué entra en cada foto, en vez de guardar todo a ciegas.</p>
+</blockquote>
+<pre><code class="language-bash">git add README.md notas.md
+</code></pre>
+<p>O, si quieres añadir todos los cambios de un golpe, el atajo es un punto, que significa "todo lo de esta carpeta":</p>
+<pre><code class="language-bash">git add .
+</code></pre>
+<p>Ahora sella la caja:</p>
+<pre><code class="language-bash">git commit -m &quot;Primer commit: README y notas iniciales&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-commit">🟦 ¿Qué significa? — <em>Commit</em></h3>
+<p>Un commit es una foto guardada del proyecto en un momento dado, con un mensaje que explica qué cambiaste. Sirve como punto de retorno: siempre puedes volver a cualquier commit anterior. La parte <code>-m</code> (de <em>message</em>) le pone la etiqueta a esa foto. Cada vez que avances en <strong>Faro</strong> o <strong>PolyPaw</strong>, dejas un commit que cuenta esa historia.</p>
+<h3 id="tip-mensajes-de-commit-que-tu-yo-futuro-agradecera">💡 Tip — Mensajes de commit que tu yo futuro agradecerá</h3>
+<p>Un buen mensaje dice <em>qué</em> hiciste, en pocas palabras y en presente: "Agrega archivo de notas", "Corrige conteo de líneas". Un mal mensaje es "cosas", "cambios", "asdf". El mensaje es para la persona que lea el historial mañana, y casi siempre esa persona eres tú.</p>
+</blockquote>
+<p>Comprueba que funcionó viendo el historial:</p>
+<pre><code class="language-bash">git log --oneline
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-git-log">🟦 ¿Qué significa? — <em>git log</em></h3>
+<p>Muestra la lista de commits que llevas, del más reciente al más antiguo. La opción <code>--oneline</code> los resume en una línea cada uno. Sirve para ver la historia de tu proyecto de un vistazo. Deberías ver tu commit con un código corto (como <code>a1b2c3d</code>), que es su identificador único.</p>
+</blockquote>
+<p>¡Felicidades, doble! Tienes tu primer commit. Tu proyecto ya tiene memoria.</p>
+<h2 id="8-el-script-contarjs">8. El script: contar.js 💻</h2>
+<p>Llegó la parte de <em>programar de verdad</em>: un script que el computador ejecuta. Vamos a usar <strong>JavaScript</strong>, el mismo lenguaje que mueve a <strong>tunal-digital</strong> y <strong>RachaSimple</strong>. Lo correremos con <strong>Node.js</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-script">🟦 ¿Qué significa? — <em>Script</em></h3>
+<p>Un script es un archivo de texto con instrucciones que el computador ejecuta de arriba abajo. "Script" significa <em>guion</em>, como el de una obra de teatro: una lista de pasos a seguir. Sirve para automatizar tareas. El <code>backend/worker.js</code> de <strong>tunal-digital</strong> también es, en el fondo, un script (más grande) que corre cuando alguien visita el sitio.</p>
+<h3 id="que-significa-javascript-la-js">🟦 ¿Qué significa? — <em>JavaScript</em> (la <code>.js</code>)</h3>
+<p>JavaScript es un lenguaje de programación muy popular, que el computador entiende. Sirve para dar comportamiento: hacer cálculos, reaccionar a clics, leer archivos. La extensión <code>.js</code> indica que el archivo está escrito en JavaScript. Es el lenguaje de tres de tus proyectos.</p>
+<h3 id="que-significa-nodejs">🟦 ¿Qué significa? — <em>Node.js</em></h3>
+<p>Node.js es un programa que ejecuta JavaScript fuera del navegador, directo en tu computador. Sirve para correr scripts desde la terminal. Comprueba si lo tienes con <code>node --version</code>: si te responde un número como <code>v20.11.0</code>, estás listo.</p>
+</blockquote>
+<h3 id="81-primero-en-pseudocodigo">8.1 Primero, en pseudocódigo</h3>
+<p>Antes de escribir JavaScript real, pensemos el script en <strong>pseudocódigo</strong>: lenguaje humano con forma de programa.</p>
+<blockquote class="def">
+<h3 id="que-significa-pseudocodigo">🟦 ¿Qué significa? — <em>Pseudocódigo</em></h3>
+<p>Es una descripción de un programa escrita en lenguaje cotidiano, sin reglas estrictas, para pensar la lógica antes de programarla. Sirve para razonar el "qué hago" sin pelear todavía con el "cómo se escribe". No lo ejecuta ninguna máquina: es solo para tu cabeza.</p>
+</blockquote>
+<pre><code>ABRIR el archivo notas.md
+LEER todas sus líneas
+CONTAR cuántas líneas empiezan con &quot;- &quot;
+MOSTRAR en pantalla: &quot;Llevas N notas. ¡Sigue así!&quot;
+</code></pre>
+<p>¿Lo ves? Cuatro pasos claros. Ahora los traducimos a JavaScript real.</p>
+<h3 id="82-ahora-en-javascript-real">8.2 Ahora, en JavaScript real</h3>
+<p>Crea el archivo <code>contar.js</code> (<code>code contar.js</code> o a mano) y escribe esto <strong>exactamente</strong>:</p>
+<pre><code class="language-javascript">// contar.js — cuenta cuántas notas tengo en notas.md
+
+// 1. Traemos una herramienta de Node para leer archivos.
+const fs = require(&quot;fs&quot;);
+
+// 2. Leemos todo el contenido de notas.md como texto.
+const contenido = fs.readFileSync(&quot;notas.md&quot;, &quot;utf8&quot;);
+
+// 3. Partimos el texto en líneas (cada salto de línea separa una).
+const lineas = contenido.split(&quot;\n&quot;);
+
+// 4. Contamos las líneas que empiezan con &quot;- &quot;.
+let total = 0;
+for (const linea of lineas) {
+  if (linea.startsWith(&quot;- &quot;)) {
+    total = total + 1;
+  }
+}
+
+// 5. Mostramos el resultado en pantalla.
+console.log(&quot;Llevas &quot; + total + &quot; notas. ¡Sigue así!&quot;);
+</code></pre>
+<p>No te asustes por la cantidad de símbolos. Vamos a entender las palabras nuevas una por una.</p>
+<blockquote class="def">
+<h3 id="que-significa-comentario">🟦 ¿Qué significa? — <em>Comentario</em> (<code>//</code>)</h3>
+<p>Todo lo que va después de <code>//</code> en una línea es un comentario: texto que el computador <strong>ignora</strong>, escrito solo para que las personas entiendan el código. Sirve para explicarte a ti mismo qué hace cada parte. Úsalos sin miedo.</p>
+<h3 id="que-significa-variable-const-let">🟦 ¿Qué significa? — <em>Variable</em> (<code>const</code>, <code>let</code>)</h3>
+<p>Una variable es una caja con nombre donde guardas un valor para usarlo después. <code>const</code> crea una caja cuyo valor no cambiará; <code>let</code> crea una que sí podrá cambiar (por eso <code>total</code> es <code>let</code>: irá creciendo). Sirven para no repetir datos y para recordar resultados intermedios.</p>
+<h3 id="que-significa-consolelog">🟦 ¿Qué significa? — <em>console.log</em></h3>
+<p>Es la orden de JavaScript para <em>mostrar algo en pantalla</em> (en la terminal). "Log" significa registrar o imprimir. Sirve para ver resultados y para revisar qué está pasando dentro de tu programa. Es la herramienta número uno para entender por qué algo no funciona.</p>
+<h3 id="que-significa-bucle-for">🟦 ¿Qué significa? — <em>Bucle</em> (<code>for</code>)</h3>
+<p>Un bucle repite un bloque de instrucciones varias veces. Aquí, <code>for (const linea of lineas)</code> significa "para cada línea de la lista de líneas, haz lo de adentro". Sirve para no escribir la misma orden cien veces: el computador la repite por ti.</p>
+<h3 id="que-significa-condicion-if">🟦 ¿Qué significa? — <em>Condición</em> (<code>if</code>)</h3>
+<p><code>if</code> (si) ejecuta un bloque <strong>solo cuando</strong> se cumple algo. Aquí: "si la línea empieza con <code>-</code>, suma uno". Sirve para que el programa tome decisiones. Es la base de toda lógica: hacer una cosa u otra según el caso.</p>
+</blockquote>
+<p>Guarda el archivo.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <strong>PolyPaw</strong>, el archivo <code>main.py</code> también empieza trayendo herramientas (en Python se usa <code>import</code> en vez de <code>require</code>) y luego lee datos desde archivos <code>.json</code>, igual que aquí leemos <code>notas.md</code>. Cambia el lenguaje, pero la melodía es la misma: traer una herramienta, leer datos, procesarlos, mostrar un resultado.</p>
+</blockquote>
+<h2 id="9-ejecutar-el-script">9. Ejecutar el script 💻</h2>
+<p>Momento de la verdad. En la terminal, asegúrate de estar dentro de <code>mi-diario-de-codigo</code> y escribe:</p>
+<pre><code class="language-bash">node contar.js
+</code></pre>
+<p>Si todo está bien, verás algo como:</p>
+<pre><code>Llevas 3 notas. ¡Sigue así!
+</code></pre>
+<p>¡El computador acaba de leer tu archivo, contar tus notas y responderte! Eso es programar. Si abres <code>notas.md</code>, agregas una línea nueva que empiece con <code>-</code>, guardas, y vuelves a correr <code>node contar.js</code>, el número subirá. Pruébalo: esa pequeña magia de cambiar datos y ver el resultado actualizarse es la esencia de todo software.</p>
+<blockquote class="warn">
+<h3 id="cuidado-si-te-sale-un-error-no-es-el-fin-del-mundo">⚠️ Cuidado — Si te sale un error, no es el fin del mundo</h3>
+<p>Errores comunes y su traducción:
+- <code>Cannot find module 'notas.md'</code> o <code>ENOENT</code>: no estás en la carpeta correcta, o el archivo se llama distinto. Revisa con <code>pwd</code> y comprueba el nombre exacto.
+- <code>node: command not found</code>: no tienes Node.js instalado, o la terminal no lo encuentra. Instálalo desde nodejs.org.
+- <code>SyntaxError</code>: escribiste algo distinto al ejemplo (una comilla, un paréntesis). Compara letra por letra. Bit te lo asegura: el 90% de los errores al inicio son una comilla o un paréntesis perdido.</p>
+<h3 id="tip-leer-el-error-en-voz-alta">💡 Tip — Leer el error en voz alta</h3>
+<p>Cuando algo falle, no cierres los ojos: <strong>lee el mensaje de error con calma</strong>, incluso en voz alta. Casi siempre dice exactamente qué pasó y en qué línea. Aprender a leer errores es una superhabilidad; los programadores expertos no es que no se equivoquen, es que leen mejor sus errores.</p>
+</blockquote>
+<h2 id="10-guardar-el-script-en-git">10. Guardar el script en Git 💻</h2>
+<p>Tienes un archivo nuevo (<code>contar.js</code>) que Git todavía no conoce. Cerremos el ciclo con otro commit. Primero mira el estado:</p>
+<pre><code class="language-bash">git status
+</code></pre>
+<p>Verás <code>contar.js</code> como <em>untracked</em>. Añádelo y haz commit:</p>
+<pre><code class="language-bash">git add contar.js
+git commit -m &quot;Agrega script que cuenta las notas&quot;
+</code></pre>
+<p>Y revisa tu historial completo:</p>
+<pre><code class="language-bash">git log --oneline
+</code></pre>
+<p>Ahora deberías ver <strong>dos</strong> commits. Tu proyecto tiene una historia con dos capítulos. Cada vez que avances, agregarás otro. Así, exactamente así, crecen proyectos enormes: un commit a la vez.</p>
+<blockquote class="tip">
+<h3 id="tip-el-ritmo-natural-del-trabajo">💡 Tip — El ritmo natural del trabajo</h3>
+<p>Fíjate en el patrón que acabas de vivir: <em>cambio algo → <code>git status</code> → <code>git add</code> → <code>git commit -m "..."</code></em>. Ese ciclo lo repetirás miles de veces en tu carrera. No lo memorices a la fuerza; lo absorberás de tanto usarlo, como aprendiste a amarrarte los zapatos.</p>
+</blockquote>
+<h2 id="11-repaso-del-proyecto-completo">11. Repaso del proyecto completo</h2>
+<p>Detente y mira lo que construiste. Desde cero hiciste:</p>
+<ol>
+<li>Una <strong>carpeta</strong> de proyecto (<code>mkdir</code>, <code>cd</code>).</li>
+<li>Un <strong>README</strong> que explica el proyecto (Markdown).</li>
+<li>Un archivo de <strong>notas</strong> propio.</li>
+<li>Un <strong>repositorio Git</strong> con <code>git init</code>.</li>
+<li><strong>Dos commits</strong> que cuentan la historia del proyecto.</li>
+<li>Un <strong>script en JavaScript</strong> que lee un archivo, cuenta y responde.</li>
+<li>La <strong>ejecución</strong> de ese script con Node.js.</li>
+</ol>
+<p>Esa lista no es de juguete. Es, en miniatura, el mismo flujo con el que se construyó <strong>Faro</strong> (un organizador de proyectos en Next.js) o <strong>RachaSimple</strong> (una app de hábitos en React). La diferencia es de tamaño, no de naturaleza. Acabas de hacer, en pequeño, lo que hacen los programadores profesionales todos los días.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Tu repositorio <strong>polypaw-nas</strong> maneja un servidor entero (Samba, Cockpit, Tailscale, AdGuard) y aun así, cuando se configura algo, alguien abre una terminal, edita un archivo de texto, lo prueba y guarda el cambio. El mismo ciclo de "editar → probar → guardar" que acabas de practicar aquí escala desde tres archivos hasta un servidor completo.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé abrir la terminal y averiguar en qué carpeta estoy con <code>pwd</code>.</li>
+<li>[ ] Puedo crear una carpeta con <code>mkdir</code> y entrar en ella con <code>cd</code>.</li>
+<li>[ ] Entiendo qué es un README y para qué sirve Markdown.</li>
+<li>[ ] Sé inicializar un repositorio con <code>git init</code>.</li>
+<li>[ ] Entiendo la diferencia entre <code>git add</code> (preparar) y <code>git commit</code> (guardar).</li>
+<li>[ ] Puedo ver el estado con <code>git status</code> y el historial con <code>git log --oneline</code>.</li>
+<li>[ ] Sé escribir un script simple en JavaScript con un comentario, una variable, un <code>if</code> y un <code>for</code>.</li>
+<li>[ ] Puedo ejecutar un script con <code>node archivo.js</code> y leer su resultado.</li>
+<li>[ ] Si sale un error, lo leo con calma en vez de asustarme.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Mensaje personalizado.</strong> 💻 Abre <code>contar.js</code> y cambia el texto final de <code>console.log</code> para que diga algo tuyo, por ejemplo: <code>"Voy por mi nota número " + total + ". ¡Bit está orgulloso!"</code>. Guarda, ejecuta con <code>node contar.js</code> y haz un commit con un buen mensaje.</p>
+</li>
+<li>
+<p><strong>Crece tu diario.</strong> 💻 Agrega tres notas nuevas (líneas que empiecen con <code>-</code>) en <code>notas.md</code>. Vuelve a ejecutar el script y comprueba que el número sube correctamente. Luego haz <code>git add .</code> y <code>git commit</code>.</p>
+</li>
+<li>
+<p><strong>Detective de commits.</strong> 💻 Ejecuta <code>git log</code> (sin <code>--oneline</code>) y observa la información completa de cada commit: autor, fecha y mensaje. Escribe en <code>notas.md</code> una línea explicando qué dato nuevo viste que <code>--oneline</code> no mostraba.</p>
+</li>
+<li>
+<p><strong>Pseudocódigo propio.</strong> Sin computador: en una hoja, escribe en pseudocódigo (lenguaje humano, paso a paso) un programa que cuente cuántas líneas de <code>notas.md</code> mencionan la palabra "Git". No lo programes todavía, solo piensa la lógica en cuatro o cinco pasos.</p>
+</li>
+<li>
+<p><strong>Romper para aprender.</strong> 💻 Borra a propósito una comilla del <code>console.log</code> en <code>contar.js</code>, guarda y ejecuta. Lee el <code>SyntaxError</code> que aparece y anota en qué línea dice que está el problema. Luego arréglalo y confirma que vuelve a funcionar. (No hagas commit del archivo roto.)</p>
+</li>
+<li>
+<p><strong>Tu segundo README.</strong> 💻 Crea una carpeta nueva llamada <code>practica-2</code>, inicializa Git dentro, crea un <code>README.md</code> que la describa y haz el primer commit. Repetir el ciclo completo desde cero, tú solo y sin guía, es la mejor forma de comprobar que de verdad lo dominas.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
