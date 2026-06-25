@@ -1,92 +1,104 @@
 # Guía de estilo visual del manual
 
-Documento que usan los "agentes de arte" para que TODAS las ilustraciones del manual se vean
-como una familia coherente. Define la marca, las mascotas y los *prompts* (instrucciones de
-texto para la IA de imágenes) listos para generar con **Higgsfield**.
+Documento que usan los "agentes de arte" para que TODAS las ilustraciones se vean como una
+familia coherente. Define la marca, la mascota y los *prompts* (instrucciones de texto para la
+IA de imágenes) listos para generar con **Higgsfield**.
 
-> Estado: los **prompts están listos**; las imágenes se generan en lote cuando el permiso de
-> Higgsfield esté aprobado. Mientras tanto, el manual usa **diagramas de texto/ASCII** para no
-> frenar la lectura ni gastar créditos.
+> Estado: estilo y prompts **listos**. Las imágenes se generan cuando el permiso interactivo de
+> Higgsfield quede aprobado en el cliente. Mientras tanto, el manual usa **diagramas de
+> texto/ASCII** (con sabor "pixel/retro") para no frenar la lectura.
 
 ---
 
-## 1. Identidad visual
+## 1. Dirección visual: PIXEL ART
 
-- **Tono:** cálido, amable, "amanecer". Hereda la marca *Tunal Amanecer* de PolyPaw.
+- **Estilo:** **pixel art** (estética de videojuego retro de 16 bits). Píxeles marcados y
+  nítidos, sin difuminado (*sin anti-aliasing*), paleta limitada, look de "sprite".
+- **Aplica a TODO:** portadas, mascota y diagramas, todos en pixel art.
 - **Paleta (colores en hexadecimal):**
-  - Verde-azulado calmado `#1B6B6B` (primario)
-  - Naranja atardecer `#D98A3D` (acento)
-  - Fondo crema `#FBF9F4` / tinta `#1F2733`
-  - Azul concepto `#9CC2EC` (para diagramas/definiciones)
-- **Estilo de dibujo:** ilustración plana ("flat"), líneas suaves, esquinas redondeadas,
-  sombras mínimas. **Nada de fotorrealismo.** Tipo infografía educativa.
-- **Texto dentro de la imagen:** el mínimo posible (mejor en español, palabras sueltas). El
-  texto explicativo va siempre fuera, en el manual.
-- **Formato:** portadas en `16:9`; diagramas en `16:9` o `4:3` según contenido.
+  - Verde-azulado `#1B6B6B` (primario)
+  - Coral / naranja atardecer `#D98A3D` (acento)
+  - Crema `#FBF9F4` (fondo) / tinta `#1F2733`
+  - Azul concepto `#9CC2EC` (acentos de diagramas)
+- **Texto dentro de la imagen:** mínimo (el pixel art rinde mal con texto pequeño). Las
+  explicaciones van fuera, en el manual.
+- **Formato:** portadas `16:9`; diagramas `16:9` o `4:3`. Mascota suelta `1:1`.
 
 ---
 
-## 2. Mascotas guía: Balam y Andy
+## 2. Mascota única: "Bit", el ajolote
 
-Reutilizamos los jaguares de PolyPaw como personajes que "explican":
+> Elegida al azar para este manual. **No** se usan Balam ni Andy.
 
-- **Balam** — jaguar mentor, tranquilo y sabio. Aparece en definiciones y conceptos serios.
-- **Andy** — jaguar extrovertido y energético. Aparece en tips, retos y celebraciones.
+- **Nombre:** **Bit** (porque un *bit* es la unidad mínima de información — guiño al Módulo 00).
+- **Especie:** ajolote (axolotl), tierno y curioso.
+- **Look:** cuerpo coral/salmón, branquias y detalles en teal `#1B6B6B`, ojos grandes
+  amistosos; sprite de pixel art de ~32–48 px de alto, contorno limpio.
+- **Personalidad:** curioso y alentador; **aprende junto al lector**. No es un experto que
+  presume, es un compañero de viaje.
+- **Poses por contexto** (mismo personaje, distinta expresión):
+  - Definiciones (🟦): Bit pensativo, con un foco/idea.
+  - Tips (💡): Bit emocionado, pulgar arriba.
+  - Cuidado (⚠️): Bit con casco, señalando una alerta.
+  - Celebración (🎉 fin de módulo): Bit saltando con confeti pixelado.
 
-> Para mantenerlos idénticos entre imágenes, lo ideal es entrenar un **"Soul"** en Higgsfield
-> (un personaje reutilizable a partir de 5–20 imágenes de referencia) usando los sprites ya
-> aprobados en `PolyPaw/polypaw_characters/`. Alternativa de una sola vez: `nano_banana_pro`
-> pasando un sprite como referencia.
+> Para mantener a Bit **idéntico** entre imágenes: primero generamos 1 *sprite sheet* de
+> referencia, y con esas imágenes se entrena un **"Soul"** en Higgsfield (personaje reutilizable
+> a partir de 5–20 imágenes). Luego cada portada usa ese Soul. Alternativa rápida de una sola
+> vez: pasar el sprite de referencia como `media` a `nano_banana_pro`.
 
 ---
 
 ## 3. Modelos de Higgsfield a usar
 
-| Necesidad | Modelo recomendado | Por qué |
+| Necesidad | Modelo | Por qué |
 |---|---|---|
-| Diagramas con algo de texto / esquemas técnicos | `nano_banana_pro` | Bueno con texto y 4K |
-| Portadas con mascotas (personaje reutilizable) | `soul_2` + Soul entrenado | Mantiene al personaje igual |
-| Portada/personaje de una sola vez | `nano_banana_pro` o `soul_2` | Rápido sin entrenar |
+| Sprite/portadas pixel art (one-off) | `nano_banana_pro` | Buen control de estilo y nitidez |
+| Mascota reutilizable idéntica | `soul_2` + Soul entrenado de Bit | Mantiene el personaje constante |
+| Diagramas técnicos en pixel art | `nano_banana_pro` | Maneja esquemas + algo de texto |
 
-Antes de cada generación se usa `get_cost: true` para preflightear créditos.
-
----
-
-## 4. Prompts listos por módulo
-
-> Idioma del prompt: inglés (los modelos rinden mejor), pero el texto visible que pidamos
-> dentro de la imagen va en español. Todos comparten el sufijo de estilo:
-> **STYLE:** *flat educational infographic illustration, soft rounded shapes, warm sunrise
-> palette (teal #1B6B6B, sunset orange #D98A3D, cream #FBF9F4), minimal text, friendly, clean,
-> no photorealism, vector-like.*
-
-- **00 Fundamentos — portada:** "A friendly jaguar mentor (Balam) standing next to a giant
-  glowing computer made of simple blocks, a small map of the internet in the background."
-- **00 — diagrama cliente/servidor:** "Two simple computers connected by an arrow labeled
-  'pide' going right and 'responde' going left, one drawn as a laptop (client) and one as a
-  server tower."
-- **01 HTML — portada:** "A house being built from labeled skeleton blocks (header, nav, main,
-  footer), jaguar Andy holding a blueprint." *(HTML = la estructura/esqueleto)*
-- **02 CSS — portada:** "The same house now painted with colors and decorated, paint buckets
-  labeled with hex colors, jaguar Andy with a paint roller." *(CSS = el aspecto)*
-- **03 JavaScript — portada:** "The house comes alive: lights turning on, a doorbell, gears
-  turning, jaguar Balam pressing a button." *(JS = la interactividad)*
-- **04 Python — portada:** "A friendly cartoon python snake (not scary) shaped like flowing
-  code, building small app screens, jaguars watching." 
-- **05 TypeScript — portada:** "JavaScript blocks wearing safety helmets and labels (types),
-  a safety net under a tightrope." *(TS = JS con seguridad de tipos)*
-- **06 React — portada:** "A user interface built from reusable LEGO-like components clicking
-  together, each block a small card." 
-- **07 Bases de datos — portada:** "A friendly filing cabinet / database cylinder with labeled
-  drawers (usuarios, hábitos), a lock icon for security (RLS)." 
-- **08 APIs/OAuth/IA — portada:** "Two buildings connected by a bridge with a contract/handshake
-  (API), a key passing through a guarded gate (OAuth), a small robot brain (IA)." 
-- **09 NAS y servidores — portada:** "An Acer gaming laptop reborn as a home server tower with
-  glowing drives, a small shield (Tailscale VPN) and a network of home devices around it."
+Antes de cada generación: `get_cost: true` para preflightear créditos.
 
 ---
 
-## 5. Dónde se guardan
+## 4. Sufijo de estilo común (va al final de cada prompt)
 
-Las imágenes generadas van a `recursos/imagenes/<modulo>/` con nombres descriptivos
-(`portada.png`, `diagrama-cliente-servidor.png`, …) y se embeben en el `.md` y el `.html`.
+> **STYLE:** *16-bit pixel art, retro video game sprite aesthetic, crisp chunky pixels, hard
+> edges, no anti-aliasing, limited warm palette (teal #1B6B6B, coral/sunset orange #D98A3D,
+> cream #FBF9F4 background), clean and friendly, high contrast.*
+
+---
+
+## 5. Prompts listos por módulo (con Bit el ajolote)
+
+- **Mascota base (primero):** "Character reference sheet of 'Bit', a cute coral-pink axolotl
+  with teal gills, big friendly eyes, several poses: idle, thumbs-up, thinking with a lightbulb,
+  wearing a tiny hard hat, jumping happily."
+- **00 Fundamentos:** "Bit the axolotl sitting in front of a big retro computer made of pixel
+  blocks, a tiny pixel map of the internet glowing behind."
+- **01 HTML:** "Bit building the pixel skeleton of a house from labeled blocks (header, main,
+  footer), holding a blueprint." *(HTML = estructura)*
+- **02 CSS:** "The same pixel house now painted with colors, Bit holding a paint roller, paint
+  buckets labeled with hex colors." *(CSS = aspecto)*
+- **03 JavaScript:** "The pixel house comes alive: lights on, gears turning, Bit pressing a big
+  pixel button." *(JS = interactividad)*
+- **04 Python:** "Bit next to a friendly pixel snake made of flowing code blocks building small
+  app screens." 
+- **05 TypeScript:** "Pixel JavaScript blocks wearing tiny safety helmets and type labels, a
+  safety net below, Bit supervising." *(TS = JS con tipos/seguridad)*
+- **06 React:** "A UI built from reusable LEGO-like pixel components snapping together, Bit
+  assembling them." 
+- **07 Bases de datos:** "A pixel database cylinder / filing cabinet with labeled drawers
+  (usuarios, hábitos) and a padlock for security, Bit holding a key." 
+- **08 APIs/OAuth/IA:** "Two pixel buildings joined by a bridge with a handshake (API), a key
+  passing a guarded gate (OAuth), a small pixel robot brain (IA), Bit in the middle." 
+- **09 NAS y servidores:** "An Acer gaming laptop reborn as a glowing pixel home-server tower,
+  a small pixel shield (VPN) and a network of home devices, Bit as the sysadmin with a tiny
+  wrench." 
+
+---
+
+## 6. Dónde se guardan
+
+Las imágenes van a `recursos/imagenes/<modulo>/` (`portada.png`, `diagrama-*.png`, …) y la
+mascota a `recursos/imagenes/mascota/`. Se embeben en el `.md` y el `.html`.

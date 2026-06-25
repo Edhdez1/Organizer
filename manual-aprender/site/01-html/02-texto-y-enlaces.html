@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 02 — Etiquetas de texto y enlaces — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-02-etiquetas-de-texto-y-enlaces">Capítulo 02 — Etiquetas de texto y enlaces</h1>
+<blockquote>
+<p>Ya sabes qué es una etiqueta. Ahora vamos a conocer las que usarás el 90% del tiempo: las de
+texto, listas, enlaces e imágenes. Con estas ya puedes construir páginas de contenido real.</p>
+</blockquote>
+<hr />
+<h2 id="1-titulos-de-h1-a-h6">1. Títulos: de <code>&lt;h1&gt;</code> a <code>&lt;h6&gt;</code></h2>
+<p>Los títulos organizan el contenido en una jerarquía, como los capítulos y subcapítulos de un
+libro.</p>
+<blockquote class="def">
+<h3 id="que-significa-encabezado-heading">🟦 ¿Qué significa? — <em>Encabezado (heading)</em></h3>
+<p>Un <strong>encabezado</strong> es un título. HTML tiene seis niveles, de <code>&lt;h1&gt;</code> (el más importante) a
+<code>&lt;h6&gt;</code> (el menos). La <code>h</code> es de <em>heading</em>.
+<code>html
+&lt;h1&gt;Título principal de la página&lt;/h1&gt;
+&lt;h2&gt;Una sección&lt;/h2&gt;
+&lt;h3&gt;Una subsección dentro de esa sección&lt;/h3&gt;</code></p>
+<h3 id="cuidado-los-titulos-no-son-para-hacer-letra-grande">⚠️ Cuidado — Los títulos NO son para "hacer letra grande"</h3>
+<p>Es tentador usar <code>&lt;h1&gt;</code> solo porque se ve grande. <strong>No lo hagas.</strong> Los encabezados comunican
+<em>estructura</em>, no tamaño: los buscadores (Google) y los lectores de pantalla los usan para
+entender de qué trata la página. Para cambiar el tamaño visual se usa <strong>CSS</strong> (módulo 02).
+Regla práctica: <strong>un solo <code>&lt;h1&gt;</code> por página</strong> (el tema principal), y debajo <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>…
+en orden, sin saltarte niveles.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <code>tunal-digital/sitio-web/index.html</code>, el <code>&lt;h1&gt;</code> es el mensaje principal de tu negocio.
+Las secciones (servicios, precios, contacto) son <code>&lt;h2&gt;</code>. Esa jerarquía es la que Google lee
+para posicionar tu sitio.</p>
+</blockquote>
+<hr />
+<h2 id="2-parrafos-y-texto">2. Párrafos y texto</h2>
+<blockquote class="def">
+<h3 id="que-significa-parrafo-p">🟦 ¿Qué significa? — <em>Párrafo <code>&lt;p&gt;</code></em></h3>
+<p>La etiqueta <code>&lt;p&gt;</code> (de <em>paragraph</em>) envuelve un bloque de texto. El navegador le pone espacio
+arriba y abajo automáticamente para separarlo de lo demás.</p>
+</blockquote>
+<p>Dentro de un párrafo puedes resaltar palabras con significado:</p>
+<blockquote class="def">
+<h3 id="que-significa-enfasis-semantico-strong-y-em">🟦 ¿Qué significa? — <em>Énfasis semántico: <code>&lt;strong&gt;</code> y <code>&lt;em&gt;</code></em></h3>
+<ul>
+<li><code>&lt;strong&gt;</code> marca algo <strong>importante</strong> (el navegador lo muestra en negrita).</li>
+<li><code>&lt;em&gt;</code> marca <em>énfasis</em> (lo muestra en cursiva; <em>em</em> = <em>emphasis</em>).
+<code>html
+&lt;p&gt;Esto es &lt;strong&gt;muy importante&lt;/strong&gt; y esto va con &lt;em&gt;énfasis&lt;/em&gt;.&lt;/p&gt;</code>
+La palabra clave es <strong>semántico</strong>: no usas <code>&lt;strong&gt;</code> "para poner negrita", sino "para decir
+que esto importa". El aspecto (negrita/cursiva) es una consecuencia, no el objetivo. ¿Por
+qué importa la distinción? Porque un lector de pantalla <em>cambia el tono de voz</em> en un
+<code>&lt;strong&gt;</code>, comunicando la importancia a quien no ve la pantalla.</li>
+</ul>
+<h3 id="que-significa-salto-de-linea-br-y-linea-divisoria-hr">🟦 ¿Qué significa? — <em>Salto de línea <code>&lt;br&gt;</code> y línea divisoria <code>&lt;hr&gt;</code></em></h3>
+<ul>
+<li><code>&lt;br&gt;</code> fuerza un <strong>salto de línea</strong> dentro de un texto (es un elemento "vacío", no se
+  cierra). Úsalo con moderación: para separar bloques, mejor usa párrafos.</li>
+<li><code>&lt;hr&gt;</code> dibuja una <strong>línea horizontal</strong> que separa temas (<em>horizontal rule</em>).</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="3-listas">3. Listas</h2>
+<p>Hay dos tipos principales, y se usan muchísimo (¡los menús de navegación son listas!).</p>
+<blockquote class="def">
+<h3 id="que-significa-lista-no-ordenada-ul-y-elementos-li">🟦 ¿Qué significa? — <em>Lista no ordenada <code>&lt;ul&gt;</code> y elementos <code>&lt;li&gt;</code></em></h3>
+<p>Una <strong>lista no ordenada</strong> (<em>unordered list</em>) muestra viñetas (puntos). Cada ítem va en un
+<code>&lt;li&gt;</code> (<em>list item</em>):
+<code>html
+&lt;ul&gt;
+  &lt;li&gt;Diseño web&lt;/li&gt;
+  &lt;li&gt;Automatización con IA&lt;/li&gt;
+  &lt;li&gt;Marketing&lt;/li&gt;
+&lt;/ul&gt;</code>
+Se ve como:
+- Diseño web
+- Automatización con IA
+- Marketing</p>
+<h3 id="que-significa-lista-ordenada-ol">🟦 ¿Qué significa? — <em>Lista ordenada <code>&lt;ol&gt;</code></em></h3>
+<p>Una <strong>lista ordenada</strong> (<em>ordered list</em>) numera automáticamente. Misma estructura, pero con
+<code>&lt;ol&gt;</code>. Úsala cuando el orden importa (pasos de una receta, un ranking).
+<code>html
+&lt;ol&gt;
+  &lt;li&gt;Calienta el agua&lt;/li&gt;
+  &lt;li&gt;Agrega el café&lt;/li&gt;
+  &lt;li&gt;Sirve&lt;/li&gt;
+&lt;/ol&gt;</code></p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>El menú de navegación de tu sitio es, por dentro, una <code>&lt;ul&gt;</code> con un <code>&lt;li&gt;</code> por cada enlace
+("Inicio", "Servicios", "Contacto"). Eso es lo correcto: un menú <strong>es</strong> una lista de opciones.</p>
+</blockquote>
+<hr />
+<h2 id="4-enlaces-el-corazon-de-la-web">4. Enlaces: el corazón de la web</h2>
+<blockquote class="def">
+<h3 id="que-significa-enlace-a-y-el-atributo-href">🟦 ¿Qué significa? — <em>Enlace <code>&lt;a&gt;</code> y el atributo <code>href</code></em></h3>
+<p>La etiqueta <code>&lt;a&gt;</code> (<em>anchor</em>, ancla) crea un <strong>enlace</strong>: texto en el que se hace clic para ir
+a otro sitio. El atributo <code>href</code> indica <strong>a dónde</strong> lleva.
+<code>html
+&lt;a href="https://tunaldigital.com"&gt;Visita mi sitio&lt;/a&gt;</code></p>
+</blockquote>
+<p>Hay tres destinos típicos:</p>
+<blockquote class="def">
+<h3 id="que-significa-enlace-externo-interno-y-ancla">🟦 ¿Qué significa? — <em>Enlace externo, interno y ancla</em></h3>
+<ul>
+<li><strong>Externo</strong> (a otra web): URL completa → <code>href="https://google.com"</code>.</li>
+<li><strong>Interno</strong> (a otra página de tu propio sitio): ruta relativa →
+  <code>href="contacto.html"</code> (busca ese archivo en tu sitio).</li>
+<li><strong>Ancla</strong> (a una sección de la misma página): empieza con <code>#</code> →
+  <code>href="#precios"</code> salta a un elemento con <code>id="precios"</code>.</li>
+</ul>
+<h3 id="tip-abrir-en-una-pestana-nueva">💡 Tip — Abrir en una pestaña nueva</h3>
+<p>Para que un enlace externo abra en otra pestaña (y el usuario no abandone tu sitio):
+<code>html
+&lt;a href="https://google.com" target="_blank" rel="noopener"&gt;Google&lt;/a&gt;</code>
+<code>target="_blank"</code> abre en pestaña nueva; <code>rel="noopener"</code> es una protección de seguridad
+recomendada al usar <code>_blank</code> (evita que la página abierta manipule la tuya).</p>
+<h3 id="que-significa-url-absoluta-vs-relativa">🟦 ¿Qué significa? — <em>URL absoluta vs. relativa</em></h3>
+<p>Una <strong>URL absoluta</strong> es la dirección completa (<code>https://tunaldigital.com/contacto.html</code>):
+funciona desde cualquier lugar. Una <strong>URL relativa</strong> (<code>contacto.html</code> o <code>./img/logo.png</code>) se
+interpreta <em>respecto a dónde estás ahora</em>. Para enlazar páginas de tu propio sitio se usan
+relativas; para sitios ajenos, absolutas. (Esto es lo mismo que viste con las <em>rutas</em> de
+archivos en el Módulo 00.)</p>
+</blockquote>
+<hr />
+<h2 id="5-imagenes">5. Imágenes</h2>
+<blockquote class="def">
+<h3 id="que-significa-imagen-img-y-sus-atributos-src-y-alt">🟦 ¿Qué significa? — <em>Imagen <code>&lt;img&gt;</code> y sus atributos <code>src</code> y <code>alt</code></em></h3>
+<p>La etiqueta <code>&lt;img&gt;</code> inserta una imagen. Es un elemento "vacío" (no se cierra). Necesita dos
+atributos clave:
+- <code>src</code> (<em>source</em>, fuente): la <strong>ruta</strong> del archivo de imagen.
+- <code>alt</code> (<em>alternative text</em>): una <strong>descripción en texto</strong> de la imagen.
+<code>html
+&lt;img src="img/logo.png" alt="Logo de Tunal Digital"&gt;</code></p>
+<h3 id="cuidado-el-alt-no-es-opcional">⚠️ Cuidado — El <code>alt</code> no es opcional</h3>
+<p>El texto <code>alt</code> cumple tres funciones importantísimas:
+1. Lo <strong>leen en voz alta</strong> los lectores de pantalla para personas ciegas.
+2. Se muestra si la imagen <strong>no carga</strong> (conexión lenta, ruta mal escrita).
+3. Lo usan los <strong>buscadores</strong> para entender la imagen.
+Descríbelo de forma útil ("Logo de Tunal Digital"), no "imagen1.png". Si una imagen es
+puramente decorativa, se pone <code>alt=""</code> (vacío) para que el lector de pantalla la ignore.</p>
+</blockquote>
+<hr />
+<h2 id="6-comentarios-en-html">6. Comentarios en HTML</h2>
+<blockquote class="def">
+<h3 id="que-significa-comentario">🟦 ¿Qué significa? — <em>Comentario</em></h3>
+<p>Un <strong>comentario</strong> es una nota que escribes en el código <strong>para ti o tu equipo</strong>, que el
+navegador <strong>ignora</strong> (no se muestra). En HTML se escribe así:
+<code>html
+&lt;!-- Esto es un comentario. No se ve en la página. --&gt;
+&lt;p&gt;Esto sí se ve.&lt;/p&gt;</code>
+<strong>¿Para qué sirve?</strong> Para dejar recordatorios ("aquí va el formulario de contacto") o para
+"apagar" temporalmente un trozo de código sin borrarlo. Todos los lenguajes tienen su forma
+de comentar; la irás viendo.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Uso los <strong>encabezados</strong> <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> por jerarquía, no por tamaño.</li>
+<li>[ ] Escribo <strong>párrafos</strong> y resalto con <code>&lt;strong&gt;</code> / <code>&lt;em&gt;</code> de forma <strong>semántica</strong>.</li>
+<li>[ ] Construyo <strong>listas</strong> ordenadas (<code>&lt;ol&gt;</code>) y no ordenadas (<code>&lt;ul&gt;</code>) con <code>&lt;li&gt;</code>.</li>
+<li>[ ] Creo <strong>enlaces</strong> <code>&lt;a href&gt;</code> externos, internos y de ancla (<code>#</code>).</li>
+<li>[ ] Inserto <strong>imágenes</strong> con <code>src</code> y un <strong><code>alt</code></strong> descriptivo.</li>
+<li>[ ] Sé escribir <strong>comentarios</strong> y para qué sirven.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Jerarquía.</strong> Estructura con encabezados (<code>h1</code>–<code>h3</code>) el índice de una página "Sobre mí":
+   un título principal, dos secciones ("Mi historia", "Mis servicios") y dos subsecciones
+   dentro de "Mis servicios".</li>
+<li><strong>¿<code>&lt;ul&gt;</code> u <code>&lt;ol&gt;</code>?</strong> Decide cuál usar para: (a) los pasos para instalar VS Code, (b) la
+   lista de tecnologías que usa tu sitio, (c) el podio de un concurso.</li>
+<li><strong>Tipos de enlace.</strong> Escribe tres enlaces: uno a <code>https://github.com</code>, uno a una página
+   <code>precios.html</code> de tu propio sitio, y uno que salte a una sección <code>#contacto</code> de la página
+   actual.</li>
+<li><strong>Arregla el <code>alt</code>.</strong> ¿Qué tiene de malo <code>&lt;img src="foto.jpg" alt="foto"&gt;</code> y cómo lo
+   mejorarías para una foto del equipo de tu agencia?</li>
+<li>💻 <strong>Página de contenido.</strong> Amplía tu <code>index.html</code> del capítulo anterior: añade un <code>&lt;h2&gt;</code>,
+   una lista <code>&lt;ul&gt;</code> con tres ítems, un enlace a tu sitio favorito y una imagen (puedes usar
+   cualquier imagen que tengas, ajustando el <code>src</code>). Ábrela y revísala.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="03-estructura-documento.html">Capítulo 03 — La estructura de un documento</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
