@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 08 — Formularios avanzados — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-08-formularios-avanzados">Capítulo 08 — Formularios avanzados</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>En el capítulo anterior aprendiste lo básico de los formularios: la etiqueta <code>&lt;form&gt;</code>, las cajas de texto y el botón de enviar. Ahora vamos a abrir el cofre completo. HTML trae muchos tipos de campos listos para usar (calendarios, selectores de color, deslizadores, subida de archivos) y además sabe revisar lo que escribe la persona antes de enviar nada. En este capítulo construirás, paso a paso, un formulario de contacto completo para tu sitio <strong>tunal-digital</strong>. Bit, el ajolote pixel art, te acompaña: hoy viene con casco de obra porque vamos a construir cosas serias.</p>
+</blockquote>
+<h2 id="1-repaso-rapido-que-es-un-formulario">1. Repaso rápido: ¿qué es un formulario?</h2>
+<p>Un formulario es la parte de una página web donde la persona <strong>escribe o elige algo</strong> y luego lo <strong>envía</strong>. Pensar en un formulario es pensar en un cuestionario de papel: tiene casillas, líneas para escribir y un botón al final.</p>
+<blockquote class="def">
+<h3 id="que-significa-formulario-form">🟦 ¿Qué significa? — <em>Formulario (<code>&lt;form&gt;</code>)</em></h3>
+<p>Es la etiqueta HTML que <strong>agrupa</strong> todos los campos que la persona va a rellenar y define qué pasa cuando se envían. Sirve para recoger datos: un nombre, un correo, un mensaje.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>), el formulario de contacto es la pieza que convierte a un visitante curioso en un mensaje que te llega a ti.</p>
+</blockquote>
+<p>Un esqueleto mínimo se ve así:</p>
+<pre><code class="language-html">&lt;form action=&quot;/enviar&quot; method=&quot;post&quot;&gt;
+  &lt;label for=&quot;nombre&quot;&gt;Tu nombre&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot;&gt;
+  &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-input">🟦 ¿Qué significa? — <em><code>&lt;input&gt;</code></em></h3>
+<p>Es la etiqueta más usada en formularios. Es una <strong>caja de entrada</strong> donde la persona escribe o elige. Lo mágico es que cambia completamente según su atributo <code>type</code>: con <code>type="text"</code> es una línea para escribir, con <code>type="date"</code> es un calendario, con <code>type="color"</code> es un selector de colores. Una sola etiqueta, muchas formas.</p>
+<h3 id="que-significa-atributo-type">🟦 ¿Qué significa? — <em>Atributo <code>type</code></em></h3>
+<p>Un <strong>atributo</strong> es información extra que le das a una etiqueta, escrita dentro de los <code>&lt; &gt;</code>. El atributo <code>type</code> le dice al <code>&lt;input&gt;</code> <strong>qué clase de campo</strong> debe ser. Cambiar <code>type</code> cambia cómo se ve y cómo se comporta el campo.</p>
+<h3 id="tip-name-es-el-nombre-id-es-la-direccion">💡 Tip — <code>name</code> es el nombre, <code>id</code> es la dirección</h3>
+<p>Casi todos los campos llevan dos atributos parecidos pero distintos: <code>name</code> es la <strong>etiqueta del dato</strong> que viaja cuando envías el formulario (el servidor lo recibe como <code>nombre=Edwar</code>). <code>id</code> es un identificador único dentro de la página, que sirve sobre todo para conectar el campo con su <code>&lt;label&gt;</code>. Sin <code>name</code>, el dato no se envía. Sin <code>id</code>, el <code>&lt;label&gt;</code> no sabe a quién apunta.</p>
+</blockquote>
+<h2 id="2-todos-los-tipos-de-input-uno-por-uno">2. Todos los tipos de <code>input</code> (uno por uno)</h2>
+<p>Vamos a recorrer los <code>type</code> más útiles. Para cada uno te muestro el código y para qué sirve. No tienes que memorizarlos: con tenerlos a mano y entender la idea, basta.</p>
+<h3 id="21-texto-correo-contrasena-los-que-ya-conoces">2.1 Texto, correo, contraseña (los que ya conoces)</h3>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; name=&quot;nombre&quot;&gt;
+&lt;input type=&quot;email&quot; name=&quot;correo&quot;&gt;
+&lt;input type=&quot;password&quot; name=&quot;clave&quot;&gt;
+</code></pre>
+<p><code>text</code> es una línea de escritura normal. <code>email</code> es igual, pero el navegador revisa que lo escrito tenga forma de correo (con <code>@</code>). <code>password</code> oculta lo que se escribe con puntitos.</p>
+<h3 id="22-number-solo-numeros">2.2 <code>number</code> — solo números</h3>
+<pre><code class="language-html">&lt;label for=&quot;cantidad&quot;&gt;¿Cuántas páginas web necesitas?&lt;/label&gt;
+&lt;input type=&quot;number&quot; id=&quot;cantidad&quot; name=&quot;cantidad&quot; min=&quot;1&quot; max=&quot;10&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-typenumber">🟦 ¿Qué significa? — <em><code>type="number"</code></em></h3>
+<p>Es un campo que <strong>solo acepta números</strong>. En el celular hace que aparezca el teclado numérico, y suele mostrar flechitas para subir o bajar el valor. Sirve para edades, cantidades, precios.</p>
+</blockquote>
+<p>Los atributos <code>min</code> y <code>max</code> ponen un límite: en el ejemplo, no se puede pedir menos de 1 ni más de 10.</p>
+<h3 id="23-date-un-calendario">2.3 <code>date</code> — un calendario</h3>
+<pre><code class="language-html">&lt;label for=&quot;fecha&quot;&gt;¿Para cuándo lo necesitas?&lt;/label&gt;
+&lt;input type=&quot;date&quot; id=&quot;fecha&quot; name=&quot;fecha&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-typedate">🟦 ¿Qué significa? — <em><code>type="date"</code></em></h3>
+<p>Convierte el campo en un <strong>selector de fecha</strong>: al hacer clic aparece un calendario y la persona elige el día. Así nadie escribe fechas raras como "el martes que viene". Sirve para reservas, plazos, cumpleaños.</p>
+</blockquote>
+<h3 id="24-range-un-deslizador">2.4 <code>range</code> — un deslizador</h3>
+<pre><code class="language-html">&lt;label for=&quot;presupuesto&quot;&gt;Presupuesto aproximado&lt;/label&gt;
+&lt;input type=&quot;range&quot; id=&quot;presupuesto&quot; name=&quot;presupuesto&quot; min=&quot;0&quot; max=&quot;2000&quot; step=&quot;100&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-typerange">🟦 ¿Qué significa? — <em><code>type="range"</code></em></h3>
+<p>Es una <strong>barra deslizante</strong> (como el control de volumen). La persona arrastra un botón de un lado a otro para elegir un valor entre un mínimo y un máximo. Sirve cuando el número exacto no importa tanto como la sensación de "más o menos por aquí".</p>
+<h3 id="que-significa-atributo-step">🟦 ¿Qué significa? — <em>Atributo <code>step</code></em></h3>
+<p>Define <strong>de cuánto en cuánto</strong> salta el valor. Con <code>step="100"</code>, el deslizador se mueve de 100 en 100 (0, 100, 200…). Sin <code>step</code>, salta de uno en uno.</p>
+</blockquote>
+<h3 id="25-color-elegir-un-color">2.5 <code>color</code> — elegir un color</h3>
+<pre><code class="language-html">&lt;label for=&quot;color&quot;&gt;Color favorito de tu marca&lt;/label&gt;
+&lt;input type=&quot;color&quot; id=&quot;color&quot; name=&quot;color&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-typecolor">🟦 ¿Qué significa? — <em><code>type="color"</code></em></h3>
+<p>Muestra un <strong>selector de color</strong> nativo del sistema. La persona elige un color y el formulario guarda su código (algo como <code>#1d4ed8</code>). Te puede servir, por ejemplo, para que un cliente de <strong>tunal-digital</strong> te diga el color que imagina para su sitio.</p>
+</blockquote>
+<h3 id="26-file-subir-un-archivo">2.6 <code>file</code> — subir un archivo</h3>
+<pre><code class="language-html">&lt;label for=&quot;logo&quot;&gt;Sube tu logo (opcional)&lt;/label&gt;
+&lt;input type=&quot;file&quot; id=&quot;logo&quot; name=&quot;logo&quot; accept=&quot;image/*&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-typefile">🟦 ¿Qué significa? — <em><code>type="file"</code></em></h3>
+<p>Crea un botón de <strong>"elegir archivo"</strong>. Al pulsarlo, se abre el explorador del dispositivo para que la persona seleccione un archivo (una imagen, un PDF). Sirve para que alguien adjunte su logo, una foto o un documento.</p>
+<h3 id="que-significa-atributo-accept">🟦 ¿Qué significa? — <em>Atributo <code>accept</code></em></h3>
+<p>Le dice al campo <strong>qué tipos de archivo</strong> aceptar. <code>accept="image/*"</code> significa "cualquier imagen". Así evitas que alguien intente subir un video de 2 GB sin querer.</p>
+</blockquote>
+<h3 id="27-search-url-y-tel">2.7 <code>search</code>, <code>url</code> y <code>tel</code></h3>
+<pre><code class="language-html">&lt;input type=&quot;search&quot; name=&quot;buscar&quot; placeholder=&quot;Buscar...&quot;&gt;
+&lt;input type=&quot;url&quot; name=&quot;sitio&quot; placeholder=&quot;https://ejemplo.com&quot;&gt;
+&lt;input type=&quot;tel&quot; name=&quot;telefono&quot; placeholder=&quot;+1 202 555 0199&quot;&gt;
+</code></pre>
+<ul>
+<li><code>search</code> se ve casi como <code>text</code>, pero algunos navegadores le añaden una "x" para borrar rápido. Está pensado para cajas de búsqueda.</li>
+<li><code>url</code> revisa que lo escrito tenga forma de dirección web (con <code>http://</code> o <code>https://</code>).</li>
+<li><code>tel</code> no revisa el formato (los teléfonos varían mucho por país), pero en el celular muestra el <strong>teclado de marcación</strong>, con números grandes.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-placeholder">🟦 ¿Qué significa? — <em><code>placeholder</code></em></h3>
+<p>Es el <strong>texto gris de ejemplo</strong> que aparece dentro de un campo vacío y desaparece cuando empiezas a escribir. Sirve de pista ("escribe aquí tu correo"). Ojo: no reemplaza al <code>&lt;label&gt;</code>, porque desaparece al escribir y la gente puede perderse.</p>
+<h3 id="cuidado-el-navegador-valida-pero-no-es-tu-guardia-de-seguridad">⚠️ Cuidado — El navegador valida, pero no es tu guardia de seguridad</h3>
+<p>Que el navegador revise un correo o una URL es comodidad para la persona, no protección de verdad. Alguien con malas intenciones puede saltarse todo eso. La validación <strong>seria</strong> siempre se hace en el servidor. En <strong>tunal-digital</strong>, eso ocurre en el Cloudflare Worker que recibe el mensaje, no en el HTML.</p>
+</blockquote>
+<h2 id="3-listas-de-opciones-select-option-y-optgroup">3. Listas de opciones: <code>select</code>, <code>option</code> y <code>optgroup</code></h2>
+<p>Cuando quieres que la persona <strong>elija de una lista cerrada</strong> (en vez de escribir libremente), usas un menú desplegable.</p>
+<pre><code class="language-html">&lt;label for=&quot;servicio&quot;&gt;¿Qué servicio te interesa?&lt;/label&gt;
+&lt;select id=&quot;servicio&quot; name=&quot;servicio&quot;&gt;
+  &lt;option value=&quot;&quot;&gt;— Elige una opción —&lt;/option&gt;
+  &lt;option value=&quot;landing&quot;&gt;Página de aterrizaje&lt;/option&gt;
+  &lt;option value=&quot;tienda&quot;&gt;Tienda en línea&lt;/option&gt;
+  &lt;option value=&quot;rediseno&quot;&gt;Rediseño de mi web actual&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-select-y-option">🟦 ¿Qué significa? — <em><code>&lt;select&gt;</code> y <code>&lt;option&gt;</code></em></h3>
+<p><code>&lt;select&gt;</code> es el <strong>menú desplegable</strong> (la cajita que se abre al pulsarla). Dentro van varias <code>&lt;option&gt;</code>, que son <strong>cada una de las opciones</strong> que la persona puede elegir. El atributo <code>value</code> de cada <code>&lt;option&gt;</code> es el dato que se envía; el texto entre las etiquetas es lo que la persona ve.</p>
+</blockquote>
+<p>Cuando hay muchas opciones, puedes <strong>agruparlas</strong> para que se lean mejor:</p>
+<pre><code class="language-html">&lt;select id=&quot;servicio&quot; name=&quot;servicio&quot;&gt;
+  &lt;optgroup label=&quot;Sitios web&quot;&gt;
+    &lt;option value=&quot;landing&quot;&gt;Página de aterrizaje&lt;/option&gt;
+    &lt;option value=&quot;tienda&quot;&gt;Tienda en línea&lt;/option&gt;
+  &lt;/optgroup&gt;
+  &lt;optgroup label=&quot;Mantenimiento&quot;&gt;
+    &lt;option value=&quot;rediseno&quot;&gt;Rediseño&lt;/option&gt;
+    &lt;option value=&quot;soporte&quot;&gt;Soporte mensual&lt;/option&gt;
+  &lt;/optgroup&gt;
+&lt;/select&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-optgroup">🟦 ¿Qué significa? — <em><code>&lt;optgroup&gt;</code></em></h3>
+<p>Es una <strong>cabecera de grupo</strong> dentro de un <code>&lt;select&gt;</code>. Pone un título (con el atributo <code>label</code>) sobre un conjunto de opciones, como las secciones de un menú de restaurante. No se puede elegir; solo organiza. Sirve cuando tienes muchas opciones y quieres ordenarlas por categorías.</p>
+<h3 id="tip-la-primera-opcion-como-instruccion">💡 Tip — La primera opción como instrucción</h3>
+<p>Es buena costumbre poner una primera <code>&lt;option&gt;</code> con <code>value=""</code> y un texto como "— Elige una opción —". Así el desplegable arranca sin nada elegido y la persona entiende que tiene que decidir. Combinado con <code>required</code> (lo verás abajo), obliga a elegir algo de verdad.</p>
+</blockquote>
+<h2 id="4-datalist-sugerencias-mientras-escribes">4. <code>datalist</code>: sugerencias mientras escribes</h2>
+<p>A veces quieres lo mejor de dos mundos: que la persona <strong>escriba libremente</strong>, pero ofreciéndole <strong>sugerencias</strong>. Eso es <code>datalist</code>.</p>
+<pre><code class="language-html">&lt;label for=&quot;ciudad&quot;&gt;¿Desde qué ciudad nos escribes?&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;ciudad&quot; name=&quot;ciudad&quot; list=&quot;ciudades&quot;&gt;
+&lt;datalist id=&quot;ciudades&quot;&gt;
+  &lt;option value=&quot;Bogotá&quot;&gt;&lt;/option&gt;
+  &lt;option value=&quot;Medellín&quot;&gt;&lt;/option&gt;
+  &lt;option value=&quot;Washington D. C.&quot;&gt;&lt;/option&gt;
+&lt;/datalist&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-datalist">🟦 ¿Qué significa? — <em><code>&lt;datalist&gt;</code></em></h3>
+<p>Es una <strong>lista de sugerencias</strong> que se asocia a un <code>&lt;input&gt;</code> de texto. Mientras la persona escribe, el navegador le ofrece opciones que coinciden, pero <strong>también puede escribir algo que no esté en la lista</strong>. La conexión se hace con el atributo <code>list</code> del input, que debe coincidir con el <code>id</code> del <code>&lt;datalist&gt;</code>.</p>
+</blockquote>
+<p>La diferencia con <code>&lt;select&gt;</code>: el <code>select</code> te <strong>obliga</strong> a elegir de la lista; el <code>datalist</code> solo <strong>sugiere</strong> y deja escribir libremente.</p>
+<h2 id="5-organizar-el-formulario-fieldset-y-legend">5. Organizar el formulario: <code>fieldset</code> y <code>legend</code></h2>
+<p>Cuando un formulario crece, conviene agrupar campos relacionados con una caja y un título.</p>
+<pre><code class="language-html">&lt;fieldset&gt;
+  &lt;legend&gt;Tus datos de contacto&lt;/legend&gt;
+
+  &lt;label for=&quot;nombre&quot;&gt;Nombre&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot;&gt;
+
+  &lt;label for=&quot;correo&quot;&gt;Correo&lt;/label&gt;
+  &lt;input type=&quot;email&quot; id=&quot;correo&quot; name=&quot;correo&quot;&gt;
+&lt;/fieldset&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-fieldset-y-legend">🟦 ¿Qué significa? — <em><code>&lt;fieldset&gt;</code> y <code>&lt;legend&gt;</code></em></h3>
+<p><code>&lt;fieldset&gt;</code> dibuja un <strong>recuadro que agrupa</strong> varios campos relacionados. <code>&lt;legend&gt;</code> es el <strong>título de ese recuadro</strong>, que aparece encajado en el borde superior. Sirven para ordenar formularios largos en bloques con sentido ("Datos de contacto", "Detalles del proyecto") y, además, ayudan a las personas que usan lectores de pantalla a entender la estructura.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong> podrías partir tu formulario de contacto en dos <code>fieldset</code>: uno para "Quién eres" (nombre, correo, teléfono) y otro para "Qué necesitas" (servicio, presupuesto, mensaje). Visualmente queda más respirado y la persona se pierde menos.</p>
+</blockquote>
+<h2 id="6-validacion-pedir-que-los-datos-vengan-bien">6. Validación: pedir que los datos vengan bien</h2>
+<p>La gran ventaja de los formularios modernos es que el navegador puede <strong>revisar lo que se escribió antes de enviar</strong> y avisar si falta algo o está mal. A esto se le llama validación.</p>
+<blockquote class="def">
+<h3 id="que-significa-validacion">🟦 ¿Qué significa? — <em>Validación</em></h3>
+<p>Es <strong>comprobar que los datos cumplen unas reglas</strong> antes de aceptarlos. Por ejemplo: que el correo tenga <code>@</code>, que el mensaje no esté vacío, que el teléfono tenga al menos 7 dígitos. HTML trae varias reglas listas para usar como atributos.</p>
+</blockquote>
+<h3 id="61-required-obligatorio">6.1 <code>required</code> — obligatorio</h3>
+<pre><code class="language-html">&lt;input type=&quot;email&quot; name=&quot;correo&quot; required&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-required">🟦 ¿Qué significa? — <em><code>required</code></em></h3>
+<p>Marca un campo como <strong>obligatorio</strong>. Si la persona intenta enviar el formulario dejándolo vacío, el navegador lo impide y muestra un aviso. Sirve para los datos sin los cuales el formulario no tiene sentido (un mensaje de contacto sin correo no sirve de mucho).</p>
+</blockquote>
+<h3 id="62-minlength-y-maxlength-longitud-del-texto">6.2 <code>minlength</code> y <code>maxlength</code> — longitud del texto</h3>
+<pre><code class="language-html">&lt;textarea name=&quot;mensaje&quot; minlength=&quot;10&quot; maxlength=&quot;500&quot; required&gt;&lt;/textarea&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-minlength-y-maxlength">🟦 ¿Qué significa? — <em><code>minlength</code> y <code>maxlength</code></em></h3>
+<p>Controlan <strong>cuántos caracteres</strong> puede tener un campo de texto. <code>minlength="10"</code> pide al menos 10 caracteres (para evitar mensajes de una sola palabra). <code>maxlength="500"</code> impide pasar de 500. Sirven para que los mensajes no sean ni demasiado cortos ni infinitos.</p>
+</blockquote>
+<h3 id="63-min-y-max-rango-de-numeros-o-fechas">6.3 <code>min</code> y <code>max</code> — rango de números o fechas</h3>
+<p>Ya los viste con <code>number</code> y <code>range</code>. También funcionan con <code>date</code>:</p>
+<pre><code class="language-html">&lt;input type=&quot;date&quot; name=&quot;fecha&quot; min=&quot;2026-07-01&quot;&gt;
+</code></pre>
+<p>Así no se puede elegir una fecha anterior al 1 de julio de 2026.</p>
+<h3 id="64-pattern-un-molde-exacto">6.4 <code>pattern</code> — un molde exacto</h3>
+<pre><code class="language-html">&lt;label for=&quot;codigo&quot;&gt;Código postal (5 dígitos)&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;codigo&quot; name=&quot;codigo&quot; pattern=&quot;[0-9]{5}&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-pattern">🟦 ¿Qué significa? — <em><code>pattern</code></em></h3>
+<p>Define un <strong>molde</strong> que el texto debe cumplir, escrito con un lenguaje llamado "expresión regular". En el ejemplo, <code>[0-9]{5}</code> significa "exactamente 5 caracteres, y todos números del 0 al 9". Si no encaja, el navegador no deja enviar. Sirve para formatos estrictos: códigos postales, identificadores, etc.</p>
+<h3 id="tip-acompana-siempre-pattern-con-un-title">💡 Tip — Acompaña siempre <code>pattern</code> con un <code>title</code></h3>
+<p>Las expresiones regulares no las entiende nadie a simple vista. Añade un atributo <code>title</code> explicando la regla en palabras: <code>title="Escribe 5 números"</code>. El navegador lo mostrará si la persona se equivoca, y se lo agradecerá.</p>
+<h3 id="cuidado-no-abuses-de-la-validacion-estricta">⚠️ Cuidado — No abuses de la validación estricta</h3>
+<p>Es tentador exigir formatos perfectos, pero recuerda que tus visitantes escriben desde el celular, con prisa. Un teléfono con espacios o un correo con mayúsculas deberían poder pasar. Valida lo justo: obligatorio sí, pero no pongas un <code>pattern</code> tan rígido que ahuyente a un cliente real.</p>
+</blockquote>
+<h2 id="7-autocomplete-que-el-navegador-eche-una-mano">7. <code>autocomplete</code>: que el navegador eche una mano</h2>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; name=&quot;nombre&quot; autocomplete=&quot;name&quot;&gt;
+&lt;input type=&quot;email&quot; name=&quot;correo&quot; autocomplete=&quot;email&quot;&gt;
+&lt;input type=&quot;tel&quot; name=&quot;telefono&quot; autocomplete=&quot;tel&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-autocomplete">🟦 ¿Qué significa? — <em><code>autocomplete</code></em></h3>
+<p>Le dice al navegador <strong>qué dato representa el campo</strong>, para que pueda ofrecer rellenarlo automáticamente con información que la persona ya guardó (su nombre, su correo, su dirección). Con <code>autocomplete="email"</code>, al tocar el campo aparece su correo como sugerencia. Sirve para que rellenar el formulario sea más rápido y cómodo.</p>
+</blockquote>
+<p>Valores comunes: <code>name</code>, <code>email</code>, <code>tel</code>, <code>street-address</code>, <code>postal-code</code>, <code>organization</code>. También existe <code>autocomplete="off"</code> para apagarlo en campos donde no quieres sugerencias.</p>
+<h2 id="8-accesibilidad-que-cualquier-persona-pueda-usarlo">8. Accesibilidad: que cualquier persona pueda usarlo</h2>
+<blockquote class="def">
+<h3 id="que-significa-accesibilidad">🟦 ¿Qué significa? — <em>Accesibilidad</em></h3>
+<p>Es diseñar para que <strong>todas las personas</strong> puedan usar tu sitio, incluidas quienes navegan con el teclado, con lectores de pantalla (programas que leen la página en voz alta) o con baja visión. No es un extra: es parte de hacer las cosas bien.</p>
+</blockquote>
+<p>Tres reglas de oro para formularios accesibles:</p>
+<ol>
+<li><strong>Cada campo con su <code>&lt;label&gt;</code>.</strong> Y conectado con <code>for</code> e <code>id</code>.</li>
+</ol>
+<pre><code class="language-html">&lt;label for=&quot;correo&quot;&gt;Tu correo&lt;/label&gt;
+&lt;input type=&quot;email&quot; id=&quot;correo&quot; name=&quot;correo&quot;&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-label">🟦 ¿Qué significa? — <em><code>&lt;label&gt;</code></em></h3>
+<p>Es la <strong>etiqueta de texto</strong> que dice qué se escribe en un campo. El atributo <code>for</code> del label debe coincidir con el <code>id</code> del input. Así, al tocar el texto, el cursor salta al campo, y los lectores de pantalla anuncian "Tu correo, campo de texto". Sirve para que nadie tenga dudas de qué va en cada caja.</p>
+</blockquote>
+<ol start="2">
+<li>
+<p><strong>No uses solo el color para avisar de errores.</strong> Si un campo está mal, acompáñalo de texto, no solo de un borde rojo (hay personas que no distinguen el rojo).</p>
+</li>
+<li>
+<p><strong>Orden lógico.</strong> Los campos deben seguir un orden natural de arriba abajo, para que se puedan recorrer con la tecla Tab sin saltos raros.</p>
+</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip-bit-dice-prueba-sin-raton">💡 Tip — Bit dice: prueba sin ratón</h3>
+<p>Bit te reta a algo: abre tu formulario y recórrelo <strong>solo con el teclado</strong>, usando Tab para avanzar y Enter para enviar. Si puedes completarlo entero sin tocar el ratón, vas muy bien. Si te trabas, ahí tienes algo que mejorar.</p>
+</blockquote>
+<h2 id="9-el-formulario-de-contacto-de-tunal-digital-todo-junto">9. El formulario de contacto de tunal-digital (todo junto)</h2>
+<p>Ahora juntamos todo lo aprendido en un formulario real para tu sitio. Este código iría dentro del <code>&lt;body&gt;</code> de <code>sitio-web/index.html</code>.</p>
+<pre><code class="language-html">&lt;form action=&quot;/api/contacto&quot; method=&quot;post&quot; autocomplete=&quot;on&quot;&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Cuéntanos quién eres&lt;/legend&gt;
+
+    &lt;label for=&quot;nombre&quot;&gt;Nombre&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot;
+           autocomplete=&quot;name&quot; required minlength=&quot;2&quot;&gt;
+
+    &lt;label for=&quot;correo&quot;&gt;Correo electrónico&lt;/label&gt;
+    &lt;input type=&quot;email&quot; id=&quot;correo&quot; name=&quot;correo&quot;
+           autocomplete=&quot;email&quot; required
+           placeholder=&quot;tucorreo@ejemplo.com&quot;&gt;
+
+    &lt;label for=&quot;telefono&quot;&gt;Teléfono (opcional)&lt;/label&gt;
+    &lt;input type=&quot;tel&quot; id=&quot;telefono&quot; name=&quot;telefono&quot;
+           autocomplete=&quot;tel&quot; placeholder=&quot;+1 202 555 0199&quot;&gt;
+  &lt;/fieldset&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Cuéntanos qué necesitas&lt;/legend&gt;
+
+    &lt;label for=&quot;servicio&quot;&gt;Servicio que te interesa&lt;/label&gt;
+    &lt;select id=&quot;servicio&quot; name=&quot;servicio&quot; required&gt;
+      &lt;option value=&quot;&quot;&gt;— Elige una opción —&lt;/option&gt;
+      &lt;optgroup label=&quot;Sitios web&quot;&gt;
+        &lt;option value=&quot;landing&quot;&gt;Página de aterrizaje&lt;/option&gt;
+        &lt;option value=&quot;tienda&quot;&gt;Tienda en línea&lt;/option&gt;
+      &lt;/optgroup&gt;
+      &lt;optgroup label=&quot;Otros&quot;&gt;
+        &lt;option value=&quot;rediseno&quot;&gt;Rediseño de mi web&lt;/option&gt;
+        &lt;option value=&quot;soporte&quot;&gt;Soporte y mantenimiento&lt;/option&gt;
+      &lt;/optgroup&gt;
+    &lt;/select&gt;
+
+    &lt;label for=&quot;presupuesto&quot;&gt;Presupuesto aproximado (USD)&lt;/label&gt;
+    &lt;input type=&quot;range&quot; id=&quot;presupuesto&quot; name=&quot;presupuesto&quot;
+           min=&quot;0&quot; max=&quot;3000&quot; step=&quot;250&quot; value=&quot;1000&quot;&gt;
+
+    &lt;label for=&quot;fecha&quot;&gt;¿Para cuándo lo necesitas?&lt;/label&gt;
+    &lt;input type=&quot;date&quot; id=&quot;fecha&quot; name=&quot;fecha&quot; min=&quot;2026-07-01&quot;&gt;
+
+    &lt;label for=&quot;mensaje&quot;&gt;Tu mensaje&lt;/label&gt;
+    &lt;textarea id=&quot;mensaje&quot; name=&quot;mensaje&quot; required
+              minlength=&quot;10&quot; maxlength=&quot;600&quot;
+              placeholder=&quot;Cuéntame brevemente tu proyecto...&quot;&gt;&lt;/textarea&gt;
+  &lt;/fieldset&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;Enviar mensaje&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Fíjate en <code>action="/api/contacto"</code>: esa ruta es la que recibirá los datos. En <strong>tunal-digital</strong>, ahí entra tu <strong>Cloudflare Worker</strong> (escrito en <code>main.js</code> o en un archivo de Worker aparte), que recibe el mensaje, puede pasarlo por la <strong>API de Claude</strong> para resumirlo o clasificarlo, y te lo hace llegar. El HTML solo recoge y entrega; la lógica vive en el servidor. Por eso los tokens y claves nunca van en el HTML del cliente.</p>
+<h3 id="cuidado-value-en-range-evita-el-medio-raro">⚠️ Cuidado — <code>value</code> en <code>range</code> evita el "medio raro"</h3>
+<p>Si no pones <code>value</code> en el deslizador, arranca en la mitad y muchas personas ni lo tocan. Darle un <code>value="1000"</code> de salida deja un punto de partida sensato. Igual recuerda mostrar el número elegido en pantalla con un poquito de JavaScript, porque un deslizador sin número es adivinar a ciegas.</p>
+<h3 id="tip-este-patron-se-repite-en-todos-tus-proyectos">💡 Tip — Este patrón se repite en todos tus proyectos</h3>
+<p>Los <code>&lt;input&gt;</code>, <code>&lt;label&gt;</code> y la validación que viste aquí son HTML puro, así que funcionan igual en <strong>tunal-digital</strong>. Pero la idea viaja: en <strong>RachaSimple</strong> (React) escribirás campos parecidos dentro de componentes <code>.tsx</code>, y en <strong>Faro</strong> (Next.js) los formularios de conexión también parten de estos mismos elementos. Aprender bien el formulario en HTML te ahorra confusión en todo lo demás.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que <code>type</code> cambia por completo lo que hace un <code>&lt;input&gt;</code>.</li>
+<li>[ ] Reconozco los tipos <code>text</code>, <code>email</code>, <code>password</code>, <code>number</code>, <code>date</code>, <code>range</code>, <code>color</code>, <code>file</code>, <code>search</code>, <code>url</code> y <code>tel</code>.</li>
+<li>[ ] Entiendo la diferencia entre <code>name</code> (dato que se envía) e <code>id</code> (identificador en la página).</li>
+<li>[ ] Sé crear un menú desplegable con <code>&lt;select&gt;</code> y <code>&lt;option&gt;</code>, y agruparlo con <code>&lt;optgroup&gt;</code>.</li>
+<li>[ ] Distingo <code>datalist</code> (sugiere, deja escribir) de <code>select</code> (obliga a elegir).</li>
+<li>[ ] Uso <code>fieldset</code> y <code>legend</code> para ordenar formularios largos.</li>
+<li>[ ] Sé validar con <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code> y <code>pattern</code>.</li>
+<li>[ ] Conecto cada campo con su <code>&lt;label&gt;</code> usando <code>for</code> e <code>id</code>.</li>
+<li>[ ] Entiendo que la validación del navegador es comodidad, no seguridad: lo serio se hace en el servidor.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>💻 Reproduce el formulario de contacto</strong> de la sección 9 dentro de tu <code>sitio-web/index.html</code>. Ábrelo en el navegador y comprueba que se ve.</p>
+</li>
+<li>
+<p><strong>💻 Rompe las reglas a propósito.</strong> Intenta enviar el formulario con el correo vacío y con un mensaje de solo 3 letras. Observa qué avisos muestra el navegador. ¿Se entienden?</p>
+</li>
+<li>
+<p><strong>💻 Añade un campo nuevo.</strong> Agrega un <code>&lt;input type="color"&gt;</code> con su <code>&lt;label&gt;</code> para que el cliente elija el color de su marca. Dale un <code>id</code>, un <code>name</code> y conéctalo bien con el label.</p>
+</li>
+<li>
+<p><strong>💻 Crea un <code>datalist</code></strong> para el campo "¿Cómo nos conociste?" con sugerencias como "Instagram", "Recomendación", "Google", pero permitiendo escribir otra cosa.</p>
+</li>
+<li>
+<p><strong>Sin computadora:</strong> dibuja en papel tu formulario y, junto a cada campo, anota qué <code>type</code> usarías y qué reglas de validación (<code>required</code>, <code>min</code>, <code>pattern</code>...) le pondrías. Justifica cada decisión en una línea.</p>
+</li>
+<li>
+<p><strong>💻 Reto de accesibilidad (de Bit):</strong> recorre tu formulario completo usando solo el teclado (Tab y Enter). Si algún campo no se selecciona o se salta de orden, arréglalo. Apunta qué cambiaste.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

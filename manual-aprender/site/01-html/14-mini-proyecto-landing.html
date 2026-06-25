@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 14 — Mini-proyecto: una landing page completa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-mini-proyecto-una-landing-page-completa">Capítulo 14 — Mini-proyecto: una landing page completa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Llegaste al gran momento del módulo de HTML: vas a construir, con tus propias manos y solo con HTML, una <strong>landing page</strong> completa para un negocio. Nada de copiar y pegar a ciegas: vamos paso a paso, etiqueta por etiqueta, entendiendo <em>por qué</em> va cada cosa donde va. Al terminar tendrás una página de verdad, con su menú, sus secciones y hasta un formulario de contacto. Bit, nuestro ajolote pixel art, va a estar a tu lado dándote ánimos (y de vez en cuando moviendo sus branquias de la emoción). ¿List@? Respira, abre tu editor y vamos. 💻</p>
+<h3 id="que-significa-landing-page">🟦 ¿Qué significa? — <em>Landing page</em></h3>
+<p>Es una <strong>página web pensada para recibir a quien llega</strong> (en inglés <em>to land</em> es "aterrizar"). Suele ser una sola página que cuenta quién eres, qué ofreces y cómo te pueden contactar. <strong>¿Para qué sirve?</strong> Para dar una primera impresión clara y hacer que la persona haga algo: escribirte, comprar, registrarse.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong> justamente: el archivo <code>sitio-web/index.html</code> es la landing del negocio. En este capítulo construimos una versión mínima de esa idea.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-vamos-a-construir-mirar-el-plano-antes-de-clavar-el-primer-clavo">1. Qué vamos a construir (mirar el plano antes de clavar el primer clavo)</h2>
+<p>Antes de escribir código, imaginemos la página como una casa vista de frente. De arriba hacia abajo tendrá cuatro grandes piezas:</p>
+<ol>
+<li>Un <strong>header</strong> (encabezado) con el nombre del negocio y un <strong>menú de navegación</strong>.</li>
+<li>Un <strong>main</strong> (contenido principal) con tres secciones: <strong>servicios</strong>, <strong>sobre nosotros</strong> y <strong>contacto</strong> (con formulario).</li>
+<li>Un <strong>footer</strong> (pie de página) con un mensajito y el año.</li>
+</ol>
+<p>Vamos a llamar al negocio <strong>"Tunal Digital"</strong>, igual que tu proyecto real, para que se sienta cercano. Pero todo lo que aprendas aquí sirve para cualquier negocio: una panadería, un salón de uñas, un taller mecánico.</p>
+<blockquote class="tip">
+<h3 id="tip-dibuja-antes-de-teclear">💡 Tip — Dibuja antes de teclear</h3>
+<p>Tomar una hoja y dibujar rectángulos (header arriba, secciones en medio, footer abajo) te ahorra muchísimo tiempo. Programar es, en buena parte, <em>pensar antes de escribir</em>. A esto se le llama <strong>maquetar</strong> o <strong>bosquejar</strong>.</p>
+<h3 id="que-significa-semantica-html-semantico">🟦 ¿Qué significa? — <em>Semántica (HTML semántico)</em></h3>
+<p>"Semántico" quiere decir que cada etiqueta <strong>describe lo que contiene</strong>, no solo cómo se ve. Usar <code>&lt;header&gt;</code> en vez de un <code>&lt;div&gt;</code> cualquiera le dice al navegador (y a Google, y a los lectores de pantalla) "esto es el encabezado". <strong>¿Para qué sirve?</strong> Para que tu página sea más fácil de entender por máquinas y por personas con discapacidad. Es buena educación digital.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-esqueleto-base-la-plantilla-minima-de-toda-pagina">2. El esqueleto base (la plantilla mínima de toda página)</h2>
+<p>Empecemos por el cascarón. Crea un archivo nuevo llamado <code>index.html</code> y escribe esto:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;Tunal Digital — Sitios web para tu negocio&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!-- Aquí irá todo lo que se ve --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Repasemos rapidito, porque ya viste estas piezas en capítulos anteriores:</p>
+<blockquote class="def">
+<h3 id="que-significa-doctype-html">🟦 ¿Qué significa? — <em><code>&lt;!DOCTYPE html&gt;</code></em></h3>
+<p>Es la <strong>primera línea</strong> que le avisa al navegador "esto es HTML moderno". <strong>¿Para qué sirve?</strong> Para que el navegador no entre en un modo viejo y raro. Va siempre arriba del todo, una sola vez.</p>
+<h3 id="que-significa-atributo-langes">🟦 ¿Qué significa? — <em>Atributo <code>lang="es"</code></em></h3>
+<p>Un <strong>atributo</strong> es información extra que le ponemos a una etiqueta. Aquí <code>lang="es"</code> significa "el idioma de esta página es español". <strong>¿Para qué sirve?</strong> Ayuda a buscadores y a lectores de pantalla a pronunciar bien. Como tu manual y tus proyectos son en español, esto es lo correcto.</p>
+<h3 id="que-significa-meta-charsetutf-8">🟦 ¿Qué significa? — <em><code>&lt;meta charset="UTF-8"&gt;</code></em></h3>
+<p>Define el <strong>juego de caracteres</strong>: el conjunto de letras y símbolos que la página entiende. UTF-8 incluye tildes, ñ, ¿, ¡ y emojis. <strong>¿Para qué sirve?</strong> Para que "diseño", "niño" o "café" no salgan con símbolos rotos.</p>
+<h3 id="que-significa-meta-nameviewport">🟦 ¿Qué significa? — <em><code>&lt;meta name="viewport" ...&gt;</code></em></h3>
+<p>El <strong>viewport</strong> es el área visible de la pantalla. Esta línea le dice "ajústate al ancho del dispositivo". <strong>¿Para qué sirve?</strong> Para que la página se vea bien en el celular y no diminuta. Es la base de lo que se llama diseño <em>responsive</em> (adaptable).</p>
+<h3 id="cuidado-lo-del-head-no-se-ve-pero-importa">⚠️ Cuidado — Lo del <code>&lt;head&gt;</code> no se ve, pero importa</h3>
+<p>Todo lo de adentro de <code>&lt;head&gt;</code> es información <strong>para el navegador</strong>, no para el visitante. Si olvidas el <code>charset</code>, tu página <em>parece</em> funcionar... hasta que aparece "Diseño" en vez de "Diseño". Pequeños detalles, grandes dolores de cabeza.</p>
+</blockquote>
+<p>A partir de aquí, todo lo que escribamos va <strong>dentro de <code>&lt;body&gt;</code></strong>, donde dice el comentario <code>&lt;!-- ... --&gt;</code>.</p>
+<hr />
+<h2 id="3-el-header-con-navegacion-la-bienvenida-y-el-menu">3. El header con navegación (la bienvenida y el menú)</h2>
+<p>El <strong>header</strong> es lo primero que ve quien llega. Pondremos el nombre del negocio y un menú para saltar a las secciones.</p>
+<pre><code class="language-html">&lt;header&gt;
+  &lt;h1&gt;Tunal Digital&lt;/h1&gt;
+  &lt;p&gt;Creamos sitios web para pequeños negocios.&lt;/p&gt;
+
+  &lt;nav aria-label=&quot;Menú principal&quot;&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#servicios&quot;&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#sobre&quot;&gt;Sobre nosotros&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#contacto&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+<p>Hay varias cosas nuevas. Vamos despacio.</p>
+<blockquote class="def">
+<h3 id="que-significa-header">🟦 ¿Qué significa? — <em><code>&lt;header&gt;</code></em></h3>
+<p>Es la etiqueta semántica del <strong>encabezado</strong> de la página: lo de arriba, la presentación. Suele llevar el título y el menú. <strong>¿Para qué sirve?</strong> Para agrupar de forma clara la "portada" de tu sitio.</p>
+<h3 id="que-significa-nav">🟦 ¿Qué significa? — <em><code>&lt;nav&gt;</code></em></h3>
+<p>Viene de <em>navigation</em> (navegación). Marca el bloque que contiene los <strong>enlaces del menú</strong>. <strong>¿Para qué sirve?</strong> Para que el navegador y los lectores de pantalla sepan "este es el menú principal" y puedan saltar directo a él.</p>
+<h3 id="que-significa-ul-y-li">🟦 ¿Qué significa? — <em><code>&lt;ul&gt;</code> y <code>&lt;li&gt;</code></em></h3>
+<p><code>&lt;ul&gt;</code> es una <strong>lista sin orden</strong> (<em>unordered list</em>) y cada <code>&lt;li&gt;</code> es un <strong>elemento de la lista</strong> (<em>list item</em>). <strong>¿Para qué sirve?</strong> Un menú es, en el fondo, una lista de opciones; por eso se construye así. Es la forma correcta y accesible de hacer menús.</p>
+<h3 id="que-significa-enlace-interno-con-ancla">🟦 ¿Qué significa? — <em>Enlace interno con <code>#</code> (ancla)</em></h3>
+<p>Cuando un enlace apunta a <code>href="#servicios"</code>, no va a otra página: <strong>salta a un trozo de esta misma página</strong> que tenga <code>id="servicios"</code>. A ese punto se le llama <strong>ancla</strong>. <strong>¿Para qué sirve?</strong> Para que al hacer clic en "Servicios" la pantalla baje sola hasta esa sección. Pura comodidad.</p>
+<h3 id="que-significa-atributo-aria-label">🟦 ¿Qué significa? — <em>Atributo <code>aria-label</code></em></h3>
+<p><code>aria-label</code> le da un <strong>nombre invisible</strong> a un elemento para las personas que usan lectores de pantalla. Aquí dice "este <code>nav</code> es el Menú principal". <strong>¿Para qué sirve?</strong> Para <strong>accesibilidad</strong>: alguien que no ve la pantalla escucha "Menú principal" y entiende qué es. No cambia nada visualmente.</p>
+<h3 id="que-significa-accesibilidad">🟦 ¿Qué significa? — <em>Accesibilidad</em></h3>
+<p>Es hacer que tu página la pueda usar <strong>todo el mundo</strong>, incluidas personas ciegas, con baja visión o que navegan solo con teclado. <strong>¿Para qué sirve?</strong> Porque la web es para todos, y además los buscadores premian las páginas accesibles. No cuesta más; solo es escribir con cuidado.</p>
+<h3 id="cuidado-un-solo-h1-por-pagina">⚠️ Cuidado — Un solo <code>&lt;h1&gt;</code> por página</h3>
+<p>El <code>&lt;h1&gt;</code> es el <strong>título más importante</strong> de la página, como el titular de un periódico. Pon <strong>solo uno</strong> y que sea el nombre del sitio. Para los títulos de cada sección usaremos <code>&lt;h2&gt;</code>, que es el segundo nivel.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>) hay un header parecido con el logo y el menú. Más adelante ese menú se "activa" con <code>main.js</code> (JavaScript) para abrirse en el celular, pero la <strong>estructura</strong> —el <code>&lt;nav&gt;</code> con su lista— nace aquí, en HTML puro. Lo que estás aprendiendo es el cimiento real de tu propio sitio.</p>
+</blockquote>
+<hr />
+<h2 id="4-el-main-y-la-primera-seccion-servicios">4. El main y la primera sección: Servicios</h2>
+<p>Ahora el corazón de la página. Todo el contenido principal vive dentro de <code>&lt;main&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-main">🟦 ¿Qué significa? — <em><code>&lt;main&gt;</code></em></h3>
+<p>Marca el <strong>contenido principal y único</strong> de la página: lo que de verdad importa, sin contar el header, el menú ni el footer. <strong>¿Para qué sirve?</strong> Para que el lector de pantalla pueda decir "saltar al contenido principal" y para dejar el código ordenado. Solo debe haber <strong>un</strong> <code>&lt;main&gt;</code> por página.</p>
+<h3 id="que-significa-section">🟦 ¿Qué significa? — <em><code>&lt;section&gt;</code></em></h3>
+<p>Es un <strong>bloque temático</strong> de la página: un grupo de contenido sobre un mismo tema (servicios, sobre nosotros, contacto). <strong>¿Para qué sirve?</strong> Para dividir el contenido en partes con sentido. Cada <code>&lt;section&gt;</code> suele empezar con su propio <code>&lt;h2&gt;</code>.</p>
+</blockquote>
+<p>Escribe esto <strong>dentro de <code>&lt;body&gt;</code>, justo debajo del <code>&lt;/header&gt;</code></strong>:</p>
+<pre><code class="language-html">&lt;main&gt;
+  &lt;section id=&quot;servicios&quot;&gt;
+    &lt;h2&gt;Servicios&lt;/h2&gt;
+    &lt;p&gt;Esto es lo que podemos hacer por tu negocio:&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;h3&gt;Sitio web a medida&lt;/h3&gt;
+        &lt;p&gt;Una página rápida y bonita, hecha para ti.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;h3&gt;Tienda en línea&lt;/h3&gt;
+        &lt;p&gt;Vende tus productos por internet sin complicaciones.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;h3&gt;Mantenimiento&lt;/h3&gt;
+        &lt;p&gt;Cuidamos tu sitio para que siempre funcione.&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-atributo-id">🟦 ¿Qué significa? — <em>Atributo <code>id</code></em></h3>
+<p>El <code>id</code> es un <strong>nombre único</strong> que le ponemos a un elemento, como una etiqueta con su nombre pegada. Aquí <code>id="servicios"</code>. <strong>¿Para qué sirve?</strong> Es el destino al que apunta el enlace <code>href="#servicios"</code> del menú. El <code>id</code> y el <code>#</code> del enlace deben escribirse <strong>igualito</strong> (mayúsculas, tildes, todo).</p>
+<h3 id="que-significa-h3-y-la-jerarquia-de-titulos">🟦 ¿Qué significa? — <em><code>&lt;h3&gt;</code> (y la jerarquía de títulos)</em></h3>
+<p>Los títulos van por niveles: <code>&lt;h1&gt;</code> el más importante, luego <code>&lt;h2&gt;</code>, luego <code>&lt;h3&gt;</code>, como los capítulos y subcapítulos de un libro. <strong>¿Para qué sirve?</strong> Cada servicio es un sub-tema dentro de la sección "Servicios" (que es <code>&lt;h2&gt;</code>), así que su título es <code>&lt;h3&gt;</code>. Respetar el orden ayuda a la accesibilidad y al buscador.</p>
+<h3 id="tip-no-te-saltes-niveles">💡 Tip — No te saltes niveles</h3>
+<p>Después de un <code>&lt;h2&gt;</code> viene un <code>&lt;h3&gt;</code>, no directamente un <code>&lt;h4&gt;</code>. Es como contar 1, 2, 3 sin brincarte el 2. Mantener el orden hace que tu página sea más clara para todos.</p>
+</blockquote>
+<p>¡Mira lo que ya tienes! Bit aplaude con sus manitas pixeladas: tu página ya tiene encabezado, menú y una sección real con tres servicios. 🎉</p>
+<hr />
+<h2 id="5-la-seccion-sobre-nosotros">5. La sección "Sobre nosotros"</h2>
+<p>Esta es más cortita. Sirve para contar quién eres y generar confianza.</p>
+<pre><code class="language-html">&lt;section id=&quot;sobre&quot;&gt;
+  &lt;h2&gt;Sobre nosotros&lt;/h2&gt;
+  &lt;p&gt;
+    Somos un equipo pequeño que ayuda a negocios locales a tener
+    presencia en internet. Creemos en lo simple, lo claro y lo bien hecho.
+  &lt;/p&gt;
+  &lt;p&gt;
+    Trabajamos contigo de cerca, sin tecnicismos raros, hasta que tu
+    sitio quede como lo imaginaste.
+  &lt;/p&gt;
+&lt;/section&gt;
+</code></pre>
+<p>Esta sección va <strong>dentro de <code>&lt;main&gt;</code></strong>, justo después de cerrar la sección de servicios (<code>&lt;/section&gt;</code>). Fíjate que ya no hay etiquetas nuevas: solo <code>&lt;section&gt;</code>, <code>&lt;h2&gt;</code> y <code>&lt;p&gt;</code>. Esa es la belleza de HTML: con pocas piezas, repitiéndolas con cabeza, construyes páginas enteras.</p>
+<blockquote class="tip">
+<h3 id="tip-texto-real-no-lorem-ipsum-para-siempre">💡 Tip — Texto real, no "Lorem ipsum" para siempre</h3>
+<p>Está bien empezar con texto de relleno mientras maquetas, pero cuando puedas escribe texto <strong>de verdad</strong>: qué hace el negocio, por qué confiar en él. El texto auténtico es lo que de verdad convence a quien visita.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Cada uno de tus proyectos podría tener una sección "Sobre": <strong>PolyPaw</strong> contaría que es una app de mascotas hecha en Python; <strong>RachaSimple</strong> explicaría que ayuda a mantener rachas de hábitos; <strong>Faro</strong> (carpeta Organizer) diría que organiza tus proyectos leyendo GitHub y Drive. La etiqueta es la misma <code>&lt;section&gt;</code>; solo cambia lo que escribes dentro.</p>
+</blockquote>
+<hr />
+<h2 id="6-la-seccion-de-contacto-con-formulario">6. La sección de Contacto con formulario</h2>
+<p>Aquí viene la estrella del capítulo: un <strong>formulario</strong>. Es el lugar donde el visitante deja sus datos para que lo contactes.</p>
+<blockquote class="def">
+<h3 id="que-significa-formulario-form">🟦 ¿Qué significa? — <em>Formulario (<code>&lt;form&gt;</code>)</em></h3>
+<p>Un formulario es un <strong>conjunto de campos</strong> donde la persona escribe información (nombre, correo, mensaje) y luego la envía. <strong>¿Para qué sirve?</strong> Para recibir mensajes, registros o pedidos. La etiqueta que lo envuelve todo es <code>&lt;form&gt;</code>.</p>
+</blockquote>
+<pre><code class="language-html">&lt;section id=&quot;contacto&quot;&gt;
+  &lt;h2&gt;Contacto&lt;/h2&gt;
+  &lt;p&gt;¿Quieres tu sitio web? Escríbenos y te respondemos pronto.&lt;/p&gt;
+
+  &lt;form action=&quot;#&quot; method=&quot;post&quot;&gt;
+    &lt;p&gt;
+      &lt;label for=&quot;nombre&quot;&gt;Tu nombre&lt;/label&gt;
+      &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot; required /&gt;
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      &lt;label for=&quot;correo&quot;&gt;Tu correo&lt;/label&gt;
+      &lt;input type=&quot;email&quot; id=&quot;correo&quot; name=&quot;correo&quot; required /&gt;
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      &lt;label for=&quot;mensaje&quot;&gt;Tu mensaje&lt;/label&gt;
+      &lt;textarea id=&quot;mensaje&quot; name=&quot;mensaje&quot; rows=&quot;4&quot; required&gt;&lt;/textarea&gt;
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      &lt;button type=&quot;submit&quot;&gt;Enviar mensaje&lt;/button&gt;
+    &lt;/p&gt;
+  &lt;/form&gt;
+&lt;/section&gt;
+</code></pre>
+<p>Vamos campo por campo, que aquí hay mucho que aprender.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributos-action-y-method">🟦 ¿Qué significa? — <em>Atributos <code>action</code> y <code>method</code></em></h3>
+<p><code>action</code> dice <strong>a dónde se mandan</strong> los datos cuando se envía el formulario; <code>method</code> dice <strong>cómo</strong> se mandan (<code>post</code> es lo normal para enviar datos). <strong>¿Para qué sirve?</strong> Por ahora pusimos <code>action="#"</code> (no va a ningún lado de verdad) porque con solo HTML no podemos procesar el envío todavía. Eso se hace después con un servidor o un servicio.</p>
+<h3 id="que-significa-label-y-su-atributo-for">🟦 ¿Qué significa? — <em><code>&lt;label&gt;</code> y su atributo <code>for</code></em></h3>
+<p><code>&lt;label&gt;</code> es la <strong>etiqueta de texto</strong> que describe un campo ("Tu nombre"). El atributo <code>for="nombre"</code> la <strong>conecta</strong> con el campo que tiene <code>id="nombre"</code>. <strong>¿Para qué sirve?</strong> Para accesibilidad: al hacer clic en el texto, el cursor salta al campo, y los lectores de pantalla leen el campo con su nombre. El <code>for</code> y el <code>id</code> deben coincidir exactamente.</p>
+<h3 id="que-significa-input">🟦 ¿Qué significa? — <em><code>&lt;input&gt;</code></em></h3>
+<p>Es una <strong>casilla donde se escribe</strong> un dato. Es una etiqueta que se cierra sola (no lleva <code>&lt;/input&gt;</code>). <strong>¿Para qué sirve?</strong> Para recoger texto corto: un nombre, un correo, un teléfono.</p>
+<h3 id="que-significa-atributo-type-del-input">🟦 ¿Qué significa? — <em>Atributo <code>type</code> del input</em></h3>
+<p><code>type</code> dice <strong>qué clase de dato</strong> espera el campo. <code>type="text"</code> es texto normal; <code>type="email"</code> es un correo (el navegador revisa que tenga forma de correo). <strong>¿Para qué sirve?</strong> Para ayudar a quien escribe y para evitar errores. Hay muchos: <code>password</code>, <code>number</code>, <code>date</code>...</p>
+<h3 id="que-significa-atributo-name">🟦 ¿Qué significa? — <em>Atributo <code>name</code></em></h3>
+<p><code>name</code> es el <strong>nombre con el que viaja el dato</strong> cuando se envía el formulario. <strong>¿Para qué sirve?</strong> El servidor que reciba el formulario verá "nombre = Edwar", "correo = ...". Sin <code>name</code>, el dato no se envía. Es distinto del <code>id</code> (el <code>id</code> es para conectar con el <code>label</code>; el <code>name</code> es para el envío).</p>
+<h3 id="que-significa-atributo-required">🟦 ¿Qué significa? — <em>Atributo <code>required</code></em></h3>
+<p><code>required</code> significa <strong>"obligatorio"</strong>: el formulario no se envía si ese campo está vacío. <strong>¿Para qué sirve?</strong> Para no recibir mensajes sin nombre o sin correo. El navegador muestra solito un aviso "completa este campo".</p>
+<h3 id="que-significa-textarea">🟦 ¿Qué significa? — <em><code>&lt;textarea&gt;</code></em></h3>
+<p>Es una <strong>caja de texto grande</strong>, de varias líneas, para mensajes largos. El atributo <code>rows="4"</code> dice que se muestre con 4 líneas de alto. <strong>¿Para qué sirve?</strong> Para que la persona escriba su mensaje cómodamente. Ojo: sí lleva cierre <code>&lt;/textarea&gt;</code>.</p>
+<h3 id="que-significa-button-typesubmit">🟦 ¿Qué significa? — <em><code>&lt;button type="submit"&gt;</code></em></h3>
+<p>Es el <strong>botón de enviar</strong>. <code>type="submit"</code> significa "al pulsarme, envía el formulario". <strong>¿Para qué sirve?</strong> Es la acción final: el visitante hace clic y sus datos se mandan.</p>
+<h3 id="cuidado-id-unico-siempre">⚠️ Cuidado — <code>id</code> único, siempre</h3>
+<p>Cada <code>id</code> de la página tiene que ser <strong>único</strong>: no puede haber dos <code>id="nombre"</code>. Si repites un <code>id</code>, los enlaces y los <code>label</code> se confunden y dejan de funcionar bien. Piensa en el <code>id</code> como el número de cédula de cada elemento.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong>, cuando alguien envía el formulario de contacto, el dato no se queda en el HTML: viaja a un <strong>Cloudflare Worker</strong> (un pequeño programa en la nube) que incluso usa la <strong>API de Claude</strong> para procesar el mensaje. Pero todo ese viaje <strong>empieza aquí</strong>, en este <code>&lt;form&gt;</code> de HTML. Sin este formulario bien hecho, no hay nada que enviar. Por eso este capítulo es tan importante.</p>
+</blockquote>
+<hr />
+<h2 id="7-el-footer-el-pie-de-pagina">7. El footer (el pie de página)</h2>
+<p>Para cerrar, el pie: un mensajito y el año.</p>
+<pre><code class="language-html">&lt;footer&gt;
+  &lt;p&gt;Tunal Digital — Hecho con cariño.&lt;/p&gt;
+  &lt;p&gt;&amp;copy; 2026 Todos los derechos reservados.&lt;/p&gt;
+&lt;/footer&gt;
+</code></pre>
+<p>Esta va <strong>dentro de <code>&lt;body&gt;</code>, después de cerrar <code>&lt;/main&gt;</code></strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-footer">🟦 ¿Qué significa? — <em><code>&lt;footer&gt;</code></em></h3>
+<p>Es la etiqueta semántica del <strong>pie de página</strong>: lo de abajo del todo. Suele llevar el aviso de derechos, contacto secundario o enlaces legales. <strong>¿Para qué sirve?</strong> Para cerrar la página con la información "de cierre" de forma ordenada y reconocible.</p>
+<h3 id="que-significa-copy-entidad-html">🟦 ¿Qué significa? — <em><code>&amp;copy;</code> (entidad HTML)</em></h3>
+<p><code>&amp;copy;</code> es un <strong>código especial</strong> que el navegador dibuja como el símbolo de copyright ©. <strong>¿Para qué sirve?</strong> Algunos símbolos no se escriben directo y se ponen con estas "entidades". Otra muy usada es <code>&amp;amp;</code> para el símbolo <code>&amp;</code>.</p>
+<h3 id="tip-que-el-ano-no-envejezca">💡 Tip — Que el año no envejezca</h3>
+<p>Escribir "2026" a mano funciona hoy, pero el año que viene quedará viejo. Con solo HTML no podemos poner el año automático (eso pide JavaScript), así que por ahora recuerda actualizarlo. Es un detalle pequeño que demuestra cuidado.</p>
+</blockquote>
+<hr />
+<h2 id="8-todo-junto-la-landing-completa">8. Todo junto: la landing completa</h2>
+<p>Aquí está tu página entera, de principio a fin. Copia esto en <code>index.html</code>, guárdalo y <strong>ábrelo con doble clic</strong> en tu navegador. 💻</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;Tunal Digital — Sitios web para tu negocio&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header&gt;
+      &lt;h1&gt;Tunal Digital&lt;/h1&gt;
+      &lt;p&gt;Creamos sitios web para pequeños negocios.&lt;/p&gt;
+      &lt;nav aria-label=&quot;Menú principal&quot;&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#servicios&quot;&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#sobre&quot;&gt;Sobre nosotros&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#contacto&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+      &lt;section id=&quot;servicios&quot;&gt;
+        &lt;h2&gt;Servicios&lt;/h2&gt;
+        &lt;p&gt;Esto es lo que podemos hacer por tu negocio:&lt;/p&gt;
+        &lt;ul&gt;
+          &lt;li&gt;
+            &lt;h3&gt;Sitio web a medida&lt;/h3&gt;
+            &lt;p&gt;Una página rápida y bonita, hecha para ti.&lt;/p&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;h3&gt;Tienda en línea&lt;/h3&gt;
+            &lt;p&gt;Vende tus productos por internet sin complicaciones.&lt;/p&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;h3&gt;Mantenimiento&lt;/h3&gt;
+            &lt;p&gt;Cuidamos tu sitio para que siempre funcione.&lt;/p&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/section&gt;
+
+      &lt;section id=&quot;sobre&quot;&gt;
+        &lt;h2&gt;Sobre nosotros&lt;/h2&gt;
+        &lt;p&gt;
+          Somos un equipo pequeño que ayuda a negocios locales a tener
+          presencia en internet. Creemos en lo simple, lo claro y lo bien hecho.
+        &lt;/p&gt;
+        &lt;p&gt;
+          Trabajamos contigo de cerca, sin tecnicismos raros, hasta que tu
+          sitio quede como lo imaginaste.
+        &lt;/p&gt;
+      &lt;/section&gt;
+
+      &lt;section id=&quot;contacto&quot;&gt;
+        &lt;h2&gt;Contacto&lt;/h2&gt;
+        &lt;p&gt;¿Quieres tu sitio web? Escríbenos y te respondemos pronto.&lt;/p&gt;
+        &lt;form action=&quot;#&quot; method=&quot;post&quot;&gt;
+          &lt;p&gt;
+            &lt;label for=&quot;nombre&quot;&gt;Tu nombre&lt;/label&gt;
+            &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot; required /&gt;
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;label for=&quot;correo&quot;&gt;Tu correo&lt;/label&gt;
+            &lt;input type=&quot;email&quot; id=&quot;correo&quot; name=&quot;correo&quot; required /&gt;
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;label for=&quot;mensaje&quot;&gt;Tu mensaje&lt;/label&gt;
+            &lt;textarea id=&quot;mensaje&quot; name=&quot;mensaje&quot; rows=&quot;4&quot; required&gt;&lt;/textarea&gt;
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;button type=&quot;submit&quot;&gt;Enviar mensaje&lt;/button&gt;
+          &lt;/p&gt;
+        &lt;/form&gt;
+      &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+      &lt;p&gt;Tunal Digital — Hecho con cariño.&lt;/p&gt;
+      &lt;p&gt;&amp;copy; 2026 Todos los derechos reservados.&lt;/p&gt;
+    &lt;/footer&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-pruebala-de-verdad">💡 Tip — Pruébala de verdad</h3>
+<p>Al abrirla, haz clic en los enlaces del menú: la pantalla debería <strong>saltar</strong> a cada sección. Escribe en el formulario y pulsa "Enviar mensaje" dejando un campo vacío: verás el aviso de campo obligatorio. ¡Eso es tu HTML funcionando! Se ve sencillo (todavía sin colores) porque el <strong>diseño visual</strong> llega en el módulo de CSS. Aquí construimos los <strong>huesos</strong>; el CSS pone la piel y la ropa.</p>
+<h3 id="cuidado-cierra-cada-etiqueta-que-abriste">⚠️ Cuidado — Cierra cada etiqueta que abriste</h3>
+<p>Si abres <code>&lt;section&gt;</code> y olvidas <code>&lt;/section&gt;</code>, la página se desordena. Un truco: cada vez que escribas una etiqueta de apertura, escribe <strong>enseguida</strong> la de cierre y luego rellena el medio. Así nunca se te olvida ninguna.</p>
+</blockquote>
+<hr />
+<h2 id="9-lo-que-lograste-en-serio-parate-a-verlo">9. Lo que lograste (en serio, párate a verlo)</h2>
+<p>Hace catorce capítulos no sabías qué era una etiqueta. Hoy acabas de construir, <strong>tú solit@</strong>, una landing page con:</p>
+<ul>
+<li>Un documento HTML bien formado, con su <code>&lt;head&gt;</code> correcto.</li>
+<li>Un <strong>header</strong> con título y menú de navegación accesible.</li>
+<li>Un <strong>main</strong> con tres secciones temáticas.</li>
+<li>Un <strong>formulario</strong> real con etiquetas, campos obligatorios y botón.</li>
+<li>Un <strong>footer</strong> con derechos de autor.</li>
+<li>Y todo con HTML <strong>semántico y accesible</strong>, hecho con criterio profesional.</li>
+</ul>
+<p>Bit está dando saltitos pixelados de orgullo. Esto no es un ejercicio de juguete: es la misma estructura que sostiene sitios reales como tu <strong>tunal-digital</strong>. Lo que sigue (CSS para los colores, JavaScript para la magia) se monta <strong>encima</strong> de estos cimientos que ya dominas. Celebra: te lo ganaste. 🎉</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé qué es una <strong>landing page</strong> y para qué sirve.</li>
+<li>[ ] Puedo escribir el <strong>esqueleto base</strong> de HTML de memoria (<code>&lt;!DOCTYPE&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>).</li>
+<li>[ ] Entiendo y uso las etiquetas semánticas <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code> y <code>&lt;footer&gt;</code>.</li>
+<li>[ ] Sé crear un <strong>menú</strong> con <code>&lt;nav&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code> y enlaces internos con <code>#</code>.</li>
+<li>[ ] Conecto un enlace <code>#servicios</code> con su sección usando el atributo <code>id</code>.</li>
+<li>[ ] Respeto la <strong>jerarquía de títulos</strong> (un solo <code>&lt;h1&gt;</code>, luego <code>&lt;h2&gt;</code>, luego <code>&lt;h3&gt;</code>).</li>
+<li>[ ] Construyo un <strong>formulario</strong> con <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> y <code>&lt;button&gt;</code>.</li>
+<li>[ ] Sé la diferencia entre el atributo <code>id</code> (para <code>label</code> y enlaces) y <code>name</code> (para enviar el dato).</li>
+<li>[ ] Uso <code>required</code> para campos obligatorios y <code>type="email"</code> para correos.</li>
+<li>[ ] Entiendo qué es la <strong>accesibilidad</strong> y por qué uso <code>aria-label</code> y <code>&lt;label for&gt;</code>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>💻 Cambia el negocio.</strong> Toma la página completa y conviértela en la landing de <strong>otro</strong> negocio (una panadería, una barbería, lo que quieras). Cambia el <code>&lt;h1&gt;</code>, los textos y los tres servicios. Guarda y ábrela en el navegador.</p>
+</li>
+<li>
+<p><strong>💻 Añade una cuarta sección.</strong> Agrega una sección nueva llamada "Preguntas frecuentes" con <code>id="faq"</code>, su <code>&lt;h2&gt;</code> y al menos dos preguntas con <code>&lt;h3&gt;</code> y su respuesta en un <code>&lt;p&gt;</code>. <strong>Importante:</strong> añade también su enlace en el menú (<code>&lt;nav&gt;</code>) y comprueba que el salto funciona.</p>
+</li>
+<li>
+<p><strong>💻 Mejora el formulario.</strong> Agrega un campo nuevo de <strong>teléfono</strong> usando <code>type="tel"</code>. Recuerda ponerle su <code>&lt;label&gt;</code>, su <code>id</code>, su <code>name</code> y conectarlos bien. Decide si lo quieres obligatorio (<code>required</code>) o no.</p>
+</li>
+<li>
+<p><strong>💻 Caza el error.</strong> Pídele a alguien (o a ti mism@ después de un rato) que borre <strong>a propósito</strong> una etiqueta de cierre o un <code>id</code> de tu página. Abre el archivo, encuentra el fallo y arréglalo. Aprender a depurar es una superhabilidad.</p>
+</li>
+<li>
+<p><strong>Sin computadora — explica.</strong> Sin mirar el código, explícale a alguien (o escríbelo en una hoja) la diferencia entre el atributo <code>id</code> y el atributo <code>name</code> de un <code>&lt;input&gt;</code>. Si puedes explicarlo con tus palabras, lo dominas.</p>
+</li>
+<li>
+<p><strong>Sin computadora — dibuja el plano.</strong> Elige uno de tus proyectos reales (PolyPaw, RachaSimple o Faro) e imagina su landing. Dibuja en una hoja los rectángulos: ¿qué iría en el header? ¿qué secciones tendría el main? ¿qué pondrías en el footer? Maquetar a mano es el primer paso de toda gran página.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 06 — Tablas en HTML — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-06-tablas-en-html">Capítulo 06 — Tablas en HTML</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>En este capítulo aprenderás a mostrar datos ordenados en filas y columnas usando tablas de HTML. Verás cuándo una tabla es la herramienta correcta (datos como un horario o una lista de precios) y cuándo NO debes usarla (para colocar cosas en la pantalla, eso es trabajo de CSS). También aprenderás a hacer tus tablas accesibles para personas que usan lectores de pantalla. Bit, nuestro ajolote pixel art, irá contigo: hoy trae una libretita cuadriculada, que es justo la idea de una tabla.</p>
+</blockquote>
+<h2 id="1-que-es-una-tabla-y-para-que-sirve">1. ¿Qué es una tabla y para qué sirve?</h2>
+<p>Imagina una hoja de cálculo o el horario de clases pegado en la pared: tiene <strong>filas</strong> (líneas horizontales) y <strong>columnas</strong> (líneas verticales), y en cada cruce hay un dato. Eso es exactamente una <strong>tabla</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-tabla">🟦 ¿Qué significa? — <em>Tabla</em></h3>
+<p>Una <strong>tabla</strong> es una forma de organizar información en filas y columnas, donde cada celda guarda un dato relacionado con su fila y su columna. <strong>¿Para qué sirve?</strong> Para mostrar <strong>datos tabulares</strong>: información que tiene sentido comparada por columnas, como precios, horarios, resultados o estadísticas.</p>
+<h3 id="que-significa-datos-tabulares">🟦 ¿Qué significa? — <em>Datos tabulares</em></h3>
+<p>Son datos que <strong>naturalmente</strong> caben en una cuadrícula: cada fila es un elemento (por ejemplo, un servicio) y cada columna es una característica de ese elemento (su precio, su duración). <strong>¿Para qué sirve la palabra?</strong> Para que sepas reconocer cuándo SÍ va una tabla: si tus datos se parecen a una hoja de Excel, es tabla.</p>
+</blockquote>
+<p>La regla de oro es muy simple: <strong>usa una tabla cuando los datos serían iguales de claros en una hoja de cálculo.</strong> Si pudieras pasarlos a Excel sin perder sentido, una tabla de HTML es perfecta.</p>
+<blockquote class="tip">
+<h3 id="tip-la-prueba-del-excel">💡 Tip — La prueba del Excel</h3>
+<p>Antes de hacer una tabla, pregúntate: "¿Esto cabría bien en una hoja de cálculo?". Si la respuesta es sí (un menú con precios, un horario, una comparación de planes), adelante. Si la respuesta es "no, solo quiero acomodar una imagen al lado de un texto", entonces NO es una tabla: es maquetación, y eso se hace con CSS (lo verás en el módulo de CSS).</p>
+</blockquote>
+<h2 id="2-la-estructura-basica-table-tr-td">2. La estructura básica: <code>table</code>, <code>tr</code>, <code>td</code></h2>
+<p>Toda tabla en HTML empieza con la etiqueta <code>&lt;table&gt;</code> y dentro lleva filas, y dentro de cada fila, celdas. Veamos las tres etiquetas mínimas.</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-table">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;table&gt;</code></em></h3>
+<p>Es la etiqueta que <strong>abre y cierra</strong> toda la tabla. Todo lo demás (filas y celdas) vive dentro de ella. <strong>¿Para qué sirve?</strong> Le dice al navegador "aquí empieza una cuadrícula de datos".</p>
+<h3 id="que-significa-etiqueta-tr-table-row">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;tr&gt;</code> (table row)</em></h3>
+<p><code>tr</code> viene del inglés <em>table row</em>, "fila de tabla". Cada <code>&lt;tr&gt;</code> es <strong>una fila horizontal</strong> completa. <strong>¿Para qué sirve?</strong> Para agrupar las celdas que van en la misma línea.</p>
+<h3 id="que-significa-etiqueta-td-table-data">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;td&gt;</code> (table data)</em></h3>
+<p><code>td</code> viene de <em>table data</em>, "dato de tabla". Cada <code>&lt;td&gt;</code> es <strong>una celda</strong> con un dato dentro. <strong>¿Para qué sirve?</strong> Es el cajoncito donde escribes el contenido (un texto, un número, hasta una imagen).</p>
+</blockquote>
+<p>Vamos con el ejemplo más pequeño posible: una tabla de dos filas y dos columnas.</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Servicio&lt;/td&gt;
+    &lt;td&gt;Precio&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Sitio web básico&lt;/td&gt;
+    &lt;td&gt;$300&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<p>Lee el código de arriba hacia abajo, como lo hace el navegador:</p>
+<ul>
+<li>La primera <code>&lt;tr&gt;</code> es la primera fila. Dentro tiene dos <code>&lt;td&gt;</code>: "Servicio" y "Precio".</li>
+<li>La segunda <code>&lt;tr&gt;</code> es la segunda fila, con "Sitio web básico" y "$300".</li>
+</ul>
+<p>El navegador dibuja una cuadrícula de 2 filas × 2 columnas. ¡Tu primera tabla!</p>
+<blockquote class="warn">
+<h3 id="cuidado-todas-las-filas-con-el-mismo-numero-de-celdas">⚠️ Cuidado — Todas las filas con el mismo número de celdas</h3>
+<p>Si una fila tiene 3 celdas, las demás también deberían tener 3 (salvo cuando uses <code>colspan</code>/<code>rowspan</code>, que verás más abajo). Si una fila tiene 2 y otra tiene 4, la tabla se ve descuadrada y confusa. Cuenta tus <code>&lt;td&gt;</code> por fila.</p>
+</blockquote>
+<h2 id="3-encabezados-con-th-y-secciones-con-thead-y-tbody">3. Encabezados con <code>th</code> y secciones con <code>thead</code> y <code>tbody</code></h2>
+<p>En el ejemplo anterior, la primera fila eran títulos ("Servicio", "Precio"), no datos normales. HTML tiene una etiqueta especial para los títulos de columna o fila: <code>&lt;th&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-th-table-header">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;th&gt;</code> (table header)</em></h3>
+<p><code>th</code> viene de <em>table header</em>, "encabezado de tabla". Se usa en lugar de <code>&lt;td&gt;</code> cuando la celda es un <strong>título</strong> (el nombre de una columna o de una fila). <strong>¿Para qué sirve?</strong> El navegador la muestra en <strong>negrita y centrada</strong> por defecto, y —muy importante— los lectores de pantalla la anuncian como encabezado, lo que ayuda a personas ciegas a entender la tabla.</p>
+</blockquote>
+<p>Además, una tabla bien hecha se divide en dos zonas: la <strong>cabecera</strong> (los títulos) y el <strong>cuerpo</strong> (los datos). Para eso existen <code>&lt;thead&gt;</code> y <code>&lt;tbody&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-thead-table-head">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;thead&gt;</code> (table head)</em></h3>
+<p>Agrupa la fila (o filas) de <strong>encabezados</strong> de la tabla. <strong>¿Para qué sirve?</strong> Para separar visual y semánticamente los títulos del resto. "Semántico" significa que le da significado: el navegador y los buscadores entienden "esto son los encabezados".</p>
+<h3 id="que-significa-etiqueta-tbody-table-body">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;tbody&gt;</code> (table body)</em></h3>
+<p>Agrupa las filas con los <strong>datos reales</strong>, el cuerpo de la tabla. <strong>¿Para qué sirve?</strong> Para dejar claro dónde está la información, separada de los títulos. Si en el futuro usas CSS o JavaScript, poder apuntar al <code>&lt;tbody&gt;</code> te facilitará la vida.</p>
+</blockquote>
+<p>Reescribamos el ejemplo, ahora bien estructurado:</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Servicio&lt;/th&gt;
+      &lt;th&gt;Precio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Sitio web básico&lt;/td&gt;
+      &lt;td&gt;$300&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Tienda en línea&lt;/td&gt;
+      &lt;td&gt;$800&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>¿Ves la diferencia? Los títulos van con <code>&lt;th&gt;</code> dentro de <code>&lt;thead&gt;</code>, y los datos van con <code>&lt;td&gt;</code> dentro de <code>&lt;tbody&gt;</code>. Esta es la forma profesional y la que deberías usar siempre.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>), si quisieras mostrar una sección de "Planes y precios" con varios paquetes y sus características, una tabla con <code>&lt;thead&gt;</code> (Plan, Precio, Incluye) y un <code>&lt;tbody&gt;</code> con una fila por plan sería ideal. Es justo el tipo de dato que se compara por columnas: ¡la prueba del Excel la pasa con facilidad!</p>
+</blockquote>
+<h2 id="4-un-titulo-para-la-tabla-caption">4. Un título para la tabla: <code>caption</code></h2>
+<p>Una tabla suelta, sin explicar de qué trata, puede confundir. Para darle un título visible que forma parte de la tabla, usamos <code>&lt;caption&gt;</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-caption">🟦 ¿Qué significa? — <em>Etiqueta <code>&lt;caption&gt;</code></em></h3>
+<p>Es el <strong>título de la tabla</strong>. Va justo después de abrir <code>&lt;table&gt;</code>, como primera línea de su contenido. <strong>¿Para qué sirve?</strong> Para que cualquiera (incluidos los lectores de pantalla) sepa de un vistazo qué muestra la tabla. Es como ponerle nombre a una foto.</p>
+</blockquote>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Planes de tunal-digital (2026)&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Plan&lt;/th&gt;
+      &lt;th&gt;Precio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Básico&lt;/td&gt;
+      &lt;td&gt;$300&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>El navegador muestra "Planes de tunal-digital (2026)" arriba de la tabla, centrado. Sencillo y muy útil.</p>
+<blockquote class="tip">
+<h3 id="tip-el-caption-siempre-primero">💡 Tip — El <code>caption</code> siempre primero</h3>
+<p>El <code>&lt;caption&gt;</code> debe ser el <strong>primer hijo</strong> de <code>&lt;table&gt;</code>, antes de <code>&lt;thead&gt;</code>. Si lo pones en otro lugar, el navegador puede ignorarlo o moverlo. Regla fácil: abres <code>&lt;table&gt;</code> y lo siguiente es el <code>&lt;caption&gt;</code>.</p>
+</blockquote>
+<h2 id="5-celdas-que-se-estiran-colspan-y-rowspan">5. Celdas que se estiran: <code>colspan</code> y <code>rowspan</code></h2>
+<p>A veces una celda necesita ocupar el espacio de varias. Por ejemplo, un título que abarca dos columnas, o una celda que cubre dos filas. Para eso existen dos <strong>atributos</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributo">🟦 ¿Qué significa? — <em>Atributo</em></h3>
+<p>Un <strong>atributo</strong> es información extra que se escribe <strong>dentro</strong> de la etiqueta de apertura, con la forma <code>nombre="valor"</code>. <strong>¿Para qué sirve?</strong> Para modificar cómo se comporta o se ve un elemento. Ya viste atributos como <code>href</code> en los enlaces; aquí usaremos <code>colspan</code> y <code>rowspan</code>.</p>
+<h3 id="que-significa-atributo-colspan">🟦 ¿Qué significa? — <em>Atributo <code>colspan</code></em></h3>
+<p><em>Col</em> = columna, <em>span</em> = abarcar. <code>colspan="2"</code> hace que <strong>una celda ocupe el ancho de 2 columnas</strong>. <strong>¿Para qué sirve?</strong> Para fusionar celdas a lo ancho, como un encabezado que cubre varias columnas.</p>
+<h3 id="que-significa-atributo-rowspan">🟦 ¿Qué significa? — <em>Atributo <code>rowspan</code></em></h3>
+<p><em>Row</em> = fila. <code>rowspan="2"</code> hace que <strong>una celda ocupe el alto de 2 filas</strong>. <strong>¿Para qué sirve?</strong> Para fusionar celdas hacia abajo, cuando un mismo valor se repite en varias filas.</p>
+</blockquote>
+<p>Veamos <code>colspan</code> en acción. Queremos un título "Servicios web" que cubra las dos columnas de abajo:</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th colspan=&quot;2&quot;&gt;Servicios web&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Servicio&lt;/th&gt;
+      &lt;th&gt;Precio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Landing page&lt;/td&gt;
+      &lt;td&gt;$300&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>Fíjate en <code>colspan="2"</code>: esa celda sola ocupa el lugar de dos. Por eso esa fila tiene <strong>una</strong> <code>&lt;th&gt;</code> en vez de dos.</p>
+<p>Ahora <code>rowspan</code>. Imagina que dos planes pertenecen a la misma categoría "Web" y no quieres repetir la palabra:</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td rowspan=&quot;2&quot;&gt;Web&lt;/td&gt;
+      &lt;td&gt;Landing page&lt;/td&gt;
+      &lt;td&gt;$300&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Tienda en línea&lt;/td&gt;
+      &lt;td&gt;$800&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>La celda "Web" tiene <code>rowspan="2"</code>, así que se estira hacia abajo y cubre las dos filas. Por eso la segunda <code>&lt;tr&gt;</code> solo tiene <strong>dos</strong> celdas: la primera columna ya está ocupada por "Web".</p>
+<blockquote class="warn">
+<h3 id="cuidado-hacer-cuentas-con-colspan-y-rowspan">⚠️ Cuidado — Hacer cuentas con colspan y rowspan</h3>
+<p>Cuando uses <code>colspan</code> o <code>rowspan</code>, una celda "se come" el lugar de otras. La fila afectada tendrá <strong>menos</strong> etiquetas <code>&lt;td&gt;</code> o <code>&lt;th&gt;</code> de lo normal. Si olvidas restar las celdas, la tabla se rompe (aparecen huecos o columnas de más). Cuenta despacio: una celda con <code>colspan="2"</code> cuenta como 2; con <code>colspan="3"</code>, como 3.</p>
+<h3 id="tip-empieza-simple">💡 Tip — Empieza simple</h3>
+<p>Como principiante, no abuses de <code>colspan</code> y <code>rowspan</code>. Una tabla sencilla y limpia se entiende mejor que una llena de celdas fusionadas. Úsalos solo cuando de verdad aclaren los datos.</p>
+</blockquote>
+<h2 id="6-por-que-no-debes-usar-tablas-para-maquetar">6. Por qué NO debes usar tablas para maquetar</h2>
+<p>Esta sección es importante porque, hace muchos años, los programadores usaban tablas <strong>para colocar cosas en la página</strong>: un menú a la izquierda, el contenido en el centro, etc. Hoy eso se considera un <strong>error</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-maquetar">🟦 ¿Qué significa? — <em>Maquetar</em></h3>
+<p><strong>Maquetar</strong> es decidir dónde va cada cosa en la pantalla: qué está arriba, qué a un lado, cómo se acomoda todo. <strong>¿Para qué sirve la palabra?</strong> Para distinguir dos trabajos: <em>mostrar datos</em> (eso sí es tarea de las tablas) y <em>acomodar la página</em> (eso es tarea de CSS).</p>
+<h3 id="que-significa-css">🟦 ¿Qué significa? — <em>CSS</em></h3>
+<p><strong>CSS</strong> (Hojas de Estilo en Cascada) es el lenguaje que da <strong>diseño</strong> a una página: colores, tamaños, posiciones y disposición. <strong>¿Para qué sirve?</strong> Para maquetar y dar estilo. <strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong> el archivo <code>styles.css</code> hace exactamente esto: coloca y embellece el sitio. La maquetación va ahí, NO en tablas dentro de <code>index.html</code>.</p>
+</blockquote>
+<p>¿Por qué es malo maquetar con tablas? Tres razones, contadas fácil:</p>
+<ol>
+<li><strong>Significado equivocado.</strong> Una tabla le dice al navegador y a los lectores de pantalla "esto son datos en filas y columnas". Si la usas solo para empujar cosas a un lado, estás mintiendo sobre el contenido. Una persona ciega oirá "fila 1, columna 2" donde no hay datos: pura confusión.</li>
+<li><strong>Difícil de mantener.</strong> El diseño con tablas se enreda muchísimo (tablas dentro de tablas dentro de tablas). Cambiar algo se vuelve una pesadilla.</li>
+<li><strong>No se adapta bien al móvil.</strong> Las tablas son rígidas. CSS, en cambio, tiene herramientas (como Flexbox y Grid) pensadas para que la página se vea bien en cualquier pantalla.</li>
+</ol>
+<blockquote class="warn">
+<h3 id="cuidado-la-regla-que-nunca-debes-olvidar">⚠️ Cuidado — La regla que nunca debes olvidar</h3>
+<p><strong>Tabla = datos. CSS = diseño.</strong> Si tu objetivo es "que esto quede al lado de aquello" o "que el menú vaya arriba", NO uses tablas. Esa decisión es de CSS. Las tablas son solo para información tabular.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <strong>RachaSimple</strong> (React + TypeScript + Tailwind), la colocación de tarjetas y botones se resuelve con clases de Tailwind (que es CSS), no con tablas. Y en <strong>Faro</strong> (carpeta Organizer, Next.js + React), el panel con la lista de proyectos se maqueta con CSS/componentes; pero si Faro mostrara una tabla de "proyecto / estado / progreso %", ahí SÍ tendría sentido una <code>&lt;table&gt;</code>, porque son datos comparables por columnas. La diferencia siempre es la misma: ¿estás mostrando datos o acomodando la página?</p>
+</blockquote>
+<h2 id="7-accesibilidad-el-atributo-scope">7. Accesibilidad: el atributo <code>scope</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-accesibilidad">🟦 ¿Qué significa? — <em>Accesibilidad</em></h3>
+<p>La <strong>accesibilidad</strong> es hacer que tu sitio lo pueda usar <strong>todo el mundo</strong>, incluidas personas con discapacidad (por ejemplo, quienes navegan con un <strong>lector de pantalla</strong>, un programa que lee la página en voz alta). <strong>¿Para qué sirve?</strong> Para no dejar a nadie afuera. Es responsabilidad de quien programa, no un extra opcional.</p>
+</blockquote>
+<p>En una tabla, los <code>&lt;th&gt;</code> son los encabezados, pero el navegador a veces no sabe si un encabezado manda sobre una <strong>columna</strong> o sobre una <strong>fila</strong>. Para dejarlo clarísimo usamos el atributo <code>scope</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-atributo-scope">🟦 ¿Qué significa? — <em>Atributo <code>scope</code></em></h3>
+<p><em>Scope</em> en inglés es "ámbito" o "alcance". Se pone en un <code>&lt;th&gt;</code> para indicar qué celdas controla ese encabezado. Los valores más comunes son <code>scope="col"</code> (encabezado de una <strong>columna</strong>) y <code>scope="row"</code> (encabezado de una <strong>fila</strong>). <strong>¿Para qué sirve?</strong> Para que el lector de pantalla diga, por ejemplo, "Precio: $300" en lugar de soltar números sueltos. Mejora mucho la comprensión.</p>
+</blockquote>
+<p>Aquí una tabla accesible con <code>scope</code>:</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Planes de tunal-digital&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;col&quot;&gt;Plan&lt;/th&gt;
+      &lt;th scope=&quot;col&quot;&gt;Precio&lt;/th&gt;
+      &lt;th scope=&quot;col&quot;&gt;Entrega&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;row&quot;&gt;Básico&lt;/th&gt;
+      &lt;td&gt;$300&lt;/td&gt;
+      &lt;td&gt;5 días&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;row&quot;&gt;Tienda&lt;/th&gt;
+      &lt;td&gt;$800&lt;/td&gt;
+      &lt;td&gt;15 días&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>Observa dos cosas:</p>
+<ul>
+<li>Los encabezados de arriba (Plan, Precio, Entrega) llevan <code>scope="col"</code> porque mandan sobre toda su columna.</li>
+<li>El nombre de cada plan (Básico, Tienda) es un <code>&lt;th scope="row"&gt;</code>: ¡también puede haber encabezados de fila! Indican de qué trata esa fila.</li>
+</ul>
+<p>Así, cuando un lector de pantalla llega a la celda "$300", puede anunciar "Básico, Precio, $300". El usuario entiende perfectamente sin ver la pantalla.</p>
+<blockquote class="tip">
+<h3 id="tip-accesible-desde-el-principio">💡 Tip — Accesible desde el principio</h3>
+<p>Añadir <code>scope</code>, <code>caption</code>, <code>&lt;thead&gt;</code> y <code>&lt;tbody&gt;</code> no cuesta casi nada cuando construyes la tabla, pero es muy molesto agregarlo después. Hazlo bien desde el primer momento y tu yo del futuro (y tus usuarios) te lo agradecerán. Bit asiente con sus branquias rosas: ajolote feliz, código accesible.</p>
+</blockquote>
+<h2 id="8-y-los-bordes-una-nota-sobre-el-aspecto-visual">8. ¿Y los bordes? Una nota sobre el aspecto visual</h2>
+<p>Si pruebas las tablas de arriba en el navegador, notarás algo curioso: <strong>no tienen líneas</strong>. Las celdas están ahí, pero no se ven los bordes que dibujarías a mano en una cuadrícula. Esto confunde a mucha gente que empieza. No te preocupes: tu tabla está bien; simplemente HTML, por sí solo, casi no pinta líneas.</p>
+<blockquote class="def">
+<h3 id="que-significa-borde">🟦 ¿Qué significa? — <em>Borde</em></h3>
+<p>Un <strong>borde</strong> es la línea que rodea una celda o la tabla entera. <strong>¿Para qué sirve?</strong> Para separar visualmente los datos y que se lean como una cuadrícula. En HTML moderno los bordes <strong>no</strong> se ponen en el HTML: se ponen con <strong>CSS</strong> (la propiedad <code>border</code>). Lo verás en el módulo de CSS.</p>
+</blockquote>
+<p>Quizá en tutoriales viejos viste algo como <code>&lt;table border="1"&gt;</code>. Funcionaba, pero hoy se considera anticuado: mezclar diseño (las líneas) con el contenido (los datos) es justo lo que queremos evitar. La regla que ya conoces vuelve a aplicar.</p>
+<blockquote class="tip">
+<h3 id="tip-sin-lineas-no-significa-roto">💡 Tip — Sin líneas no significa "roto"</h3>
+<p>Si tu tabla aparece sin bordes, <strong>no está mal hecha</strong>: solo le falta estilo. La estructura (filas, columnas, encabezados) es correcta. Darle líneas, colores y espacios es el siguiente paso, y ese paso vive en CSS, no aquí. Primero la estructura, luego la pintura.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>tunal-digital</strong>, cuando llegues al módulo de CSS, abrirás <code>styles.css</code> y le darás bordes y colores a tu tabla de precios con reglas como <code>table { border-collapse: collapse; }</code>. El HTML que escribes hoy en <code>index.html</code> queda igual; solo le sumas una capa de estilo encima. Separar las dos cosas es lo que hace tu código limpio y fácil de mantener.</p>
+</blockquote>
+<h2 id="9-errores-tipicos-de-principiante-y-como-evitarlos">9. Errores típicos de principiante (y cómo evitarlos)</h2>
+<p>Antes del repaso final, repasemos las trampas más comunes al hacer tablas. Reconocerlas ahora te ahorrará dolores de cabeza.</p>
+<blockquote class="warn">
+<h3 id="cuidado-olvidar-el-tr">⚠️ Cuidado — Olvidar el <code>&lt;tr&gt;</code></h3>
+<p>Un error frecuente es poner <code>&lt;td&gt;</code> sueltos directamente dentro de <code>&lt;table&gt;</code>, sin envolverlos en una fila <code>&lt;tr&gt;</code>. Sin <code>&lt;tr&gt;</code>, el navegador no sabe qué celdas van juntas en cada línea. <strong>Recuerda el orden:</strong> <code>&lt;table&gt;</code> contiene <code>&lt;tr&gt;</code>, y cada <code>&lt;tr&gt;</code> contiene <code>&lt;td&gt;</code> o <code>&lt;th&gt;</code>. Es como una caja (tabla) con bandejas (filas) y dentro de cada bandeja, los cajoncitos (celdas).</p>
+<h3 id="cuidado-usar-th-donde-van-datos-o-al-reves">⚠️ Cuidado — Usar <code>&lt;th&gt;</code> donde van datos (o al revés)</h3>
+<p>Usa <code>&lt;th&gt;</code> <strong>solo</strong> para títulos (nombres de columna o de fila) y <code>&lt;td&gt;</code> para los datos. Si pones todo con <code>&lt;th&gt;</code>, el lector de pantalla pensará que todo es encabezado y la tabla pierde sentido. Si pones los títulos con <code>&lt;td&gt;</code>, pierdes la negrita automática y la ayuda de accesibilidad. Cada etiqueta tiene su trabajo.</p>
+<h3 id="tip-lee-tu-tabla-en-voz-alta">💡 Tip — Lee tu tabla en voz alta</h3>
+<p>Una forma sencilla de comprobar si tu tabla está bien: léela imaginando que eres un lector de pantalla, celda por celda, fila por fila. Si al decir "Precio, $300" todo cuadra, vas bien. Si algo suena raro ("encabezado, encabezado, encabezado, 300"), revisa tus <code>&lt;th&gt;</code> y <code>&lt;td&gt;</code>.</p>
+</blockquote>
+<h2 id="10-repaso-con-un-ejemplo-completo">10. Repaso con un ejemplo completo</h2>
+<p>Juntemos todo lo aprendido en una tabla final, lista para pegar en <code>sitio-web/index.html</code> de <strong>tunal-digital</strong>:</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Comparativa de planes — tunal-digital&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;col&quot;&gt;Plan&lt;/th&gt;
+      &lt;th scope=&quot;col&quot;&gt;Precio&lt;/th&gt;
+      &lt;th scope=&quot;col&quot;&gt;Páginas&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;row&quot;&gt;Básico&lt;/th&gt;
+      &lt;td&gt;$300&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;row&quot;&gt;Profesional&lt;/th&gt;
+      &lt;td&gt;$600&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;row&quot;&gt;Tienda&lt;/th&gt;
+      &lt;td&gt;$800&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>Esta tabla tiene título (<code>caption</code>), cabecera separada (<code>thead</code>), cuerpo (<code>tbody</code>), encabezados de columna y de fila con <code>scope</code>, y datos limpios. Es una tabla de nivel profesional, y la entiendes por completo. ¡Bien hecho!</p>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé qué son <strong>datos tabulares</strong> y aplico "la prueba del Excel" antes de hacer una tabla.</li>
+<li>[ ] Sé escribir una tabla con <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code> y <code>&lt;td&gt;</code>.</li>
+<li>[ ] Uso <code>&lt;th&gt;</code> para los encabezados y entiendo por qué no son simples <code>&lt;td&gt;</code>.</li>
+<li>[ ] Separo mi tabla en <code>&lt;thead&gt;</code> y <code>&lt;tbody&gt;</code>.</li>
+<li>[ ] Le pongo un título a la tabla con <code>&lt;caption&gt;</code> como primer elemento.</li>
+<li>[ ] Sé fusionar celdas con <code>colspan</code> (a lo ancho) y <code>rowspan</code> (a lo alto), y recuerdo restar celdas.</li>
+<li>[ ] Entiendo que <strong>NO</strong> se usan tablas para maquetar: el diseño es trabajo de CSS.</li>
+<li>[ ] Añado <code>scope="col"</code> y <code>scope="row"</code> para que mi tabla sea accesible.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>(En papel)</strong> Escribe en una hoja tres ejemplos de información que SÍ sea tabular (datos de tabla) y tres que NO lo sean (que deban maquetarse con CSS). Justifica cada uno con la "prueba del Excel".</p>
+</li>
+<li>
+<p><strong>💻</strong> Crea un archivo <code>tabla.html</code> y haz una tabla de 3 filas × 2 columnas con tu lista de tareas: columna "Tarea" y columna "¿Hecha?". Usa solo <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code> y <code>&lt;td&gt;</code>. Ábrelo en el navegador.</p>
+</li>
+<li>
+<p><strong>💻</strong> Mejora la tabla del ejercicio anterior: convierte la primera fila en encabezados con <code>&lt;th&gt;</code>, envuélvela en <code>&lt;thead&gt;</code> y mete el resto en <code>&lt;tbody&gt;</code>. Agrégale un <code>&lt;caption&gt;</code> con el título "Mi lista de tareas".</p>
+</li>
+<li>
+<p><strong>💻</strong> En tu <code>tabla.html</code>, añade <code>scope="col"</code> a los encabezados de columna y, si tienes encabezados de fila, <code>scope="row"</code>. Comprueba que la tabla sigue viéndose igual (el cambio es para accesibilidad, no para el aspecto visual).</p>
+</li>
+<li>
+<p><strong>💻</strong> Construye la "Comparativa de planes" de <strong>tunal-digital</strong> del apartado 10 en un archivo nuevo. Luego añade una fila de encabezado con <code>colspan="3"</code> arriba de todo que diga "Servicios 2026", y verifica que la fila tenga una sola <code>&lt;th&gt;</code>.</p>
+</li>
+<li>
+<p><strong>💻 (reto)</strong> Crea una tabla de horario semanal (columnas: Lunes a Viernes; filas: Mañana y Tarde). Usa <code>rowspan="2"</code> en una celda donde una misma actividad ocupe mañana y tarde el mismo día, y cuenta con cuidado cuántas celdas debe tener cada fila.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
