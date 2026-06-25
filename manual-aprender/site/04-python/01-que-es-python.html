@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 01 — ¿Qué es Python? — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-01-que-es-python">Capítulo 01 — ¿Qué es Python?</h1>
+<blockquote>
+<p>Buenas noticias: ya sabes programar. En el Módulo 03 aprendiste los conceptos (variables,
+decisiones, bucles, funciones). Python usa <strong>los mismos conceptos</strong>, solo que escritos de
+forma distinta —y, para muchos, más clara—. Este módulo será más rápido porque construyes
+sobre lo que ya tienes.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-python-y-por-que-es-tan-querido">1. Qué es Python y por qué es tan querido</h2>
+<blockquote class="def">
+<h3 id="que-significa-python">🟦 ¿Qué significa? — <em>Python</em></h3>
+<p><strong>Python</strong> es un lenguaje de programación de propósito general, famoso por ser <strong>fácil de
+leer y escribir</strong>. Su código se parece al inglés y evita símbolos innecesarios. Se usa para
+casi todo: aplicaciones, páginas web (en el servidor), automatización de tareas, análisis de
+datos, ciencia y, muy especialmente, <strong>inteligencia artificial</strong>.</p>
+<h3 id="tip-por-que-aprender-python-si-ya-se-javascript">💡 Tip — ¿Por qué aprender Python si ya sé JavaScript?</h3>
+<p>Porque cada lenguaje brilla en cosas distintas:
+- <strong>JavaScript</strong> domina el navegador y la web.
+- <strong>Python</strong> domina la automatización, los datos y la IA, y es el lenguaje de apps como
+  PolyPaw (con Flet).
+Saber ambos te da un rango enorme. Y como comparten conceptos, el segundo lenguaje siempre
+cuesta mucho menos que el primero.</p>
+<h3 id="cuidado-el-nombre-viene-de-un-grupo-de-comedia-no-de-la-serpiente">⚠️ Cuidado — El nombre viene de un grupo de comedia, no de la serpiente</h3>
+<p>Python se llama así por <em>Monty Python</em> (humoristas británicos), no por la serpiente. Aun así,
+el logo es una serpiente y se ha vuelto su símbolo. Curiosidad inofensiva.</p>
+</blockquote>
+<hr />
+<h2 id="2-como-se-ejecuta-python-y-como-instalarlo">2. Cómo se ejecuta Python (y cómo instalarlo)</h2>
+<p>A diferencia de JavaScript (que vive en el navegador), Python se ejecuta con un programa
+llamado <strong>intérprete</strong> que instalas en tu computadora.</p>
+<blockquote class="def">
+<h3 id="que-significa-interprete">🟦 ¿Qué significa? — <em>Intérprete</em></h3>
+<p>Un <strong>intérprete</strong> es el programa que <strong>lee tu código y lo ejecuta</strong> línea por línea. Para
+Python, ese programa también se llama <code>python</code>. Lo instalas una vez y luego puedes correr
+cualquier archivo <code>.py</code>.</p>
+</blockquote>
+<p><strong>Instalación (cuando tengas tu computadora):</strong>
+1. Descarga Python desde <a href="https://python.org">https://python.org</a> (botón "Download"). En Windows, marca la casilla
+   <strong>"Add Python to PATH"</strong> durante la instalación (importante para usarlo desde la terminal).
+2. Comprueba en la terminal: <code>python --version</code> (o <code>python3 --version</code>) debe mostrar un número.</p>
+<blockquote class="def">
+<h3 id="que-significa-repl-la-consola-interactiva">🟦 ¿Qué significa? — <em>REPL (la consola interactiva)</em></h3>
+<p>Si escribes solo <code>python</code> en la terminal, entras al <strong>REPL</strong> (<em>Read-Eval-Print Loop</em>): una
+consola donde escribes una línea de Python y ves el resultado al instante, como la consola
+del navegador para JS. Ideal para probar. Sales con <code>exit()</code>.</p>
+</blockquote>
+<p><strong>Ejecutar un archivo:</strong> guardas tu código en un archivo, por ejemplo <code>hola.py</code>, y en la
+terminal escribes:</p>
+<pre><code>python hola.py
+</code></pre>
+<hr />
+<h2 id="3-tu-primer-programa-print">3. Tu primer programa: <code>print</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-print">🟦 ¿Qué significa? — <em><code>print()</code></em></h3>
+<p><code>print(...)</code> <strong>muestra algo en la pantalla</strong> (en la terminal). Es el equivalente al
+<code>console.log</code> de JavaScript:
+<code>python
+print("¡Hola, mundo!")
+print(2 + 3)</code>
+Crea un archivo <code>hola.py</code> con esas líneas, ejecútalo con <code>python hola.py</code>, y verás la salida.</p>
+<h3 id="tip-compara-para-aprender-mas-rapido">💡 Tip — Compara para aprender más rápido</h3>
+<p>A lo largo del módulo verás recuadros "JS vs. Python". Aprovéchalos: ver el mismo concepto en
+dos idiomas refuerza el entendimiento.
+| Idea | JavaScript | Python |
+|---|---|---|
+| Mostrar en pantalla | <code>console.log("hola")</code> | <code>print("hola")</code> |</p>
+</blockquote>
+<hr />
+<h2 id="4-variables-sin-let-ni-const">4. Variables: sin <code>let</code> ni <code>const</code></h2>
+<blockquote class="def">
+<h3 id="que-significa-variables-en-python">🟦 ¿Qué significa? — <em>Variables en Python</em></h3>
+<p>En Python <strong>no</strong> se usan <code>let</code>, <code>const</code> ni <code>var</code>: simplemente escribes el nombre y le asignas
+un valor. Tampoco se ponen <code>;</code> al final.
+<code>python
+nombre = "Edwar"
+edad = 25
+es_programador = True</code>
+| Idea | JavaScript | Python |
+|---|---|---|
+| Crear variable | <code>const nombre = "Edwar";</code> | <code>nombre = "Edwar"</code> |
+| Verdadero/falso | <code>true</code> / <code>false</code> | <code>True</code> / <code>False</code> (¡con mayúscula!) |
+| Nada / vacío | <code>null</code> | <code>None</code> |</p>
+<h3 id="tip-estilo-de-nombres-en-python">💡 Tip — Estilo de nombres en Python</h3>
+<p>Mientras en JavaScript se usa <code>camelCase</code> (<code>esProgramador</code>), en Python la convención es
+<code>snake_case</code>: todo en minúsculas y palabras unidas por guion bajo (<code>es_programador</code>). Cada
+lenguaje tiene su costumbre; respétala para que tu código "hable como un nativo".</p>
+</blockquote>
+<hr />
+<h2 id="5-la-regla-de-python-la-sangria-indentacion">5. LA regla de Python: la sangría (indentación)</h2>
+<p>Esta es la característica que más sorprende al venir de otros lenguajes, y la más importante.</p>
+<blockquote class="def">
+<h3 id="que-significa-sangria-indentacion">🟦 ¿Qué significa? — <em>Sangría / indentación</em></h3>
+<p>La <strong>sangría</strong> es el espacio en blanco al inicio de una línea (normalmente 4 espacios). En la
+mayoría de lenguajes la sangría es solo estética; <strong>en Python es obligatoria y tiene
+significado</strong>: define qué líneas pertenecen a un bloque.</p>
+<p>En JavaScript, los bloques se marcan con <strong>llaves</strong> <code>{ }</code>:
+<code>javascript
+if (edad &gt;= 18) {
+  console.log("Adulto");
+}</code>
+En Python, se marcan con <strong>dos puntos <code>:</code> y sangría</strong> (sin llaves):
+<code>python
+if edad &gt;= 18:
+    print("Adulto")</code>
+Las líneas "dentro" del <code>if</code> van <strong>sangradas</strong> (4 espacios). Cuando la sangría termina, el
+bloque termina. Es más limpio, pero <strong>estricto</strong>.</p>
+<h3 id="cuidado-la-sangria-inconsistente-rompe-el-programa">⚠️ Cuidado — La sangría inconsistente rompe el programa</h3>
+<p>Si mezclas cantidades de espacios o usas tabuladores y espacios a la vez, Python lanza un
+error (<code>IndentationError</code>). Regla: usa <strong>4 espacios</strong> siempre. Los editores como VS Code lo
+hacen automáticamente al pulsar Tab. Es la fuente de error nº 1 de los principiantes en
+Python; una vez te acostumbras, se vuelve natural y hasta agradable.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Abre cualquier archivo de PolyPaw, como <code>main.py</code>: verás que NO hay llaves <code>{ }</code> para los
+bloques, solo dos puntos y sangría. Esa es la firma visual de Python.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé qué es Python y para qué destaca (automatización, datos, IA, apps con Flet).</li>
+<li>[ ] Entiendo qué es el <strong>intérprete</strong> y cómo ejecutar un <code>.py</code> (<code>python archivo.py</code>).</li>
+<li>[ ] Sé usar <code>print()</code> y el <strong>REPL</strong> para probar.</li>
+<li>[ ] Creo variables sin <code>let</code>/<code>const</code> y sin <code>;</code>, en <code>snake_case</code>.</li>
+<li>[ ] Conozco <code>True</code>/<code>False</code>/<code>None</code> (con mayúscula).</li>
+<li>[ ] <strong>Entiendo la sangría</strong>: bloques con <code>:</code> y 4 espacios, sin llaves.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>Traduce a Python.</strong> Pasa esto de JavaScript a Python:
+   <code>const ciudad = "San Salvador"; console.log(ciudad);</code></li>
+<li><strong>Mayúsculas.</strong> ¿Qué tiene de malo, en Python, escribir <code>activo = true</code>? Corrígelo.</li>
+<li><strong>Sangría.</strong> Explica qué marca el final de un bloque en Python (si en JS son las llaves, en
+   Python es…).</li>
+<li><strong>Encuentra el error.</strong> ¿Por qué falla esto?
+   <code>python
+   if edad &gt;= 18:
+   print("Adulto")</code></li>
+<li>💻 <strong>Primer programa.</strong> Cuando tengas Python, crea <code>hola.py</code> con un <code>print</code> que muestre tu
+   nombre y, en otra línea, el resultado de <code>7 * 6</code>. Ejecútalo con <code>python hola.py</code>.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="02-tipos-y-control.html">Capítulo 02 — Tipos y control de flujo</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
