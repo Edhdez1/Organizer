@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 13 — Errores y depuracion — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-errores-y-depuracion">Capitulo 13 — Errores y depuracion</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote programador. Hoy vamos a hablar de algo que asusta a casi todo principiante: los <strong>errores</strong>. Pero te cuento un secreto de ajolote: los errores no son tu enemigo, son mensajes que te dicen exactamente que arreglar. Un programador no es alguien que nunca se equivoca; es alguien que sabe leer sus errores y resolverlos con calma. Al terminar este capitulo vas a mirar la consola roja sin temblar. Respira, que arrancamos.</p>
+</blockquote>
+<p>Cuando escribimos JavaScript, tarde o temprano el programa <strong>falla</strong>: una pantalla que no carga, un boton que no responde, un texto que sale como <code>undefined</code>. Eso es normal. Lo importante es tener herramientas para <strong>encontrar</strong> el problema (depurar) y <strong>manejarlo</strong> (controlar el error) sin que toda la aplicacion se caiga. Vamos paso a paso.</p>
+<h2 id="1-que-es-un-error-y-por-que-aparece">1. ¿Que es un error y por que aparece?</h2>
+<p>Un programa es un conjunto de instrucciones. Cuando una instruccion le pide al navegador algo imposible o mal escrito, el navegador <strong>detiene</strong> esa parte del codigo y lanza un error.</p>
+<blockquote class="def">
+<h3 id="que-significa-error-en-programacion">🟦 ¿Que significa? — <em>Error (en programacion)</em></h3>
+<p>Un <strong>error</strong> es un aviso que JavaScript genera cuando no puede ejecutar una instruccion. <strong>Para que sirve:</strong> te dice que algo salio mal y, casi siempre, en que linea. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, si en <code>main.js</code> llamas a una funcion que no existe o tocas una propiedad de algo vacio, el navegador lanza un error y el resto del script puede dejar de correr.</p>
+<h3 id="que-significa-consola-console">🟦 ¿Que significa? — <em>Consola (Console)</em></h3>
+<p>La <strong>consola</strong> es una ventana dentro de las herramientas del navegador donde aparecen los mensajes de tu programa: textos que tu imprimes y errores que JavaScript lanza. <strong>Para que sirve:</strong> es tu tablero de diagnostico. <strong>Donde se usa en un repo real:</strong> mientras pruebas el chat IA de <code>tunal-digital</code>, abres la consola para ver si la peticion al Worker respondio bien o fallo.</p>
+</blockquote>
+<p>Para abrir la consola en casi cualquier navegador: pulsa <strong>F12</strong> o clic derecho sobre la pagina y elige <strong>Inspeccionar</strong>, luego ve a la pestaña <strong>Console</strong>.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Acostumbrate a tener la consola abierta SIEMPRE mientras programas en el navegador. Es como conducir mirando el tablero del auto: muchos problemas se ven ahi antes de que se vuelvan grandes.</p>
+</blockquote>
+<h2 id="2-los-tres-errores-que-mas-veras-syntaxerror-referenceerror-typeerror">2. Los tres errores que mas veras: SyntaxError, ReferenceError, TypeError</h2>
+<p>JavaScript tiene varios tipos de error, cada uno con un nombre. El nombre te dice <strong>la categoria del problema</strong>. Vamos con los tres mas comunes.</p>
+<blockquote class="def">
+<h3 id="que-significa-syntaxerror">🟦 ¿Que significa? — <em>SyntaxError</em></h3>
+<p>Un <strong>SyntaxError</strong> (error de sintaxis) ocurre cuando el codigo esta <strong>mal escrito</strong> segun las reglas del lenguaje: un parentesis sin cerrar, una coma de mas, una llave que falta. <strong>Para que sirve:</strong> te avisa que el navegador ni siquiera pudo entender tu codigo. <strong>Donde se usa en un repo real:</strong> si en <code>main.js</code> de <code>tunal-digital</code> olvidas cerrar un <code>}</code> de una funcion, el archivo entero no corre y veras un SyntaxError.</p>
+</blockquote>
+<pre><code class="language-javascript">// SyntaxError: falta cerrar el parentesis
+function saludar(nombre {
+  console.log(&quot;Hola &quot; + nombre);
+}
+// Uncaught SyntaxError: missing ) after argument list
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-referenceerror">🟦 ¿Que significa? — <em>ReferenceError</em></h3>
+<p>Un <strong>ReferenceError</strong> ocurre cuando usas un <strong>nombre que no existe</strong>: una variable o funcion que nunca declaraste, o que escribiste mal. <strong>Para que sirve:</strong> te indica que el navegador busco ese nombre y no lo encontro. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, si escribes <code>enviarFormularo()</code> en vez de <code>enviarFormulario()</code>, JavaScript no encuentra esa funcion y lanza un ReferenceError.</p>
+</blockquote>
+<pre><code class="language-javascript">// ReferenceError: usamos algo que no existe
+console.log(mensaje);
+// Uncaught ReferenceError: mensaje is not defined
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-typeerror">🟦 ¿Que significa? — <em>TypeError</em></h3>
+<p>Un <strong>TypeError</strong> ocurre cuando un valor <strong>no es del tipo</strong> que esperabas: intentas llamar como funcion algo que no lo es, o leer una propiedad de <code>null</code> o <code>undefined</code>. <strong>Para que sirve:</strong> te avisa que el dato existe pero no se puede usar asi. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, si <code>document.querySelector(".chat")</code> no encuentra el elemento, devuelve <code>null</code>, y al hacer <code>.addEventListener(...)</code> sobre <code>null</code> salta un TypeError.</p>
+</blockquote>
+<pre><code class="language-javascript">// TypeError: el elemento no existe (es null)
+const boton = document.querySelector(&quot;#no-existe&quot;);
+boton.addEventListener(&quot;click&quot;, abrirChat);
+// Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-null-y-undefined">🟦 ¿Que significa? — <em>null y undefined</em></h3>
+<p><strong><code>null</code></strong> es un valor que significa "vacio a proposito"; <strong><code>undefined</code></strong> significa "esto no tiene valor todavia". <strong>Para que sirve:</strong> representan la ausencia de un dato. <strong>Donde se usa en un repo real:</strong> en <code>RachaSimple</code> (React + TypeScript), mientras los datos del usuario cargan desde Supabase con TanStack Query, una variable puede estar <code>undefined</code> un instante; si la usas sin revisar, salta un TypeError.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>El TypeError mas frecuente del principiante es <strong>"Cannot read properties of null/undefined"</strong>. Casi siempre significa: "buscaste algo en el HTML y no lo encontre" o "ese dato aun no ha llegado". Antes de usar un valor, asegurate de que existe.</p>
+</blockquote>
+<h2 id="3-leer-el-stack-el-mapa-hacia-el-error">3. Leer el stack: el mapa hacia el error</h2>
+<p>Cuando ocurre un error, la consola no solo muestra el mensaje; muestra tambien el <strong>stack trace</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-stack-trace-rastro-de-la-pila">🟦 ¿Que significa? — <em>Stack trace (rastro de la pila)</em></h3>
+<p>El <strong>stack trace</strong> es la lista de funciones que se estaban ejecutando en el momento del error, desde la mas reciente hacia atras, con el archivo y la linea de cada una. <strong>Para que sirve:</strong> te dice donde explotó el error y como llego hasta ahi. <strong>Donde se usa en un repo real:</strong> en <code>Faro/Organizer</code> (Next.js + TypeScript), si la llamada a OpenAI falla, el stack te muestra la cadena de funciones hasta el punto exacto del fallo.</p>
+</blockquote>
+<p>Asi se lee un mensaje de error tipico:</p>
+<pre><code>Uncaught TypeError: Cannot read properties of null (reading 'value')
+    at enviarFormulario (main.js:42)
+    at HTMLButtonElement.&lt;anonymous&gt; (main.js:88)
+</code></pre>
+<p>Lee de <strong>arriba hacia abajo</strong>:
+1. <strong>Primera linea:</strong> el tipo de error (<code>TypeError</code>) y el mensaje.
+2. <strong><code>at enviarFormulario (main.js:42)</code>:</strong> donde fallo de verdad — funcion <code>enviarFormulario</code>, archivo <code>main.js</code>, <strong>linea 42</strong>. Ahi vas a mirar primero.
+3. <strong>Linea siguiente:</strong> quien la llamo — un boton al que le hiciste clic.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Empieza siempre por la <strong>linea mas alta que sea de TU codigo</strong>. Si el stack menciona archivos de librerias (React, TanStack), salta esas y busca la primera que sea tuya, como <code>main.js:42</code>.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <code>tunal-digital</code>, abre <code>main.js</code>, provoca un error a proposito (por ejemplo, escribe mal el nombre de una funcion de atajo) y observa el stack en la consola. Practica leer el numero de linea y abrir esa linea exacta en tu editor.</p>
+</blockquote>
+<h2 id="4-try-catch-throw-manejar-errores-sin-caerse">4. try / catch / throw: manejar errores sin caerse</h2>
+<p>A veces sabes que algo <strong>puede</strong> fallar (una peticion a internet, un dato que quiza no llegue). En esos casos no quieres que toda la pagina se rompa: quieres <strong>capturar</strong> el error y reaccionar con elegancia. Para eso existe <code>try...catch</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-trycatch">🟦 ¿Que significa? — <em>try...catch</em></h3>
+<p><strong><code>try...catch</code></strong> es una estructura que ejecuta un bloque de codigo "arriesgado" dentro de <code>try</code>; si algo falla, en vez de detener todo, salta al bloque <code>catch</code>, donde tu decides que hacer. <strong>Para que sirve:</strong> evita que un error tumbe toda la app y te deja mostrar un mensaje amable. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, el <code>fetch</code> al Worker de IA va dentro de un <code>try...catch</code> para que, si no hay internet, el chat muestre "intenta de nuevo" en vez de quedarse congelado.</p>
+</blockquote>
+<pre><code class="language-javascript">async function preguntarIA(texto) {
+  try {
+    const respuesta = await fetch(&quot;https://worker.tunal/chat&quot;, {
+      method: &quot;POST&quot;,
+      body: JSON.stringify({ mensaje: texto }),
+    });
+    const datos = await respuesta.json();
+    return datos.respuesta;
+  } catch (error) {
+    console.error(&quot;Fallo la peticion al Worker:&quot;, error);
+    return &quot;Lo siento, no pude responder. Intenta de nuevo.&quot;;
+  }
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-bloque-catch-y-el-objeto-error">🟦 ¿Que significa? — <em>Bloque catch y el objeto error</em></h3>
+<p>El <strong>bloque <code>catch (error)</code></strong> recibe un objeto que describe lo que fallo. Ese objeto tiene <code>error.message</code> (texto del problema) y <code>error.name</code> (tipo de error). <strong>Para que sirve:</strong> te da los detalles para registrar o mostrar el fallo. <strong>Donde se usa en un repo real:</strong> en <code>Faro/Organizer</code>, al analizar un proyecto con IA, el <code>catch</code> registra <code>error.message</code> para saber si fallo Supabase, GitHub o OpenAI.</p>
+<h3 id="que-significa-throw">🟦 ¿Que significa? — <em>throw</em></h3>
+<p><strong><code>throw</code></strong> lanza un error a proposito. Tu creas el error y lo "arrojas" para detener la ejecucion y avisar de una condicion invalida. <strong>Para que sirve:</strong> validar datos y forzar que alguien mas (un <code>catch</code>) los maneje. <strong>Donde se usa en un repo real:</strong> en <code>Faro/Organizer</code>, si falta una variable de entorno necesaria para OpenAI, el codigo del servidor puede hacer <code>throw new Error("Falta la API key")</code> para no continuar con datos incompletos.</p>
+</blockquote>
+<pre><code class="language-javascript">function dividir(a, b) {
+  if (b === 0) {
+    throw new Error(&quot;No se puede dividir entre cero&quot;);
+  }
+  return a / b;
+}
+
+try {
+  dividir(10, 0);
+} catch (error) {
+  console.error(error.message); // No se puede dividir entre cero
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-error-objeto-y-new-error">🟦 ¿Que significa? — <em>Error (objeto) y new Error()</em></h3>
+<p><strong><code>Error</code></strong> es un tipo de objeto que representa un fallo; <strong><code>new Error("mensaje")</code></strong> crea uno nuevo con tu propio texto. <strong>Para que sirve:</strong> empaquetar la descripcion del problema para lanzarlo o registrarlo. <strong>Donde se usa en un repo real:</strong> en <code>RachaSimple</code>, las funciones que hablan con Supabase devuelven un objeto de error; si decides cortar el flujo, puedes <code>throw new Error(error.message)</code>.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>No envuelvas <strong>todo</strong> tu codigo en un <code>try...catch</code> gigante para "que no falle nunca". Eso esconde los errores y te deja a ciegas. Usa <code>try...catch</code> solo donde de verdad esperas un fallo (red, datos externos) y siempre registra el error con <code>console.error</code>.</p>
+<h3 id="que-significa-finally">🟦 ¿Que significa? — <em>finally</em></h3>
+<p><strong><code>finally</code></strong> es un bloque opcional que se ejecuta SIEMPRE al final del <code>try...catch</code>, haya fallado o no. <strong>Para que sirve:</strong> limpiar cosas, como apagar un indicador de "cargando...". <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, despues de la peticion del chat (salga bien o mal), un <code>finally</code> puede ocultar el spinner de "escribiendo...".</p>
+</blockquote>
+<pre><code class="language-javascript">async function preguntarIA(texto) {
+  mostrarCargando(true);
+  try {
+    const r = await fetch(&quot;https://worker.tunal/chat&quot;, { method: &quot;POST&quot; });
+    return await r.json();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    mostrarCargando(false); // se apaga pase lo que pase
+  }
+}
+</code></pre>
+<h2 id="5-console-tu-primera-herramienta-de-depuracion">5. console: tu primera herramienta de depuracion</h2>
+<p>Antes de herramientas sofisticadas, esta el humilde y poderoso <code>console</code>. Imprimir valores en momentos clave es la forma mas rapida de entender que esta pasando.</p>
+<blockquote class="def">
+<h3 id="que-significa-depurar-debugging">🟦 ¿Que significa? — <em>Depurar (debugging)</em></h3>
+<p><strong>Depurar</strong> es el proceso de encontrar y corregir errores en tu codigo, observando que hace por dentro. <strong>Para que sirve:</strong> pasar de "no funciona" a "ya se exactamente por que". <strong>Donde se usa en un repo real:</strong> depuras <code>main.js</code> de <code>tunal-digital</code> cuando el formulario no envia y necesitas ver que valores recoge antes de mandarlos.</p>
+<h3 id="que-significa-consolelog">🟦 ¿Que significa? — <em>console.log()</em></h3>
+<p><strong><code>console.log(valor)</code></strong> imprime un valor en la consola. <strong>Para que sirve:</strong> ver el contenido de una variable o confirmar que una linea se ejecuto. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, dentro de la funcion del formulario imprimes <code>console.log(nombre, email)</code> para confirmar que recoge bien los datos antes del fetch.</p>
+</blockquote>
+<pre><code class="language-javascript">function enviarFormulario() {
+  const nombre = document.querySelector(&quot;#nombre&quot;).value;
+  const email = document.querySelector(&quot;#email&quot;).value;
+  console.log(&quot;Datos recogidos:&quot;, { nombre, email });
+  // ...resto del envio
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-consoleerror">🟦 ¿Que significa? — <em>console.error()</em></h3>
+<p><strong><code>console.error(valor)</code></strong> imprime un mensaje marcado como error (en rojo, con icono). <strong>Para que sirve:</strong> resaltar fallos para distinguirlos de mensajes normales. <strong>Donde se usa en un repo real:</strong> en el <code>catch</code> del fetch de <code>tunal-digital</code>, usas <code>console.error</code> para que el fallo de red destaque entre los demas logs.</p>
+<h3 id="que-significa-consoletable">🟦 ¿Que significa? — <em>console.table()</em></h3>
+<p><strong><code>console.table(datos)</code></strong> muestra arreglos u objetos como una <strong>tabla</strong> ordenada con filas y columnas. <strong>Para que sirve:</strong> leer listas de datos comodamente. <strong>Donde se usa en un repo real:</strong> en <code>Faro/Organizer</code>, al traer la lista de proyectos desde Supabase, <code>console.table(proyectos)</code> te deja ver nombre, estado y progreso de cada uno en columnas.</p>
+</blockquote>
+<pre><code class="language-javascript">const proyectos = [
+  { nombre: &quot;tunal-digital&quot;, estado: &quot;activo&quot;, progreso: 80 },
+  { nombre: &quot;PolyPaw&quot;, estado: &quot;activo&quot;, progreso: 60 },
+];
+console.table(proyectos);
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Pon una <strong>etiqueta</strong> clara en cada log: en vez de <code>console.log(x)</code>, escribe <code>console.log("valor de x:", x)</code>. Cuando tengas diez logs, agradeceras saber cual es cual. Y cuando termines de depurar, <strong>borra</strong> los <code>console.log</code> de prueba para no dejar la consola llena de ruido.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Recuerda que en <code>PolyPaw</code> (Python con Flet) la consola equivalente es <code>print()</code> y los datos viven en archivos <code>JSON</code>. El concepto es el mismo: imprimir valores para entender el flujo. Cambia el lenguaje, no la idea.</p>
+</blockquote>
+<h2 id="6-el-debugger-y-los-breakpoints-en-devtools">6. El debugger y los breakpoints en DevTools</h2>
+<p>Los <code>console.log</code> son geniales, pero a veces quieres <strong>pausar</strong> el programa y mirar todo con calma, paso a paso. Para eso estan las DevTools.</p>
+<blockquote class="def">
+<h3 id="que-significa-devtools-herramientas-de-desarrollador">🟦 ¿Que significa? — <em>DevTools (herramientas de desarrollador)</em></h3>
+<p>Las <strong>DevTools</strong> son el conjunto de herramientas del navegador para inspeccionar y depurar paginas: Console, Sources (codigo), Network (peticiones) y mas. <strong>Para que sirve:</strong> examinar tu app por dentro mientras corre. <strong>Donde se usa en un repo real:</strong> depuras <code>tunal-digital</code> en la pestaña <strong>Sources</strong> para pausar <code>main.js</code>, y en <strong>Network</strong> para ver la peticion al Worker.</p>
+<h3 id="que-significa-breakpoint-punto-de-interrupcion">🟦 ¿Que significa? — <em>Breakpoint (punto de interrupcion)</em></h3>
+<p>Un <strong>breakpoint</strong> es una marca que pones en una linea para que el navegador <strong>pause</strong> la ejecucion justo ahi. <strong>Para que sirve:</strong> congelar el programa en un momento exacto y revisar el valor de cada variable. <strong>Donde se usa en un repo real:</strong> pones un breakpoint en la linea de <code>enviarFormulario</code> en <code>tunal-digital</code> para inspeccionar <code>nombre</code> y <code>email</code> antes del fetch.</p>
+</blockquote>
+<p>Como poner un breakpoint:
+1. Abre DevTools (<strong>F12</strong>) y ve a <strong>Sources</strong>.
+2. Busca tu archivo (<code>main.js</code>).
+3. Haz clic en el <strong>numero de linea</strong>: aparece un marcador azul.
+4. Recarga o usa la pagina hasta que pase por esa linea. El programa se <strong>pausa</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-debugger-palabra-clave">🟦 ¿Que significa? — <em>debugger (palabra clave)</em></h3>
+<p><strong><code>debugger;</code></strong> es una instruccion que, si tienes las DevTools abiertas, pausa el programa en esa linea, como un breakpoint escrito en el codigo. <strong>Para que sirve:</strong> marcar una pausa sin abrir Sources a mano. <strong>Donde se usa en un repo real:</strong> colocas <code>debugger;</code> dentro de la funcion del chat de <code>tunal-digital</code> para detenerte justo antes de enviar el mensaje.</p>
+</blockquote>
+<pre><code class="language-javascript">function enviarFormulario() {
+  const nombre = document.querySelector(&quot;#nombre&quot;).value;
+  debugger; // el programa se pausa aqui si DevTools esta abierto
+  enviarDatos(nombre);
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-step-over-step-into-avanzar-paso-a-paso">🟦 ¿Que significa? — <em>Step over / Step into (avanzar paso a paso)</em></h3>
+<p><strong>Step over</strong> ejecuta la linea actual y pasa a la siguiente sin entrar en las funciones; <strong>Step into</strong> entra dentro de la funcion para seguirla por dentro. <strong>Para que sirve:</strong> recorrer el codigo con lupa, linea por linea. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, usas Step over para avanzar por <code>enviarFormulario</code> y Step into para meterte en la funcion <code>fetch</code> y ver que envia.</p>
+<h3 id="que-significa-watch-y-scope-vigilar-variables">🟦 ¿Que significa? — <em>Watch y Scope (vigilar variables)</em></h3>
+<p>El panel <strong>Scope</strong> muestra el valor de todas las variables en el punto pausado; <strong>Watch</strong> te deja fijar variables concretas para vigilarlas. <strong>Para que sirve:</strong> ver como cambian los datos sin imprimir nada. <strong>Donde se usa en un repo real:</strong> en pausa dentro de <code>main.js</code>, miras en Scope cuanto vale <code>email</code> para confirmar que el usuario escribio algo.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Cuando estes pausado en un breakpoint, ve a la pestaña <strong>Console</strong> y escribe el nombre de una variable: el navegador te dice su valor <strong>en ese instante</strong>. Es como hacerle preguntas a tu programa congelado.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No olvides quitar las lineas <code>debugger;</code> antes de subir tu codigo. Si quedan y alguien abre DevTools, la pagina se pausará sin avisar y parecera "colgada".</p>
+</blockquote>
+<h2 id="7-errores-asincronos-cuando-el-fallo-llega-tarde">7. Errores asincronos: cuando el fallo llega tarde</h2>
+<p>Mucho codigo moderno es <strong>asincrono</strong>: pide datos a internet y sigue trabajando mientras llegan. Los errores en ese mundo se manejan distinto.</p>
+<blockquote class="def">
+<h3 id="que-significa-asincrono">🟦 ¿Que significa? — <em>Asincrono</em></h3>
+<p><strong>Asincrono</strong> describe codigo que no se ejecuta de inmediato, sino que <strong>espera</strong> un resultado futuro (una respuesta de internet, por ejemplo) sin congelar el resto del programa. <strong>Para que sirve:</strong> mantener la app fluida mientras llegan datos. <strong>Donde se usa en un repo real:</strong> el chat IA y el formulario de <code>tunal-digital</code> usan codigo asincrono para hablar con el Worker sin bloquear la pagina.</p>
+<h3 id="que-significa-promesa-promise">🟦 ¿Que significa? — <em>Promesa (Promise)</em></h3>
+<p>Una <strong>promesa</strong> es un objeto que representa un resultado que llegara <strong>mas tarde</strong>: puede cumplirse (resolverse) o fallar (rechazarse). <strong>Para que sirve:</strong> manejar operaciones que tardan, como un <code>fetch</code>. <strong>Donde se usa en un repo real:</strong> <code>fetch</code> en <code>tunal-digital</code> devuelve una promesa; cuando llega la respuesta del Worker, esa promesa se resuelve.</p>
+<h3 id="que-significa-async-await">🟦 ¿Que significa? — <em>async / await</em></h3>
+<p><strong><code>async</code></strong> marca una funcion como asincrona; <strong><code>await</code></strong> dentro de ella espera a que una promesa termine antes de seguir. <strong>Para que sirve:</strong> escribir codigo asincrono que se lee de arriba abajo, casi como si fuera normal. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, la funcion del chat es <code>async</code> y hace <code>await fetch(...)</code> para esperar la respuesta de la IA.</p>
+</blockquote>
+<p>La clave: con <code>async/await</code>, un fallo en un <code>await</code> se captura con <code>try...catch</code>, igual que un error normal.</p>
+<pre><code class="language-javascript">async function cargarRespuesta() {
+  try {
+    const r = await fetch(&quot;https://worker.tunal/chat&quot;);
+    if (!r.ok) {
+      throw new Error(&quot;El servidor respondio con error &quot; + r.status);
+    }
+    const datos = await r.json();
+    return datos;
+  } catch (error) {
+    console.error(&quot;Error asincrono:&quot;, error.message);
+  }
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p><code>fetch</code> NO lanza error si el servidor responde con 404 o 500: la promesa <strong>se cumple</strong> igual. Por eso revisamos <code>r.ok</code> y, si es falso, hacemos <code>throw</code>. Es uno de los tropiezos clasicos del principiante con peticiones.</p>
+<h3 id="que-significa-catch-y-then">🟦 ¿Que significa? — <em>.catch() y .then()</em></h3>
+<p>Cuando no usas <code>async/await</code>, manejas la promesa con <strong><code>.then()</code></strong> (que corre si todo va bien) y <strong><code>.catch()</code></strong> (que corre si falla). <strong>Para que sirve:</strong> reaccionar al resultado de una promesa al estilo de cadena. <strong>Donde se usa en un repo real:</strong> en <code>RachaSimple</code>, TanStack Query trabaja con promesas por dentro; entender <code>.then</code>/<code>.catch</code> te ayuda a leer ese flujo.</p>
+<h3 id="que-significa-unhandled-promise-rejection">🟦 ¿Que significa? — <em>Unhandled promise rejection</em></h3>
+<p>Una <strong>"unhandled promise rejection"</strong> es una promesa que fallo y <strong>nadie</strong> la capturo con <code>try...catch</code> ni <code>.catch()</code>. <strong>Para que sirve (saberlo):</strong> te avisa de un error asincrono que estas ignorando. <strong>Donde se usa en un repo real:</strong> si en <code>Faro/Organizer</code> olvidas capturar el fallo de una llamada a OpenAI, veras este aviso en la consola del servidor.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En <code>Faro/Organizer</code>, casi toda interaccion con Supabase, GitHub y OpenAI es asincrona. Acostumbrate a envolver cada <code>await</code> que toque la red en <code>try...catch</code> y a registrar <code>error.message</code>. Asi nunca tendras un fallo silencioso.</p>
+</blockquote>
+<h2 id="8-errores-comunes-de-principiante-y-como-resolverlos">8. Errores comunes de principiante (y como resolverlos)</h2>
+<p>Vamos con un mini-catalogo de tropiezos clasicos. Si reconoces uno, ya casi lo resolviste.</p>
+<blockquote class="def">
+<h3 id="que-significa-cannot-read-properties-of-nullundefined">🟦 ¿Que significa? — <em>Cannot read properties of null/undefined</em></h3>
+<p>Es el TypeError que aparece al <strong>leer algo de un valor vacio</strong>. <strong>Para que sirve (entenderlo):</strong> te dice que el objeto que esperabas no existe. <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, <code>querySelector</code> devolvio <code>null</code> porque el selector no coincide con ningun elemento del HTML.</p>
+<p><strong>Como resolverlo:</strong> revisa que el selector (<code>#id</code> o <code>.clase</code>) exista en el HTML y que el script corra <strong>despues</strong> de que el HTML cargo (script al final del <code>&lt;body&gt;</code> o con <code>defer</code>).</p>
+<h3 id="que-significa-is-not-defined-referenceerror">🟦 ¿Que significa? — <em>is not defined (ReferenceError)</em></h3>
+<p>Significa que usaste un nombre que el navegador no conoce. <strong>Para que sirve (entenderlo):</strong> casi siempre es un error de tipeo o una variable fuera de su sitio. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <code>tunal-digital</code>, llamar <code>abriChat()</code> en vez de <code>abrirChat()</code>.</p>
+<p><strong>Como resolverlo:</strong> revisa la ortografia del nombre y que la variable este declarada <strong>antes</strong> de usarla y en el mismo ambito.</p>
+<h3 id="que-significa-is-not-a-function-typeerror">🟦 ¿Que significa? — <em>is not a function (TypeError)</em></h3>
+<p>Significa que intentaste <strong>llamar</strong> como funcion algo que no lo es. <strong>Para que sirve (entenderlo):</strong> la variable existe pero no es una funcion. <strong>Donde se usa en un repo real:</strong> confundir <code>array.length</code> (un numero) con <code>array.length()</code> (intentar llamarlo) en <code>tunal-digital</code>.</p>
+<p><strong>Como resolverlo:</strong> verifica que el valor sea realmente una funcion; revisa si te sobra o falta un par de parentesis.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>Muchos "errores" no lanzan mensaje rojo: simplemente el resultado sale mal. Por ejemplo, comparar con <code>==</code> en vez de <code>===</code> puede dar resultados raros. Cuando algo "no funciona" pero no hay error en consola, es momento de <code>console.log</code> y breakpoints.</p>
+<h3 id="que-significa-error-de-logica">🟦 ¿Que significa? — <em>Error de logica</em></h3>
+<p>Un <strong>error de logica</strong> es cuando el codigo corre sin lanzar error, pero hace algo distinto a lo que querias. <strong>Para que sirve (entenderlo):</strong> te recuerda que "sin errores rojos" no significa "correcto". <strong>Donde se usa en un repo real:</strong> en <code>RachaSimple</code>, un calculo de racha que cuenta un dia de mas no lanza error, pero el numero esta mal; lo cazas comparando lo que esperas contra lo que imprime.</p>
+<h3 id="tip-el-metodo-del-patito-de-goma">💡 Tip — El metodo del patito de goma</h3>
+<p>Cuando estes atascado, explica tu codigo <strong>en voz alta</strong>, linea por linea, a un objeto (un patito, o a mi, Bit). Al forzarte a verbalizar cada paso, muchas veces descubres el fallo tu mismo antes de terminar la frase. Suena raro, pero funciona de verdad.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>Incluso fuera de JavaScript depuras leyendo mensajes. En <code>polypaw-nas</code> (servidor Ubuntu con Samba, Cockpit y Tailscale), cuando un servicio no arranca, lees los <strong>logs</strong> del sistema igual que aqui lees el stack: de arriba abajo, buscando la primera linea que explica la causa.</p>
+</blockquote>
+<h2 id="9-una-rutina-de-depuracion-que-siempre-funciona">9. Una rutina de depuracion que siempre funciona</h2>
+<p>Cuando algo falle, sigue estos pasos en orden y rara vez te quedaras atascado:</p>
+<ol>
+<li><strong>Lee el mensaje completo</strong> en la consola: tipo de error y texto.</li>
+<li><strong>Mira el stack:</strong> ve a la primera linea de TU codigo y abre ese archivo y linea.</li>
+<li><strong>Reproduce el error:</strong> averigua que accion exacta lo dispara.</li>
+<li><strong>Imprime valores</strong> cerca del fallo con <code>console.log</code> etiquetados.</li>
+<li><strong>Pausa con un breakpoint</strong> si los logs no bastan y revisa el Scope.</li>
+<li><strong>Forma una hipotesis</strong> ("creo que <code>email</code> llega vacio") y <strong>compruebala</strong>.</li>
+<li><strong>Arregla una sola cosa</strong> y vuelve a probar. No cambies cinco cosas a la vez.</li>
+<li><strong>Limpia</strong> los <code>console.log</code> y <code>debugger;</code> de prueba.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Cambia <strong>una cosa cada vez</strong>. Si tocas cinco lineas y el error desaparece, no sabras cual lo arreglo, y volvera a aparecer. Paso a paso, como caminamos los ajolotes.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se abrir la consola del navegador y la pestaña Sources.</li>
+<li>[ ] Distingo SyntaxError, ReferenceError y TypeError por su mensaje.</li>
+<li>[ ] Se leer un stack trace y encontrar la linea de mi codigo que fallo.</li>
+<li>[ ] Entiendo que <code>null</code> y <code>undefined</code> causan el clasico "Cannot read properties of...".</li>
+<li>[ ] Se usar <code>try...catch</code> para manejar codigo que puede fallar.</li>
+<li>[ ] Se lanzar mis propios errores con <code>throw new Error(...)</code>.</li>
+<li>[ ] Uso <code>finally</code> para limpiar cosas pase lo que pase.</li>
+<li>[ ] Diferencio <code>console.log</code>, <code>console.error</code> y <code>console.table</code> y cuando usar cada uno.</li>
+<li>[ ] Se poner un breakpoint y avanzar paso a paso con step over / step into.</li>
+<li>[ ] Entiendo que un fallo en un <code>await</code> se captura con <code>try...catch</code>.</li>
+<li>[ ] Se que <code>fetch</code> no falla solo por un 404 y reviso <code>r.ok</code>.</li>
+<li>[ ] Tengo una rutina ordenada para depurar y cambio una cosa a la vez.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 <strong>Caza el SyntaxError.</strong> Copia en un archivo <code>.js</code> una funcion a la que le falte cerrar una llave <code>}</code>. Abre la pagina, mira el error en consola e identifica el tipo y la linea. Luego arreglalo y confirma que desaparece.</p>
+</li>
+<li>
+<p>💻 <strong>Provoca y lee un TypeError.</strong> Escribe <code>document.querySelector("#noexiste").value</code> en la consola del navegador. Lee el mensaje completo, explica con tus palabras por que ocurre y como lo evitarias.</p>
+</li>
+<li>
+<p>💻 <strong>Envuelve un fetch en try/catch.</strong> Escribe una funcion <code>async</code> que haga <code>fetch</code> a una URL inventada (que fallara). Captura el error con <code>try...catch</code>, registra <code>error.message</code> con <code>console.error</code> y devuelve un texto amable como "no se pudo cargar".</p>
+</li>
+<li>
+<p>💻 <strong>Practica breakpoints.</strong> En un script con una funcion que sume dos numeros leidos de inputs, pon un breakpoint dentro de la funcion. Pausa el programa, mira los valores en Scope y avanza con step over hasta el <code>return</code>.</p>
+</li>
+<li>
+<p><strong>Clasifica errores (sin computadora).</strong> Para cada mensaje, di que tipo de error es y una causa probable: (a) <code>x is not defined</code>, (b) <code>Cannot read properties of null (reading 'value')</code>, (c) <code>missing ) after argument list</code>, (d) <code>boton.adEventListener is not a function</code>.</p>
+</li>
+<li>
+<p><strong>Diseña tu validacion con throw (papel).</strong> Imagina una funcion <code>registrarEdad(edad)</code> que debe rechazar edades negativas. Escribe en papel donde pondrias <code>throw new Error(...)</code> y como un <code>try...catch</code> que la llame mostraria el mensaje al usuario.</p>
+</li>
+</ol>
+<blockquote>
+<p>¡Lo lograste! Ahora los errores ya no son monstruos: son pistas. Cada mensaje rojo que leas con calma te hace mejor programador. Yo, Bit, sigo nadando a tu lado. En el proximo capitulo seguimos construyendo. Recuerda: programar es, en gran parte, depurar con paciencia.</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

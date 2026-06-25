@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 09 — Objetos a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-09-objetos-a-fondo">Capitulo 09 — Objetos a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guia. Hasta ahora hemos visto variables, funciones y arreglos. Hoy abrimos la caja fuerte de JavaScript: los <strong>objetos</strong>. Casi todo lo que toca tu codigo real (la respuesta de una API, un usuario de Supabase, la configuracion de un proyecto en Faro) llega en forma de objeto. Si dominas esto, dominas el 80% del trabajo del dia a dia. Respira, mueve las branquias, y vamos despacio. Cada palabra rara la voy a explicar en un recuadro azul. Nada quedara sin definir.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-un-objeto-y-por-que-importa">1. ¿Que es un objeto y por que importa?</h2>
+<p>Un arreglo guarda cosas en orden por numero: <code>lista[0]</code>, <code>lista[1]</code>. Un objeto guarda cosas con <strong>nombre</strong>: <code>usuario.nombre</code>, <code>usuario.edad</code>. Cuando lo que describes tiene partes que merecen un nombre, usa un objeto.</p>
+<blockquote class="def">
+<h3 id="que-significa-objeto">🟦 ¿Que significa? — <em>Objeto</em></h3>
+<p>Es una coleccion de pares <strong>nombre + valor</strong>. Cada nombre se llama <strong>propiedad</strong> y cada valor puede ser un texto, un numero, otro objeto o incluso una funcion.
+<strong>Para que sirve:</strong> agrupar datos que pertenecen a la misma "cosa" bajo una sola variable.
+<strong>Donde se usa en un repo real:</strong> en <strong>Faro/Organizer</strong> cada proyecto analizado es un objeto con propiedades como <code>nombre</code>, <code>estado</code>, <code>progreso</code> y <code>roadmap</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">const proyecto = {
+  nombre: &quot;Faro&quot;,
+  estado: &quot;en progreso&quot;,
+  progreso: 42,
+};
+
+console.log(proyecto.nombre); // &quot;Faro&quot;
+</code></pre>
+<p>Las llaves <code>{ }</code> delimitan el objeto. Dentro van pares <code>clave: valor</code> separados por comas.</p>
+<blockquote class="def">
+<h3 id="que-significa-propiedad">🟦 ¿Que significa? — <em>Propiedad</em></h3>
+<p>Es uno de los nombres dentro del objeto (en el ejemplo: <code>nombre</code>, <code>estado</code>, <code>progreso</code>). Tambien se le llama <strong>clave</strong> (en ingles <em>key</em>).
+<strong>Para que sirve:</strong> etiquetar cada dato para poder pedirlo despues por su nombre.
+<strong>Donde se usa:</strong> en <strong>tunal-digital</strong>, cuando el formulario de contacto arma un objeto con propiedades <code>nombre</code>, <code>email</code> y <code>mensaje</code> antes de enviarlo.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Lee un objeto como una ficha: "este proyecto <strong>tiene</strong> nombre Faro, <strong>tiene</strong> estado en progreso". La palabra "tiene" es la pista de que estas frente a propiedades.</p>
+</blockquote>
+<hr />
+<h2 id="2-leer-y-escribir-propiedades-punto-y-corchetes">2. Leer y escribir propiedades: punto y corchetes</h2>
+<p>Hay dos formas de acceder a una propiedad.</p>
+<pre><code class="language-javascript">const usuario = { nombre: &quot;Edwar&quot;, rol: &quot;dueño&quot; };
+
+// Notacion de punto: la mas comun y legible
+console.log(usuario.nombre); // &quot;Edwar&quot;
+
+// Notacion de corchetes: util cuando la clave esta en una variable
+const clave = &quot;rol&quot;;
+console.log(usuario[clave]); // &quot;dueño&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-notacion-de-punto">🟦 ¿Que significa? — <em>Notacion de punto</em></h3>
+<p>Escribir <code>objeto.propiedad</code> para leer o cambiar un valor.
+<strong>Para que sirve:</strong> es la forma corta y clara cuando ya sabes el nombre exacto de la propiedad.
+<strong>Donde se usa:</strong> en <strong>RachaSimple</strong>, al leer <code>racha.dias</code> de un dato traido de Supabase.</p>
+<h3 id="que-significa-notacion-de-corchetes">🟦 ¿Que significa? — <em>Notacion de corchetes</em></h3>
+<p>Escribir <code>objeto["propiedad"]</code>. Acepta un texto o una variable que contenga el nombre.
+<strong>Para que sirve:</strong> cuando el nombre de la propiedad se decide en tiempo de ejecucion (por ejemplo, viene de un bucle o de la eleccion del usuario).
+<strong>Donde se usa:</strong> util en <strong>PolyPaw</strong> al recorrer las claves de un JSON de misiones donde cada clave es un id distinto.</p>
+</blockquote>
+<p>Para escribir, asignas con <code>=</code>:</p>
+<pre><code class="language-javascript">usuario.rol = &quot;administrador&quot;; // cambia un valor existente
+usuario.activo = true;         // crea una propiedad nueva
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pides una propiedad que no existe, JavaScript <strong>no se rompe</strong>: devuelve <code>undefined</code>. Eso puede confundir, porque parece que "funciono". Mas adelante veremos <code>?.</code> para protegerte de esto.</p>
+</blockquote>
+<hr />
+<h2 id="3-metodos-funciones-que-viven-dentro-del-objeto">3. Metodos: funciones que viven dentro del objeto</h2>
+<p>Un objeto no solo guarda datos; tambien puede guardar <strong>acciones</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-metodo">🟦 ¿Que significa? — <em>Metodo</em></h3>
+<p>Es una propiedad cuyo valor es una funcion. En lugar de un dato, guarda algo que el objeto <strong>sabe hacer</strong>.
+<strong>Para que sirve:</strong> mantener juntas las acciones con los datos sobre los que actuan.
+<strong>Donde se usa:</strong> en <strong>tunal-digital</strong>, el <code>main.js</code> define funciones de atajo (acortar/seleccionar elementos del DOM); agrupadas en un objeto serian metodos de ese objeto utilitario.</p>
+</blockquote>
+<pre><code class="language-javascript">const saludador = {
+  nombre: &quot;Bit&quot;,
+  saludar() {
+    return &quot;Hola, soy &quot; + this.nombre;
+  },
+};
+
+console.log(saludador.saludar()); // &quot;Hola, soy Bit&quot;
+</code></pre>
+<p>Fijate en <code>saludar() { ... }</code>: es el <strong>atajo de metodo</strong>, una forma corta de escribir <code>saludar: function() { ... }</code>. Y aparecio una palabra clave nueva: <code>this</code>.</p>
+<hr />
+<h2 id="4-this-el-yo-mismo-del-objeto">4. <code>this</code>: el "yo mismo" del objeto</h2>
+<blockquote class="def">
+<h3 id="que-significa-this">🟦 ¿Que significa? — <em>this</em></h3>
+<p>Dentro de un metodo, <code>this</code> se refiere al <strong>objeto que llamo al metodo</strong>. Es como decir "yo mismo".
+<strong>Para que sirve:</strong> que un metodo pueda leer las propiedades de su propio objeto sin repetir el nombre de la variable.
+<strong>Donde se usa:</strong> en cualquier objeto con metodos; por ejemplo, en componentes de <strong>Faro</strong> cuando un objeto de configuracion necesita referirse a sus propios valores.</p>
+</blockquote>
+<pre><code class="language-javascript">const carrito = {
+  productos: [&quot;camisa&quot;, &quot;gorra&quot;],
+  total() {
+    return this.productos.length; // &quot;this&quot; = carrito
+  },
+};
+
+console.log(carrito.total()); // 2
+</code></pre>
+<p>Cuando escribes <code>carrito.total()</code>, JavaScript pone <code>this = carrito</code> mientras corre el metodo. Por eso <code>this.productos</code> es lo mismo que <code>carrito.productos</code>.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>this</code> cambia segun <strong>como se llama</strong> la funcion, no segun donde se escribio. Si extraes el metodo a una variable suelta (<code>const f = carrito.total; f();</code>), <code>this</code> se pierde y obtienes un error o <code>undefined</code>. Para principiantes, la regla segura es: <strong>llama los metodos pegados a su objeto</strong> (<code>carrito.total()</code>), no por separado.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Las <strong>funciones flecha</strong> (<code>() =&gt; {}</code>) no tienen su propio <code>this</code>: heredan el de afuera. Por eso, para metodos que usan <code>this</code>, prefiere la sintaxis normal <code>metodo() {}</code> y no la flecha.</p>
+</blockquote>
+<hr />
+<h2 id="5-atajo-de-propiedades-shorthand">5. Atajo de propiedades (shorthand)</h2>
+<p>Muy seguido tienes una variable que se llama igual que la propiedad que quieres crear. JavaScript te deja escribirlo una sola vez.</p>
+<blockquote class="def">
+<h3 id="que-significa-atajo-de-propiedades-shorthand">🟦 ¿Que significa? — <em>Atajo de propiedades</em> (shorthand)</h3>
+<p>Si ya tienes una variable <code>nombre</code>, puedes escribir <code>{ nombre }</code> en vez de <code>{ nombre: nombre }</code>. Ambos crean una propiedad <code>nombre</code> con el valor de la variable.
+<strong>Para que sirve:</strong> evitar repetir y escribir menos.
+<strong>Donde se usa:</strong> en <strong>RachaSimple</strong>, al armar el objeto que se envia a Supabase usando variables que ya se llaman como las columnas.</p>
+</blockquote>
+<pre><code class="language-javascript">const nombre = &quot;Faro&quot;;
+const estado = &quot;activo&quot;;
+
+// Forma larga
+const a = { nombre: nombre, estado: estado };
+
+// Atajo (identico resultado)
+const b = { nombre, estado };
+
+console.log(b); // { nombre: &quot;Faro&quot;, estado: &quot;activo&quot; }
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En el <code>main.js</code> de <strong>tunal-digital</strong>, cuando recoges los valores del formulario en variables <code>nombre</code>, <code>email</code>, <code>mensaje</code>, puedes mandarlos al Worker como <code>{ nombre, email, mensaje }</code> sin repetir nada.</p>
+</blockquote>
+<hr />
+<h2 id="6-spread-y-copia-de-objetos">6. Spread y copia de objetos</h2>
+<p>Aqui empieza una de las herramientas mas usadas en proyectos React (RachaSimple, Faro): el operador <strong>spread</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-spread">🟦 ¿Que significa? — <em>Spread</em> (<code>...</code>)</h3>
+<p>Tres puntos delante de un objeto que "desparraman" todas sus propiedades dentro de otro objeto nuevo.
+<strong>Para que sirve:</strong> copiar un objeto o combinar varios sin tocar los originales.
+<strong>Donde se usa:</strong> en <strong>Faro</strong> y <strong>RachaSimple</strong>, para actualizar el estado de React creando una copia con un cambio, en vez de modificar el objeto viejo.</p>
+</blockquote>
+<pre><code class="language-javascript">const base = { nombre: &quot;Faro&quot;, estado: &quot;activo&quot;, progreso: 42 };
+
+// Copia exacta
+const copia = { ...base };
+
+// Copia con un cambio
+const actualizado = { ...base, progreso: 80 };
+
+console.log(actualizado); // { nombre: &quot;Faro&quot;, estado: &quot;activo&quot;, progreso: 80 }
+console.log(base.progreso); // 42  (el original NO cambio)
+</code></pre>
+<p>Cuando dos propiedades chocan, <strong>gana la ultima</strong> escrita. Por eso <code>progreso: 80</code> pisa al <code>progreso: 42</code> que venia en <code>...base</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-copia-inmutabilidad">🟦 ¿Que significa? — <em>Copia (inmutabilidad)</em></h3>
+<p>Hacer un objeto nuevo con los mismos datos en vez de modificar el original. Trabajar asi se llama <strong>inmutabilidad</strong>.
+<strong>Para que sirve:</strong> evitar errores donde un cambio en un lado rompe otra parte del programa que apuntaba al mismo objeto.
+<strong>Donde se usa:</strong> es <strong>obligatorio</strong> al actualizar estado en React (RachaSimple, Faro); por eso veras <code>...</code> por todos lados en esos repos.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>El spread hace una <strong>copia superficial</strong> (<em>shallow copy</em>): copia el primer nivel, pero los objetos anidados se comparten. Si <code>base</code> tuviera <code>config: { tema: "oscuro" }</code>, la copia y el original apuntarian al <strong>mismo</strong> <code>config</code>. Para cambios profundos, copia tambien el nivel interno: <code>{ ...base, config: { ...base.config, tema: "claro" } }</code>.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>El mismo <code>...</code> sirve para combinar: <code>{ ...valoresPorDefecto, ...valoresDelUsuario }</code> aplica los del usuario encima de los defaults. Patron clasico para configuraciones.</p>
+</blockquote>
+<hr />
+<h2 id="7-desestructuracion-sacar-propiedades-a-variables">7. Desestructuracion: sacar propiedades a variables</h2>
+<p>Sacar valores de un objeto uno por uno cansa. La <strong>desestructuracion</strong> lo hace en una linea.</p>
+<blockquote class="def">
+<h3 id="que-significa-desestructuracion">🟦 ¿Que significa? — <em>Desestructuracion</em></h3>
+<p>Sintaxis para extraer propiedades de un objeto y guardarlas en variables sueltas de golpe.
+<strong>Para que sirve:</strong> escribir menos y dejar claro al inicio de una funcion que datos vas a usar.
+<strong>Donde se usa:</strong> en <strong>Faro</strong> y <strong>RachaSimple</strong>, en cada componente que recibe <code>props</code> o que lee un resultado de TanStack Query con <code>const { data, isLoading } = useQuery(...)</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">const proyecto = { nombre: &quot;Faro&quot;, estado: &quot;activo&quot;, progreso: 42 };
+
+// Forma larga
+const nombre1 = proyecto.nombre;
+const estado1 = proyecto.estado;
+
+// Desestructuracion (mismo resultado)
+const { nombre, estado } = proyecto;
+
+console.log(nombre); // &quot;Faro&quot;
+console.log(estado); // &quot;activo&quot;
+</code></pre>
+<p>El nombre de la variable debe coincidir con el de la propiedad. Pero a veces no quieres eso, y para eso existe el renombrado.</p>
+<h3 id="71-renombrado">7.1 Renombrado</h3>
+<blockquote class="def">
+<h3 id="que-significa-renombrado-en-desestructuracion">🟦 ¿Que significa? — <em>Renombrado en desestructuracion</em></h3>
+<p>Cambiar el nombre de la variable usando <code>propiedad: nuevoNombre</code>.
+<strong>Para que sirve:</strong> evitar choques de nombres o usar un nombre mas claro en tu codigo.
+<strong>Donde se usa:</strong> comun en <strong>RachaSimple</strong> cuando dos consultas devuelven <code>data</code> y necesitas distinguirlas: <code>const { data: rachas } = useQuery(...)</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">const { nombre: tituloProyecto } = proyecto;
+console.log(tituloProyecto); // &quot;Faro&quot;
+// Ojo: &quot;nombre&quot; como variable ya no existe; ahora es &quot;tituloProyecto&quot;
+</code></pre>
+<h3 id="72-valores-por-defecto">7.2 Valores por defecto</h3>
+<blockquote class="def">
+<h3 id="que-significa-valor-por-defecto-en-desestructuracion">🟦 ¿Que significa? — <em>Valor por defecto en desestructuracion</em></h3>
+<p>Un valor de respaldo (<code>propiedad = valor</code>) que se usa <strong>solo</strong> si la propiedad es <code>undefined</code>.
+<strong>Para que sirve:</strong> que tu variable nunca quede vacia cuando el dato no vino.
+<strong>Donde se usa:</strong> en <strong>Faro</strong>, al leer configuracion de un proyecto donde algunos campos podrian faltar.</p>
+</blockquote>
+<pre><code class="language-javascript">const config = { tema: &quot;oscuro&quot; };
+
+const { tema = &quot;claro&quot;, idioma = &quot;es&quot; } = config;
+
+console.log(tema);   // &quot;oscuro&quot; (vino en el objeto)
+console.log(idioma); // &quot;es&quot;     (no vino, se uso el default)
+</code></pre>
+<p>Puedes combinar renombrado y default a la vez:</p>
+<pre><code class="language-javascript">const { idioma: lang = &quot;es&quot; } = config;
+console.log(lang); // &quot;es&quot;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>El default salta <strong>solo con <code>undefined</code></strong>, no con otros valores "vacios". Si la propiedad vale <code>null</code>, <code>0</code> o <code>""</code>, esos SI se respetan y el default no entra. Es un error tipico esperar que <code>0</code> active el respaldo: no lo hace.</p>
+</blockquote>
+<hr />
+<h2 id="8-optional-chaining-leer-sin-miedo-a-romper">8. Optional chaining <code>?.</code>: leer sin miedo a romper</h2>
+<p>Cuando lees datos anidados (un objeto dentro de otro), si un nivel falta, el programa <strong>explota</strong> con un error. El operador <code>?.</code> evita ese golpe.</p>
+<blockquote class="def">
+<h3 id="que-significa-optional-chaining">🟦 ¿Que significa? — <em>Optional chaining</em> (<code>?.</code>)</h3>
+<p>Operador que lee una propiedad solo si lo de la izquierda existe; si es <code>null</code> o <code>undefined</code>, devuelve <code>undefined</code> en vez de lanzar error.
+<strong>Para que sirve:</strong> acceder con seguridad a datos que podrian no estar (respuestas de API incompletas, usuario sin sesion, etc.).
+<strong>Donde se usa:</strong> en <strong>Faro</strong> y <strong>RachaSimple</strong>, al leer datos del usuario de Supabase: <code>user?.email</code> no truena aunque <code>user</code> sea <code>null</code> mientras carga la sesion.</p>
+</blockquote>
+<pre><code class="language-javascript">const respuesta = {
+  proyecto: { nombre: &quot;Faro&quot; },
+};
+
+// Sin ?.  -&gt; esto explotaria si &quot;drive&quot; no existe:
+// console.log(respuesta.drive.archivos); // ❌ TypeError
+
+// Con ?.  -&gt; seguro:
+console.log(respuesta.drive?.archivos); // undefined (no truena)
+console.log(respuesta.proyecto?.nombre); // &quot;Faro&quot;
+</code></pre>
+<p>Tambien funciona para llamar metodos que quizas no existan:</p>
+<pre><code class="language-javascript">const obj = {};
+obj.saludar?.(); // no hace nada, pero NO truena
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En el <code>main.js</code> de <strong>tunal-digital</strong>, cuando haces <code>fetch</code> al Worker y conviertes la respuesta a objeto, no todos los campos llegan siempre. Leer <code>data?.respuesta?.texto</code> evita que la pagina se rompa si el chat de IA devolvio algo distinto a lo esperado.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>No abuses de <code>?.</code>. Si una propiedad <strong>siempre</strong> deberia existir, usar <code>?.</code> esconde bugs reales. Usalo solo donde de verdad el dato puede faltar.</p>
+</blockquote>
+<hr />
+<h2 id="9-nullish-coalescing-un-respaldo-mas-preciso">9. Nullish coalescing <code>??</code>: un respaldo mas preciso</h2>
+<p><code>?.</code> te da <code>undefined</code> cuando algo falta. Casi siempre quieres poner un valor de respaldo. Para eso esta <code>??</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-nullish-coalescing">🟦 ¿Que significa? — <em>Nullish coalescing</em> (<code>??</code>)</h3>
+<p>Operador que devuelve lo de la derecha <strong>solo</strong> si lo de la izquierda es <code>null</code> o <code>undefined</code>. La palabra <em>nullish</em> significa "que es null o undefined".
+<strong>Para que sirve:</strong> dar un valor por defecto sin equivocarte con datos validos como <code>0</code> o <code>""</code>.
+<strong>Donde se usa:</strong> en <strong>Faro</strong>, al mostrar el progreso: <code>progreso ?? 0</code> deja pasar un <code>0</code> real pero cubre el caso de dato ausente.</p>
+</blockquote>
+<pre><code class="language-javascript">const progreso = 0;
+
+console.log(progreso ?? 100); // 0   -&gt; 0 es valido, se respeta
+console.log(progreso || 100); // 100 -&gt; ¡ojo! &quot;||&quot; trata el 0 como falso
+</code></pre>
+<p>Esa es la diferencia clave con el viejo <code>||</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-valor-falsy">🟦 ¿Que significa? — <em>Valor "falsy"</em></h3>
+<p>En JavaScript, los valores que cuentan como "falso" en una condicion: <code>false</code>, <code>0</code>, <code>""</code> (texto vacio), <code>null</code>, <code>undefined</code> y <code>NaN</code>.
+<strong>Para que sirve:</strong> entender por que <code>||</code> a veces "se come" un <code>0</code> o un texto vacio que tu si querias conservar.
+<strong>Donde se usa:</strong> en cualquier repo; saberlo evita bugs sutiles al poner defaults.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Regla practica: usa <code>??</code> cuando <code>0</code>, <code>""</code> o <code>false</code> sean <strong>valores validos</strong> que quieres conservar. Usa <code>||</code> solo cuando de verdad quieras tratar todos esos como "vacio".</p>
+</blockquote>
+<p><code>?.</code> y <code>??</code> se combinan de maravilla:</p>
+<pre><code class="language-javascript">const usuario = null;
+const nombre = usuario?.nombre ?? &quot;Invitado&quot;;
+console.log(nombre); // &quot;Invitado&quot;
+</code></pre>
+<hr />
+<h2 id="10-recorrer-objetos-keys-values-y-entries">10. Recorrer objetos: keys, values y entries</h2>
+<p>Un objeto no se recorre con <code>for</code> por indice como un arreglo. Para eso <code>Object</code> nos da tres ayudantes.</p>
+<blockquote class="def">
+<h3 id="que-significa-objectkeys">🟦 ¿Que significa? — <em>Object.keys()</em></h3>
+<p>Funcion que devuelve un <strong>arreglo con los nombres</strong> (claves) de las propiedades de un objeto.
+<strong>Para que sirve:</strong> saber que propiedades tiene un objeto y recorrerlas.
+<strong>Donde se usa:</strong> en <strong>PolyPaw</strong>, al recorrer las claves de un JSON de misiones para listarlas.</p>
+<h3 id="que-significa-objectvalues">🟦 ¿Que significa? — <em>Object.values()</em></h3>
+<p>Devuelve un arreglo con los <strong>valores</strong> de las propiedades.
+<strong>Para que sirve:</strong> trabajar solo con los datos sin importar como se llaman.
+<strong>Donde se usa:</strong> util para sumar o filtrar todos los valores de un objeto de configuracion.</p>
+<h3 id="que-significa-objectentries">🟦 ¿Que significa? — <em>Object.entries()</em></h3>
+<p>Devuelve un arreglo de pares <code>[clave, valor]</code>, uno por cada propiedad.
+<strong>Para que sirve:</strong> recorrer clave y valor al mismo tiempo.
+<strong>Donde se usa:</strong> en <strong>Faro</strong>, al pintar una tabla donde cada fila muestra el nombre de un dato y su valor.</p>
+</blockquote>
+<pre><code class="language-javascript">const proyecto = { nombre: &quot;Faro&quot;, estado: &quot;activo&quot;, progreso: 42 };
+
+console.log(Object.keys(proyecto));   // [&quot;nombre&quot;, &quot;estado&quot;, &quot;progreso&quot;]
+console.log(Object.values(proyecto)); // [&quot;Faro&quot;, &quot;activo&quot;, 42]
+console.log(Object.entries(proyecto));
+// [[&quot;nombre&quot;,&quot;Faro&quot;], [&quot;estado&quot;,&quot;activo&quot;], [&quot;progreso&quot;,42]]
+</code></pre>
+<p>Como te devuelven <strong>arreglos</strong>, puedes usar todo lo que ya sabes de arreglos, como <code>forEach</code>:</p>
+<pre><code class="language-javascript">Object.entries(proyecto).forEach(([clave, valor]) =&gt; {
+  console.log(`${clave}: ${valor}`);
+});
+// nombre: Faro
+// estado: activo
+// progreso: 42
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Fijate en <code>([clave, valor]) =&gt;</code>: ahi hay desestructuracion de <strong>arreglos</strong>. Cada par <code>[clave, valor]</code> se abre directo en dos variables. Mezclar tecnicas asi es lo normal en codigo real.</p>
+</blockquote>
+<hr />
+<h2 id="11-json-a-fondo-stringify-y-parse">11. JSON a fondo: stringify y parse</h2>
+<p>Cuando guardas datos en un archivo o los mandas por internet, no viajan como objetos: viajan como <strong>texto</strong>. JSON es el formato de ese texto.</p>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p>Sigla de <em>JavaScript Object Notation</em>. Es un <strong>formato de texto</strong> para representar objetos y arreglos. Se parece mucho a un objeto de JavaScript, pero es texto plano y con reglas estrictas (claves siempre entre comillas dobles, sin funciones, sin comas finales).
+<strong>Para que sirve:</strong> guardar datos en archivos y enviarlos entre programas o por la red.
+<strong>Donde se usa:</strong> en <strong>PolyPaw</strong> las misiones se guardan en archivos <code>.json</code>; en <strong>tunal-digital</strong> el <code>fetch</code> al Worker envia y recibe JSON.</p>
+<h3 id="que-significa-jsonstringify">🟦 ¿Que significa? — <em>JSON.stringify()</em></h3>
+<p>Convierte un objeto de JavaScript en <strong>texto</strong> JSON.
+<strong>Para que sirve:</strong> preparar datos para guardarlos o mandarlos por <code>fetch</code>.
+<strong>Donde se usa:</strong> en <strong>tunal-digital</strong>, el <code>main.js</code> hace <code>JSON.stringify</code> del mensaje del usuario antes de enviarlo al Worker de IA.</p>
+<h3 id="que-significa-jsonparse">🟦 ¿Que significa? — <em>JSON.parse()</em></h3>
+<p>Hace lo contrario: convierte <strong>texto</strong> JSON de vuelta a un objeto de JavaScript usable.
+<strong>Para que sirve:</strong> leer datos que llegaron como texto (de una API, de un archivo) y volver a usarlos como objeto.
+<strong>Donde se usa:</strong> en <strong>PolyPaw</strong> al cargar un archivo de misiones; en <strong>tunal-digital</strong> al leer la respuesta del Worker.</p>
+</blockquote>
+<pre><code class="language-javascript">const proyecto = { nombre: &quot;Faro&quot;, progreso: 42 };
+
+// Objeto -&gt; texto
+const texto = JSON.stringify(proyecto);
+console.log(texto); // '{&quot;nombre&quot;:&quot;Faro&quot;,&quot;progreso&quot;:42}'
+console.log(typeof texto); // &quot;string&quot;
+
+// Texto -&gt; objeto
+const otraVez = JSON.parse(texto);
+console.log(otraVez.progreso); // 42
+console.log(typeof otraVez); // &quot;object&quot;
+</code></pre>
+<h3 id="111-stringify-con-formato-bonito">11.1 stringify con formato bonito</h3>
+<p><code>JSON.stringify</code> acepta dos argumentos extra: uno para filtrar y otro para <strong>indentar</strong>.</p>
+<pre><code class="language-javascript">const bonito = JSON.stringify(proyecto, null, 2);
+console.log(bonito);
+// {
+//   &quot;nombre&quot;: &quot;Faro&quot;,
+//   &quot;progreso&quot;: 42
+// }
+</code></pre>
+<p>El <code>null</code> es el "filtro" (no filtramos nada) y el <code>2</code> son los espacios de sangria. Asi se ven los <code>.json</code> legibles de <strong>PolyPaw</strong>.</p>
+<blockquote class="warn">
+<h3 id="cuidado_5">⚠️ Cuidado</h3>
+<p><code>JSON.stringify</code> <strong>ignora</strong> las funciones y el valor <code>undefined</code>: simplemente no aparecen en el texto. JSON guarda datos, no acciones. Si necesitabas un metodo, no estara al volver con <code>parse</code>.</p>
+<h3 id="cuidado_6">⚠️ Cuidado</h3>
+<p><code>JSON.parse</code> <strong>truena</strong> si el texto no es JSON valido (una coma de mas, una comilla simple). Cuando el texto viene de afuera (de un <code>fetch</code>), protege la llamada con <code>try { ... } catch { ... }</code> para que un dato malo no rompa toda la pagina.</p>
+</blockquote>
+<pre><code class="language-javascript">try {
+  const datos = JSON.parse(textoDeAfuera);
+} catch {
+  console.log(&quot;El texto no era JSON valido&quot;);
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>El ciclo completo del chat de <strong>tunal-digital</strong> es: armas un objeto <code>{ mensaje }</code>, lo conviertes con <code>JSON.stringify</code> para el <code>fetch</code>, el Worker responde texto JSON, y tu lo recuperas con <code>JSON.parse</code> (o con <code>await respuesta.json()</code>, que hace el parse por dentro). Entender este viaje texto-objeto es entender medio backend.</p>
+</blockquote>
+<hr />
+<h2 id="12-todo-junto-un-mini-ejemplo-realista">12. Todo junto: un mini ejemplo realista</h2>
+<p>Juntemos varias piezas como en un caso de <strong>Faro</strong>:</p>
+<pre><code class="language-javascript">function resumirProyecto(datos) {
+  // Desestructuracion con default y renombrado
+  const {
+    nombre = &quot;Sin nombre&quot;,
+    estado = &quot;desconocido&quot;,
+    metricas: { progreso } = {}, // anidado con default
+  } = datos;
+
+  // Optional chaining + nullish
+  const ultimoRoadmap = datos.roadmap?.[0]?.titulo ?? &quot;Sin tareas&quot;;
+
+  // Copia inmutable con un campo nuevo
+  const resumen = { nombre, estado, progreso: progreso ?? 0, ultimoRoadmap };
+
+  return JSON.stringify(resumen, null, 2);
+}
+
+console.log(
+  resumirProyecto({
+    nombre: &quot;Faro&quot;,
+    metricas: { progreso: 42 },
+    roadmap: [{ titulo: &quot;OAuth con Supabase&quot; }],
+  })
+);
+// {
+//   &quot;nombre&quot;: &quot;Faro&quot;,
+//   &quot;estado&quot;: &quot;desconocido&quot;,
+//   &quot;progreso&quot;: 42,
+//   &quot;ultimoRoadmap&quot;: &quot;OAuth con Supabase&quot;
+// }
+</code></pre>
+<p>Mira cuanto cabe en pocas lineas: desestructuracion, defaults, <code>?.</code>, <code>??</code>, copia con spread implicito y <code>JSON.stringify</code>. Eso es JavaScript real.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se crear un objeto y leer/escribir propiedades con punto y con corchetes.</li>
+<li>[ ] Entiendo que un metodo es una funcion dentro de un objeto.</li>
+<li>[ ] Se que <code>this</code> es "el objeto que llamo al metodo" y por que conviene llamar el metodo pegado a su objeto.</li>
+<li>[ ] Uso el atajo de propiedades <code>{ nombre }</code> cuando la variable se llama igual.</li>
+<li>[ ] Copio objetos con <code>...</code> y entiendo que es una copia superficial.</li>
+<li>[ ] Desestructuro con renombrado (<code>prop: nuevo</code>) y con valores por defecto (<code>prop = valor</code>).</li>
+<li>[ ] Distingo cuando el default salta (solo con <code>undefined</code>).</li>
+<li>[ ] Leo datos anidados con <code>?.</code> sin que el programa truene.</li>
+<li>[ ] Uso <code>??</code> para defaults y se por que es mejor que <code>||</code> cuando <code>0</code> o <code>""</code> son validos.</li>
+<li>[ ] Recorro objetos con <code>Object.keys</code>, <code>Object.values</code> y <code>Object.entries</code>.</li>
+<li>[ ] Convierto objeto-a-texto con <code>JSON.stringify</code> y texto-a-objeto con <code>JSON.parse</code>, y protejo el parse con <code>try/catch</code>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Ficha de mascota (papel o consola).</strong> Escribe en un objeto <code>bit</code> las propiedades <code>nombre</code>, <code>especie</code> y <code>colorFavorito</code>. Luego, sin mirar, di que devuelve <code>bit.edad</code>. (Pista: la propiedad no existe.)</p>
+</li>
+<li>
+<p>💻 <strong>Metodo con <code>this</code>.</strong> Crea un objeto <code>contador</code> con propiedad <code>valor: 0</code> y un metodo <code>sumar()</code> que haga <code>this.valor++</code> y devuelva <code>this.valor</code>. Llamalo tres veces y comprueba que imprime <code>1</code>, <code>2</code>, <code>3</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Copia segura.</strong> Parte de <code>const base = { nombre: "Faro", progreso: 42 }</code>. Crea <code>mejorado</code> con spread cambiando <code>progreso</code> a <code>100</code>. Imprime <code>base.progreso</code> y confirma que sigue en <code>42</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Desestructuracion con defaults.</strong> Dado <code>const config = { tema: "oscuro" }</code>, desestructura <code>tema</code> y <code>idioma</code> poniendo <code>"es"</code> como default de <code>idioma</code>. Imprime ambos. Luego renombra <code>tema</code> a <code>apariencia</code>.</p>
+</li>
+<li>
+<p>💻 <strong><code>?.</code> y <code>??</code> al rescate.</strong> Dado <code>const data = { proyecto: { nombre: "Faro" } }</code>, intenta leer <code>data.drive?.archivos?.length ?? 0</code> y explica por que el resultado es <code>0</code> en vez de un error.</p>
+</li>
+<li>
+<p>💻 <strong>Ida y vuelta con JSON.</strong> Toma el objeto del ejercicio 3, conviertelo a texto con <code>JSON.stringify(obj, null, 2)</code> e imprimelo. Luego pasalo por <code>JSON.parse</code> y comprueba con <code>typeof</code> que volviste a tener un objeto.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. Hoy abriste, copiaste, recorriste y empaquetaste objetos como un profesional. Cada vez que en <strong>Faro</strong> o <strong>RachaSimple</strong> veas <code>{ ...algo }</code>, <code>data?.campo</code> o <code>JSON.stringify</code>, ya sabras exactamente que pasa por dentro. Nos vemos en el siguiente capitulo. — Bit 🐾
+```</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

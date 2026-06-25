@@ -42,7 +42,17 @@ aparatos**: los interruptores, el timbre, las cosas que *reaccionan*.
 | 03 | [Bucles y funciones](03-bucles-y-funciones.md) | `for`, `while`, funciones, parámetros, `return` |
 | 04 | [El DOM y los eventos](04-dom-y-eventos.md) | Seleccionar y cambiar elementos, reaccionar a clics |
 | 05 | [Datos, JSON y fetch](05-datos-json-fetch.md) | Arrays, objetos, JSON, `async/await`, llamar APIs |
+| 06 | [El DOM a fondo](06-dom-a-fondo.md) | Crear/eliminar elementos, recorrer, atributos, dataset |
+| 07 | [Eventos a fondo](07-eventos-a-fondo.md) | Propagación, delegación, el objeto event |
+| 08 | [Arrays a fondo](08-arrays-a-fondo.md) | map, filter, reduce, sort, spread |
+| 09 | [Objetos a fondo](09-objetos-a-fondo.md) | this, desestructuración, `?.`, `??`, JSON |
+| 10 | [Funciones a fondo](10-funciones-a-fondo.md) | Callbacks, closures, scope, orden superior |
+| 11 | [Asincronía a fondo](11-asincronia-a-fondo.md) | Promesas, async/await, fetch, errores |
+| 12 | [Almacenamiento y módulos](12-almacenamiento-y-modulos.md) | localStorage, import/export |
+| 13 | [Errores y depuración](13-errores-y-depuracion.md) | try/catch, debugger, leer el stack |
+| 14 | [Mini-proyecto: lista de tareas](14-mini-proyecto-todo.md) | Una to-do interactiva con localStorage |
+| 15 | [Glosario de JavaScript](15-glosario-js.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 03 — versión ampliada (capítulos 01–15, ~100 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es JavaScript?](01-que-es-javascript.md)**.
