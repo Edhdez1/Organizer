@@ -1,5 +1,10 @@
 # Capítulo 11 — Git a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap11.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En el capítulo 05 aprendiste a hacer tus primeros `commit` y a guardar la historia de tu proyecto. Ahora vas a llevar Git al siguiente nivel: trabajar con **ramas** para experimentar sin miedo, **fusionar** tu trabajo, resolver **conflictos** cuando dos cambios chocan, **comparar versiones**, **deshacer errores** con calma y decidir qué archivos Git debe **ignorar**. Todo esto es lo que separa a alguien que "usa Git" de alguien que de verdad confía en Git. Y, como bonus, entenderás el mismo flujo de trabajo con ramas y *pull requests* que usamos para construir este propio manual. Bit, tu ajolote guía, te acompaña con la linterna encendida.
 
 ## 1. Repaso rápido: ¿dónde quedamos?

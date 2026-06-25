@@ -1,5 +1,10 @@
 # Capítulo 10 — La terminal a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap10.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En el Capítulo 04 diste tus primeros pasos en la terminal: aprendiste a moverte entre carpetas y a crear archivos. Ahora vamos a convertir esa terminal en una herramienta de verdad poderosa. Aprenderás a **buscar dentro de archivos**, **encadenar comandos como tuberías de agua**, **guardar resultados en archivos**, entender qué son las **variables de entorno** y los **permisos** de Linux, y usar **comodines** para trabajar con muchos archivos a la vez. Todo esto importa porque tu servidor `polypaw-nas` corre Ubuntu Server **sin pantalla bonita**: la terminal es la única forma de administrarlo. Dominarla es la diferencia entre tener miedo a tocar el NAS y sentirte su dueño. Bit, nuestro ajolote, te acompaña: cuando veas algo nuevo, respira y prueba sin miedo.
 
 ---

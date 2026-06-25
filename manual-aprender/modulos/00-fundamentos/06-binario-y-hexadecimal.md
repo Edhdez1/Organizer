@@ -1,5 +1,10 @@
 # Capítulo 06 — El sistema binario y hexadecimal
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En este capítulo vas a descubrir cómo cuenta una computadora por dentro. Te aseguro que no usa los diez dedos como nosotros: solo conoce dos estados, encendido y apagado. A partir de ahí construye **todo**: números, las letras de este texto, las fotos de tu galería y los colores de tu sitio web. Entender esto te quita el miedo a símbolos raros como `#1B6B6B` que aparecen en tu CSS, y te da una intuición que vas a usar durante toda tu vida como programador. Bit, nuestro ajolote pixelado, te acompaña: él, después de todo, está hecho de bits.
 
 ## 1. ¿Por qué una computadora solo cuenta con 0 y 1?

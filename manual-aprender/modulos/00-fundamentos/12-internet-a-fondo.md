@@ -1,5 +1,10 @@
 # Capítulo 12 — Internet a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap12.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En el Capítulo 03 viste a vuelo de pájaro qué es internet: una red de computadoras que se hablan entre sí. Ahora vamos a bajar al detalle. Vas a entender cómo tu mensaje se parte en pedacitos (paquetes) que viajan por rutas distintas, cómo TCP/IP los vuelve a armar, qué hace un router, qué es un puerto, y por qué el candado del navegador (HTTPS) significa que nadie puede leer tus datos en el camino. Todo esto no es teoría suelta: es exactamente lo que ocurre cuando alguien visita **tunal-digital** en Cloudflare o cuando tú entras a tu **polypaw-nas** desde lejos con Tailscale. Bit, el ajolote, te acompaña con la linterna.
 
 ## 1. La idea grande: internet es correo, no teléfono

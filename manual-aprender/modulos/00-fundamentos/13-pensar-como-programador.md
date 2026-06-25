@@ -1,5 +1,10 @@
 # Capítulo 13 — Pensar como programador
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En este capítulo no vas a aprender un lenguaje nuevo: vas a aprender la **forma de pensar** que está debajo de todos ellos. Descomponer un problema en pasos, escribir un plan en palabras antes de tocar el teclado, distinguir los datos de las decisiones y de las repeticiones, leer un mensaje de error sin asustarte, encontrar el bug paso a paso, pedir ayuda de forma que de verdad te respondan y, sobre todo, dar órdenes precisas a una IA. Esta es la habilidad que hace que todo lo demás cobre sentido. Bit, nuestro ajolote, dice que esto es como aprender a caminar antes de correr: aburrido al principio, imprescindible siempre.
 
 ## 1. ¿Qué es "pensar como programador"?

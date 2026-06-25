@@ -1,5 +1,10 @@
 # Capítulo 14 — Mini-proyecto guiado
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En este capítulo vas a juntar **todo** lo que aprendiste en el Módulo 00 y construir, con tus propias manos, un proyecto pequeño pero **completo y real**: una carpeta organizada, un archivo de notas, un repositorio de Git con su historial de cambios, y un script muy simple que el computador ejecutará y te responderá. No es un ejercicio de mentira: cuando termines, tendrás en tu disco un proyecto con la misma estructura básica que usan proyectos de verdad como *tunal-digital* o *PolyPaw*. Importa porque dejas de *leer* sobre programar y empiezas a *programar*. Bit, tu ajolote guía, te acompaña paso a paso. Respira: todo lo que sigue se hace despacio y sin prisa.
 
 ## 1. Qué vamos a construir (el plan antes que el teclado)

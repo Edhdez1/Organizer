@@ -1,5 +1,10 @@
 # Capítulo 09 — Tu taller: instalar y usar VS Code
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En este capítulo montas tu mesa de trabajo. Hasta ahora has aprendido ideas sueltas sobre programación; ahora vas a instalar **VS Code**, el programa donde de verdad vas a escribir, leer y ejecutar tu código. Aprenderás a abrir una carpeta de proyecto, moverte entre archivos, usar la terminal sin salir del editor, instalar extensiones que te ayudan, y reconocer las pistas de color y los atajos que te harán más rápido. Es el capítulo más "manos a la obra" del módulo: al terminar, podrás abrir cualquiera de tus repos reales (tunal-digital, PolyPaw, RachaSimple, Faro) y sentirte en casa. Bit, nuestro ajolote pixelado, te acompaña como siempre.
 
 ## 1. ¿Qué es un editor de código y por qué no usar Word?

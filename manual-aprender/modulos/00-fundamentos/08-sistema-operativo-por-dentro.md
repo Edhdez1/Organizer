@@ -1,5 +1,10 @@
 # Capítulo 08 — El sistema operativo por dentro
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En este capítulo vas a abrir la "caja negra" que hay debajo de todos tus programas: el **sistema operativo**. Aprenderás qué hace en realidad cuando abres una app, cómo reparte el cerebro (CPU) y la memoria (RAM) entre muchas tareas a la vez, cómo organiza tus archivos en carpetas y rutas, qué son los permisos y los drivers, y en qué se parecen y diferencian Windows, macOS y Linux. Importa porque **todo** lo que programas —tu sitio web, tu app de hábitos, tu NAS— corre encima de un sistema operativo, y entenderlo te da superpoderes para no perderte cuando algo falla. Bit, el ajolote, te acompaña.
 
 ## 1. ¿Qué es un sistema operativo y por qué existe?
