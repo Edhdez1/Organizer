@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 14 — Mini-proyecto: una tarjeta con estilo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-mini-proyecto-una-tarjeta-con-estilo">Capítulo 14 — Mini-proyecto: una tarjeta con estilo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>¡Llegó el día! Durante trece capítulos fuiste juntando piezas: selectores, colores, el modelo de caja, tipografía, sombras, transiciones. Hoy las usamos todas juntas para construir algo de verdad: una <strong>tarjeta</strong> bonita, de esas que ves en mil sitios web (un producto, un perfil, una publicación). Lo haremos paso a paso, en tu computadora 💻, y al final tendrás una pieza que podrías pegar tal cual en tu proyecto <strong>tunal-digital</strong>. Bit, el ajolote, ya tiene puestas las gafas de obra y trae su casquito rosa. Vamos a construir.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-vamos-a-construir-y-por-que-una-tarjeta">1. ¿Qué vamos a construir y por qué una tarjeta?</h2>
+<p>Una <strong>tarjeta</strong> (en inglés <em>card</em>) es un bloque rectangular que agrupa información relacionada: una imagen, un título, un texto corto y, casi siempre, un botón. Es uno de los patrones de diseño más comunes de la web. Si abres una tienda online, cada producto es una tarjeta. Si abres una red social, cada publicación es una tarjeta.</p>
+<blockquote class="def">
+<h3 id="que-significa-tarjeta-card">🟦 ¿Qué significa? — <em>Tarjeta (card)</em></h3>
+<p>Es un patrón visual: un contenedor con bordes redondeados, algo de relleno por dentro y normalmente una sombra suave que la separa del fondo. No es una etiqueta de HTML especial; la construimos con un <code>&lt;div&gt;</code> (o mejor, una etiqueta semántica como <code>&lt;article&gt;</code>) y la vestimos con CSS.
+<strong>Para qué sirve:</strong> ordenar información en piezas reutilizables y fáciles de leer.
+<strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, la sección de servicios o de portafolio podría mostrarse como una rejilla de tarjetas; en <strong>RachaSimple</strong> (React + Tailwind), cada racha del usuario probablemente se pinta como una tarjeta con clases de Tailwind.</p>
+</blockquote>
+<p>La gracia de hacerla "a mano" con CSS puro es que entiendes qué hace cada propiedad. Más adelante, cuando uses <strong>Tailwind</strong> en RachaSimple o Faro, vas a reconocer que <code>rounded-xl</code>, <code>shadow-md</code> o <code>p-6</code> son exactamente las mismas ideas que hoy escribiremos con nombres largos.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No copies y pegues el código de golpe. Escríbelo tú, línea por línea, mirando cómo cambia la tarjeta en el navegador cada vez que guardas. Aprender CSS es como aprender a cocinar: hay que probar la sopa mientras la haces.</p>
+</blockquote>
+<hr />
+<h2 id="2-preparar-el-terreno-html-y-css-enlazados">2. Preparar el terreno: HTML y CSS enlazados</h2>
+<p>Antes de pintar necesitamos un lienzo. Crea una carpeta nueva (por ejemplo <code>tarjeta/</code>) con dos archivos: <code>index.html</code> y <code>estilos.css</code>.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Tu proyecto <strong>tunal-digital</strong> ya usa un patrón parecido: un <code>index.html</code> que enlaza un <code>styles.css</code> y un <code>main.js</code>. Aquí repetimos la misma estructura para que te resulte familiar. El nombre del archivo de estilos da igual (<code>styles.css</code>, <code>estilos.css</code>); lo importante es enlazarlo bien.</p>
+</blockquote>
+<p>Empecemos por el HTML. Pega esto en <code>index.html</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+  &lt;title&gt;Mi tarjeta&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;estilos.css&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;article class=&quot;tarjeta&quot;&gt;
+    &lt;img
+      class=&quot;tarjeta__imagen&quot;
+      src=&quot;https://picsum.photos/400/250&quot;
+      alt=&quot;Foto de ejemplo&quot;
+    /&gt;
+    &lt;div class=&quot;tarjeta__cuerpo&quot;&gt;
+      &lt;h2 class=&quot;tarjeta__titulo&quot;&gt;Café de la montaña&lt;/h2&gt;
+      &lt;p class=&quot;tarjeta__texto&quot;&gt;
+        Granos tostados artesanalmente, con notas de chocolate y un final
+        suave. Edición limitada de la cosecha de este año.
+      &lt;/p&gt;
+      &lt;button class=&quot;tarjeta__boton&quot;&gt;Comprar ahora&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/article&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Mira que envolví todo en <code>&lt;article class="tarjeta"&gt;</code>. Usé <code>&lt;article&gt;</code> en lugar de <code>&lt;div&gt;</code> porque es <strong>HTML semántico</strong>: le dice al navegador (y a los lectores de pantalla) "esto es una pieza de contenido independiente".</p>
+<blockquote class="def">
+<h3 id="que-significa-etiqueta-semantica">🟦 ¿Qué significa? — <em>Etiqueta semántica</em></h3>
+<p>Es una etiqueta de HTML cuyo nombre describe <strong>qué tipo de contenido</strong> contiene, no cómo se ve. <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code> y <code>&lt;footer&gt;</code> son semánticas; <code>&lt;div&gt;</code> y <code>&lt;span&gt;</code> son neutras (no significan nada en particular).
+<strong>Para qué sirve:</strong> mejora la accesibilidad y el SEO, y hace el código más legible.
+<strong>Dónde se usa en un repo real:</strong> en <strong>Faro/Organizer</strong> (Next.js), los componentes suelen renderizar <code>&lt;article&gt;</code> o <code>&lt;section&gt;</code> para cada proyecto listado.</p>
+<h3 id="que-significa-atributo-alt">🟦 ¿Qué significa? — <em>Atributo <code>alt</code></em></h3>
+<p>Es el texto alternativo de una imagen. Si la imagen no carga, o si una persona usa un lector de pantalla, se lee este texto.
+<strong>Para qué sirve:</strong> accesibilidad. Una imagen sin <code>alt</code> es invisible para quien no puede verla.
+<strong>Dónde se usa:</strong> en TODO proyecto serio. Acostúmbrate desde ya.</p>
+</blockquote>
+<p>Fíjate también en los nombres de clase tipo <code>tarjeta__cuerpo</code>. Ese doble guion bajo es una convención llamada <strong>BEM</strong> que ayuda a no perderte. No es obligatorio, pero ordena mucho.</p>
+<blockquote class="def">
+<h3 id="que-significa-bem-block-element-modifier">🟦 ¿Qué significa? — <em>BEM (Block, Element, Modifier)</em></h3>
+<p>Es una forma de nombrar clases CSS. <code>bloque__elemento--modificador</code>. El bloque es la tarjeta, los elementos son sus partes (<code>__titulo</code>, <code>__boton</code>) y los modificadores son variantes (<code>--destacada</code>).
+<strong>Para qué sirve:</strong> que el nombre de una clase te diga a qué pertenece y evites colisiones.
+<strong>Dónde se usa en un repo real:</strong> muchos <code>styles.css</code> vanilla como el de <strong>tunal-digital</strong> lo usan; con Tailwind (RachaSimple, Faro) no hace falta porque las clases ya son utilitarias.</p>
+</blockquote>
+<p>Si abres <code>index.html</code> en el navegador ahora, verás un desastre sin estilo: una imagen enorme, texto pegado a la izquierda y un botón gris feo. Perfecto. Ese es nuestro punto de partida. Bit dice que toda escultura empieza siendo un bloque de piedra.</p>
+<hr />
+<h2 id="3-la-caja-relleno-bordes-redondeados-y-sombra">3. La caja: relleno, bordes redondeados y sombra</h2>
+<p>Vamos al <code>estilos.css</code>. Primero, un pequeño reseteo y un fondo para que la tarjeta no flote en blanco:</p>
+<pre><code class="language-css">* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-box-sizing-border-box">🟦 ¿Qué significa? — <em><code>box-sizing: border-box</code></em></h3>
+<p>Cambia cómo se calcula el tamaño de una caja. Con <code>border-box</code>, el <code>padding</code> y el <code>border</code> quedan <strong>incluidos</strong> dentro del ancho que tú declaras, en vez de sumarse por fuera.
+<strong>Para qué sirve:</strong> que cuando digas "300px de ancho" sea de verdad 300px, sin sorpresas.
+<strong>Dónde se usa:</strong> en casi todos los proyectos se pone al inicio con el selector <code>*</code>. Es de las primeras líneas de cualquier <code>styles.css</code> profesional.</p>
+<h3 id="que-significa-min-height-100vh">🟦 ¿Qué significa? — <em><code>min-height: 100vh</code></em></h3>
+<p><code>vh</code> es "viewport height": <code>100vh</code> es el 100% de la altura de la ventana. Con <code>min-height</code> le pedimos al <code>body</code> que ocupe al menos toda la pantalla de alto.
+<strong>Para qué sirve:</strong> aquí, combinado con <code>display: flex</code> y los <code>justify</code>/<code>align</code>, centra la tarjeta en mitad de la pantalla.</p>
+<h3 id="que-significa-display-flex-y-justify-content-align-items">🟦 ¿Qué significa? — <em><code>display: flex</code> (y <code>justify-content</code> / <code>align-items</code>)</em></h3>
+<p><code>display: flex</code> convierte una caja en un <strong>contenedor flexible</strong>: sus hijos se ordenan automáticamente en una fila (o columna) que tú puedes alinear. Aquí lo usamos en el <code>body</code> solo para centrar una cosa: <code>justify-content: center</code> centra horizontalmente y <code>align-items: center</code> centra verticalmente.
+<strong>Para qué sirve:</strong> centrar elementos sin trucos raros. Esta combinación de tres líneas es la receta clásica para "poner algo justo en el medio de la pantalla".
+<strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, el <code>styles.css</code> usa flex para alinear los enlaces del menú o las columnas de una sección. No te preocupes si aún no lo dominas: el siguiente capítulo está dedicado por completo a Flexbox; aquí solo lo usamos de pasada para centrar.</p>
+</blockquote>
+<p>Ahora sí, la caja de la tarjeta:</p>
+<pre><code class="language-css">.tarjeta {
+  background-color: #ffffff;
+  width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+</code></pre>
+<p>Guarda y mira el navegador. ¡Ya parece una tarjeta! Vamos propiedad por propiedad.</p>
+<blockquote class="def">
+<h3 id="que-significa-border-radius">🟦 ¿Qué significa? — <em><code>border-radius</code></em></h3>
+<p>Redondea las esquinas de una caja. <code>16px</code> significa que cada esquina tiene un radio de curva de 16 píxeles. Si pones un número muy grande (como <code>50%</code>) en algo cuadrado, se vuelve un círculo.
+<strong>Para qué sirve:</strong> suavizar el aspecto. Las esquinas redondeadas se sienten más amables.
+<strong>Dónde se usa en un repo real:</strong> en <strong>RachaSimple/Faro</strong> verás clases Tailwind como <code>rounded-2xl</code>, que hace exactamente esto.</p>
+<h3 id="que-significa-box-shadow">🟦 ¿Qué significa? — <em><code>box-shadow</code></em></h3>
+<p>Dibuja una sombra alrededor de la caja. Los valores son: desplazamiento horizontal, desplazamiento vertical, desenfoque (<em>blur</em>) y el color. En <code>0 10px 25px rgba(0,0,0,0.1)</code>: 0 a los lados, 10px hacia abajo, 25px de difuminado y un negro muy transparente.
+<strong>Para qué sirve:</strong> dar sensación de profundidad, como si la tarjeta flotara sobre el fondo.
+<strong>Dónde se usa:</strong> Tailwind lo llama <code>shadow-lg</code>, <code>shadow-xl</code>, etc.</p>
+<h3 id="que-significa-overflow-hidden">🟦 ¿Qué significa? — <em><code>overflow: hidden</code></em></h3>
+<p>Recorta cualquier cosa que se salga de la caja. Como la imagen es rectangular y la tarjeta tiene esquinas redondeadas, sin esto la imagen sobresaldría por las esquinas de arriba.
+<strong>Para qué sirve:</strong> aquí, que la imagen respete el redondeo de la tarjeta. ¡Es un truco muy usado!</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>El valor <code>rgba(0, 0, 0, 0.1)</code> es negro (0,0,0) con <strong>10% de opacidad</strong> (el <code>0.1</code>). Las sombras casi nunca son negro puro; un negro semitransparente se ve mucho más natural sobre cualquier fondo.</p>
+</blockquote>
+<hr />
+<h2 id="4-la-imagen-que-llene-su-espacio-sin-deformarse">4. La imagen: que llene su espacio sin deformarse</h2>
+<p>La imagen del HTML mide originalmente 400x250 (la pedimos así a <code>picsum.photos</code>), pero nuestra tarjeta mide 320px de ancho. Hay que ajustarla:</p>
+<pre><code class="language-css">.tarjeta__imagen {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-width-100">🟦 ¿Qué significa? — <em><code>width: 100%</code></em></h3>
+<p>Hace que la imagen ocupe el 100% del ancho de su contenedor (la tarjeta). Como la tarjeta mide 320px, la imagen se ajusta a 320px.
+<strong>Para qué sirve:</strong> que la imagen sea "responsive": si la tarjeta cambia de ancho, la imagen la sigue.</p>
+<h3 id="que-significa-object-fit-cover">🟦 ¿Qué significa? — <em><code>object-fit: cover</code></em></h3>
+<p>Le dice a la imagen cómo rellenar el espacio que le dimos (320 × 180). <code>cover</code> significa "cubre todo el área, recortando lo que sobre, sin deformar". La alternativa <code>contain</code> mostraría la imagen entera dejando huecos.
+<strong>Para qué sirve:</strong> evitar que las fotos se vean estiradas o aplastadas. Es la diferencia entre una foto profesional y una foto chiclosa.
+<strong>Dónde se usa en un repo real:</strong> cualquier galería o avatar de usuario; en Tailwind sería <code>object-cover</code>.</p>
+<h3 id="que-significa-display-block">🟦 ¿Qué significa? — <em><code>display: block</code></em></h3>
+<p>Las imágenes son <code>inline</code> por defecto, lo que a veces deja un pequeño espacio fantasma debajo. Ponerlas en <code>block</code> elimina ese hueco.
+<strong>Para qué sirve:</strong> que la imagen quede pegada limpiamente al borde superior de la tarjeta.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pones <code>height</code> fija (180px) pero olvidas <code>object-fit: cover</code>, la imagen se <strong>deforma</strong> para caber. El <code>object-fit</code> es justo lo que evita ese estiramiento. Prueba a borrarlo un momento y verás la cara aplastada de la foto. Bit se rió, pero no es bonito.</p>
+</blockquote>
+<hr />
+<h2 id="5-la-tipografia-titulo-y-texto-que-se-lean-bien">5. La tipografía: título y texto que se lean bien</h2>
+<p>Ahora el cuerpo. Le damos relleno interno y arreglamos los textos:</p>
+<pre><code class="language-css">.tarjeta__cuerpo {
+  padding: 20px;
+}
+
+.tarjeta__titulo {
+  font-size: 1.25rem;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.tarjeta__texto {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-padding">🟦 ¿Qué significa? — <em><code>padding</code></em></h3>
+<p>Es el relleno <strong>por dentro</strong> de la caja: el espacio entre el borde del contenedor y su contenido. Aquí <code>20px</code> separa el texto de los bordes de la tarjeta para que no quede pegado.
+<strong>Para qué sirve:</strong> dar "aire". El texto pegado a los bordes se siente apretado e incómodo de leer.
+<strong>Recuerda:</strong> <code>padding</code> es por dentro; <code>margin</code> es por fuera. Es la distinción más importante del modelo de caja.</p>
+<h3 id="que-significa-rem-unidad-de-tamano">🟦 ¿Qué significa? — <em><code>rem</code> (unidad de tamaño)</em></h3>
+<p><code>1rem</code> equivale al tamaño de fuente base del documento (normalmente 16px). Así, <code>1.25rem</code> ≈ 20px y <code>0.95rem</code> ≈ 15px. Es una unidad <strong>relativa</strong>.
+<strong>Para qué sirve:</strong> si el usuario agranda la fuente del navegador, tus textos escalan con él. Más accesible que usar <code>px</code> a secas.
+<strong>Dónde se usa:</strong> Tailwind se basa en rem internamente (<code>text-lg</code>, <code>text-sm</code>).</p>
+<h3 id="que-significa-line-height">🟦 ¿Qué significa? — <em><code>line-height</code></em></h3>
+<p>Es la altura de cada línea de texto, es decir, cuánto se separan las líneas verticalmente. <code>1.5</code> significa "1.5 veces el tamaño de la fuente".
+<strong>Para qué sirve:</strong> un párrafo con líneas muy juntas cansa la vista. <code>1.4</code> a <code>1.6</code> es el rango cómodo para leer.</p>
+</blockquote>
+<p>Fíjate en el detalle de los colores: el título usa un gris casi negro (<code>#111827</code>) y el texto un gris medio (<code>#6b7280</code>). Esa diferencia de intensidad crea <strong>jerarquía</strong>: tu ojo sabe de inmediato qué es importante.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Un error de principiante es poner todo el texto en negro puro <code>#000000</code>. Los diseños modernos usan grises muy oscuros para el texto principal; se sienten más suaves y elegantes. Es un truco gratis que mejora cualquier interfaz.</p>
+</blockquote>
+<hr />
+<h2 id="6-el-boton-color-hover-y-transicion">6. El botón: color, hover y transición</h2>
+<p>El protagonista de la interacción. Lo hacemos llamativo y le damos vida al pasar el ratón:</p>
+<pre><code class="language-css">.tarjeta__boton {
+  background-color: #e11d48;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.tarjeta__boton:hover {
+  background-color: #be123c;
+}
+
+.tarjeta__boton:active {
+  transform: scale(0.98);
+}
+</code></pre>
+<p>Guarda y pasa el ratón por encima del botón. Mira cómo cambia de color suavemente, no de golpe. Y al hacer clic, se encoge un poquito. ¡Eso es interacción de verdad! Vamos a entender cada pieza.</p>
+<blockquote class="def">
+<h3 id="que-significa-font-weight">🟦 ¿Qué significa? — <em><code>font-weight</code></em></h3>
+<p>Controla el <strong>grosor</strong> de la letra. <code>400</code> es el peso normal, <code>600</code> es semi-negrita y <code>700</code> es negrita. Aquí pusimos <code>600</code> para que el texto del botón resalte sin gritar.
+<strong>Para qué sirve:</strong> dar énfasis. Un botón o un título en semi-negrita se lee como "más importante" sin necesidad de agrandarlo.
+<strong>Dónde se usa en un repo real:</strong> en <strong>RachaSimple/Faro</strong> lo verás como clases Tailwind tipo <code>font-semibold</code> (600) o <code>font-bold</code> (700).</p>
+<h3 id="que-significa-border-none">🟦 ¿Qué significa? — <em><code>border: none</code></em></h3>
+<p>Quita el borde que los navegadores le ponen a los botones por defecto (ese marco gris que se ve anticuado).
+<strong>Para qué sirve:</strong> partir de cero para diseñar el botón a tu gusto. Casi siempre es la primera línea cuando estilizas un <code>&lt;button&gt;</code>.</p>
+<h3 id="que-significa-cursor-pointer">🟦 ¿Qué significa? — <em><code>cursor: pointer</code></em></h3>
+<p>Cambia el puntero del ratón a la "manita" cuando pasas por encima.
+<strong>Para qué sirve:</strong> indica visualmente "esto se puede pulsar". Los botones siempre deberían tenerlo.</p>
+<h3 id="que-significa-hover-pseudo-clase">🟦 ¿Qué significa? — <em><code>:hover</code> (pseudo-clase)</em></h3>
+<p>Es un selector especial que aplica estilos solo <strong>mientras el ratón está encima</strong> del elemento. <code>.tarjeta__boton:hover</code> significa "el botón, cuando lo señalas".
+<strong>Para qué sirve:</strong> dar retroalimentación. El usuario ve que el botón reacciona, así que confía en que es pulsable.
+<strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, todos los botones y enlaces del menú probablemente tienen un <code>:hover</code>; en Tailwind se escribe <code>hover:bg-rose-700</code>.</p>
+<h3 id="que-significa-active-pseudo-clase">🟦 ¿Qué significa? — <em><code>:active</code> (pseudo-clase)</em></h3>
+<p>Aplica estilos en el instante exacto en que pulsas (el botón del ratón está presionado).
+<strong>Para qué sirve:</strong> simular que el botón "se hunde". Aquí lo encogemos un 2% con <code>transform: scale(0.98)</code>.</p>
+<h3 id="que-significa-transition">🟦 ¿Qué significa? — <em><code>transition</code></em></h3>
+<p>Hace que un cambio de propiedad ocurra de forma <strong>gradual</strong> en vez de instantánea. <code>transition: background-color 0.2s ease</code> significa "cuando cambie el color de fondo, tárdate 0.2 segundos en hacerlo, suavemente".
+<strong>Para qué sirve:</strong> que las interacciones se sientan pulidas y agradables, no bruscas.
+<strong>Dónde se usa:</strong> en absolutamente todas partes. Tailwind: <code>transition-colors duration-200</code>.</p>
+<h3 id="que-significa-transform-scale">🟦 ¿Qué significa? — <em><code>transform: scale()</code></em></h3>
+<p>Transforma el tamaño del elemento sin afectar al resto del diseño. <code>scale(0.98)</code> lo deja al 98% de su tamaño; <code>scale(1.05)</code> lo agrandaría un 5%.
+<strong>Para qué sirve:</strong> efectos de "presión" o "rebote" sin mover las cosas de su sitio (a diferencia de cambiar <code>width</code>, que sí descoloca a los vecinos).</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>La <code>transition</code> se declara en el estado <strong>normal</strong> del botón (no dentro de <code>:hover</code>). Si solo la pones en el <code>:hover</code>, la animación entra suave pero sale de golpe. Decláralala una vez en <code>.tarjeta__boton</code> y servirá tanto para entrar como para salir.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Tiempos buenos para transiciones de interfaz: entre <code>0.1s</code> y <code>0.3s</code>. Si pones <code>1s</code>, todo se siente lento y pesado. La animación debe ser un toque sutil, no el centro de atención.</p>
+</blockquote>
+<hr />
+<h2 id="7-hacerla-responsive-que-se-vea-bien-en-el-movil">7. Hacerla responsive: que se vea bien en el móvil</h2>
+<p>Nuestra tarjeta mide 320px fijos. En un computador grande, perfecto. Pero en un móvil estrecho de 300px, esos 320px se salen de la pantalla. La arreglamos con una sola línea y, de paso, conocemos las <em>media queries</em>.</p>
+<p>Cambia el ancho de la tarjeta así:</p>
+<pre><code class="language-css">.tarjeta {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-max-width">🟦 ¿Qué significa? — <em><code>max-width</code></em></h3>
+<p>Pone un tope al ancho: el elemento puede ser más estrecho, pero nunca más ancho que ese valor. Aquí, <code>width: 100%</code> dice "ocupa todo el espacio disponible" y <code>max-width: 320px</code> dice "pero no pases de 320px".
+<strong>Para qué sirve:</strong> en pantallas grandes la tarjeta se queda en 320px; en un móvil de 300px, se encoge a 300px y no desborda. Es el truco responsive más útil que existe.</p>
+</blockquote>
+<p>Y si quieres que en pantallas muy pequeñas el texto y el relleno se ajusten, usamos una <strong>media query</strong>:</p>
+<pre><code class="language-css">@media (max-width: 360px) {
+  .tarjeta__cuerpo {
+    padding: 14px;
+  }
+
+  .tarjeta__titulo {
+    font-size: 1.1rem;
+  }
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-media-query-media">🟦 ¿Qué significa? — <em>Media query (<code>@media</code>)</em></h3>
+<p>Es un bloque de CSS que solo se aplica <strong>si se cumple una condición</strong> sobre la pantalla. <code>@media (max-width: 360px)</code> significa "aplica esto solo cuando la ventana mida 360px de ancho o menos" (es decir, en móviles pequeños).
+<strong>Para qué sirve:</strong> el corazón del diseño responsive. Permite tener estilos distintos según el tamaño de pantalla.
+<strong>Dónde se usa en un repo real:</strong> el <code>styles.css</code> de <strong>tunal-digital</strong> seguramente tiene varias media queries para que el menú y las secciones se reorganicen en móvil. En Tailwind esto se hace con prefijos como <code>sm:</code> y <code>md:</code>.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>El propio <code>estilos.css</code> del sitio de este manual usa <strong>variables CSS</strong> y temas (claro/oscuro). Una variable es como guardar un color en una caja con nombre: <code>--color-principal: #e11d48;</code> y luego usarlo con <code>color: var(--color-principal);</code>. No lo necesitamos para una sola tarjeta, pero cuando tengas diez botones del mismo color rojo, una variable te deja cambiarlos todos desde un solo sitio. Lo veremos a fondo más adelante.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Para probar el responsive sin tener un móvil a mano: abre tu tarjeta en el navegador, pulsa <strong>F12</strong> para abrir las herramientas de desarrollo y haz clic en el icono de móvil/tablet. Podrás simular distintos tamaños de pantalla y ver cómo reacciona tu media query en vivo.</p>
+</blockquote>
+<hr />
+<h2 id="8-el-toque-final-un-hover-sobre-toda-la-tarjeta">8. El toque final: un hover sobre toda la tarjeta</h2>
+<p>Una mejora pequeñita que se ve muy profesional: que la tarjeta entera se eleve un poco cuando pasas el ratón por encima.</p>
+<pre><code class="language-css">.tarjeta {
+  /* ...lo de antes... */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-transform-translatey">🟦 ¿Qué significa? — <em><code>transform: translateY()</code></em></h3>
+<p>Mueve el elemento en el eje vertical sin afectar a los vecinos. <code>translateY(-4px)</code> lo sube 4 píxeles (negativo = arriba).
+<strong>Para qué sirve:</strong> aquí, el efecto de "levitar" al pasar el ratón. Combinado con una sombra más grande, parece que la tarjeta se acerca a ti.</p>
+</blockquote>
+<p>Mira el resultado: la tarjeta sube suavemente y su sombra crece, como si se despegara del fondo. Con <code>transition</code> ya declarada, el movimiento es fluido. Estos detalles pequeños son los que separan una página que "funciona" de una que se siente cuidada.</p>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No abuses de los efectos. Una tarjeta que se mueve está bien; una página donde TODO salta, gira y parpadea marea. El buen diseño es como la sal: justo la necesaria.</p>
+</blockquote>
+<hr />
+<h2 id="9-lo-lograste-mira-lo-que-construiste">9. ¡Lo lograste! Mira lo que construiste</h2>
+<p>Para, respira y mira tu pantalla. Hace catorce capítulos no sabías qué era un selector y ahora tienes:</p>
+<ul>
+<li>una <strong>caja</strong> con relleno, esquinas redondeadas y sombra;</li>
+<li>una <strong>imagen</strong> que se ajusta sin deformarse;</li>
+<li>una <strong>tipografía</strong> con jerarquía clara;</li>
+<li>un <strong>botón</strong> con hover, estado activo y transición;</li>
+<li>un diseño <strong>responsive</strong> que aguanta en móvil;</li>
+<li>y un efecto de <strong>hover</strong> sobre toda la tarjeta.</li>
+</ul>
+<p>Eso no es un ejercicio de juguete. Es exactamente el tipo de componente que vive en proyectos reales. Si abrieras una tarjeta de <strong>RachaSimple</strong> o un panel de proyecto en <strong>Faro</strong>, encontrarías estas mismísimas ideas, solo que escritas con clases de Tailwind. Hoy entiendes lo que esas clases hacen por dentro, y eso es un superpoder.</p>
+<p>Bit se quitó el casquito de obra, está aplaudiendo con sus manitas de ajolote y ya guardó una foto de tu tarjeta en su álbum de logros. Tómate un momento para sentirte orgullosa u orgulloso: construiste algo bonito de la nada, con tus propias manos y tu propio código. 🎉</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Guarda esta tarjeta en una carpeta de "trozos reutilizables". Cuando armes tu próximo proyecto y necesites mostrar productos o perfiles, vas a tener una base lista para adaptar. Los buenos programadores no reinventan la rueda cada vez: reutilizan lo que ya construyeron.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé enlazar un archivo CSS desde el HTML con <code>&lt;link rel="stylesheet"&gt;</code>.</li>
+<li>[ ] Entiendo la diferencia entre <code>padding</code> (por dentro) y <code>margin</code> (por fuera).</li>
+<li>[ ] Puedo redondear esquinas con <code>border-radius</code> y poner una sombra con <code>box-shadow</code>.</li>
+<li>[ ] Sé usar <code>overflow: hidden</code> para que una imagen respete las esquinas redondeadas.</li>
+<li>[ ] Entiendo qué hace <code>object-fit: cover</code> y por qué evita que las fotos se deformen.</li>
+<li>[ ] Sé crear jerarquía de texto con distintos tamaños y tonos de gris.</li>
+<li>[ ] Puedo darle un <code>:hover</code> y una <code>transition</code> a un botón.</li>
+<li>[ ] Entiendo qué es una media query y por qué <code>max-width</code> ayuda al responsive.</li>
+<li>[ ] Reconozco que estas ideas son las mismas que las clases de Tailwind (<code>rounded</code>, <code>shadow</code>, <code>p-</code>, <code>hover:</code>).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Cambia los colores (💻).</strong> Reemplaza el rojo del botón (<code>#e11d48</code>) y el de su <code>:hover</code> por los colores de tu marca favorita. Asegúrate de que el texto blanco siga siendo legible sobre el nuevo fondo. Si el color es muy claro, prueba con texto oscuro.</p>
+</li>
+<li>
+<p><strong>Tu propia foto (💻).</strong> Cambia el <code>src</code> de la imagen por la URL de una foto real (un producto, tu mascota, un paisaje). Comprueba que <code>object-fit: cover</code> la encuadra bien sin deformarla, y ajusta el <code>height</code> si quieres una imagen más alta o más baja.</p>
+</li>
+<li>
+<p><strong>Una etiqueta de precio (💻).</strong> Añade dentro del cuerpo, justo antes del botón, un <code>&lt;p class="tarjeta__precio"&gt;$24.000&lt;/p&gt;</code> y dale estilo: que sea grande, en negrita y con el color de tu botón. Pista: <code>font-size</code>, <code>font-weight: 700</code> y <code>color</code>.</p>
+</li>
+<li>
+<p><strong>Variante destacada (💻).</strong> Crea una clase modificadora <code>.tarjeta--destacada</code> (estilo BEM) que ponga un borde de color, por ejemplo <code>border: 2px solid #e11d48;</code>. Añádela en el HTML junto a <code>tarjeta</code> y observa el cambio. Esto te prepara para los modificadores.</p>
+</li>
+<li>
+<p><strong>Tres tarjetas en fila (💻).</strong> Duplica el <code>&lt;article&gt;</code> dos veces (para tener tres tarjetas) y envuélvelas en un <code>&lt;div class="galeria"&gt;</code>. Dale a <code>.galeria</code> las propiedades <code>display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;</code> y observa cómo se acomodan solas. ¿Qué pasa cuando achicas la ventana?</p>
+</li>
+<li>
+<p><strong>Reto de hover (💻).</strong> Haz que, al pasar el ratón por toda la tarjeta, la imagen se agrande ligeramente por dentro. Pista: aplica <code>transition: transform 0.3s ease;</code> a <code>.tarjeta__imagen</code> y un <code>transform: scale(1.05);</code> en la regla <code>.tarjeta:hover .tarjeta__imagen</code>. Recuerda que necesitas <code>overflow: hidden</code> en la tarjeta para que el recorte funcione.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>En el próximo capítulo daremos un paso más en organización visual y aprenderemos a colocar varios elementos en filas y columnas con soltura. Pero por hoy, cierra el editor con una sonrisa: tienes una tarjeta con estilo hecha por ti. Bit te choca los cinco. 🦎✨</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
