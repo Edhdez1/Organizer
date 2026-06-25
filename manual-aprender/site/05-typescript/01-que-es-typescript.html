@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 01 — ¿Qué es TypeScript? — Manuales de Aprendizaje</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-01-que-es-typescript">Capítulo 01 — ¿Qué es TypeScript?</h1>
+<blockquote>
+<p>Este módulo es corto y muy rentable: TypeScript es JavaScript que ya conoces, más una "red de
+seguridad". Entender el <em>porqué</em> es la mitad del trabajo; la otra mitad es sintaxis sencilla.</p>
+</blockquote>
+<hr />
+<h2 id="1-el-problema-que-resuelve-typescript">1. El problema que resuelve TypeScript</h2>
+<p>Recuerda un detalle de JavaScript: una variable puede contener cualquier cosa y cambiar de tipo
+sin avisar. Eso es flexible, pero causa errores difíciles. Ejemplo:</p>
+<pre><code class="language-javascript">function precioConIva(precio) {
+  return precio * 1.13;
+}
+precioConIva(&quot;100&quot;);   // en JavaScript no se queja… y da un resultado raro
+</code></pre>
+<p>Pasarle el texto <code>"100"</code> en vez del número <code>100</code> no provoca un error inmediato; el problema
+aparece <strong>más tarde</strong>, en producción, y cuesta encontrarlo.</p>
+<blockquote class="def">
+<h3 id="que-significa-tipo-type">🟦 ¿Qué significa? — <em>Tipo (type)</em></h3>
+<p>El <strong>tipo</strong> de un dato es la <strong>clase</strong> de información que es: texto (<code>string</code>), número
+(<code>number</code>), booleano (<code>boolean</code>), etc. (Ya los viste en JS y Python.) En JavaScript los tipos
+existen, pero el lenguaje no te obliga a respetarlos. TypeScript sí.</p>
+<h3 id="que-significa-typescript">🟦 ¿Qué significa? — <em>TypeScript</em></h3>
+<p><strong>TypeScript</strong> es JavaScript <strong>más un sistema de tipos</strong>: te permite <strong>declarar</strong> de qué tipo
+es cada cosa, y un programa revisa tu código <strong>antes de ejecutarlo</strong> para avisarte si te
+equivocas (por ejemplo, si pasas un texto donde se esperaba un número).
+<code>typescript
+function precioConIva(precio: number) {   // ': number' declara el tipo
+  return precio * 1.13;
+}
+precioConIva("100");   // ❌ TypeScript marca error aquí mismo, antes de ejecutar</code></p>
+</blockquote>
+<hr />
+<h2 id="2-la-idea-clave-errores-temprano-no-tarde">2. La idea clave: errores temprano, no tarde</h2>
+<blockquote class="tip">
+<h3 id="tip-shift-left-atrapar-el-error-cuanto-antes">💡 Tip — "Shift left": atrapar el error cuanto antes</h3>
+<p>Cuanto <strong>antes</strong> descubres un error, más barato es arreglarlo. Un error que TypeScript te
+marca <strong>mientras escribes</strong> (subrayado rojo en el editor) te cuesta segundos. El mismo error
+descubierto por un cliente en producción te cuesta horas y reputación. TypeScript mueve la
+detección de errores "hacia la izquierda" en el tiempo: del usuario final a tu teclado.</p>
+<h3 id="que-significa-tipado-estatico-vs-dinamico">🟦 ¿Qué significa? — <em>Tipado estático vs. dinámico</em></h3>
+<ul>
+<li><strong>Dinámico</strong> (JavaScript, Python): los tipos se revisan <strong>al ejecutar</strong>. Flexible, pero los
+  errores aparecen tarde.</li>
+<li><strong>Estático</strong> (TypeScript): los tipos se revisan <strong>antes de ejecutar</strong>, al escribir/compilar.
+  Más seguro. "Estático" = comprobado de antemano, sin correr el programa.</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="3-typescript-es-un-superset-de-javascript">3. TypeScript es un "superset" de JavaScript</h2>
+<blockquote class="def">
+<h3 id="que-significa-superset-superconjunto">🟦 ¿Qué significa? — <em>Superset (superconjunto)</em></h3>
+<p>Un <strong>superset</strong> es un lenguaje que <strong>contiene a otro entero y le añade cosas</strong>. TypeScript
+incluye <strong>todo</strong> JavaScript y le suma los tipos. Consecuencia práctica importante: <strong>todo tu
+JavaScript ya es TypeScript válido</strong>. Puedes adoptar TypeScript poco a poco, añadiendo tipos
+donde quieras. No tiras nada de lo aprendido en el Módulo 03; lo amplías.</p>
+</blockquote>
+<hr />
+<h2 id="4-los-navegadores-no-entienden-typescript-la-compilacion">4. Los navegadores no entienden TypeScript: la compilación</h2>
+<blockquote class="def">
+<h3 id="que-significa-compilar-transpilar">🟦 ¿Qué significa? — <em>Compilar (transpilar)</em></h3>
+<p>Los navegadores solo ejecutan JavaScript, no TypeScript. Por eso, antes de usarlo, el código
+<code>.ts</code> se <strong>compila</strong> (o "transpila"): un programa lo traduce a JavaScript normal, quitando las
+anotaciones de tipo. <strong>Compilar</strong> es traducir código de un lenguaje/forma a otro que la máquina
+pueda ejecutar.
+<code>archivo.ts   ──(compilador de TypeScript)──►   archivo.js   ──►   el navegador lo ejecuta</code>
+Durante esa traducción, el compilador <strong>revisa los tipos</strong> y te avisa de errores. Las
+herramientas modernas (como <strong>Vite</strong>, que usa RachaSimple) hacen esto automáticamente mientras
+desarrollas; no tienes que ejecutar nada a mano.</p>
+<h3 id="que-significa-las-extensiones-ts-y-tsx">🟦 ¿Qué significa? — <em>Las extensiones <code>.ts</code> y <code>.tsx</code></em></h3>
+<ul>
+<li><code>.ts</code> → un archivo de TypeScript normal.</li>
+<li><code>.tsx</code> → TypeScript que además contiene <strong>JSX</strong> (la sintaxis de React para escribir
+  interfaz; la verás en el Módulo 06). Por eso los componentes de RachaSimple y Faro son
+  <code>.tsx</code>.</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="5-tu-primera-anotacion-de-tipo">5. Tu primera anotación de tipo</h2>
+<p>La sintaxis básica es: después del nombre, dos puntos <code>:</code> y el tipo.</p>
+<pre><code class="language-typescript">let nombre: string = &quot;Edwar&quot;;
+let edad: number = 25;
+let activo: boolean = true;
+</code></pre>
+<p>Si intentas guardar algo del tipo equivocado, TypeScript se queja <strong>al instante</strong>:</p>
+<pre><code class="language-typescript">let edad: number = 25;
+edad = &quot;veintiséis&quot;;   // ❌ Error: el tipo 'string' no se puede asignar a 'number'
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-el-editor-se-vuelve-tu-copiloto">💡 Tip — El editor se vuelve tu copiloto</h3>
+<p>Con TypeScript, VS Code no solo marca errores: también te <strong>autocompleta</strong> mejor (sabe qué
+propiedades tiene cada cosa) y te muestra la "forma" de los datos al pasar el cursor. Esa
+ayuda constante es una de las grandes razones por las que equipos enteros adoptan TypeScript.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo qué problema resuelve TypeScript (errores de tipo que JS no atrapa).</li>
+<li>[ ] Sé qué es un <strong>tipo</strong> y la diferencia entre tipado <strong>estático</strong> y <strong>dinámico</strong>.</li>
+<li>[ ] Entiendo que TypeScript es un <strong>superset</strong>: todo mi JavaScript ya es válido.</li>
+<li>[ ] Sé que el <code>.ts</code> se <strong>compila</strong> a <code>.js</code> y que ahí se revisan los tipos.</li>
+<li>[ ] Distingo <code>.ts</code> de <code>.tsx</code> (este último con JSX de React).</li>
+<li>[ ] Sé anotar una variable con <code>: tipo</code>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>El porqué.</strong> Explica, con el ejemplo del IVA, por qué pasar <code>"100"</code> (texto) a una función
+   de precios es un problema que TypeScript evita y JavaScript no.</li>
+<li><strong>Estático o dinámico.</strong> Clasifica: JavaScript, Python, TypeScript. ¿Cuál revisa los tipos
+   antes de ejecutar?</li>
+<li><strong>Superset.</strong> ¿Es verdad que tu código JavaScript del Módulo 03 ya es TypeScript válido?
+   Explica por qué.</li>
+<li><strong>Anota.</strong> Escribe tres variables tipadas: una <code>string</code>, una <code>number</code> y una <code>boolean</code>.</li>
+<li><strong>Encuentra el error.</strong> ¿Qué marcará TypeScript aquí y por qué?
+   <code>typescript
+   let total: number = 0;
+   total = "cero";</code></li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="02-tipos-basicos.html">Capítulo 02 — Tipos básicos y anotaciones</a></strong>.</p>
+<footer>Manuales de Aprendizaje · Idioma: español</footer>
+</main>
+</body>
+</html>
