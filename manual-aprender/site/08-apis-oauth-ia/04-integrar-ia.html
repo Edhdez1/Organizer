@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 04 — Integrar IA — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-04-integrar-ia">Capítulo 04 — Integrar IA</h1>
+<blockquote>
+<p>Integrar inteligencia artificial en una app suena a ciencia ficción, pero —ya lo intuyes— es
+<strong>consumir una API</strong> (capítulo 02) cuyo servicio es un modelo de IA. Tu sitio ya lo hace con
+Claude; Faro, con OpenAI. Aquí entiendes cómo, y cómo pedirle bien las cosas a un modelo.</p>
+</blockquote>
+<hr />
+<h2 id="1-un-modelo-de-ia-es-una-api-mas-con-un-detalle">1. Un modelo de IA es una API más (con un detalle)</h2>
+<blockquote class="def">
+<h3 id="que-significa-modelo-de-lenguaje-llm">🟦 ¿Qué significa? — <em>Modelo de lenguaje (LLM)</em></h3>
+<p>Un <strong>modelo de lenguaje grande</strong> (<em>Large Language Model</em>, LLM) es un programa de IA, entrenado
+con enormes cantidades de texto, capaz de <strong>entender y generar lenguaje</strong>: responder preguntas,
+resumir, redactar, clasificar. <strong>Claude</strong> (de Anthropic) y los modelos <strong>GPT</strong> (de OpenAI) son
+LLMs. No "saben" como una base de datos: <strong>predicen</strong> texto coherente a partir de lo que les
+das.</p>
+<h3 id="que-significa-consumir-un-llm-por-su-api">🟦 ¿Qué significa? — <em>Consumir un LLM por su API</em></h3>
+<p>Usas un LLM igual que cualquier API (capítulo 02): haces un <strong>POST</strong> a su endpoint, con tu
+<strong>clave de API</strong> en los headers y, en el <strong>body</strong>, el <strong>prompt</strong> (lo que le pides) más opciones
+(qué modelo, cuánto puede responder). Te devuelve la respuesta en JSON. Eso es todo: tu chat es,
+en esencia, un <code>fetch</code> POST a Claude.</p>
+<h3 id="que-significa-modelo-model">🟦 ¿Qué significa? — <em>Modelo (model)</em></h3>
+<p>Al llamar a la API eliges <strong>qué modelo</strong> usar. Suele haber varios, equilibrando capacidad,
+velocidad y costo: por ejemplo Claude tiene modelos más potentes (tipo "Opus") y otros más
+rápidos y económicos (tipo "Haiku"). <strong>Tu sitio usa <code>claude-haiku-4-5</code></strong>: un modelo rápido y
+barato, suficiente para un chat de bienvenida, y que te ayuda a <strong>controlar el gasto</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-prompt-como-se-le-pide-a-un-llm">2. El prompt: cómo se le pide a un LLM</h2>
+<blockquote class="def">
+<h3 id="que-significa-prompt">🟦 ¿Qué significa? — <em>Prompt</em></h3>
+<p>El <strong>prompt</strong> es <strong>el texto con el que le pides algo</strong> a un modelo: tu instrucción + el
+contexto. La calidad de la respuesta depende muchísimo de la calidad del prompt. A escribir
+buenos prompts se le llama <strong>"ingeniería de prompts"</strong> (prompt engineering), y es una habilidad
+en sí misma.</p>
+<h3 id="que-significa-prompt-de-sistema-system-prompt">🟦 ¿Qué significa? — <em>Prompt de sistema (system prompt)</em></h3>
+<p>Muchas APIs separan dos cosas:
+- El <strong>system prompt</strong>: instrucciones de fondo que definen <strong>el papel y las reglas</strong> del
+  asistente ("Eres el asistente de Tunal Digital. Responde breve, en español, sobre nuestros
+  servicios. No inventes precios.").
+- El <strong>mensaje del usuario</strong>: lo que la persona escribe en el chat.
+Tu Worker arma ambos: pone un system prompt fijo (la personalidad de tu bot) y le añade el
+mensaje del visitante. Por eso tu chat "sabe" de qué hablar y mantiene el tono.</p>
+<h3 id="tip-como-escribir-un-buen-prompt-lo-que-este-manual-te-dio">💡 Tip — Cómo escribir un buen prompt (lo que este manual te dio)</h3>
+<p>Un buen prompt es <strong>específico</strong> y <strong>da contexto</strong>, justo la habilidad que perseguías:
+- Di <strong>el rol</strong> ("actúa como…"), <strong>el formato</strong> ("responde en una lista de 3 puntos"), <strong>el
+  tono</strong> y <strong>los límites</strong> ("máximo 50 palabras", "no inventes datos").
+- Da <strong>ejemplos</strong> si puedes (mostrarle uno o dos ejemplos de lo que quieres se llama
+  <em>few-shot</em>; tu Worker usa esta técnica).
+Vago: "háblame de marketing". Preciso: "En 3 viñetas y tono cercano, explica a un dueño de
+tienda por qué necesita un sitio web. Máximo 60 palabras. No menciones precios."</p>
+</blockquote>
+<hr />
+<h2 id="3-como-viaja-una-pregunta-del-chat-uniendo-todo">3. Cómo viaja una pregunta del chat (uniendo todo)</h2>
+<pre><code>1. Escribes en el chat de tunaldigital.com y pulsas enviar.
+2. main.js hace un fetch POST a tu Cloudflare Worker, con tu mensaje en el body (JSON).
+3. El Worker (servidor) añade el system prompt y llama a la API de Claude,
+   con la CLAVE secreta (que vive solo en el Worker, nunca en la página).
+4. Claude responde; el Worker te devuelve el texto.
+5. main.js muestra la respuesta en pantalla (manipulando el DOM, Módulo 03).
+</code></pre>
+<p>Cada flecha es algo que ya sabes: <code>fetch</code>, JSON, async/await, headers, claves de API, DOM. La IA
+no era magia: era una API bien orquestada y protegida.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Faro usa la API de <strong>OpenAI</strong> (<code>src/lib/openai.ts</code>) de la misma forma, pero para otra tarea:
+le manda el README y los datos de un proyecto y le pide que <strong>resuma</strong> su estado, progreso y
+roadmap, devolviendo <strong>JSON estructurado</strong>. Es el mismo patrón (prompt → respuesta), aplicado a
+analizar en vez de chatear.</p>
+<h3 id="que-significa-token-en-el-contexto-de-ia-y-por-que-importa-el-costo">🟦 ¿Qué significa? — <em>Token (en el contexto de IA) y por qué importa el costo</em></h3>
+<p>En IA, un <strong>token</strong> es un trocito de texto (más o menos una palabra o parte de ella). Las APIs
+de LLM <strong>cobran por tokens</strong> (los que envías + los que genera). Por eso importan los límites: tu
+Worker corta el largo de los mensajes y limita el uso, para que el chat sea útil <strong>sin
+dispararte la factura</strong> (tu sitio tiene un tope de gasto mensual). Controlar tokens = controlar
+costo.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que un <strong>LLM</strong> se consume como cualquier <strong>API</strong> (POST + clave + prompt).</li>
+<li>[ ] Sé qué es un <strong>modelo</strong> y por qué elegir uno rápido/barato (Haiku) controla el gasto.</li>
+<li>[ ] Sé qué es un <strong>prompt</strong> y un <strong>system prompt</strong>, y cómo escribir uno bueno (específico, con rol/formato/límites).</li>
+<li>[ ] Puedo narrar cómo viaja una pregunta del chat de mi sitio (navegador → Worker → Claude → vuelta).</li>
+<li>[ ] Entiendo qué es un <strong>token</strong> en IA y su relación con el <strong>costo</strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li><strong>De vago a preciso.</strong> Reescribe este prompt para que sea bueno: "escribe algo sobre mi
+   negocio". (Inventa rol, formato, tono y un límite de palabras.)</li>
+<li><strong>System vs. usuario.</strong> Da un ejemplo de system prompt para un bot que ayuda a reservar citas,
+   y un ejemplo de mensaje de usuario.</li>
+<li><strong>El flujo.</strong> ¿Por qué la clave de Claude vive en el Worker y no en <code>main.js</code>? (Une con el
+   capítulo 02.)</li>
+<li><strong>Costo.</strong> Explica por qué limitar el largo de los mensajes ayuda a controlar la factura de la
+   IA.</li>
+<li><strong>Tarea distinta.</strong> Faro no chatea: pide a la IA un <strong>resumen en JSON</strong>. Inventa un prompt que
+   le pida resumir un proyecto en un JSON con campos <code>descripcion</code> y <code>siguiente_accion</code>.</li>
+</ol>
+<p>➡️ Siguiente: <strong><a href="05-construir-y-proteger.html">Capítulo 05 — Construir y proteger una API</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
