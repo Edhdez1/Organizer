@@ -1,5 +1,10 @@
 # Capitulo 11 — Integrar IA a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap11.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora usaste la IA como una caja magica: le mandas un texto y te devuelve otro.
 > En este capitulo abrimos la caja. Vas a entender que es de verdad una API de modelo de
 > lenguaje, como se conversa con ella usando "mensajes", que son los tokens (la moneda con

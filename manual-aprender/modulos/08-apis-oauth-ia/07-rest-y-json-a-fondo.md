@@ -1,5 +1,10 @@
 # Capitulo 07 — APIs REST y JSON a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hola otra vez. Soy **Bit**, el ajolote que te acompana en este manual. En el modulo 03 aprendiste `fetch` y en el modulo 07 viste bases de datos. Hoy vamos a juntar las piezas: vamos a entender **de verdad** que es una API REST, como se piden y devuelven datos, y por que el formato **JSON** esta en todas partes. Lo haremos con calma, definiendo cada palabra rara. Y al final veras como **Faro** habla con GitHub y Google Drive, y como **tunal-digital** habla con la IA de Claude. Respira: esto es mas sencillo de lo que suena. Vamos.
 
 ## 1. Empecemos por la idea: cliente y servidor conversando

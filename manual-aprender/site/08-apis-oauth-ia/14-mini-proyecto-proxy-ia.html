@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 14 — Mini-proyecto: tu propio proxy de IA — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-mini-proyecto-tu-propio-proxy-de-ia">Capitulo 14 — Mini-proyecto: tu propio proxy de IA</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Llegaste al gran final del modulo. En los capitulos anteriores aprendiste a hablar con APIs, a usar <code>fetch</code>, a pedir una clave secreta y hasta a entender OAuth. Hoy vas a juntar TODO en un solo proyecto que de verdad funciona: un pequeno backend que recibe un mensaje desde el navegador, le anade tu clave secreta <strong>en el servidor</strong>, llama a una API de IA y te devuelve la respuesta, sin que nadie pueda robarte la clave. Es exactamente el patron que usa el sitio real <strong>tunal-digital</strong> para su chat con la IA de Claude. Bit, nuestro ajolote, se puso el casco de obra: hoy construimos algo de verdad.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-vamos-a-construir-y-por-que-importa">1. Que vamos a construir (y por que importa)</h2>
+<p>Imagina una pagina web sencilla: tiene una cajita de texto donde escribes una pregunta, un boton "Enviar" y un area donde aparece la respuesta de una IA. Suena simple, y la parte visual lo es. El problema esta escondido: <strong>para hablar con la IA necesitas una clave secreta</strong>, y esa clave NO puede vivir en el navegador.</p>
+<p>Entonces, ¿como hace la pagina para usar la IA sin tener la clave? La respuesta es poner a alguien <strong>en el medio</strong>: un pequeno servidor de confianza que si tiene la clave. El navegador le habla a ese servidor; el servidor le habla a la IA. A ese intermediario lo llamamos <strong>proxy</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-proxy">🟦 ¿Que significa? — <em>Proxy</em></h3>
+<p>Un <strong>proxy</strong> es un programa que se pone en medio de dos partes y reenvia mensajes de una a otra, normalmente anadiendo o quitando algo en el camino. En nuestro caso, recibe el mensaje del navegador, le agrega la clave secreta y lo reenvia a la IA.
+<strong>Para que sirve:</strong> para que el navegador nunca tenga que conocer la clave; el proxy la guarda y la usa por el.
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, el chat de la web no llama directo a la API de Claude. Llama a un <strong>Cloudflare Worker</strong> (el proxy), y ese Worker es quien tiene la clave de Anthropic y habla con la IA.</p>
+</blockquote>
+<p>El diagrama mental es este:</p>
+<pre><code>Navegador  ──(mensaje)──►  Proxy (tiene la clave)  ──(mensaje + clave)──►  API de IA
+Navegador  ◄──(respuesta)──  Proxy                 ◄──(respuesta)────────  API de IA
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Si recuerdas una sola idea de este capitulo, que sea esta: <strong>la clave secreta vive en el servidor, jamas en el navegador</strong>. Todo lo demas que construyamos hoy existe para cumplir esa regla.</p>
+</blockquote>
+<hr />
+<h2 id="2-repaso-rapido-de-las-piezas-que-ya-conoces">2. Repaso rapido de las piezas que ya conoces</h2>
+<p>No empezamos de cero. Estas piezas ya las viste en el modulo, solo las vamos a conectar. Igual te dejo la definicion fresca de cada una para que nada quede sin explicar.</p>
+<blockquote class="def">
+<h3 id="que-significa-http">🟦 ¿Que significa? — <em>HTTP</em></h3>
+<p><strong>HTTP</strong> es el idioma con el que dos computadoras se hablan por internet. El navegador manda una <strong>peticion</strong> ("dame esto", "guarda esto otro") y el servidor manda una <strong>respuesta</strong>. Cada peticion tiene un metodo (como <code>GET</code> para pedir o <code>POST</code> para enviar datos), unas cabeceras y, a veces, un cuerpo con datos.
+<strong>Para que sirve:</strong> para mover informacion entre cliente y servidor de forma ordenada.
+<strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, cuando aprietas "analizar proyecto", el navegador manda una peticion HTTP a una ruta del backend de Next.js, y esa ruta responde con el analisis generado por IA.</p>
+<h3 id="que-significa-api">🟦 ¿Que significa? — <em>API</em></h3>
+<p>Una <strong>API</strong> (Interfaz de Programacion de Aplicaciones) es la lista de "puertas de entrada" que un programa ofrece para que otros programas le pidan cosas. Es como el menu de un restaurante: tu no entras a la cocina, pides del menu y te traen el plato.
+<strong>Para que sirve:</strong> para que tu codigo use un servicio (una IA, una base de datos, GitHub) sin saber como funciona por dentro.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> usa la API de OpenAI para generar texto, y las APIs de GitHub y Google Drive para leer tus proyectos. <strong>tunal-digital</strong> usa la API de Anthropic (Claude).</p>
+<h3 id="que-significa-fetch">🟦 ¿Que significa? — <em>fetch</em></h3>
+<p><strong><code>fetch</code></strong> es una funcion que trae JavaScript para hacer peticiones HTTP desde el codigo. Le pasas una direccion (URL) y opciones (metodo, cabeceras, cuerpo) y te devuelve una <strong>promesa</strong> con la respuesta.
+<strong>Para que sirve:</strong> es la herramienta principal para llamar a una API desde JavaScript, tanto en el navegador como en el servidor.
+<strong>Donde se usa en un repo real:</strong> el chat de <strong>tunal-digital</strong> usa <code>fetch</code> en el navegador para llamar al Worker, y el Worker usa <code>fetch</code> por dentro para llamar a la API de Claude.</p>
+<h3 id="que-significa-clave-de-api-api-key">🟦 ¿Que significa? — <em>Clave de API (API key)</em></h3>
+<p>Una <strong>clave de API</strong> es una contrasena larga y secreta que identifica quien esta usando un servicio. La API de IA revisa la clave para saber que la peticion viene de una cuenta valida (y, normalmente, para cobrarte por el uso).
+<strong>Para que sirve:</strong> para autenticarte ante el servicio y poder usarlo.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> guarda la clave de OpenAI como variable de entorno del servidor; <strong>tunal-digital</strong> guarda la clave de Anthropic como secreto del Worker. En ninguno de los dos la clave llega al navegador.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pegaras tu clave de API directamente en el JavaScript del navegador, cualquier persona podria abrir las herramientas de desarrollo (F12), verla, copiarla y gastar dinero con tu cuenta. Esto ha arruinado a mas de un proyecto. Por eso existe el proxy.</p>
+</blockquote>
+<hr />
+<h2 id="3-el-backend-que-es-y-por-que-lo-necesitamos">3. El backend: que es y por que lo necesitamos</h2>
+<blockquote class="def">
+<h3 id="que-significa-backend">🟦 ¿Que significa? — <em>Backend</em></h3>
+<p>El <strong>backend</strong> es la parte de una aplicacion que corre en un servidor, no en el navegador del usuario. El usuario no ve su codigo; solo recibe sus respuestas. Es un lugar <strong>de confianza</strong> donde puedes guardar secretos.
+<strong>Para que sirve:</strong> para hacer tareas que no deben ocurrir a la vista de todos: usar claves secretas, hablar con bases de datos, validar datos.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> tiene su backend en las rutas de servidor de Next.js; <strong>tunal-digital</strong> usa un <strong>Cloudflare Worker</strong> como backend minimo.</p>
+<h3 id="que-significa-cliente-lado-del-cliente">🟦 ¿Que significa? — <em>Cliente / lado del cliente</em></h3>
+<p>El <strong>cliente</strong> es la parte que corre en el dispositivo del usuario: el navegador con su HTML, CSS y JavaScript. Todo lo que esta en el cliente es <strong>publico</strong>: el usuario puede leerlo.
+<strong>Para que sirve:</strong> para mostrar la interfaz y reaccionar a lo que hace la persona.
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, la pagina HTML/CSS/JS <strong>vanilla</strong> (es decir, JavaScript "puro", sin frameworks como React) con la cajita del chat, el cotizador y el formulario es todo cliente.</p>
+<h3 id="que-significa-cloudflare-worker">🟦 ¿Que significa? — <em>Cloudflare Worker</em></h3>
+<p>Un <strong>Cloudflare Worker</strong> es un pequeno programa de servidor que corre en la nube de Cloudflare, sin que tengas que administrar una maquina. Le das un trozo de codigo y Cloudflare lo ejecuta cada vez que llega una peticion a su direccion.
+<strong>Para que sirve:</strong> para tener un backend liviano y barato, ideal justo para un proxy de IA.
+<strong>Donde se usa en un repo real:</strong> es exactamente lo que usa <strong>tunal-digital</strong> para su chat: el Worker es el proxy entre la web y la API de Claude.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>Para este capitulo no necesitas Cloudflare. Vamos a construir el mismo proxy con <strong>Node.js</strong> en tu propia computadora, porque es mas facil de probar y la idea es identica. Una vez que lo entiendas, mover el codigo a un Worker o a una ruta de Next.js (como en Faro) es un paso pequeno.</p>
+</blockquote>
+<hr />
+<h2 id="4-preparar-el-proyecto-en-tu-computadora">4. Preparar el proyecto en tu computadora 💻</h2>
+<p>Vamos a crear una carpeta con dos partes: el proxy (servidor) y una pagina web sencilla (cliente). Abre tu terminal y sigue los pasos.</p>
+<pre><code class="language-bash">mkdir proxy-ia
+cd proxy-ia
+npm init -y
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-npm-init">🟦 ¿Que significa? — <em>npm init</em></h3>
+<p><strong><code>npm init -y</code></strong> crea un archivo <code>package.json</code>, que es la "ficha de identidad" de tu proyecto JavaScript: dice como se llama, que dependencias usa y que comandos sabe ejecutar. El <code>-y</code> acepta todas las respuestas por defecto.
+<strong>Para que sirve:</strong> para que Node sepa que esto es un proyecto y poder instalar librerias.
+<strong>Donde se usa en un repo real:</strong> todos los repos del curso lo tienen. <strong>Faro</strong> y <strong>RachaSimple</strong> tienen un <code>package.json</code> con sus dependencias (Next.js, React, Supabase, etc.).</p>
+</blockquote>
+<p>Ahora vamos a usar variables de entorno para guardar la clave. Crea un archivo llamado <code>.env</code>:</p>
+<pre><code>IA_API_KEY=pega-aqui-tu-clave-secreta
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
+<p>Una <strong>variable de entorno</strong> es un valor que vive fuera de tu codigo, en el "ambiente" donde corre el programa. Tu codigo la lee con <code>process.env.NOMBRE</code>, pero el valor no esta escrito dentro de los archivos que compartes.
+<strong>Para que sirve:</strong> para guardar secretos (como claves) y configuraciones sin escribirlos en el codigo que subes a GitHub.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> guarda ahi la clave de OpenAI y las credenciales de Supabase; su <code>CLAUDE.md</code> ordena explicitamente que "tokens y secretos solo en el servidor (variables de entorno)".</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>El archivo <code>.env</code> NUNCA debe subirse a GitHub. Crea un archivo <code>.gitignore</code> con una linea que diga <code>.env</code> para que git lo ignore. Si tu clave termina en un repo publico, considerala quemada y generala de nuevo de inmediato.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Una clave "quemada" es una clave que se volvio publica por accidente. Casi todos los servicios te dejan <strong>revocar</strong> (anular) una clave y crear otra en su panel. Hazlo sin pena: es lo correcto.</p>
+</blockquote>
+<hr />
+<h2 id="5-escribir-el-proxy-paso-a-paso">5. Escribir el proxy paso a paso 💻</h2>
+<p>Crea un archivo <code>servidor.js</code>. Lo vamos a construir por pedazos para entender cada linea, y al final lo veras completo.</p>
+<h3 id="51-levantar-un-servidor-que-escucha">5.1 Levantar un servidor que escucha</h3>
+<pre><code class="language-javascript">// servidor.js
+import http from &quot;node:http&quot;;
+
+const PORT = 3000;
+
+const servidor = http.createServer((req, res) =&gt; {
+  res.end(&quot;Hola, soy el proxy de IA&quot;);
+});
+
+servidor.listen(PORT, () =&gt; {
+  console.log(`Proxy escuchando en http://localhost:${PORT}`);
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-servidor">🟦 ¿Que significa? — <em>Servidor</em></h3>
+<p>Un <strong>servidor</strong> es un programa que se queda esperando peticiones y responde a cada una. <code>http.createServer</code> crea uno; <code>listen</code> lo pone a escuchar en un <strong>puerto</strong> (una "puerta" numerada de tu computadora, aqui la 3000).
+<strong>Para que sirve:</strong> para recibir las peticiones del navegador y contestarlas.
+<strong>Donde se usa en un repo real:</strong> todo backend es un servidor. El Worker de <strong>tunal-digital</strong> y las rutas de <strong>Faro</strong> hacen este mismo trabajo, aunque el framework les esconda la parte de <code>listen</code>.</p>
+</blockquote>
+<p>Corre <code>node servidor.js</code> y abre <code>http://localhost:3000</code> en el navegador. Si ves el saludo, ya tienes un servidor vivo. Bit aplaude con sus patitas.</p>
+<h3 id="52-leer-el-mensaje-que-manda-el-navegador">5.2 Leer el mensaje que manda el navegador</h3>
+<p>El navegador nos va a mandar el mensaje del usuario en el <strong>cuerpo</strong> de una peticion <code>POST</code>, en formato JSON. Hay que leerlo.</p>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p><strong>JSON</strong> (JavaScript Object Notation) es una forma de escribir datos como texto, con llaves, comillas y dos puntos. Por ejemplo <code>{ "mensaje": "hola" }</code>. Casi todas las APIs hablan en JSON.
+<strong>Para que sirve:</strong> para enviar datos estructurados entre cliente y servidor de forma que ambos los entiendan.
+<strong>Donde se usa en un repo real:</strong> la API de OpenAI en <strong>Faro</strong> y la de Claude en <strong>tunal-digital</strong> reciben y devuelven JSON.</p>
+<h3 id="que-significa-cuerpo-body-de-una-peticion">🟦 ¿Que significa? — <em>Cuerpo (body) de una peticion</em></h3>
+<p>El <strong>cuerpo</strong> es la parte de una peticion HTTP que lleva los datos. En un <code>POST</code>, ahi viaja la informacion que mandas (por ejemplo, el mensaje del usuario). El cuerpo llega en pedacitos, asi que hay que juntarlos.
+<strong>Para que sirve:</strong> para transportar los datos de la peticion.
+<strong>Donde se usa en un repo real:</strong> cuando <strong>Faro</strong> pide un analisis, el cuerpo lleva que proyecto analizar.</p>
+</blockquote>
+<pre><code class="language-javascript">function leerCuerpo(req) {
+  return new Promise((resolve) =&gt; {
+    let datos = &quot;&quot;;
+    req.on(&quot;data&quot;, (parte) =&gt; (datos += parte));
+    req.on(&quot;end&quot;, () =&gt; resolve(datos ? JSON.parse(datos) : {}));
+  });
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-promesa-promise">🟦 ¿Que significa? — <em>Promesa (Promise)</em></h3>
+<p>Una <strong>promesa</strong> es un objeto de JavaScript que representa un resultado que <strong>aun no esta listo</strong> pero llegara mas tarde (por ejemplo, cuando el cuerpo de la peticion termine de llegar). Cuando el valor esta disponible, la promesa se <strong>resuelve</strong> (<code>resolve</code>). El <code>await</code> que viste antes es justo la forma de esperar a que una promesa se resuelva.
+<strong>Para que sirve:</strong> para manejar cosas que tardan (red, archivos, temporizadores) sin congelar el programa mientras esperas.
+<strong>Donde se usa en un repo real:</strong> <code>fetch</code> siempre devuelve una promesa; cada llamada a la API de OpenAI en <strong>Faro</strong> o a la de Claude en <strong>tunal-digital</strong> es, por dentro, una promesa que se espera con <code>await</code>.</p>
+<h3 id="que-significa-jsonparse-y-jsonstringify">🟦 ¿Que significa? — <em>JSON.parse y JSON.stringify</em></h3>
+<p><strong><code>JSON.parse</code></strong> convierte un texto JSON en un objeto de JavaScript con el que puedes trabajar. <strong><code>JSON.stringify</code></strong> hace lo contrario: convierte un objeto en texto JSON para enviarlo.
+<strong>Para que sirve:</strong> para traducir entre "texto que viaja por la red" y "objeto que usa tu codigo".
+<strong>Donde se usa en un repo real:</strong> en cualquier llamada a una API de IA: se arma el cuerpo con <code>stringify</code> y se lee la respuesta con <code>parse</code>.</p>
+</blockquote>
+<h3 id="53-anadir-la-clave-y-llamar-a-la-ia">5.3 Anadir la clave y llamar a la IA</h3>
+<p>Aqui esta el corazon del proxy. Tomamos el mensaje del usuario, leemos la clave <strong>del entorno del servidor</strong> y llamamos a la API de IA con <code>fetch</code>.</p>
+<pre><code class="language-javascript">async function preguntarAIA(mensajeUsuario) {
+  const respuesta = await fetch(&quot;https://api.de-la-ia.com/v1/chat&quot;, {
+    method: &quot;POST&quot;,
+    headers: {
+      &quot;Content-Type&quot;: &quot;application/json&quot;,
+      &quot;Authorization&quot;: `Bearer ${process.env.IA_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: &quot;modelo-de-ejemplo&quot;,
+      messages: [{ role: &quot;user&quot;, content: mensajeUsuario }],
+    }),
+  });
+
+  const datos = await respuesta.json();
+  return datos;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-cabecera-header-http">🟦 ¿Que significa? — <em>Cabecera (header) HTTP</em></h3>
+<p>Una <strong>cabecera</strong> es un par "nombre: valor" que viaja con la peticion para dar informacion extra: que tipo de datos mandas (<code>Content-Type</code>), o quien eres (<code>Authorization</code>).
+<strong>Para que sirve:</strong> para acompanar el mensaje con metadatos que el servidor necesita.
+<strong>Donde se usa en un repo real:</strong> el Worker de <strong>tunal-digital</strong> pone la cabecera con la clave de Anthropic antes de reenviar a la API de Claude.</p>
+<h3 id="que-significa-authorization-bearer">🟦 ¿Que significa? — <em>Authorization: Bearer</em></h3>
+<p><strong><code>Authorization</code></strong> es la cabecera donde pones tu credencial. La palabra <strong><code>Bearer</code></strong> ("portador") seguida de la clave significa "quien presenta esta clave tiene permiso". Es la forma estandar de mandar una clave de API.
+<strong>Para que sirve:</strong> para autenticar tu peticion ante la IA.
+<strong>Donde se usa en un repo real:</strong> asi se autentica <strong>Faro</strong> ante OpenAI; el formato exacto cambia un poco segun el proveedor, pero la idea es la misma.</p>
+<h3 id="que-significa-async-await">🟦 ¿Que significa? — <em>async / await</em></h3>
+<p><strong><code>async</code></strong> marca una funcion que hace cosas que tardan (como una llamada de red). <strong><code>await</code></strong> dice "espera aqui hasta que termine esto antes de seguir". Juntos hacen que el codigo asincrono se lea casi como codigo normal, de arriba hacia abajo.
+<strong>Para que sirve:</strong> para esperar respuestas de la red sin congelar el programa ni enredarte con promesas.
+<strong>Donde se usa en un repo real:</strong> toda llamada a IA, base de datos o API en <strong>Faro</strong> y <strong>RachaSimple</strong> usa <code>async/await</code>.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Fijate que <code>process.env.IA_API_KEY</code> solo existe <strong>en el servidor</strong>. Este archivo <code>servidor.js</code> nunca se manda al navegador, asi que la clave nunca sale de la maquina de confianza. Ese es exactamente el truco del proxy.</p>
+</blockquote>
+<h3 id="54-conectar-todo-la-ruta-del-proxy">5.4 Conectar todo: la ruta del proxy</h3>
+<pre><code class="language-javascript">const servidor = http.createServer(async (req, res) =&gt; {
+  // Permitir que el navegador llame a este proxy
+  res.setHeader(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);
+  res.setHeader(&quot;Access-Control-Allow-Headers&quot;, &quot;Content-Type&quot;);
+
+  if (req.method === &quot;OPTIONS&quot;) {
+    res.writeHead(204);
+    return res.end();
+  }
+
+  if (req.method === &quot;POST&quot; &amp;&amp; req.url === &quot;/chat&quot;) {
+    try {
+      const cuerpo = await leerCuerpo(req);
+      const mensaje = (cuerpo.mensaje || &quot;&quot;).toString().slice(0, 1000);
+
+      if (!mensaje) {
+        res.writeHead(400, { &quot;Content-Type&quot;: &quot;application/json&quot; });
+        return res.end(JSON.stringify({ error: &quot;Falta el mensaje&quot; }));
+      }
+
+      const datos = await preguntarAIA(mensaje);
+      res.writeHead(200, { &quot;Content-Type&quot;: &quot;application/json&quot; });
+      res.end(JSON.stringify(datos));
+    } catch (e) {
+      res.writeHead(500, { &quot;Content-Type&quot;: &quot;application/json&quot; });
+      res.end(JSON.stringify({ error: &quot;Algo fallo en el proxy&quot; }));
+    }
+    return;
+  }
+
+  res.writeHead(404, { &quot;Content-Type&quot;: &quot;application/json&quot; });
+  res.end(JSON.stringify({ error: &quot;Ruta no encontrada&quot; }));
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-ruta-endpoint">🟦 ¿Que significa? — <em>Ruta (endpoint)</em></h3>
+<p>Una <strong>ruta</strong> o <strong>endpoint</strong> es una direccion concreta dentro de tu servidor que hace una tarea, por ejemplo <code>/chat</code>. El servidor mira el metodo (<code>POST</code>) y la ruta (<code>/chat</code>) para decidir que codigo ejecutar.
+<strong>Para que sirve:</strong> para organizar tu API en acciones claras.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> tiene rutas como las de analisis de proyecto; cada una es un endpoint con su tarea.</p>
+<h3 id="que-significa-codigo-de-estado-http">🟦 ¿Que significa? — <em>Codigo de estado HTTP</em></h3>
+<p>Es el numero con el que el servidor resume como salio la peticion: <strong>200</strong> todo bien, <strong>400</strong> te equivocaste tu (faltaba el mensaje), <strong>404</strong> no existe esa ruta, <strong>500</strong> fallo el servidor.
+<strong>Para que sirve:</strong> para que el cliente sepa de un vistazo si funciono o no.
+<strong>Donde se usa en un repo real:</strong> toda API responde con estos codigos; el chat de <strong>tunal-digital</strong> revisa el estado para mostrar un error amable si la IA falla.</p>
+<h3 id="que-significa-cors">🟦 ¿Que significa? — <em>CORS</em></h3>
+<p><strong>CORS</strong> (Cross-Origin Resource Sharing) es la regla del navegador que decide si una pagina puede llamar a un servidor que esta en otra direccion. El servidor debe enviar la cabecera <code>Access-Control-Allow-Origin</code> para dar permiso. La peticion <code>OPTIONS</code> es el "permiso previo" que el navegador pregunta antes.
+<strong>Para que sirve:</strong> para proteger a los usuarios de que cualquier sitio llame a cualquier servidor sin permiso.
+<strong>Donde se usa en un repo real:</strong> el Worker de <strong>tunal-digital</strong> configura CORS para que solo el sitio de Tunal pueda usar el proxy.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Pusimos <code>Access-Control-Allow-Origin: "*"</code> (cualquier origen) solo para practicar en tu maquina. En produccion, como en <strong>tunal-digital</strong>, debes poner el dominio exacto de tu sitio, para que no cualquier pagina del mundo use tu proxy y gaste tu saldo.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Fijate que cortamos el mensaje a 1000 caracteres con <code>.slice(0, 1000)</code>. <strong>Validar y limitar</strong> lo que llega es parte del trabajo del backend: nunca confies a ciegas en lo que manda el navegador.</p>
+</blockquote>
+<hr />
+<h2 id="6-el-cliente-una-pagina-que-usa-tu-proxy">6. El cliente: una pagina que usa tu proxy 💻</h2>
+<p>Ahora la parte bonita. Crea un archivo <code>index.html</code>. Fijate que aqui <strong>no aparece ninguna clave</strong>: el navegador solo conoce la direccion del proxy.</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;title&gt;Mi chat de IA&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Pregunta a la IA&lt;/h1&gt;
+    &lt;input id=&quot;entrada&quot; placeholder=&quot;Escribe tu pregunta&quot; /&gt;
+    &lt;button id=&quot;enviar&quot;&gt;Enviar&lt;/button&gt;
+    &lt;pre id=&quot;respuesta&quot;&gt;&lt;/pre&gt;
+
+    &lt;script&gt;
+      const boton = document.getElementById(&quot;enviar&quot;);
+      const entrada = document.getElementById(&quot;entrada&quot;);
+      const salida = document.getElementById(&quot;respuesta&quot;);
+
+      boton.addEventListener(&quot;click&quot;, async () =&gt; {
+        salida.textContent = &quot;Pensando...&quot;;
+        try {
+          const r = await fetch(&quot;http://localhost:3000/chat&quot;, {
+            method: &quot;POST&quot;,
+            headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+            body: JSON.stringify({ mensaje: entrada.value }),
+          });
+          const datos = await r.json();
+          salida.textContent = JSON.stringify(datos, null, 2);
+        } catch (e) {
+          salida.textContent = &quot;No pude conectar con el proxy.&quot;;
+        }
+      });
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>Lee con calma el <code>&lt;script&gt;</code>: el navegador hace <code>fetch</code> a <code>http://localhost:3000/chat</code>, que es <strong>tu proxy</strong>, no la IA. El navegador no sabe ni la direccion de la IA ni la clave. Esa separacion es justo la arquitectura de <strong>tunal-digital</strong>: cliente vanilla → Worker → Claude.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Abre el <code>index.html</code> con una extension de servidor local (como "Live Server" en tu editor) en vez de hacer doble clic. Asi el navegador lo sirve por <code>http://</code> y CORS funciona como en la vida real.</p>
+</blockquote>
+<p>Para probar todo junto: en una terminal corre <code>node servidor.js</code>, en el editor abre <code>index.html</code> con Live Server, escribe una pregunta y aprieta Enviar. Si recibes una respuesta, <strong>acabas de construir tu primer proxy de IA</strong>. Bit hace una vuelta de campana en el agua.</p>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Si la respuesta de la IA viene anidada (por ejemplo dentro de <code>datos.choices[0].message.content</code> o <code>datos.content[0].text</code> segun el proveedor), tendras que sacar ese campo concreto en lugar de mostrar el JSON entero. Revisa la documentacion de la API que uses; cada una organiza su respuesta a su manera.</p>
+</blockquote>
+<hr />
+<h2 id="7-por-que-este-patron-es-tan-importante">7. Por que este patron es tan importante</h2>
+<p>Lo que construiste hoy no es un ejercicio de juguete: es la columna vertebral de casi cualquier app que use IA de forma seria.</p>
+<ul>
+<li>En <strong>tunal-digital</strong>, el patron es identico: el chat de la web (cliente) llama a un Cloudflare Worker (proxy) que guarda la clave de Anthropic y habla con Claude.</li>
+<li>En <strong>Faro</strong>, las rutas de servidor de Next.js hacen de proxy hacia OpenAI: el navegador pide un analisis, el servidor pone la clave y llama a la IA, y devuelve descripcion, estado, progreso y roadmap. La regla de seguridad del proyecto lo dice sin rodeos: tokens y secretos solo en el servidor.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-variable-de-entorno-en-el-servidor-recordatorio-aplicado">🟦 ¿Que significa? — <em>Variable de entorno en el servidor (recordatorio aplicado)</em></h3>
+<p>Es el lugar donde, tanto en tu proxy como en Faro y en tunal-digital, vive la clave: en el entorno del servidor, leida con <code>process.env</code>, fuera del codigo publico y fuera del navegador.
+<strong>Para que sirve:</strong> para cumplir la regla de oro de seguridad de todo este modulo.
+<strong>Donde se usa en un repo real:</strong> en los tres casos mencionados. Si entendiste tu proxy, entendiste como protegen su clave los proyectos reales.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>El mismo patron protege MAS que claves de IA. Un proxy/backend es donde tambien validas tokens de OAuth, hablas con la base de datos (como Supabase en <strong>RachaSimple</strong> y <strong>Faro</strong>) y aplicas reglas de seguridad. El cliente pide; el servidor de confianza decide.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>Tener la clave en el servidor te protege de que la roben del navegador, pero no de gastar de mas. Un proxy abierto al mundo puede recibir miles de peticiones. En produccion conviene anadir limites de uso (rate limiting) y, si aplica, exigir que el usuario haya iniciado sesion antes de usar la IA.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar con mis palabras que es un <strong>proxy</strong> y por que el navegador no debe tener la clave de la IA.</li>
+<li>[ ] Distingo el <strong>cliente</strong> (navegador, publico) del <strong>backend/servidor</strong> (de confianza, donde viven los secretos).</li>
+<li>[ ] Se que una <strong>clave de API</strong> va en una <strong>variable de entorno</strong> del servidor y que el <code>.env</code> no se sube a GitHub.</li>
+<li>[ ] Entiendo el camino completo: navegador → <code>fetch</code> al proxy → el proxy anade la clave → <code>fetch</code> a la IA → respuesta de vuelta.</li>
+<li>[ ] Reconozco las piezas HTTP: <strong>metodo</strong> (<code>POST</code>), <strong>ruta</strong> (<code>/chat</code>), <strong>cabeceras</strong> (<code>Content-Type</code>, <code>Authorization: Bearer</code>), <strong>cuerpo</strong> JSON y <strong>codigo de estado</strong> (200, 400, 404, 500).</li>
+<li>[ ] Se que es <strong>CORS</strong> y por que en produccion debo limitar el origen a mi propio dominio.</li>
+<li>[ ] Puedo relacionar mi proxy con casos reales: el Worker de <strong>tunal-digital</strong> y las rutas de servidor de <strong>Faro</strong>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Sin computadora.</strong> Dibuja en papel el recorrido de un mensaje desde que lo escribes hasta que recibes la respuesta de la IA, marcando en que punto exacto se anade la clave secreta y por que ese punto esta del lado del servidor.</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> Explica con tus palabras que pasaria si pusieras la clave de API dentro del <code>&lt;script&gt;</code> del <code>index.html</code>. ¿Quien podria verla y como? Relacionalo con la regla de seguridad de <strong>Faro</strong>.</p>
+</li>
+<li>
+<p>💻 <strong>Construye el proxy.</strong> Sigue las secciones 4, 5 y 6 hasta que tu <code>index.html</code> reciba una respuesta a traves de tu <code>servidor.js</code>. Usa una clave de prueba o, si no tienes acceso a una API de IA real, haz que <code>preguntarAIA</code> devuelva un objeto fijo de ejemplo para verificar que el flujo completo funciona.</p>
+</li>
+<li>
+<p>💻 <strong>Mejora la validacion.</strong> Modifica el proxy para que rechace con codigo <strong>400</strong> los mensajes vacios o de mas de 1000 caracteres, devolviendo un mensaje de error claro en JSON. Comprueba desde la pagina que el error se muestra bien.</p>
+</li>
+<li>
+<p>💻 <strong>Cierra el CORS.</strong> Cambia <code>Access-Control-Allow-Origin</code> de <code>"*"</code> al origen exacto desde el que sirves tu <code>index.html</code> (por ejemplo <code>http://localhost:5500</code>). Verifica que sigue funcionando desde tu pagina y razona por que esto se parece a lo que hace <strong>tunal-digital</strong> en produccion.</p>
+</li>
+<li>
+<p>💻 <strong>Lleva la respuesta limpia.</strong> Ajusta el cliente para que, en lugar de mostrar el JSON completo, muestre solo el texto de la respuesta de la IA (saca el campo correcto del objeto). Si usaste una respuesta de ejemplo en el ejercicio 3, adaptala a la forma real de la API que elijas.</p>
+</li>
+</ol>
+<hr />
+<p>Lo lograste. Empezaste el modulo sin saber que era una API y lo terminas habiendo construido un backend que protege una clave secreta y conversa con una inteligencia artificial, el mismo patron que usan proyectos reales. Eso no es poca cosa: es ingenieria de verdad. Bit infla los cachetes de orgullo y te choca la patita. Nos vemos en el siguiente modulo.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

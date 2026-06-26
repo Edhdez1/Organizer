@@ -1,5 +1,10 @@
 # Capitulo 14 — Mini-proyecto: tu propio proxy de IA
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Llegaste al gran final del modulo. En los capitulos anteriores aprendiste a hablar con APIs, a usar `fetch`, a pedir una clave secreta y hasta a entender OAuth. Hoy vas a juntar TODO en un solo proyecto que de verdad funciona: un pequeno backend que recibe un mensaje desde el navegador, le anade tu clave secreta **en el servidor**, llama a una API de IA y te devuelve la respuesta, sin que nadie pueda robarte la clave. Es exactamente el patron que usa el sitio real **tunal-digital** para su chat con la IA de Claude. Bit, nuestro ajolote, se puso el casco de obra: hoy construimos algo de verdad.
 
 ---

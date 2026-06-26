@@ -1,5 +1,10 @@
 # Capitulo 06 — HTTP a fondo: métodos, estados y cabeceras
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > ¡Hola de nuevo! Soy **Bit**, tu ajolote guía. 🐾 En el capítulo anterior viste qué es una API y cómo `fetch` pide datos. Hoy abrimos el capó del coche: vamos a entender el **protocolo HTTP**, el idioma que hablan tu navegador, los servidores y las APIs cuando se mandan mensajes. Cada vez que el chat de **tunal-digital** pregunta algo a la IA, o que **Faro** lee tus proyectos de GitHub, por debajo viajan peticiones HTTP. Al terminar vas a poder abrir la pestaña *Network* del navegador y leer lo que pasa como si fuera un libro. Y, muy importante: vamos a insistir en una regla de oro: **las claves secretas viven en el servidor, NUNCA en el cliente**. ¡Vamos!
 
 ## 1. ¿Qué es HTTP y por qué nos importa?

@@ -1,5 +1,10 @@
 # Capitulo 13 — Construir tu propia API
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora siempre fuiste **cliente**: tu codigo hacia `fetch` a la API de alguien mas (GitHub, OpenAI, Supabase) y recibia una respuesta. En este capitulo cambias de bando. Vas a **construir tu propia API**: el lugar al que *otros* (incluido tu propio frontend) le hacen `fetch`. Bit el ajolote se frota las manitas: "Hoy dejamos de pedir prestada la cocina ajena... y montamos la nuestra." Lo haremos con dos herramientas reales que usan tus repos: las **rutas de API de Next.js** (como en Faro) y los **Cloudflare Workers** (como en tunal-digital). Y vamos a insistir, mucho, en lo mas importante: **tus claves secretas viven en el servidor, jamas en el navegador.**
 
 ---

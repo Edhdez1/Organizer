@@ -1,5 +1,10 @@
 # Capitulo 15 — Glosario de APIs, OAuth e IA y mapa
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Llegaste al final del Modulo 08. Soy **Bit**, tu ajolote guia, y vengo con una libreta llena de palabras raras que fuimos soltando por el camino: *endpoint*, *Bearer*, *scope*, *temperature*... Si alguna te dio un escalofrio, tranquilo: aqui las ordenamos de la A a la Z, con definiciones cortitas, para que sirven y donde aparecen de verdad en nuestros repos (sobre todo **Faro** y **tunal-digital**). Este capitulo es tu diccionario de cabecera. No se memoriza de un tiron: se consulta. Vamos despacio y con la cola tranquila.
 
 Antes de empezar, un recordatorio que repetiremos como mantra de todo el modulo: **las claves y los secretos viven en el servidor, nunca en el cliente**. Es la regla de seguridad de Faro y la vas a ver subrayada varias veces. No es paranoia; es profesionalismo.

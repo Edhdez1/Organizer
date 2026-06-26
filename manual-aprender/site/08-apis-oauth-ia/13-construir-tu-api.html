@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 13 — Construir tu propia API — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-construir-tu-propia-api">Capitulo 13 — Construir tu propia API</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora siempre fuiste <strong>cliente</strong>: tu codigo hacia <code>fetch</code> a la API de alguien mas (GitHub, OpenAI, Supabase) y recibia una respuesta. En este capitulo cambias de bando. Vas a <strong>construir tu propia API</strong>: el lugar al que <em>otros</em> (incluido tu propio frontend) le hacen <code>fetch</code>. Bit el ajolote se frota las manitas: "Hoy dejamos de pedir prestada la cocina ajena... y montamos la nuestra." Lo haremos con dos herramientas reales que usan tus repos: las <strong>rutas de API de Next.js</strong> (como en Faro) y los <strong>Cloudflare Workers</strong> (como en tunal-digital). Y vamos a insistir, mucho, en lo mas importante: <strong>tus claves secretas viven en el servidor, jamas en el navegador.</strong></p>
+</blockquote>
+<hr />
+<h2 id="1-por-que-necesito-una-api-propia">1. ¿Por que necesito una API propia?</h2>
+<p>En el modulo 03 aprendiste <code>fetch</code>. Probablemente pensaste: "si desde el navegador puedo llamar a la API de OpenAI, ¿para que quiero un backend en medio?". Excelente pregunta. La respuesta corta: <strong>por seguridad y por control</strong>.</p>
+<p>Imagina el chat de IA de <strong>tunal-digital</strong>. Es un sitio de HTML, CSS y JavaScript "vanilla" (sin frameworks) con un cotizador, un formulario y un chat que responde con inteligencia artificial. Ese chat necesita llamar a la API de Claude (Anthropic). Para llamar a Claude necesitas una <strong>clave de API</strong>, algo como <code>sk-ant-...</code>. </p>
+<p>Si pusieras esa clave en el JavaScript del navegador, cualquier visitante podria abrir las herramientas de desarrollador, copiarla y gastar tu dinero. Por eso tunal-digital <strong>no</strong> llama a Claude desde el navegador: llama primero a un <strong>Cloudflare Worker</strong> (un pequeño servidor), y es el Worker quien guarda la clave y habla con Claude. El navegador nunca ve el secreto.</p>
+<blockquote class="def">
+<h3 id="que-significa-api-propia-backend">🟦 ¿Que significa? — <em>API propia (backend)</em></h3>
+<p>Una <strong>API propia</strong> es un programa que vive en un servidor y expone direcciones (URLs) a las que tu aplicacion le pide cosas. Tu codigo de servidor decide que datos entrega, que valida y que esconde.
+<strong>Para que sirve:</strong> centralizar logica, proteger secretos y ser el unico que habla con servicios caros o privados.
+<strong>Donde se usa:</strong> en <strong>Faro</strong> son las rutas dentro de <code>app/api/...</code>; en <strong>tunal-digital</strong> es el Cloudflare Worker que atiende el chat.</p>
+<h3 id="que-significa-cliente-y-servidor">🟦 ¿Que significa? — <em>Cliente y servidor</em></h3>
+<p>El <strong>cliente</strong> es quien pide (el navegador, tu app de celular). El <strong>servidor</strong> es quien responde (tu API). El cliente nunca debe guardar secretos porque vive en la maquina del usuario, donde cualquiera puede mirar.
+<strong>Para que sirve:</strong> separar lo publico (lo que ve el usuario) de lo privado (claves, logica).
+<strong>Donde se usa:</strong> en RachaSimple el cliente es React; el servidor de autenticacion es Supabase. En Faro el cliente es la interfaz y el servidor son las rutas de API de Next.js.</p>
+</blockquote>
+<hr />
+<h2 id="2-una-ruta-de-api-en-nextjs-route-handler">2. Una ruta de API en Next.js (route handler)</h2>
+<p><strong>Faro</strong> esta hecho con Next.js + React + TypeScript. Next.js trae una manera elegante de crear endpoints: pones un archivo <code>route.ts</code> dentro de una carpeta bajo <code>app/api/</code>, y esa carpeta se convierte en una URL.</p>
+<blockquote class="def">
+<h3 id="que-significa-endpoint">🟦 ¿Que significa? — <em>Endpoint</em></h3>
+<p>Un <strong>endpoint</strong> es una direccion concreta de tu API a la que se le pide algo, por ejemplo <code>/api/proyectos</code>. Cada endpoint hace una tarea.
+<strong>Para que sirve:</strong> organizar tu API en "puertas" claras, cada una con su proposito.
+<strong>Donde se usa:</strong> Faro tiene endpoints como <code>/api/analyze</code> (dispara el analisis con IA) o rutas para leer proyectos de GitHub.</p>
+<h3 id="que-significa-route-handler-manejador-de-ruta">🟦 ¿Que significa? — <em>Route handler (manejador de ruta)</em></h3>
+<p>En Next.js, un <strong>route handler</strong> es una funcion que responde a un endpoint. Se escribe en un archivo <code>route.ts</code> y exportas funciones con el nombre del metodo HTTP: <code>GET</code>, <code>POST</code>, etc.
+<strong>Para que sirve:</strong> decir "cuando alguien haga GET a esta URL, ejecuta esta funcion".
+<strong>Donde se usa:</strong> todas las rutas de API de Faro son route handlers.</p>
+<h3 id="que-significa-metodo-http-get-post">🟦 ¿Que significa? — <em>Metodo HTTP (GET, POST...)</em></h3>
+<p>Un <strong>metodo HTTP</strong> es el "verbo" de la peticion. <code>GET</code> = "dame datos" (no cambia nada). <code>POST</code> = "aqui van datos, crea/procesa algo". Tambien existen <code>PUT</code> (actualizar) y <code>DELETE</code> (borrar).
+<strong>Para que sirve:</strong> comunicar la <em>intencion</em> de la peticion.
+<strong>Donde se usa:</strong> Faro usa <code>GET</code> para listar proyectos y <code>POST</code> para enviar datos y pedir un analisis con IA.</p>
+</blockquote>
+<p>Asi se ve un route handler sencillo en Faro. El archivo estaria en <code>app/api/saludo/route.ts</code>:</p>
+<pre><code class="language-ts">// app/api/saludo/route.ts
+import { NextResponse } from &quot;next/server&quot;;
+
+// Responde a GET /api/saludo
+export async function GET() {
+  return NextResponse.json({ mensaje: &quot;Hola desde la API de Faro&quot; });
+}
+</code></pre>
+<p>Si tu app esta corriendo y entras a <code>http://localhost:3000/api/saludo</code>, recibes <code>{ "mensaje": "Hola desde la API de Faro" }</code>. ¡Ya construiste tu primera API!</p>
+<blockquote class="def">
+<h3 id="que-significa-nextresponsejson">🟦 ¿Que significa? — <em>NextResponse.json()</em></h3>
+<p><code>NextResponse.json(objeto)</code> es una funcion de Next.js que toma un objeto de JavaScript, lo convierte a <strong>JSON</strong> y lo envia al cliente con las cabeceras correctas.
+<strong>Para que sirve:</strong> devolver datos de forma estandar sin armar la respuesta a mano.
+<strong>Donde se usa:</strong> practicamente todas las rutas de API de Faro terminan con un <code>NextResponse.json(...)</code>.</p>
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p><strong>JSON</strong> (JavaScript Object Notation) es un formato de texto para intercambiar datos. Se ve como un objeto de JavaScript: llaves, claves entre comillas y valores. Es el idioma universal de las APIs.
+<strong>Para que sirve:</strong> que cliente y servidor se entiendan, sin importar el lenguaje de cada uno.
+<strong>Donde se usa:</strong> Faro, tunal-digital y hasta PolyPaw (que guarda datos en archivos <code>.json</code>) usan JSON.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>La carpeta es la URL. <code>app/api/proyectos/route.ts</code> → <code>/api/proyectos</code>. <code>app/api/proyectos/[id]/route.ts</code> → <code>/api/proyectos/123</code> (donde <code>[id]</code> es un parametro variable). Crear endpoints es, literalmente, crear carpetas.</p>
+</blockquote>
+<hr />
+<h2 id="3-recibir-datos-leer-lo-que-manda-el-cliente">3. Recibir datos: leer lo que manda el cliente</h2>
+<p>Una API aburrida solo responde lo mismo siempre. Una API util <strong>recibe datos</strong>, los procesa y responde en consecuencia. En Faro, cuando el usuario dispara un analisis, el frontend envia (por <code>POST</code>) que proyecto analizar.</p>
+<blockquote class="def">
+<h3 id="que-significa-request-peticion">🟦 ¿Que significa? — <em>Request (peticion)</em></h3>
+<p>El <strong>request</strong> es el objeto que representa lo que el cliente envio: el metodo, las cabeceras y el cuerpo (body). Tu route handler lo recibe como argumento.
+<strong>Para que sirve:</strong> leer que pidio el usuario para responder lo correcto.
+<strong>Donde se usa:</strong> las rutas <code>POST</code> de Faro reciben un <code>request</code> para sacar el id del proyecto.</p>
+<h3 id="que-significa-body-cuerpo-de-la-peticion">🟦 ¿Que significa? — <em>Body (cuerpo de la peticion)</em></h3>
+<p>El <strong>body</strong> es la "carga" que el cliente envia, normalmente en JSON. En un <code>GET</code> casi nunca hay body; en un <code>POST</code> es donde van los datos.
+<strong>Para que sirve:</strong> mandar informacion al servidor (un formulario, un id, un texto).
+<strong>Donde se usa:</strong> el chat de tunal-digital envia en el body el mensaje del usuario; Faro envia el id del proyecto a analizar.</p>
+</blockquote>
+<pre><code class="language-ts">// app/api/analizar/route.ts
+import { NextResponse } from &quot;next/server&quot;;
+
+export async function POST(request: Request) {
+  // Leemos el JSON que mando el cliente
+  const datos = await request.json();
+  const proyectoId = datos.proyectoId;
+
+  // ... aqui Faro buscaria el proyecto y llamaria a OpenAI ...
+
+  return NextResponse.json({ ok: true, proyectoId });
+}
+</code></pre>
+<p>Fijate en <code>await request.json()</code>. Como leer el cuerpo es una operacion que toma su tiempo, es <strong>asincrona</strong>, asi que usamos <code>await</code> (eso lo viste en el modulo 03 con <code>fetch</code>).</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En el frontend de Faro, llamar a esa ruta se ve asi:
+<code>ts
+const res = await fetch("/api/analizar", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ proyectoId: "abc-123" }),
+});
+const data = await res.json();</code>
+El <code>JSON.stringify</code> convierte tu objeto a texto JSON para enviarlo. Del otro lado, <code>request.json()</code> lo vuelve a convertir en objeto. Ida y vuelta.</p>
+</blockquote>
+<hr />
+<h2 id="4-validar-nunca-confies-en-el-cliente">4. Validar: nunca confies en el cliente</h2>
+<p>Aqui Bit se pone serio (lo cual es raro en un ajolote). <strong>Cualquiera puede mandar lo que sea a tu API.</strong> Un usuario malintencionado puede enviar un body vacio, un id que no existe, o texto enorme para tumbar tu servidor. Tu API debe <strong>validar</strong> antes de actuar.</p>
+<blockquote class="def">
+<h3 id="que-significa-validar">🟦 ¿Que significa? — <em>Validar</em></h3>
+<p><strong>Validar</strong> es revisar que los datos que llegaron cumplan las reglas (que existan, que sean del tipo correcto, que no esten vacios) antes de usarlos.
+<strong>Para que sirve:</strong> evitar errores, datos basura y ataques.
+<strong>Donde se usa:</strong> antes de llamar a OpenAI, Faro valida que venga un proyecto valido; tunal-digital valida que el mensaje del chat no este vacio.</p>
+</blockquote>
+<pre><code class="language-ts">export async function POST(request: Request) {
+  const datos = await request.json();
+  const proyectoId = datos?.proyectoId;
+
+  // Validacion: ¿vino el id y es texto?
+  if (!proyectoId || typeof proyectoId !== &quot;string&quot;) {
+    return NextResponse.json(
+      { error: &quot;Falta proyectoId o no es valido&quot; },
+      { status: 400 } // 400 = peticion incorrecta
+    );
+  }
+
+  // Si pasa la validacion, seguimos...
+  return NextResponse.json({ ok: true, proyectoId });
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>"Pero yo controlo el frontend, yo nunca mandaria datos malos." No importa. Tu frontend no es el unico que puede llamar a tu API: cualquiera con la URL puede. <strong>Validar en el servidor no es opcional.</strong> El navegador es territorio del usuario, no tuyo.</p>
+</blockquote>
+<hr />
+<h2 id="5-codigos-de-estado-el-semaforo-de-http">5. Codigos de estado: el semaforo de HTTP</h2>
+<p>Cada respuesta HTTP lleva un <strong>codigo de estado</strong>: un numero que resume como salio todo. Ya usaste algunos sin notarlo (el famoso <code>404</code>).</p>
+<blockquote class="def">
+<h3 id="que-significa-codigo-de-estado-status-code">🟦 ¿Que significa? — <em>Codigo de estado (status code)</em></h3>
+<p>Un <strong>codigo de estado</strong> es un numero de tres cifras que indica el resultado de la peticion. <code>2xx</code> = exito, <code>4xx</code> = error del cliente, <code>5xx</code> = error del servidor.
+<strong>Para que sirve:</strong> que el cliente sepa, sin leer el contenido, si todo fue bien o que tipo de error hubo.
+<strong>Donde se usa:</strong> las rutas de Faro devuelven <code>200</code> al exito y <code>400</code>/<code>401</code>/<code>500</code> en errores; el Worker de tunal-digital responde <code>200</code> cuando Claude contesta bien.</p>
+</blockquote>
+<p>Los que mas vas a usar:</p>
+<table>
+<thead>
+<tr>
+<th>Codigo</th>
+<th>Significado</th>
+<th>Cuando usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200</code></td>
+<td>OK</td>
+<td>Todo salio bien</td>
+</tr>
+<tr>
+<td><code>201</code></td>
+<td>Creado</td>
+<td>Creaste un recurso nuevo</td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td>Bad Request</td>
+<td>El cliente mando datos invalidos</td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td>No autorizado</td>
+<td>Falta login / token</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>No encontrado</td>
+<td>Ese recurso no existe</td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td>Error del servidor</td>
+<td>Algo se rompio de tu lado</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="def">
+<h3 id="que-significa-401-no-autorizado">🟦 ¿Que significa? — <em>401 No autorizado</em></h3>
+<p>El <code>401</code> dice "no se quien eres o no tienes permiso". Es distinto del <code>400</code> (datos malos) y del <code>404</code> (no existe).
+<strong>Para que sirve:</strong> proteger endpoints privados.
+<strong>Donde se usa:</strong> Faro usa autenticacion con Supabase Auth; si llamas a una ruta privada sin sesion, lo correcto es responder <code>401</code>.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Por defecto <code>NextResponse.json(datos)</code> ya devuelve <code>200</code>. Solo necesitas indicar el status cuando es distinto: <code>NextResponse.json({ error: "..." }, { status: 400 })</code>. En errores, devuelve <strong>siempre</strong> un JSON con un campo <code>error</code> legible; tu yo del futuro lo agradecera al depurar.</p>
+</blockquote>
+<hr />
+<h2 id="6-el-patron-proxy-esconder-secretos-detras-de-tu-backend">6. El patron proxy: esconder secretos detras de tu backend</h2>
+<p>Llegamos al corazon del capitulo, y a la regla de seguridad de Faro: <strong>tokens y secretos solo en el servidor, nunca en el cliente.</strong> La tecnica que lo hace posible se llama <strong>patron proxy</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-patron-proxy">🟦 ¿Que significa? — <em>Patron proxy</em></h3>
+<p>Un <strong>proxy</strong> es un intermediario. En vez de que el cliente llame directo al servicio externo (OpenAI, Claude), llama a <em>tu</em> API, y <em>tu</em> API es la que llama al servicio con la clave secreta y devuelve el resultado.
+<strong>Para que sirve:</strong> que la clave nunca llegue al navegador y que tu controles que se pide.
+<strong>Donde se usa:</strong> el Worker de tunal-digital es un proxy a Claude; las rutas de Faro son un proxy a OpenAI.</p>
+</blockquote>
+<p>Asi se ve el flujo:</p>
+<pre><code>SIN proxy (PELIGROSO):
+  Navegador  --(con la clave sk-...)--&gt;  OpenAI/Claude   ❌
+
+CON proxy (SEGURO):
+  Navegador  --&gt;  TU API (guarda la clave)  --&gt;  OpenAI/Claude   ✅
+              &lt;--                            &lt;--
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
+<p>Una <strong>variable de entorno</strong> es un valor de configuracion (como una clave secreta) que vive <em>fuera</em> del codigo, en el servidor. Se lee con <code>process.env.NOMBRE</code> en Next.js o <code>env.NOMBRE</code> en un Worker. Nunca se escribe directamente en el codigo ni se sube al repo.
+<strong>Para que sirve:</strong> guardar secretos sin commitearlos y cambiarlos sin tocar el codigo.
+<strong>Donde se usa:</strong> Faro guarda la clave de OpenAI en variables de entorno; tunal-digital guarda la clave de Claude como secreto del Worker.</p>
+</blockquote>
+<p>Asi seria una ruta proxy en Faro que llama a OpenAI sin exponer la clave:</p>
+<pre><code class="language-ts">// app/api/ia/route.ts
+import { NextResponse } from &quot;next/server&quot;;
+
+export async function POST(request: Request) {
+  const { prompt } = await request.json();
+
+  if (!prompt || typeof prompt !== &quot;string&quot;) {
+    return NextResponse.json({ error: &quot;Falta prompt&quot; }, { status: 400 });
+  }
+
+  // La clave vive en el servidor, jamas viaja al navegador
+  const respuesta = await fetch(&quot;https://api.openai.com/v1/chat/completions&quot;, {
+    method: &quot;POST&quot;,
+    headers: {
+      &quot;Content-Type&quot;: &quot;application/json&quot;,
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: &quot;gpt-4o-mini&quot;,
+      messages: [{ role: &quot;user&quot;, content: prompt }],
+    }),
+  });
+
+  const data = await respuesta.json();
+  return NextResponse.json({ texto: data.choices[0].message.content });
+}
+</code></pre>
+<p>El navegador solo conoce <code>/api/ia</code>. Nunca ve <code>OPENAI_API_KEY</code>. Ese es el patron proxy en accion.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>En Next.js, cualquier variable de entorno que empiece con <code>NEXT_PUBLIC_</code> se incrusta en el codigo del navegador y queda <strong>publica</strong>. Jamas pongas una clave secreta con ese prefijo. <code>OPENAI_API_KEY</code> (sin prefijo) se queda en el servidor; <code>NEXT_PUBLIC_ALGO</code> se va al cliente. Confundirlos es filtrar tu clave.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Esta es exactamente la filosofia de Faro: la IA de OpenAI que genera descripcion, estado, progreso y roadmap se llama desde rutas del servidor, con la clave en variables de entorno. Los tokens de cada usuario se guardan en una tabla <code>user_connections</code> protegida con <strong>RLS</strong> (Row Level Security: una regla de la base de datos que hace que cada usuario solo pueda leer sus propias filas). El frontend solo dispara el analisis "bajo demanda" y recibe JSON ya cocinado.</p>
+</blockquote>
+<hr />
+<h2 id="7-cloudflare-workers-el-caso-de-tunal-digital">7. Cloudflare Workers: el caso de tunal-digital</h2>
+<p>Faro tiene un backend completo de Next.js. Pero <strong>tunal-digital</strong> es solo HTML, CSS y JavaScript vanilla: ¡no tiene servidor propio! ¿Como esconde entonces la clave de Claude? Con un <strong>Cloudflare Worker</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-cloudflare-worker">🟦 ¿Que significa? — <em>Cloudflare Worker</em></h3>
+<p>Un <strong>Cloudflare Worker</strong> es una pequeña funcion de servidor que Cloudflare ejecuta en sus servidores, repartidos por el mundo, muy cerca del usuario. No administras maquinas: solo subes una funcion y te dan una URL.
+<strong>Para que sirve:</strong> tener "un poquito de backend" sin montar un servidor entero. Ideal para un sitio estatico que necesita esconder una clave.
+<strong>Donde se usa:</strong> tunal-digital usa un Worker como proxy entre su chat y la API de Claude (Anthropic).</p>
+</blockquote>
+<p>Un Worker no usa <code>NextResponse</code>; usa el estandar web <code>Request</code>/<code>Response</code>. Su estructura minima:</p>
+<pre><code class="language-js">// worker.js — el proxy de chat de tunal-digital
+export default {
+  async fetch(request, env) {
+    // Solo aceptamos POST para el chat
+    if (request.method !== &quot;POST&quot;) {
+      return new Response(&quot;Metodo no permitido&quot;, { status: 405 });
+    }
+
+    const { mensaje } = await request.json();
+
+    // Validacion
+    if (!mensaje || typeof mensaje !== &quot;string&quot;) {
+      return new Response(
+        JSON.stringify({ error: &quot;Mensaje vacio&quot; }),
+        { status: 400, headers: { &quot;Content-Type&quot;: &quot;application/json&quot; } }
+      );
+    }
+
+    // Llamamos a Claude con la clave guardada como secreto del Worker
+    const r = await fetch(&quot;https://api.anthropic.com/v1/messages&quot;, {
+      method: &quot;POST&quot;,
+      headers: {
+        &quot;Content-Type&quot;: &quot;application/json&quot;,
+        &quot;x-api-key&quot;: env.ANTHROPIC_API_KEY,
+        &quot;anthropic-version&quot;: &quot;2023-06-01&quot;,
+      },
+      body: JSON.stringify({
+        model: &quot;claude-3-5-haiku-latest&quot;,
+        max_tokens: 500,
+        messages: [{ role: &quot;user&quot;, content: mensaje }],
+      }),
+    });
+
+    const data = await r.json();
+    return new Response(
+      JSON.stringify({ respuesta: data.content[0].text }),
+      { status: 200, headers: { &quot;Content-Type&quot;: &quot;application/json&quot; } }
+    );
+  },
+};
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-env-entorno-del-worker">🟦 ¿Que significa? — <em>env (entorno del Worker)</em></h3>
+<p>En un Worker, <code>env</code> es el objeto que contiene las variables de entorno y secretos. <code>env.ANTHROPIC_API_KEY</code> es la clave de Claude, configurada en el panel de Cloudflare, no en el codigo.
+<strong>Para que sirve:</strong> acceder a secretos sin escribirlos en el archivo del Worker.
+<strong>Donde se usa:</strong> el Worker de tunal-digital lee de ahi su clave de Anthropic.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Igual que Faro y su clave de OpenAI, tunal-digital y su clave de Claude siguen la misma regla de oro: <strong>el secreto vive en el servidor (aqui, el Worker), nunca en el JavaScript del navegador.</strong> Dos stacks distintos, una misma disciplina de seguridad.</p>
+</blockquote>
+<hr />
+<h2 id="8-cors-a-grandes-rasgos">8. CORS a grandes rasgos</h2>
+<p>Cuando tu pagina (digamos <code>tunaldigital.com</code>) llama a una API en <em>otro</em> dominio (el Worker en <code>tu-worker.workers.dev</code>), el navegador aplica una regla de seguridad llamada <strong>CORS</strong>. Si tu API no da permiso explicito, el navegador bloquea la respuesta.</p>
+<blockquote class="def">
+<h3 id="que-significa-cors">🟦 ¿Que significa? — <em>CORS</em></h3>
+<p><strong>CORS</strong> (Cross-Origin Resource Sharing) es una regla del navegador: por defecto, una pagina solo puede leer respuestas de su <em>mismo origen</em> (mismo dominio, puerto y protocolo). Para permitir otros origenes, el servidor debe enviar cabeceras especiales.
+<strong>Para que sirve:</strong> evitar que cualquier sitio malicioso use tu API en nombre de tus usuarios sin permiso.
+<strong>Donde se usa:</strong> el Worker de tunal-digital, que vive en un dominio distinto al sitio, debe enviar cabeceras CORS para que el chat funcione.</p>
+<h3 id="que-significa-origen-origin">🟦 ¿Que significa? — <em>Origen (origin)</em></h3>
+<p>Un <strong>origen</strong> es la combinacion de protocolo + dominio + puerto, por ejemplo <code>https://tunaldigital.com</code>. Dos URLs son del "mismo origen" solo si coinciden los tres.
+<strong>Para que sirve:</strong> es la unidad con la que el navegador decide que esta permitido.
+<strong>Donde se usa:</strong> Faro, al llamar <code>fetch("/api/...")</code> (mismo origen), no sufre CORS; tunal-digital, al llamar a otro dominio, si.</p>
+</blockquote>
+<p>La cabecera clave es <code>Access-Control-Allow-Origin</code>. En el Worker:</p>
+<pre><code class="language-js">const cabecerasCORS = {
+  &quot;Access-Control-Allow-Origin&quot;: &quot;https://tunaldigital.com&quot;,
+  &quot;Access-Control-Allow-Methods&quot;: &quot;POST, OPTIONS&quot;,
+  &quot;Access-Control-Allow-Headers&quot;: &quot;Content-Type&quot;,
+};
+
+// El navegador manda primero una peticion OPTIONS (preflight)
+if (request.method === &quot;OPTIONS&quot;) {
+  return new Response(null, { status: 204, headers: cabecerasCORS });
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-preflight-peticion-options">🟦 ¿Que significa? — <em>Preflight (peticion OPTIONS)</em></h3>
+<p>Antes de un <code>POST</code> a otro origen, el navegador envia automaticamente una peticion <code>OPTIONS</code> para preguntar "¿me dejas?". Tu servidor responde con las cabeceras CORS. Si dice que si, el navegador hace el <code>POST</code> real.
+<strong>Para que sirve:</strong> confirmar permisos antes de enviar datos de verdad.
+<strong>Donde se usa:</strong> el Worker de tunal-digital responde a ese <code>OPTIONS</code> antes de procesar el chat.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Es tentador poner <code>Access-Control-Allow-Origin: *</code> (asterisco = "cualquiera"). Para una API publica de solo lectura puede valer, pero para una que cuesta dinero (como un proxy a Claude) <strong>limita el origen a tu propio dominio</strong>. Si dejas <code>*</code>, cualquier web podria usar tu Worker y gastar tu cuota. CORS no reemplaza la validacion ni la autenticacion: es solo una capa mas.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>En Faro casi nunca pelearas con CORS, porque el frontend y las rutas <code>/api</code> viven en el <em>mismo</em> dominio. CORS aparece sobre todo cuando, como en tunal-digital, el sitio y la API estan separados. Si ves "blocked by CORS policy" en la consola, ya sabes: faltan cabeceras en el servidor.</p>
+</blockquote>
+<hr />
+<h2 id="9-juntando-todo-el-viaje-de-una-peticion">9. Juntando todo: el viaje de una peticion</h2>
+<p>Recapitulemos el camino completo, con el chat de tunal-digital como ejemplo:</p>
+<ol>
+<li>El usuario escribe "¿cuanto cuesta una pagina web?" y presiona enviar.</li>
+<li>El JavaScript del navegador hace <code>fetch</code> (POST) al Worker, con el mensaje en el <strong>body</strong> como JSON.</li>
+<li>El navegador, como es otro origen, primero hace el <strong>preflight OPTIONS</strong>; el Worker responde con cabeceras <strong>CORS</strong>.</li>
+<li>El Worker <strong>valida</strong> que el mensaje no este vacio.</li>
+<li>El Worker, como <strong>proxy</strong>, llama a Claude usando su clave secreta (<code>env.ANTHROPIC_API_KEY</code>).</li>
+<li>Claude responde; el Worker devuelve un <strong>JSON</strong> con <code>status 200</code>.</li>
+<li>El navegador recibe la respuesta y la muestra en el chat.</li>
+</ol>
+<p>En ningun momento la clave toco el navegador. Ese es el objetivo de todo este capitulo. Bit sonrie: "El secreto se quedo en casa, justo donde debe estar."</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo la diferencia entre <strong>cliente</strong> y <strong>servidor</strong>, y por que los secretos solo van en el servidor.</li>
+<li>[ ] Se crear un <strong>route handler</strong> en Next.js poniendo <code>route.ts</code> en una carpeta bajo <code>app/api/</code>.</li>
+<li>[ ] Se exportar funciones <code>GET</code> y <code>POST</code> y devolver datos con <code>NextResponse.json(...)</code>.</li>
+<li>[ ] Se leer el <strong>body</strong> de una peticion con <code>await request.json()</code>.</li>
+<li>[ ] <strong>Valido</strong> siempre los datos recibidos antes de usarlos, y respondo <code>400</code> si son invalidos.</li>
+<li>[ ] Conozco los <strong>codigos de estado</strong> mas comunes: <code>200</code>, <code>400</code>, <code>401</code>, <code>404</code>, <code>500</code>.</li>
+<li>[ ] Entiendo el <strong>patron proxy</strong> y por que es la forma correcta de esconder claves de OpenAI o Claude.</li>
+<li>[ ] Se que una <strong>variable de entorno</strong> guarda secretos fuera del codigo, y que <code>NEXT_PUBLIC_</code> los hace publicos.</li>
+<li>[ ] Entiendo a grandes rasgos que es <strong>CORS</strong>, el <strong>origen</strong> y la peticion <strong>preflight OPTIONS</strong>.</li>
+<li>[ ] Se que un <strong>Cloudflare Worker</strong> es un mini-servidor ideal para dar backend a un sitio estatico como tunal-digital.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 <strong>Tu primer endpoint.</strong> En un proyecto Next.js, crea <code>app/api/saludo/route.ts</code> con un <code>GET</code> que devuelva <code>{ mensaje: "Hola" }</code>. Entra a <code>http://localhost:3000/api/saludo</code> en el navegador y confirma que ves el JSON.</p>
+</li>
+<li>
+<p>💻 <strong>Recibir y validar.</strong> Crea <code>app/api/eco/route.ts</code> con un <code>POST</code> que lea <code>texto</code> del body y lo devuelva en mayusculas. Si <code>texto</code> falta o no es string, responde <code>400</code> con <code>{ error: "..." }</code>. Pruebalo con <code>fetch</code> desde la consola del navegador.</p>
+</li>
+<li>
+<p><strong>En papel: codigos de estado.</strong> Para cada situacion, escribe que codigo devolverias y por que: (a) el usuario pide un proyecto que no existe; (b) manda un body vacio; (c) todo sale bien; (d) tu llamada a OpenAI falla por un error interno.</p>
+</li>
+<li>
+<p>💻 <strong>Patron proxy simulado.</strong> Escribe una ruta <code>/api/clima</code> que, en vez de exponer una clave, lea <code>process.env.CLIMA_API_KEY</code> y la use en un <code>fetch</code> a un servicio (puedes simular el servicio). Verifica que la clave <strong>no</strong> aparece en el codigo del navegador (revisa las herramientas de desarrollador).</p>
+</li>
+<li>
+<p><strong>CORS en tu cabeza.</strong> Explica con tus palabras por que el chat de tunal-digital necesita cabeceras CORS pero las rutas <code>/api</code> de Faro normalmente no. Pista: piensa en los <strong>origenes</strong>.</p>
+</li>
+<li>
+<p>💻 <strong>(Reto) Un mini-Worker.</strong> Si tienes cuenta de Cloudflare, crea un Worker que responda <code>{ respuesta: "pong" }</code> a un <code>POST</code>, rechace cualquier otro metodo con <code>405</code> y conteste el preflight <code>OPTIONS</code> con cabeceras CORS limitadas a tu dominio. No llames a ninguna IA todavia: solo el esqueleto del proxy.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

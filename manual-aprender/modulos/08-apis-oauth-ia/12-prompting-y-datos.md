@@ -1,5 +1,10 @@
 # Capitulo 12 — Prompting y respuestas estructuradas
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap12.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hola otra vez, soy **Bit**, el ajolote del manual. En los capitulos anteriores aprendiste a hablar con una API por HTTP y a guardar datos en una base. Hoy vamos a hablar con algo mas raro: una **inteligencia artificial** que entiende texto en espanol. El truco no es "preguntar bonito", sino aprender a pedir las cosas de forma que el programa pueda usarlas. Y, sobre todo, a **no creerle ciegamente**. Vamos despacio, que aqui nadie corre. 🦎
 
 ## 1. ¿Que es un prompt y por que importa tanto?

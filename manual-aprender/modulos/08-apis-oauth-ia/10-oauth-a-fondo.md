@@ -1,5 +1,10 @@
 # Capitulo 10 — OAuth a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap10.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hola de nuevo, soy **Bit**, tu ajolote guia. En el capitulo anterior viste como una app habla con otra usando peticiones HTTP. Hoy resolvemos un problema mas delicado: *como dejar que una app entre a tus datos de otro servicio (GitHub, Google Drive) sin darle tu contrasena*. Eso es **OAuth**. Tranqui: lo vamos a desarmar pieza por pieza, con calma, y veras como **Faro** lo usa de verdad para leer tus proyectos. Respira. Vamos paso a paso.
 
 ---

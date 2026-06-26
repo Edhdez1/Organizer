@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 11 — Integrar IA a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-11-integrar-ia-a-fondo">Capitulo 11 — Integrar IA a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap11.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora usaste la IA como una caja magica: le mandas un texto y te devuelve otro.
+En este capitulo abrimos la caja. Vas a entender que es de verdad una API de modelo de
+lenguaje, como se conversa con ella usando "mensajes", que son los tokens (la moneda con
+la que se cobra y se mide todo), y como controlar el resultado con un par de parametros.
+Lo veremos con dos casos reales: el chat de <strong>tunal-digital</strong>, que habla con la API de
+Claude/Anthropic, y <strong>Faro</strong>, que usa la API de OpenAI para describir tus proyectos.
+Bit, el ajolote, viene con nosotros. Bit es curioso pero olvidadizo: por eso entiende
+tan bien a los modelos de IA, que tambien olvidan todo entre una pregunta y la siguiente.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-una-api-de-modelo-de-lenguaje">1. Que es una API de modelo de lenguaje</h2>
+<p>En el modulo 03 viste <code>fetch</code> y aprendiste que una <strong>API</strong> es una "ventanilla" a la que le
+mandas una peticion y te devuelve una respuesta. Una API de IA funciona igual: la diferencia
+es que del otro lado no hay una base de datos comun, sino un <strong>modelo de lenguaje</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-modelo-de-lenguaje-llm">🟦 ¿Que significa? — <em>Modelo de lenguaje (LLM)</em></h3>
+<p>Un <strong>modelo de lenguaje grande</strong> (en ingles <em>Large Language Model</em>, LLM) es un programa
+entrenado con enormes cantidades de texto que aprendio a <strong>predecir la siguiente palabra</strong>.
+Sirve para: redactar, resumir, traducir, clasificar, responder preguntas o programar.
+Donde se usa en un repo real: en <strong>tunal-digital</strong>, el chat de la web le manda al modelo
+Claude (de Anthropic) la pregunta del visitante y muestra la respuesta. En <strong>Faro</strong>, el
+modelo de OpenAI lee la informacion de tus proyectos y genera la descripcion y el roadmap.</p>
+</blockquote>
+<p>La idea clave: el modelo <strong>no busca</strong> la respuesta en ningun lado, la <strong>genera</strong> palabra por
+palabra. Por eso a veces inventa cosas (a eso se le llama "alucinar") y por eso dos preguntas
+iguales pueden dar respuestas algo distintas.</p>
+<blockquote class="def">
+<h3 id="que-significa-api">🟦 ¿Que significa? — <em>API</em></h3>
+<p>Una <strong>API</strong> (<em>Application Programming Interface</em>) es una direccion de internet a la que tu
+programa le hace una peticion HTTP y recibe una respuesta, normalmente en formato JSON.
+Sirve para: usar un servicio que vive en otro servidor sin tener ese servicio en tu maquina.
+Donde se usa: la API de Claude vive en <code>https://api.anthropic.com/v1/messages</code> y la de
+OpenAI en <code>https://api.openai.com/v1/...</code>. Tu codigo les manda peticiones a esas direcciones.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Un LLM es "sin estado" (en ingles <em>stateless</em>): no recuerda nada de tu conversacion
+anterior. Cada vez que le preguntas algo, hay que mandarle <strong>toda la conversacion otra vez</strong>.
+Bit te lo resume asi: el modelo tiene la memoria de un pez. Si quieres que recuerde tu
+nombre, se lo tienes que repetir en cada mensaje.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-rol-de-los-mensajes-system-user-y-assistant">2. El rol de los mensajes: system, user y assistant</h2>
+<p>Las APIs modernas de chat no reciben "un texto suelto": reciben una <strong>lista de mensajes</strong>.
+Cada mensaje tiene un <strong>rol</strong> que le dice al modelo quien esta hablando.</p>
+<blockquote class="def">
+<h3 id="que-significa-mensaje-y-rol">🟦 ¿Que significa? — <em>Mensaje y rol</em></h3>
+<p>Un <strong>mensaje</strong> es un objeto con dos partes: un <strong>rol</strong> (quien habla) y un <strong>contenido</strong>
+(lo que dice). El <strong>rol</strong> puede ser <code>system</code>, <code>user</code> o <code>assistant</code>.
+Sirve para: darle estructura a la conversacion para que el modelo sepa quien dijo que.
+Donde se usa: tanto la API de Claude (tunal-digital) como la de OpenAI (Faro) reciben
+esta lista de mensajes en el cuerpo (<code>body</code>) de la peticion.</p>
+</blockquote>
+<p>Los tres roles, en cristiano:</p>
+<ul>
+<li><strong><code>system</code></strong> — las instrucciones generales. Es como el guion del actor: define el tono,
+  el idioma, las reglas. El usuario normalmente <strong>no lo ve</strong>. Ejemplo: <em>"Eres el asistente
+  de Tunal Digital. Responde en espanol, breve y amable."</em></li>
+<li><strong><code>user</code></strong> — lo que escribe la persona. Ejemplo: <em>"Hola, ¿hacen paginas web?"</em></li>
+<li><strong><code>assistant</code></strong> — lo que respondio el modelo en turnos anteriores. Sirve para que el modelo
+  recuerde el hilo de la conversacion.</li>
+</ul>
+<p>Una conversacion en JSON se ve asi (este es el estilo de <strong>OpenAI</strong>, como en Faro):</p>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;gpt-4o-mini&quot;,
+  &quot;messages&quot;: [
+    { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Eres el asistente de Faro. Responde en espanol.&quot; },
+    { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Resume el estado de mi proyecto RachaSimple.&quot; },
+    { &quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;RachaSimple va por la fase de login con Supabase.&quot; },
+    { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;¿Y que falta para terminarlo?&quot; }
+  ]
+}
+</code></pre>
+<p>Fijate que el ultimo mensaje es del <code>user</code>: el modelo respondera a ese, pero usando todo lo
+anterior como contexto. En la API de <strong>Claude/Anthropic</strong> (la de tunal-digital) es casi igual,
+con una diferencia: las instrucciones de sistema no van dentro de <code>messages</code>, sino en un campo
+aparte llamado <code>system</code>. El cuerpo se ve asi:</p>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;claude-opus-4-8&quot;,
+  &quot;max_tokens&quot;: 1024,
+  &quot;system&quot;: &quot;Eres el asistente de Tunal Digital. Responde en espanol, breve y amable.&quot;,
+  &quot;messages&quot;: [
+    { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hola, ¿hacen paginas web?&quot; }
+  ]
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <strong>tunal-digital</strong> el frontend (HTML/CSS/JS vanilla) no llama directo a Anthropic.
+Le manda el mensaje a un <strong>Cloudflare Worker</strong>, y el Worker es quien arma este JSON con
+<code>system</code> y <code>messages</code> y se lo manda a la API de Claude. Ya veremos en la seccion 7 por
+que ese paso intermedio es obligatorio por seguridad.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>El campo <code>system</code> es poderoso pero no es magia. Si le dices "responde solo en espanol" y el
+usuario insiste mucho en otro idioma, el modelo puede desviarse. Las instrucciones de sistema
+guian, no encadenan. Pon ahi las reglas importantes, pero no esperes obediencia ciega.</p>
+</blockquote>
+<hr />
+<h2 id="3-tokens-la-moneda-de-los-modelos">3. Tokens: la moneda de los modelos</h2>
+<p>Aqui esta el concepto que mas confunde a quien empieza, asi que lo desmenuzamos despacio.</p>
+<blockquote class="def">
+<h3 id="que-significa-token">🟦 ¿Que significa? — <em>Token</em></h3>
+<p>Un <strong>token</strong> es un pedacito de texto: puede ser una palabra corta, parte de una palabra
+larga, un signo de puntuacion o un espacio. El modelo no lee letras ni palabras enteras,
+lee tokens.
+Sirve para: medir cuanto texto entra y sale, y para <strong>cobrar</strong>. Todo se cuenta en tokens.
+Donde se usa: tanto Claude (tunal-digital) como OpenAI (Faro) reportan en su respuesta
+cuantos tokens consumio cada peticion.</p>
+</blockquote>
+<p>Una regla aproximada para el espanol e ingles: <strong>1 token ≈ 4 caracteres</strong>, o mas o menos
+<strong>3 palabras = 4 tokens</strong>. No es exacto, pero te da la intuicion. Por ejemplo, la frase
+<em>"Hola, ¿como estas?"</em> son unos 6 o 7 tokens.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>No cuentes tokens "a ojo" multiplicando por un numero fijo. El codigo y los idiomas con
+tildes o emojis gastan mas tokens de lo que parece. Si necesitas el numero exacto, ambas
+APIs ofrecen una manera de contarlos antes de enviar. Para una estimacion rapida en tu
+cabeza, "4 caracteres por token" sobra.</p>
+</blockquote>
+<p>Hay dos tipos de tokens que importan:</p>
+<ul>
+<li><strong>Tokens de entrada</strong> (<em>input</em>): todo lo que le mandas (el <code>system</code> + todos los <code>messages</code>).</li>
+<li><strong>Tokens de salida</strong> (<em>output</em>): todo lo que el modelo te responde.</li>
+</ul>
+<p>Esta distincion es la base del costo, que veremos en la seccion 6.</p>
+<blockquote class="def">
+<h3 id="que-significa-ventana-de-contexto">🟦 ¿Que significa? — <em>Ventana de contexto</em></h3>
+<p>La <strong>ventana de contexto</strong> es el maximo de tokens que el modelo puede "ver" de una sola vez,
+sumando entrada <strong>y</strong> salida. Es como el tamano de su escritorio: solo cabe cierta cantidad
+de papeles abiertos al mismo tiempo.
+Sirve para: saber cuanto texto le puedes pasar antes de que se "desborde".
+Donde se usa: en <strong>Faro</strong>, cuando la IA lee muchos proyectos de GitHub y Drive a la vez,
+hay que vigilar no pasarse de la ventana de contexto, o la peticion falla o se recorta.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Si tu conversacion crece y crece (como en un chat largo), cada nueva pregunta arrastra todo
+el historial, y los tokens de entrada se disparan. Llega un punto en que te pasas de la
+ventana de contexto. Soluciones tipicas: resumir lo viejo, o quedarte solo con los ultimos
+mensajes. Bit lo dice asi: el escritorio no es infinito; a veces hay que guardar papeles
+viejos en un cajon.</p>
+</blockquote>
+<hr />
+<h2 id="4-parametros-para-controlar-la-respuesta">4. Parametros para controlar la respuesta</h2>
+<p>Ademas de <code>model</code> y <code>messages</code>, en el cuerpo de la peticion puedes mandar <strong>parametros</strong> que
+ajustan como responde el modelo. Los dos mas comunes para empezar son <code>max_tokens</code> y
+<code>temperature</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-max_tokens">🟦 ¿Que significa? — <em>max_tokens</em></h3>
+<p><code>max_tokens</code> es el <strong>maximo de tokens de salida</strong> que permites en la respuesta. Es un techo:
+si el modelo lo alcanza, corta la respuesta ahi, aunque no haya terminado la idea.
+Sirve para: evitar respuestas eternas y poner un limite al gasto.
+Donde se usa: en la API de Claude (tunal-digital) <code>max_tokens</code> es <strong>obligatorio</strong>; en la de
+OpenAI es opcional (existe como <code>max_tokens</code> o <code>max_completion_tokens</code> segun la version).</p>
+</blockquote>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;claude-opus-4-8&quot;,
+  &quot;max_tokens&quot;: 500,
+  &quot;messages&quot;: [{ &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explicame que es una cookie.&quot; }]
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Si pones <code>max_tokens</code> muy bajo, la respuesta se corta a la mitad de una frase. No es un error
+del modelo: literalmente le dijiste "no escribas mas de tantos tokens". Si ves respuestas
+truncadas, sube <code>max_tokens</code>. Para un chat normal, unos cientos suelen bastar; para generar
+un roadmap completo como en Faro, necesitas mas espacio.</p>
+<h3 id="que-significa-temperature">🟦 ¿Que significa? — <em>temperature</em></h3>
+<p><code>temperature</code> es un numero (tipicamente de 0 a 1) que controla cuanto <strong>se arriesga</strong> el
+modelo al elegir la siguiente palabra. Cerca de 0 es predecible y "serio"; mas alto es mas
+creativo y variado.
+Sirve para: tareas exactas (clasificar, extraer datos) conviene bajo; para redactar o
+hacer lluvia de ideas conviene mas alto.
+Donde se usa: en <strong>Faro</strong>, para generar el estado y el progreso de un proyecto interesa una
+temperatura baja, porque quieres respuestas consistentes y no inventadas.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Un detalle importante de 2026: los modelos mas nuevos de Claude (la familia Opus 4.x y
+Fable 5) <strong>ya no aceptan</strong> el parametro <code>temperature</code>; lo guian con otros mecanismos
+internos. En cambio, los modelos de OpenAI que usa Faro si lo aceptan. Moraleja: cada API
+tiene sus propios parametros y van cambiando. Cuando algo no funcione, revisa la
+documentacion del modelo concreto que estas usando en lugar de copiar parametros de memoria.</p>
+</blockquote>
+<p>Otro parametro que veras a menudo es <code>stream</code>, que activa el envio por partes. Lo vemos en la
+seccion 5.</p>
+<hr />
+<h2 id="5-streaming-respuestas-que-van-llegando-de-a-poco">5. Streaming: respuestas que van llegando de a poco</h2>
+<p>¿Has notado que ChatGPT y otros chats escriben la respuesta letra por letra, como si la
+estuvieran tecleando? Eso es <strong>streaming</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-streaming">🟦 ¿Que significa? — <em>Streaming</em></h3>
+<p>El <strong>streaming</strong> es recibir la respuesta del modelo <strong>en pedacitos</strong>, a medida que se va
+generando, en lugar de esperar a que termine toda y recibirla de golpe.
+Sirve para: que el usuario vea texto enseguida (mejor experiencia) y para evitar que la
+conexion se caiga por esperar demasiado en respuestas largas.
+Donde se usa: un chat como el de <strong>tunal-digital</strong> se siente mucho mas agil si el Worker
+reenvia el texto de Claude conforme llega, en vez de mostrar todo al final.</p>
+</blockquote>
+<p>A grandes rasgos funciona asi: en la peticion pones <code>"stream": true</code>. El servidor, en vez de
+mandarte un solo JSON al final, te manda una secuencia de pequenos eventos. Cada evento trae
+un trocito de texto (un "delta"). Tu codigo los va pegando uno tras otro para formar la
+respuesta completa.</p>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;claude-opus-4-8&quot;,
+  &quot;max_tokens&quot;: 1024,
+  &quot;stream&quot;: true,
+  &quot;messages&quot;: [{ &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Escribe un haiku sobre el codigo.&quot; }]
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>El streaming es comodo para el usuario, pero anade complejidad: tu codigo tiene que ir
+juntando los pedazos en vez de recibir un objeto listo. Para tu primer chat, empezar <strong>sin</strong>
+streaming (esperar la respuesta completa) es perfectamente valido y mas facil de depurar.
+Bit recomienda: primero que funcione de un solo golpe, despues lo haces "bonito" con stream.</p>
+</blockquote>
+<hr />
+<h2 id="6-el-costo-pagas-por-tokens">6. El costo: pagas por tokens</h2>
+<p>Las APIs de IA cobran <strong>por token</strong>, normalmente con un precio por <strong>millon de tokens</strong> (se
+abrevia <em>MTok</em>). Y casi siempre la <strong>salida cuesta mas</strong> que la entrada, porque generar texto
+es mas costoso que leerlo.</p>
+<blockquote class="def">
+<h3 id="que-significa-costo-por-tokens">🟦 ¿Que significa? — <em>Costo por tokens</em></h3>
+<p>Es la forma de cobrar de estas APIs: un precio por cada millon de tokens de <strong>entrada</strong> y
+otro (mas alto) por cada millon de tokens de <strong>salida</strong>. Pagas exactamente lo que consumes.
+Sirve para: poder estimar y controlar cuanto te va a costar usar la IA en tu producto.
+Donde se usa: tanto en la cuenta de Anthropic (tunal-digital) como en la de OpenAI (Faro)
+el panel te muestra el gasto acumulado en tokens.</p>
+</blockquote>
+<p>Un ejemplo ilustrativo con precios de referencia de la familia Opus de Claude (5 USD por
+millon de tokens de entrada, 25 USD por millon de salida):</p>
+<ul>
+<li>Una peticion con <strong>1.000 tokens de entrada</strong> cuesta <code>1.000 / 1.000.000 * 5 = 0,005 USD</code>.</li>
+<li>Si responde con <strong>500 tokens de salida</strong>, son <code>500 / 1.000.000 * 25 = 0,0125 USD</code>.</li>
+<li>Total de esa peticion: unos <strong>0,0175 USD</strong>, menos de dos centavos.</li>
+</ul>
+<p>Parece poquisimo, y para una peticion lo es. Pero multiplicalo por miles de visitantes en el
+chat de tunal-digital, o por un Faro que analiza decenas de proyectos cada vez, y se vuelve un
+numero que importa.</p>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Tres palancas para gastar menos: (1) un <strong>modelo mas barato</strong> para tareas simples (las
+familias tienen modelos "grandes" caros y "pequenos" baratos); (2) <strong><code>max_tokens</code> ajustado</strong>
+para no generar texto de mas; (3) <strong>no arrastrar historial innecesario</strong> en chats largos.
+En Faro, la filosofia de "refresco bajo demanda" (el usuario dispara el analisis, no se
+ejecuta solo) tambien es una decision de costo: no llamas a la IA sin que haga falta.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Cada vez que reenvias toda la conversacion (porque el modelo no recuerda, ¿te acuerdas?),
+<strong>vuelves a pagar</strong> esos tokens de entrada. Un chat largo no solo gasta mas memoria: gasta
+mas dinero en cada turno. Tenlo en cuenta antes de mandar 50 mensajes de historial en cada
+pregunta.</p>
+</blockquote>
+<hr />
+<h2 id="7-seguridad-las-claves-van-en-el-servidor-nunca-en-el-cliente">7. Seguridad: las claves van en el servidor, NUNCA en el cliente</h2>
+<p>Esta es la seccion mas importante del capitulo. Leela dos veces. Es la regla de seguridad
+explicita de <strong>Faro</strong> y aplica a cualquier proyecto que use IA.</p>
+<blockquote class="def">
+<h3 id="que-significa-api-key-clave-de-api">🟦 ¿Que significa? — <em>API key (clave de API)</em></h3>
+<p>Una <strong>API key</strong> es una contrasena secreta que te identifica ante la API. Quien la tenga puede
+hacer peticiones <strong>a tu cuenta y con tu dinero</strong>.
+Sirve para: autenticarte ante Anthropic u OpenAI para que sepan que eres tu y te cobren a ti.
+Donde se usa: tanto Claude (tunal-digital) como OpenAI (Faro) exigen una clave en cada
+peticion, en una cabecera HTTP (<code>x-api-key</code> en Anthropic, <code>Authorization: Bearer ...</code> en OpenAI).</p>
+<h3 id="que-significa-cliente-vs-servidor">🟦 ¿Que significa? — <em>Cliente vs. servidor</em></h3>
+<p>El <strong>cliente</strong> es lo que corre en el navegador del usuario: tu HTML, CSS y JavaScript. El
+usuario puede ver todo ese codigo (clic derecho → inspeccionar). El <strong>servidor</strong> es codigo
+que corre en una maquina que tu controlas y que el usuario <strong>no</strong> puede leer.
+Sirve para: decidir donde guardar secretos. Lo del cliente es publico; lo del servidor es privado.
+Donde se usa: en <strong>tunal-digital</strong>, el navegador es el cliente y el <strong>Cloudflare Worker</strong> es
+el servidor. En <strong>Faro</strong> (Next.js), el cliente es el navegador y las rutas de servidor de
+Next.js (junto con <code>user_connections</code> protegido por RLS en Supabase) son el lado seguro.</p>
+</blockquote>
+<p>La regla, en una frase: <strong>si pones tu API key en el JavaScript del navegador, cualquiera puede
+robarla.</strong> No importa que la "escondas" en una variable o la ofusques: el navegador la descarga
+y se puede leer. Alguien la copia, hace miles de peticiones, y te llega la factura.</p>
+<p>Por eso <strong>tunal-digital</strong> mete un Cloudflare Worker en el medio. El flujo es:</p>
+<pre><code>Navegador (cliente)  -&gt;  Cloudflare Worker (servidor)  -&gt;  API de Claude
+   (sin la clave)          (aqui SI esta la clave)         (Anthropic)
+</code></pre>
+<p>El navegador solo le manda el mensaje del usuario al Worker. El Worker, que vive en un servidor
+seguro, <strong>tiene la clave guardada como variable de entorno</strong> y es quien habla con Anthropic.
+La clave nunca toca el navegador. Faro hace lo mismo con sus rutas de servidor y la clave de
+OpenAI.</p>
+<blockquote class="def">
+<h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
+<p>Una <strong>variable de entorno</strong> es un valor secreto (como una API key) que se configura en el
+servidor <strong>fuera del codigo</strong>, y que el programa lee al ejecutarse. No se escribe en los
+archivos del proyecto, asi que no termina en GitHub.
+Sirve para: guardar secretos sin escribirlos en el codigo ni subirlos al repositorio.
+Donde se usa: en el Worker de tunal-digital y en Faro, las claves viven en variables de
+entorno del servidor, nunca en el codigo que se sube al repo.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p><strong>Nunca</strong> escribas una API key directamente en un archivo <code>.js</code>, <code>.ts</code> o <code>.html</code>, y <strong>nunca</strong>
+hagas commit de un archivo con la clave dentro. Si por accidente subes una clave a GitHub,
+considerala quemada: <strong>revocala de inmediato</strong> desde el panel de Anthropic u OpenAI y crea
+una nueva. Los bots rastrean GitHub buscando claves filtradas en segundos.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En <strong>Faro</strong>, la regla esta escrita en el <code>CLAUDE.md</code> del proyecto: <em>"Tokens y secretos solo
+en el servidor. Nunca exponer claves en el cliente ni commitearlas."</em> Las conexiones OAuth
+con GitHub y Google Drive se guardan en la tabla <code>user_connections</code> con <strong>RLS</strong> (seguridad a
+nivel de fila) en Supabase, de modo que cada usuario solo puede ver lo suyo. La IA de OpenAI
+se llama desde el lado servidor, nunca desde el navegador.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>¿Como sabes si una clave esta "en el cliente"? Pregunta simple: ¿el navegador del usuario
+necesita esa clave para hacer su trabajo? Si la respuesta es "tendria que descargarla", esta
+en el cliente y esta mal. La clave solo debe vivir donde el usuario no puede mirar.</p>
+</blockquote>
+<hr />
+<h2 id="8-juntando-todo-el-viaje-de-una-pregunta-en-tunal-digital">8. Juntando todo: el viaje de una pregunta en tunal-digital</h2>
+<p>Pongamos las piezas en orden, paso a paso, para el chat de tunal-digital:</p>
+<ol>
+<li>El visitante escribe <em>"¿Hacen tiendas online?"</em> en el chat de la web.</li>
+<li>El JavaScript del navegador (cliente) le manda <strong>solo ese texto</strong> al Cloudflare Worker.</li>
+<li>El Worker arma el cuerpo de la peticion: el campo <code>system</code> con las instrucciones de marca,
+   el historial en <code>messages</code>, el <code>model</code> y <code>max_tokens</code>.</li>
+<li>El Worker le anade la <strong>API key</strong> (que tiene en una variable de entorno) y llama a la API
+   de Claude en <code>https://api.anthropic.com/v1/messages</code>.</li>
+<li>Claude procesa los <strong>tokens de entrada</strong>, genera la respuesta (los <strong>tokens de salida</strong>) y
+   se la devuelve al Worker, eventualmente por <strong>streaming</strong>.</li>
+<li>El Worker reenvia el texto al navegador, que lo muestra al visitante.</li>
+<li>La respuesta incluye cuantos tokens se usaron: con eso podrias estimar el <strong>costo</strong>.</li>
+</ol>
+<p>Cada pieza de este capitulo aparece en ese viaje: mensajes con roles, tokens, ventana de
+contexto (si el chat se alarga), parametros, streaming, costo y, sobre todo, la clave a salvo
+en el servidor. Bit asiente satisfecho: la caja magica ya no es magica, es entendible.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar con mis palabras que es un LLM y por que "genera" en vez de "buscar".</li>
+<li>[ ] Se la diferencia entre los roles <code>system</code>, <code>user</code> y <code>assistant</code>.</li>
+<li>[ ] Entiendo por que un LLM no recuerda nada entre peticiones (es <em>stateless</em>).</li>
+<li>[ ] Se que es un token y puedo estimar a ojo cuantos tiene una frase corta.</li>
+<li>[ ] Entiendo que es la ventana de contexto y por que un chat largo se la puede comer.</li>
+<li>[ ] Se para que sirven <code>max_tokens</code> y <code>temperature</code> y cuando bajar la temperatura.</li>
+<li>[ ] Puedo explicar a grandes rasgos que es el streaming y que problema resuelve.</li>
+<li>[ ] Se que la salida cuesta mas que la entrada y como estimar el costo de una peticion.</li>
+<li>[ ] Tengo clarisimo que la API key va en el servidor y JAMAS en el cliente ni en un commit.</li>
+<li>[ ] Entiendo por que tunal-digital usa un Cloudflare Worker entre el navegador y Claude.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Roles a mano.</strong> Escribe en papel (o en un comentario de codigo) una conversacion de 4
+   mensajes para el asistente de Tunal Digital: un <code>system</code> que defina el tono, dos <code>user</code> y
+   un <code>assistant</code> en medio. Marca claramente el rol de cada uno.</p>
+</li>
+<li>
+<p><strong>Estimando tokens.</strong> Toma la frase <em>"Faro lee GitHub y Google Drive para describir tus
+   proyectos con IA."</em> y estima cuantos tokens tiene usando la regla de 4 caracteres por token.
+   Luego escribe en una frase por que esa estimacion no es exacta.</p>
+</li>
+<li>
+<p>💻 <strong>Contando el gasto.</strong> Escribe una pequena funcion en JavaScript <code>costo(entrada, salida)</code>
+   que reciba el numero de tokens de entrada y de salida y devuelva el costo en dolares, usando
+   5 USD/MTok de entrada y 25 USD/MTok de salida. Pruebala con 2.000 de entrada y 800 de salida.</p>
+</li>
+<li>
+<p>💻 <strong>Detector de claves filtradas.</strong> Imagina este fragmento de cliente:
+   <code>const apiKey = "sk-ant-xxxx"; fetch("https://api.anthropic.com/v1/messages", ...)</code>.
+   Explica en un comentario por que esto es inseguro y reescribe el plan: ¿a quien deberia
+   llamar el navegador en su lugar (en el caso de tunal-digital)?</p>
+</li>
+<li>
+<p><strong>Comparando dos APIs.</strong> Haz una mini tabla con dos columnas (Claude/Anthropic y OpenAI/Faro)
+   y compara: (a) donde van las instrucciones de sistema, (b) si <code>max_tokens</code> es obligatorio,
+   (c) si aceptan <code>temperature</code> en sus modelos mas nuevos. Apoyate en lo leido en este capitulo.</p>
+</li>
+<li>
+<p>💻 <strong>Chat sin streaming.</strong> Esboza (en pseudocodigo o JS) el cuerpo JSON de una peticion al
+   chat: <code>model</code>, <code>max_tokens</code>, <code>system</code> y un arreglo <code>messages</code> con un mensaje de <code>user</code>. No
+   pongas la API key en ese objeto y explica en un comentario donde deberia estar.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

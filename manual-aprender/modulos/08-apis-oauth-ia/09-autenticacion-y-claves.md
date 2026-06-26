@@ -1,5 +1,10 @@
 # Capitulo 09 — Autenticación: claves, tokens y Bearer
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > ¡Hola de nuevo! Soy **Bit**, tu ajolote guía. En el capítulo anterior aprendiste a pedirle datos a una API con `fetch`. Pero hay un detalle incómodo: las APIs serias no le abren la puerta a cualquiera. Antes de darte la información (o de gastar tu dinero llamando a una IA), quieren saber **quién eres** y **qué tienes permiso de hacer**. En este capítulo vamos a entender cómo te identificas ante un servidor: con **claves**, con **tokens**, con el famoso header `Authorization` y la palabrita `Bearer`. Y sobre todo, vas a aprender la regla de oro que repetiré hasta cansarte: **las claves secretas viven en el servidor, JAMÁS en el cliente.** Respira hondo, que esto es lo que separa a un proyecto de juguete de uno serio. 🦎
 
 ## 1. ¿Por qué un servidor necesita saber quién eres?
