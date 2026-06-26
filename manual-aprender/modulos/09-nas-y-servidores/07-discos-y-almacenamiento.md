@@ -1,5 +1,10 @@
 # Capitulo 07 — Discos y almacenamiento
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hola de nuevo. Soy **Bit**, tu ajolote guia. Hoy bajamos al sotano de tu NAS: los discos. Tu servidor **polypaw-nas** (un laptop Acer Nitro AN515-54) tiene **dos discos** muy distintos, y entender quien es quien te va a salvar de muchos sustos. Vamos a aprender a ver los discos, medir cuanto espacio te queda, montar el HDD de datos en `/srv/nas`, hacer que se monte solo al encender y vigilar la salud de los discos para que tus respaldos no desaparezcan un mal dia. Respira: es mas facil de lo que parece, y lo haremos con calma. 🪼
 
 ---
@@ -8,7 +13,7 @@
 
 Antes de tocar comandos, fija una idea: tu NAS no tiene un disco, tiene **dos**, y cumplen papeles diferentes.
 
-- **El SSD de 238 GB** → es el **disco de sistema**. Ahi vive Ubuntu Server, los programas (Samba, Cockpit, Docker...) y la configuracion. Es rapido.
+- **El SSD de 238 GB** → es el **disco de sistema**. Ahi vive Ubuntu Server, los programas (Samba, Cockpit, Docker/Podman...) y la configuracion. Es rapido.
 - **El HDD de 954 GB** → es el **disco de datos**. Ahi van tus archivos del recurso compartido, los respaldos de tus repos (`tunal-digital`, `PolyPaw`, `RachaSimple`, `Faro/Organizer`), tus fotos, etc. Es mas grande pero mas lento.
 
 > ### 🟦 ¿Que significa? — *SSD (Solid State Drive)*
@@ -84,6 +89,9 @@ lsblk -f
 
 Veras una columna `FSTYPE` con `ext4` en tus particiones de datos y sistema, y un valor `UUID` larguisimo que sera clave en la seccion 6.
 
+> ### 🟦 ¿Que significa? — *`mkfs` (make filesystem)*
+> Comando que **crea un sistema de archivos vacio** en una particion, es decir, la formatea. La version para ext4 es `mkfs.ext4`. **Para que sirve:** dejar un disco nuevo listo para guardar datos. **En tu polypaw-nas:** es el comando mas peligroso del capitulo. Solo se usa **una vez**, cuando estrenas un disco. Si lo corres sobre el HDD que ya tiene tus respaldos, los borra sin posibilidad de recuperarlos.
+
 > ### ⚠️ Cuidado
 > El comando para formatear es `mkfs` (make filesystem). **Nunca** lo corras "para probar". Si escribes `sudo mkfs.ext4 /dev/sda1` sobre tu HDD lleno de respaldos, **se borra todo en segundos y no hay deshacer**. Antes de cualquier comando que mencione un `/dev/sdX`, respira y confirma con `lsblk` que es el disco correcto.
 
@@ -130,6 +138,9 @@ sudo du -h --max-depth=1 /srv/nas | sort -h
 ```
 
 Esto te dice cuanto pesa cada subcarpeta de `/srv/nas`, ordenado de menor a mayor. Util para descubrir que respaldo crecio de mas.
+
+> ### 🟦 ¿Que significa? — *`du` (disk usage)*
+> Comando que mide **cuanto pesa cada carpeta**, sumando todos los archivos que tiene dentro. **Para que sirve:** mientras `df` te dice cuanto queda en el disco entero, `du` te dice **quien se esta comiendo el espacio**. **En tu polypaw-nas:** lo usas dentro de `/srv/nas` para cazar la carpeta o el respaldo gigante que llena el HDD de 954 GB. El `--max-depth=1` evita que liste cada archivo suelto y solo te muestre el peso de las carpetas de primer nivel.
 
 > ### 🔎 En tu servidor
 > Cada cierto tiempo corre `df -h /srv/nas`. Si el `Use%` pasa del **80%**, empieza a planear: borra respaldos viejos o consigue mas disco. Un NAS lleno al 100% deja de funcionar bien, y Samba puede empezar a rechazar escrituras.
@@ -193,6 +204,9 @@ Primero, averigua el UUID de tu HDD:
 sudo blkid /dev/sda1
 ```
 
+> ### 🟦 ¿Que significa? — *`blkid`*
+> Comando que **lee la etiqueta de identidad** de una particion: su UUID y su tipo de sistema de archivos. **Para que sirve:** conseguir el UUID exacto que necesitas para `/etc/fstab`. **En tu polypaw-nas:** lo corres sobre `/dev/sda1` (tu HDD de 954 GB) para copiar su UUID y pegarlo en `fstab`, de modo que `/srv/nas` se monte siempre en el disco correcto aunque cambie de nombre.
+
 Te dara algo como:
 
 ```bash
@@ -236,6 +250,9 @@ Esto monta todo lo de `fstab`. Si no da ningun error y `df -h /srv/nas` muestra 
 
 > ### 🔎 En tu servidor
 > Tambien puedes administrar discos desde **Cockpit** (el panel web en el puerto 9090). En su seccion de Almacenamiento ves los discos graficamente y puedes montar/desmontar con clics. Esta bien para mirar, pero entender `fstab` por texto te da control total cuando algo se rompe.
+
+> ### ⚠️ Cuidado
+> Cockpit escucha en el puerto **9090**, pero eso NO significa que debas abrir ese puerto en tu router. Para entrar a Cockpit desde fuera de casa, conectate primero por **Tailscale** y luego abre `https://polypaw-nas:9090` dentro de esa red privada. Exponer el 9090 directo a internet es regalarle a cualquier atacante la puerta de administracion de todo tu NAS. Tailscale primero, siempre.
 
 ---
 

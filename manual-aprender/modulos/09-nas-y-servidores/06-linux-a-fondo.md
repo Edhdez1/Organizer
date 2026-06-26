@@ -1,12 +1,17 @@
 # Capitulo 06 — Linux a fondo para tu servidor
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hola de nuevo, soy **Bit**, tu ajolote acompañante. Hasta ahora hemos tratado a **polypaw-nas** como una cajita mágica que guarda archivos. En este capítulo vamos a abrir la caja. Vas a entender cómo piensa Linux por dentro: quién manda (root y sudo), quién puede tocar qué (usuarios, grupos y permisos), dónde guarda cada cosa (la estructura de carpetas) y cómo editar la configuración a mano sin romper nada (nano). Todo aplicado a tu laptop Acer Nitro convertido en servidor. Respira: no hay escritorio, no hay ratón, solo terminal por SSH... y eso es exactamente lo que un servidor necesita. Vamos despacio.
 
 ---
 
 ## 1. Por qué tu servidor no tiene escritorio (y está bien así)
 
-Cuando instalaste **Ubuntu Server 26.04** en tu Acer Nitro AN515-54, no apareció un fondo de pantalla bonito ni iconos. Apareció una pantalla negra pidiendo usuario y contraseña. Eso no es un error: es la versión "Server" de Ubuntu, pensada para máquinas que trabajan sin que nadie las mire.
+Cuando instalaste **Ubuntu Server 26.04** en tu Acer Nitro AN515-54 (procesador Intel **i5-9300H** y 8 GB de RAM), no apareció un fondo de pantalla bonito ni iconos. Apareció una pantalla negra pidiendo usuario y contraseña. Eso no es un error: es la versión "Server" de Ubuntu, pensada para máquinas que trabajan sin que nadie las mire.
 
 > ### 🟦 ¿Que significa? — *Ubuntu Server*
 > Es una variante de Ubuntu (el sistema Linux) que viene **sin entorno gráfico de escritorio**: no hay ventanas ni ratón, solo una línea de comandos (la terminal).
@@ -297,7 +302,7 @@ df -h
 > **Dónde aparece en tu NAS real:** tu HDD de 954 GB está **montado en `/srv/nas`**. Si por error no se monta al arrancar, `/srv/nas` aparecería vacío aunque el disco esté lleno.
 
 > ### 🔎 En tu servidor
-> Vigila el espacio con `df -h`. Tu SSD del sistema es de solo 238 GB; no guardes respaldos grandes ahí. Los datos pesados (respaldos de PolyPaw, tunal-digital, Faro) van al HDD en `/srv/nas`. Y vigila también la **RAM de 8 GB** con el comando `free -h`: si Docker, Samba y AdGuard juntos la llenan, el servidor se pone lento.
+> Vigila el espacio con `df -h`. Tu SSD del sistema es de solo 238 GB; no guardes respaldos grandes ahí. Los datos pesados (respaldos de PolyPaw, tunal-digital, Faro) van al HDD en `/srv/nas`. Y vigila también la **RAM de 8 GB** con el comando `free -h` (`free` muestra la memoria libre y usada; la `-h` la presenta legible para humanos): si Docker, Samba y AdGuard juntos la llenan, el servidor se pone lento.
 
 ---
 
@@ -350,6 +355,16 @@ Dentro de nano verás abajo una lista de atajos con el símbolo `^`, que signifi
 > **Para qué sirve:** controlar lo que tu servidor mantiene activo sin que tú estés mirando.
 > **Dónde aparece en tu NAS real:** Samba (`smbd`), Cockpit, Tailscale y AdGuard Home corren como servicios. Los administras todos con `systemctl`.
 
+> ### 🟦 ¿Que significa? — *testparm*
+> Es una pequeña herramienta de Samba que **revisa el archivo `smb.conf` y avisa si tiene errores** antes de reiniciar el servicio.
+> **Para qué sirve:** evita que reinicies Samba con una configuración rota. Si `testparm` dice "Loaded services file OK", puedes reiniciar tranquilo.
+> **Dónde aparece en tu NAS real:** lo corres justo después de editar `/etc/samba/smb.conf` y antes de `systemctl restart smbd`.
+
+> ### 🟦 ¿Que significa? — *Docker y Podman (contenedores)*
+> Un **contenedor** es una forma de empaquetar un programa con todo lo que necesita para correr, aislado del resto del sistema. **Docker** y **Podman** son dos herramientas que crean y gestionan esos contenedores; Podman es una alternativa a Docker que funciona sin un proceso permanente con permisos de root, lo que algunos consideran más seguro.
+> **Para qué sirve:** instalar y ejecutar aplicaciones (como AdGuard Home u otros servicios) sin "ensuciar" el sistema, y poder borrarlas limpiamente. Cada app vive en su cajita.
+> **Dónde aparece en tu NAS real:** puedes correr servicios de polypaw-nas dentro de contenedores. Las órdenes de Docker y Podman son casi idénticas, así que lo que aprendas de uno te sirve para el otro.
+
 ---
 
 ## 7. Seguridad: las reglas de oro de tu polypaw-nas
@@ -399,6 +414,8 @@ Ya tienes el poder de root, sabes cambiar permisos y editar configuraciones. Con
 - [ ] Entiendo que mi HDD de 954 GB está montado en `/srv/nas`.
 - [ ] Sé editar y guardar un archivo con nano (Ctrl+O, Ctrl+X).
 - [ ] Hago copia de un archivo de configuración antes de editarlo.
+- [ ] Sé reiniciar un servicio con `systemctl` y comprobar `smb.conf` con `testparm`.
+- [ ] Entiendo qué es un contenedor (Docker/Podman) y por qué aísla las aplicaciones.
 - [ ] Prefiero Tailscale a abrir puertos al internet.
 - [ ] Uso contraseñas fuertes y tengo una estrategia de respaldo (3-2-1).
 
