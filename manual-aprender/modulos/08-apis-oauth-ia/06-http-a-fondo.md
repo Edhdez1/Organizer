@@ -1,6 +1,6 @@
 # Capitulo 06 — HTTP a fondo: métodos, estados y cabeceras
 
-> ¡Hola de nuevo! Soy **Bit**, tu ajolote guía. 🐾 En el capítulo anterior viste qué es una API y cómo `fetch` pide datos. Hoy abrimos el capó del coche: vamos a entender el **protocolo HTTP**, que es el idioma que hablan tu navegador, los servidores y las APIs cuando se mandan mensajes. Cada vez que el chat de **tunal-digital** pregunta algo a la IA, o que **Faro** lee tus proyectos de GitHub, por debajo viajan peticiones HTTP. Cuando termines este capítulo vas a poder abrir la pestaña *Network* del navegador y leer lo que pasa como si fuera un libro. Y, muy importante, vamos a insistir en una regla de oro: **las claves secretas viven en el servidor, NUNCA en el cliente**. ¡Vamos!
+> ¡Hola de nuevo! Soy **Bit**, tu ajolote guía. 🐾 En el capítulo anterior viste qué es una API y cómo `fetch` pide datos. Hoy abrimos el capó del coche: vamos a entender el **protocolo HTTP**, el idioma que hablan tu navegador, los servidores y las APIs cuando se mandan mensajes. Cada vez que el chat de **tunal-digital** pregunta algo a la IA, o que **Faro** lee tus proyectos de GitHub, por debajo viajan peticiones HTTP. Al terminar vas a poder abrir la pestaña *Network* del navegador y leer lo que pasa como si fuera un libro. Y, muy importante: vamos a insistir en una regla de oro: **las claves secretas viven en el servidor, NUNCA en el cliente**. ¡Vamos!
 
 ## 1. ¿Qué es HTTP y por qué nos importa?
 
@@ -47,8 +47,8 @@ Vamos uno por uno con una analogía de una libreta de contactos:
 > **Dónde se usa:** el chat de **tunal-digital** hace `POST` al Cloudflare Worker enviando el texto del usuario; **Faro** hace POST a OpenAI enviando el contexto del proyecto para que la IA genere la descripción.
 
 > ### 🟦 ¿Que significa? — *PUT*
-> **PUT** sirve para **reemplazar por completo** un recurso que ya existe. Es como borrar un contacto y volver a escribirlo entero, todos los campos.
-> **Dónde se usa:** una API que guarde la configuración completa de un proyecto en **Faro** podría usar PUT para sobrescribir todo el registro de una sola vez.
+> **PUT** sirve para **reemplazar por completo** un recurso que ya existe. Es como borrar un contacto y volver a escribirlo entero, con todos los campos.
+> **Dónde se usa:** una API que guarde la configuración completa de un proyecto en **Faro** podría usar PUT para sobrescribir todo el registro de una vez.
 
 > ### 🟦 ¿Que significa? — *PATCH*
 > **PATCH** sirve para **modificar solo una parte** de un recurso existente. Es como cambiar únicamente el teléfono de un contacto, dejando el resto igual.
@@ -59,7 +59,7 @@ Vamos uno por uno con una analogía de una libreta de contactos:
 > **Dónde se usa:** desconectar una fuente (por ejemplo, una cuenta de Google Drive) en **Faro** podría disparar un DELETE sobre el registro de esa conexión.
 
 > ### 💡 Tip
-> Una forma fácil de recordarlos: **GET** = traer, **POST** = crear, **PUT** = reemplazar todo, **PATCH** = parchear (cambiar un poco), **DELETE** = borrar. Si solo recuerdas GET y POST estás bien para empezar: son los dos que más vas a ver.
+> Para recordarlos: **GET** = traer, **POST** = crear, **PUT** = reemplazar todo, **PATCH** = parchear (cambiar un poco), **DELETE** = borrar. Si solo recuerdas GET y POST estás bien para empezar: son los dos que más vas a ver.
 
 Así se ve un GET y un POST con `fetch`, que ya conoces del módulo 03:
 
@@ -246,11 +246,11 @@ Cómo abrirla y leerla, paso a paso:
 > Abre Network mientras usas el chat de **tunal-digital** y comprueba algo importante para la seguridad: en la petición al Worker **NO** debe aparecer ninguna clave de Anthropic. El visitante solo ve su mensaje y la URL del Worker; la clave secreta se queda escondida en el servidor. Si la vieras ahí, sería una fuga grave. Esa es la prueba visual de que la arquitectura "secretos en el servidor" funciona.
 
 > ### ⚠️ Cuidado
-> En Network puedes ver TUS propios tokens si tu sesión los usa (por ejemplo, el de Supabase en **RachaSimple** o **Faro**). Eso es normal: son *tus* credenciales en *tu* navegador. El problema sería que aparecieran claves **compartidas** del servicio (como la clave maestra de OpenAI o de Anthropic): esas nunca deben llegar al navegador de nadie.
+> En Network puedes ver TUS propios tokens de sesión (por ejemplo, el de Supabase en **RachaSimple** o **Faro**). Eso es normal: son *tus* credenciales en *tu* navegador. El problema sería ver claves **compartidas** del servicio (como la de OpenAI o Anthropic): esas nunca deben llegar al navegador de nadie.
 
 ## 8. Juntándolo todo: una petición real de Faro, comentada
 
-Veamos cómo se conectan todas las piezas en una llamada que el **servidor** de Faro hace a OpenAI para generar la descripción de un proyecto:
+Veamos cómo se conectan todas las piezas en la llamada que el **servidor** de Faro hace a OpenAI para generar la descripción de un proyecto:
 
 ```javascript
 // Esto corre en el SERVIDOR de Faro (una ruta de API de Next.js),
