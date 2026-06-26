@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 13 — Rutas y estructura de una app — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-rutas-y-estructura-de-una-app">Capitulo 13 — Rutas y estructura de una app</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora tus componentes vivian en una sola pantalla: un <code>App</code> con su estado, sus listas y sus formularios. Pero una aplicacion de verdad tiene <strong>varias pantallas</strong>: una de inicio, otra de login, otra para ver el detalle de algo. ¿Como pasas de una a otra sin recargar la pagina entera? Eso es el <strong>enrutado</strong> (routing), y es el tema de este capitulo. Bit, nuestro ajolote, ya tiene su mapa en la mano y un ojo cerrado de concentracion: vamos a recorrer las dos formas mas comunes de organizar una app React, usando dos proyectos reales: <strong>RachaSimple</strong> (una app de habitos con Vite + React Router) y <strong>Faro</strong> (un organizador de proyectos con Next.js). Misma idea, dos sabores distintos.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-problema-resuelve-el-enrutado">1. ¿Que problema resuelve el enrutado?</h2>
+<p>Imagina que entras a una web. Escribes <code>racha.app/today</code> y ves tus habitos de hoy. Haces clic en uno y la barra de direcciones cambia a <code>racha.app/habit/42</code>, y ahora ves el detalle de ese habito. Vuelves atras con el boton del navegador y regresas a la lista. Todo eso —las URLs distintas, el boton de atras, los enlaces— es trabajo del <strong>enrutado</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-enrutado-routing">🟦 ¿Que significa? — <em>Enrutado (routing)</em></h3>
+<p>Es el mecanismo que decide <strong>que pantalla mostrar segun la URL</strong> (la direccion que aparece en la barra del navegador). Sirve para que tu app tenga varias "paginas" que el usuario puede visitar, marcar como favoritas y compartir por enlace. En una <strong>SPA</strong> (aplicacion de una sola pagina), el navegador no recarga todo: el enrutado intercambia los componentes en pantalla al vuelo. En RachaSimple lo usa React Router; en Faro lo da Next.js.</p>
+<h3 id="que-significa-url-y-ruta-path">🟦 ¿Que significa? — <em>URL y ruta (path)</em></h3>
+<p>La <strong>URL</strong> es la direccion completa (<code>https://racha.app/habit/42</code>). La <strong>ruta</strong> o <strong>path</strong> es solo la parte despues del dominio (<code>/habit/42</code>). El enrutado mira esa ruta para elegir el componente. Piensa en la URL como la direccion de una casa y en la ruta como "calle y numero" dentro de tu ciudad.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Antes de React, cada URL distinta cargaba un archivo HTML distinto desde el servidor (recarga completa, pantalla en blanco un instante). El enrutado moderno hace que cambiar de pantalla se sienta <strong>instantaneo</strong>, porque solo intercambia componentes en JavaScript sin volver a pedir toda la pagina.</p>
+</blockquote>
+<hr />
+<h2 id="2-paginas-vs-componentes-de-ui">2. Paginas vs componentes de UI</h2>
+<p>Aqui hay una distincion que confunde a mucha gente al principio, asi que Bit la marca con su patita: <strong>no todo componente es una pagina</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-componente-de-pagina">🟦 ¿Que significa? — <em>Componente de pagina</em></h3>
+<p>Es el componente que representa <strong>una pantalla completa</strong> a la que se llega por una URL. Suele ocupar todo el espacio, decide que datos cargar y arma la estructura general. En RachaSimple cada pantalla vive en <code>src/pages/</code>: <code>Today.tsx</code>, <code>HabitDetail.tsx</code>, <code>Settings.tsx</code>, <code>Login.tsx</code>. Cada uno es "una pagina".</p>
+<h3 id="que-significa-componente-de-ui-interfaz">🟦 ¿Que significa? — <em>Componente de UI (interfaz)</em></h3>
+<p>Es una pieza reutilizable que <strong>no es una pantalla</strong>, sino un trozo visual que se usa dentro de las paginas: un boton, una tarjeta, una cabecera. En RachaSimple viven en <code>src/components/</code>: por ejemplo <code>HabitCard.tsx</code> (la tarjeta de un habito) o <code>PageHeader.tsx</code> (la cabecera). En Faro estan en <code>src/components/</code>: <code>project-card.tsx</code>, <code>phase-badge.tsx</code>, <code>sign-out-button.tsx</code>.</p>
+</blockquote>
+<p>La regla mental es simple:</p>
+<ul>
+<li><strong>¿Le llego por una URL?</strong> Es una pagina.</li>
+<li><strong>¿Lo uso <em>dentro</em> de varias paginas?</strong> Es un componente de UI.</li>
+</ul>
+<p>Por ejemplo, en RachaSimple la pagina <code>Today.tsx</code> (pantalla) renderiza muchos <code>HabitCard</code> (UI) en una lista. La pagina manda; las piezas de UI obedecen y reciben sus datos por <strong>props</strong> (lo viste en el Capitulo 3).</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>Mira <code>src/pages/Today.tsx</code> de RachaSimple: en su parte de arriba importa <code>Link</code> de React Router y <code>HabitCard</code> de componentes. La pagina coordina; la tarjeta solo pinta un habito. Esa separacion (carpeta <code>pages/</code> aparte de <code>components/</code>) no es decoracion: te dice de un vistazo que cosa es navegable y que cosa es una pieza reutilizable.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>No metas logica de "que pantalla mostrar" dentro de un boton o una tarjeta. Una tarjeta no deberia saber a que URL pertenece la app entera; solo deberia avisar "me hicieron clic" (con una funcion que recibe por props) y dejar que la pagina decida. Mezclar esto hace que los componentes de UI dejen de ser reutilizables.</p>
+</blockquote>
+<hr />
+<h2 id="3-rachasimple-enrutado-con-react-router">3. RachaSimple: enrutado con React Router</h2>
+<p>RachaSimple es una app construida con <strong>Vite</strong> (la herramienta que empaqueta y sirve el proyecto) y usa <strong>React Router</strong> para el enrutado. Veamos como encaja todo.</p>
+<blockquote class="def">
+<h3 id="que-significa-vite">🟦 ¿Que significa? — <em>Vite</em></h3>
+<p>Es una herramienta de desarrollo que arranca tu app React en segundos y la empaqueta para produccion. Cuando ejecutas <code>npm run dev</code> en RachaSimple, es Vite quien levanta el servidor local. No decide rutas: solo construye y sirve la app. El enrutado lo pones tu encima, con React Router.</p>
+<h3 id="que-significa-react-router">🟦 ¿Que significa? — <em>React Router</em></h3>
+<p>Es una libreria que añade enrutado a una app React. Tu le declaras, en codigo, "esta ruta muestra este componente", y ella se encarga de cambiar de pantalla cuando la URL cambia. En RachaSimple es el paquete <code>react-router-dom</code> (version 6), que ves en su <code>package.json</code>.</p>
+</blockquote>
+<p>El corazon esta en <code>src/App.tsx</code>. La app envuelve todo con un <code>BrowserRouter</code> y dentro declara las rutas con <code>Routes</code> y <code>Route</code>:</p>
+<pre><code class="language-tsx">import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { LandingPage } from '@/pages/Landing';
+import { LoginPage } from '@/pages/Login';
+import { TodayPage } from '@/pages/Today';
+import { CreateHabitPage } from '@/pages/CreateHabit';
+
+function AppRoutes() {
+  return (
+    &lt;Routes&gt;
+      &lt;Route path=&quot;/&quot; element={&lt;LandingPage /&gt;} /&gt;
+      &lt;Route path=&quot;/login&quot; element={&lt;LoginPage /&gt;} /&gt;
+      &lt;Route path=&quot;/today&quot; element={&lt;TodayPage /&gt;} /&gt;
+      &lt;Route path=&quot;/create-habit&quot; element={&lt;CreateHabitPage /&gt;} /&gt;
+      &lt;Route path=&quot;/habit/:id&quot; element={&lt;HabitDetailPage /&gt;} /&gt;
+    &lt;/Routes&gt;
+  );
+}
+</code></pre>
+<p>Lee cada <code>Route</code> como una frase: "cuando la ruta sea <code>/today</code>, muestra el elemento <code>&lt;TodayPage /&gt;</code>". Es un <strong>mapa explicito</strong>: tu, programador, escribes a mano la correspondencia entre URL y componente.</p>
+<blockquote class="def">
+<h3 id="que-significa-routes-y-route">🟦 ¿Que significa? — <em><code>&lt;Routes&gt;</code> y <code>&lt;Route&gt;</code></em></h3>
+<p><code>&lt;Routes&gt;</code> es la caja que contiene todas tus rutas posibles; mira la URL actual y elige <strong>una sola</strong> <code>&lt;Route&gt;</code> que coincida. Cada <code>&lt;Route&gt;</code> empareja un <code>path</code> (la ruta) con un <code>element</code> (el componente de pagina a mostrar). Sirve para declarar el mapa completo de pantallas de la app.</p>
+<h3 id="que-significa-browserrouter">🟦 ¿Que significa? — <em><code>&lt;BrowserRouter&gt;</code></em></h3>
+<p>Es el componente que envuelve toda la app y conecta React Router con la barra de direcciones real del navegador (la "Browser URL"). Sin el, <code>&lt;Routes&gt;</code> no sabria que URL esta activa. Va una sola vez, bien arriba del arbol. En RachaSimple envuelve a <code>AppRoutes</code>.</p>
+</blockquote>
+<h3 id="ruta-dinamica-habitid">Ruta dinamica: <code>/habit/:id</code></h3>
+<p>Fijate en <code>path="/habit/:id"</code>. Esos dos puntos antes de <code>id</code> significan "aqui va un valor variable". <code>/habit/42</code> y <code>/habit/7</code> casan ambos con esa ruta; lo que cambia es el <code>id</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-ruta-dinamica-y-parametro">🟦 ¿Que significa? — <em>Ruta dinamica y parametro</em></h3>
+<p>Es una ruta con un hueco variable, escrito como <code>:nombre</code>. El valor que entra por ese hueco es el <strong>parametro</strong>. En RachaSimple, <code>/habit/:id</code> deja que una misma pagina de detalle sirva para cualquier habito; el <code>id</code> distingue cual. Sirve para no escribir una ruta por cada elemento (¡seria imposible!).</p>
+</blockquote>
+<p>Dentro de la pagina de detalle, lees ese parametro con el hook <code>useParams</code>:</p>
+<pre><code class="language-tsx">import { useParams } from 'react-router-dom';
+
+export function HabitDetailPage() {
+  const { id } = useParams(); // &quot;42&quot; si la URL es /habit/42
+  // ...usas ese id para cargar el habito correcto
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-useparams">🟦 ¿Que significa? — <em><code>useParams</code></em></h3>
+<p>Es un hook de React Router que te devuelve los <strong>parametros de la ruta actual</strong> (los huecos <code>:nombre</code> que declaraste en el <code>path</code>). Lo llamas dentro de la pagina y te entrega un objeto: si la ruta es <code>/habit/:id</code> y la URL es <code>/habit/42</code>, <code>const { id } = useParams()</code> te da <code>id = "42"</code>. Sirve para que la pagina de detalle sepa <strong>cual</strong> elemento mostrar. En Faro esto no se necesita: alli el parametro llega por la prop <code>params</code> (sin hook), porque la pagina corre en el servidor.</p>
+</blockquote>
+<h3 id="navegar-entre-paginas-link-y-usenavigate">Navegar entre paginas: <code>Link</code> y <code>useNavigate</code></h3>
+<p>Para que el usuario salte de una pagina a otra hay dos formas, y RachaSimple usa ambas.</p>
+<blockquote class="def">
+<h3 id="que-significa-link">🟦 ¿Que significa? — <em><code>&lt;Link&gt;</code></em></h3>
+<p>Es el componente que reemplaza al <code>&lt;a href&gt;</code> de HTML dentro de una app con React Router. Crea un enlace que cambia la pantalla <strong>sin recargar</strong> toda la pagina. En <code>src/pages/Today.tsx</code>, RachaSimple lo usa asi: <code>&lt;Link to="/create-habit"&gt;</code> para llevar al usuario a crear un habito nuevo.</p>
+</blockquote>
+<pre><code class="language-tsx">import { Link } from 'react-router-dom';
+
+// Dentro de Today.tsx:
+&lt;Link to=&quot;/create-habit&quot;&gt;Crear habito&lt;/Link&gt;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-usenavigate">🟦 ¿Que significa? — <em><code>useNavigate</code></em></h3>
+<p>Es un hook que te devuelve una funcion para cambiar de pagina <strong>desde codigo</strong>, no desde un clic en un enlace. Util cuando navegas como consecuencia de algo: "termino de guardar, ahora llevame a <code>/today</code>". Se usa asi: <code>const navigate = useNavigate();</code> y luego <code>navigate('/today');</code>.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Usa <code>&lt;Link&gt;</code> cuando el usuario decide ir (un menu, un boton de "ver detalle"). Usa <code>useNavigate</code> cuando <strong>el codigo</strong> decide ir (despues de guardar un formulario, tras un login exitoso). Ambos evitan la recarga completa; la diferencia es quien dispara la navegacion.</p>
+</blockquote>
+<h3 id="rutas-protegidas">Rutas protegidas</h3>
+<p>RachaSimple tiene pantallas que solo deben ver usuarios con sesion iniciada. Lo resuelve con un componente envoltorio:</p>
+<pre><code class="language-tsx">function ProtectedRoute({ children }: { children: ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return &lt;LoadingScreen /&gt;;
+  if (!user) return &lt;Navigate to=&quot;/login&quot; replace /&gt;;
+  return &lt;&gt;{children}&lt;/&gt;;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-ruta-protegida">🟦 ¿Que significa? — <em>Ruta protegida</em></h3>
+<p>Es una pantalla que solo se muestra si se cumple una condicion (normalmente: hay usuario con sesion). Si no se cumple, se <strong>redirige</strong> a otra ruta. En RachaSimple, <code>ProtectedRoute</code> revisa <code>user</code> con el hook <code>useAuth</code> y, si no hay nadie, devuelve <code>&lt;Navigate to="/login" /&gt;</code> para mandar al login.</p>
+<h3 id="que-significa-navigate-y-redirigir">🟦 ¿Que significa? — <em><code>&lt;Navigate&gt;</code> y redirigir</em></h3>
+<p><strong>Redirigir</strong> es enviar al usuario a otra ruta de forma automatica, sin que haga clic. <code>&lt;Navigate to="/login" replace /&gt;</code> hace justo eso al renderizarse. El <code>replace</code> evita que la pantalla previa quede en el historial (asi el boton "atras" no lo regresa a una pagina que no debe ver).</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En <code>App.tsx</code> de RachaSimple veras varias rutas envueltas en <code>&lt;ProtectedRoute&gt;...&lt;/ProtectedRoute&gt;</code>: <code>/today</code>, <code>/create-habit</code>, <code>/onboarding</code>, etc. En cambio <code>/</code>, <code>/login</code>, <code>/privacidad</code> y <code>/terminos</code> quedan <strong>publicas</strong>, fuera del envoltorio. Esa lista te dice de un vistazo que parte de la app exige sesion.</p>
+</blockquote>
+<hr />
+<h2 id="4-faro-enrutado-por-archivos-con-nextjs">4. Faro: enrutado por archivos con Next.js</h2>
+<p>Faro es otro proyecto y juega distinto. No usa React Router: usa <strong>Next.js</strong> con su <strong>App Router</strong>, donde <strong>las carpetas y los archivos SON las rutas</strong>. No hay un <code>App.tsx</code> con una lista de <code>&lt;Route&gt;</code>. La estructura de carpetas <em>es</em> el mapa.</p>
+<blockquote class="def">
+<h3 id="que-significa-nextjs">🟦 ¿Que significa? — <em>Next.js</em></h3>
+<p>Es un framework (un conjunto de herramientas y reglas) construido sobre React. Aporta enrutado, renderizado en el servidor y mas, todo integrado. Faro usa Next.js 15 con React 19. A diferencia de Vite + React Router (donde juntas piezas tu), Next.js trae muchas decisiones ya tomadas.</p>
+<h3 id="que-significa-enrutado-por-archivos-file-based-routing">🟦 ¿Que significa? — <em>Enrutado por archivos (file-based routing)</em></h3>
+<p>Es el enfoque donde la <strong>ubicacion de cada archivo en el disco define su URL</strong>, sin que escribas un mapa de rutas a mano. En el App Router de Next.js, una carpeta dentro de <code>src/app/</code> es una ruta, y el archivo <code>page.tsx</code> que contiene es la pantalla de esa ruta. La carpeta es la URL.</p>
+</blockquote>
+<p>Mira la estructura real de <code>src/app/</code> en Faro:</p>
+<pre><code>src/app/
+  page.tsx              -&gt;  /            (pagina de inicio)
+  login/page.tsx        -&gt;  /login
+  dashboard/page.tsx    -&gt;  /dashboard
+  agenda/page.tsx       -&gt;  /agenda
+  projects/page.tsx     -&gt;  /projects
+  projects/new/page.tsx -&gt;  /projects/new
+  projects/[id]/page.tsx -&gt; /projects/42 (ruta dinamica)
+  layout.tsx            -&gt;  envoltura comun de todas
+</code></pre>
+<p>¿Ves el patron? No hay declaracion de rutas en ningun lado. Si quieres una pantalla en <code>/agenda</code>, creas <code>src/app/agenda/page.tsx</code> y listo: esa URL ya existe.</p>
+<blockquote class="def">
+<h3 id="que-significa-pagetsx">🟦 ¿Que significa? — <em><code>page.tsx</code></em></h3>
+<p>Es el nombre de archivo reservado por Next.js para "la pantalla de esta carpeta". Si una carpeta tiene un <code>page.tsx</code>, esa carpeta es navegable como URL. <code>src/app/dashboard/page.tsx</code> exporta por defecto un componente, y ese componente es lo que se ve en <code>/dashboard</code>.</p>
+<h3 id="que-significa-ruta-dinamica-en-nextjs-id">🟦 ¿Que significa? — <em>Ruta dinamica en Next.js (<code>[id]</code>)</em></h3>
+<p>Es el equivalente del <code>:id</code> de React Router, pero con <strong>corchetes en el nombre de la carpeta</strong>: <code>projects/[id]</code>. La carpeta <code>[id]</code> casa con cualquier valor (<code>/projects/42</code>, <code>/projects/abc</code>). Faro la usa para mostrar el detalle de cualquier proyecto con una sola plantilla.</p>
+</blockquote>
+<p>En Faro, la pagina de detalle recibe ese parametro por <strong>props</strong>, no con un hook:</p>
+<pre><code class="language-tsx">export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise&lt;{ id: string }&gt;;
+}) {
+  const { id } = await params; // el &quot;42&quot; de /projects/42
+  const project = await getProject(id);
+  if (!project) notFound();
+  // ...
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>¿Notaste <code>async</code> y <code>await params</code>? En el App Router de Next.js, una <code>page.tsx</code> puede ser un <strong>componente de servidor</strong>: se ejecuta en el servidor antes de llegar al navegador, por eso puede usar <code>await</code> para pedir datos directamente. En RachaSimple (que corre todo en el navegador) eso no pasa: los datos se cargan con hooks como <code>useEffect</code> o TanStack Query (Capitulos 8 y 11).</p>
+<h3 id="que-significa-layouttsx">🟦 ¿Que significa? — <em><code>layout.tsx</code></em></h3>
+<p>Es un archivo especial de Next.js que define la <strong>envoltura comun</strong> de las paginas: lo que se repite en todas (el <code>&lt;html&gt;</code>, la fuente, una barra de navegacion). El <code>src/app/layout.tsx</code> de Faro define <code>lang="es"</code>, carga las fuentes de marca y mete <code>{children}</code> (la pagina actual) dentro del <code>&lt;body&gt;</code>. Es el primo de Next.js del <code>AppShell</code> que RachaSimple pone alrededor de sus <code>&lt;Routes&gt;</code>.</p>
+</blockquote>
+<h3 id="navegar-en-faro-link-de-nextlink">Navegar en Faro: <code>Link</code> de <code>next/link</code></h3>
+<p>Para enlazar entre pantallas, Faro usa tambien un componente <code>Link</code>, pero importado de Next.js:</p>
+<pre><code class="language-tsx">import Link from &quot;next/link&quot;;
+
+// Dentro de dashboard/page.tsx:
+&lt;Link href=&quot;/projects/new&quot;&gt;Nuevo proyecto&lt;/Link&gt;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Los dos <code>Link</code> se llaman igual pero <strong>no son intercambiables</strong>. El de React Router usa la prop <code>to="/ruta"</code> y se importa de <code>react-router-dom</code>. El de Next.js usa <code>href="/ruta"</code> y se importa de <code>next/link</code>. Si copias codigo de un proyecto al otro sin cambiar el import y la prop, te dara error. Bit ya se equivoco una vez y se le pusieron las branquias rosas de la verguenza.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En <code>dashboard/page.tsx</code> de Faro veras <code>import Link from "next/link"</code> y, ademas, <code>redirect("/login")</code> de <code>next/navigation</code>. Ese <code>redirect</code> es el equivalente del <code>&lt;Navigate&gt;</code> de RachaSimple: si no hay usuario, Next.js manda al login desde el servidor. Misma idea de "ruta protegida", herramienta distinta.</p>
+</blockquote>
+<hr />
+<h2 id="5-rachasimple-vs-faro-la-misma-idea-dos-caminos">5. RachaSimple vs Faro: la misma idea, dos caminos</h2>
+<p>Pongamos las dos formas lado a lado para que se grabe.</p>
+<table>
+<thead>
+<tr>
+<th>Tema</th>
+<th>RachaSimple (Vite + React Router)</th>
+<th>Faro (Next.js App Router)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Donde se declaran las rutas</td>
+<td>A mano, en <code>src/App.tsx</code> con <code>&lt;Route&gt;</code></td>
+<td>Por carpetas dentro de <code>src/app/</code></td>
+</tr>
+<tr>
+<td>Una pantalla nueva</td>
+<td>Añades un <code>&lt;Route&gt;</code> y un componente</td>
+<td>Creas una carpeta con <code>page.tsx</code></td>
+</tr>
+<tr>
+<td>Ruta dinamica</td>
+<td><code>path="/habit/:id"</code> + <code>useParams()</code></td>
+<td>carpeta <code>[id]</code> + prop <code>params</code></td>
+</tr>
+<tr>
+<td>Enlace de navegacion</td>
+<td><code>&lt;Link to="..."&gt;</code> de <code>react-router-dom</code></td>
+<td><code>&lt;Link href="..."&gt;</code> de <code>next/link</code></td>
+</tr>
+<tr>
+<td>Navegar desde codigo</td>
+<td><code>useNavigate()</code></td>
+<td><code>redirect()</code> / <code>useRouter()</code></td>
+</tr>
+<tr>
+<td>Envoltura comun</td>
+<td>Componente <code>AppShell</code> alrededor de <code>&lt;Routes&gt;</code></td>
+<td>Archivo <code>layout.tsx</code></td>
+</tr>
+<tr>
+<td>Donde corre</td>
+<td>Todo en el navegador (SPA)</td>
+<td>Servidor + navegador</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>No existe "el mejor". React Router te da control explicito y es comodo para apps que viven solo en el navegador, como RachaSimple. Next.js te ahorra escribir el mapa de rutas y permite correr codigo en el servidor (util para Faro, que habla con GitHub, Drive y OpenAI con secretos que no deben llegar al navegador). Elige segun lo que la app necesite.</p>
+</blockquote>
+<hr />
+<h2 id="6-como-organizar-las-carpetas-de-una-app-react">6. Como organizar las carpetas de una app React</h2>
+<p>Mas alla del enrutado, una app crece y necesita orden. Bit detesta el desorden (perdio una semilla de calabaza entre sus archivos una vez). Estas son las carpetas que veras en proyectos reales.</p>
+<blockquote class="def">
+<h3 id="que-significa-estructura-de-carpetas-por-responsabilidad">🟦 ¿Que significa? — <em>Estructura de carpetas por responsabilidad</em></h3>
+<p>Es agrupar los archivos segun <strong>lo que hacen</strong>, no segun el azar. Cada carpeta tiene un papel claro, asi cualquiera (incluido tu en tres meses) encuentra las cosas rapido.</p>
+</blockquote>
+<p>Asi se reparte RachaSimple en <code>src/</code>:</p>
+<pre><code>src/
+  pages/        # pantallas navegables (Today, HabitDetail, Settings...)
+  components/   # piezas de UI reutilizables (HabitCard, PageHeader...)
+  hooks/        # hooks propios (Capitulo 9)
+  lib/          # utilidades y config (supabase, query-client...)
+  auth/         # todo lo de sesion (AuthProvider, useAuth)
+  i18n/         # textos en varios idiomas
+  types/        # tipos de TypeScript (Capitulo 5)
+  App.tsx       # el mapa de rutas
+  main.tsx      # el punto de arranque
+</code></pre>
+<p>Y Faro, con Next.js, en <code>src/</code>:</p>
+<pre><code>src/
+  app/          # rutas (carpetas con page.tsx) + api/
+  components/   # piezas de UI (project-card, phase-badge...)
+  lib/          # queries, conexiones, cliente de supabase
+  middleware.ts # codigo que corre antes de cada peticion
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-punto-de-arranque-entry-point">🟦 ¿Que significa? — <em>Punto de arranque (entry point)</em></h3>
+<p>Es el archivo donde la app empieza a vivir. En RachaSimple es <code>src/main.tsx</code>: con <code>ReactDOM.createRoot(...).render(&lt;App /&gt;)</code> engancha tu arbol de componentes a la pagina HTML. En Next.js no escribes este archivo: el framework lo gestiona por ti.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>Abre <code>src/main.tsx</code> de RachaSimple. Veras que <code>&lt;App /&gt;</code> va envuelto en <code>&lt;React.StrictMode&gt;</code>, un modo que React usa en desarrollo para avisarte de codigo sospechoso. Es la primera linea de toda la app: desde aqui cuelga absolutamente todo lo demas.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Tunal Digital, en cambio, es un sitio en HTML/CSS/JS vanilla: cada pagina ES un archivo <code>.html</code> de verdad, sin React ni enrutado de SPA. Y PolyPaw esta hecho en Python con Flet, otra cosa por completo. Por eso en este modulo solo sacamos ejemplos de React de <strong>RachaSimple y Faro</strong>: son los unicos dos proyectos donde el enrutado de React aplica.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No crees una carpeta nueva por cada componente solo "por si acaso". Empieza simple (<code>pages/</code> y <code>components/</code>) y separa mas cuando una carpeta crezca demasiado. Sobre-organizar al inicio te hace perder mas tiempo del que ahorras. Que la estructura crezca <em>con</em> la app, no antes.</p>
+</blockquote>
+<hr />
+<h2 id="7-juntando-las-piezas-el-recorrido-de-un-clic">7. Juntando las piezas: el recorrido de un clic</h2>
+<p>Para cerrar, sigamos un clic de principio a fin en RachaSimple, que ya conoces:</p>
+<ol>
+<li>El usuario esta en <code>/today</code> (pagina <code>Today.tsx</code>), viendo sus <code>HabitCard</code>.</li>
+<li>Hace clic en <code>&lt;Link to="/create-habit"&gt;</code>. React Router cambia la URL <strong>sin recargar</strong>.</li>
+<li><code>&lt;Routes&gt;</code> detecta la nueva ruta y monta <code>&lt;CreateHabitPage /&gt;</code>.</li>
+<li>Pero esa ruta esta dentro de <code>&lt;ProtectedRoute&gt;</code>: se revisa <code>user</code>. Hay sesion, asi que pasa.</li>
+<li>El usuario llena el formulario y guarda. El codigo llama a <code>navigate('/today')</code>.</li>
+<li>Vuelve a <code>/today</code>, ahora con un habito mas en la lista.</li>
+</ol>
+<p>En Faro el guion es parecido, pero el paso 3 lo decide la <strong>carpeta</strong> (<code>projects/new/page.tsx</code>) en vez de un <code>&lt;Route&gt;</code>, y el paso 4 (proteccion) ocurre en el <strong>servidor</strong> con <code>redirect("/login")</code>. Misma pelicula, distinto reparto.</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Si entiendes este recorrido, entiendes el enrutado. Todo lo demas (rutas anidadas, carga de datos por ruta, transiciones) son variaciones sobre esta misma historia: URL cambia -&gt; se elige una pagina -&gt; se muestra, quizas tras comprobar permisos.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Explico con mis palabras que es el enrutado y por que una app necesita varias URLs.</li>
+<li>[ ] Distingo un <strong>componente de pagina</strong> de un <strong>componente de UI</strong> y se en que carpeta va cada uno.</li>
+<li>[ ] Se que en RachaSimple las rutas se declaran a mano en <code>App.tsx</code> con <code>&lt;Routes&gt;</code> y <code>&lt;Route&gt;</code>.</li>
+<li>[ ] Se que en Faro las rutas las definen las <strong>carpetas</strong> con <code>page.tsx</code> dentro de <code>src/app/</code>.</li>
+<li>[ ] Entiendo una <strong>ruta dinamica</strong>: <code>:id</code> en React Router y <code>[id]</code> en Next.js.</li>
+<li>[ ] Distingo <code>&lt;Link&gt;</code> de <code>react-router-dom</code> (<code>to=</code>) del <code>&lt;Link&gt;</code> de <code>next/link</code> (<code>href=</code>).</li>
+<li>[ ] Se que es una <strong>ruta protegida</strong> y como se redirige a <code>/login</code> si no hay sesion.</li>
+<li>[ ] Reconozco las carpetas tipicas (<code>pages</code>, <code>components</code>, <code>lib</code>, <code>hooks</code>) y para que sirve cada una.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>En papel.</strong> Dibuja el mapa de rutas de RachaSimple a partir de <code>App.tsx</code>: una columna con las rutas (<code>/</code>, <code>/login</code>, <code>/today</code>, <code>/habit/:id</code>...) y al lado el componente de pagina que muestra cada una. Marca con un asterisco las que estan protegidas.</p>
+</li>
+<li>
+<p><strong>En papel.</strong> Para cada uno de estos archivos de Faro, escribe la URL que le corresponde: <code>src/app/page.tsx</code>, <code>src/app/agenda/page.tsx</code>, <code>src/app/projects/new/page.tsx</code>, <code>src/app/projects/[id]/page.tsx</code>. Explica que tienen en comun los corchetes del ultimo.</p>
+</li>
+<li>
+<p><strong>En papel.</strong> Clasifica cada componente como "pagina" o "UI" y justifica: <code>HabitCard.tsx</code>, <code>Today.tsx</code>, <code>PageHeader.tsx</code>, <code>Settings.tsx</code>, <code>project-card.tsx</code>, <code>phase-badge.tsx</code>. Pista: preguntate "¿se llega por una URL?".</p>
+</li>
+<li>
+<p>💻 <strong>Abre RachaSimple.</strong> Busca en <code>src/pages/Today.tsx</code> el uso de <code>&lt;Link&gt;</code>. Anota a que ruta apunta (<code>to="..."</code>) y luego ve a <code>App.tsx</code> y confirma que existe un <code>&lt;Route&gt;</code> con ese mismo <code>path</code>. Has seguido un enlace de punta a punta.</p>
+</li>
+<li>
+<p>💻 <strong>Abre Faro.</strong> Lista el contenido de <code>src/app/</code> y escribe la lista de URLs que ofrece la app (una por carpeta con <code>page.tsx</code>). Compara: ¿cuantas pantallas tiene Faro y cuantas RachaSimple? ¿Cual declara sus rutas con menos codigo?</p>
+</li>
+<li>
+<p>💻 <strong>Mini-reto de diseño (sin codificar aun).</strong> Imagina que añades a RachaSimple una pantalla de "Logros" en <code>/achievements</code>. Escribe los tres cambios que harias en <code>App.tsx</code>: (a) el <code>import</code> de la nueva pagina, (b) el <code>&lt;Route&gt;</code> nuevo, (c) si iria dentro de <code>&lt;ProtectedRoute&gt;</code> o no, y por que. Luego di como seria el equivalente en Faro (que archivo crearias y donde).</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

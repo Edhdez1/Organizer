@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 08 — useEffect a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-08-useeffect-a-fondo">Capítulo 08 — useEffect a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>En el Capítulo 05 conociste <code>useEffect</code> por encima: "ejecuta código como efecto". Ahora bajamos
+al fondo del pozo con calma. Vas a entender el <strong>ciclo de vida</strong> de un componente, el famoso
+<strong>array de dependencias</strong> (la parte que más asusta y la que más se entiende mal), la <strong>función
+de limpieza</strong>, los <strong>errores clásicos</strong> (bucles infinitos, avisos de dependencias faltantes) y
+—muy importante— <strong>cuándo NO usar <code>useEffect</code></strong>. Todo con código real de RachaSimple y Faro.
+Bit el ajolote te acompaña: él ya quemó un par de componentes con bucles infinitos, así que sabe
+de qué habla. 🦎</p>
+</blockquote>
+<hr />
+<h2 id="1-antes-de-los-efectos-el-ciclo-de-vida-de-un-componente">1. Antes de los efectos: el ciclo de vida de un componente</h2>
+<p>Un componente de React no es una foto fija: <strong>nace, vive y muere</strong>. A ese recorrido lo llamamos
+ciclo de vida. Entenderlo es la mitad de entender <code>useEffect</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-ciclo-de-vida-lifecycle">🟦 ¿Qué significa? — <em>Ciclo de vida (lifecycle)</em></h3>
+<p>El <strong>ciclo de vida</strong> es la secuencia de momentos por los que pasa un componente mientras la app
+está abierta. Tiene tres fases:
+1. <strong>Montar (mount):</strong> el componente aparece por primera vez en la pantalla.
+2. <strong>Actualizar (update / re-render):</strong> el componente se vuelve a dibujar porque cambió su estado
+   o sus props.
+3. <strong>Desmontar (unmount):</strong> el componente desaparece de la pantalla (cambiaste de página, cerraste
+   un panel, etc.).
+Sirve para saber <strong>cuándo</strong> hacer cada cosa: "carga los datos al montar", "limpia el temporizador
+al desmontar". En RachaSimple, cuando navegas de la pantalla de hábitos a la de ajustes, el
+componente de hábitos se <strong>desmonta</strong> y el de ajustes se <strong>monta</strong>.</p>
+<h3 id="que-significa-render-renderizado">🟦 ¿Qué significa? — <em>Render (renderizado)</em></h3>
+<p><strong>Renderizar</strong> es que React ejecute tu función-componente para calcular qué interfaz dibujar (el
+<code>return</code> con el JSX). Ocurre al montar y otra vez cada vez que algo cambia. <strong>Importante:</strong> durante
+el render solo debes <em>calcular y devolver JSX</em>; nada de pedir datos ni tocar el navegador. Eso —los
+efectos— va aparte, en <code>useEffect</code>.</p>
+<h3 id="tip-por-que-react-separa-dibujar-de-efectos">💡 Tip — Por qué React separa "dibujar" de "efectos"</h3>
+<p>React quiere que tu <code>return</code> sea <strong>puro</strong>: dados los mismos datos, dibuja siempre lo mismo, sin
+sorpresas. Por eso te empuja a sacar las "acciones al mundo exterior" (pedir datos, temporizadores,
+escribir en el navegador) fuera del render, a <code>useEffect</code>. Así tu componente es predecible y fácil
+de probar.</p>
+</blockquote>
+<hr />
+<h2 id="2-useeffect-recordatorio-rapido-y-anatomia">2. <code>useEffect</code>: recordatorio rápido y anatomía</h2>
+<blockquote class="def">
+<h3 id="que-significa-efecto-secundario-side-effect">🟦 ¿Qué significa? — <em>Efecto secundario (side effect)</em></h3>
+<p>Un <strong>efecto secundario</strong> es algo que tu componente hace <strong>además</strong> de dibujar, y que toca el mundo
+fuera de React: pedir datos a una API, leer/escribir almacenamiento, poner un <code>setInterval</code>,
+suscribirse a un evento, leer permisos del navegador. "Secundario" no quiere decir poco importante;
+quiere decir "aparte de dibujar".</p>
+<h3 id="que-significa-useeffect">🟦 ¿Qué significa? — <em><code>useEffect</code></em></h3>
+<p><code>useEffect</code> es el hook que <strong>ejecuta una función después</strong> de que el componente se dibuja. Su forma:
+<code>tsx
+useEffect(() =&gt; {
+  // 1) el efecto: tu código que toca el mundo exterior
+  return () =&gt; {
+    // 2) la limpieza (opcional): deshacer lo del efecto
+  };
+}, [/* 3) array de dependencias */]);</code>
+Tiene <strong>tres piezas</strong>: la función-efecto, una función de limpieza opcional que ella devuelve, y el
+array de dependencias. Vamos una por una.</p>
+</blockquote>
+<p>Aquí lo tienes en RachaSimple, en <code>src/components/racha/ReminderCard.tsx</code> (la tarjeta de
+recordatorios), simplificado:</p>
+<pre><code class="language-tsx">import { useEffect, useState } from &quot;react&quot;;
+
+function ReminderCard() {
+  const [permission, setPermission] = useState(&quot;default&quot;);
+
+  useEffect(() =&gt; {
+    setPermission(getReminderPermission()); // leer permiso del navegador
+    setPushSupport(detectPushSupport());     // ver si el navegador soporta push
+  }, []); // [] = solo al montar
+
+  // …resto del componente…
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Ese efecto es perfecto de manual: lee algo del navegador (los permisos de notificación) <strong>una vez,
+al montar la tarjeta</strong>, y guarda el resultado en estado. No se puede hacer durante el render porque
+"leer permisos del navegador" es un efecto secundario. Por eso vive en <code>useEffect</code>.</p>
+</blockquote>
+<hr />
+<h2 id="3-el-array-de-dependencias-despacio">3. El array de dependencias, despacio</h2>
+<p>Esta es la pieza que más confunde a quien empieza. Vamos con mucha calma, porque entenderla bien te
+ahorra horas de bugs.</p>
+<blockquote class="def">
+<h3 id="que-significa-array-de-dependencias">🟦 ¿Qué significa? — <em>Array de dependencias</em></h3>
+<p>El <strong>array de dependencias</strong> es el segundo argumento de <code>useEffect</code>. Es una lista de valores que le
+dice a React: <em>"vuelve a ejecutar el efecto solo cuando alguno de estos valores cambie"</em>. React
+compara los valores entre un render y el siguiente; si todos son iguales, <strong>no</strong> repite el efecto.</p>
+</blockquote>
+<p>Hay exactamente <strong>tres casos</strong>. Memorízalos:</p>
+<blockquote class="def">
+<h3 id="que-significa-los-tres-casos-del-array">🟦 ¿Qué significa? — <em>Los tres casos del array</em></h3>
+<ol>
+<li><strong><code>[]</code> (array vacío):</strong> el efecto se ejecuta <strong>una sola vez</strong>, al montar. Nunca se repite. Es el
+   caso más común: "carga datos al abrir la pantalla".</li>
+<li><strong><code>[valor]</code> (con dependencias):</strong> el efecto se ejecuta al montar <strong>y</strong> cada vez que <code>valor</code>
+   cambie. Ejemplo: "cuando cambie el <code>userId</code>, vuelve a cargar su perfil".</li>
+<li><strong>Sin array (lo omites):</strong> el efecto se ejecuta <strong>después de cada render</strong>. Casi nunca lo quieres
+   y suele ser señal de un error. Evítalo salvo que sepas muy bien qué haces.</li>
+</ol>
+</blockquote>
+<p>Veamos los tres con el mismo molde:</p>
+<pre><code class="language-tsx">// CASO 1 — una sola vez, al montar
+useEffect(() =&gt; {
+  cargarHabitos();
+}, []);
+
+// CASO 2 — cada vez que cambie 'reminderTime'
+useEffect(() =&gt; {
+  programarRecordatorio(reminderTime);
+}, [reminderTime]);
+
+// CASO 3 — tras CADA render (peligroso, casi nunca)
+useEffect(() =&gt; {
+  console.log(&quot;me ejecuté otra vez&quot;);
+}); // &lt;- sin array
+</code></pre>
+<p>Y aquí el caso 2 <strong>de verdad</strong>, en <code>ReminderCard.tsx</code> de RachaSimple:</p>
+<pre><code class="language-tsx">useEffect(() =&gt; {
+  if (profile.data?.reminder_time) setTime(profile.data.reminder_time);
+}, [profile.data?.reminder_time]);
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Léelo en voz alta: <em>"cuando cambie la hora de recordatorio del perfil, copia ese valor al estado
+local <code>time</code>"</em>. La dependencia es <code>profile.data?.reminder_time</code>. Si esa hora no cambia entre renders,
+el efecto no se vuelve a ejecutar. Si el usuario edita su hora y el perfil se actualiza, el valor
+cambia y el efecto corre otra vez para sincronizar. <strong>Eso</strong> es para lo que sirve el array.</p>
+<h3 id="tip-como-decidir-que-va-en-el-array">💡 Tip — Cómo decidir qué va en el array</h3>
+<p>Regla mental sencilla: <strong>mira dentro del efecto qué variables del componente usa</strong> (estado, props,
+valores derivados). Todas esas, que vengan "de fuera" del efecto y puedan cambiar, deberían estar en
+el array. Si tu efecto usa <code>reminderTime</code>, entonces <code>reminderTime</code> va en el array. No adivines: lee
+el cuerpo del efecto y lista lo que toca.</p>
+<h3 id="cuidado-no-significa-ignora-todo-para-siempre">⚠️ Cuidado — <code>[]</code> no significa "ignora todo para siempre"</h3>
+<p>Mucha gente pone <code>[]</code> para que el efecto "solo corra una vez" aunque dentro use variables que sí
+cambian. Eso esconde bugs: el efecto se queda con el <strong>primer</strong> valor y no se entera de los cambios
+(a esto se le llama <em>stale closure</em>, "valor congelado"). <code>[]</code> está bien <strong>solo</strong> cuando el efecto no
+depende de ningún valor que cambie. Si depende, ponlo en el array.</p>
+</blockquote>
+<hr />
+<h2 id="4-la-funcion-de-limpieza-cleanup">4. La función de limpieza (cleanup)</h2>
+<blockquote class="def">
+<h3 id="que-significa-funcion-de-limpieza-cleanup">🟦 ¿Qué significa? — <em>Función de limpieza (cleanup)</em></h3>
+<p>La <strong>función de limpieza</strong> es una función que tu efecto <strong>devuelve</strong> (<code>return () =&gt; { … }</code>). React
+la ejecuta para <strong>deshacer</strong> lo que el efecto montó: parar un temporizador, cancelar una suscripción,
+cerrar una conexión. Se llama en dos momentos: <strong>antes de volver a ejecutar el efecto</strong> (si el array
+cambió) y <strong>al desmontar</strong> el componente.</p>
+</blockquote>
+<p>La regla de oro es hermosamente simple:</p>
+<blockquote class="tip">
+<h3 id="tip-la-regla-si-lo-abro-lo-cierro">💡 Tip — La regla "si lo abro, lo cierro"</h3>
+<p>Si en el efecto <strong>abres</strong> algo que sigue vivo por su cuenta (un <code>setInterval</code>, un <code>addEventListener</code>,
+una suscripción a Supabase), tienes que <strong>cerrarlo</strong> en la limpieza. Si tu efecto solo lee un valor y
+guarda estado (como leer permisos), normalmente <strong>no</strong> necesita limpieza. ¿Encendiste algo? Apágalo.</p>
+</blockquote>
+<p>Ejemplo clásico, un reloj:</p>
+<pre><code class="language-tsx">useEffect(() =&gt; {
+  const id = setInterval(() =&gt; setHora(new Date()), 1000); // abro
+  return () =&gt; clearInterval(id);                           // cierro
+}, []);
+</code></pre>
+<p>Un caso real más interesante: en <code>AuthProvider.tsx</code> de RachaSimple, el efecto se <strong>suscribe</strong> a los
+cambios de sesión de Supabase (login/logout) y usa una bandera para no tocar estado si el componente
+ya desapareció:</p>
+<pre><code class="language-tsx">useEffect(() =&gt; {
+  let mounted = true; // bandera: ¿sigo en pantalla?
+
+  supabase.auth.getSession().then(({ data }) =&gt; {
+    if (!mounted) return;        // si ya me desmonté, no toco estado
+    setSession(data.session);
+    setUser(data.session?.user ?? null);
+    setLoading(false);
+  });
+
+  const { data: sub } = supabase.auth.onAuthStateChange((_e, session) =&gt; {
+    setSession(session);
+    setUser(session?.user ?? null);
+  });
+
+  return () =&gt; {
+    mounted = false;          // marco que ya no estoy
+    sub.subscription.unsubscribe(); // cierro la suscripción
+  };
+}, []);
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Mira las dos cosas que la limpieza deshace: pone <code>mounted = false</code> (para que la petición que volvió
+tarde no intente actualizar un componente muerto) y llama a <code>unsubscribe()</code> (para dejar de escuchar
+los cambios de sesión). Sin esa limpieza, RachaSimple tendría <strong>suscripciones zombi</strong> acumulándose y
+avisos de "no puedes actualizar estado de un componente desmontado". La limpieza es lo que mantiene
+la app sana.</p>
+<h3 id="cuidado-sin-limpieza-fuga-de-memoria">⚠️ Cuidado — Sin limpieza = fuga de memoria</h3>
+<p>Una <strong>fuga de memoria (memory leak)</strong> es cuando algo que ya no se usa sigue ocupando recursos. Si
+abres un <code>setInterval</code> en cada visita a una pantalla y nunca lo cierras, los intervalos se apilan y
+tu app se vuelve lenta o se comporta raro. La limpieza evita justo eso.</p>
+</blockquote>
+<hr />
+<h2 id="5-cargar-datos-al-montar-el-patron-estrella">5. Cargar datos al montar (el patrón estrella)</h2>
+<p>El uso número uno de <code>useEffect</code>: <strong>pedir datos cuando la pantalla aparece</strong>. Aquí están RachaSimple y
+Faro juntos.</p>
+<p>En Faro, <code>src/components/today-agenda.tsx</code> (la tarjeta "Hoy te toca…") carga la agenda al montar:</p>
+<pre><code class="language-tsx">import { useEffect, useState } from &quot;react&quot;;
+import type { AgendaDay, AgendaPlan } from &quot;@/lib/types&quot;;
+
+export function TodayAgenda() {
+  const [today, setToday] = useState&lt;AgendaDay | null&gt;(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() =&gt; {
+    fetch(&quot;/api/agenda&quot;)
+      .then((r) =&gt; r.json())
+      .then((d) =&gt; {
+        const plan: AgendaPlan | undefined = d.agenda?.plan;
+        if (plan?.days) {
+          const iso = new Date().toLocaleDateString(&quot;en-CA&quot;);
+          setToday(plan.days.find((x) =&gt; x.date === iso) ?? null);
+        }
+      })
+      .catch(() =&gt; {})
+      .finally(() =&gt; setLoaded(true));
+  }, []); // una sola vez, al montar
+}
+</code></pre>
+<p>Reconoce las piezas (todas del manual):
+- <strong>estado</strong> (<code>useState</code>): <code>today</code> para el dato, <code>loaded</code> para saber si ya terminó.
+- <strong>efecto</strong> (<code>useEffect</code>): el bloque que pide los datos.
+- <strong>petición</strong> (<code>fetch</code> del Módulo 03): habla con <code>/api/agenda</code>.
+- <strong>manejo de error</strong> (<code>.catch</code>): si algo falla, no rompe la pantalla.
+- <strong>array <code>[]</code></strong>: cargar <strong>una vez</strong>, al aparecer la tarjeta.</p>
+<blockquote class="def">
+<h3 id="que-significa-bandera-de-carga-loading-flag">🟦 ¿Qué significa? — <em>Bandera de carga (loading flag)</em></h3>
+<p>Una <strong>bandera de carga</strong> es un booleano de estado (aquí <code>loaded</code>) que dice si los datos ya llegaron.
+Sirve para mostrar "Cargando…" mientras esperas y el contenido real cuando termina. Es el patrón que
+usas para que la pantalla no se vea vacía o rota mientras la red responde.</p>
+<h3 id="que-significa-funcion-async-dentro-del-efecto">🟦 ¿Qué significa? — <em>Función async dentro del efecto</em></h3>
+<p>El efecto en sí <strong>no</strong> debe ser <code>async</code> (React espera que devuelva una limpieza o nada, no una
+promesa). Por eso, cuando usas <code>await</code>, declaras una función <code>async</code> <strong>dentro</strong> y la llamas:
+<code>tsx
+useEffect(() =&gt; {
+  async function cargar() {
+    const r = await fetch("/api/agenda");
+    setToday(await r.json());
+  }
+  cargar();
+}, []);</code>
+Faro lo resuelve con <code>.then()</code> en vez de <code>await</code>; las dos formas son válidas. Lo prohibido es poner
+<code>async</code> directamente en <code>useEffect(async () =&gt; …)</code>.</p>
+</blockquote>
+<hr />
+<h2 id="6-errores-clasicos-y-como-evitarlos">6. Errores clásicos (y cómo evitarlos)</h2>
+<p>Aquí es donde Bit ha sufrido. Los tres errores que verás una y otra vez.</p>
+<h3 id="61-el-bucle-infinito">6.1 El bucle infinito</h3>
+<blockquote class="def">
+<h3 id="que-significa-bucle-infinito-de-renders">🟦 ¿Qué significa? — <em>Bucle infinito de renders</em></h3>
+<p>Un <strong>bucle infinito</strong> ocurre cuando el efecto <strong>cambia un valor</strong> que está en su <strong>propio array de
+dependencias</strong>. Pasa esto: el efecto corre → cambia el estado → eso re-renderiza → el array cambió →
+el efecto corre otra vez → cambia el estado → … sin parar. La app se congela o el navegador grita.</p>
+</blockquote>
+<p>El error en vivo:</p>
+<pre><code class="language-tsx">// ❌ MAL: el efecto cambia 'count', y 'count' está en el array
+const [count, setCount] = useState(0);
+useEffect(() =&gt; {
+  setCount(count + 1); // cambio count...
+}, [count]);          // ...y reacciono a count -&gt; ¡bucle infinito!
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado-como-reconocer-un-bucle-infinito">⚠️ Cuidado — Cómo reconocer un bucle infinito</h3>
+<p>Síntomas: la pestaña se traba, el ventilador del portátil despega, o ves miles de <code>console.log</code>
+repetidos. Causa casi siempre: un <code>setX</code> dentro de un efecto cuya dependencia es la propia <code>x</code>.
+Solución: o quitas <code>x</code> del array (si el efecto no debe reaccionar a <code>x</code>), o no llamas a <code>setX</code> ahí
+(probablemente ni necesitabas el efecto: ver sección 7).</p>
+</blockquote>
+<h3 id="62-dependencias-faltantes">6.2 Dependencias faltantes</h3>
+<blockquote class="def">
+<h3 id="que-significa-dependencia-faltante-missing-dependency">🟦 ¿Qué significa? — <em>Dependencia faltante (missing dependency)</em></h3>
+<p>Una <strong>dependencia faltante</strong> es una variable que tu efecto usa pero que <strong>olvidaste</strong> poner en el
+array. El efecto se queda con un valor viejo y no reacciona a los cambios. El linter de React (la
+regla <code>react-hooks/exhaustive-deps</code>) te avisa con un <em>warning</em> amarillo.</p>
+</blockquote>
+<pre><code class="language-tsx">// ⚠️ El efecto usa 'userId' pero el array está vacío
+useEffect(() =&gt; {
+  cargarPerfil(userId);
+}, []); // &lt;- falta userId; el linter te avisa
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip-hazle-caso-al-linter-casi-siempre">💡 Tip — Hazle caso al linter, casi siempre</h3>
+<p>Cuando el aviso "React Hook useEffect has a missing dependency" aparezca, la respuesta correcta el
+95% de las veces es <strong>añadir esa dependencia al array</strong>. RachaSimple y Faro tienen el linter activado
+precisamente para cazar estos despistes antes de que lleguen a producción. Silenciar el aviso con un
+comentario <code>// eslint-disable</code> debe ser la excepción, no la costumbre.</p>
+</blockquote>
+<h3 id="63-el-efecto-que-no-debia-ser-efecto">6.3 El efecto que no debía ser efecto</h3>
+<p>Es el error más sutil y lo vemos en su propia sección, porque merece la pena.</p>
+<hr />
+<h2 id="7-cuando-no-usar-useeffect">7. Cuándo NO usar <code>useEffect</code></h2>
+<p>Mucha gente nueva mete <em>todo</em> en <code>useEffect</code>. Y resulta que <strong>buena parte de los efectos sobran</strong>. La
+guía oficial de React tiene un lema: <em>"You Might Not Need an Effect"</em> (puede que no necesites un
+efecto). Bit lo tiene tatuado. 🦎</p>
+<blockquote class="warn">
+<h3 id="cuidado-tres-casos-en-los-que-useeffect-esta-de-mas">⚠️ Cuidado — Tres casos en los que <code>useEffect</code> está de más</h3>
+<p><strong>1) Calcular algo a partir del estado/props.</strong> Si puedes calcular un valor durante el render, hazlo
+ahí; no lo guardes en un estado aparte sincronizado con un efecto.
+```tsx
+// ❌ innecesario
+const [completos, setCompletos] = useState(0);
+useEffect(() =&gt; {
+  setCompletos(habitos.filter(h =&gt; h.hecho).length);
+}, [habitos]);</p>
+<p>// ✅ solo calcula al renderizar
+const completos = habitos.filter(h =&gt; h.hecho).length;
+<code>**2) Responder a un evento del usuario.** Si algo pasa *porque el usuario hizo clic*, ponlo en el
+manejador del evento (`onClick`), no en un efecto. Los efectos son para sincronizar con sistemas
+externos, no para reaccionar a clics.</code>tsx
+// ❌ no uses un efecto para reaccionar a un clic
+// ✅ hazlo en el manejador:
+function onComprar() { registrarCompra(); mostrarGracias(); }
+<code>``
+**3) Pedir datos del servidor cuando ya usas TanStack Query.** Si tu app tiene</code>useQuery<code>, no
+escribas el</code>useEffect<code>+</code>fetch<code>+</code>useState` a mano.</p>
+<h3 id="que-significa-valor-derivado-derived-value">🟦 ¿Qué significa? — <em>Valor derivado (derived value)</em></h3>
+<p>Un <strong>valor derivado</strong> es un dato que <strong>se calcula</strong> a partir de otros que ya tienes (estado o props),
+no uno que guardas por separado. "Cuántos hábitos están hechos" se <em>deriva</em> de la lista de hábitos.
+Los valores derivados se calculan en el render, <strong>no</strong> necesitan <code>useState</code> ni <code>useEffect</code>. Guardarlos
+aparte es justo lo que crea bugs de "se me quedó desactualizado".</p>
+<h3 id="en-tu-codigo_3">🔎 En tu código</h3>
+<p>RachaSimple y Faro casi no traen datos del servidor con <code>useEffect</code>+<code>fetch</code> a pelo: usan <strong>TanStack
+Query</strong> con hooks como <code>useQuery</code>. Por eso en RachaSimple los efectos que sí quedan son para cosas que
+Query no cubre: leer permisos del navegador, suscribirse a la sesión de Supabase, programar un
+recordatorio local. Esos <strong>sí</strong> son sincronización con el mundo exterior, el trabajo legítimo de
+<code>useEffect</code>.</p>
+<h3 id="que-significa-tanstack-query-usequery">🟦 ¿Qué significa? — <em>TanStack Query (<code>useQuery</code>)</em></h3>
+<p><strong>TanStack Query</strong> es una librería para traer y cachear datos del servidor. Su hook <code>useQuery</code> te da
+el dato, un <code>isLoading</code> y un <code>error</code> listos, y recarga solo cuando hace falta. Internamente hace el
+trabajo del <code>useEffect</code>+<code>fetch</code>+estados, pero mucho mejor (caché, reintentos, recarga automática). Si
+el dato vive en el servidor, prefiere <code>useQuery</code> antes que un efecto a mano.</p>
+<h3 id="tip-la-pregunta-que-lo-decide">💡 Tip — La pregunta que lo decide</h3>
+<p>Antes de escribir un <code>useEffect</code>, pregúntate: <strong>"¿esto sincroniza mi componente con algo de fuera de
+React?"</strong> (la red, el navegador, un temporizador, una suscripción). Si la respuesta es sí → efecto.
+Si es "solo estoy calculando algo" o "solo reacciono a un clic" → <strong>no</strong> es un efecto.</p>
+</blockquote>
+<hr />
+<h2 id="8-un-repaso-visual-del-flujo">8. Un repaso visual del flujo</h2>
+<p>Así viaja un componente con efecto, de principio a fin:</p>
+<pre><code>MONTAR
+  └─ render (calcula JSX)
+       └─ useEffect corre  ──► abre cosas / pide datos
+
+ACTUALIZAR (cambió estado o props)
+  └─ ¿cambió el array de deps?
+       ├─ sí ► limpieza del efecto anterior ──► useEffect corre de nuevo
+       └─ no ► no pasa nada con el efecto
+
+DESMONTAR (el componente se va)
+  └─ limpieza final ──► cierra cosas / cancela suscripciones
+</code></pre>
+<p>Mira cómo encaja todo: la <strong>limpieza</strong> corre tanto entre repeticiones (porque el array cambió) como al
+final (al desmontar). El <strong>array</strong> decide si hay repetición. El <strong>efecto</strong> hace el trabajo. Tres
+piezas, un baile.</p>
+<blockquote class="tip">
+<h3 id="tip-lee-tus-propios-efectos-asi">💡 Tip — Lee tus propios efectos así</h3>
+<p>Cuando abras un <code>useEffect</code> de RachaSimple o Faro, identifica las tres piezas en orden: <em>(1) ¿qué hace
+el cuerpo? (2) ¿devuelve limpieza? (3) ¿qué hay en el array?</em>. Con esas tres respuestas entiendes
+cualquier efecto, por enrevesado que parezca.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que un componente <strong>monta, actualiza y desmonta</strong>, y qué ocurre en cada fase.</li>
+<li>[ ] Entiendo que el <strong>render</strong> solo calcula JSX, y que los <strong>efectos</strong> van en <code>useEffect</code>.</li>
+<li>[ ] Distingo los <strong>tres casos del array de dependencias</strong>: <code>[]</code>, <code>[valor]</code> y sin array.</li>
+<li>[ ] Sé decidir <strong>qué variables</strong> poner en el array (las que el efecto usa y pueden cambiar).</li>
+<li>[ ] Aplico la regla <strong>"si lo abro, lo cierro"</strong> con la <strong>función de limpieza</strong>.</li>
+<li>[ ] Reconozco el patrón de <strong>cargar datos al montar</strong> (estado + efecto + <code>fetch</code> + bandera de carga).</li>
+<li>[ ] Sé qué es un <strong>bucle infinito</strong> y cómo evitarlo (no cambies en el efecto lo que está en su array).</li>
+<li>[ ] Entiendo el aviso de <strong>dependencia faltante</strong> y por qué casi siempre hay que hacerle caso.</li>
+<li>[ ] Sé <strong>cuándo NO usar <code>useEffect</code></strong>: valores derivados, eventos de clic y datos que ya da <code>useQuery</code>.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Los tres casos.</strong> Sin mirar, escribe de memoria qué hace <code>useEffect(fn, [])</code>,
+   <code>useEffect(fn, [x])</code> y <code>useEffect(fn)</code> (sin array). Explica cada uno con una frase.</p>
+</li>
+<li>
+<p><strong>Caza el valor derivado.</strong> Tienes <code>const [n, setN] = useState(0)</code> y un efecto que hace
+   <code>setN(habitos.length)</code> con array <code>[habitos]</code>. Reescríbelo <strong>sin</strong> efecto y explica por qué la
+   versión nueva no puede quedarse desactualizada.</p>
+</li>
+<li>
+<p><strong>💻 Reproduce un bucle infinito.</strong> En un componente de práctica, escribe a propósito el efecto
+   roto de la sección 6.1 (<code>setCount(count + 1)</code> con array <code>[count]</code>). Abre la consola, observa qué
+   pasa y luego arréglalo. Apunta qué viste.</p>
+</li>
+<li>
+<p><strong>💻 Reloj con limpieza.</strong> Crea un componente <code>Reloj</code> con <code>setInterval</code> que actualice la hora cada
+   segundo y su <code>clearInterval</code> en la limpieza. Después <strong>borra</strong> la línea de limpieza, monta y
+   desmonta el reloj varias veces y describe qué empieza a fallar.</p>
+</li>
+<li>
+<p><strong>Lee tu app.</strong> Abre <code>RachaSimple/src/auth/AuthProvider.tsx</code> y localiza, en su <code>useEffect</code>, las
+   tres piezas: el cuerpo, la limpieza y el array. ¿Qué cierra exactamente la limpieza y por qué
+   importa?</p>
+</li>
+<li>
+<p><strong>💻 ¿Efecto o no?</strong> Para cada caso, decide si necesita <code>useEffect</code> y justifica: (a) calcular cuántos
+   hábitos están hechos; (b) suscribirse a los cambios de sesión de Supabase; (c) mostrar un "gracias"
+   al pulsar un botón; (d) cargar la agenda de hoy desde <code>/api/agenda</code> al abrir la pantalla.</p>
+</li>
+</ol>
+<hr />
+<p>🎉 Con <code>useEffect</code> a fondo cierras el corazón de los hooks de React. Ya entiendes el ciclo de vida, el
+array de dependencias sin miedo, la limpieza, los errores que asustan y —lo más valioso— cuándo un
+efecto <strong>sobra</strong>. Cuando leas los componentes de RachaSimple y Faro, los efectos dejarán de ser magia:
+verás las tres piezas y sabrás exactamente qué hacen. Bit está orgulloso. 🦎</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,5 +1,10 @@
 # Capítulo 07 — Eventos y formularios controlados
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora tus componentes mostraban datos y los cambiaban con botones de juguete. Pero una app
 > de verdad **escucha al usuario**: clics, teclas, texto que se escribe, formularios que se envían.
 > En este capítulo aprenderás a manejar **eventos** en React (`onClick`, `onChange`, `onSubmit`) y a

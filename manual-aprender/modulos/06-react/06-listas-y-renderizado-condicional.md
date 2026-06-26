@@ -1,5 +1,10 @@
 # Capítulo 06 — Listas y renderizado condicional
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora dibujaste cosas **fijas**: un componente, un texto, un botón. Pero las apps
 > de verdad muestran **muchas** cosas que vienen de datos: la lista de hábitos de
 > **RachaSimple**, la lista de proyectos de **Faro**. En este capítulo aprendes a convertir

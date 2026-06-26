@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Glosario de React y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-react-y-mapa">Capitulo 15 — Glosario de React y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Llegaste al final del modulo de React. Catorce capitulos de componentes, hooks, estado, props y rutas. Es mucho, y es normal que algunos terminos se hayan mezclado en tu cabeza como ingredientes en una licuadora. Este capitulo no enseña nada nuevo: es un <strong>diccionario de bolsillo</strong>. Cada palabra importante del modulo, con su definicion en una o dos lineas, para que sirve y donde la viste en un proyecto real (RachaSimple y Faro). Al final hay un <strong>mapa mental</strong> que conecta todo, un repaso y un adelanto del Modulo 07. Bit, nuestro ajolote, se sento encima de una pila de fichas ordenadas alfabeticamente: hoy hace de bibliotecario. Si en cualquier capitulo futuro olvidas que era un "hook" o un "componente controlado", vuelve aqui.</p>
+</blockquote>
+<hr />
+<h2 id="1-como-usar-este-glosario">1. Como usar este glosario</h2>
+<p>No leas esto de corrido como una novela. Usalo asi:</p>
+<ul>
+<li><strong>Cuando olvides un termino</strong>, busca su recuadro 🟦 y lee las dos lineas. Suele bastar.</li>
+<li><strong>Cuando quieras ver el termino vivo</strong>, mira el recuadro 🔎 "En tu codigo": te dice en que archivo de RachaSimple o Faro aparece.</li>
+<li><strong>Cuando confundas dos parecidos</strong> (props vs estado, useMemo vs useCallback), lee los dos recuadros seguidos y compara.</li>
+</ul>
+<p>Los terminos estan agrupados por tema para que las ideas relacionadas queden juntas.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Un glosario es una herramienta de <strong>repaso activo</strong>: tapa la definicion con la mano, lee solo el titulo del termino e intenta explicarlo en voz alta. Si puedes, lo dominas. Eso fija mucho mas que releer pasivo.</p>
+</blockquote>
+<hr />
+<h2 id="2-las-piezas-basicas-componente-jsx-props-estado">2. Las piezas basicas: componente, JSX, props, estado</h2>
+<p>Estos cuatro son el abecedario de React. Sin ellos no hay nada.</p>
+<blockquote class="def">
+<h3 id="que-significa-componente">🟦 ¿Que significa? — <em>Componente</em></h3>
+<p>Es una funcion de JavaScript/TypeScript que devuelve un trozo de interfaz (JSX). Sirve para construir tu app por piezas reutilizables en vez de una pagina gigante. En RachaSimple, <code>HabitCard.tsx</code> es un componente que pinta una tarjeta de habito; en Faro, <code>project-card.tsx</code> pinta la tarjeta de un proyecto.</p>
+<h3 id="que-significa-jsx">🟦 ¿Que significa? — <em>JSX</em></h3>
+<p>Es la sintaxis que mezcla HTML dentro de JavaScript: <code>return &lt;button&gt;Hola&lt;/button&gt;</code>. Sirve para describir como se ve un componente de forma legible. Cada componente <code>.tsx</code> de RachaSimple y Faro esta lleno de JSX; la <code>x</code> de <code>.tsx</code> es literalmente por "JSX + TypeScript".</p>
+<h3 id="que-significa-props-propiedades">🟦 ¿Que significa? — <em>Props (propiedades)</em></h3>
+<p>Son los datos que un componente <strong>recibe desde fuera</strong>, como los argumentos de una funcion. Sirven para que un componente sea reutilizable con distintos valores. En RachaSimple, <code>HabitCard</code> recibe por props el habito a mostrar: <code>&lt;HabitCard habit={h} /&gt;</code>.</p>
+<h3 id="que-significa-estado-state">🟦 ¿Que significa? — <em>Estado (state)</em></h3>
+<p>Es la memoria interna de un componente: datos que pueden cambiar y que, al cambiar, <strong>vuelven a dibujar</strong> la pantalla. Sirve para reaccionar a lo que hace el usuario. En RachaSimple, si un input guarda lo que escribes, eso vive en estado con <code>useState</code>.</p>
+</blockquote>
+<p>La diferencia clave, que Bit subraya con su patita:</p>
+<ul>
+<li><strong>Props</strong> entran desde el padre y el hijo <strong>no las modifica</strong> (son de solo lectura).</li>
+<li><strong>Estado</strong> nace dentro del componente y <strong>si</strong> lo modifica (con su funcion <code>set...</code>).</li>
+</ul>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>Abre <code>src/components/HabitCard.tsx</code> de RachaSimple. Lo que llega entre parentesis a la funcion (<code>{ habit }</code>) son <strong>props</strong>. Si dentro hubiera un <code>useState</code>, eso seria <strong>estado</strong>. Misma tarjeta, dos tipos de datos con reglas distintas.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>No confundas "no cambia nunca" con "props". Las props <strong>pueden</strong> cambiar: cambian cuando el padre les pasa un valor distinto. Lo que no puede es que el hijo las reescriba por su cuenta. El estado vive y cambia dentro; las props vienen y se respetan.</p>
+</blockquote>
+<hr />
+<h2 id="3-hooks-el-corazon-de-react-moderno">3. Hooks: el corazon de React moderno</h2>
+<p>Un "hook" suena a gancho, y la metafora ayuda: te "engancha" a capacidades de React.</p>
+<blockquote class="def">
+<h3 id="que-significa-hook">🟦 ¿Que significa? — <em>Hook</em></h3>
+<p>Es una funcion especial de React cuyo nombre empieza por <code>use</code> y que da superpoderes a un componente (memoria, efectos, contexto...). Sirve para usar estado y otras funciones de React dentro de funciones. Todos los <code>useState</code>, <code>useEffect</code> y <code>useQuery</code> de RachaSimple y Faro son hooks.</p>
+<h3 id="que-significa-usestate">🟦 ¿Que significa? — <em>useState</em></h3>
+<p>Es el hook para tener <strong>estado</strong> en un componente. Devuelve el valor actual y una funcion para cambiarlo: <code>const [n, setN] = useState(0)</code>. En RachaSimple lo usan los formularios para recordar lo que el usuario escribe antes de guardar.</p>
+<h3 id="que-significa-useeffect">🟦 ¿Que significa? — <em>useEffect</em></h3>
+<p>Es el hook para ejecutar codigo <strong>despues de pintar</strong>, como reaccion a cambios: pedir datos, suscribirse, sincronizar con el navegador. Sirve para "efectos secundarios" (todo lo que no sea calcular el JSX). En RachaSimple aparece para sincronizar cosas con la sesion de Supabase.</p>
+<h3 id="que-significa-dependencias-de-un-efecto">🟦 ¿Que significa? — <em>Dependencias (de un efecto)</em></h3>
+<p>Es el array al final de <code>useEffect(fn, [a, b])</code> que le dice a React <strong>cuando</strong> volver a ejecutar el efecto: solo si <code>a</code> o <code>b</code> cambiaron. Sirve para no repetir trabajo de mas. Si lo dejas vacio <code>[]</code>, el efecto corre una sola vez al montar.</p>
+<h3 id="que-significa-montar-desmontar">🟦 ¿Que significa? — <em>Montar / desmontar</em></h3>
+<p>"Montar" es cuando un componente aparece por primera vez en pantalla; "desmontar" es cuando se quita. Sirve para saber cuando arranca y termina su ciclo de vida. Un <code>useEffect</code> con <code>[]</code> corre al <strong>montar</strong>; su funcion de limpieza corre al <strong>desmontar</strong>.</p>
+<h3 id="que-significa-custom-hook-hook-propio">🟦 ¿Que significa? — <em>Custom hook (hook propio)</em></h3>
+<p>Es un hook que <strong>tu</strong> escribes combinando otros hooks, para reutilizar logica entre componentes. Su nombre tambien empieza por <code>use</code>. En RachaSimple, algo como <code>useHabits()</code> agruparia la logica de cargar y tocar habitos en un solo lugar reutilizable.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Hay solo <strong>dos reglas de los hooks</strong> y conviene tenerlas tatuadas: (1) llamalos siempre en el nivel superior del componente, nunca dentro de un <code>if</code> o un bucle; (2) llamalos solo desde componentes o desde otros hooks. Romper esto es la causa numero uno de errores raros con hooks.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En RachaSimple busca cualquier archivo que empiece su nombre con <code>use</code> (por ejemplo en <code>src/hooks/</code>). Ese prefijo no es decoracion: es el contrato que le dice a React y a ti "esto es un hook, respeta sus reglas".</p>
+</blockquote>
+<hr />
+<h2 id="4-renderizado-como-react-dibuja">4. Renderizado: como React dibuja</h2>
+<p>Estas palabras describen <strong>el acto de pintar</strong> la interfaz.</p>
+<blockquote class="def">
+<h3 id="que-significa-renderizar-render">🟦 ¿Que significa? — <em>Renderizar (render)</em></h3>
+<p>Es el proceso por el que React ejecuta tu componente y produce el JSX que se vera en pantalla. Sirve para convertir tus datos en interfaz. Cada vez que cambia el estado o las props, React <strong>vuelve a renderizar</strong> ese componente.</p>
+<h3 id="que-significa-re-render-re-renderizado">🟦 ¿Que significa? — <em>Re-render (re-renderizado)</em></h3>
+<p>Es cuando React vuelve a ejecutar un componente porque algo de lo que depende cambio. Sirve para mantener la pantalla sincronizada con los datos. Si tocas un habito en RachaSimple, su tarjeta hace re-render para mostrar el nuevo estado.</p>
+<h3 id="que-significa-renderizado-condicional">🟦 ¿Que significa? — <em>Renderizado condicional</em></h3>
+<p>Es mostrar una cosa u otra segun una condicion: <code>{cargando ? &lt;Spinner/&gt; : &lt;Lista/&gt;}</code>. Sirve para pantallas que cambian segun el momento (cargando, vacio, con datos, error). En RachaSimple lo ves cuando muestra un mensaje de "sin habitos" o la lista.</p>
+<h3 id="que-significa-lista-renderizar-listas">🟦 ¿Que significa? — <em>Lista (renderizar listas)</em></h3>
+<p>Es pintar muchos elementos a partir de un array con <code>.map()</code>: <code>habits.map(h =&gt; &lt;HabitCard ... /&gt;)</code>. Sirve para mostrar colecciones (habitos, proyectos, tareas). En Faro, la cuadricula de proyectos se arma mapeando un array a muchos <code>project-card</code>.</p>
+<h3 id="que-significa-key-clave">🟦 ¿Que significa? — <em>key (clave)</em></h3>
+<p>Es un identificador unico que pones en cada elemento de una lista: <code>&lt;HabitCard key={h.id} /&gt;</code>. Sirve para que React sepa cual es cual y actualice solo lo que cambio. Usa un <code>id</code> real, nunca el indice del array si la lista puede reordenarse.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>El error de <code>key</code> mas comun es usar el indice (<code>map((x, i) =&gt; ... key={i})</code>). Funciona "de milagro" hasta que reordenas, insertas o borras elementos en medio: ahi React se confunde y mezcla estados. Si tus datos tienen <code>id</code>, usa el <code>id</code>.</p>
+</blockquote>
+<pre><code class="language-tsx">// Lista + key + renderizado condicional juntos (estilo RachaSimple)
+{habits.length === 0 ? (
+  &lt;p&gt;Aun no tienes habitos.&lt;/p&gt;
+) : (
+  habits.map((h) =&gt; &lt;HabitCard key={h.id} habit={h} /&gt;)
+)}
+</code></pre>
+<hr />
+<h2 id="5-eventos-formularios-y-componentes-controlados">5. Eventos, formularios y componentes controlados</h2>
+<p>Aqui es donde el usuario <strong>interactua</strong> con tu app.</p>
+<blockquote class="def">
+<h3 id="que-significa-evento">🟦 ¿Que significa? — <em>Evento</em></h3>
+<p>Es algo que ocurre en la interfaz: un clic, una tecla, un envio de formulario. Sirve para reaccionar a lo que hace el usuario. En React lo manejas con props como <code>onClick={...}</code> u <code>onSubmit={...}</code>.</p>
+<h3 id="que-significa-manejador-handler">🟦 ¿Que significa? — <em>Manejador (handler)</em></h3>
+<p>Es la funcion que respondes a un evento, normalmente nombrada <code>handleAlgo</code>: <code>onClick={handleSave}</code>. Sirve para decir "cuando pase esto, haz aquello". En RachaSimple, marcar un habito dispara un handler que actualiza el estado.</p>
+<h3 id="que-significa-componente-controlado">🟦 ¿Que significa? — <em>Componente controlado</em></h3>
+<p>Es un input cuyo valor lo manda <strong>React</strong> (vive en estado) y no el navegador: <code>&lt;input value={texto} onChange={...} /&gt;</code>. Sirve para que tu codigo sea la unica fuente de verdad del formulario. Los formularios de RachaSimple usan inputs controlados.</p>
+<h3 id="que-significa-componente-no-controlado">🟦 ¿Que significa? — <em>Componente no controlado</em></h3>
+<p>Es lo contrario: el input guarda su propio valor en el DOM y tu lo lees solo cuando lo necesitas (con una ref). Sirve para formularios simples sin reaccion en cada tecla. En React moderno se usa menos; lo normal es controlado.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En un formulario de RachaSimple (por ejemplo crear un habito), el <code>value</code> del input viene de un <code>useState</code> y el <code>onChange</code> llama a su <code>setEstado</code>. Ese par <code>value</code> + <code>onChange</code> es la firma de un <strong>componente controlado</strong>: si quitas el <code>onChange</code>, el input se queda "congelado".</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Regla de oro de formularios: <strong>un trozo de estado por campo</strong> (o un objeto con todos los campos). Si el input no se actualiza al escribir, casi siempre es porque pusiste <code>value</code> pero olvidaste el <code>onChange</code>.</p>
+</blockquote>
+<hr />
+<h2 id="6-compartir-datos-contexto-y-prop-drilling">6. Compartir datos: contexto y prop drilling</h2>
+<p>Cuando un dato lo necesitan muchos componentes lejanos, entran estos terminos.</p>
+<blockquote class="def">
+<h3 id="que-significa-prop-drilling">🟦 ¿Que significa? — <em>Prop drilling</em></h3>
+<p>Es pasar una prop de padre a hijo a nieto a bisnieto solo para que llegue al fondo, aunque los del medio no la usen. "Drilling" = taladrar capa tras capa. Es una molestia, no un error: el contexto suele ser la cura.</p>
+<h3 id="que-significa-contexto-context">🟦 ¿Que significa? — <em>Contexto (Context)</em></h3>
+<p>Es un mecanismo de React para compartir un dato con <strong>todos</strong> los componentes de un arbol sin pasarlo por props uno a uno. Sirve para datos globales: usuario logueado, tema, idioma. En RachaSimple, la sesion del usuario (Supabase Auth) encaja perfecto en un contexto.</p>
+<h3 id="que-significa-provider-proveedor">🟦 ¿Que significa? — <em>Provider (proveedor)</em></h3>
+<p>Es el componente que <strong>envuelve</strong> una parte del arbol y reparte el valor del contexto hacia abajo: <code>&lt;AuthContext.Provider value={...}&gt;</code>. Sirve para definir desde donde y con que valor esta disponible el contexto. Suele ir cerca de la raiz de la app.</p>
+<h3 id="que-significa-usecontext">🟦 ¿Que significa? — <em>useContext</em></h3>
+<p>Es el hook para <strong>leer</strong> un contexto desde cualquier componente de adentro: <code>const { user } = useContext(AuthContext)</code>. Sirve para consumir el dato global sin recibirlo por props. Es la otra mitad del Provider.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>No metas <strong>todo</strong> en contexto por miedo al prop drilling. Pasar una prop uno o dos niveles esta perfectamente bien. El contexto brilla cuando el dato es de verdad global y profundo (sesion, tema). Para datos del servidor, mejor TanStack Query (seccion siguiente).</p>
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>En RachaSimple, busca un <code>createContext</code> y su <code>Provider</code> cerca de <code>App.tsx</code>. Ese patron (crear contexto + envolver + leer con <code>useContext</code>) es como la app sabe en cualquier pantalla quien es el usuario sin arrastrarlo por props.</p>
+</blockquote>
+<hr />
+<h2 id="7-datos-del-servidor-tanstack-query">7. Datos del servidor: TanStack Query</h2>
+<p>Cuando los datos viven en una base de datos (Supabase), no los manejas como estado normal.</p>
+<blockquote class="def">
+<h3 id="que-significa-tanstack-query-react-query">🟦 ¿Que significa? — <em>TanStack Query (React Query)</em></h3>
+<p>Es una libreria que gestiona los datos que vienen del servidor: los pide, los guarda en cache, los refresca y conoce los estados de carga y error. Sirve para no escribir a mano toda la fontaneria de pedir datos. RachaSimple la usa con Supabase.</p>
+<h3 id="que-significa-usequery">🟦 ¿Que significa? — <em>useQuery</em></h3>
+<p>Es el hook de TanStack Query para <strong>leer</strong> datos del servidor. Le das una clave y una funcion que pide los datos, y te devuelve <code>data</code>, <code>isLoading</code>, <code>error</code>. En RachaSimple, cargar la lista de habitos del usuario es un <code>useQuery</code>.</p>
+<h3 id="que-significa-usemutation">🟦 ¿Que significa? — <em>useMutation</em></h3>
+<p>Es el hook para <strong>cambiar</strong> datos en el servidor (crear, editar, borrar). A diferencia de <code>useQuery</code>, no se dispara solo: tu lo llamas cuando el usuario actua. En RachaSimple, marcar un habito como hecho seria una <code>useMutation</code>.</p>
+<h3 id="que-significa-cache-cache-de-datos">🟦 ¿Que significa? — <em>Cache (cache de datos)</em></h3>
+<p>Es la copia en memoria que TanStack Query guarda de lo ya pedido, para no volver a pedirlo cada vez. Sirve para que la app se sienta instantanea. Si vuelves a una pantalla ya visitada, los datos aparecen al instante desde la cache.</p>
+<h3 id="que-significa-querykey-clave-de-consulta">🟦 ¿Que significa? — <em>queryKey (clave de consulta)</em></h3>
+<p>Es la etiqueta unica que identifica cada consulta en la cache: <code>['habits', userId]</code>. Sirve para que TanStack Query sepa que es cada cosa y cuando refrescarla. Dos componentes con la misma <code>queryKey</code> comparten los mismos datos.</p>
+<h3 id="que-significa-invalidar-invalidate">🟦 ¿Que significa? — <em>Invalidar (invalidate)</em></h3>
+<p>Es marcar una consulta como "vieja" para que TanStack Query la vuelva a pedir. Sirve para refrescar la pantalla tras un cambio: tras marcar un habito, invalidas <code>['habits']</code> y la lista se actualiza sola.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No mezcles <code>useState</code> con datos del servidor. Guardar la lista de habitos en <code>useState</code> y sincronizarla a mano es una fuente infinita de bugs (datos desincronizados, cargas duplicadas). Para datos del servidor: TanStack Query. Para estado de la UI (un input, un modal abierto): <code>useState</code>.</p>
+</blockquote>
+<hr />
+<h2 id="8-rendimiento-memo-usememo-usecallback">8. Rendimiento: memo, useMemo, useCallback</h2>
+<p>Estos tres existen para que React <strong>no trabaje de mas</strong>. Son optimizaciones, no obligaciones.</p>
+<blockquote class="def">
+<h3 id="que-significa-memo-reactmemo">🟦 ¿Que significa? — <em>memo (React.memo)</em></h3>
+<p>Es una funcion que envuelve un componente para que <strong>no se re-renderice</strong> si sus props no cambiaron. Sirve para evitar redibujos inutiles en componentes pesados. Se usa con medida: solo donde de verdad notas lentitud.</p>
+<h3 id="que-significa-usememo">🟦 ¿Que significa? — <em>useMemo</em></h3>
+<p>Es el hook que <strong>recuerda un valor calculado</strong> y solo lo recalcula si cambian sus dependencias: <code>useMemo(() =&gt; calculoCaro(x), [x])</code>. Sirve para no repetir calculos costosos en cada render. Memoiza un <strong>valor</strong>.</p>
+<h3 id="que-significa-usecallback">🟦 ¿Que significa? — <em>useCallback</em></h3>
+<p>Es el hook que <strong>recuerda una funcion</strong> para que no se cree nueva en cada render: <code>useCallback(fn, [deps])</code>. Sirve para que componentes con <code>memo</code> no se re-rendericen por recibir "otra" funcion cada vez. Memoiza una <strong>funcion</strong>.</p>
+</blockquote>
+<p>La forma facil de no confundir <code>useMemo</code> y <code>useCallback</code>, segun Bit:</p>
+<ul>
+<li><code>useMemo</code> guarda <strong>lo que una funcion devuelve</strong> (un valor).</li>
+<li><code>useCallback</code> guarda <strong>la funcion misma</strong>.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-memoizar">🟦 ¿Que significa? — <em>Memoizar</em></h3>
+<p>Es guardar el resultado de un calculo para reutilizarlo en vez de recalcularlo. Sirve para ahorrar trabajo. Es la idea detras de <code>memo</code>, <code>useMemo</code> y <code>useCallback</code>.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>No salpiques tu codigo de <code>useMemo</code> y <code>useCallback</code> "por si acaso". Memoizar tambien cuesta (memoria y complejidad). La regla: primero escribe codigo claro; optimiza solo cuando midas un problema real. Optimizar de forma prematura ensucia mas de lo que ayuda.</p>
+<h3 id="en-tu-codigo_4">🔎 En tu codigo</h3>
+<p>Ni RachaSimple ni Faro estan llenos de estos hooks, y eso es <strong>buena señal</strong>: significa que el rendimiento por defecto de React les alcanza. Cuando los veas, estaran en una lista grande o un calculo pesado concreto, no por todos lados.</p>
+</blockquote>
+<hr />
+<h2 id="9-rutas-estructura-y-stacks">9. Rutas, estructura y stacks</h2>
+<p>Como se organiza una app de varias pantallas y con que herramientas.</p>
+<blockquote class="def">
+<h3 id="que-significa-enrutado-routing">🟦 ¿Que significa? — <em>Enrutado (routing)</em></h3>
+<p>Es el mecanismo que decide <strong>que pantalla mostrar segun la URL</strong>. Sirve para tener varias paginas navegables con boton de atras y enlaces. RachaSimple lo hace con React Router; Faro con el enrutado de Next.js.</p>
+<h3 id="que-significa-react-router">🟦 ¿Que significa? — <em>React Router</em></h3>
+<p>Es la libreria que añade enrutado a una app React de Vite. Le declaras "esta ruta muestra este componente". En RachaSimple es <code>react-router-dom</code>, con <code>BrowserRouter</code>, <code>Routes</code> y <code>Route</code>.</p>
+<h3 id="que-significa-componente-de-pagina">🟦 ¿Que significa? — <em>Componente de pagina</em></h3>
+<p>Es el componente que representa una <strong>pantalla completa</strong> a la que se llega por una URL. En RachaSimple viven en <code>src/pages/</code> (<code>Today.tsx</code>, <code>Login.tsx</code>); en Faro, en carpetas dentro de <code>app/</code>.</p>
+<h3 id="que-significa-vite">🟦 ¿Que significa? — <em>Vite</em></h3>
+<p>Es la herramienta que arranca y empaqueta una app React rapido. <code>npm run dev</code> en RachaSimple lo levanta Vite. No decide rutas: solo construye y sirve.</p>
+<h3 id="que-significa-nextjs">🟦 ¿Que significa? — <em>Next.js</em></h3>
+<p>Es un framework sobre React que trae enrutado, renderizado en servidor y mas, ya integrado. Faro esta construido con Next.js 15 y React 19. Las pantallas se definen por la estructura de carpetas en <code>app/</code>.</p>
+<h3 id="que-significa-server-component-client-component">🟦 ¿Que significa? — <em>Server Component / Client Component</em></h3>
+<p>En Next.js, un <strong>Server Component</strong> se ejecuta en el servidor (ideal para leer datos con secretos); un <strong>Client Component</strong> corre en el navegador (lleva <code>'use client'</code> y puede usar hooks de estado). Faro mezcla ambos: tokens y claves solo en el servidor.</p>
+<h3 id="que-significa-typescript">🟦 ¿Que significa? — <em>TypeScript</em></h3>
+<p>Es JavaScript con tipos (lo viste en el Modulo 05). Sirve para cazar errores antes de ejecutar. Tanto RachaSimple como Faro son 100% TypeScript: cada <code>.tsx</code> tipa sus props y su estado.</p>
+<h3 id="que-significa-tailwind-css">🟦 ¿Que significa? — <em>Tailwind CSS</em></h3>
+<p>Es una forma de dar estilos escribiendo clases utilitarias directamente en el JSX (<code>className="flex gap-2"</code>). Sirve para maquetar rapido sin archivos CSS aparte. RachaSimple y Faro usan Tailwind.</p>
+<h3 id="que-significa-shadcnui">🟦 ¿Que significa? — <em>shadcn/ui</em></h3>
+<p>Es una coleccion de componentes de UI ya hechos (botones, tarjetas, dialogos) que copias a tu proyecto y personalizas. Sirve para no reinventar la rueda visual. RachaSimple lo usa sobre Tailwind.</p>
+<h3 id="que-significa-supabase">🟦 ¿Que significa? — <em>Supabase</em></h3>
+<p>Es una plataforma que da base de datos, autenticacion (Auth) y mas, accesible desde el cliente. Sirve como "backend" sin montar servidor propio. RachaSimple y Faro guardan datos y sesiones de usuario en Supabase.</p>
+<h3 id="en-tu-codigo_5">🔎 En tu codigo</h3>
+<p>Compara el <code>package.json</code> de RachaSimple (veras <code>vite</code>, <code>react-router-dom</code>, <code>@tanstack/react-query</code>, <code>tailwindcss</code>, <code>@supabase/supabase-js</code>) con el de Faro (veras <code>next</code>, <code>react@19</code>, <code>openai</code>). Mismo lenguaje (React + TypeScript), dos stacks distintos. Saber leer un <code>package.json</code> es saber leer el ADN de un proyecto.</p>
+</blockquote>
+<hr />
+<h2 id="10-mapa-mental-de-react">10. Mapa mental de React</h2>
+<p>Bit dibujo este mapa para que veas como encaja todo. Leelo de arriba (lo basico) hacia abajo (lo avanzado):</p>
+<pre><code class="language-text">                          COMPONENTE
+                     (funcion que devuelve JSX)
+                              │
+          ┌───────────────────┼───────────────────┐
+        PROPS               ESTADO               HOOKS
+   (entran de fuera)   (memoria interna)    (funciones use...)
+                              │              ┌──────┼──────┐
+                          useState      useEffect  useContext  custom hooks
+
+   RENDERIZADO ── al cambiar estado/props → RE-RENDER
+       ├── condicional ({cond ? A : B})
+       ├── listas (.map) + key
+       └── eventos (onClick/onSubmit) → handlers → cambian estado
+
+   DATOS DEL SERVIDOR ── TanStack Query
+       └── useQuery (leer) · useMutation (escribir) · cache · queryKey · invalidar
+
+   RENDIMIENTO ── memo · useMemo (valor) · useCallback (funcion)
+   ESTRUCTURA  ── enrutado (React Router / Next.js) · paginas vs UI
+
+   STACKS REALES
+       ├── RachaSimple: Vite + React 18 + TS + Tailwind + shadcn/ui + Supabase + TanStack Query
+       └── Faro:        Next.js 15 + React 19 + TS + Tailwind + Supabase + OpenAI
+</code></pre>
+<p>La idea central: <strong>todo gira alrededor del componente</strong>. Las props lo alimentan, el estado le da memoria, los hooks le dan poderes, el renderizado lo dibuja, los eventos lo cambian, y las herramientas (Query, Router, los stacks) lo conectan al mundo real.</p>
+<hr />
+<h2 id="11-repaso-final-del-modulo">11. Repaso final del modulo</h2>
+<p>Cierra los ojos un segundo (despues de leer esto) y recuerda el viaje:</p>
+<ol>
+<li><strong>Empezaste</strong> entendiendo que React arma interfaces por <strong>componentes</strong> que devuelven <strong>JSX</strong>.</li>
+<li><strong>Aprendiste</strong> a alimentarlos con <strong>props</strong> y a darles memoria con <strong>estado</strong> (<code>useState</code>).</li>
+<li><strong>Descubriste los hooks</strong>: <code>useEffect</code> para efectos, <strong>custom hooks</strong> para reutilizar logica.</li>
+<li><strong>Pintaste listas</strong> con <code>.map</code> y <code>key</code>, y <strong>renderizado condicional</strong> para distintos momentos.</li>
+<li><strong>Conectaste al usuario</strong> con <strong>eventos</strong>, <strong>handlers</strong> y <strong>componentes controlados</strong> en formularios.</li>
+<li><strong>Compartiste datos</strong> evitando <strong>prop drilling</strong>: con <strong>contexto</strong> (<code>useContext</code>, <code>Provider</code>).</li>
+<li><strong>Trajiste datos reales</strong> con <strong>TanStack Query</strong> (<code>useQuery</code>, <code>useMutation</code>, cache, invalidar) sobre <strong>Supabase</strong>.</li>
+<li><strong>Cuidaste el rendimiento</strong> con <code>memo</code>, <code>useMemo</code> y <code>useCallback</code>, sin abusar.</li>
+<li><strong>Organizaste la app</strong> en pantallas con <strong>enrutado</strong> (React Router en RachaSimple, Next.js en Faro).</li>
+</ol>
+<p>Todo eso aplicado a <strong>proyectos reales</strong>: RachaSimple (una app de habitos) y Faro (un organizador de proyectos). No fueron ejemplos de juguete: son repos de verdad con su <code>package.json</code>, sus <code>.tsx</code> y sus stacks.</p>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Si tuvieras que quedarte con <strong>una sola idea</strong> de todo el modulo: <em>los datos fluyen hacia abajo (props) y los eventos suben (handlers); cuando el estado cambia, React redibuja</em>. Casi todo React es una variacion de esa frase.</p>
+</blockquote>
+<hr />
+<h2 id="12-como-sigue-modulo-07-bases-de-datos-y-sql">12. Como sigue: Modulo 07 — Bases de datos y SQL</h2>
+<p>A lo largo del modulo dijimos muchas veces "los datos vienen de Supabase" y "esto se guarda en la base de datos", pero siempre por encima. <strong>Nunca abrimos esa caja.</strong> Eso es justo el Modulo 07.</p>
+<p>Hasta ahora, cuando RachaSimple cargaba tus habitos o Faro listaba tus proyectos, alguien al otro lado guardaba esos datos en <strong>tablas</strong>. Aprenderas:</p>
+<ul>
+<li><strong>Que es una base de datos relacional</strong> y por que los datos viven en tablas con filas y columnas.</li>
+<li><strong>SQL</strong>, el lenguaje para hablarle a la base de datos: <code>SELECT</code> para leer, <code>INSERT</code> para crear, <code>UPDATE</code> para cambiar, <code>DELETE</code> para borrar. Vas a reconocer enseguida el parecido con <code>useQuery</code> (leer) y <code>useMutation</code> (escribir): React pide, SQL responde.</li>
+<li><strong>Relaciones</strong> entre tablas: un usuario tiene muchos habitos; un proyecto tiene muchas fases. Eso es la "R" de relacional.</li>
+<li><strong>Como Supabase</strong> (que ya usaste desde React) es por dentro una base de datos <strong>PostgreSQL</strong> con reglas de seguridad (RLS) para que cada usuario solo vea lo suyo.</li>
+</ul>
+<p>Cuando termines el Modulo 07, vas a entender <strong>las dos orillas</strong>: el frente (React, este modulo) y el fondo (la base de datos). Y empezaras a ver que una app no es magia, sino dos mundos conversando.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_6">🔎 En tu codigo</h3>
+<p>Antes de empezar el Modulo 07, echa un ultimo vistazo a RachaSimple y Faro buscando las llamadas a Supabase (algo como <code>supabase.from('habits').select()</code>). Esa palabra <code>select</code> no es casualidad: es <strong>SQL disfrazado</strong>. En el proximo modulo le quitamos el disfraz.</p>
+</blockquote>
+<p>Bit guarda sus fichas, se estira (los ajolotes tambien se estiran) y te espera en el Modulo 07 con una tabla bajo el brazo. Buen trabajo: terminaste React.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Distingo <strong>props</strong> (entran de fuera, solo lectura) de <strong>estado</strong> (memoria interna que cambia).</li>
+<li>[ ] Explico que es un <strong>componente</strong>, <strong>JSX</strong> y un <strong>hook</strong> en una frase cada uno.</li>
+<li>[ ] Se para que sirven <code>useState</code> y <code>useEffect</code>, y que son las <strong>dependencias</strong> de un efecto.</li>
+<li>[ ] Entiendo <strong>renderizado condicional</strong>, listas con <code>.map</code> y por que cada item necesita <strong>key</strong>.</li>
+<li>[ ] Reconozco un <strong>componente controlado</strong> por su par <code>value</code> + <code>onChange</code>.</li>
+<li>[ ] Se que problema resuelve el <strong>contexto</strong> frente al <strong>prop drilling</strong>.</li>
+<li>[ ] Distingo <code>useQuery</code> (leer) de <code>useMutation</code> (escribir) en <strong>TanStack Query</strong>.</li>
+<li>[ ] No confundo <code>useMemo</code> (memoiza un <strong>valor</strong>) con <code>useCallback</code> (memoiza una <strong>funcion</strong>).</li>
+<li>[ ] Se que el <strong>enrutado</strong> elige pantalla segun la URL (React Router / Next.js).</li>
+<li>[ ] Puedo nombrar el stack de <strong>RachaSimple</strong> y el de <strong>Faro</strong> sin mirar.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Sin computadora.</strong> Tapa las definiciones de la seccion 11 y, leyendo solo el termino, explica en voz alta: <em>componente, props, estado, hook, key</em>. Marca cuales te costaron y reléelos.</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> Dibuja en una hoja tu propia version del mapa mental de la seccion 10, pero de memoria. Compara con el del capitulo: ¿que ramas olvidaste? Esas son tus puntos debiles.</p>
+</li>
+<li>
+<p>💻 <strong>En RachaSimple.</strong> Abre <code>package.json</code> y haz una lista de cada dependencia que reconozcas del glosario (<code>react</code>, <code>react-router-dom</code>, <code>@tanstack/react-query</code>, <code>tailwindcss</code>, <code>@supabase/supabase-js</code>). Escribe al lado de cada una, en una linea, que hace.</p>
+</li>
+<li>
+<p>💻 <strong>En RachaSimple.</strong> Abre <code>src/components/HabitCard.tsx</code> (o cualquier componente). Señala con un comentario <code>// props</code> lo que llega de fuera y <code>// estado</code> si hay un <code>useState</code>. Confirma que entiendes la diferencia mirando codigo real.</p>
+</li>
+<li>
+<p>💻 <strong>En Faro.</strong> Abre el <code>package.json</code> y compara con el de RachaSimple. Escribe tres diferencias de stack (por ejemplo: Faro usa <code>next</code> y <code>openai</code>; RachaSimple usa <code>vite</code> y <code>react-router-dom</code>). ¿Que tienen en comun?</p>
+</li>
+<li>
+<p>💻 <strong>Reto de busqueda.</strong> En RachaSimple o Faro, busca con tu editor una llamada a Supabase que contenga <code>.select(</code> o <code>.from(</code>. Anota el archivo y la linea. Guardala: la vas a entender del todo en el Modulo 07.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
