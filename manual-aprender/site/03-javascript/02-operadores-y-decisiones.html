@@ -18,17 +18,21 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-02-operadores-y-decisiones">Capítulo 02 — Operadores y decisiones</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Ya guardas datos en variables. Ahora vas a <strong>operar</strong> con ellos (sumar, comparar) y a hacer
-que tu programa <strong>tome decisiones</strong> según el resultado. Aquí aparece el segundo ingrediente
-del Módulo 00: las decisiones (<code>if/else</code>).</p>
+<p>Ya sabes guardar datos en variables. El siguiente paso es <strong>operar</strong> con ellos (sumarlos,
+compararlos) y hacer que tu programa <strong>tome decisiones</strong> según lo que salga. Aquí entra en
+juego el segundo ingrediente del Módulo 00: las decisiones (<code>if/else</code>).</p>
 </blockquote>
 <hr />
 <h2 id="1-operadores-aritmeticos-matematicas">1. Operadores aritméticos (matemáticas)</h2>
 <blockquote class="def">
 <h3 id="que-significa-operador">🟦 ¿Qué significa? — <em>Operador</em></h3>
-<p>Un <strong>operador</strong> es un símbolo que realiza una operación sobre uno o más valores. Los
-aritméticos son los de matemáticas:
+<p>Un <strong>operador</strong> es un símbolo que hace una operación con uno o más valores. Los aritméticos
+son los de toda la vida, los de matemáticas:
 | Operador | Operación | Ejemplo | Resultado |
 |---|---|---|---|
 | <code>+</code> | suma | <code>5 + 3</code> | <code>8</code> |
@@ -38,34 +42,35 @@ aritméticos son los de matemáticas:
 | <code>%</code> | <strong>resto</strong> (módulo) | <code>7 % 3</code> | <code>1</code> |
 | <code>**</code> | potencia | <code>2 ** 3</code> | <code>8</code> |</p>
 <h3 id="que-significa-el-operador-resto-modulo">🟦 ¿Qué significa? — <em>El operador resto <code>%</code> (módulo)</em></h3>
-<p><code>%</code> da <strong>el sobrante</strong> de una división. <code>7 % 3</code> es 1 porque 7 entre 3 da 2 y sobra 1. Parece
-raro, pero es utilísimo: por ejemplo, <strong>un número es par si <code>numero % 2 === 0</code></strong> (no sobra
-nada al dividir entre 2). Lo usarás más de lo que crees.</p>
+<p><code>%</code> te da <strong>lo que sobra</strong> de una división. <code>7 % 3</code> es 1 porque 7 entre 3 da 2 y sobra 1. Al
+principio suena rebuscado, pero acaba siendo de los más prácticos: por ejemplo, <strong>un número es
+par si <code>numero % 2 === 0</code></strong> (al dividirlo entre 2 no sobra nada). Lo vas a acabar usando más de
+lo que ahora imaginas.</p>
 <h3 id="cuidado-con-texto-concatenacion">⚠️ Cuidado — <code>+</code> con texto: concatenación</h3>
-<p>Si usas <code>+</code> entre <strong>textos</strong> (strings), no suma: los <strong>pega</strong> (concatena).
+<p>Si pones <code>+</code> entre <strong>textos</strong> (strings), no suma: los <strong>pega</strong> uno detrás de otro (concatena).
 <code>javascript
 "Hola " + "Edwar"   // "Hola Edwar"
 5 + 3               // 8
 "5" + 3             // "53"  ← ¡ojo! el "5" es texto, así que pega</code>
-Por eso conviene usar <strong>template strings</strong> (<code>`...${}`</code>) del capítulo anterior, que evitan
-esta confusión.</p>
+Justo por esto vale la pena usar las <strong>template strings</strong> (<code>`...${}`</code>) del capítulo
+anterior: te ahorran este lío.</p>
 </blockquote>
 <hr />
 <h2 id="2-variables-que-cambian-operadores-de-asignacion">2. Variables que cambian: operadores de asignación</h2>
 <blockquote class="def">
 <h3 id="que-significa-asignacion-compuesta">🟦 ¿Qué significa? — <em>Asignación compuesta</em></h3>
-<p>Atajos para modificar una variable usando su propio valor:
+<p>Son atajos para modificar una variable a partir de su propio valor:
 <code>javascript
 let total = 10;
 total += 5;   // igual que: total = total + 5  → 15
 total -= 3;   // 12
 total *= 2;   // 24</code>
-<code>+=</code> se lee "súmale y guarda". Muy común en contadores.</p>
+<code>+=</code> se lee algo así como "súmale esto y guárdalo". Aparece mucho en contadores.</p>
 </blockquote>
 <hr />
 <h2 id="3-comparaciones-preguntas-que-dan-true-o-false">3. Comparaciones: preguntas que dan true o false</h2>
-<p>Para decidir, primero necesitas <strong>comparar</strong>. Las comparaciones devuelven un <strong>booleano</strong>
-(<code>true</code>/<code>false</code>).</p>
+<p>Antes de decidir algo, casi siempre necesitas <strong>comparar</strong> dos valores. Y toda comparación
+devuelve un <strong>booleano</strong>: <code>true</code> o <code>false</code>, sí o no.</p>
 <blockquote class="def">
 <h3 id="que-significa-operadores-de-comparacion">🟦 ¿Qué significa? — <em>Operadores de comparación</em></h3>
 <table>
@@ -117,19 +122,21 @@ total *= 2;   // 24</code>
 </tbody>
 </table>
 <h3 id="cuidado-usa-no">⚠️ Cuidado — Usa <code>===</code>, no <code>==</code></h3>
-<p>JavaScript tiene dos formas de comparar igualdad:
-- <code>===</code> (tres iguales) compara <strong>valor y tipo</strong>. Es la correcta: <code>5 === "5"</code> es <code>false</code>
-  (número vs. texto).
-- <code>==</code> (dos iguales) compara de forma "laxa" y hace conversiones raras: <code>5 == "5"</code> es <code>true</code>.
-  Esto causa errores difíciles. <strong>Usa siempre <code>===</code> y <code>!==</code>.</strong> (Recuerda además que un solo
-  <code>=</code> es asignar, no comparar.) Tres niveles: <code>=</code> asigna, <code>==</code> compara mal, <code>===</code> compara bien.</p>
+<p>JavaScript tiene dos maneras de comparar igualdad, y conviene tenerlo claro desde ya:
+- <code>===</code> (tres iguales) compara <strong>valor y tipo</strong>. Es la que quieres: <code>5 === "5"</code> da <code>false</code>
+  (un número no es lo mismo que un texto).
+- <code>==</code> (dos iguales) compara de forma "laxa" y va convirtiendo cosas por su cuenta: <code>5 == "5"</code>
+  da <code>true</code>. Ese tipo de magia provoca errores difíciles de rastrear. <strong>Quédate siempre con
+  <code>===</code> y <code>!==</code>.</strong> Y recuerda que un solo <code>=</code> no compara: asigna. Resumiendo los tres niveles:
+  <code>=</code> asigna, <code>==</code> compara mal, <code>===</code> compara bien.</p>
 </blockquote>
 <hr />
 <h2 id="4-la-decision-if-else-if-else">4. La decisión: <code>if</code>, <code>else if</code>, <code>else</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-la-estructura-if-si">🟦 ¿Qué significa? — <em>La estructura <code>if</code> (si)</em></h3>
-<p><code>if</code> ejecuta un bloque de código <strong>solo si</strong> una condición es verdadera. Si no, puedes dar
-alternativas con <code>else if</code> (si no, ¿y si...?) y <code>else</code> (si no, en cualquier otro caso):
+<p><code>if</code> ejecuta un bloque de código <strong>solo si</strong> una condición se cumple. Si no se cumple, puedes
+ofrecer alternativas con <code>else if</code> (si no, ¿y si pasa esto otro?) y <code>else</code> (si no, en cualquier
+otro caso):
 ```javascript
 const edad = 20;</p>
 <p>if (edad &gt;= 18) {
@@ -138,10 +145,11 @@ const edad = 20;</p>
   console.log("No puede entrar");
 }
 <code>``
-La condición va entre **paréntesis**</code>( )<code>y el código a ejecutar entre **llaves**</code>{ }`.
-¿Te suena? Es exactamente el algoritmo del evento del Módulo 00, ahora en código real.</p>
+La condición va entre **paréntesis**</code>( )<code>y el código que se ejecuta entre **llaves**</code>{ }`.
+¿Te suena de algo? Es el mismo algoritmo del evento que viste en el Módulo 00, pero ahora
+escrito en código de verdad.</p>
 </blockquote>
-<p>Con varias ramas:</p>
+<p>Cuando hay varias ramas posibles:</p>
 <pre><code class="language-javascript">const nota = 85;
 
 if (nota &gt;= 90) {
@@ -155,19 +163,19 @@ if (nota &gt;= 90) {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-como-se-evalua">💡 Tip — Cómo se evalúa</h3>
-<p>JavaScript revisa las condiciones <strong>en orden, de arriba a abajo</strong>, y ejecuta el <strong>primer</strong>
-bloque cuya condición sea verdadera; luego se salta el resto. Por eso el orden importa: pon
-las condiciones más específicas/altas primero.</p>
+<p>JavaScript va leyendo las condiciones <strong>en orden, de arriba abajo</strong>, ejecuta el <strong>primer</strong>
+bloque cuya condición se cumple y se salta todo lo demás. Por eso el orden no es un detalle:
+pon arriba las condiciones más específicas o más altas.</p>
 </blockquote>
 <hr />
 <h2 id="5-combinar-condiciones-operadores-logicos">5. Combinar condiciones: operadores lógicos</h2>
-<p>A veces una decisión depende de <strong>varias</strong> condiciones a la vez.</p>
+<p>Muchas veces una decisión no depende de una sola cosa, sino de <strong>varias</strong> a la vez.</p>
 <blockquote class="def">
 <h3 id="que-significa-operadores-logicos">🟦 ¿Qué significa? — <em>Operadores lógicos <code>&amp;&amp;</code>, <code>||</code>, <code>!</code></em></h3>
 <ul>
-<li><code>&amp;&amp;</code> (<strong>Y</strong>): verdadero solo si <strong>ambas</strong> condiciones lo son.</li>
-<li><code>||</code> (<strong>O</strong>): verdadero si <strong>al menos una</strong> lo es.</li>
-<li><code>!</code> (<strong>NO</strong>): invierte (de <code>true</code> a <code>false</code> y viceversa).
+<li><code>&amp;&amp;</code> (<strong>Y</strong>): es verdadero solo si <strong>las dos</strong> condiciones lo son.</li>
+<li><code>||</code> (<strong>O</strong>): es verdadero si <strong>al menos una</strong> lo es.</li>
+<li><code>!</code> (<strong>NO</strong>): da la vuelta al valor (de <code>true</code> a <code>false</code> y al revés).
 ```javascript
 const edad = 25;
 const tieneEntrada = true;</li>
@@ -180,10 +188,11 @@ const tieneEntrada = true;</li>
 }
 ```</p>
 <h3 id="que-significa-valores-verdaderos-y-falsos-truthyfalsy">🟦 ¿Qué significa? — <em>Valores "verdaderos" y "falsos" (truthy/falsy)</em></h3>
-<p>En una condición, JavaScript trata ciertos valores como falsos aunque no sean exactamente
-<code>false</code>: <code>0</code>, <code>""</code> (texto vacío), <code>null</code>, <code>undefined</code>. Los demás se consideran "verdaderos".
-Esto permite escribir <code>if (nombre)</code> para decir "si nombre tiene algo". Útil, pero por ahora
-sé explícito (<code>if (nombre !== "")</code>) hasta que te sientas cómodo.</p>
+<p>Dentro de una condición, JavaScript trata algunos valores como falsos aunque no sean
+exactamente <code>false</code>: el <code>0</code>, el <code>""</code> (texto vacío), <code>null</code> y <code>undefined</code>. Todo lo demás cuenta
+como "verdadero". Esto te permite escribir <code>if (nombre)</code> para preguntar "¿nombre tiene algo
+dentro?". Es cómodo, pero por ahora mejor sé explícito (<code>if (nombre !== "")</code>) hasta que te
+sientas a gusto con el truco.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

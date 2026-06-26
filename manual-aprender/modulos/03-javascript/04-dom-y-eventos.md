@@ -1,58 +1,65 @@
 # Capítulo 04 — El DOM y los eventos
 
-> Hasta ahora JavaScript hablaba con la consola. Ahora hará lo que de verdad importa en una web:
-> **cambiar la página en vivo** y **reaccionar a lo que hace el usuario** (clics, escritura). Aquí
-> es donde HTML, CSS y JavaScript por fin trabajan juntos.
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> Hasta ahora JavaScript solo conversaba con la consola. A partir de aquí empieza a hacer lo que
+> de verdad cuenta en una web: **cambiar la página mientras la miras** y **responder a lo que hace
+> quien la usa** (clics, escritura). Este es el punto donde HTML, CSS y JavaScript dejan de ir cada
+> uno por su lado y empiezan a trabajar en equipo.
 
 ---
 
 ## 1. Recordando el DOM
 
 > ### 🟦 ¿Qué significa? — *DOM (repaso del Módulo 01)*
-> El **DOM** (*Document Object Model*) es el **árbol** que el navegador construye a partir de tu
-> HTML, donde cada etiqueta es un "nodo". JavaScript puede **leer y modificar** ese árbol: cambiar
-> un texto, ocultar un elemento, añadir una clase de CSS, crear elementos nuevos. Cuando una web
-> "cambia sin recargar", es JavaScript manipulando el DOM.
+> El **DOM** (*Document Object Model*) es el **árbol** que el navegador arma a partir de tu HTML.
+> Cada etiqueta se convierte en un "nodo" de ese árbol. Y JavaScript puede **leerlo y modificarlo**
+> a su antojo: cambiar un texto, esconder un elemento, añadirle una clase de CSS o crear elementos
+> desde cero. Cada vez que ves una web que "cambia sin recargar", detrás hay JavaScript tocando el
+> DOM.
 
 ---
 
 ## 2. Seleccionar elementos: encontrar lo que quieres cambiar
 
-Antes de cambiar algo, hay que **agarrarlo**. Para eso se usan los selectores (¡los mismos de
-CSS!).
+Antes de cambiar algo, primero hay que **agarrarlo**. Para eso usamos los selectores, que son los
+mismos que ya conoces de CSS.
 
 > ### 🟦 ¿Qué significa? — *`document` y `querySelector`*
-> `document` representa toda la página. `document.querySelector("...")` **busca y devuelve el
-> primer** elemento que coincida con un selector CSS:
+> `document` es toda la página entera. `document.querySelector("...")` recorre esa página y te
+> **devuelve el primer** elemento que encaje con un selector CSS:
 > ```javascript
 > const titulo = document.querySelector("h1");        // el primer <h1>
 > const boton  = document.querySelector(".boton");    // el primer elemento con class="boton"
 > const menu   = document.querySelector("#menu");     // el elemento con id="menu"
 > ```
-> Para obtener **todos** los que coincidan (no solo el primero), se usa `querySelectorAll`, que
-> devuelve una lista.
+> Si lo que quieres son **todos** los elementos que coincidan, y no solo el primero, usas
+> `querySelectorAll`, que te entrega una lista con todos ellos.
 
 > ### 🔎 En tu código
-> Tu `tunal-digital/sitio-web/main.js` define unas funciones de atajo, `$` y `$$`, que son
-> exactamente `querySelector` y `querySelectorAll` con nombre corto. Es un truco común; ahora
-> sabes qué hacen por dentro.
+> En tu `tunal-digital/sitio-web/main.js` hay un par de funciones de atajo, `$` y `$$`, que no son
+> más que `querySelector` y `querySelectorAll` con un nombre corto. Es un truco que verás mucho por
+> ahí; ahora ya sabes qué hacen realmente por debajo.
 
 ---
 
 ## 3. Cambiar elementos: leer y modificar
 
-Una vez tienes el elemento en una variable, puedes cambiar sus propiedades.
+Cuando ya tienes el elemento guardado en una variable, puedes empezar a cambiarle sus propiedades.
 
 > ### 🟦 ¿Qué significa? — *`textContent` e `innerHTML`*
 > - `elemento.textContent` → lee o cambia el **texto** de un elemento.
-> - `elemento.innerHTML` → lee o cambia el **HTML interno** (puede incluir etiquetas).
+> - `elemento.innerHTML` → lee o cambia el **HTML interno** (o sea, puede llevar etiquetas dentro).
 > ```javascript
 > const titulo = document.querySelector("h1");
 > titulo.textContent = "¡Texto cambiado por JavaScript!";
 > ```
-> ⚠️ Prefiere `textContent` cuando solo metes texto: `innerHTML` con datos del usuario puede
-> abrir un agujero de seguridad (inyección de código). Por eso tu `main.js` tiene una función
-> `escHTML` para "limpiar" texto antes de mostrarlo.
+> ⚠️ Cuando solo vas a meter texto, quédate con `textContent`. Usar `innerHTML` con datos que
+> escribe el usuario puede abrirte un agujero de seguridad (alguien podría colar código). Por eso
+> tu `main.js` tiene una función `escHTML` que "limpia" el texto antes de mostrarlo.
 
 > ### 🟦 ¿Qué significa? — *Cambiar estilos y clases*
 > ```javascript
@@ -61,26 +68,28 @@ Una vez tienes el elemento en una variable, puedes cambiar sus propiedades.
 > elemento.classList.remove("oculto");       // quita una clase
 > elemento.classList.toggle("abierto");      // la pone si no está, la quita si está
 > ```
-> **`classList.toggle`** es oro: con una línea muestras/ocultas un menú. Así funciona el botón
-> del menú móvil de tu sitio: alterna una clase, y el CSS hace el resto.
+> **`classList.toggle`** vale su peso en oro: con una sola línea muestras u ocultas un menú. Así
+> funciona, ni más ni menos, el botón del menú móvil de tu sitio: alterna una clase y el CSS se
+> encarga del resto.
 
 > ### 💡 Tip — La división del trabajo
-> Fíjate en el patrón ideal: **JavaScript añade o quita una clase**, y **el CSS define cómo se
-> ve esa clase**. JS decide *cuándo*, CSS decide *cómo*. No metas diseño en el JavaScript: solo
-> cambia clases. Esto mantiene todo ordenado.
+> Fíjate en el patrón, porque es la forma limpia de hacerlo: **JavaScript añade o quita una clase**
+> y **el CSS decide cómo se ve esa clase**. JS dice *cuándo* pasa algo, CSS dice *cómo* se ve. No
+> metas el diseño dentro del JavaScript; deja que solo cambie clases. Así todo queda ordenado y no
+> se te mezclan las cosas.
 
 ---
 
 ## 4. Eventos: reaccionar al usuario
 
 > ### 🟦 ¿Qué significa? — *Evento*
-> Un **evento** es **algo que ocurre** en la página: un clic, mover el ratón, escribir en un
-> campo, enviar un formulario, cargar la página. JavaScript puede "escuchar" estos eventos y
-> ejecutar código cuando ocurren.
+> Un **evento** es **algo que pasa** en la página: un clic, el ratón moviéndose, alguien
+> escribiendo en un campo, un formulario que se envía, la página que termina de cargar. JavaScript
+> puede quedarse "a la escucha" de esos eventos y ejecutar código justo cuando ocurren.
 
 > ### 🟦 ¿Qué significa? — *`addEventListener`*
-> `elemento.addEventListener("evento", función)` dice: "cuando a este elemento le pase *evento*,
-> ejecuta *función*". Es la base de toda la interactividad.
+> `elemento.addEventListener("evento", función)` viene a decir: "cuando a este elemento le pase
+> *evento*, ejecuta *función*". Sobre esta idea se construye toda la interactividad.
 > ```javascript
 > const boton = document.querySelector(".boton");
 >
@@ -88,20 +97,20 @@ Una vez tienes el elemento en una variable, puedes cambiar sus propiedades.
 >   console.log("¡Me hicieron clic!");
 > });
 > ```
-> La función que pasas se llama **callback**: no se ejecuta ahora, sino **cuando ocurra** el
-> evento. Eventos comunes: `"click"`, `"input"` (al escribir), `"submit"` (al enviar formulario),
-> `"mouseover"` (al pasar el ratón).
+> A la función que le pasas se le llama **callback**: no corre en el momento, sino **cuando ocurra**
+> el evento. Algunos eventos que verás todo el tiempo: `"click"`, `"input"` (al escribir),
+> `"submit"` (al enviar un formulario), `"mouseover"` (al pasar el ratón por encima).
 
 > ### 🟦 ¿Qué significa? — *Callback (función de retorno)*
-> Un **callback** es una función que entregas a otra para que la ejecute **más tarde**, cuando
-> algo suceda. "Llámame cuando pase X". Es un concepto que reaparece en `fetch` (próximo
-> capítulo) y en React.
+> Un **callback** es una función que le entregas a otra para que la ejecute **más tarde**, cuando
+> pase algo concreto. Es como decir "avísame cuando ocurra X". Lo vas a reencontrar en `fetch` (el
+> próximo capítulo) y también en React, así que conviene tenerlo claro desde ya.
 
 ---
 
 ## 5. Un ejemplo completo: un botón que muestra y oculta
 
-Juntando selección, eventos y clases:
+Vamos a juntar las tres piezas: selección, eventos y clases.
 
 ```html
 <button class="abrir">Mostrar/ocultar menú</button>
@@ -119,21 +128,22 @@ boton.addEventListener("click", () => {
 });
 ```
 
-Eso es, en esencia, **el menú de tu propio sitio**. Un clic → alternar una clase → el CSS
-muestra u oculta. Tres tecnologías, un resultado.
+Y eso es, básicamente, **el menú de tu propio sitio**. Un clic dispara el cambio de clase, y el CSS
+decide si el menú aparece o desaparece. Tres tecnologías, un solo resultado.
 
 > ### 🟦 ¿Qué significa? — *El objeto del evento y `preventDefault`*
-> El callback recibe un dato con información del evento (por convención `e`). Una de sus
-> funciones más útiles es `e.preventDefault()`, que **evita el comportamiento por defecto** del
-> navegador. El caso típico: al enviar un formulario, el navegador recarga la página; con
-> `e.preventDefault()` lo impides para manejar el envío tú mismo con JavaScript.
+> Tu callback recibe un dato con la información de lo que acaba de pasar (por costumbre lo llamamos
+> `e`). Una de las cosas más útiles que trae es `e.preventDefault()`, que **frena el comportamiento
+> que el navegador haría por defecto**. El caso de siempre: al enviar un formulario, el navegador
+> recarga la página; con `e.preventDefault()` se lo impides para encargarte tú del envío con
+> JavaScript.
 > ```javascript
 > formulario.addEventListener("submit", (e) => {
 >   e.preventDefault();          // no recargues la página
 >   // …aquí tu código para procesar el formulario…
 > });
 > ```
-> Tu sitio usa esto para enviar el formulario de contacto sin recargar.
+> Tu sitio se apoya en esto para mandar el formulario de contacto sin que la página se recargue.
 
 ---
 

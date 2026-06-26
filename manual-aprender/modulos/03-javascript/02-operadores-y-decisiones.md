@@ -1,16 +1,21 @@
 # Capítulo 02 — Operadores y decisiones
 
-> Ya guardas datos en variables. Ahora vas a **operar** con ellos (sumar, comparar) y a hacer
-> que tu programa **tome decisiones** según el resultado. Aquí aparece el segundo ingrediente
-> del Módulo 00: las decisiones (`if/else`).
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> Ya sabes guardar datos en variables. El siguiente paso es **operar** con ellos (sumarlos,
+> compararlos) y hacer que tu programa **tome decisiones** según lo que salga. Aquí entra en
+> juego el segundo ingrediente del Módulo 00: las decisiones (`if/else`).
 
 ---
 
 ## 1. Operadores aritméticos (matemáticas)
 
 > ### 🟦 ¿Qué significa? — *Operador*
-> Un **operador** es un símbolo que realiza una operación sobre uno o más valores. Los
-> aritméticos son los de matemáticas:
+> Un **operador** es un símbolo que hace una operación con uno o más valores. Los aritméticos
+> son los de toda la vida, los de matemáticas:
 > | Operador | Operación | Ejemplo | Resultado |
 > |---|---|---|---|
 > | `+` | suma | `5 + 3` | `8` |
@@ -21,40 +26,41 @@
 > | `**` | potencia | `2 ** 3` | `8` |
 
 > ### 🟦 ¿Qué significa? — *El operador resto `%` (módulo)*
-> `%` da **el sobrante** de una división. `7 % 3` es 1 porque 7 entre 3 da 2 y sobra 1. Parece
-> raro, pero es utilísimo: por ejemplo, **un número es par si `numero % 2 === 0`** (no sobra
-> nada al dividir entre 2). Lo usarás más de lo que crees.
+> `%` te da **lo que sobra** de una división. `7 % 3` es 1 porque 7 entre 3 da 2 y sobra 1. Al
+> principio suena rebuscado, pero acaba siendo de los más prácticos: por ejemplo, **un número es
+> par si `numero % 2 === 0`** (al dividirlo entre 2 no sobra nada). Lo vas a acabar usando más de
+> lo que ahora imaginas.
 
 > ### ⚠️ Cuidado — `+` con texto: concatenación
-> Si usas `+` entre **textos** (strings), no suma: los **pega** (concatena).
+> Si pones `+` entre **textos** (strings), no suma: los **pega** uno detrás de otro (concatena).
 > ```javascript
 > "Hola " + "Edwar"   // "Hola Edwar"
 > 5 + 3               // 8
 > "5" + 3             // "53"  ← ¡ojo! el "5" es texto, así que pega
 > ```
-> Por eso conviene usar **template strings** (`` `...${}` ``) del capítulo anterior, que evitan
-> esta confusión.
+> Justo por esto vale la pena usar las **template strings** (`` `...${}` ``) del capítulo
+> anterior: te ahorran este lío.
 
 ---
 
 ## 2. Variables que cambian: operadores de asignación
 
 > ### 🟦 ¿Qué significa? — *Asignación compuesta*
-> Atajos para modificar una variable usando su propio valor:
+> Son atajos para modificar una variable a partir de su propio valor:
 > ```javascript
 > let total = 10;
 > total += 5;   // igual que: total = total + 5  → 15
 > total -= 3;   // 12
 > total *= 2;   // 24
 > ```
-> `+=` se lee "súmale y guarda". Muy común en contadores.
+> `+=` se lee algo así como "súmale esto y guárdalo". Aparece mucho en contadores.
 
 ---
 
 ## 3. Comparaciones: preguntas que dan true o false
 
-Para decidir, primero necesitas **comparar**. Las comparaciones devuelven un **booleano**
-(`true`/`false`).
+Antes de decidir algo, casi siempre necesitas **comparar** dos valores. Y toda comparación
+devuelve un **booleano**: `true` o `false`, sí o no.
 
 > ### 🟦 ¿Qué significa? — *Operadores de comparación*
 > | Operador | Pregunta | Ejemplo | Resultado |
@@ -67,20 +73,22 @@ Para decidir, primero necesitas **comparar**. Las comparaciones devuelven un **b
 > | `<=` | ¿menor o igual? | `4 <= 3` | `false` |
 
 > ### ⚠️ Cuidado — Usa `===`, no `==`
-> JavaScript tiene dos formas de comparar igualdad:
-> - `===` (tres iguales) compara **valor y tipo**. Es la correcta: `5 === "5"` es `false`
->   (número vs. texto).
-> - `==` (dos iguales) compara de forma "laxa" y hace conversiones raras: `5 == "5"` es `true`.
->   Esto causa errores difíciles. **Usa siempre `===` y `!==`.** (Recuerda además que un solo
->   `=` es asignar, no comparar.) Tres niveles: `=` asigna, `==` compara mal, `===` compara bien.
+> JavaScript tiene dos maneras de comparar igualdad, y conviene tenerlo claro desde ya:
+> - `===` (tres iguales) compara **valor y tipo**. Es la que quieres: `5 === "5"` da `false`
+>   (un número no es lo mismo que un texto).
+> - `==` (dos iguales) compara de forma "laxa" y va convirtiendo cosas por su cuenta: `5 == "5"`
+>   da `true`. Ese tipo de magia provoca errores difíciles de rastrear. **Quédate siempre con
+>   `===` y `!==`.** Y recuerda que un solo `=` no compara: asigna. Resumiendo los tres niveles:
+>   `=` asigna, `==` compara mal, `===` compara bien.
 
 ---
 
 ## 4. La decisión: `if`, `else if`, `else`
 
 > ### 🟦 ¿Qué significa? — *La estructura `if` (si)*
-> `if` ejecuta un bloque de código **solo si** una condición es verdadera. Si no, puedes dar
-> alternativas con `else if` (si no, ¿y si...?) y `else` (si no, en cualquier otro caso):
+> `if` ejecuta un bloque de código **solo si** una condición se cumple. Si no se cumple, puedes
+> ofrecer alternativas con `else if` (si no, ¿y si pasa esto otro?) y `else` (si no, en cualquier
+> otro caso):
 > ```javascript
 > const edad = 20;
 >
@@ -90,10 +98,11 @@ Para decidir, primero necesitas **comparar**. Las comparaciones devuelven un **b
 >   console.log("No puede entrar");
 > }
 > ```
-> La condición va entre **paréntesis** `( )` y el código a ejecutar entre **llaves** `{ }`.
-> ¿Te suena? Es exactamente el algoritmo del evento del Módulo 00, ahora en código real.
+> La condición va entre **paréntesis** `( )` y el código que se ejecuta entre **llaves** `{ }`.
+> ¿Te suena de algo? Es el mismo algoritmo del evento que viste en el Módulo 00, pero ahora
+> escrito en código de verdad.
 
-Con varias ramas:
+Cuando hay varias ramas posibles:
 ```javascript
 const nota = 85;
 
@@ -108,20 +117,20 @@ if (nota >= 90) {
 ```
 
 > ### 💡 Tip — Cómo se evalúa
-> JavaScript revisa las condiciones **en orden, de arriba a abajo**, y ejecuta el **primer**
-> bloque cuya condición sea verdadera; luego se salta el resto. Por eso el orden importa: pon
-> las condiciones más específicas/altas primero.
+> JavaScript va leyendo las condiciones **en orden, de arriba abajo**, ejecuta el **primer**
+> bloque cuya condición se cumple y se salta todo lo demás. Por eso el orden no es un detalle:
+> pon arriba las condiciones más específicas o más altas.
 
 ---
 
 ## 5. Combinar condiciones: operadores lógicos
 
-A veces una decisión depende de **varias** condiciones a la vez.
+Muchas veces una decisión no depende de una sola cosa, sino de **varias** a la vez.
 
 > ### 🟦 ¿Qué significa? — *Operadores lógicos `&&`, `||`, `!`*
-> - `&&` (**Y**): verdadero solo si **ambas** condiciones lo son.
-> - `||` (**O**): verdadero si **al menos una** lo es.
-> - `!` (**NO**): invierte (de `true` a `false` y viceversa).
+> - `&&` (**Y**): es verdadero solo si **las dos** condiciones lo son.
+> - `||` (**O**): es verdadero si **al menos una** lo es.
+> - `!` (**NO**): da la vuelta al valor (de `true` a `false` y al revés).
 > ```javascript
 > const edad = 25;
 > const tieneEntrada = true;
@@ -136,10 +145,11 @@ A veces una decisión depende de **varias** condiciones a la vez.
 > ```
 
 > ### 🟦 ¿Qué significa? — *Valores "verdaderos" y "falsos" (truthy/falsy)*
-> En una condición, JavaScript trata ciertos valores como falsos aunque no sean exactamente
-> `false`: `0`, `""` (texto vacío), `null`, `undefined`. Los demás se consideran "verdaderos".
-> Esto permite escribir `if (nombre)` para decir "si nombre tiene algo". Útil, pero por ahora
-> sé explícito (`if (nombre !== "")`) hasta que te sientas cómodo.
+> Dentro de una condición, JavaScript trata algunos valores como falsos aunque no sean
+> exactamente `false`: el `0`, el `""` (texto vacío), `null` y `undefined`. Todo lo demás cuenta
+> como "verdadero". Esto te permite escribir `if (nombre)` para preguntar "¿nombre tiene algo
+> dentro?". Es cómodo, pero por ahora mejor sé explícito (`if (nombre !== "")`) hasta que te
+> sientas a gusto con el truco.
 
 ---
 

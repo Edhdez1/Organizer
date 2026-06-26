@@ -23,50 +23,50 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez. Soy <strong>Bit</strong>, el ajolote que te acompana en este manual. En el modulo 03 aprendiste <code>fetch</code> y en el modulo 07 viste bases de datos. Hoy vamos a juntar las piezas: vamos a entender <strong>de verdad</strong> que es una API REST, como se piden y devuelven datos, y por que el formato <strong>JSON</strong> esta en todas partes. Lo haremos con calma, definiendo cada palabra rara. Y al final veras como <strong>Faro</strong> habla con GitHub y Google Drive, y como <strong>tunal-digital</strong> habla con la IA de Claude. Respira: esto es mas sencillo de lo que suena. Vamos.</p>
+<p>Hola otra vez. Soy <strong>Bit</strong>, el ajolote que te acompana en este manual. En el modulo 03 conociste <code>fetch</code> y en el modulo 07 trabajaste con bases de datos. Hoy toca unir esas piezas: entender, ya en serio, que es una API REST, como se piden y se devuelven los datos, y por que el formato <strong>JSON</strong> aparece en todos lados. Vamos despacio y le ponemos nombre a cada palabra que parezca complicada. Al final veras como <strong>Faro</strong> conversa con GitHub y Google Drive, y como <strong>tunal-digital</strong> le habla a la IA de Claude. Tranquilo: esto es mas facil de lo que el nombre da a entender. Arrancamos.</p>
 </blockquote>
 <h2 id="1-empecemos-por-la-idea-cliente-y-servidor-conversando">1. Empecemos por la idea: cliente y servidor conversando</h2>
-<p>Cuando tu navegador pide una pagina, o tu app pide datos, estan ocurriendo dos papeles: alguien <strong>pide</strong> y alguien <strong>responde</strong>. El que pide es el cliente; el que responde es el servidor. Una <strong>API</strong> es la lista de cosas que puedes pedir y como pedirlas.</p>
+<p>Cuando tu navegador pide una pagina, o tu app pide datos, hay siempre dos papeles en juego: alguien <strong>pide</strong> y alguien <strong>responde</strong>. Quien pide es el cliente; quien responde es el servidor. Y una <strong>API</strong> es, sencillamente, la lista de cosas que puedes pedir y la forma de pedirlas.</p>
 <blockquote class="def">
 <h3 id="que-significa-api">🟦 ¿Que significa? — <em>API</em></h3>
-<p><strong>API</strong> son las siglas de <em>Application Programming Interface</em> (Interfaz de Programacion de Aplicaciones). Es un <strong>menu de un restaurante</strong>: una lista de lo que puedes pedir y como pedirlo, sin que tengas que entrar a la cocina. Sirve para que dos programas se hablen sin conocer sus interioridades.
-<strong>Donde se usa en un repo real:</strong> Faro pide la lista de repositorios de un usuario a la <strong>API de GitHub</strong>; nunca entra a los servidores de GitHub, solo usa el "menu" que GitHub publica.</p>
+<p><strong>API</strong> son las siglas de <em>Application Programming Interface</em> (Interfaz de Programacion de Aplicaciones). Piensa en el <strong>menu de un restaurante</strong>: una lista de lo que puedes pedir y como pedirlo, sin que tengas que meterte a la cocina. Su trabajo es dejar que dos programas se hablen sin conocer las tripas del otro.
+<strong>Donde se usa en un repo real:</strong> Faro le pide la lista de repositorios de un usuario a la <strong>API de GitHub</strong>; jamas entra a los servidores de GitHub, solo usa el "menu" que GitHub publica.</p>
 <h3 id="que-significa-cliente-y-servidor">🟦 ¿Que significa? — <em>Cliente y servidor</em></h3>
-<p>El <strong>cliente</strong> es quien hace la peticion (tu app, tu navegador). El <strong>servidor</strong> es el programa, en otra computadora, que recibe la peticion y devuelve una respuesta. Sirve para repartir el trabajo: el cliente pinta la pantalla, el servidor guarda y entrega los datos.
+<p>El <strong>cliente</strong> es quien hace la peticion (tu app, tu navegador). El <strong>servidor</strong> es el programa, que vive en otra computadora, que recibe esa peticion y devuelve una respuesta. La idea es repartir el trabajo: el cliente pinta la pantalla, el servidor guarda y entrega los datos.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> (React + TypeScript + Supabase) el cliente es la app React en el navegador, y el servidor es Supabase, que guarda las rachas y valida el login.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>Piensa siempre en voz alta: "yo (cliente) pido X; el servidor me responde Y". Si tienes claro quien pide y quien responde, la mitad del problema ya esta resuelta.</p>
+<p>Acostumbrate a decirlo en voz alta: "yo (cliente) pido X; el servidor me responde Y". Cuando tienes claro quien pide y quien responde, medio problema ya esta resuelto.</p>
 </blockquote>
 <h2 id="2-que-es-rest-con-calma">2. Que es REST, con calma</h2>
-<p>La palabra REST suena tecnica, pero la idea es tranquila: es <strong>una manera de organizar</strong> una API para que sea predecible. En vez de inventar nombres raros para cada operacion, REST dice: "todo es un <strong>recurso</strong> (una cosa), cada cosa tiene una <strong>direccion (URL)</strong>, y usas unos pocos <strong>verbos</strong> estandar para actuar sobre ella".</p>
+<p>La palabra REST suena tecnica, pero detras hay una idea bastante tranquila: es <strong>una forma de organizar</strong> una API para que resulte predecible. En lugar de inventar un nombre distinto para cada operacion, REST propone algo simple: "todo es un <strong>recurso</strong> (una cosa), cada cosa tiene una <strong>direccion (URL)</strong>, y para actuar sobre ella usas unos pocos <strong>verbos</strong> estandar".</p>
 <blockquote class="def">
 <h3 id="que-significa-rest">🟦 ¿Que significa? — <em>REST</em></h3>
-<p><strong>REST</strong> (<em>Representational State Transfer</em>) es un <strong>estilo</strong> para disenar APIs sobre HTTP. No es una libreria ni un programa: es un acuerdo de buenas costumbres. Sirve para que cualquier programador adivine como usar la API sin memorizar mil casos especiales.
-<strong>Donde se usa en un repo real:</strong> la API de GitHub que consume <strong>Faro</strong> es REST: para ver un repo pides <code>GET /repos/usuario/proyecto</code>, y se lee casi como una frase.</p>
+<p><strong>REST</strong> (<em>Representational State Transfer</em>) es un <strong>estilo</strong> para disenar APIs sobre HTTP. No es una libreria ni un programa: es un acuerdo de buenas costumbres. Gracias a el, cualquier programador puede intuir como usar la API sin tener que memorizar mil casos especiales.
+<strong>Donde se usa en un repo real:</strong> la API de GitHub que consume <strong>Faro</strong> es REST: para ver un repo pides <code>GET /repos/usuario/proyecto</code>, y casi se lee como una frase normal.</p>
 <h3 id="que-significa-http">🟦 ¿Que significa? — <em>HTTP</em></h3>
-<p><strong>HTTP</strong> (<em>HyperText Transfer Protocol</em>) es el <strong>idioma</strong> que usan cliente y servidor en la web para hablarse. Define como se ve una peticion y como se ve una respuesta. Sirve como la "gramatica" comun de internet.
-<strong>Donde se usa en un repo real:</strong> cuando <strong>tunal-digital</strong> envia el mensaje del chat al servidor, viaja por HTTP hasta el Cloudflare Worker.</p>
+<p><strong>HTTP</strong> (<em>HyperText Transfer Protocol</em>) es el <strong>idioma</strong> con el que cliente y servidor se hablan en la web. Define como se ve una peticion y como se ve una respuesta. Vendria a ser la "gramatica" comun de internet.
+<strong>Donde se usa en un repo real:</strong> cuando <strong>tunal-digital</strong> envia el mensaje del chat al servidor, ese mensaje viaja por HTTP hasta el Cloudflare Worker.</p>
 <h3 id="que-significa-recurso">🟦 ¿Que significa? — <em>Recurso</em></h3>
-<p>Un <strong>recurso</strong> es una "cosa" que la API maneja: un usuario, un repositorio, un archivo, un mensaje. Sirve para pensar la API como un conjunto de objetos identificables, no como un monton de funciones sueltas.
+<p>Un <strong>recurso</strong> es una "cosa" que la API maneja: un usuario, un repositorio, un archivo, un mensaje. Sirve para pensar la API como un conjunto de objetos que puedes identificar, y no como un monton de funciones sueltas.
 <strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, un "repositorio" y un "archivo de Drive" son recursos; cada uno tiene su propia direccion para pedirlo.</p>
 </blockquote>
 <h3 id="los-verbos-de-http">Los verbos de HTTP</h3>
-<p>REST usa unos pocos <strong>verbos</strong> (tambien llamados metodos) para decir que quieres hacer con un recurso.</p>
+<p>REST se apoya en unos pocos <strong>verbos</strong> (tambien llamados metodos) para indicar que quieres hacer con un recurso.</p>
 <blockquote class="def">
 <h3 id="que-significa-metodo-http-verbo">🟦 ¿Que significa? — <em>Metodo HTTP (verbo)</em></h3>
-<p>Es la <strong>accion</strong> que pides sobre un recurso. Los mas comunes: <strong>GET</strong> (leer), <strong>POST</strong> (crear o enviar), <strong>PUT/PATCH</strong> (actualizar) y <strong>DELETE</strong> (borrar). Sirve para que el servidor sepa tu intencion sin que se la expliques en palabras.
-<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> usa <code>GET</code> para leer tus repos de GitHub; <strong>tunal-digital</strong> usa <code>POST</code> para enviar el mensaje del usuario a la IA, porque esta "enviando datos" para que la IA responda.</p>
+<p>Es la <strong>accion</strong> que pides sobre un recurso. Los mas habituales son: <strong>GET</strong> (leer), <strong>POST</strong> (crear o enviar), <strong>PUT/PATCH</strong> (actualizar) y <strong>DELETE</strong> (borrar). Con el verbo, el servidor entiende tu intencion sin que tengas que explicarsela con palabras.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> usa <code>GET</code> para leer tus repos de GitHub; <strong>tunal-digital</strong> usa <code>POST</code> para mandarle el mensaje del usuario a la IA, porque esta "enviando datos" para que la IA responda.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Regla mental rapida: si solo quieres <strong>mirar</strong> datos, casi siempre es <code>GET</code>. Si vas a <strong>mandar</strong> datos (un formulario, un mensaje de chat), suele ser <code>POST</code>.</p>
+<p>Una regla mental que casi nunca falla: si solo quieres <strong>mirar</strong> datos, lo normal es <code>GET</code>. Si vas a <strong>mandar</strong> datos (un formulario, un mensaje de chat), suele ser <code>POST</code>.</p>
 </blockquote>
 <h2 id="3-endpoints-y-rutas-las-direcciones-de-la-api">3. Endpoints y rutas: las direcciones de la API</h2>
 <p>Cada recurso vive en una <strong>direccion</strong>. A esa direccion la llamamos <strong>endpoint</strong> o <strong>ruta</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-endpoint-ruta">🟦 ¿Que significa? — <em>Endpoint (ruta)</em></h3>
-<p>Un <strong>endpoint</strong> es una URL concreta de la API que hace <strong>una cosa</strong>. Es como la direccion de una casa: si tocas ahi, te atienden para ese asunto. Sirve para organizar la API en puntos de entrada claros.
+<p>Un <strong>endpoint</strong> es una URL concreta de la API que hace <strong>una sola cosa</strong>. Es como la direccion de una casa: si tocas ahi, te atienden para ese asunto. Sirve para organizar la API en puntos de entrada claros.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> llama al endpoint <code>https://api.github.com/user/repos</code> para traer la lista de repositorios del usuario conectado.</p>
 </blockquote>
-<p>Una URL de API se lee por partes. Mira esta:</p>
+<p>Una URL de API se lee por partes. Fijate en esta:</p>
 <pre><code>https://api.github.com/repos/edwar/Faro/contents/README.md
 </code></pre>
 <ul>
@@ -76,22 +76,22 @@
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-host">🟦 ¿Que significa? — <em>Host</em></h3>
-<p>El <strong>host</strong> es el nombre del servidor al que envias la peticion (la parte despues de <code>https://</code> y antes de la primera <code>/</code>). Sirve para que internet sepa <strong>a que computadora</strong> entregar tu peticion.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> el host de la IA es el del Cloudflare Worker; el navegador nunca habla directo con <code>api.anthropic.com</code> (ya veremos por que, es por seguridad).</p>
+<p>El <strong>host</strong> es el nombre del servidor al que envias la peticion (la parte que va despues de <code>https://</code> y antes de la primera <code>/</code>). Le dice a internet <strong>a que computadora</strong> debe entregar tu peticion.
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> el host de la IA es el del Cloudflare Worker; el navegador nunca habla directo con <code>api.anthropic.com</code> (ya veremos por que, y es por seguridad).</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>Cuando escribas <code>fetch("https://api.github.com/user/repos")</code>, ese texto largo <strong>es</strong> el endpoint. No es magia: es solo la direccion exacta de la cosa que quieres. Cambia la ruta y pides otra cosa.</p>
+<p>Cuando escribas <code>fetch("https://api.github.com/user/repos")</code>, ese texto largo <strong>es</strong> el endpoint. No hay magia: es la direccion exacta de la cosa que quieres. Cambia la ruta y pides otra cosa distinta.</p>
 </blockquote>
 <h2 id="4-parametros-de-ruta-y-query-params">4. Parametros de ruta y query params</h2>
-<p>A veces la direccion necesita un <strong>dato variable</strong>. Hay dos formas de pasarlo: dentro de la ruta o pegado al final con <code>?</code>.</p>
+<p>A veces la direccion necesita un <strong>dato variable</strong>. Tienes dos maneras de pasarlo: dentro de la ruta, o pegado al final con <code>?</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-parametro-de-ruta">🟦 ¿Que significa? — <em>Parametro de ruta</em></h3>
-<p>Es un <strong>trozo variable dentro de la ruta</strong> que identifica un recurso concreto. En <code>/repos/edwar/Faro</code>, las partes <code>edwar</code> y <code>Faro</code> son parametros de ruta: dicen <em>de quien</em> y <em>cual</em> repo. Sirve para apuntar a un elemento especifico.
-<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> arma rutas como <code>/repos/{owner}/{repo}/contents</code> rellenando <code>owner</code> y <code>repo</code> con el proyecto que el usuario eligio.</p>
+<p>Es un <strong>trozo variable dentro de la ruta</strong> que identifica un recurso concreto. En <code>/repos/edwar/Faro</code>, las partes <code>edwar</code> y <code>Faro</code> son parametros de ruta: dicen <em>de quien</em> y <em>cual</em> repo. Sirve para senalar un elemento especifico.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> arma rutas como <code>/repos/{owner}/{repo}/contents</code> rellenando <code>owner</code> y <code>repo</code> con el proyecto que eligio el usuario.</p>
 <h3 id="que-significa-query-params-parametros-de-consulta">🟦 ¿Que significa? — <em>Query params (parametros de consulta)</em></h3>
-<p>Son <strong>opciones</strong> que van al final de la URL despues de un <code>?</code>, en forma <code>clave=valor</code>, separadas por <code>&amp;</code>. Sirven para filtrar, ordenar o paginar <strong>sin cambiar el recurso</strong>. Son como decir "lo mismo, pero ordenado por fecha y de a 10".
+<p>Son <strong>opciones</strong> que van al final de la URL despues de un <code>?</code>, en forma <code>clave=valor</code>, separadas por <code>&amp;</code>. Sirven para filtrar, ordenar o paginar <strong>sin cambiar el recurso</strong> que pides. Es como decir "lo mismo, pero ordenado por fecha y de a 10".
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> puede pedir <code>GET /user/repos?sort=updated&amp;per_page=20</code> para traer los repos ordenados por ultima actualizacion y de 20 en 20.</p>
 </blockquote>
-<p>Ejemplo comparando los dos:</p>
+<p>Veamoslos uno al lado del otro:</p>
 <pre><code>Parametro de ruta:   /repos/edwar/Faro
                               ^^^^^ ^^^^   (que recurso)
 
@@ -100,18 +100,18 @@ Query params:        /user/repos?sort=updated&amp;per_page=20
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-filtrar">🟦 ¿Que significa? — <em>Filtrar</em></h3>
-<p><strong>Filtrar</strong> es pedirle al servidor que solo te devuelva los datos que cumplen una condicion, en vez de todos. Sirve para recibir menos datos y mas utiles. Suele hacerse con query params (ej: <code>?state=open</code>).
-<strong>Donde se usa en un repo real:</strong> al revisar issues, <strong>Faro</strong> podria pedir solo las abiertas con <code>?state=open</code>, para no traer las cerradas.</p>
+<p><strong>Filtrar</strong> es pedirle al servidor que te devuelva solo los datos que cumplen cierta condicion, en lugar de todos. Asi recibes menos datos y mas utiles. Lo normal es hacerlo con query params (por ejemplo <code>?state=open</code>).
+<strong>Donde se usa en un repo real:</strong> al revisar issues, <strong>Faro</strong> podria pedir solo las abiertas con <code>?state=open</code>, para no traerse tambien las cerradas.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Los query params se ven <strong>en la URL</strong>. Nunca pongas ahi una clave secreta ni una contrasena: quedaria registrada en logs y en el historial del navegador. Los secretos viajan de otra forma (lo veremos en la seccion de seguridad).</p>
+<p>Los query params quedan <strong>a la vista en la URL</strong>. Nunca metas ahi una clave secreta ni una contrasena: terminaria registrada en logs y en el historial del navegador. Los secretos viajan de otra forma, y lo veremos en la seccion de seguridad.</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>Los caracteres raros (espacios, acentos, <code>&amp;</code>) hay que "escaparlos" en una URL. En JavaScript usa <code>encodeURIComponent("texto con espacios")</code> para construir query params sin romper la direccion.</p>
+<p>Los caracteres raros (espacios, acentos, <code>&amp;</code>) hay que "escaparlos" en una URL. En JavaScript tienes <code>encodeURIComponent("texto con espacios")</code> para construir query params sin que se rompa la direccion.</p>
 </blockquote>
 <h2 id="5-el-formato-json-a-fondo">5. El formato JSON, a fondo</h2>
-<p>Cuando el servidor responde, te manda los datos en un formato de texto. El mas usado hoy es <strong>JSON</strong>. Ya lo viste de pasada; ahora lo vamos a entender pieza por pieza.</p>
+<p>Cuando el servidor responde, te manda los datos en un formato de texto. El mas usado hoy es <strong>JSON</strong>. Ya lo cruzaste de pasada; ahora vamos a entenderlo pieza por pieza.</p>
 <blockquote class="def">
 <h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
-<p><strong>JSON</strong> (<em>JavaScript Object Notation</em>) es un formato de <strong>texto</strong> para representar datos de forma ordenada: objetos con <code>{}</code>, listas con <code>[]</code>, pares <code>clave: valor</code>. Sirve para que dos programas (en cualquier lenguaje) intercambien datos que ambos entienden.
+<p><strong>JSON</strong> (<em>JavaScript Object Notation</em>) es un formato de <strong>texto</strong> para representar datos de manera ordenada: objetos con <code>{}</code>, listas con <code>[]</code>, pares <code>clave: valor</code>. Su gracia es que dos programas, escritos en cualquier lenguaje, pueden intercambiar datos que ambos entienden.
 <strong>Donde se usa en un repo real:</strong> <strong>PolyPaw</strong> (Python/Flet) guarda sus misiones y datos en archivos <strong>JSON</strong>; y la API de GitHub le responde a <strong>Faro</strong> en JSON.</p>
 </blockquote>
 <p>Asi se ve un JSON (una respuesta simplificada de la API de GitHub):</p>
@@ -128,23 +128,23 @@ Query params:        /user/repos?sort=updated&amp;per_page=20
   }
 }
 </code></pre>
-<p>Vamos a nombrar cada parte:</p>
+<p>Vamos a ponerle nombre a cada parte:</p>
 <blockquote class="def">
 <h3 id="que-significa-objeto-json">🟦 ¿Que significa? — <em>Objeto JSON</em></h3>
 <p>Un <strong>objeto</strong> es un grupo de datos entre llaves <code>{ }</code>, formado por <strong>pares clave-valor</strong>. La clave (a la izquierda de <code>:</code>) es un texto entre comillas; el valor (a la derecha) es el dato. Sirve para describir "una cosa" con sus propiedades.
 <strong>Donde se usa en un repo real:</strong> cada repositorio que <strong>Faro</strong> recibe de GitHub llega como un objeto con <code>name</code>, <code>language</code>, etc.</p>
 <h3 id="que-significa-clave-y-valor">🟦 ¿Que significa? — <em>Clave y valor</em></h3>
-<p>La <strong>clave</strong> es el nombre de un dato (ej: <code>"language"</code>); el <strong>valor</strong> es su contenido (ej: <code>"TypeScript"</code>). Sirven para que cada dato tenga etiqueta y no se confundan entre si.
+<p>La <strong>clave</strong> es el nombre de un dato (por ejemplo <code>"language"</code>); el <strong>valor</strong> es su contenido (por ejemplo <code>"TypeScript"</code>). Sirven para que cada dato tenga su etiqueta y no se confunda con los demas.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> lee la clave <code>language</code> para mostrar en que lenguaje esta escrito cada proyecto.</p>
 <h3 id="que-significa-array-lista">🟦 ¿Que significa? — <em>Array (lista)</em></h3>
 <p>Un <strong>array</strong> es una lista ordenada de valores entre corchetes <code>[ ]</code>, separados por comas. Sirve para guardar varias cosas del mismo tipo (varios temas, varios archivos).
-<strong>Donde se usa en un repo real:</strong> en el JSON de arriba, <code>"topics": ["nextjs", "supabase", "openai"]</code> es un array de etiquetas del proyecto.</p>
+<strong>Donde se usa en un repo real:</strong> en el JSON de arriba, <code>"topics": ["nextjs", "supabase", "openai"]</code> es un array con las etiquetas del proyecto.</p>
 <h3 id="que-significa-anidamiento">🟦 ¿Que significa? — <em>Anidamiento</em></h3>
-<p><strong>Anidar</strong> es meter un objeto o array <strong>dentro</strong> de otro. En el ejemplo, <code>owner</code> es un objeto dentro del objeto principal. Sirve para representar datos con estructura (una cosa que contiene otra cosa).
+<p><strong>Anidar</strong> es meter un objeto o un array <strong>dentro</strong> de otro. En el ejemplo, <code>owner</code> es un objeto que vive dentro del objeto principal. Sirve para representar datos con estructura: una cosa que contiene a otra.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> accede a <code>repo.owner.login</code> para saber de quien es el repositorio; ese <code>owner</code> esta anidado.</p>
 </blockquote>
 <h3 id="tipos-de-valor-que-admite-json">Tipos de valor que admite JSON</h3>
-<p>JSON solo permite estos tipos de valor. Memoriza la lista corta:</p>
+<p>JSON solo permite estos tipos de valor. Es una lista corta, vale la pena tenerla a mano:</p>
 <ul>
 <li><strong>Texto (string):</strong> entre comillas dobles, ej <code>"Faro"</code>.</li>
 <li><strong>Numero:</strong> sin comillas, ej <code>12</code> o <code>3.5</code>.</li>
@@ -155,13 +155,13 @@ Query params:        /user/repos?sort=updated&amp;per_page=20
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>En JSON las claves <strong>siempre</strong> van entre comillas dobles <code>"</code>, nunca simples <code>'</code>. Y no se permite coma despues del ultimo elemento. Un solo error de estos hace que el JSON sea invalido y el programa falle al leerlo.</p>
+<p>En JSON las claves <strong>siempre</strong> van entre comillas dobles <code>"</code>, nunca simples <code>'</code>. Y tampoco se permite una coma despues del ultimo elemento. Cualquiera de esos dos descuidos deja el JSON invalido, y el programa falla al intentar leerlo.</p>
 </blockquote>
 <h3 id="de-texto-a-objeto-y-de-vuelta">De texto a objeto y de vuelta</h3>
-<p>JSON viaja como <strong>texto</strong>, pero en tu codigo lo quieres como <strong>objeto</strong> para usar <code>.name</code>, <code>.language</code>, etc. JavaScript tiene dos funciones para convertir.</p>
+<p>JSON viaja como <strong>texto</strong>, pero en tu codigo lo quieres como <strong>objeto</strong> para poder usar <code>.name</code>, <code>.language</code>, etc. JavaScript trae dos funciones para hacer la conversion en ambos sentidos.</p>
 <blockquote class="def">
 <h3 id="que-significa-serializar-y-parsear">🟦 ¿Que significa? — <em>Serializar y parsear</em></h3>
-<p><strong>Serializar</strong> es convertir un objeto de tu codigo en texto JSON (<code>JSON.stringify</code>). <strong>Parsear</strong> es lo contrario: convertir texto JSON en un objeto usable (<code>JSON.parse</code>). Sirven para enviar datos por la red (texto) y luego trabajarlos comodos (objeto).
+<p><strong>Serializar</strong> es convertir un objeto de tu codigo en texto JSON (<code>JSON.stringify</code>). <strong>Parsear</strong> es el camino inverso: convertir texto JSON en un objeto que puedes usar (<code>JSON.parse</code>). Lo primero te sirve para enviar datos por la red (que viajan como texto) y lo segundo para trabajarlos comodo (como objeto).
 <strong>Donde se usa en un repo real:</strong> <strong>tunal-digital</strong> serializa el mensaje del usuario a JSON antes de enviarlo, y parsea la respuesta de la IA para mostrarla en el chat.</p>
 </blockquote>
 <pre><code class="language-javascript">// De objeto a texto JSON (para enviar):
@@ -178,25 +178,25 @@ console.log(datos.reply);             // ahora puedes usarlo como objeto
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>Fijate en <code>await respuesta.json()</code>. Ese metodo <code>.json()</code> hace el <code>JSON.parse</code> por ti: toma el texto de la respuesta y te entrega un objeto listo para usar. Por eso despues puedes escribir <code>datos.reply</code>.</p>
+<p>Mira bien el <code>await respuesta.json()</code>. Ese metodo <code>.json()</code> te ahorra el <code>JSON.parse</code>: agarra el texto de la respuesta y te lo devuelve como un objeto listo para usar. Por eso un par de lineas despues puedes escribir <code>datos.reply</code>.</p>
 <h3 id="que-significa-header-cabecera">🟦 ¿Que significa? — <em>Header (cabecera)</em></h3>
-<p>Un <strong>header</strong> es un dato extra que acompana la peticion o la respuesta, en forma <code>clave: valor</code>, para dar contexto (que formato envias, quien eres). Sirve para informar al servidor sin meterlo en el cuerpo.
-<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> y <strong>tunal-digital</strong> mandan <code>Content-Type: application/json</code> para avisar "te estoy enviando JSON", y un header de autorizacion para identificarse.</p>
+<p>Un <strong>header</strong> es un dato extra que viaja junto a la peticion o a la respuesta, en forma <code>clave: valor</code>, para dar contexto (que formato envias, quien eres). Sirve para informar al servidor sin tener que meterlo dentro del cuerpo.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> y <strong>tunal-digital</strong> mandan <code>Content-Type: application/json</code> para avisar "te estoy enviando JSON", mas un header de autorizacion para identificarse.</p>
 </blockquote>
 <h2 id="6-el-contrato-entre-cliente-y-servidor">6. El contrato entre cliente y servidor</h2>
-<p>Aqui esta la idea mas importante del capitulo. Una API es un <strong>contrato</strong>: un acuerdo de que pide el cliente y que devuelve el servidor.</p>
+<p>Aqui esta la idea mas importante del capitulo. Una API es un <strong>contrato</strong>: un acuerdo sobre que pide el cliente y que devuelve el servidor.</p>
 <blockquote class="def">
 <h3 id="que-significa-contrato-de-api">🟦 ¿Que significa? — <em>Contrato de API</em></h3>
-<p>Es el <strong>acuerdo</strong> de como se comunican cliente y servidor: que ruta llamar, que metodo usar, que datos enviar y que forma exacta tendra la respuesta. Sirve para que ambos lados puedan trabajar por separado confiando en lo prometido.
+<p>Es el <strong>acuerdo</strong> sobre como se comunican cliente y servidor: que ruta llamar, que metodo usar, que datos enviar y que forma exacta tendra la respuesta. Gracias a el, cada lado puede trabajar por su cuenta confiando en lo que el otro prometio.
 <strong>Donde se usa en un repo real:</strong> <strong>RachaSimple</strong> confia en que Supabase Auth devolvera un objeto de sesion con cierta forma al hacer login; si esa forma cambiara, el login se romperia. Ese acuerdo es el contrato.</p>
 </blockquote>
-<p>Las dos partes del contrato son: <strong>la peticion</strong> (lo que mandas) y <strong>la respuesta</strong> (lo que recibes). La respuesta trae un dato clave: el <strong>codigo de estado</strong>.</p>
+<p>El contrato tiene dos caras: <strong>la peticion</strong> (lo que mandas) y <strong>la respuesta</strong> (lo que recibes). Y la respuesta trae un dato clave: el <strong>codigo de estado</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-codigo-de-estado-status-code">🟦 ¿Que significa? — <em>Codigo de estado (status code)</em></h3>
-<p>Es un <strong>numero</strong> que el servidor pone en la respuesta para decir como le fue. Familias: <strong>2xx</strong> = exito, <strong>4xx</strong> = error del cliente (tu peticion estaba mal), <strong>5xx</strong> = error del servidor. Sirve para reaccionar correctamente sin adivinar.
-<strong>Donde se usa en un repo real:</strong> si <strong>Faro</strong> recibe <code>401</code> de GitHub significa "no autorizado" (token vencido); si recibe <code>200</code> significa "aqui tienes tus datos".</p>
+<p>Es un <strong>numero</strong> que el servidor pone en la respuesta para contarte como le fue. Van por familias: <strong>2xx</strong> = exito, <strong>4xx</strong> = error del cliente (tu peticion estaba mal), <strong>5xx</strong> = error del servidor. Sirve para que reacciones bien sin tener que adivinar.
+<strong>Donde se usa en un repo real:</strong> si <strong>Faro</strong> recibe <code>401</code> de GitHub, eso significa "no autorizado" (token vencido); si recibe <code>200</code>, significa "aqui tienes tus datos".</p>
 </blockquote>
-<p>Codigos que veras seguido:</p>
+<p>Codigos que vas a ver una y otra vez:</p>
 <ul>
 <li><strong>200 OK</strong> → todo bien, aqui esta la respuesta.</li>
 <li><strong>201 Created</strong> → se creo el recurso (tras un <code>POST</code>).</li>
@@ -220,34 +220,34 @@ if (respuesta.ok) {                 // .ok es true si el status es 2xx
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p><code>respuesta.ok</code> es un atajo: vale <code>true</code> cuando el codigo es 2xx. Pero revisar el numero exacto (como <code>401</code>) te deja dar mensajes mas utiles al usuario.</p>
+<p><code>respuesta.ok</code> es un atajo: vale <code>true</code> cuando el codigo es 2xx. Aun asi, mirar el numero exacto (como <code>401</code>) te permite darle al usuario un mensaje mucho mas util.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p><code>fetch</code> <strong>no lanza error</strong> cuando el servidor responde 404 o 500. Para <code>fetch</code>, recibir una respuesta de error sigue siendo "recibir una respuesta". Por eso debes mirar <code>respuesta.ok</code> o <code>respuesta.status</code> a mano. No asumas que llegaste al <code>await respuesta.json()</code> solo porque no exploto nada.</p>
+<p>Ojo con esto: <code>fetch</code> <strong>no lanza error</strong> cuando el servidor responde 404 o 500. Para <code>fetch</code>, recibir una respuesta de error sigue siendo "recibir una respuesta". Por eso te toca mirar <code>respuesta.ok</code> o <code>respuesta.status</code> a mano. No des por hecho que llegaste sano al <code>await respuesta.json()</code> solo porque nada exploto.</p>
 </blockquote>
 <h2 id="7-versionado-de-apis">7. Versionado de APIs</h2>
-<p>Las APIs cambian con el tiempo. Para no romper a quienes ya las usan, se <strong>versionan</strong>.</p>
+<p>Las APIs cambian con el tiempo. Para no dejar tirado a quien ya las usa, se <strong>versionan</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-versionado-de-api">🟦 ¿Que significa? — <em>Versionado de API</em></h3>
-<p>Es marcar la API con un numero o fecha de version (ej <code>/v1/</code>) para que los cambios nuevos no rompan el codigo viejo. Sirve para evolucionar sin dejar tirados a los que ya integraron la version anterior.
-<strong>Donde se usa en un repo real:</strong> la API de Claude que usa <strong>tunal-digital</strong> se identifica con una version (un header tipo <code>anthropic-version</code> con una fecha); asi el Worker sabe exactamente con que "edicion" del contrato esta hablando.</p>
+<p>Es marcar la API con un numero o una fecha de version (por ejemplo <code>/v1/</code>) para que los cambios nuevos no rompan el codigo viejo. Asi la API puede evolucionar sin abandonar a quienes ya integraron la version anterior.
+<strong>Donde se usa en un repo real:</strong> la API de Claude que usa <strong>tunal-digital</strong> se identifica con una version (un header tipo <code>anthropic-version</code> con una fecha); de ese modo el Worker sabe con que "edicion" del contrato esta hablando.</p>
 </blockquote>
-<p>Veras la version de dos formas tipicas:</p>
+<p>La version te la vas a encontrar de dos formas tipicas:</p>
 <ul>
 <li><strong>En la ruta:</strong> <code>https://miapi.com/v1/usuarios</code> (la <code>v1</code> salta a la vista).</li>
 <li><strong>En un header:</strong> un encabezado como <code>anthropic-version: 2023-06-01</code>.</li>
 </ul>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>Cuando leas la documentacion de una API, fijate primero en que version estas mirando. Un ejemplo de <code>/v1/</code> no funcionara igual si la doc abierta es de <code>/v2/</code>.</p>
+<p>Cuando abras la documentacion de una API, lo primero es fijarte que version estas mirando. Un ejemplo de <code>/v1/</code> no se comportara igual si la doc que tienes abierta es la de <code>/v2/</code>.</p>
 </blockquote>
 <h2 id="8-paginacion">8. Paginacion</h2>
-<p>Si pides "todos los repos" y hay 5000, el servidor no te los manda de golpe: te los da <strong>por paginas</strong>. Eso es paginar.</p>
+<p>Si pides "todos los repos" y resulta que hay 5000, el servidor no te los suelta de golpe: te los entrega <strong>por paginas</strong>. Eso es paginar.</p>
 <blockquote class="def">
 <h3 id="que-significa-paginacion">🟦 ¿Que significa? — <em>Paginacion</em></h3>
-<p>Es partir un resultado grande en <strong>trozos (paginas)</strong> y entregarlos de a poco. Sirve para no saturar la red ni la memoria, y para que la app cargue rapido. Suele controlarse con query params como <code>page</code> y <code>per_page</code>.
-<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> pide los repos de GitHub paginados (<code>?per_page=30&amp;page=1</code>, luego <code>page=2</code>...) para no descargar cientos de repos de una sola vez.</p>
+<p>Es partir un resultado grande en <strong>trozos (paginas)</strong> y entregarlos poco a poco. Asi no se satura la red ni la memoria, y la app carga rapido. Suele controlarse con query params como <code>page</code> y <code>per_page</code>.
+<strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> pide los repos de GitHub paginados (<code>?per_page=30&amp;page=1</code>, luego <code>page=2</code>...) para no descargarse cientos de repos de una sola vez.</p>
 <h3 id="que-significa-per_page-y-page">🟦 ¿Que significa? — <em>per_page y page</em></h3>
-<p><code>per_page</code> dice <strong>cuantos elementos</strong> por pagina; <code>page</code> dice <strong>que pagina</strong> quieres. Juntos sirven para recorrer un resultado grande en partes manejables.
+<p><code>per_page</code> dice <strong>cuantos elementos</strong> quieres por pagina; <code>page</code> dice <strong>que pagina</strong> pides. Juntos te dejan recorrer un resultado grande en partes manejables.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> usa <code>per_page</code> para limitar el tamano de cada lote y <code>page</code> para avanzar al siguiente.</p>
 </blockquote>
 <pre><code class="language-javascript">// Traer la pagina 2, de 30 en 30:
@@ -256,44 +256,44 @@ const repos = await (await fetch(url)).json();
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-rate-limit-limite-de-peticiones">🟦 ¿Que significa? — <em>Rate limit (limite de peticiones)</em></h3>
-<p>Es el <strong>maximo de peticiones</strong> que la API te deja hacer en cierto tiempo. Sirve para proteger al servidor de abusos. Si lo superas, responde <code>429</code>.
-<strong>Donde se usa en un repo real:</strong> por su filosofia de <strong>refresco bajo demanda</strong>, <strong>Faro</strong> analiza solo cuando el usuario lo pide; eso ayuda a no pegarle de mas a GitHub y respetar su rate limit.</p>
+<p>Es el <strong>maximo de peticiones</strong> que la API te permite en cierto tiempo. Existe para proteger al servidor de abusos. Si te pasas, te responde <code>429</code>.
+<strong>Donde se usa en un repo real:</strong> por su filosofia de <strong>refresco bajo demanda</strong>, <strong>Faro</strong> analiza solo cuando el usuario lo pide; eso ayuda a no pegarle de mas a GitHub y a respetar su rate limit.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>No hagas un bucle que pida pagina tras pagina sin freno: puedes chocar contra el rate limit (<code>429</code>) o agotar la cuota. Pide solo lo que vas a mostrar, justo cuando lo necesitas.</p>
+<p>No montes un bucle que pida pagina tras pagina sin freno: puedes chocar contra el rate limit (<code>429</code>) o agotar tu cuota. Pide solo lo que vas a mostrar, y justo cuando lo necesitas.</p>
 </blockquote>
 <h2 id="9-leer-la-documentacion-de-una-api">9. Leer la documentacion de una API</h2>
-<p>Nadie memoriza las APIs: se <strong>leen</strong>. La documentacion (o "docs") es el manual de instrucciones. Saber leerla es una de las habilidades mas utiles que te llevas de este capitulo.</p>
+<p>Nadie se aprende las APIs de memoria: se <strong>leen</strong>. La documentacion (las "docs") es el manual de instrucciones, y saber leerla es una de las habilidades mas utiles que te llevas de este capitulo.</p>
 <blockquote class="def">
 <h3 id="que-significa-documentacion-docs">🟦 ¿Que significa? — <em>Documentacion (docs)</em></h3>
-<p>Es el <strong>manual</strong> que publica quien hace la API: lista de endpoints, metodos, parametros, ejemplos de peticion y de respuesta. Sirve para saber exactamente que pedir y que esperar, sin adivinar.
+<p>Es el <strong>manual</strong> que publica quien hace la API: la lista de endpoints, los metodos, los parametros, ejemplos de peticion y de respuesta. Te dice exactamente que pedir y que esperar, sin tener que adivinar.
 <strong>Donde se usa en un repo real:</strong> para integrar la IA, <strong>tunal-digital</strong> sigue la documentacion de la API de Claude/Anthropic; para los repos, <strong>Faro</strong> sigue la documentacion de la API de GitHub.</p>
 </blockquote>
-<p>Cuando abras unas docs, busca en este orden:</p>
+<p>Cuando abras unas docs, ve buscando en este orden:</p>
 <ol>
 <li><strong>El endpoint:</strong> la URL y el metodo (<code>GET /user/repos</code>).</li>
-<li><strong>Autenticacion:</strong> como te identificas (suele ser un header).</li>
-<li><strong>Parametros:</strong> de ruta y query params, con cuales son obligatorios.</li>
+<li><strong>Autenticacion:</strong> como te identificas (casi siempre con un header).</li>
+<li><strong>Parametros:</strong> de ruta y query params, y cuales son obligatorios.</li>
 <li><strong>Ejemplo de peticion:</strong> copialo y adaptalo.</li>
-<li><strong>Ejemplo de respuesta:</strong> mira la forma del JSON para saber que claves leer.</li>
-<li><strong>Errores:</strong> que codigos puede devolver y que significan.</li>
+<li><strong>Ejemplo de respuesta:</strong> mira la forma del JSON para saber que claves vas a leer.</li>
+<li><strong>Errores:</strong> que codigos puede devolver y que significa cada uno.</li>
 </ol>
 <blockquote class="tip">
 <h3 id="tip_5">💡 Tip</h3>
-<p>Casi todas las docs traen un "ejemplo con <code>curl</code>". <code>curl</code> es una herramienta de linea de comandos para hacer peticiones. Aunque tu uses <code>fetch</code>, el ejemplo <code>curl</code> te muestra la URL, el metodo y los headers exactos: traducelo mentalmente a tu <code>fetch</code>.</p>
+<p>Casi todas las docs traen un "ejemplo con <code>curl</code>". <code>curl</code> es una herramienta de linea de comandos para hacer peticiones. Aunque tu vayas a usar <code>fetch</code>, el ejemplo de <code>curl</code> te ensena la URL, el metodo y los headers exactos: solo te toca traducirlo mentalmente a tu <code>fetch</code>.</p>
 </blockquote>
 <h2 id="10-las-apis-que-consumen-faro-y-tunal-digital">10. Las APIs que consumen Faro y tunal-digital</h2>
-<p>Pongamos todo junto con los repos reales.</p>
+<p>Juntemos todo lo visto con los repos reales.</p>
 <p><strong>Faro / Organizer</strong> (Next.js + React + TypeScript + Supabase + OpenAI) consume <strong>tres</strong> APIs:</p>
 <ul>
 <li><strong>API de GitHub:</strong> lee tus repositorios, archivos y actividad. Es REST, responde JSON, se pagina con <code>per_page</code>/<code>page</code> y requiere un token para identificarte.</li>
 <li><strong>API de Google Drive:</strong> lee tus documentos de proyecto. Tambien REST + JSON, tambien con autorizacion.</li>
-<li><strong>API de OpenAI:</strong> con los datos leidos, genera la descripcion, el estado, el progreso y el roadmap de cada proyecto. Se le envia (<code>POST</code>) la informacion y devuelve (JSON) el texto generado.</li>
+<li><strong>API de OpenAI:</strong> con los datos ya leidos, genera la descripcion, el estado, el progreso y el roadmap de cada proyecto. Se le envia (<code>POST</code>) la informacion y devuelve (en JSON) el texto generado.</li>
 </ul>
-<p><strong>tunal-digital</strong> (HTML/CSS/JS vanilla) consume la <strong>API de Claude/Anthropic</strong> para su chat de IA, pero con un detalle clave de seguridad: el navegador no llama a Anthropic directamente. Llama a un <strong>Cloudflare Worker</strong>, y el Worker llama a la IA.</p>
+<p><strong>tunal-digital</strong> (HTML/CSS/JS vanilla) consume la <strong>API de Claude/Anthropic</strong> para su chat de IA, pero con un detalle de seguridad que conviene subrayar: el navegador no llama a Anthropic directamente. Llama a un <strong>Cloudflare Worker</strong>, y es el Worker el que llama a la IA.</p>
 <blockquote class="def">
 <h3 id="que-significa-cloudflare-worker">🟦 ¿Que significa? — <em>Cloudflare Worker</em></h3>
-<p>Es un <strong>pequeno programa que corre en el servidor</strong> (en la red de Cloudflare), no en el navegador del usuario. Sirve como intermediario: recibe la peticion del cliente, le anade la clave secreta y reenvia la llamada a la API real.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, el chat envia el mensaje al Worker; el Worker, ya en el servidor, le agrega la clave de la API de Claude y hace la llamada. La clave nunca toca el navegador.</p>
+<p>Es un <strong>pequeno programa que corre en el servidor</strong> (dentro de la red de Cloudflare), no en el navegador del usuario. Hace de intermediario: recibe la peticion del cliente, le anade la clave secreta y reenvia la llamada a la API real.
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, el chat envia el mensaje al Worker; el Worker, que ya esta en el servidor, le agrega la clave de la API de Claude y hace la llamada. La clave nunca toca el navegador.</p>
 </blockquote>
 <pre><code>[Navegador / chat]  --POST mensaje--&gt;  [Cloudflare Worker]  --con la clave--&gt;  [API de Claude]
         ^                                      |
@@ -301,25 +301,25 @@ const repos = await (await fetch(url)).json();
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>El mismo patron lo veras en <strong>Faro</strong>: el navegador habla con las rutas de la propia app (en el servidor de Next.js), y es <strong>el servidor</strong> quien guarda los tokens y llama a GitHub, Drive y OpenAI. El cliente nunca ve los secretos.</p>
+<p>El mismo patron lo veras en <strong>Faro</strong>: el navegador habla con las rutas de la propia app (que viven en el servidor de Next.js), y es <strong>el servidor</strong> quien guarda los tokens y llama a GitHub, Drive y OpenAI. El cliente nunca llega a ver los secretos.</p>
 </blockquote>
 <h2 id="11-seguridad-las-claves-viven-en-el-servidor-jamas-en-el-cliente">11. Seguridad: las claves viven en el servidor, jamas en el cliente</h2>
-<p>Esta seccion es la mas importante. Leela dos veces. Es la regla de oro de Faro y de cualquier proyecto serio.</p>
+<p>Esta seccion es la mas importante de todas. Leela dos veces. Es la regla de oro de Faro y de cualquier proyecto que se tome en serio.</p>
 <blockquote class="def">
 <h3 id="que-significa-clave-de-api-secreto">🟦 ¿Que significa? — <em>Clave de API / secreto</em></h3>
-<p>Es una <strong>credencial</strong> (un texto largo) que te identifica ante una API y suele dar acceso a tu cuenta o a recursos de pago. Sirve para autorizar tus peticiones. Por eso es <strong>secreta</strong>: quien la tenga puede actuar en tu nombre.
-<strong>Donde se usa en un repo real:</strong> la clave de la API de Claude en <strong>tunal-digital</strong> y la clave de OpenAI en <strong>Faro</strong> son secretos; vive cada una en el servidor (el Worker, las variables de entorno de Faro).</p>
+<p>Es una <strong>credencial</strong> (un texto largo) que te identifica ante una API y que suele dar acceso a tu cuenta o a recursos de pago. Autoriza tus peticiones, y justo por eso es <strong>secreta</strong>: quien la tenga puede actuar en tu nombre.
+<strong>Donde se usa en un repo real:</strong> la clave de la API de Claude en <strong>tunal-digital</strong> y la clave de OpenAI en <strong>Faro</strong> son secretos; cada una vive en el servidor (el Worker, las variables de entorno de Faro).</p>
 <h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
-<p>Es un valor de configuracion (como una clave secreta) que se guarda <strong>fuera del codigo</strong>, en el entorno donde corre el servidor. Sirve para no escribir secretos en los archivos y no subirlos por accidente a GitHub.
+<p>Es un valor de configuracion (por ejemplo una clave secreta) que se guarda <strong>fuera del codigo</strong>, en el entorno donde corre el servidor. Asi no escribes los secretos en los archivos ni los subes a GitHub sin querer.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> guarda sus claves y tokens en variables de entorno del servidor y en la tabla <code>user_connections</code> protegida con <strong>RLS</strong> (<em>Row Level Security</em>: una regla de la base de datos que hace que cada usuario solo pueda leer sus propias filas); nunca en el codigo del cliente.</p>
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p><strong>El codigo que llega al navegador es publico.</strong> Cualquiera puede abrir las herramientas de desarrollo y leerlo. Si pones una clave de API en el JavaScript del cliente, la estas <strong>regalando</strong>. Por eso tunal-digital usa un Worker y Faro usa el servidor: para que la clave nunca baje al navegador.</p>
+<p><strong>El codigo que llega al navegador es publico.</strong> Cualquiera puede abrir las herramientas de desarrollo y leerlo entero. Si pones una clave de API en el JavaScript del cliente, basicamente la estas <strong>regalando</strong>. Por eso tunal-digital usa un Worker y Faro usa el servidor: para que la clave nunca baje al navegador.</p>
 <h3 id="cuidado_5">⚠️ Cuidado</h3>
-<p>Nunca pongas secretos en query params (<code>?api_key=...</code>): quedan en logs e historial. Nunca los escribas dentro del codigo fuente. Nunca los subas a GitHub. Si una clave se filtra, <strong>revocala y genera una nueva</strong> de inmediato.</p>
+<p>Nunca metas secretos en query params (<code>?api_key=...</code>): quedan en logs e historial. Nunca los escribas dentro del codigo fuente. Nunca los subas a GitHub. Y si una clave se llega a filtrar, <strong>revocala y genera una nueva</strong> de inmediato.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>Patron seguro, siempre el mismo: <strong>cliente</strong> llama a <strong>tu servidor</strong> (ruta propia o Worker) → <strong>tu servidor</strong> anade el secreto y llama a la <strong>API externa</strong> → la respuesta vuelve al cliente sin el secreto. Si alguna vez te ves tentado a meter la clave en el front, detente: ese es justo el error que este patron evita.</p>
+<p>El patron seguro es siempre el mismo: el <strong>cliente</strong> llama a <strong>tu servidor</strong> (una ruta propia o un Worker) → <strong>tu servidor</strong> anade el secreto y llama a la <strong>API externa</strong> → la respuesta vuelve al cliente sin el secreto. Si en algun momento te dan ganas de meter la clave en el front, frena: ese es exactamente el error que este patron viene a evitar.</p>
 <h3 id="tip_6">💡 Tip</h3>
-<p>Una buena senal de que vas bien: si miras el codigo del navegador con las herramientas de desarrollo y <strong>no</strong> encuentras ninguna clave secreta, vas por buen camino.</p>
+<p>Una buena senal de que vas por buen camino: abres el codigo del navegador con las herramientas de desarrollo y <strong>no</strong> encuentras ninguna clave secreta por ningun lado.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -359,7 +359,7 @@ const repos = await (await fetch(url)).json();
 </li>
 </ol>
 <blockquote>
-<p>Lo lograste. Hoy desarmaste una API REST pieza por pieza: recursos, rutas, parametros, JSON, el contrato y, sobre todo, la regla sagrada de la seguridad. Cuando en los proximos capitulos veamos OAuth y la IA en detalle, vas a reconocer estas piezas por todas partes. Nos vemos en el siguiente. — Bit 🐾</p>
+<p>Lo lograste. Hoy desarmaste una API REST pieza por pieza: recursos, rutas, parametros, JSON, el contrato y, sobre todo, la regla sagrada de la seguridad. Cuando en los proximos capitulos veamos OAuth y la IA con detalle, vas a reconocer estas piezas por todos lados. Nos vemos en el siguiente. — Bit 🐾</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

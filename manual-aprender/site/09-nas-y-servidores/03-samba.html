@@ -18,33 +18,41 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-03-compartir-archivos-con-samba">Capítulo 03 — Compartir archivos con Samba</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>La función estrella de un NAS es <strong>compartir archivos</strong> por la red, para verlos desde tu
-teléfono, laptop o tele. En tu NAS, eso lo hace <strong>Samba</strong>, que ofrece el recurso compartido
-<strong><code>PolyPawNAS</code></strong>. Aquí entiendes cómo funciona y cómo conectarte.</p>
+<p>Lo que hace de verdad útil a un NAS es poder <strong>compartir archivos</strong> por la red y abrirlos
+desde el teléfono, la laptop o la tele sin tener que copiarlos de un lado a otro. En tu NAS,
+de eso se encarga <strong>Samba</strong>, que pone a disposición el recurso compartido <strong><code>PolyPawNAS</code></strong>.
+En este capítulo vas a entender cómo funciona y cómo conectarte a él.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-protocolo-smb-el-idioma-de-carpetas-en-red">1. El protocolo SMB: el idioma de "carpetas en red"</h2>
 <blockquote class="def">
 <h3 id="que-significa-smb-el-protocolo-de-archivos-compartidos">🟦 ¿Qué significa? — <em>SMB (el protocolo de archivos compartidos)</em></h3>
-<p><strong>SMB</strong> (<em>Server Message Block</em>) es el <strong>protocolo</strong> (conjunto de reglas, como HTTP en el
-Módulo 00, pero para archivos) que usan Windows, Mac y Linux para <strong>compartir carpetas por la
-red</strong>. Cuando en Windows ves "carpetas de red" o en Mac "Conectar al servidor", por debajo es
-SMB. Es el estándar universal para esto.</p>
+<p><strong>SMB</strong> (<em>Server Message Block</em>) es el <strong>protocolo</strong> —el conjunto de reglas, igual que HTTP
+en el Módulo 00, pero esta vez para archivos— que usan Windows, Mac y Linux para <strong>compartir
+carpetas por la red</strong>. Cuando en Windows entras a las "carpetas de red" o en Mac usas
+"Conectar al servidor", lo que pasa por debajo es SMB. Es el estándar de toda la vida para
+esto.</p>
 <h3 id="que-significa-samba">🟦 ¿Qué significa? — <em>Samba</em></h3>
-<p><strong>Samba</strong> es el programa que hace que un <strong>Linux</strong> "hable" SMB, es decir, que pueda compartir
-carpetas con equipos Windows/Mac/Linux como si fuera un servidor de archivos nativo. Tu Ubuntu,
-gracias a Samba, aparece en la red como un sitio del que sacar y guardar archivos.
-En tu NAS, el servicio se llama <strong><code>smbd</code></strong> y está activo (lo viste en el capítulo 02).</p>
+<p><strong>Samba</strong> es el programa que hace que un <strong>Linux</strong> sepa "hablar" SMB; es decir, que pueda
+compartir carpetas con equipos Windows, Mac o Linux como si fuera un servidor de archivos de
+los de siempre. Gracias a Samba, tu Ubuntu aparece en la red como un sitio del que sacar y
+guardar archivos. En tu NAS, ese servicio se llama <strong><code>smbd</code></strong> y ya está corriendo (lo viste
+en el capítulo 02).</p>
 <h3 id="que-significa-recurso-compartido-share">🟦 ¿Qué significa? — <em>Recurso compartido (share)</em></h3>
-<p>Un <strong>share</strong> (recurso compartido) es <strong>una carpeta del servidor publicada en la red</strong> con un
-nombre. Tu NAS publica el share <strong><code>PolyPawNAS</code></strong> (que apunta a una carpeta dentro de
-<code>/srv/nas</code>, tu disco de datos). Quien se conecte verá "PolyPawNAS" como una carpeta y podrá
-entrar (según sus permisos).</p>
+<p>Un <strong>share</strong> (recurso compartido) no es más que <strong>una carpeta del servidor que se publica en
+la red</strong> con un nombre. Tu NAS publica el share <strong><code>PolyPawNAS</code></strong>, que apunta a una carpeta
+dentro de <code>/srv/nas</code>, tu disco de datos. Quien se conecte verá "PolyPawNAS" como si fuera una
+carpeta normal y podrá entrar, siempre según sus permisos.</p>
 </blockquote>
 <hr />
 <h2 id="2-como-se-configura-samba-el-panorama">2. Cómo se configura Samba (el panorama)</h2>
-<p>No hace falta que lo configures ahora (ya está hecho), pero conviene entender las piezas:</p>
+<p>No tienes que configurar nada ahora —ya está hecho—, pero vale la pena saber qué piezas hay
+detrás:</p>
 <blockquote class="def">
 <h3 id="que-significa-el-archivo-smbconf">🟦 ¿Qué significa? — <em>El archivo <code>smb.conf</code></em></h3>
 <p>Samba se configura en un archivo de texto, <strong><code>/etc/smb/smb.conf</code></strong> (o <code>/etc/samba/smb.conf</code>).
@@ -54,53 +62,57 @@ Ahí se definen los shares. Una entrada típica para tu recurso se vería así:
    path = /srv/nas/compartido      # qué carpeta se comparte
    read only = no                  # ¿se puede escribir? (no = sí se puede)
    valid users = edwar             # quién puede entrar</code>
-- <code>[PolyPawNAS]</code> → el <strong>nombre</strong> del share que ves en la red.
+- <code>[PolyPawNAS]</code> → el <strong>nombre</strong> del share, tal como lo ves en la red.
 - <code>path</code> → la carpeta real del servidor que se publica.
 - <code>valid users</code> / <code>read only</code> → <strong>quién</strong> entra y si puede <strong>escribir</strong> o solo leer.
-Tras editar <code>smb.conf</code>, se reinicia el servicio: <code>sudo systemctl restart smbd</code> (capítulo 02).</p>
+Cada vez que editas <code>smb.conf</code>, hay que reiniciar el servicio: <code>sudo systemctl restart smbd</code>
+(capítulo 02).</p>
 <h3 id="que-significa-usuario-de-samba">🟦 ¿Qué significa? — <em>Usuario de Samba</em></h3>
-<p>Samba tiene su <strong>propia contraseña</strong> por usuario (separada de la de Linux), que se crea con
-<code>sudo smbpasswd -a edwar</code>. Por eso, al conectarte desde otro dispositivo, te pide usuario y
-contraseña: es esa credencial la que valida quién puede ver tus archivos. Seguridad básica:
-<strong>el share no está abierto a cualquiera</strong>, pide identificarse.</p>
+<p>Samba maneja su <strong>propia contraseña</strong> por cada usuario, distinta de la de Linux, y se crea con
+<code>sudo smbpasswd -a edwar</code>. Por eso, cuando te conectas desde otro dispositivo, te pide usuario
+y contraseña: es esa credencial la que decide quién puede ver tus archivos. Es la seguridad
+mínima razonable: <strong>el share no queda abierto para cualquiera</strong>, hay que identificarse.</p>
 <h3 id="tip-permisos-dos-capas">💡 Tip — Permisos: dos capas</h3>
-<p>El acceso a tus archivos pasa por <strong>dos</strong> controles: (1) los permisos de <strong>Samba</strong> (<code>valid
-users</code>, contraseña) y (2) los permisos de <strong>Linux</strong> del archivo (rwx, capítulo 02). Ambos deben
-permitir la acción. Si algo "no deja escribir", suele ser uno de los dos. Es defensa en capas.</p>
+<p>El acceso a tus archivos pasa por <strong>dos</strong> controles distintos: (1) los permisos de <strong>Samba</strong>
+(<code>valid users</code>, la contraseña) y (2) los permisos de <strong>Linux</strong> del propio archivo (rwx,
+capítulo 02). Los dos tienen que dar luz verde para que la acción funcione. Cuando algo "no
+deja escribir", casi siempre el problema está en uno de esos dos sitios. Es defensa en capas.</p>
 </blockquote>
 <hr />
 <h2 id="3-conectarte-al-nas-desde-tus-dispositivos">3. Conectarte al NAS desde tus dispositivos</h2>
-<p>Esta es la parte práctica que usarás siempre. Necesitas la <strong>dirección</strong> del NAS en la red (su
-IP o su nombre <code>polypaw-nas</code>) y tu usuario/contraseña de Samba.</p>
+<p>Esta es la parte que vas a usar todos los días. Solo necesitas dos cosas: la <strong>dirección</strong> del
+NAS en la red (su IP o su nombre <code>polypaw-nas</code>) y tu usuario y contraseña de Samba.</p>
 <blockquote class="tip">
 <h3 id="tip-conectarse-segun-el-dispositivo">💡 Tip — Conectarse según el dispositivo</h3>
 <ul>
 <li><strong>Windows:</strong> en el Explorador de archivos, escribe en la barra de dirección
-  <code>\\polypaw-nas\PolyPawNAS</code> (o <code>\\IP-del-nas\PolyPawNAS</code>). Pide usuario y contraseña.</li>
+  <code>\\polypaw-nas\PolyPawNAS</code> (o <code>\\IP-del-nas\PolyPawNAS</code>). Te pedirá usuario y contraseña.</li>
 <li><strong>Mac:</strong> Finder → menú <em>Ir</em> → <em>Conectarse al servidor</em> → <code>smb://polypaw-nas/PolyPawNAS</code>.</li>
-<li><strong>Teléfono (Android/iOS):</strong> una app de archivos con soporte SMB (muchas lo traen) y la misma
-  dirección <code>smb://...</code>.</li>
+<li><strong>Teléfono (Android/iOS):</strong> una app de archivos con soporte SMB (muchas ya lo traen de
+  serie) y la misma dirección <code>smb://...</code>.</li>
 <li><strong>Linux:</strong> en el gestor de archivos, "Otras ubicaciones" → <code>smb://polypaw-nas/PolyPawNAS</code>.
-Una vez conectado, esa carpeta se comporta como cualquier otra: copias, abres y guardas
-archivos, pero <strong>viven en el NAS</strong>, no en tu dispositivo.</li>
+Una vez conectado, esa carpeta se porta como cualquier otra: copias, abres y guardas archivos
+con normalidad, solo que en realidad <strong>viven en el NAS</strong>, no en tu dispositivo.</li>
 </ul>
 <h3 id="que-significa-montar-el-recurso-acceso-permanente">🟦 ¿Qué significa? — <em>Montar el recurso (acceso permanente)</em></h3>
-<p>"Montar" el share (como montabas un disco en el capítulo 02) hace que aparezca <strong>siempre</strong> como
-una unidad/carpeta fija en tu equipo, sin reconectarte cada vez. En Windows se llama "conectar a
-unidad de red"; en Mac/Linux, montar en una carpeta. Cómodo para usarlo a diario.</p>
+<p>"Montar" el share —igual que montabas un disco en el capítulo 02— hace que aparezca
+<strong>siempre</strong> como una unidad o carpeta fija en tu equipo, sin tener que reconectarte cada vez.
+En Windows se llama "conectar a unidad de red"; en Mac y Linux, montar en una carpeta. Es lo
+más cómodo si lo vas a usar a diario.</p>
 </blockquote>
 <hr />
 <h2 id="4-por-que-samba-y-no-otra-cosa-nfs">4. Por qué Samba y no otra cosa (NFS)</h2>
 <blockquote class="def">
 <h3 id="que-significa-smb-vs-nfs">🟦 ¿Qué significa? — <em>SMB vs. NFS</em></h3>
-<p>Existe otro protocolo para compartir archivos en red: <strong>NFS</strong> (<em>Network File System</em>), más común
-entre equipos <strong>solo-Linux</strong>. SMB (Samba) es mejor cuando hay <strong>mezcla</strong> de Windows/Mac/Linux y
-teléfonos, que es el caso normal en una casa. <strong>Tu NAS usa Samba y NFS está desactivado</strong>:
-decisión correcta para máxima compatibilidad con todos tus aparatos.</p>
+<p>Hay otro protocolo para compartir archivos en red: <strong>NFS</strong> (<em>Network File System</em>), que es más
+habitual entre equipos <strong>solo-Linux</strong>. SMB (Samba) gana cuando tienes una <strong>mezcla</strong> de
+Windows, Mac, Linux y teléfonos, que es justo lo normal en una casa. <strong>Tu NAS usa Samba y NFS
+está desactivado</strong>, y es la decisión correcta: así te entiendes con todos tus aparatos.</p>
 <h3 id="en-tu-equipo">🔎 En tu equipo</h3>
-<p>Recapitulando tu configuración real de archivos: Ubuntu Server + servicio <strong><code>smbd</code></strong> activo +
-share <strong><code>PolyPawNAS</code></strong> sobre el disco de datos en <strong><code>/srv/nas</code></strong>. Eso es, exactamente, "tu nube
-privada" del capítulo 01, hecha funcionar por Samba.</p>
+<p>Recapitulando cómo quedó tu configuración real de archivos: Ubuntu Server + el servicio
+<strong><code>smbd</code></strong> activo + el share <strong><code>PolyPawNAS</code></strong> montado sobre el disco de datos en
+<strong><code>/srv/nas</code></strong>. Eso es, ni más ni menos, "tu nube privada" del capítulo 01, puesta en marcha
+por Samba.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

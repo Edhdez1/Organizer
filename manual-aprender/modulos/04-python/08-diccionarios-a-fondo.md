@@ -5,21 +5,21 @@
 </p>
 
 
-> Hola, soy Bit, tu ajolote guia. En el capitulo anterior aprendiste a guardar muchas cosas en orden con las listas. Hoy damos un salto que lo cambia todo: vamos a guardar cosas **con nombre**. En vez de decir "el elemento numero 3 de la lista", vas a decir "el campo `nombre`" o "el campo `puntos`". Eso es un **diccionario**, y es la estructura con la que esta construido casi todo PolyPaw por dentro: el perfil del usuario, las misiones, la configuracion... todo. Respira hondo, mueve las branquias y vamos.
+> Hola, soy Bit, tu ajolote guia. En el capitulo anterior aprendiste a guardar muchas cosas en orden con las listas. Hoy damos un paso que cambia bastante la forma de trabajar: vamos a guardar cosas **con nombre**. En lugar de decir "el elemento numero 3 de la lista", diras "el campo `nombre`" o "el campo `puntos`". A eso lo llamamos **diccionario**, y es la estructura con la que esta armado casi todo PolyPaw por dentro: el perfil del usuario, las misiones, la configuracion... todo. Respira hondo, mueve las branquias y empezamos.
 
 ---
 
 ## 1. ¿Que problema resuelve un diccionario?
 
-Imagina que quieres guardar los datos de un usuario de PolyPaw: su nombre, su idioma, sus puntos y su nivel. Con lo que sabes hasta ahora podrias usar una lista:
+Supon que quieres guardar los datos de un usuario de PolyPaw: su nombre, su idioma, sus puntos y su nivel. Con lo que sabes hasta ahora, lo natural seria usar una lista:
 
 ```python
 usuario = ["Edwar", "ingles", 1500, 3]
 ```
 
-El problema salta enseguida: ¿que es el `1500`? ¿Y el `3`? Tienes que **recordar de memoria** que la posicion 2 son los puntos y la 3 el nivel. Si manana agregas un dato en medio, todas las posiciones se mueven y se rompe tu codigo. Es fragil y confuso.
+Y enseguida aparece el problema: ¿que es el `1500`? ¿Y el `3`? Tienes que **acordarte de memoria** de que la posicion 2 son los puntos y la 3 el nivel. Si manana agregas un dato en medio, todas las posiciones se corren y tu codigo se rompe. Es fragil y se presta a confusion.
 
-Un diccionario resuelve esto poniendo una **etiqueta** a cada dato:
+Un diccionario lo arregla poniendole una **etiqueta** a cada dato:
 
 ```python
 usuario = {
@@ -30,24 +30,24 @@ usuario = {
 }
 ```
 
-Ahora se lee solo. `usuario["puntos"]` es 1500, sin contar posiciones. Esto es exactamente lo que hace PolyPaw para representar al estudiante.
+Ahora se entiende a la primera. `usuario["puntos"]` es 1500, sin andar contando posiciones. Esto es justo lo que hace PolyPaw para representar al estudiante.
 
 > ### 🟦 ¿Que significa? — *Diccionario*
 > Un **diccionario** es una coleccion que guarda parejas de **clave** y **valor**. La clave es la etiqueta (como `"nombre"`) y el valor es el dato que esa etiqueta guarda (como `"Edwar"`). Sirve para almacenar informacion donde cada dato tiene un significado claro y lo buscas por su nombre, no por su posicion. En PolyPaw, el perfil del usuario y cada mision son diccionarios; cuando `database_manager.py` lee un archivo JSON, lo convierte en un diccionario de Python.
 
 > ### 🟦 ¿Que significa? — *Clave y valor*
-> La **clave** (en ingles *key*) es el nombre que identifica un dato dentro del diccionario; el **valor** (*value*) es el dato en si. En `"puntos": 1500`, la clave es `"puntos"` y el valor es `1500`. Las claves suelen ser texto (cadenas) y deben ser unicas: no puede haber dos claves `"puntos"` en el mismo diccionario. Sirve para que cada pieza de informacion tenga una direccion con nombre.
+> La **clave** (en ingles *key*) es el nombre que identifica un dato dentro del diccionario; el **valor** (*value*) es el dato en si. En `"puntos": 1500`, la clave es `"puntos"` y el valor es `1500`. Las claves suelen ser texto (cadenas) y tienen que ser unicas: no puede haber dos claves `"puntos"` en el mismo diccionario. Asi cada pieza de informacion tiene su propia direccion con nombre.
 
 > ### 💡 Tip
-> Fijate en las **llaves** `{ }`. Las listas usan corchetes `[ ]`, las tuplas usan parentesis `( )`, y los diccionarios usan llaves `{ }` con parejas `clave: valor`. Esa pareja separada por dos puntos es la marca registrada del diccionario.
+> Fijate en las **llaves** `{ }`. Las listas usan corchetes `[ ]`, las tuplas usan parentesis `( )`, y los diccionarios usan llaves `{ }` con parejas `clave: valor`. Esa pareja separada por dos puntos es la marca de la casa del diccionario.
 
-Si vienes del modulo de JavaScript, esto te va a sonar muchisimo: un diccionario de Python es practicamente lo mismo que un **objeto** de JavaScript (`{ nombre: "Edwar" }`). La diferencia mas visible es que en Python las claves van casi siempre entre comillas (`"nombre"`).
+Si vienes del modulo de JavaScript, esto te va a resultar familiar: un diccionario de Python es practicamente lo mismo que un **objeto** de JavaScript (`{ nombre: "Edwar" }`). La diferencia que mas salta a la vista es que en Python las claves van casi siempre entre comillas (`"nombre"`).
 
 ---
 
 ## 2. Crear y leer un diccionario
 
-Crear uno es escribir las parejas entre llaves. Tambien puedes empezar con uno vacio y llenarlo despues:
+Crear uno es escribir las parejas entre llaves. Tambien puedes arrancar con uno vacio y llenarlo despues:
 
 ```python
 # Diccionario con datos desde el inicio
@@ -83,16 +83,16 @@ mision["dificultad"] = "facil" # agrega una clave nueva
 > ```python
 > print(mision["autor"])   # KeyError: 'autor'
 > ```
-> Ese `KeyError` significa "no encontre esa clave". En la siguiente seccion veras la forma segura de evitarlo.
+> Ese `KeyError` quiere decir "no encontre esa clave". En la siguiente seccion veras la forma segura de evitarlo.
 
 > ### 🟦 ¿Que significa? — *KeyError*
-> Un **KeyError** es el error que Python muestra cuando intentas leer una clave que no esta en el diccionario. "Key" es clave en ingles y "Error" es error. Sirve como aviso de que pediste algo que no existe. En una app real como PolyPaw, un `KeyError` no atendido puede tumbar la pantalla del usuario, por eso conviene leer las claves de forma segura.
+> Un **KeyError** es el error que Python muestra cuando intentas leer una clave que no esta en el diccionario. "Key" es clave en ingles y "Error" es error. Funciona como aviso de que pediste algo que no existe. En una app real como PolyPaw, un `KeyError` que nadie atiende puede tumbar la pantalla del usuario, por eso conviene leer las claves con cuidado.
 
 ---
 
 ## 3. Acceso seguro con `.get()`
 
-A veces no estas seguro de si una clave existe. Por ejemplo, un usuario nuevo de PolyPaw quizas todavia no tiene el campo `"racha"`. Para esos casos usas `.get()` en lugar de los corchetes.
+Hay veces en que no estas seguro de si una clave existe. Por ejemplo, un usuario nuevo de PolyPaw quizas todavia no tiene el campo `"racha"`. Para esos casos usas `.get()` en lugar de los corchetes.
 
 ```python
 usuario = {"nombre": "Edwar", "puntos": 1500}
@@ -104,7 +104,7 @@ usuario = {"nombre": "Edwar", "puntos": 1500}
 print(usuario.get("racha"))        # None
 ```
 
-Lo mas util es que puedes dar un **valor por defecto**: si la clave no existe, `.get()` te devuelve lo que tu indiques en vez de `None`.
+Lo mejor es que puedes darle un **valor por defecto**: si la clave no existe, `.get()` te devuelve lo que tu indiques en vez de `None`.
 
 ```python
 racha = usuario.get("racha", 0)
@@ -115,18 +115,18 @@ print(racha)   # 0  -> usuario nuevo, asumimos racha cero
 > El **metodo `.get()`** es una herramienta del diccionario que busca una clave y devuelve su valor; si la clave no existe, devuelve `None` (o el valor por defecto que le pases como segundo argumento) en lugar de provocar un error. Sirve para leer datos que **podrian no estar** sin arriesgarte a un `KeyError`. PolyPaw lo usa para leer campos opcionales del perfil, como configuraciones que un usuario nuevo aun no ha tocado.
 
 > ### 🟦 ¿Que significa? — *Valor por defecto*
-> Un **valor por defecto** es el valor que se usa cuando no hay otro disponible. En `usuario.get("racha", 0)`, ese `0` es el valor por defecto: "si no hay racha guardada, considerala 0". Sirve para que tu programa siempre tenga algo razonable con que trabajar y no se quede con un `None` que despues cause problemas.
+> Un **valor por defecto** es el valor que se usa cuando no hay otro disponible. En `usuario.get("racha", 0)`, ese `0` es el valor por defecto: "si no hay racha guardada, considerala 0". Asi tu programa siempre tiene algo razonable con que trabajar y no se queda con un `None` que despues te da problemas.
 
 > ### 💡 Tip
-> Regla practica: usa **corchetes** `[ ]` cuando estes seguro de que la clave existe (porque tu mismo la creaste), y usa **`.get()`** cuando el dato venga de afuera (un archivo JSON, lo que escribio el usuario, una respuesta de internet) y no tengas garantia de que este.
+> Regla practica: usa **corchetes** `[ ]` cuando estes seguro de que la clave existe (porque tu mismo la creaste), y usa **`.get()`** cuando el dato venga de afuera (un archivo JSON, lo que escribio el usuario, una respuesta de internet) y no tengas garantia de que este ahi.
 
-En JavaScript, leer una propiedad ausente te da `undefined` sin reventar; en Python los corchetes **si** revientan, por eso `.get()` es tan importante.
+En JavaScript, leer una propiedad ausente te da `undefined` sin reventar; en Python los corchetes **si** revientan, y por eso `.get()` es tan importante.
 
 ---
 
 ## 4. Recorrer un diccionario: `.items()`, `.keys()`, `.values()`
 
-Muchas veces quieres pasar por **todo** el diccionario, dato por dato. Hay tres formas, segun lo que necesites.
+Muchas veces quieres pasar por **todo** el diccionario, dato por dato. Hay tres formas de hacerlo, segun lo que necesites.
 
 Partimos de este perfil:
 
@@ -170,7 +170,7 @@ for valor in usuario.values():
 
 ### Recorrer claves y valores juntos con `.items()`
 
-Esta es la mas usada. Te da las dos cosas a la vez:
+Esta es la que mas vas a usar. Te da las dos cosas a la vez:
 
 ```python
 for clave, valor in usuario.items():
@@ -188,10 +188,10 @@ for clave, valor in usuario.items():
 > El **metodo `.keys()`** devuelve solo las claves (los nombres) y el **metodo `.values()`** devuelve solo los valores (los datos). Sirven cuando te interesa una sola de las dos partes; por ejemplo, `.values()` para sumar todos los puntos de un conjunto, o `.keys()` para revisar que campos tiene un perfil.
 
 > ### 🟦 ¿Que significa? — *Desempaquetado*
-> El **desempaquetado** es cuando Python toma un grupo de valores que vienen juntos (como la pareja clave-valor que entrega `.items()`) y los reparte en varias variables de una sola vez. En `for clave, valor in usuario.items()`, cada vuelta trae una pareja y Python la "desempaqueta": pone la clave en `clave` y el valor en `valor`. Sirve para escribir codigo mas limpio sin tener que sacar cada pieza a mano.
+> El **desempaquetado** es cuando Python toma un grupo de valores que vienen juntos (como la pareja clave-valor que entrega `.items()`) y los reparte en varias variables de una sola vez. En `for clave, valor in usuario.items()`, cada vuelta trae una pareja y Python la "desempaqueta": pone la clave en `clave` y el valor en `valor`. Asi tu codigo queda mas limpio, sin tener que sacar cada pieza a mano.
 
 > ### 💡 Tip
-> El truco `for clave, valor in ...items()` se apoya en ese desempaquetado: Python toma la pareja y la reparte en dos variables de un solo golpe. Le puedes poner los nombres que quieras (`for k, v in ...`), pero `clave, valor` se lee mucho mejor.
+> El truco `for clave, valor in ...items()` se apoya en ese desempaquetado: Python toma la pareja y la reparte en dos variables de un solo golpe. Puedes ponerles los nombres que quieras (`for k, v in ...`), pero `clave, valor` se lee mucho mejor.
 
 ---
 
@@ -215,7 +215,7 @@ mision = {
 }
 ```
 
-Mira la estructura: la clave `"autor"` guarda **otro diccionario**, y la clave `"ejercicios"` guarda **una lista de diccionarios**. Esto es lo normal en datos del mundo real.
+Mira la estructura: la clave `"autor"` guarda **otro diccionario**, y la clave `"ejercicios"` guarda **una lista de diccionarios**. Asi se ven los datos del mundo real la mayor parte del tiempo.
 
 > ### 🟦 ¿Que significa? — *Diccionario anidado*
 > Un **diccionario anidado** es un diccionario que tiene, dentro de alguno de sus valores, otro diccionario (o una lista de diccionarios). "Anidar" es meter una cosa dentro de otra, como cajas dentro de cajas. Sirve para representar informacion que tiene estructura por niveles: una mision que a su vez contiene varios ejercicios, cada uno con su propia pregunta y respuesta. Casi todos los archivos JSON de PolyPaw son diccionarios anidados.
@@ -231,10 +231,10 @@ print(mision["ejercicios"][0]["pregunta"])    # Hello
 print(mision["ejercicios"][1]["respuesta"])   # Adios
 ```
 
-Leelo de izquierda a derecha como una direccion: "de la mision, entra en autor, y de ahi saca el nombre". El `[0]` del segundo ejemplo es porque `"ejercicios"` es una **lista**, asi que primero eliges el ejercicio por posicion y luego entras a su clave.
+Leelo de izquierda a derecha, como si fuera una direccion: "de la mision, entra en autor, y de ahi saca el nombre". El `[0]` del segundo ejemplo aparece porque `"ejercicios"` es una **lista**, asi que primero eliges el ejercicio por su posicion y luego entras a su clave.
 
 > ### ⚠️ Cuidado
-> Cada `[ ]` que encadenas puede fallar si esa pieza no existe. `mision["autor"]["telefono"]` reventaria porque el autor no tiene `"telefono"`. Para datos anidados inseguros, encadena `.get()` con cuidado:
+> Cada `[ ]` que encadenas puede fallar si esa pieza no existe. `mision["autor"]["telefono"]` reventaria porque el autor no tiene `"telefono"`. Para datos anidados que no son de fiar, encadena `.get()` con cuidado:
 > ```python
 > pais = mision.get("autor", {}).get("pais", "desconocido")
 > ```
@@ -267,7 +267,7 @@ else:
     print("Usuario nuevo, sin racha aun")
 ```
 
-Y para sumar a un valor existente (muy comun: sumar puntos cuando se completa una mision):
+Y para sumar a un valor existente (algo muy comun: sumar puntos cuando se completa una mision):
 
 ```python
 usuario = {"nombre": "Edwar", "puntos": 1500}
@@ -291,7 +291,7 @@ usuario["puntos"] += 50                        # ahora 1600
 
 En el capitulo de listas viste las **comprensiones de lista**, esa forma compacta de construir una lista en una sola linea. Los diccionarios tienen su version equivalente: las **comprensiones de diccionario**.
 
-Supongamos que tienes una lista de idiomas y quieres un diccionario que diga cuantas letras tiene cada uno:
+Imagina que tienes una lista de idiomas y quieres un diccionario que diga cuantas letras tiene cada uno:
 
 ```python
 idiomas = ["ingles", "frances", "aleman"]
@@ -344,12 +344,12 @@ print(positivos)   # {'puntos': 1500, 'nivel': 3}
 
 ## 8. ¿Diccionario o lista? Cuando usar cada uno
 
-Esta es una decision que tomaras todo el tiempo. La regla mas simple:
+Esta es una decision que vas a tomar todo el tiempo. La regla mas simple es esta:
 
 - Usa una **lista** cuando tienes **muchas cosas del mismo tipo en orden** y las recorres o las cuentas. Ejemplo: la lista de todas las misiones de un idioma, los ejercicios de una mision.
 - Usa un **diccionario** cuando tienes **un conjunto de datos con nombre** que describen **una sola cosa**, y los buscas por etiqueta. Ejemplo: el perfil de un usuario, una mision individual con su titulo, puntos y autor.
 
-Muy a menudo se **combinan**: una lista de diccionarios. Eso es justo el caso de PolyPaw: una **lista** de misiones, donde cada mision es un **diccionario**.
+Muy a menudo se **combinan**: una lista de diccionarios. Ese es justo el caso de PolyPaw: una **lista** de misiones, donde cada mision es un **diccionario**.
 
 | Pregunta | Si... | Usa |
 |----------|-------|-----|
@@ -379,7 +379,7 @@ print(misiones[0]["titulo"])                 # Saludos basicos
 > ### ⚠️ Cuidado
 > No abuses de los diccionarios para cosas que son claramente una secuencia. Guardar tus ejercicios como `{"1": ..., "2": ..., "3": ...}` con claves que son numeros disfrazados de texto es senal de que en realidad querias una **lista**. Si lo unico que distingue a tus datos es un orden, usa lista.
 
-Si recuerdas el modulo de JavaScript: alla tambien combinabas **arrays** (las listas de Python) con **objetos** (los diccionarios de Python) exactamente igual, un array de objetos. El concepto es identico; solo cambia un poco la sintaxis.
+Si te acuerdas del modulo de JavaScript: alla tambien combinabas **arrays** (las listas de Python) con **objetos** (los diccionarios de Python) exactamente igual, un array de objetos. El concepto es identico; solo cambia un poco la sintaxis.
 
 ---
 

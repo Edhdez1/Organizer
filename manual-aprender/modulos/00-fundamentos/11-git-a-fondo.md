@@ -5,33 +5,33 @@
 </p>
 
 
-> En el capítulo 05 aprendiste a hacer tus primeros `commit` y a guardar la historia de tu proyecto. Ahora vas a llevar Git al siguiente nivel: trabajar con **ramas** para experimentar sin miedo, **fusionar** tu trabajo, resolver **conflictos** cuando dos cambios chocan, **comparar versiones**, **deshacer errores** con calma y decidir qué archivos Git debe **ignorar**. Todo esto es lo que separa a alguien que "usa Git" de alguien que de verdad confía en Git. Y, como bonus, entenderás el mismo flujo de trabajo con ramas y *pull requests* que usamos para construir este propio manual. Bit, tu ajolote guía, te acompaña con la linterna encendida.
+> En el capítulo 05 hiciste tus primeros `commit` y empezaste a guardar la historia de tu proyecto. Aquí damos un paso más: vas a trabajar con **ramas** para experimentar sin miedo, **fusionar** tu trabajo cuando esté listo, salir vivo de los **conflictos** cuando dos cambios chocan, **comparar versiones**, **deshacer errores** sin sudar frío y decidir qué archivos Git debe **ignorar**. Eso es justo lo que diferencia a quien "usa Git" de quien de verdad confía en Git. Y de paso vas a entender el mismo flujo de ramas y *pull requests* con el que construimos este manual. Bit, tu ajolote guía, te acompaña con la linterna encendida.
 
 ## 1. Repaso rápido: ¿dónde quedamos?
 
-En el capítulo 05 vimos que Git guarda "fotos" de tu proyecto llamadas *commits*. Cada commit tiene un mensaje, una fecha y un identificador único. Hasta ahora trabajabas en una sola línea de tiempo: hacías un cambio, lo guardabas, hacías otro, lo guardabas, y así.
+En el capítulo 05 vimos que Git guarda "fotos" de tu proyecto llamadas *commits*. Cada commit lleva un mensaje, una fecha y un identificador único. Hasta ahora trabajabas sobre una sola línea de tiempo: hacías un cambio y lo guardabas, hacías otro y lo guardabas, y así una cosa detrás de otra.
 
-El problema aparece cuando quieres **probar algo nuevo sin romper lo que ya funciona**. Por ejemplo, en tu proyecto **RachaSimple** (la app de hábitos en React) quieres añadir una pantalla de estadísticas, pero no estás seguro de que vaya a quedar bien. Si tocas el código directamente y algo falla, te quedas sin nada que funcione. La solución es trabajar en una **rama** separada.
+El lío empieza cuando quieres **probar algo nuevo sin romper lo que ya funciona**. Imagina que en tu proyecto **RachaSimple** (la app de hábitos en React) se te ocurre añadir una pantalla de estadísticas, pero no tienes claro si va a quedar bien. Si metes mano al código directamente y algo se rompe, te quedas sin nada que funcione. Para eso sirve trabajar en una **rama** aparte.
 
 > ### 🟦 ¿Qué significa? — *Rama (branch)*
-> Una **rama** es una línea de trabajo paralela dentro de tu repositorio. Es como sacar una fotocopia de tu proyecto en su estado actual y empezar a dibujar sobre esa copia, sin tocar el original. Sirve para experimentar, desarrollar una funcionalidad o arreglar un error de forma aislada. Si sale bien, juntas el resultado con el original; si sale mal, tiras la rama y no pasó nada.
-> **¿Dónde se usa en tu proyecto?** En **Faro** (la carpeta Organizer), cada vez que una sesión añade una nueva *feature* lo hace en una rama propia antes de fusionarla a `main`.
+> Una **rama** es una línea de trabajo paralela dentro de tu repositorio. Piénsalo como sacar una fotocopia de tu proyecto tal y como está ahora y empezar a dibujar sobre esa copia, sin tocar el original. Te sirve para experimentar, desarrollar una funcionalidad o arreglar un error de forma aislada. Si sale bien, juntas el resultado con el original; si sale mal, tiras la rama y aquí no ha pasado nada.
+> **¿Dónde se usa en tu proyecto?** En **Faro** (la carpeta Organizer), cada vez que una sesión añade una *feature* nueva la trabaja en su propia rama antes de fusionarla a `main`.
 
 ## 2. La rama principal y por qué no se toca a la ligera
 
-Cuando creas un repositorio, Git crea una rama por defecto. Hoy se llama casi siempre `main` (antes se llamaba `master`).
+Al crear un repositorio, Git genera una rama por defecto. Hoy casi siempre se llama `main` (antes solía llamarse `master`).
 
 > ### 🟦 ¿Qué significa? — *`main`*
-> `main` es el nombre de la rama principal: la versión "oficial" y estable de tu proyecto. Sirve como la fuente de la verdad. La idea es que el código en `main` siempre funcione, de modo que cualquiera que lo descargue obtenga algo que no esté roto.
+> `main` es el nombre de la rama principal: la versión "oficial" y estable de tu proyecto, la fuente de la verdad. La idea es que el código en `main` siempre funcione, de modo que cualquiera que lo descargue se encuentre algo que no esté roto.
 
-La regla de oro de los proyectos serios es: **no trabajes directamente sobre `main`**. En su lugar, creas una rama para tu tarea, trabajas tranquilo ahí, y solo cuando esté listo y probado lo llevas a `main`. Así `main` se mantiene siempre sano.
+La regla de oro en los proyectos serios es una sola: **no trabajes directamente sobre `main`**. Lo que haces es crear una rama para tu tarea, trabajar tranquilo ahí, y solo cuando esté listo y probado lo llevas a `main`. Así `main` se mantiene siempre sano.
 
 > ### 💡 Tip — Una rama, una tarea
-> No metas diez cosas distintas en la misma rama. Una rama debería resolver **un** asunto concreto: "añadir login", "arreglar el color del botón", "corregir el cálculo de progreso". Ramas pequeñas y enfocadas son fáciles de revisar y de fusionar.
+> No metas diez cosas distintas en la misma rama. Una rama debería resolver **un** asunto concreto: "añadir login", "arreglar el color del botón", "corregir el cálculo de progreso". Las ramas pequeñas y enfocadas son fáciles de revisar y de fusionar.
 
 ## 3. Crear, listar y cambiar de rama
 
-Veamos los comandos. Imagina que estás en **RachaSimple** y quieres crear la rama de las estadísticas.
+Vamos a los comandos. Supón que estás en **RachaSimple** y quieres crear la rama de las estadísticas.
 
 ```bash
 # Ver en qué rama estás y qué otras existen
@@ -44,16 +44,16 @@ git branch estadisticas
 git switch estadisticas
 ```
 
-Hay un atajo muy común que **crea la rama y te cambia a ella** en un solo paso:
+Existe un atajo muy usado que **crea la rama y te cambia a ella** de un solo golpe:
 
 ```bash
 git switch -c estadisticas
 ```
 
 > ### 🟦 ¿Qué significa? — *`switch` y `checkout`*
-> `git switch` sirve para moverte entre ramas. Verás también `git checkout` en tutoriales antiguos: hace lo mismo (y más cosas), pero Git separó esa función en `switch` precisamente porque `checkout` hacía demasiadas tareas distintas y confundía. Para cambiar de rama, prefiere `switch`; es más claro.
+> `git switch` sirve para moverte entre ramas. En tutoriales antiguos verás `git checkout`, que hace lo mismo (y unas cuantas cosas más). Git decidió separar esa función en `switch` precisamente porque `checkout` cargaba con demasiadas tareas distintas y eso confundía a todo el mundo. Para cambiar de rama, quédate con `switch`; es más claro.
 
-Cuando te cambias de rama, los archivos en tu carpeta **cambian** para reflejar el estado de esa rama. Si en `main` el archivo `src/components/Stats.tsx` no existía y en tu rama sí, al volver a `main` ese archivo desaparece de la vista (pero sigue guardado en la rama). Esto asusta la primera vez; es normal. No perdiste nada: cada rama recuerda su propia versión.
+Cuando te cambias de rama, los archivos de tu carpeta **cambian** para reflejar el estado de esa rama. Si en `main` no existía el archivo `src/components/Stats.tsx` y en tu rama sí, al volver a `main` ese archivo desaparece de la vista (pero sigue guardado en la rama). La primera vez asusta un poco; es normal. No perdiste nada: cada rama recuerda su propia versión.
 
 > ### 🔎 En tu código
 > En **RachaSimple**, una rama típica viviría así:
@@ -63,14 +63,14 @@ Cuando te cambias de rama, los archivos en tu carpeta **cambian** para reflejar 
 > git add src/components/StatsView.tsx src/hooks/useStats.ts
 > git commit -m "Añade vista de estadísticas semanales"
 > ```
-> Mientras tanto, tu rama `main` sigue intacta con la app funcionando como antes.
+> Mientras tanto, tu rama `main` sigue intacta, con la app funcionando igual que antes.
 
 ## 4. Ver diferencias con `diff`
 
-Antes de guardar nada, conviene mirar **qué cambiaste exactamente**. Para eso está `git diff`.
+Antes de guardar nada, vale la pena mirar **qué cambiaste exactamente**. Para eso está `git diff`.
 
 > ### 🟦 ¿Qué significa? — *`diff` (diferencia)*
-> Un **diff** es una comparación que muestra, línea por línea, qué cambió entre dos versiones de un archivo. Las líneas que añadiste aparecen con `+` (normalmente en verde) y las que borraste con `-` (en rojo). Sirve para revisar tu propio trabajo antes de confirmarlo y para entender qué hizo otra persona.
+> Un **diff** es una comparación que te muestra, línea por línea, qué cambió entre dos versiones de un archivo. Las líneas que añadiste salen con `+` (normalmente en verde) y las que borraste con `-` (en rojo). Te sirve para revisar tu propio trabajo antes de confirmarlo y para entender qué tocó otra persona.
 
 ```bash
 # Ver los cambios que aún NO has preparado (no hiciste git add)
@@ -83,7 +83,7 @@ git diff --staged
 git diff main
 ```
 
-Una lectura de ejemplo, sobre el archivo `main.js` de **tunal-digital**:
+Veamos un ejemplo, sobre el archivo `main.js` de **tunal-digital**:
 
 ```diff
 diff --git a/sitio-web/main.js b/sitio-web/main.js
@@ -95,19 +95,19 @@ diff --git a/sitio-web/main.js b/sitio-web/main.js
    fetch(url, { method: "POST", body: texto });
 ```
 
-Esto se lee así: en `main.js`, alrededor de la línea 10, **quitaste** la línea con `localhost` y la **reemplazaste** por la URL real del Worker de Cloudflare. El diff te deja revisar exactamente eso antes de hacer commit.
+Se lee así: en `main.js`, alrededor de la línea 10, **quitaste** la línea con `localhost` y la **reemplazaste** por la URL real del Worker de Cloudflare. El diff te deja revisar justo eso antes de hacer commit.
 
 > ### 💡 Tip — Lee siempre tu diff antes del commit
-> Hacer `git diff` antes de `git commit` es como releer un mensaje antes de enviarlo. Atrapa errores tontos: una clave de API pegada por accidente, un `console.log` olvidado, una línea borrada de más. Bit te lo recordará.
+> Hacer `git diff` antes de `git commit` es como releer un mensaje antes de darle a enviar. Pilla errores tontos: una clave de API pegada por accidente, un `console.log` que se te olvidó quitar, una línea borrada de más. Bit te lo recordará.
 
 ## 5. Fusionar ramas con `merge`
 
-Cuando tu rama está lista y probada, quieres llevar esos cambios de vuelta a `main`. Eso es **fusionar** (merge).
+Cuando tu rama está lista y probada, querrás llevar esos cambios de vuelta a `main`. A eso lo llamamos **fusionar** (merge).
 
 > ### 🟦 ¿Qué significa? — *Fusionar (merge)*
-> **Fusionar** es combinar el trabajo de una rama dentro de otra. Git toma los commits de tu rama y los integra en la rama destino, creando una historia unificada. Sirve para que el trabajo que hiciste aislado pase a formar parte de la versión oficial.
+> **Fusionar** es combinar el trabajo de una rama dentro de otra. Git toma los commits de tu rama y los integra en la rama destino, dejando una historia unificada. Sirve para que ese trabajo que hiciste aislado pase a formar parte de la versión oficial.
 
-El patrón es: te paras en la rama que va a **recibir** los cambios y le pides que se traiga la otra.
+El patrón es sencillo: te paras en la rama que va a **recibir** los cambios y le pides que se traiga la otra.
 
 ```bash
 # 1. Me muevo a la rama destino (la que recibe)
@@ -117,22 +117,22 @@ git switch main
 git merge estadisticas
 ```
 
-Hay dos formas en que Git puede fusionar:
+Git puede fusionar de dos maneras:
 
 - **Fast-forward (avance rápido):** si `main` no cambió desde que creaste tu rama, Git simplemente "adelanta" el puntero de `main` hasta tu último commit. No hay nada que combinar; es instantáneo.
 - **Merge commit (commit de fusión):** si `main` también avanzó por su cuenta, Git crea un commit especial que une las dos historias. Es perfectamente normal y deseable.
 
 > ### ⚠️ Cuidado — Fusiona hacia donde quieres
-> Un error clásico de principiante es fusionar al revés. Recuerda: primero `switch` a la rama **destino**, luego `merge` de la rama **origen**. Si te paras en `estadisticas` y haces `git merge main`, estás trayendo `main` *hacia tu rama*, que a veces es lo que quieres (actualizar tu rama) pero no es "publicar tu trabajo".
+> Un error clásico de principiante es fusionar al revés. Recuerda el orden: primero `switch` a la rama **destino**, luego `merge` de la rama **origen**. Si te paras en `estadisticas` y haces `git merge main`, estás trayendo `main` *hacia tu rama*. A veces es lo que buscas (actualizar tu rama con lo último), pero eso no es "publicar tu trabajo".
 
 ## 6. Conflictos: cuando dos cambios chocan
 
-A veces, dos ramas modifican **la misma línea del mismo archivo** de forma distinta. Git no puede adivinar cuál es la correcta, así que se detiene y te pide ayuda. Eso es un **conflicto de fusión**.
+A veces dos ramas modifican **la misma línea del mismo archivo** de formas distintas. Git no tiene cómo adivinar cuál es la buena, así que se detiene y te pide ayuda. Eso es un **conflicto de fusión**.
 
 > ### 🟦 ¿Qué significa? — *Conflicto (merge conflict)*
-> Un **conflicto** ocurre cuando Git no puede combinar dos versiones automáticamente porque ambas tocaron las mismas líneas. No es un error tuyo ni un daño: es Git pidiéndote que decidas tú qué versión gana. Sirve para que nunca se pierda trabajo sin que un humano lo apruebe.
+> Un **conflicto** ocurre cuando Git no puede combinar dos versiones de forma automática porque ambas tocaron las mismas líneas. No es un error tuyo ni un daño: es Git pidiéndote que decidas tú qué versión gana. Está pensado para que nunca se pierda trabajo sin que un humano lo apruebe.
 
-Cuando hay conflicto, Git marca el archivo con unos símbolos especiales. Por ejemplo, en `polypaw_db.json` de **PolyPaw** dos ramas cambiaron el mismo valor:
+Cuando hay conflicto, Git marca el archivo con unos símbolos especiales. Por ejemplo, en `polypaw_db.json` de **PolyPaw**, dos ramas cambiaron el mismo valor:
 
 ```text
 {
@@ -145,12 +145,12 @@ Cuando hay conflicto, Git marca el archivo con unos símbolos especiales. Por ej
 }
 ```
 
-Cómo leer esto:
+Cómo se lee esto:
 
-- `<<<<<<< HEAD` hasta `=======` es **lo que hay en tu rama actual** (HEAD).
-- `=======` hasta `>>>>>>> nuevas-misiones` es **lo que trae la otra rama**.
+- Desde `<<<<<<< HEAD` hasta `=======` está **lo que hay en tu rama actual** (HEAD).
+- Desde `=======` hasta `>>>>>>> nuevas-misiones` está **lo que trae la otra rama**.
 
-Tu trabajo es **editar el archivo a mano** para dejarlo como debe quedar, **borrando** las tres líneas de marcas (`<<<<<<<`, `=======`, `>>>>>>>`). Por ejemplo, decides que la versión correcta es la `1.3.0`:
+Tu trabajo es **editar el archivo a mano** para dejarlo como debe quedar, y **borrar** las tres líneas de marcas (`<<<<<<<`, `=======`, `>>>>>>>`). Pongamos que decides que la versión correcta es la `1.3.0`:
 
 ```text
 {
@@ -158,7 +158,7 @@ Tu trabajo es **editar el archivo a mano** para dejarlo como debe quedar, **borr
 }
 ```
 
-Luego le dices a Git que ya lo resolviste:
+Después le avisas a Git de que ya lo resolviste:
 
 ```bash
 git add polypaw_db.json
@@ -166,18 +166,18 @@ git commit          # cierra la fusión
 ```
 
 > ### 💡 Tip — Calma con los conflictos
-> Los conflictos asustan al principio, pero son rutina. La clave es ir archivo por archivo: abre cada uno marcado, decide qué texto queda, borra las marcas, guarda. Si te enredas y quieres empezar de cero, `git merge --abort` cancela la fusión y te devuelve a como estabas antes de empezar.
+> Los conflictos asustan al principio, pero acaban siendo rutina. El truco es ir archivo por archivo: abres cada uno marcado, decides qué texto se queda, borras las marcas y guardas. Y si te enredas y prefieres empezar de cero, `git merge --abort` cancela la fusión y te devuelve a como estabas antes de empezar.
 
 > ### 🔎 En tu código
-> En **Faro** (Next.js), un conflicto típico aparece en `src/lib/` cuando dos sesiones tocan la misma función de análisis con OpenAI. Resolverlo es leer ambas versiones, entender qué hacía cada una, y combinar la lógica a mano para que el resultado tenga sentido, no solo elegir una al azar.
+> En **Faro** (Next.js), un conflicto típico aparece en `src/lib/` cuando dos sesiones tocan la misma función de análisis con OpenAI. Resolverlo significa leer ambas versiones, entender qué hacía cada una y combinar la lógica a mano para que el resultado tenga sentido, no quedarte con una al azar.
 
 ## 7. Deshacer cambios: `restore`, `checkout` y `revert`
 
-Equivocarse es parte de programar. Git te da varias formas de retroceder, según **qué tan lejos** quieres deshacer.
+Equivocarse es parte de programar. Git te ofrece varias formas de retroceder, según **qué tan atrás** quieras llegar.
 
 ### 7.1 Descartar cambios que aún no guardaste
 
-Editaste `styles.css` de **tunal-digital**, no te gustó y quieres volver a como estaba en el último commit:
+Editaste `styles.css` de **tunal-digital**, no te convenció y quieres volver a como estaba en el último commit:
 
 ```bash
 # Forma moderna y recomendada
@@ -188,14 +188,14 @@ git checkout -- sitio-web/styles.css
 ```
 
 > ### 🟦 ¿Qué significa? — *`restore`*
-> `git restore` devuelve un archivo (o varios) a un estado anterior, normalmente el del último commit. Sirve para tirar a la basura cambios sin guardar que no quieres conservar. **Cuidado:** lo descartado no se recupera, porque nunca llegó a la historia de Git.
+> `git restore` devuelve un archivo (o varios) a un estado anterior, normalmente el del último commit. Sirve para tirar a la basura cambios sin guardar que no quieres conservar. **Ojo:** lo que descartas no se recupera, porque nunca llegó a entrar en la historia de Git.
 
 > ### ⚠️ Cuidado — `restore` borra de verdad
-> A diferencia de un `commit`, lo que descartas con `restore` no está guardado en ningún lado. Úsalo solo cuando estés seguro de que esos cambios no valen nada. Bit sugiere mirar primero con `git diff` para no arrepentirte.
+> A diferencia de un `commit`, lo que descartas con `restore` no queda guardado en ningún lado. Úsalo solo cuando estés seguro de que esos cambios no valen nada. Bit sugiere mirar primero con `git diff`, para no arrepentirte luego.
 
 ### 7.2 Quitar un archivo del área preparada
 
-Hiciste `git add` de un archivo que no querías incluir todavía:
+Hiciste `git add` de un archivo que todavía no querías incluir:
 
 ```bash
 # Lo saca de "preparado", pero conserva tus ediciones
@@ -207,7 +207,7 @@ git restore --staged backend/worker.js
 Aquí la herramienta más segura es `revert`.
 
 > ### 🟦 ¿Qué significa? — *`revert`*
-> `git revert` crea un **nuevo commit** que deshace los cambios de un commit anterior. No borra historia: la *añade*. Es como decir "este commit fue un error, aquí va otro que lo cancela". Sirve para deshacer algo que ya compartiste con otras personas sin reescribir el pasado, lo cual sería peligroso en un trabajo en equipo.
+> `git revert` crea un **nuevo commit** que deshace los cambios de un commit anterior. No borra historia: la *suma*. Es como decir "este commit fue un error, aquí va otro que lo cancela". Sirve para deshacer algo que ya compartiste con otras personas sin reescribir el pasado, cosa que sería peligrosa cuando se trabaja en equipo.
 
 ```bash
 # Ver los identificadores de los commits
@@ -218,14 +218,14 @@ git revert a1b2c3d
 ```
 
 > ### 💡 Tip — `revert` para historia compartida, `restore` para lo local
-> Regla mental sencilla: si el cambio **ya está en GitHub** o lo vio alguien más, usa `revert` (suma un commit que corrige). Si el cambio es **solo tuyo y local**, puedes usar `restore` o rehacerlo sin drama. Reescribir historia que otros ya descargaron causa líos; `revert` los evita.
+> Una regla mental sencilla: si el cambio **ya está en GitHub** o lo vio alguien más, usa `revert` (añade un commit que corrige). Si el cambio es **solo tuyo y local**, puedes usar `restore` o rehacerlo sin drama. Reescribir historia que otros ya descargaron es pedir líos; `revert` te los ahorra.
 
 ## 8. `.gitignore`: lo que Git no debe vigilar
 
-No todo lo que hay en tu carpeta debe entrar al repositorio. Cosas como dependencias descargadas, archivos temporales o, sobre todo, **secretos**, deben quedar fuera.
+No todo lo que vive en tu carpeta tiene que entrar al repositorio. Cosas como las dependencias descargadas, los archivos temporales y, sobre todo, los **secretos**, deben quedarse fuera.
 
 > ### 🟦 ¿Qué significa? — *`.gitignore`*
-> `.gitignore` es un archivo de texto donde escribes, una por línea, los nombres o patrones de archivos que quieres que Git **ignore** por completo: no los sigue, no los sube, no los muestra como cambios. Sirve para mantener el repo limpio y, crítico, para no subir contraseñas ni claves de API por accidente.
+> `.gitignore` es un archivo de texto donde escribes, una por línea, los nombres o patrones de archivos que quieres que Git **ignore** por completo: no los sigue, no los sube, no los muestra como cambios. Sirve para mantener el repo limpio y, esto es lo crítico, para no subir contraseñas ni claves de API por descuido.
 
 Un `.gitignore` realista para **Faro** (Next.js) se vería así:
 
@@ -244,13 +244,13 @@ node_modules/
 .DS_Store
 ```
 
-Cada línea es un patrón. `node_modules/` ignora toda esa carpeta. `.env.local` ignora ese archivo concreto. El `#` marca un comentario para que tú te acuerdes de para qué es cada regla.
+Cada línea es un patrón. `node_modules/` ignora toda esa carpeta. `.env.local` ignora ese archivo concreto. El `#` marca un comentario, para que tú te acuerdes de para qué sirve cada regla.
 
 > ### ⚠️ Cuidado — Los secretos jamás van a Git
-> Las convenciones de **Faro** son tajantes: tokens y claves (las de OpenAI, las de Supabase) viven solo en variables de entorno del servidor, nunca en el código ni en el repositorio. Por eso `.env` y `.env.local` **siempre** están en `.gitignore`. Si alguna vez una clave llega a subirse, debe considerarse comprometida y rotarse (cambiarse) de inmediato.
+> Las convenciones de **Faro** son tajantes en esto: los tokens y claves (los de OpenAI, los de Supabase) viven solo en variables de entorno del servidor, nunca en el código ni en el repositorio. Por eso `.env` y `.env.local` están **siempre** en `.gitignore`. Y si alguna vez una clave acaba subiéndose, hay que darla por comprometida y rotarla (cambiarla) de inmediato.
 
 > ### 🔎 En tu código
-> En **PolyPaw** (Python + Flet) tu `.gitignore` ignoraría la carpeta del entorno virtual y los archivos compilados de Python:
+> En **PolyPaw** (Python + Flet), tu `.gitignore` ignoraría la carpeta del entorno virtual y los archivos compilados de Python:
 > ```gitignore
 > __pycache__/
 > *.pyc
@@ -259,14 +259,14 @@ Cada línea es un patrón. `node_modules/` ignora toda esa carpeta. `.env.local`
 > En cambio, sí quieres versionar `missions/*.json` y `polypaw_db.json`, porque esos datos **son** el contenido de la app.
 
 > ### 💡 Tip — Ignora antes de añadir
-> `.gitignore` solo evita que se **empiecen** a seguir archivos. Si ya hiciste `git add` de algo y luego lo pones en `.gitignore`, Git lo seguirá vigilando. Para que deje de hacerlo: `git rm --cached archivo` y luego commit. Por eso conviene crear el `.gitignore` al inicio del proyecto.
+> `.gitignore` solo evita que se **empiecen** a seguir archivos. Si ya hiciste `git add` de algo y después lo pones en `.gitignore`, Git seguirá vigilándolo. Para que deje de hacerlo: `git rm --cached archivo` y luego commit. Por eso conviene crear el `.gitignore` al arrancar el proyecto.
 
 ## 9. El flujo con ramas y *pull requests* (como en este manual)
 
-Ya tienes todas las piezas. Ahora veamos cómo se combinan en un **flujo de trabajo** real, el mismo que usamos para construir este manual y que describen las convenciones de **Faro**.
+Ya tienes todas las piezas sueltas. Veamos cómo encajan en un **flujo de trabajo** real, el mismo que usamos para construir este manual y que describen las convenciones de **Faro**.
 
 > ### 🟦 ¿Qué significa? — *Pull request (PR)*
-> Un **pull request** (literalmente "solicitud de incorporación") es una propuesta formal, hecha en GitHub, para fusionar una rama dentro de otra. Sirve para revisar los cambios antes de aceptarlos: muestra el diff completo, permite comentarios y deja constancia de qué se decidió. Es la puerta de entrada controlada hacia `main`.
+> Un **pull request** (literalmente "solicitud de incorporación") es una propuesta formal, hecha en GitHub, para fusionar una rama dentro de otra. Sirve para revisar los cambios antes de aceptarlos: muestra el diff completo, deja comentar y guarda constancia de qué se decidió. Es la puerta de entrada controlada hacia `main`.
 
 El ciclo completo, paso a paso:
 
@@ -286,16 +286,16 @@ git commit -m "Corrige el cálculo de progreso híbrido"
 git push -u origin arreglo-progreso
 ```
 
-Con la rama subida, vas a GitHub y **abres un pull request** de `arreglo-progreso` hacia `main`. Ahí cualquiera (o tú mismo) revisa el diff, comenta y, si todo está bien, lo **fusiona**.
+Con la rama ya subida, te vas a GitHub y **abres un pull request** de `arreglo-progreso` hacia `main`. Ahí cualquiera (o tú mismo) revisa el diff, comenta y, si todo está en orden, lo **fusiona**.
 
 > ### 🟦 ¿Qué significa? — *`push` y `pull`*
-> `git push` **sube** tus commits locales al repositorio remoto (GitHub) para compartirlos. `git pull` **baja** los commits que otros subieron, para que tu copia local esté al día. Son los dos sentidos de sincronización entre tu computadora y GitHub.
+> `git push` **sube** tus commits locales al repositorio remoto (GitHub) para compartirlos. `git pull` **baja** los commits que otros subieron, para que tu copia local esté al día. Son los dos sentidos de la sincronización entre tu computadora y GitHub.
 
 > ### 🔎 En tu código
-> Las convenciones de **Faro** piden un detalle importante: en el **mismo PR** que introduce un cambio funcional, hay que **actualizar el `README.md`** para que la documentación siempre refleje el estado real del producto. Así, cuando alguien revisa tu pull request, ve a la vez el código nuevo y su explicación. Ese es exactamente el espíritu del flujo con PRs: nada entra a `main` sin revisión y sin estar documentado.
+> Las convenciones de **Faro** piden un detalle importante: en el **mismo PR** que introduce un cambio funcional hay que **actualizar el `README.md`**, para que la documentación siempre refleje el estado real del producto. Así, cuando alguien revisa tu pull request, ve a la vez el código nuevo y su explicación. Ese es justo el espíritu del flujo con PRs: nada entra a `main` sin revisión y sin estar documentado.
 
 > ### 💡 Tip — Por qué este flujo vale la pena
-> Ramas + pull requests te dan tres regalos: (1) `main` siempre funciona porque solo recibe trabajo revisado; (2) cada cambio queda documentado con su discusión; (3) puedes experimentar sin miedo, porque una rama fallida se descarta sin tocar lo bueno. Cuando trabajes con otras personas, este flujo deja de ser opcional y se vuelve la forma normal de colaborar.
+> Ramas + pull requests te dan tres regalos: (1) `main` siempre funciona, porque solo recibe trabajo ya revisado; (2) cada cambio queda documentado con su discusión; (3) puedes experimentar sin miedo, porque una rama fallida se descarta sin tocar lo bueno. Cuando trabajes con otras personas, este flujo deja de ser opcional y se convierte en la forma normal de colaborar.
 
 ## 10. Juntándolo todo: una historia completa
 
@@ -322,7 +322,7 @@ git push -u origin racha-semanal
 # (en GitHub: abrir PR, revisar diff, actualizar README, fusionar)
 ```
 
-Si al fusionar en GitHub aparece un conflicto, lo resuelves localmente: traes `main` a tu rama con `git merge main`, editas los archivos marcados, borras las marcas `<<<<<<<`, haces `git add` y `git commit`, y vuelves a subir. El PR se actualiza solo.
+Si al fusionar en GitHub te aparece un conflicto, lo resuelves en local: traes `main` a tu rama con `git merge main`, editas los archivos marcados, borras las marcas `<<<<<<<`, haces `git add` y `git commit`, y vuelves a subir. El PR se actualiza solo.
 
 ## ✅ Checklist — ¿ya domino esto?
 

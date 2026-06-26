@@ -23,20 +23,21 @@
 </p>
 
 <blockquote>
-<p>Llegó el capítulo donde todo lo que aprendiste se junta en una sola obra. Vas a construir,
+<p>Este es el capítulo donde todo lo que aprendiste se junta en una sola obra. Vas a construir,
 paso a paso y con tus propias manos, una versión chiquita de <strong>RachaSimple</strong>: una app que
-lista hábitos, te deja <strong>añadir</strong>, <strong>marcar como hecho</strong> y <strong>borrar</strong>, con un <strong>formulario
+lista hábitos y te deja <strong>añadir</strong>, <strong>marcar como hecho</strong> y <strong>borrar</strong>, con un <strong>formulario
 controlado</strong>, un <strong>hook personalizado</strong> llamado <code>useHabits</code> y, al final, persistencia en
-<strong>localStorage</strong> para que tus hábitos sigan ahí cuando recargas. No usaremos Supabase ni
-TanStack Query: solo React puro, para que veas cómo encajan componentes, props, estado,
-efectos y hooks. Bit, nuestro ajolote, se puso el casco de obra: hoy se construye. 🪼</p>
+<strong>localStorage</strong> para que tus hábitos sigan ahí cuando recargas. Nada de Supabase ni
+TanStack Query: solo React puro, para que veas con claridad cómo encajan componentes, props,
+estado, efectos y hooks. Bit, nuestro ajolote, se puso el casco de obra: hoy se construye. 🪼</p>
 </blockquote>
 <hr />
 <h2 id="1-que-vamos-a-construir-y-por-que-asi">1. Qué vamos a construir (y por qué así)</h2>
 <p>RachaSimple, tu app real, está hecha con React 18 + TypeScript + Vite + Tailwind + shadcn/ui
-+ Supabase + TanStack Query. Es una app completa, con servidor y base de datos. Nosotros vamos
-a hacer una <strong>maqueta</strong> suya: misma idea (hábitos que marcas cada día), pero sin servidor.
-Todo vive en el navegador. Así puedes correrla en tu computadora sin configurar nada.</p>
++ Supabase + TanStack Query. Es una app completa, con servidor y base de datos. Lo que vamos
+a hacer aquí es una <strong>maqueta</strong> suya: la misma idea (hábitos que marcas cada día), pero sin
+servidor. Todo vive en el navegador, así que la puedes correr en tu computadora sin configurar
+absolutamente nada.</p>
 <p>La app tendrá tres componentes y un hook:</p>
 <ul>
 <li><code>useHabits</code> — el <strong>hook personalizado</strong> que guarda la lista y sabe añadir, marcar y borrar.</li>
@@ -47,19 +48,19 @@ Todo vive en el navegador. Así puedes correrla en tu computadora sin configurar
 <blockquote class="def">
 <h3 id="que-significa-mini-proyecto-o-maqueta">🟦 ¿Qué significa? — <em>Mini-proyecto (o maqueta)</em></h3>
 <p>Un <strong>mini-proyecto</strong> es una versión reducida y autocontenida de una app real, hecha para
-practicar un concepto sin la complejidad completa. Sirve para <strong>aprender el esqueleto</strong> antes
-de enfrentarte al edificio entero. Aquí copiamos la <em>idea</em> de RachaSimple (lista de hábitos,
-marcar a diario) pero quitamos lo que distrae para principiantes: el servidor, la
+practicar un concepto sin cargar con toda la complejidad. Te sirve para <strong>aprender el esqueleto</strong>
+antes de enfrentarte al edificio entero. Aquí copiamos la <em>idea</em> de RachaSimple (lista de
+hábitos, marcar a diario) pero dejamos fuera lo que distrae a quien empieza: el servidor, la
 autenticación y la caché de datos.</p>
 <h3 id="que-significa-hook-personalizado">🟦 ¿Qué significa? — <em>Hook personalizado</em></h3>
 <p>Un <strong>hook personalizado</strong> es una función tuya cuyo nombre empieza por <code>use</code> (aquí <code>useHabits</code>) y
-que <strong>agrupa lógica de estado y efectos</strong> para reutilizarla. Sirve para sacar el "cerebro" de un
-componente a un sitio aparte, de modo que <code>App</code> quede limpio y la lógica se pueda probar y
+que <strong>agrupa lógica de estado y efectos</strong> para reutilizarla. Te sirve para sacar el "cerebro" de
+un componente a un sitio aparte, de modo que <code>App</code> quede limpio y la lógica se pueda probar y
 reutilizar. Lo viste a fondo en el capítulo 09; aquí lo aplicas por primera vez en un proyecto
 completo. RachaSimple tiene su propio <code>useHabits</code>, solo que apoyado en el servidor.</p>
 <h3 id="tip">💡 Tip</h3>
 <p>No leas este capítulo de corrido. Ábrelo junto a tu editor y escribe cada bloque de código en
-cuanto aparezca. Se aprende a construir construyendo, no mirando.</p>
+cuanto aparezca. A construir se aprende construyendo, no mirando.</p>
 </blockquote>
 <hr />
 <h2 id="2-preparar-el-proyecto-en-tu-computadora">2. Preparar el proyecto en tu computadora 💻</h2>
@@ -67,8 +68,9 @@ cuanto aparezca. Se aprende a construir construyendo, no mirando.</p>
 <blockquote class="def">
 <h3 id="que-significa-vite">🟦 ¿Qué significa? — <em>Vite</em></h3>
 <p><strong>Vite</strong> es una herramienta que arranca un proyecto de React, lo sirve en tu navegador
-mientras programas y lo empaqueta para publicarlo. Sirve para <strong>ver tus cambios al instante</strong>
-sin configurar nada a mano. RachaSimple usa Vite de verdad; por eso lo usamos también aquí.</p>
+mientras programas y lo empaqueta para publicarlo. Su gracia es que <strong>ves tus cambios al
+instante</strong> sin tener que configurar nada a mano. RachaSimple usa Vite de verdad; por eso lo
+usamos también aquí.</p>
 <h3 id="que-significa-npm-y-la-terminal">🟦 ¿Qué significa? — <em><code>npm</code> y la terminal</em></h3>
 <p><strong><code>npm</code></strong> (Node Package Manager) es la herramienta de línea de comandos que <strong>instala y arranca</strong>
 proyectos de JavaScript: descarga librerías y ejecuta tareas como <code>npm run dev</code>. La <strong>terminal</strong>
@@ -89,13 +91,13 @@ Sirve para empezar con todo ya enchufado: React, el compilador de TypeScript y l
 de carpetas. El <code>-ts</code> es lo que hace que tus archivos sean <code>.tsx</code> (React + TypeScript), igual
 que los de RachaSimple y Faro.</p>
 </blockquote>
-<p>Cuando <code>npm run dev</code> arranque, te dará una dirección como <code>http://localhost:5173</code>. Ábrela en el
-navegador: verás la pantalla de ejemplo de Vite. Vamos a reemplazarla por nuestra app.</p>
+<p>Cuando <code>npm run dev</code> arranque, te dará una dirección parecida a <code>http://localhost:5173</code>. Ábrela
+en el navegador: verás la pantalla de ejemplo de Vite. Vamos a reemplazarla por nuestra app.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
 <p>RachaSimple se arranca igual: <code>npm run dev</code> levanta Vite. En Faro (Next.js 15) el comando es
 el mismo (<code>npm run dev</code>), aunque por dentro use otra herramienta. PolyPaw, en cambio, es Python
-con Flet: ahí no hay <code>npm</code> ni navegador, se corre con Python. Cada stack, su forma de arrancar.</p>
+con Flet: ahí no hay <code>npm</code> ni navegador, se corre con Python. Cada stack tiene su forma de arrancar.</p>
 </blockquote>
 <hr />
 <h2 id="3-el-tipo-habit-decidir-la-forma-del-dato">3. El tipo <code>Habit</code>: decidir la forma del dato</h2>
@@ -109,19 +111,19 @@ un <code>type</code>. Crea el archivo <code>src/types.ts</code>:</p>
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-type-tipo">🟦 ¿Qué significa? — <em><code>type</code> (tipo)</em></h3>
-<p>Un <strong><code>type</code></strong> en TypeScript describe la <strong>forma</strong> que debe tener un dato: qué campos tiene y de
-qué clase es cada uno. Sirve para que el editor te avise si te equivocas (por ejemplo, si
+<p>Un <strong><code>type</code></strong> en TypeScript describe la <strong>forma</strong> que debe tener un dato: qué campos lleva y de
+qué clase es cada uno. Te sirve para que el editor te avise cuando te equivocas (por ejemplo, si
 escribes <code>done: "sí"</code> en vez de <code>true</code>). En RachaSimple existe un tipo <code>Habit</code> parecido,
 generado a partir de la tabla de Supabase, con más campos (color, fecha de creación, etc.).</p>
 <h3 id="tip-empieza-por-el-dato">💡 Tip — Empieza por el dato</h3>
-<p>Decidir la forma del dato <strong>antes</strong> de programar la interfaz es un hábito de profesional. Si
-sabes que un hábito tiene <code>id</code>, <code>name</code> y <code>done</code>, ya sabes qué mostrar y qué botones necesitas.
-El dato manda; la pantalla lo sigue.</p>
+<p>Decidir la forma del dato <strong>antes</strong> de programar la interfaz es un hábito de profesional. Si ya
+sabes que un hábito tiene <code>id</code>, <code>name</code> y <code>done</code>, también sabes qué mostrar y qué botones
+necesitas. El dato manda; la pantalla lo sigue.</p>
 </blockquote>
 <hr />
 <h2 id="4-el-hook-usehabits-el-cerebro-de-la-app">4. El hook <code>useHabits</code>: el cerebro de la app</h2>
-<p>Aquí vive toda la lógica. Crea <code>src/useHabits.ts</code>. Empezaremos <strong>sin</strong> localStorage (lo
-añadiremos en el apartado 8) para no mezclar conceptos.</p>
+<p>Aquí vive toda la lógica. Crea <code>src/useHabits.ts</code>. Vamos a empezar <strong>sin</strong> localStorage (lo
+añadiremos en el apartado 8) para no mezclar conceptos de golpe.</p>
 <pre><code class="language-tsx">import { useState } from 'react';
 import type { Habit } from './types';
 
@@ -153,7 +155,7 @@ export function useHabits() {
   return { habits, addHabit, toggleHabit, removeHabit };
 }
 </code></pre>
-<p>Repasemos cada pieza, porque aquí está el 80 % del capítulo.</p>
+<p>Vamos pieza por pieza, porque aquí está el 80 % del capítulo.</p>
 <blockquote class="def">
 <h3 id="que-significa-usestatehabit">🟦 ¿Qué significa? — <em><code>useState&lt;Habit[]&gt;([])</code></em></h3>
 <p><strong><code>useState</code></strong> es el hook que le da <strong>memoria</strong> a un componente o hook. Le dijimos que guarda un
@@ -162,7 +164,7 @@ array de hábitos (<code>Habit[]</code>) y que empieza vacío (<code>[]</code>).
 vuelve a dibujar lo que dependa de esa lista. Es el mismo <code>useState</code> del capítulo 04.</p>
 <h3 id="que-significa-cryptorandomuuid">🟦 ¿Qué significa? — <em><code>crypto.randomUUID()</code></em></h3>
 <p><strong><code>crypto.randomUUID()</code></strong> es una función del navegador que genera un <strong>identificador único</strong>
-(un texto largo e irrepetible como <code>"a1b2c3..."</code>). Sirve para darle a cada hábito un <code>id</code>
+(un texto largo e irrepetible, del estilo <code>"a1b2c3..."</code>). Sirve para darle a cada hábito un <code>id</code>
 propio, de modo que puedas marcarlo o borrarlo sin confundirlo con otro. En RachaSimple ese
 <code>id</code> lo pone Supabase al guardar; aquí, como no hay servidor, lo generamos nosotros.</p>
 <h3 id="que-significa-inmutabilidad-el-spread-map-y-filter">🟦 ¿Qué significa? — <em>Inmutabilidad, el spread <code>...</code>, <code>.map()</code> y <code>.filter()</code></em></h3>
@@ -173,13 +175,14 @@ copia: <code>[...prev, nuevo]</code> crea una lista nueva con todo lo de antes m
 con <code>{ ...h, done: !h.done }</code>). <strong><code>.filter()</code></strong> devuelve la lista <strong>sin</strong> lo que no cumple (en
 <code>removeHabit</code>, todos menos el del <code>id</code>). Los tres crean listas nuevas y no tocan el original.
 Cuando le pasas una <strong>función</strong> a <code>setHabits</code>, React te entrega el valor más reciente en <code>prev</code>:
-la forma segura cuando el nuevo valor depende del anterior. Todo esto es JavaScript del módulo 03.</p>
+es la forma segura de hacerlo cuando el nuevo valor depende del anterior. Todo esto es JavaScript
+del módulo 03.</p>
 <h3 id="cuidado-hdone-invierte-no-marca-siempre-hecho">⚠️ Cuidado — <code>!h.done</code> invierte, no "marca siempre hecho"</h3>
 <p><code>done: !h.done</code> significa "pon <code>done</code> al <strong>contrario</strong> de como está": si era <code>false</code> pasa a
 <code>true</code>, y si era <code>true</code> pasa a <code>false</code>. Por eso <code>toggleHabit</code> sirve tanto para marcar como para
 desmarcar. Si pusieras <code>done: true</code> a secas, nunca podrías desmarcar un hábito.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En RachaSimple, este "cerebro" no usa <code>useState</code> con un array local: usa <strong>TanStack Query</strong>
+<p>En RachaSimple este "cerebro" no usa <code>useState</code> con un array local: usa <strong>TanStack Query</strong>
 (<code>useHabits</code> con <code>useQuery</code>) para traer los hábitos de Supabase y <code>useMutation</code> para crearlos.
 La <em>idea</em> es idéntica —un hook que expone la lista y las acciones— pero la fuente de datos es el
 servidor en vez de la memoria del navegador. Lo viste en el capítulo 11.</p>
@@ -220,30 +223,30 @@ export function HabitForm({ onAdd }: HabitFormProps) {
 <blockquote class="def">
 <h3 id="que-significa-formulario-controlado-componente-controlado">🟦 ¿Qué significa? — <em>Formulario controlado (componente controlado)</em></h3>
 <p>Un <strong>formulario controlado</strong> es aquel donde el valor del <code>input</code> lo manda <strong>React</strong>, no el
-navegador. Lo logramos con dos cosas: <code>value={text}</code> (el input muestra lo que dice el estado) y
+navegador. Lo conseguimos con dos cosas: <code>value={text}</code> (el input muestra lo que dice el estado) y
 <code>onChange={(e) =&gt; setText(e.target.value)}</code> (cada tecla actualiza el estado). Sirve para que
-React sea siempre la "única fuente de verdad" de lo que hay escrito: puedes validarlo, vaciarlo
-o transformarlo cuando quieras. Lo viste a fondo en el capítulo 07.</p>
+React sea siempre la "única fuente de verdad" de lo que hay escrito: así puedes validarlo,
+vaciarlo o transformarlo cuando quieras. Lo viste a fondo en el capítulo 07.</p>
 <h3 id="que-significa-props-y-el-callback-onadd">🟦 ¿Qué significa? — <em><code>props</code> y el callback <code>onAdd</code></em></h3>
 <p>Las <strong>props</strong> son los datos y funciones que un componente padre le pasa a un hijo. Aquí
 <code>HabitForm</code> recibe la prop <strong><code>onAdd</code></strong>, que es una <strong>función</strong> (un <em>callback</em>). Cuando el
 usuario envía el formulario, el form no sabe <em>cómo</em> se guarda un hábito: solo llama
-<code>onAdd(limpio)</code> y deja que el padre decida. Sirve para que el formulario sea <strong>reutilizable</strong> y
-no esté pegado a una app concreta. Esto es exactamente lo del capítulo 03.</p>
+<code>onAdd(limpio)</code> y deja que el padre decida. Así el formulario queda <strong>reutilizable</strong> y no está
+pegado a una app concreta. Esto es exactamente lo del capítulo 03.</p>
 <h3 id="que-significa-onsubmit-epreventdefault-y-validar-con-trim">🟦 ¿Qué significa? — <em><code>onSubmit</code>, <code>e.preventDefault()</code> y validar con <code>.trim()</code></em></h3>
-<p><strong><code>onSubmit</code></strong> se dispara al enviar el formulario (botón o Enter). <strong><code>e.preventDefault()</code></strong> evita
-el comportamiento por defecto del navegador, que sería <strong>recargar la página</strong> entera; sin esa
-línea tu app se reiniciaría y perderías todo. <strong><code>.trim()</code></strong> quita los espacios de los extremos,
-para que un hábito de solo espacios cuente como vacío y no se añada: a comprobar antes de guardar
-se le llama <strong>validar</strong>, y RachaSimple también valida que el nombre no esté vacío.</p>
+<p><strong><code>onSubmit</code></strong> se dispara al enviar el formulario (con el botón o con Enter). <strong><code>e.preventDefault()</code></strong>
+evita el comportamiento por defecto del navegador, que sería <strong>recargar la página</strong> entera; sin
+esa línea tu app se reiniciaría y perderías todo. <strong><code>.trim()</code></strong> quita los espacios de los extremos,
+para que un hábito de solo espacios cuente como vacío y no se añada: a esa comprobación previa a
+guardar se le llama <strong>validar</strong>, y RachaSimple también valida que el nombre no esté vacío.</p>
 <h3 id="que-significa-e-reactformevent">🟦 ¿Qué significa? — <em><code>e: React.FormEvent</code></em></h3>
 <p>Cuando escribes <code>handleSubmit(e: React.FormEvent)</code>, la <strong><code>e</code></strong> es el <strong>evento</strong>: un objeto que
 React te entrega con información de lo que pasó (qué formulario se envió) y métodos como
 <code>preventDefault()</code>. La parte <strong><code>: React.FormEvent</code></strong> es solo el <strong>tipo</strong> de TypeScript que
-describe ese objeto, para que el editor sepa qué puedes hacer con <code>e</code> y te autocomplete. Sirve
-para trabajar con seguridad: si te equivocas de método, el editor te avisa antes de ejecutar.</p>
+describe ese objeto, para que el editor sepa qué puedes hacer con <code>e</code> y te autocomplete. Trabajas
+con más seguridad: si te equivocas de método, el editor te avisa antes de ejecutar.</p>
 <h3 id="tip-vaciar-el-campo-tras-anadir">💡 Tip — Vaciar el campo tras añadir</h3>
-<p>Fíjate en <code>setText('')</code> al final de <code>handleSubmit</code>. Como el input es controlado, basta con
+<p>Fíjate en el <code>setText('')</code> del final de <code>handleSubmit</code>. Como el input es controlado, basta con
 poner el estado a cadena vacía para que el campo se limpie solo. Sin componentes controlados,
 tendrías que tocar el <strong>DOM</strong> a mano (el DOM es el árbol de elementos HTML que el navegador
 dibuja en pantalla; manipularlo "a mano" sería buscar el input y vaciarlo tú mismo). Esta es una
@@ -285,7 +288,7 @@ pequeñas, reutilizables y fáciles de leer. En RachaSimple, <code>HabitCard.tsx
 muestra una tarjeta de hábito y delega las acciones hacia arriba.</p>
 <h3 id="que-significa-renderizado-condicional-con-el-ternario">🟦 ¿Qué significa? — <em>Renderizado condicional con el ternario</em></h3>
 <p>El <strong>ternario</strong> <code>condición ? A : B</code> elige entre dos valores según una condición. Aquí
-<code>habit.done ? 'line-through' : 'none'</code> tacha el texto si el hábito está hecho. Es la forma de
+<code>habit.done ? 'line-through' : 'none'</code> tacha el texto si el hábito está hecho. Es la manera de
 que la <strong>interfaz reaccione al estado</strong>: el mismo componente se ve distinto según <code>done</code>. Lo
 viste en el capítulo 06.</p>
 <h3 id="que-significa-checkbox-controlado-checked-onchange">🟦 ¿Qué significa? — <em>Checkbox controlado (<code>checked</code> + <code>onChange</code>)</em></h3>
@@ -297,11 +300,11 @@ verdad, otra vez.</p>
 <p>Tienes que pasarle a <code>onClick</code> una <strong>función</strong>, no el <strong>resultado</strong> de llamarla. Si escribes
 <code>onClick={onRemove(habit.id)}</code> (sin la flecha), React llamaría <code>onRemove</code> <strong>al dibujar</strong>, no al
 hacer clic, y borraría el hábito de inmediato. La flecha <code>() =&gt; ...</code> crea una función que se
-ejecuta <strong>cuando</strong> ocurre el clic. Es el error más común de principiante; ténlo presente.</p>
+ejecuta <strong>cuando</strong> ocurre el clic. Es el error más común de principiante; tenlo presente.</p>
 </blockquote>
 <hr />
 <h2 id="7-app-juntar-todas-las-piezas">7. <code>App</code>: juntar todas las piezas</h2>
-<p>Ahora el componente raíz que orquesta todo. Reemplaza el contenido de <code>src/App.tsx</code>:</p>
+<p>Ahora el componente raíz, el que orquesta todo. Reemplaza el contenido de <code>src/App.tsx</code>:</p>
 <pre><code class="language-tsx">import { useHabits } from './useHabits';
 import { HabitForm } from './HabitForm';
 import { HabitItem } from './HabitItem';
@@ -339,26 +342,26 @@ export default function App() {
   );
 }
 </code></pre>
-<p>Mira lo limpio que quedó <code>App</code>: una línea trae todo del hook, el formulario recibe <code>addHabit</code>, y
-la lista se pinta recorriendo <code>habits</code>. <code>App</code> <strong>no</strong> tiene <code>useState</code>: toda la memoria vive en
-<code>useHabits</code>. Ese es el premio de haber extraído la lógica.</p>
+<p>Mira lo limpio que quedó <code>App</code>: una sola línea trae todo del hook, el formulario recibe <code>addHabit</code>
+y la lista se pinta recorriendo <code>habits</code>. <code>App</code> <strong>no</strong> tiene <code>useState</code>: toda la memoria vive en
+<code>useHabits</code>. Ese es el premio de haber sacado la lógica a un sitio aparte.</p>
 <blockquote class="def">
 <h3 id="que-significa-renderizar-una-lista-con-map-y-key">🟦 ¿Qué significa? — <em>Renderizar una lista con <code>.map()</code> y <code>key</code></em></h3>
 <p>Para dibujar una lista, recorremos <code>habits</code> con <strong><code>.map()</code></strong> y devolvemos un <code>&lt;HabitItem&gt;</code> por
 cada uno. La prop especial <strong><code>key</code></strong> le da a React un identificador estable de cada fila
 (<code>habit.id</code>) para que sepa cuál cambió, se añadió o se borró, y redibuje solo lo necesario. Sin
-<code>key</code>, React se confunde al reordenar o eliminar. Esto es del capítulo 06.</p>
+<code>key</code>, React se hace un lío al reordenar o eliminar. Esto es del capítulo 06.</p>
 <h3 id="que-significa-levantar-el-estado-lifting-state-up">🟦 ¿Qué significa? — <em>"Levantar el estado" (lifting state up)</em></h3>
 <p>El estado (la lista) vive <strong>arriba</strong>, en el hook que usa <code>App</code>, no dentro de cada hijo.
-<code>HabitForm</code> y <code>HabitItem</code> no guardan la lista: la <strong>reciben</strong> y avisan de cambios con sus
+<code>HabitForm</code> y <code>HabitItem</code> no guardan la lista: la <strong>reciben</strong> y avisan de los cambios con sus
 callbacks. A esto se le llama <strong>levantar el estado</strong>: ponerlo en el ancestro común para que
 todos los hijos compartan la misma verdad. Es el patrón estándar de React y el que usa
 RachaSimple entre sus pantallas y tarjetas.</p>
 <h3 id="que-significa-estado-derivado-hechos">🟦 ¿Qué significa? — <em>Estado derivado (<code>hechos</code>)</em></h3>
 <p><strong><code>hechos</code></strong> no es un estado nuevo: se <strong>calcula</strong> a partir de <code>habits</code> en cada render
-(<code>habits.filter((h) =&gt; h.done).length</code>). A los datos que se obtienen de otro estado se les llama
+(<code>habits.filter((h) =&gt; h.done).length</code>). A los datos que salen de otro estado se les llama
 <strong>estado derivado</strong>. La regla de oro: si puedes <strong>calcularlo</strong>, no lo guardes en otro <code>useState</code>.
-Guardar un contador aparte solo te daría dos verdades que se contradicen.</p>
+Guardar un contador aparte solo te daría dos verdades que tarde o temprano se contradicen.</p>
 <h3 id="tip-compila-mentalmente-el-flujo">💡 Tip — Compila mentalmente el flujo</h3>
 <p>Sigue un clic: pulsas el checkbox → <code>HabitItem</code> llama <code>onToggle(id)</code> → que es <code>toggleHabit</code> del
 hook → este hace <code>setHabits</code> con la lista nueva → React redibuja <code>App</code> → la fila se tacha y el
@@ -411,18 +414,18 @@ export function useHabits() {
   return { habits, addHabit, toggleHabit, removeHabit };
 }
 </code></pre>
-<p>Solo cambiaron dos cosas respecto al apartado 4: <strong>de dónde sale el valor inicial</strong> y <strong>un
-efecto que guarda</strong>. El resto es idéntico. Veámoslas.</p>
+<p>Respecto al apartado 4 solo cambiaron dos cosas: <strong>de dónde sale el valor inicial</strong> y <strong>un
+efecto que guarda</strong>. Lo demás es idéntico. Veámoslas.</p>
 <blockquote class="def">
 <h3 id="que-significa-localstorage">🟦 ¿Qué significa? — <em><code>localStorage</code></em></h3>
 <p><strong><code>localStorage</code></strong> es un pequeño almacén que el navegador guarda en el disco del usuario y que
-<strong>sobrevive a recargas y a cerrar la pestaña</strong>. Guarda pares de <strong>texto</strong>: una clave
+<strong>sobrevive a las recargas y a cerrar la pestaña</strong>. Guarda pares de <strong>texto</strong>: una clave
 (<code>'mini-rachas:habits'</code>) y un valor. Sirve para recordar cosas sin servidor: preferencias,
-borradores, o aquí, la lista de hábitos. Solo guarda texto, por eso necesitamos convertir.</p>
+borradores, o aquí, la lista de hábitos. Como solo guarda texto, necesitamos convertir.</p>
 <h3 id="que-significa-jsonstringify-y-jsonparse">🟦 ¿Qué significa? — <em><code>JSON.stringify</code> y <code>JSON.parse</code></em></h3>
 <p><strong><code>JSON.stringify(habits)</code></strong> convierte tu array en <strong>texto</strong> para guardarlo (localStorage solo
-entiende texto); <strong><code>JSON.parse(guardado)</code></strong> hace lo contrario al leer. Dos funciones de
-JavaScript (módulo 03) que viajan juntas: una para guardar, otra para recuperar.</p>
+entiende texto); <strong><code>JSON.parse(guardado)</code></strong> hace lo contrario al leer. Son dos funciones de
+JavaScript (módulo 03) que van siempre de la mano: una para guardar, otra para recuperar.</p>
 <h3 id="que-significa-inicializador-perezoso-usestateleerinicial">🟦 ¿Qué significa? — <em>Inicializador perezoso (<code>useState(leerInicial)</code>)</em></h3>
 <p>Fíjate que pasamos <code>useState(leerInicial)</code> — la <strong>función</strong>, sin paréntesis — y no
 <code>useState(leerInicial())</code>. Así React la ejecuta <strong>una sola vez</strong>, al montar, en vez de en cada
@@ -431,13 +434,13 @@ localStorage (que es lenta) no se repita inútilmente en cada dibujo.</p>
 <h3 id="que-significa-useeffect-con-dependencia-habits">🟦 ¿Qué significa? — <em><code>useEffect</code> con dependencia <code>[habits]</code></em></h3>
 <p><strong><code>useEffect</code></strong> ejecuta código <strong>después</strong> de que React dibuja, para cosas que tocan el "mundo
 exterior" (aquí, el almacén del navegador). El array <code>[habits]</code> son sus <strong>dependencias</strong>:
-significa "vuelve a ejecutar este efecto <strong>cada vez que <code>habits</code> cambie</strong>". Así, cada añadir,
-marcar o borrar dispara un guardado automático. Lo viste a fondo en el capítulo 08.</p>
+significa "vuelve a ejecutar este efecto <strong>cada vez que <code>habits</code> cambie</strong>". Así, cada vez que
+añades, marcas o borras se dispara un guardado automático. Lo viste a fondo en el capítulo 08.</p>
 <h3 id="cuidado-el-trycatch-no-es-decorativo">⚠️ Cuidado — El <code>try/catch</code> no es decorativo</h3>
-<p>Si el dato guardado se corrompiera (alguien lo editó a mano, o cambió el formato), <code>JSON.parse</code>
-lanzaría un error y tu app <strong>no arrancaría</strong>. El <strong><code>try/catch</code></strong> atrapa ese fallo y devuelve un
-array vacío para empezar limpio en vez de romperse. Programar defensivamente alrededor de datos
-externos es una marca de madurez.</p>
+<p>Si el dato guardado se corrompiera (porque alguien lo editó a mano, o porque cambió el formato),
+<code>JSON.parse</code> lanzaría un error y tu app <strong>no arrancaría</strong>. El <strong><code>try/catch</code></strong> atrapa ese fallo y
+devuelve un array vacío para empezar limpio en lugar de romperse. Programar a la defensiva
+alrededor de datos externos es señal de madurez.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
 <p>RachaSimple <strong>no</strong> usa localStorage para los hábitos: usa Supabase (base de datos en la nube)
 para que tus rachas estén en cualquier dispositivo. Pero el patrón —<em>leer al inicio, guardar
@@ -453,21 +456,21 @@ archivos <strong>JSON</strong> locales: misma idea de "guardar texto", distinto 
 <li>Pulsar <strong>Borrar</strong> → la fila desaparece.</li>
 <li><strong>Recargar la página (F5)</strong> → tus hábitos siguen ahí. 🎉</li>
 </ol>
-<p>Si los cuatro pasos funcionan, acabas de construir una app de React completa con todo lo del
+<p>Si los cuatro pasos funcionan, acabas de construir una app de React completa, con todo lo del
 módulo trabajando junto.</p>
 <blockquote class="tip">
 <h3 id="tip-inspecciona-localstorage">💡 Tip — Inspecciona localStorage</h3>
 <p>Abre las herramientas de desarrollador del navegador (F12), ve a la pestaña <strong>Application</strong> (o
 <strong>Almacenamiento</strong>) → <strong>Local Storage</strong>. Verás tu clave <code>mini-rachas:habits</code> con el JSON de tus
-hábitos. Verlo con tus ojos hace que "persistencia" deje de ser una palabra abstracta.</p>
+hábitos. Verlo con tus propios ojos hace que "persistencia" deje de ser una palabra abstracta.</p>
 <h3 id="cuidado-si-algo-no-aparece-revisa-la-consola">⚠️ Cuidado — Si algo no aparece, revisa la consola</h3>
-<p>Cuando una pantalla queda en blanco, casi siempre hay un error rojo en la <strong>consola</strong> (F12 →
+<p>Cuando una pantalla se queda en blanco, casi siempre hay un error rojo en la <strong>consola</strong> (F12 →
 Console). Léelo: suele decirte el archivo y la línea. Olvidar un <code>export</code>, un <code>import</code> mal
 escrito o una <code>key</code> faltante son los culpables más frecuentes en este proyecto.</p>
 </blockquote>
 <hr />
 <h2 id="10-repaso-que-concepto-del-modulo-uso-cada-pieza">10. Repaso: qué concepto del módulo usó cada pieza</h2>
-<p>Para que veas que de verdad integraste todo, este es el mapa:</p>
+<p>Para que veas que de verdad lo integraste todo, este es el mapa:</p>
 <ul>
 <li><strong>Componentes</strong> (cap. 02): <code>App</code>, <code>HabitForm</code>, <code>HabitItem</code>.</li>
 <li><strong>JSX</strong> (cap. 02): todo el HTML dentro de los <code>return</code>.</li>

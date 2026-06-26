@@ -18,38 +18,45 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-02-consultar-con-sql">Capítulo 02 — Consultar con SQL</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>SQL se aprende rápido porque se lee casi como inglés. En este capítulo dominas la operación
-más usada de todas: <strong>pedir datos</strong> (consultar). Con <code>SELECT</code>, <code>WHERE</code> y <code>ORDER BY</code> ya puedes
-sacar de una base de datos justo lo que necesitas.</p>
+<p>SQL tiene una ventaja: se lee casi como una frase en inglés, así que se aprende deprisa. En
+este capítulo te centras en lo que más vas a hacer con una base de datos: <strong>pedirle datos</strong>.
+Con <code>SELECT</code>, <code>WHERE</code> y <code>ORDER BY</code> ya puedes sacar exactamente lo que necesitas, ni más ni menos.</p>
 </blockquote>
 <hr />
 <h2 id="1-select-pedir-datos">1. <code>SELECT</code>: pedir datos</h2>
 <blockquote class="def">
 <h3 id="que-significa-select-from">🟦 ¿Qué significa? — <em><code>SELECT ... FROM</code></em></h3>
-<p><code>SELECT</code> elige <strong>qué columnas</strong> quieres; <code>FROM</code> dice <strong>de qué tabla</strong>. Es la consulta base:
+<p><code>SELECT</code> indica <strong>qué columnas</strong> quieres ver; <code>FROM</code>, <strong>de qué tabla</strong> las sacas. Esta es la
+consulta de la que parte todo lo demás:
 <code>sql
 SELECT nombre, color FROM habitos;</code>
-"Dame las columnas nombre y color, de la tabla habitos." Para pedir <strong>todas</strong> las columnas se
-usa el asterisco <code>*</code>:
+Léelo tal cual: "dame las columnas nombre y color de la tabla habitos". Y si quieres <strong>todas</strong>
+las columnas de golpe, en lugar de nombrarlas una a una pones un asterisco <code>*</code>:
 <code>sql
 SELECT * FROM habitos;</code></p>
 <h3 id="tip-la-convencion-de-sql">💡 Tip — La convención de SQL</h3>
-<p>Las palabras clave de SQL (<code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>…) suelen escribirse en <strong>MAYÚSCULAS</strong> por
-costumbre, para distinguirlas de los nombres de tus tablas/columnas. No es obligatorio (SQL no
-distingue mayúsculas en las palabras clave), pero se lee mejor. Cada consulta termina en <code>;</code>.</p>
+<p>Verás que las palabras clave de SQL (<code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>…) casi siempre van en
+<strong>MAYÚSCULAS</strong>. Es pura costumbre: ayuda a distinguirlas de un vistazo de los nombres de tus
+tablas y columnas. No es obligatorio (a SQL le da igual cómo escribas las palabras clave), pero
+de verdad se lee mejor. Una cosa más: cada consulta termina en <code>;</code>.</p>
 </blockquote>
 <hr />
 <h2 id="2-where-filtrar-filas">2. <code>WHERE</code>: filtrar filas</h2>
-<p>Casi nunca quieres <strong>todas</strong> las filas; quieres las que cumplen una condición.</p>
+<p>Lo normal es que no quieras <strong>todas</strong> las filas, sino solo las que cumplen cierta condición. Para
+eso está <code>WHERE</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-where">🟦 ¿Qué significa? — <em><code>WHERE</code></em></h3>
-<p><code>WHERE</code> filtra: solo devuelve las filas que <strong>cumplen una condición</strong> (¿recuerdas las
-condiciones del Módulo 03?). 
+<p><code>WHERE</code> filtra: te devuelve únicamente las filas que <strong>cumplen una condición</strong> (¿te suenan las
+condiciones del Módulo 03? Es la misma idea).
 <code>sql
 SELECT * FROM habitos WHERE usuario_id = 7;</code>
-"Dame los hábitos cuyo usuario_id sea 7." Operadores de comparación (parecidos a los que ya
-conoces):
+"Dame los hábitos cuyo usuario_id sea 7." Estos son los operadores de comparación que puedes
+usar; varios ya los conoces:
 | Operador | Significa | Ejemplo |
 |---|---|---|
 | <code>=</code> | igual | <code>meta = 20</code> |
@@ -59,35 +66,38 @@ conoces):
 | <code>LIKE</code> | coincide con un patrón de texto | <code>nombre LIKE 'Le%'</code> |
 | <code>IN</code> | está en una lista | <code>usuario_id IN (7, 9)</code> |</p>
 <h3 id="cuidado-en-sql-la-igualdad-es-un-solo">⚠️ Cuidado — En SQL, la igualdad es UN solo <code>=</code></h3>
-<p>Ojo con esto si vienes de JavaScript: en SQL, comparar es con <strong>un</strong> <code>=</code> (no <code>===</code> ni <code>==</code>).
-Y el texto va entre <strong>comillas simples</strong>: <code>WHERE nombre = 'Leer'</code> (no comillas dobles).</p>
+<p>Si vienes de JavaScript, presta atención aquí: en SQL comparas con <strong>un</strong> solo <code>=</code>, nada de
+<code>===</code> ni <code>==</code>. Y el texto siempre va entre <strong>comillas simples</strong>: <code>WHERE nombre = 'Leer'</code>. Las
+comillas dobles no sirven para esto.</p>
 <h3 id="que-significa-like-y-los-comodines">🟦 ¿Qué significa? — <em><code>LIKE</code> y los comodines</em></h3>
-<p><code>LIKE</code> busca por <strong>patrón</strong> de texto. El comodín <code>%</code> representa "cualquier cosa":
+<p><code>LIKE</code> busca por <strong>patrón</strong> de texto. El comodín <code>%</code> significa "aquí va cualquier cosa":
 - <code>'Le%'</code> → empieza por "Le" (Leer, Lectura…).
 - <code>'%ar'</code> → termina en "ar".
 - <code>'%jercicio%'</code> → contiene "jercicio".
-Útil para buscadores.</p>
+Es justo lo que necesitas cuando montas un buscador.</p>
 </blockquote>
 <hr />
 <h2 id="3-combinar-condiciones-and-or">3. Combinar condiciones: <code>AND</code> / <code>OR</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-and-y-or">🟦 ¿Qué significa? — <em><code>AND</code> y <code>OR</code></em></h3>
-<p>Igual que <code>&amp;&amp;</code> y <code>||</code> del Módulo 03, pero escritos como palabras:
+<p>Son los <code>&amp;&amp;</code> y <code>||</code> del Módulo 03, pero escritos como palabras de toda la vida:
 <code>sql
 SELECT * FROM habitos WHERE usuario_id = 7 AND meta &gt; 15;
 SELECT * FROM habitos WHERE color = '#1B6B6B' OR color = '#D98A3D';</code>
-<code>AND</code> exige que se cumplan <strong>ambas</strong>; <code>OR</code>, que se cumpla <strong>al menos una</strong>.</p>
+Con <code>AND</code> se tienen que cumplir <strong>las dos</strong> condiciones; con <code>OR</code>, basta con que se cumpla
+<strong>una</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="4-ordenar-y-limitar-order-by-y-limit">4. Ordenar y limitar: <code>ORDER BY</code> y <code>LIMIT</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-order-by">🟦 ¿Qué significa? — <em><code>ORDER BY</code></em></h3>
-<p>Ordena los resultados por una columna, ascendente (<code>ASC</code>, por defecto) o descendente (<code>DESC</code>):
+<p>Ordena los resultados según una columna, de menor a mayor (<code>ASC</code>, que es lo que hace por
+defecto) o de mayor a menor (<code>DESC</code>):
 <code>sql
 SELECT * FROM habitos ORDER BY meta DESC;</code>
 "Dame los hábitos ordenados por meta, de mayor a menor."</p>
 <h3 id="que-significa-limit">🟦 ¿Qué significa? — <em><code>LIMIT</code></em></h3>
-<p>Limita cuántas filas devuelve. Útil para "los 5 primeros":
+<p>Recorta cuántas filas te devuelve. Perfecto cuando solo quieres "los 5 primeros":
 <code>sql
 SELECT * FROM habitos ORDER BY meta DESC LIMIT 5;</code></p>
 </blockquote>
@@ -95,30 +105,33 @@ SELECT * FROM habitos ORDER BY meta DESC LIMIT 5;</code></p>
 <h2 id="5-contar-y-agrupar-un-vistazo">5. Contar y agrupar (un vistazo)</h2>
 <blockquote class="def">
 <h3 id="que-significa-funciones-de-agregacion-y-count">🟦 ¿Qué significa? — <em>Funciones de agregación y <code>COUNT</code></em></h3>
-<p>A veces no quieres las filas, sino un <strong>resumen</strong>: cuántas hay, el promedio, el total. Eso son
-las <strong>funciones de agregación</strong>. La más común es <code>COUNT</code> (contar):
+<p>A veces no te interesan las filas en sí, sino un <strong>resumen</strong> de ellas: cuántas hay, cuánto suman,
+cuál es el promedio. De eso se encargan las <strong>funciones de agregación</strong>. La que más vas a usar es
+<code>COUNT</code>, que cuenta:
 <code>sql
 SELECT COUNT(*) FROM habitos WHERE usuario_id = 7;</code>
-"¿Cuántos hábitos tiene el usuario 7?" Otras: <code>SUM</code> (suma), <code>AVG</code> (promedio), <code>MAX</code>, <code>MIN</code>.</p>
+"¿Cuántos hábitos tiene el usuario 7?" Hay más en la misma familia: <code>SUM</code> (suma), <code>AVG</code>
+(promedio), <code>MAX</code> y <code>MIN</code>.</p>
 <h3 id="que-significa-group-by">🟦 ¿Qué significa? — <em><code>GROUP BY</code></em></h3>
-<p><code>GROUP BY</code> agrupa filas para resumir <strong>por categoría</strong>. Por ejemplo, "cuántos hábitos tiene
-cada usuario":
+<p><code>GROUP BY</code> junta las filas para resumirlas <strong>por categoría</strong>. Por ejemplo, para saber cuántos
+hábitos tiene cada usuario:
 <code>sql
 SELECT usuario_id, COUNT(*) FROM habitos GROUP BY usuario_id;</code>
-No necesitas dominarlo ahora; reconócelo como "resumir datos por grupos".</p>
+No hace falta que lo domines todavía. Por ahora con que lo reconozcas como "resumir datos por
+grupos" es suficiente.</p>
 </blockquote>
 <hr />
 <h2 id="6-como-se-ve-esto-en-tus-apps">6. Cómo se ve esto en tus apps</h2>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En RachaSimple y Faro no escribes SQL "a mano" en la mayoría de sitios: usas el <strong>cliente de
-Supabase</strong>, que traduce a SQL por debajo. Por ejemplo, esto de la app:
+<p>En RachaSimple y en Faro casi nunca escribes SQL "a mano". En su lugar usas el <strong>cliente de
+Supabase</strong>, que se encarga de traducirlo a SQL por debajo. Mira este trozo de la app:
 <code>js
 supabase.from('habitos').select('*').eq('usuario_id', 7)</code>
-es, en el fondo, <code>SELECT * FROM habitos WHERE usuario_id = 7;</code>. Entender el SQL te permite
-saber <strong>qué hace realmente</strong> ese código y depurarlo. (El cliente de Supabase lo verás en el
-capítulo 04.) Además, Supabase tiene un <strong>editor SQL</strong> donde puedes escribir consultas
-directas, ideal para practicar.</p>
+que, en el fondo, no es más que <code>SELECT * FROM habitos WHERE usuario_id = 7;</code>. Por eso vale la
+pena entender el SQL: te deja ver <strong>qué está haciendo de verdad</strong> ese código y arreglarlo cuando
+algo falla. (El cliente de Supabase lo vemos a fondo en el capítulo 04.) Y por si fuera poco,
+Supabase trae un <strong>editor SQL</strong> donde puedes lanzar consultas directas: ideal para practicar.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

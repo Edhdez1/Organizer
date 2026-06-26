@@ -18,61 +18,68 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-construir-y-proteger-una-api">Capítulo 05 — Construir y proteger una API</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Hasta ahora <strong>consumiste</strong> APIs ajenas. Ahora ves la otra cara: cómo tus apps <strong>ofrecen</strong> su
-propia API (su backend) y, sobre todo, cómo <strong>protegerla</strong>. Cierras el módulo entendiendo el
-backend de Faro y los Workers de tu sitio.</p>
+<p>Hasta aquí estuviste del lado del que <strong>consume</strong> APIs de otros. Ahora le damos la vuelta: vas a
+ver cómo tus propias apps <strong>ofrecen</strong> su API (su backend) y, lo más importante, cómo
+<strong>protegerla</strong>. Cerramos el módulo entendiendo el backend de Faro y los Workers de tu sitio.</p>
 </blockquote>
 <hr />
 <h2 id="1-por-que-tu-app-necesita-su-propia-api-un-backend">1. Por qué tu app necesita su propia API (un backend)</h2>
-<p>Recuerda dos lecciones: las <strong>claves secretas</strong> no pueden estar en el frontend (capítulo 02), y
-la <strong>seguridad</strong> vive en el servidor (Módulo 07). Por eso tu app necesita un "intermediario"
-propio del lado servidor: tu propia API.</p>
+<p>Vale la pena recordar dos cosas que ya viste: las <strong>claves secretas</strong> no pueden vivir en el
+frontend (capítulo 02), y la <strong>seguridad</strong> se decide en el servidor (Módulo 07). De ahí sale la
+necesidad de tener un "intermediario" propio del lado del servidor: tu propia API.</p>
 <blockquote class="def">
 <h3 id="que-significa-construir-una-api-exponer-endpoints">🟦 ¿Qué significa? — <em>Construir una API (exponer endpoints)</em></h3>
-<p>Construir una API es escribir <strong>código que corre en un servidor</strong> y responde a peticiones HTTP
-en ciertos <strong>endpoints</strong>. El navegador (frontend) llama a <strong>tu</strong> API; <strong>tu</strong> API, con sus
-secretos a salvo, hace el trabajo pesado (hablar con la base de datos, con Claude, con GitHub) y
-devuelve un resultado limpio.</p>
+<p>Construir una API es escribir <strong>código que corre en un servidor</strong> y responde a peticiones HTTP en
+ciertos <strong>endpoints</strong>. El navegador (frontend) llama a <strong>tu</strong> API; <strong>tu</strong> API, que guarda los
+secretos a buen recaudo, hace el trabajo pesado (hablar con la base de datos, con Claude, con
+GitHub) y devuelve un resultado limpio.</p>
 <h3 id="que-significa-las-dos-formas-que-usan-tus-proyectos">🟦 ¿Qué significa? — <em>Las dos formas que usan tus proyectos</em></h3>
 <ul>
 <li><strong>Rutas de API en Next.js</strong> (Faro): archivos dentro de <code>src/app/api/</code>. Cada carpeta es un
   endpoint que corre <strong>en el servidor</strong>. Por ejemplo, <code>src/app/api/ai/analyze/</code> recibe una
   petición, llama a OpenAI con la clave secreta (a salvo en el servidor) y devuelve el análisis.</li>
-<li><strong>Cloudflare Workers</strong> (tunal-digital): pequeños programas que corren "en el borde" de la red
-  de Cloudflare. Tu <code>worker.js</code> es tu API para el chat: recibe el mensaje, llama a Claude y
-  responde. Ligero y sin servidor que mantener.
-Las dos son "tu backend"; difieren en dónde corren, pero el concepto es el mismo.</li>
+<li><strong>Cloudflare Workers</strong> (tunal-digital): programitas que corren "en el borde" de la red de
+  Cloudflare. Tu <code>worker.js</code> es la API del chat: recibe el mensaje, llama a Claude y responde.
+  Ligero y sin servidor que mantener.
+Las dos son "tu backend". Cambian en dónde corren, pero la idea de fondo es la misma.</li>
 </ul>
 <h3 id="que-significa-serverless-sin-servidor">🟦 ¿Qué significa? — <em>Serverless ("sin servidor")</em></h3>
-<p>Suena contradictorio: <strong>sí</strong> hay servidores, pero <strong>tú no los administras</strong>. Subes tu función
-(una ruta de Next.js en Vercel, o un Worker en Cloudflare) y la plataforma la ejecuta cuando
-llega una petición, escalando sola. "Serverless" = tú pones el código, ellos ponen (y cuidan)
-el servidor. Es lo que permite que tus apps tengan backend sin que mantengas máquinas. (En el
-Módulo 09 verás el otro extremo: administrar <strong>tu propio</strong> servidor, el NAS.)</p>
+<p>Suena a contradicción: <strong>sí</strong> hay servidores, lo que pasa es que <strong>tú no los administras</strong>. Subes
+tu función (una ruta de Next.js en Vercel, o un Worker en Cloudflare) y la plataforma la ejecuta
+cuando llega una petición, y escala sola. "Serverless" viene a ser: tú pones el código, ellos
+ponen (y cuidan) el servidor. Eso es justo lo que permite que tus apps tengan backend sin que
+tengas que mantener máquinas. (En el Módulo 09 verás el otro extremo: administrar <strong>tu propio</strong>
+servidor, el NAS.)</p>
 </blockquote>
 <hr />
 <h2 id="2-como-proteger-tu-api-lo-esencial">2. Cómo proteger tu API (lo esencial)</h2>
-<p>Una API abierta al mundo recibe abusos. Estas son las defensas que usan tus proyectos:</p>
+<p>Una API abierta al mundo tarde o temprano recibe abusos. Estas son las defensas que ya usan tus
+proyectos:</p>
 <blockquote class="def">
 <h3 id="que-significa-verificacion-de-origen-cors">🟦 ¿Qué significa? — <em>Verificación de origen (CORS)</em></h3>
-<p><strong>CORS</strong> (<em>Cross-Origin Resource Sharing</em>) controla <strong>qué sitios web</strong> pueden llamar a tu API
-desde el navegador. Tu Worker verifica que la petición venga de <code>tunaldigital.com</code> y no de un
-sitio cualquiera que quiera usar tu chat (y tu factura de IA). Es poner un portero que revisa de
-dónde vienes.</p>
+<p><strong>CORS</strong> (<em>Cross-Origin Resource Sharing</em>) decide <strong>qué sitios web</strong> pueden llamar a tu API desde
+el navegador. Tu Worker comprueba que la petición venga de <code>tunaldigital.com</code> y no de cualquier
+sitio que quiera aprovecharse de tu chat (y de tu factura de IA). Es como poner un portero que
+revisa de dónde vienes.</p>
 <h3 id="que-significa-rate-limiting-limite-de-tasa">🟦 ¿Qué significa? — <em>Rate limiting (límite de tasa)</em></h3>
-<p>Limitar <strong>cuántas peticiones</strong> acepta tu API de un mismo usuario/IP en un tiempo dado. Evita que
-alguien haga miles de llamadas para saturarte o gastarte el presupuesto. Tu Worker hace rate
-limiting <strong>por IP</strong>. (Es la otra cara del 429 que viste en el capítulo 02: ahora tú lo aplicas.)</p>
+<p>Limitar <strong>cuántas peticiones</strong> acepta tu API de un mismo usuario o IP en un rato dado. Así evitas
+que alguien lance miles de llamadas para saturarte o vaciarte el presupuesto. Tu Worker aplica
+rate limiting <strong>por IP</strong>. (Es la otra cara del 429 que viste en el capítulo 02: ahora el que lo
+aplica eres tú.)</p>
 <h3 id="que-significa-validacion-de-entrada">🟦 ¿Qué significa? — <em>Validación de entrada</em></h3>
-<p><strong>Nunca confíes en lo que llega</strong> del cliente: revisa que los datos tengan el formato esperado
+<p><strong>Nunca te fíes de lo que llega</strong> del cliente: revisa que los datos tengan el formato que esperas
 antes de usarlos (que el mensaje no sea gigantesco, que el correo sea válido). En el Módulo 07
 viste que RachaSimple valida con <strong>Zod</strong> antes de tocar la base de datos. Validar en el servidor
-es seguridad real (el frontend solo valida por comodidad).</p>
+es seguridad de verdad; el frontend solo valida por comodidad.</p>
 <h3 id="que-significa-tope-de-gasto">🟦 ¿Qué significa? — <em>Tope de gasto</em></h3>
-<p>Como las APIs de IA cuestan dinero, una protección extra es un <strong>límite de gasto</strong>: cortar el
-servicio si se supera cierto costo mensual. Tu chat tiene un tope (~$10/mes) para que un abuso
-no se convierta en una factura enorme. Defensa de negocio, no solo técnica.</p>
+<p>Como las APIs de IA cuestan dinero, una protección extra es ponerles un <strong>límite de gasto</strong>:
+cortar el servicio si se pasa de cierto costo mensual. Tu chat tiene un tope (~$10/mes) para que
+un abuso no termine en una factura enorme. Es una defensa de negocio, no solo técnica.</p>
 </blockquote>
 <hr />
 <h2 id="3-el-panorama-completo-las-dos-caras">3. El panorama completo: las dos caras</h2>
@@ -87,9 +94,9 @@ no se convierta en una factura enorme. Defensa de negocio, no solo técnica.</p>
    Base de datos     API de IA       APIs externas
    (Supabase/RLS)   (Claude/OpenAI)  (GitHub, Drive)
 </code></pre>
-<p>Tu frontend nunca habla directo con los secretos: pasa por <strong>tu</strong> backend, que es la única puerta
-y la que aplica todas las defensas. Esta arquitectura —que tú ya tienes en tus proyectos— es la
-forma profesional y segura de construir apps conectadas.</p>
+<p>Tu frontend nunca habla directo con los secretos: todo pasa por <strong>tu</strong> backend, que es la única
+puerta y la que aplica todas las defensas. Esta arquitectura —que ya tienes montada en tus
+proyectos— es la forma profesional y segura de construir apps conectadas.</p>
 <hr />
 <h2 id="4-cierre-del-modulo">4. Cierre del módulo</h2>
 <pre><code>APIs, OAuth e IA
@@ -99,9 +106,9 @@ forma profesional y segura de construir apps conectadas.</p>
 ├── Integrar IA: LLM como API, prompts, control de costo         (cap. 04)
 └── Construir y proteger: backend propio, CORS, rate limit, secretos (cap. 05)
 </code></pre>
-<p>Ya entiendes cómo tus apps <strong>hablan con el mundo</strong> de forma segura: la pieza que conecta todo lo
-anterior (frontend, datos, lógica) con servicios poderosos como la IA. Solo queda un módulo, y es
-distinto: tu propio <strong>servidor en casa</strong>, el NAS.</p>
+<p>Ya entiendes cómo tus apps <strong>hablan con el mundo</strong> de forma segura: esa es la pieza que conecta
+todo lo anterior (frontend, datos, lógica) con servicios potentes como la IA. Solo queda un módulo,
+y es de otra naturaleza: tu propio <strong>servidor en casa</strong>, el NAS.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -116,10 +123,10 @@ distinto: tu propio <strong>servidor en casa</strong>, el NAS.</p>
 <ol>
 <li><strong>Por qué un backend.</strong> Explica por qué el chat no puede llamar a Claude <strong>directamente</strong> desde
    <code>main.js</code> y necesita el Worker en medio.</li>
-<li><strong>CORS.</strong> ¿Qué problema evita la verificación de origen en tu Worker? Da un ejemplo de abuso
-   que frena.</li>
-<li><strong>Rate limit.</strong> Relaciona el rate limiting que <strong>tú</strong> aplicas con el estado <strong>429</strong> que viste
-   al consumir APIs ajenas (capítulo 02).</li>
+<li><strong>CORS.</strong> ¿Qué problema evita la verificación de origen en tu Worker? Da un ejemplo de abuso que
+   frena.</li>
+<li><strong>Rate limit.</strong> Relaciona el rate limiting que <strong>tú</strong> aplicas con el estado <strong>429</strong> que viste al
+   consumir APIs ajenas (capítulo 02).</li>
 <li><strong>Serverless.</strong> Explica con tus palabras por qué "serverless" no significa "sin servidores".</li>
 <li><strong>Diseña defensas.</strong> Vas a abrir una API que resume textos con IA. Lista 4 protecciones que le
    pondrías y por qué.</li>
@@ -127,8 +134,8 @@ distinto: tu propio <strong>servidor en casa</strong>, el NAS.</p>
 <hr />
 <p>🎉 <strong>¡Terminaste el Módulo 08 — APIs, OAuth e IA!</strong> Con esto cierras toda la parte de
 <strong>programación</strong>: ya entiendes, de punta a punta, cómo están hechas tus cuatro apps y cómo dar
-órdenes precisas sobre ellas. Felicidades: ese era el objetivo central del manual. Queda un
-módulo final, dedicado a tu <strong>servidor NAS</strong> y las redes.</p>
+órdenes precisas sobre ellas. Felicidades: ese era el objetivo central del manual. Queda un módulo
+final, dedicado a tu <strong>servidor NAS</strong> y las redes.</p>
 <p>➡️ Siguiente módulo: <strong><a href="../09-nas-y-servidores/README.html">09 — NAS y servidores</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

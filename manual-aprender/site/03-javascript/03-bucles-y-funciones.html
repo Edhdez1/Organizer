@@ -18,42 +18,47 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-03-bucles-y-funciones">Capítulo 03 — Bucles y funciones</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
 <p>Llegamos al tercer ingrediente del Módulo 00 (<strong>repeticiones</strong>) y a la herramienta que
-organiza todo el código: las <strong>funciones</strong>. Con variables, decisiones, bucles y funciones ya
-tienes las cuatro piezas con las que se construye casi cualquier programa.</p>
+ordena todo el código: las <strong>funciones</strong>. Con variables, decisiones, bucles y funciones ya
+tienes las cuatro piezas con las que se arma casi cualquier programa.</p>
 </blockquote>
 <hr />
 <h2 id="1-bucles-repetir-sin-copiar-y-pegar">1. Bucles: repetir sin copiar y pegar</h2>
 <blockquote class="def">
 <h3 id="que-significa-bucle-loop">🟦 ¿Qué significa? — <em>Bucle (loop)</em></h3>
-<p>Un <strong>bucle</strong> repite un bloque de código varias veces. En vez de escribir lo mismo 100 veces,
-escribes la instrucción una vez y le dices cuántas veces repetirla. Es de lo que más ahorra
-trabajo en programación.</p>
+<p>Un <strong>bucle</strong> repite un bloque de código varias veces. En lugar de escribir lo mismo 100 veces,
+escribes la instrucción una sola vez y le indicas cuántas veces debe repetirla. Pocas cosas
+en programación te ahorran tanto trabajo.</p>
 </blockquote>
 <h3 id="el-bucle-for">El bucle <code>for</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-el-bucle-for">🟦 ¿Qué significa? — <em>El bucle <code>for</code></em></h3>
-<p><code>for</code> repite un número <strong>conocido</strong> de veces. Tiene tres partes entre paréntesis, separadas
+<p><code>for</code> repite un número <strong>conocido</strong> de veces. Lleva tres partes entre paréntesis, separadas
 por <code>;</code>:
 <code>javascript
 for (let i = 0; i &lt; 5; i++) {
   console.log("Vuelta número " + i);
 }
 // muestra: Vuelta número 0, 1, 2, 3, 4</code>
-- <code>let i = 0</code> → <strong>inicio</strong>: crea un contador <code>i</code> que empieza en 0.
+- <code>let i = 0</code> → <strong>inicio</strong>: crea un contador <code>i</code> que arranca en 0.
 - <code>i &lt; 5</code> → <strong>condición</strong>: repite <strong>mientras</strong> se cumpla.
-- <code>i++</code> → <strong>paso</strong>: qué hacer tras cada vuelta (<code>i++</code> suma 1 a <code>i</code>).</p>
-<p>Se lee: "empieza i en 0; mientras i sea menor que 5, ejecuta el bloque y luego suma 1 a i".</p>
+- <code>i++</code> → <strong>paso</strong>: qué hacer al terminar cada vuelta (<code>i++</code> suma 1 a <code>i</code>).</p>
+<p>Se lee así: "empieza i en 0; mientras i sea menor que 5, ejecuta el bloque y luego súmale 1 a i".</p>
 <h3 id="tip-por-que-se-empieza-en-0">💡 Tip — Por qué se empieza en 0</h3>
-<p>En programación se cuenta <strong>desde 0</strong>, no desde 1. Es una convención que verás en todos lados
-(sobre todo con las listas, en el próximo capítulo). Por eso <code>i &lt; 5</code> da 5 vueltas: 0, 1, 2, 3, 4.</p>
+<p>En programación se cuenta <strong>desde 0</strong>, no desde 1. Es una convención que te encontrarás por
+todos lados (y especialmente con las listas, en el próximo capítulo). Por eso <code>i &lt; 5</code> da 5
+vueltas: 0, 1, 2, 3, 4.</p>
 </blockquote>
 <h3 id="el-bucle-while">El bucle <code>while</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-el-bucle-while">🟦 ¿Qué significa? — <em>El bucle <code>while</code></em></h3>
-<p><code>while</code> ("mientras") repite <strong>mientras</strong> una condición sea verdadera. Se usa cuando <strong>no sabes
-de antemano</strong> cuántas vueltas serán:
+<p><code>while</code> ("mientras") repite <strong>mientras</strong> una condición sea verdadera. Te sirve cuando <strong>no
+sabes de antemano</strong> cuántas vueltas harán falta:
 <code>javascript
 let saldo = 100;
 while (saldo &gt; 0) {
@@ -61,20 +66,20 @@ while (saldo &gt; 0) {
   saldo -= 25;   // se va gastando
 }</code></p>
 <h3 id="cuidado-el-bucle-infinito">⚠️ Cuidado — El bucle infinito</h3>
-<p>Si la condición de un <code>while</code> <strong>nunca</strong> se vuelve falsa, el bucle no termina jamás y el
-programa se cuelga. Asegúrate de que <strong>algo dentro del bucle</strong> acerque la condición a su fin
-(en el ejemplo, <code>saldo</code> baja en cada vuelta). Es el error clásico de principiante; si tu
-navegador se congela, probablemente sea esto.</p>
+<p>Si la condición de un <code>while</code> <strong>nunca</strong> llega a ser falsa, el bucle no termina nunca y el
+programa se cuelga. Asegúrate de que <strong>algo dentro del bucle</strong> acerque la condición a su final
+(en el ejemplo, <code>saldo</code> baja en cada vuelta). Es el error clásico de quien empieza; si tu
+navegador se congela, casi seguro es esto.</p>
 </blockquote>
 <hr />
 <h2 id="2-funciones-empaquetar-codigo-para-reutilizarlo">2. Funciones: empaquetar código para reutilizarlo</h2>
 <blockquote class="def">
 <h3 id="que-significa-funcion">🟦 ¿Qué significa? — <em>Función</em></h3>
-<p>Una <strong>función</strong> es un <strong>bloque de código con nombre</strong> que realiza una tarea, y que puedes
-<strong>ejecutar (llamar) cuando quieras</strong>, las veces que quieras. Evita repetir código y organiza
+<p>Una <strong>función</strong> es un <strong>bloque de código con nombre</strong> que hace una tarea y que puedes
+<strong>ejecutar (llamar) cuando quieras</strong>, las veces que quieras. Te evita repetir código y reparte
 el programa en piezas con un propósito claro.
-Analogía: es como una <strong>receta</strong> guardada. La escribes una vez ("hacer café") y la "invocas"
-cada mañana sin reescribir los pasos.</p>
+Piénsalo como una <strong>receta</strong> guardada: la escribes una vez ("hacer café") y la "invocas" cada
+mañana sin volver a anotar los pasos.</p>
 </blockquote>
 <h3 id="definir-y-llamar-una-funcion">Definir y llamar una función</h3>
 <pre><code class="language-javascript">// Definir la función (escribir la receta)
@@ -89,8 +94,8 @@ saludar();   // puedes llamarla cuantas veces quieras
 <blockquote class="def">
 <h3 id="que-significa-definir-vs-llamar">🟦 ¿Qué significa? — <em>Definir vs. llamar</em></h3>
 <ul>
-<li><strong>Definir</strong> una función es escribir qué hace (no la ejecuta todavía).</li>
-<li><strong>Llamar</strong> (o invocar) es ejecutarla, escribiendo su nombre seguido de <code>()</code>.
+<li><strong>Definir</strong> una función es escribir qué hace (todavía no la ejecuta).</li>
+<li><strong>Llamar</strong> (o invocar) es ejecutarla: escribes su nombre seguido de <code>()</code>.
 Definir la receta no prepara el café; llamarla, sí.</li>
 </ul>
 </blockquote>
@@ -109,23 +114,23 @@ saludar("Ana");                   // → ¡Hola, Ana!</code></p>
 <h3 id="return-que-la-funcion-devuelva-un-resultado"><code>return</code>: que la función devuelva un resultado</h3>
 <blockquote class="def">
 <h3 id="que-significa-return-devolver">🟦 ¿Qué significa? — <em><code>return</code> (devolver)</em></h3>
-<p><code>return</code> hace que la función <strong>entregue un valor</strong> de vuelta a quien la llamó, para usarlo
-después. Sin <code>return</code>, la función hace algo pero no "devuelve" nada utilizable.
+<p><code>return</code> hace que la función <strong>entregue un valor</strong> de vuelta a quien la llamó, para que lo
+uses después. Sin <code>return</code>, la función hace algo pero no te "devuelve" nada con lo que seguir.
 <code>javascript
 function sumar(a, b) {
   return a + b;     // devuelve el resultado
 }
 const total = sumar(5, 3);   // total ahora vale 8
 console.log(total);          // 8</code>
-Diferencia clave: <code>console.log</code> <strong>muestra</strong> algo en pantalla; <code>return</code> <strong>entrega</strong> un valor
-para seguir usándolo en el código. Una función puede tener <code>return</code> sin imprimir nada.</p>
+La diferencia clave: <code>console.log</code> <strong>muestra</strong> algo en pantalla; <code>return</code> <strong>entrega</strong> un valor
+para que sigas usándolo en el código. Una función puede tener <code>return</code> sin imprimir nada.</p>
 <h3 id="cuidado-return-termina-la-funcion">⚠️ Cuidado — <code>return</code> termina la función</h3>
-<p>En cuanto se ejecuta un <code>return</code>, la función <strong>termina ahí mismo</strong>; lo que esté después no se
-ejecuta. Es útil para "salir temprano" en ciertos casos.</p>
+<p>En cuanto se ejecuta un <code>return</code>, la función <strong>termina ahí mismo</strong>; lo que venga después no
+llega a ejecutarse. Eso es útil para "salir temprano" en ciertos casos.</p>
 </blockquote>
 <hr />
 <h2 id="3-funciones-flecha-la-forma-moderna-y-abreviada">3. Funciones flecha (la forma moderna y abreviada)</h2>
-<p>Verás muchísimo esta otra forma de escribir funciones, sobre todo en React.</p>
+<p>Vas a ver muchísimo esta otra forma de escribir funciones, sobre todo en React.</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-flecha-arrow-function">🟦 ¿Qué significa? — <em>Función flecha (arrow function)</em></h3>
 <p>Es una sintaxis más corta para escribir funciones, usando <code>=&gt;</code> (una "flecha"):
@@ -140,9 +145,9 @@ const sumar = (a, b) =&gt; {
 };
 // Versión ultracorta (si solo devuelve algo, sin llaves ni return)
 const sumar = (a, b) =&gt; a + b;</code>
-Las tres hacen lo mismo. La flecha es popular por ser concisa. <strong>¿Dónde se usa en tu
-proyecto?</strong> Tu <code>main.js</code> y, sobre todo, RachaSimple y Faro están llenos de funciones flecha;
-reconocerlas te abrirá ese código.</p>
+Las tres hacen exactamente lo mismo. La flecha se usa tanto porque es muy concisa. <strong>¿Dónde la
+ves en tu proyecto?</strong> Tu <code>main.js</code> y, sobre todo, RachaSimple y Faro están llenos de funciones
+flecha; reconocerlas te abrirá ese código.</p>
 </blockquote>
 <hr />
 <h2 id="4-juntandolo-un-ejemplo-con-todo">4. Juntándolo: un ejemplo con todo</h2>
@@ -165,9 +170,9 @@ for (let i = 0; i &lt; notas.length; i++) {
 // Nota 60: Reprobado
 // Nota 75: Aprobado
 </code></pre>
-<p>Aquí ves las <strong>cuatro piezas</strong> juntas: variables (<code>notas</code>), decisiones (<code>if</code>), repetición
-(<code>for</code>) y una función reutilizable (<code>clasificar</code>). Eso es programar. <code>notas.length</code> da la
-cantidad de elementos de la lista (lo verás en el próximo capítulo).</p>
+<p>Aquí tienes las <strong>cuatro piezas</strong> trabajando juntas: variables (<code>notas</code>), decisiones (<code>if</code>),
+repetición (<code>for</code>) y una función reutilizable (<code>clasificar</code>). Eso es programar, ni más ni menos.
+<code>notas.length</code> te da la cantidad de elementos de la lista (lo verás en el próximo capítulo).</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

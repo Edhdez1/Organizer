@@ -23,30 +23,30 @@
 </p>
 
 <blockquote>
-<p>¡Hola de nuevo! Soy Bit, tu ajolote guía. 🐾 En capítulos anteriores aprendimos a poner color, márgenes y a colocar cajas. Pero seguro notaste algo: cuando escribíamos <code>width: 300px</code> o <code>font-size: 16px</code>, todo quedaba <strong>fijo como una estatua</strong>. En una pantalla grande se veía bien; en un teléfono, apretado; en un monitor enorme, perdido en una esquina. En este capítulo vamos a darle vida a esos números. Aprenderás unidades que <strong>respiran</strong> con la pantalla y funciones que calculan tamaños solas, para que tu diseño se adapte sin que tengas que escribir mil <code>@media</code> queries. Respira hondo, que esto es de lo más útil que vas a aprender en CSS. ¡Vamos!</p>
+<p>¡Hola otra vez! Soy Bit, tu ajolote guía. 🐾 En los capítulos pasados aprendimos a dar color, poner márgenes y colocar cajas. Pero seguro te diste cuenta de algo: cuando escribíamos <code>width: 300px</code> o <code>font-size: 16px</code>, todo quedaba <strong>fijo como una estatua</strong>. En una pantalla grande se veía bien; en un teléfono, apretado; en un monitor enorme, perdido en una esquina. Hoy vamos a darle vida a esos números. Vas a conocer unidades que <strong>respiran</strong> con la pantalla y funciones que calculan tamaños por su cuenta, para que tu diseño se adapte sin que escribas mil <code>@media</code> queries. Respira hondo, porque esto es de lo más útil que vas a ver en CSS. ¡Arrancamos!</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-de-los-pixeles-fijos">1. El problema de los píxeles fijos</h2>
-<p>Hasta ahora casi todo lo medimos en <strong>píxeles</strong> (<code>px</code>). Un píxel es como un ladrillito: siempre mide lo mismo, sin importar dónde lo pongas. Eso está bien para cosas que de verdad no deben cambiar (el grosor de un borde, por ejemplo), pero es un problema para textos y espacios que deberían crecer o encoger según el dispositivo.</p>
+<p>Hasta ahora medíamos casi todo en <strong>píxeles</strong> (<code>px</code>). Un píxel es como un ladrillito: siempre mide lo mismo, lo pongas donde lo pongas. Eso viene bien para cosas que de verdad no deben moverse (el grosor de un borde, por ejemplo), pero se vuelve un estorbo para textos y espacios que deberían crecer o encoger según el dispositivo.</p>
 <blockquote class="def">
 <h3 id="que-significa-pixel-px">🟦 ¿Qué significa? — <em>Píxel (px)</em></h3>
-<p>Un <strong>píxel</strong> es la unidad más pequeña y fija de CSS. Sirve para medir longitudes que no deben escalar (bordes finos, sombras, separaciones milimétricas). Se usa muchísimo en <code>styles.css</code> de <strong>tunal-digital</strong>, por ejemplo en <code>border: 1px solid</code> o en sombras. El problema es que un texto fijado en <code>px</code> ignora las preferencias de accesibilidad del usuario: si alguien con baja visión agranda la letra del navegador, tu <code>16px</code> no se mueve.</p>
+<p>Un <strong>píxel</strong> es la unidad más pequeña y fija de CSS. Sirve para medir longitudes que no deben escalar: bordes finos, sombras, separaciones milimétricas. Lo usas un montón en el <code>styles.css</code> de <strong>tunal-digital</strong>, por ejemplo en <code>border: 1px solid</code> o en sombras. El lado flojo es que un texto fijado en <code>px</code> ignora las preferencias de accesibilidad de la persona: si alguien con baja visión agranda la letra del navegador, tu <code>16px</code> no se inmuta.</p>
 </blockquote>
-<p>Imagina que en <strong>tunal-digital</strong> pusiste todos los títulos en <code>font-size: 32px</code>. En un celular pequeño esos 32px se comen el ancho de la pantalla. Y si un usuario configuró su navegador para letra más grande, tu sitio lo ignora. Eso no es accesible ni cómodo. La solución está en usar unidades <strong>relativas</strong>, que se calculan a partir de otra cosa (el tamaño de letra base, el ancho de la ventana, el contenedor padre…).</p>
+<p>Imagina que en <strong>tunal-digital</strong> pusiste todos los títulos en <code>font-size: 32px</code>. En un celular pequeño esos 32px se comen el ancho de la pantalla. Y si un usuario configuró su navegador para letra más grande, tu sitio lo ignora por completo. Eso no es accesible ni cómodo. La salida son las unidades <strong>relativas</strong>, que se calculan a partir de otra cosa: el tamaño de letra base, el ancho de la ventana, el contenedor padre…</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Regla práctica de Bit: usa <code>px</code> para detalles que <strong>nunca</strong> deben escalar (bordes, líneas finas) y unidades relativas para <strong>todo lo que el usuario lee o toca</strong> (textos, espacios, anchos de columna). Así tu sitio respeta a la persona que lo usa.</p>
+<p>Regla práctica de Bit: usa <code>px</code> para detalles que <strong>nunca</strong> deberían escalar (bordes, líneas finas) y unidades relativas para <strong>todo lo que el usuario lee o toca</strong> (textos, espacios, anchos de columna). Así tu sitio respeta a la persona que lo está usando.</p>
 </blockquote>
 <hr />
 <h2 id="2-rem-y-em-medir-en-relacion-al-texto">2. <code>rem</code> y <code>em</code>: medir en relación al texto</h2>
-<p>Estas dos unidades miden en función del <strong>tamaño de la fuente</strong>, no en píxeles absolutos. Son las reinas de la tipografía moderna.</p>
+<p>Estas dos unidades se miden a partir del <strong>tamaño de la fuente</strong>, no en píxeles absolutos. Son las reinas de la tipografía moderna.</p>
 <blockquote class="def">
 <h3 id="que-significa-rem">🟦 ¿Qué significa? — <em>rem</em></h3>
-<p><code>rem</code> significa "root em": mide en relación al tamaño de letra <strong>del elemento raíz</strong> (la etiqueta <code>&lt;html&gt;</code>). Por defecto, los navegadores ponen <code>html</code> en <code>16px</code>, así que <code>1rem = 16px</code>, <code>1.5rem = 24px</code>, <code>0.5rem = 8px</code>. Sirve para definir tamaños que escalen todos juntos desde un único lugar. Si en <code>styles.css</code> de <strong>tunal-digital</strong> cambias el tamaño base del <code>html</code>, <strong>todo</strong> lo medido en <code>rem</code> se reajusta a la vez. Es ideal para tipografía y espaciados coherentes.</p>
+<p><code>rem</code> viene de "root em": mide en relación al tamaño de letra <strong>del elemento raíz</strong>, la etiqueta <code>&lt;html&gt;</code>. Por defecto, los navegadores ponen <code>html</code> en <code>16px</code>, así que <code>1rem = 16px</code>, <code>1.5rem = 24px</code> y <code>0.5rem = 8px</code>. Te sirve para definir tamaños que escalen todos juntos desde un único lugar. Si en el <code>styles.css</code> de <strong>tunal-digital</strong> cambias el tamaño base del <code>html</code>, <strong>todo</strong> lo medido en <code>rem</code> se reajusta de golpe. Es perfecta para tipografía y espaciados coherentes.</p>
 <h3 id="que-significa-em">🟦 ¿Qué significa? — <em>em</em></h3>
-<p><code>em</code> mide en relación al tamaño de letra <strong>del propio elemento</strong> (o el que herede de su padre). Si un párrafo tiene <code>font-size: 20px</code>, entonces dentro de él <code>1em = 20px</code>. Sirve para tamaños que dependen del contexto local: por ejemplo, un <code>padding</code> de botón que crezca proporcionalmente si el botón tiene letra más grande. Se usa cuando quieres que algo escale <strong>junto con su propio texto</strong>.</p>
+<p><code>em</code> mide en relación al tamaño de letra <strong>del propio elemento</strong> (o el que herede de su padre). Si un párrafo tiene <code>font-size: 20px</code>, entonces dentro de él <code>1em = 20px</code>. Sirve para tamaños que dependen del contexto local: por ejemplo, un <code>padding</code> de botón que crezca de forma proporcional cuando el botón tiene letra más grande. La usas cuando quieres que algo escale <strong>junto con su propio texto</strong>.</p>
 </blockquote>
-<p>La diferencia es sutil pero importante:</p>
+<p>La diferencia es sutil, pero importa:</p>
 <pre><code class="language-css">html {
   font-size: 16px; /* base: 1rem = 16px */
 }
@@ -60,21 +60,21 @@ h1 {
   padding: 1em;       /* 1 × 20 = 20px, referido a ESTA tarjeta */
 }
 </code></pre>
-<p>En <code>.tarjeta</code>, el <code>padding: 1em</code> vale 20px porque <code>em</code> mira el <code>font-size</code> local (20px). Si mañana subes la letra de la tarjeta a 24px, su padding crecerá solo a 24px. En cambio el <code>h1</code> con <code>2rem</code> siempre será el doble del tamaño raíz, sin importar dónde lo coloques.</p>
+<p>En <code>.tarjeta</code>, el <code>padding: 1em</code> vale 20px porque <code>em</code> mira el <code>font-size</code> local, que son 20px. Si mañana subes la letra de la tarjeta a 24px, su padding crecerá solo hasta 24px. El <code>h1</code> con <code>2rem</code>, en cambio, siempre será el doble del tamaño raíz, lo coloques donde lo coloques.</p>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p><code>em</code> se <strong>acumula</strong> cuando hay elementos anidados. Si un <code>&lt;div&gt;</code> con <code>font-size: 1.5em</code> contiene otro <code>&lt;div&gt;</code> también en <code>1.5em</code>, el segundo será <code>1.5 × 1.5 = 2.25</code> veces el tamaño base. Esto puede crecer sin control. Por eso, para tipografía general se prefiere <code>rem</code> (siempre se refiere a la raíz y no se multiplica), y se reserva <code>em</code> para casos puntuales como padding interno de un componente.</p>
+<p><code>em</code> se <strong>acumula</strong> cuando hay elementos anidados. Si un <code>&lt;div&gt;</code> con <code>font-size: 1.5em</code> contiene otro <code>&lt;div&gt;</code> también en <code>1.5em</code>, el segundo termina siendo <code>1.5 × 1.5 = 2.25</code> veces el tamaño base. Esto puede irse de las manos. Por eso, para tipografía general se prefiere <code>rem</code> (siempre apunta a la raíz y no se multiplica), y se deja <code>em</code> para casos puntuales como el padding interno de un componente.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <strong>RachaSimple</strong> y <strong>Faro</strong> usas Tailwind. Cuando escribes <code>text-lg</code> o <code>p-4</code>, por debajo Tailwind genera valores en <code>rem</code> (<code>text-lg</code> es <code>1.125rem</code>, <code>p-4</code> es <code>1rem</code>). O sea: aunque no escribas <code>rem</code> a mano, ya lo estás usando. Entender <code>rem</code> te ayuda a saber <em>por qué</em> la escala de Tailwind se ve armónica: todo se construye sobre la misma raíz.</p>
+<p>En <strong>RachaSimple</strong> y <strong>Faro</strong> usas Tailwind. Cuando escribes <code>text-lg</code> o <code>p-4</code>, Tailwind genera por debajo valores en <code>rem</code> (<code>text-lg</code> es <code>1.125rem</code>, <code>p-4</code> es <code>1rem</code>). O sea: aunque no escribas <code>rem</code> a mano, ya lo estás usando. Entender <code>rem</code> te ayuda a saber <em>por qué</em> la escala de Tailwind se ve tan armónica: todo se construye sobre la misma raíz.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Un truco famoso: poner <code>html { font-size: 62.5%; }</code> hace que <code>1rem = 10px</code> (porque el 62.5% de 16 es 10). Así las cuentas son fáciles: <code>1.6rem = 16px</code>, <code>2.4rem = 24px</code>. Mucha gente lo usa para "pensar en píxeles" pero conservar las ventajas de escalado de <code>rem</code>. No es obligatorio, pero es bueno conocerlo.</p>
+<p>Hay un truco famoso: poner <code>html { font-size: 62.5%; }</code> hace que <code>1rem = 10px</code> (porque el 62.5% de 16 es 10). Así las cuentas salen redondas: <code>1.6rem = 16px</code>, <code>2.4rem = 24px</code>. Mucha gente lo usa para "pensar en píxeles" sin perder las ventajas de escalado de <code>rem</code>. No es obligatorio, pero está bueno conocerlo.</p>
 </blockquote>
 <hr />
 <h2 id="3-relativo-al-contenedor-padre">3. <code>%</code>: relativo al contenedor padre</h2>
-<p>El porcentaje (<code>%</code>) mide en relación al <strong>elemento padre</strong>, pero ojo: a qué propiedad del padre depende de qué estés midiendo.</p>
+<p>El porcentaje (<code>%</code>) mide en relación al <strong>elemento padre</strong>, aunque con una trampa: a qué propiedad del padre depende de qué estés midiendo.</p>
 <blockquote class="def">
 <h3 id="que-significa-porcentaje">🟦 ¿Qué significa? — <em>Porcentaje (%)</em></h3>
-<p>El <code>%</code> expresa una fracción de una medida del <strong>contenedor padre</strong>. En <code>width</code>, es un porcentaje del ancho del padre; en <code>height</code>, del alto; en <code>padding</code> y <code>margin</code>, casi siempre del <strong>ancho</strong> del padre (¡incluso para arriba y abajo!). Sirve para que un elemento ocupe una parte proporcional de su contenedor. En <code>styles.css</code> de <strong>tunal-digital</strong> lo usarías para que una columna ocupe el <code>50%</code> del ancho disponible y se reacomode sola en pantallas distintas.</p>
+<p>El <code>%</code> expresa una fracción de una medida del <strong>contenedor padre</strong>. En <code>width</code>, es un porcentaje del ancho del padre; en <code>height</code>, del alto; en <code>padding</code> y <code>margin</code>, casi siempre del <strong>ancho</strong> del padre (¡incluso para arriba y abajo!). Sirve para que un elemento ocupe una parte proporcional de su contenedor. En el <code>styles.css</code> de <strong>tunal-digital</strong> lo usarías para que una columna ocupe el <code>50%</code> del ancho disponible y se reacomode sola en pantallas distintas.</p>
 </blockquote>
 <pre><code class="language-css">.contenedor {
   width: 600px;
@@ -87,20 +87,20 @@ h1 {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Que <code>padding-top</code> en porcentaje se calcule sobre el <strong>ancho</strong> sorprende a todo el mundo al principio. No es un error tuyo: es como funciona CSS. (Más adelante veremos que existe <code>aspect-ratio</code>, que resuelve de forma limpia lo que antes la gente hacía con ese truco raro de <code>padding</code> en porcentaje.)</p>
+<p>Que <code>padding-top</code> en porcentaje se calcule sobre el <strong>ancho</strong> sorprende a todo el mundo al principio. No es un error tuyo: CSS funciona así. (Más adelante veremos <code>aspect-ratio</code>, que resuelve de forma limpia lo que antes la gente conseguía con ese truco raro del <code>padding</code> en porcentaje.)</p>
 </blockquote>
 <hr />
 <h2 id="4-unidades-de-ventana-vw-vh-vmin-vmax">4. Unidades de ventana: <code>vw</code>, <code>vh</code>, <code>vmin</code>, <code>vmax</code></h2>
-<p>Ahora subimos un nivel. Estas unidades no miran al padre ni a la fuente, sino a <strong>la ventana completa del navegador</strong> (lo que se llama <em>viewport</em>).</p>
+<p>Ahora subimos un escalón. Estas unidades no miran al padre ni a la fuente, sino a <strong>la ventana completa del navegador</strong>, lo que se llama <em>viewport</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-viewport">🟦 ¿Qué significa? — <em>Viewport</em></h3>
-<p>El <strong>viewport</strong> es el área visible de la página dentro del navegador: el "marco" por el que asomas. Su tamaño cambia según el dispositivo y si el usuario agranda o achica la ventana. Saber su tamaño nos deja crear diseños que reaccionan al espacio real disponible. Es la base de todo lo "responsive".</p>
+<p>El <strong>viewport</strong> es el área visible de la página dentro del navegador: el "marco" por el que te asomas. Su tamaño cambia según el dispositivo y según si el usuario agranda o achica la ventana. Conocer ese tamaño nos permite crear diseños que reaccionan al espacio real disponible. Es la base de todo lo "responsive".</p>
 <h3 id="que-significa-vw-viewport-width">🟦 ¿Qué significa? — <em>vw (viewport width)</em></h3>
 <p><code>1vw</code> es el <strong>1% del ancho</strong> del viewport. Si la ventana mide 1000px de ancho, <code>1vw = 10px</code> y <code>100vw</code> es todo el ancho. Sirve para tamaños que deben escalar con el ancho de pantalla, como un título gigante en una portada (<em>hero</em>) que se ve enorme en desktop y razonable en móvil. En una landing de <strong>tunal-digital</strong>, un <code>font-size: 5vw</code> haría que el titular crezca y encoja solo según el ancho.</p>
 <h3 id="que-significa-vh-viewport-height">🟦 ¿Qué significa? — <em>vh (viewport height)</em></h3>
 <p><code>1vh</code> es el <strong>1% del alto</strong> del viewport. <code>100vh</code> es toda la altura visible. Sirve para secciones que deben ocupar la pantalla completa de alto, como una portada de pantalla entera. En <strong>tunal-digital</strong>, una sección con <code>min-height: 100vh</code> ocuparía todo el alto al cargar.</p>
 <h3 id="que-significa-vmin-y-vmax">🟦 ¿Qué significa? — <em>vmin y vmax</em></h3>
-<p><code>vmin</code> es el 1% de la dimensión <strong>más pequeña</strong> del viewport (ancho o alto, el menor de los dos); <code>vmax</code>, el 1% de la <strong>más grande</strong>. Sirven para elementos que deben caber bien tanto en pantallas anchas (horizontal) como altas (vertical). Por ejemplo, un cuadrado decorativo con <code>width: 50vmin</code> siempre cabrá, gire como gire el teléfono, porque se basa en el lado más corto.</p>
+<p><code>vmin</code> es el 1% de la dimensión <strong>más pequeña</strong> del viewport (ancho o alto, el menor de los dos); <code>vmax</code>, el 1% de la <strong>más grande</strong>. Sirven para elementos que deben caber bien tanto en pantallas anchas (horizontal) como altas (vertical). Por ejemplo, un cuadrado decorativo con <code>width: 50vmin</code> siempre cabe, gire como gire el teléfono, porque se apoya en el lado más corto.</p>
 </blockquote>
 <pre><code class="language-css">.portada {
   min-height: 100vh;      /* pantalla completa de alto */
@@ -114,16 +114,16 @@ h1 {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Usar <code>vw</code> <em>solo</em> para tipografía es peligroso: en pantallas muy pequeñas el texto se vuelve diminuto y en pantallas gigantes, descomunal. Además no respeta el zoom del usuario. Por eso casi nunca usamos <code>vw</code> desnudo para texto: lo combinamos con <code>rem</code> dentro de <code>clamp()</code>, que veremos en la sección 6. Bit te lo advierte para que no te lleves un susto. 🐾</p>
+<p>Usar <code>vw</code> <em>solo</em> para tipografía es jugar con fuego: en pantallas muy pequeñas el texto queda diminuto y en pantallas gigantes, descomunal. Encima no respeta el zoom del usuario. Por eso casi nunca usamos <code>vw</code> desnudo para texto: lo combinamos con <code>rem</code> dentro de <code>clamp()</code>, que veremos en la sección 6. Bit te lo avisa para que no te lleves un susto. 🐾</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>Existe un detalle con <code>100vh</code> en móviles: la barra de direcciones del navegador puede tapar parte de la pantalla y provocar saltos. Para eso existen unidades más nuevas como <code>dvh</code> (<em>dynamic viewport height</em>), <code>svh</code> y <code>lvh</code>, que tienen en cuenta esa barra. Si notas que tu sección de <code>100vh</code> "salta" en el celular, prueba con <code>100dvh</code>.</p>
+<p>Hay un detalle con <code>100vh</code> en móviles: la barra de direcciones del navegador puede tapar parte de la pantalla y provocar saltos molestos. Para eso aparecieron unidades más nuevas como <code>dvh</code> (<em>dynamic viewport height</em>), <code>svh</code> y <code>lvh</code>, que tienen en cuenta esa barra. Si notas que tu sección de <code>100vh</code> "salta" en el celular, prueba con <code>100dvh</code>.</p>
 </blockquote>
 <hr />
 <h2 id="5-ch-medir-en-caracteres">5. <code>ch</code>: medir en caracteres</h2>
-<p>Esta unidad es curiosa y muy útil para legibilidad.</p>
+<p>Esta unidad es curiosa y resulta muy útil para la legibilidad.</p>
 <blockquote class="def">
 <h3 id="que-significa-ch">🟦 ¿Qué significa? — <em>ch</em></h3>
-<p><code>1ch</code> es el ancho aproximado del carácter "0" (cero) en la fuente actual. O sea, mide en "caracteres". Sirve, sobre todo, para controlar el <strong>ancho de los bloques de texto</strong>: hay estudios que dicen que una línea cómoda de leer tiene entre 45 y 75 caracteres. Con <code>max-width: 65ch</code> logras justo eso de forma elegante. En el sitio del propio manual o en un artículo de <strong>tunal-digital</strong>, limitar el ancho del texto con <code>ch</code> mejora muchísimo la lectura.</p>
+<p><code>1ch</code> es el ancho aproximado del carácter "0" (cero) en la fuente actual. Es decir, mide en "caracteres". Su uso estrella es controlar el <strong>ancho de los bloques de texto</strong>: hay estudios que dicen que una línea cómoda de leer ronda los 45 a 75 caracteres. Con <code>max-width: 65ch</code> consigues justo eso de forma elegante. En el sitio del propio manual o en un artículo de <strong>tunal-digital</strong>, limitar el ancho del texto con <code>ch</code> mejora la lectura una barbaridad.</p>
 </blockquote>
 <pre><code class="language-css">.articulo {
   max-width: 65ch;   /* líneas de ~65 caracteres, fáciles de leer */
@@ -132,15 +132,15 @@ h1 {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Cuando un párrafo ocupa todo el ancho de un monitor grande, el ojo se cansa al saltar de línea. <code>max-width</code> en <code>ch</code> es la forma más natural de evitarlo, porque piensas en términos de lectura ("cuántas letras por línea") y no en píxeles arbitrarios.</p>
+<p>Cuando un párrafo se estira por todo el ancho de un monitor grande, el ojo se cansa al saltar de una línea a otra. <code>max-width</code> en <code>ch</code> es la forma más natural de evitarlo, porque piensas en términos de lectura ("cuántas letras por línea") en vez de en píxeles arbitrarios.</p>
 </blockquote>
 <hr />
 <h2 id="6-funciones-de-calculo-calc-min-max-clamp">6. Funciones de cálculo: <code>calc()</code>, <code>min()</code>, <code>max()</code>, <code>clamp()</code></h2>
-<p>Aquí está la magia de este capítulo. CSS sabe hacer cuentas. Estas cuatro funciones te dejan combinar unidades distintas y crear tamaños <strong>fluidos</strong> que se adaptan solos.</p>
+<p>Aquí está la magia del capítulo. CSS sabe hacer cuentas. Estas cuatro funciones te dejan combinar unidades distintas y crear tamaños <strong>fluidos</strong> que se adaptan solos.</p>
 <h3 id="61-calc-mezcla-y-combina">6.1 <code>calc()</code>: mezcla y combina</h3>
 <blockquote class="def">
 <h3 id="que-significa-calc">🟦 ¿Qué significa? — <em>calc()</em></h3>
-<p><code>calc()</code> realiza una <strong>operación matemática</strong> (suma, resta, multiplicación, división) dentro de un valor de CSS, y permite <strong>mezclar unidades distintas</strong>. Sirve para cosas imposibles a mano, como "el 100% del ancho menos 40px de margen". Lo usarías en <code>styles.css</code> de <strong>tunal-digital</strong> para que un panel ocupe todo el ancho menos un sidebar fijo.</p>
+<p><code>calc()</code> hace una <strong>operación matemática</strong> (suma, resta, multiplicación, división) dentro de un valor de CSS, y te deja <strong>mezclar unidades distintas</strong>. Sirve para cosas que a mano serían imposibles, como "el 100% del ancho menos 40px de margen". Lo usarías en el <code>styles.css</code> de <strong>tunal-digital</strong> para que un panel ocupe todo el ancho menos un sidebar fijo.</p>
 </blockquote>
 <pre><code class="language-css">.contenido {
   width: calc(100% - 250px);  /* todo el ancho menos el menú lateral */
@@ -152,14 +152,14 @@ h1 {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Dentro de <code>calc()</code>, los signos <code>+</code> y <code>-</code> <strong>necesitan espacios</strong> alrededor: <code>calc(100% - 20px)</code> funciona, pero <code>calc(100%-20px)</code> se rompe en silencio. Es el error más común. La multiplicación <code>*</code> y la división <code>/</code> no exigen espacios, pero ponlos igual por claridad.</p>
+<p>Dentro de <code>calc()</code>, los signos <code>+</code> y <code>-</code> <strong>necesitan espacios</strong> alrededor: <code>calc(100% - 20px)</code> funciona, pero <code>calc(100%-20px)</code> se rompe sin avisar. Es el tropiezo más común de todos. La multiplicación <code>*</code> y la división <code>/</code> no exigen espacios, pero ponlos igual por claridad.</p>
 </blockquote>
 <h3 id="62-min-y-max-elige-el-menor-o-el-mayor">6.2 <code>min()</code> y <code>max()</code>: elige el menor o el mayor</h3>
 <blockquote class="def">
 <h3 id="que-significa-min">🟦 ¿Qué significa? — <em>min()</em></h3>
-<p><code>min()</code> toma varios valores y usa el <strong>más pequeño</strong> de ellos en cada momento. Suena raro que "min" sirva para limitar un máximo, pero piénsalo así: <code>width: min(90%, 600px)</code> significa "usa el 90% del ancho, pero <strong>nunca pases de 600px</strong>". En pantallas chicas gana el 90%; en grandes, gana 600px. Sirve para poner topes de tamaño sin media queries. Perfecto para un contenedor central en <strong>tunal-digital</strong>.</p>
+<p><code>min()</code> recibe varios valores y usa el <strong>más pequeño</strong> de ellos en cada momento. Suena al revés que "min" sirva para poner un máximo, pero míralo así: <code>width: min(90%, 600px)</code> significa "usa el 90% del ancho, pero <strong>nunca pases de 600px</strong>". En pantallas chicas gana el 90%; en grandes, gana 600px. Sirve para poner topes de tamaño sin media queries. Ideal para un contenedor central en <strong>tunal-digital</strong>.</p>
 <h3 id="que-significa-max">🟦 ¿Qué significa? — <em>max()</em></h3>
-<p><code>max()</code> toma varios valores y usa el <strong>más grande</strong>. <code>width: max(50%, 300px)</code> significa "al menos 300px, pero crece al 50% si hay espacio". Sirve para garantizar un tamaño mínimo. Útil para que un botón o tarjeta nunca quede demasiado pequeño.</p>
+<p><code>max()</code> recibe varios valores y usa el <strong>más grande</strong>. <code>width: max(50%, 300px)</code> significa "al menos 300px, pero crece hasta el 50% si hay espacio". Sirve para garantizar un tamaño mínimo. Viene bien para que un botón o una tarjeta nunca queden demasiado pequeños.</p>
 </blockquote>
 <pre><code class="language-css">.contenedor {
   width: min(90%, 600px);   /* tope de 600px, pero respira en móvil */
@@ -172,12 +172,12 @@ h1 {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p><code>min()</code> y <code>max()</code> aceptan más de dos valores: <code>min(90%, 600px, 50vw)</code> elige el menor de los tres. Y puedes meter <code>calc()</code> dentro: <code>min(100% - 2rem, 600px)</code>. Son piezas que se combinan como bloques de Lego.</p>
+<p><code>min()</code> y <code>max()</code> aceptan más de dos valores: <code>min(90%, 600px, 50vw)</code> elige el menor de los tres. Y puedes meter <code>calc()</code> dentro: <code>min(100% - 2rem, 600px)</code>. Son piezas que encajan unas con otras como bloques de Lego.</p>
 </blockquote>
 <h3 id="63-clamp-el-tres-en-uno-para-tamanos-fluidos">6.3 <code>clamp()</code>: el tres en uno para tamaños fluidos</h3>
 <blockquote class="def">
 <h3 id="que-significa-clamp">🟦 ¿Qué significa? — <em>clamp()</em></h3>
-<p><code>clamp(mínimo, ideal, máximo)</code> "abraza" un valor entre un piso y un techo. Toma el valor <strong>ideal</strong> (que suele ser fluido, en <code>vw</code>) pero nunca baja del <strong>mínimo</strong> ni sube del <strong>máximo</strong>. Es la herramienta estrella para <strong>tipografía fluida</strong>: el texto crece con la pantalla, pero con límites sensatos. Sirve para no escribir media queries solo por cambiar tamaños de letra.</p>
+<p><code>clamp(mínimo, ideal, máximo)</code> "abraza" un valor entre un piso y un techo. Toma el valor <strong>ideal</strong> (que suele ser fluido, en <code>vw</code>) pero nunca baja del <strong>mínimo</strong> ni sube del <strong>máximo</strong>. Es la herramienta estrella para la <strong>tipografía fluida</strong>: el texto crece con la pantalla, pero con límites sensatos. Sirve para no tener que escribir media queries solo por cambiar tamaños de letra.</p>
 </blockquote>
 <pre><code class="language-css">h1 {
   /* mínimo 1.5rem, ideal que escale con el ancho, máximo 3rem */
@@ -189,19 +189,19 @@ h1 {
   padding: clamp(1rem, 5vw, 4rem);
 }
 </code></pre>
-<p>¿Cómo leer <code>clamp(1.5rem, 1rem + 3vw, 3rem)</code>? En una pantalla muy pequeña, <code>1rem + 3vw</code> daría un número bajo, así que gana el <strong>mínimo</strong> (1.5rem) y el título no se vuelve ilegible. En una pantalla mediana, el valor ideal manda y el texto crece suavemente. En una pantalla enorme, <code>1rem + 3vw</code> sería gigante, pero el <strong>máximo</strong> (3rem) lo frena. Resultado: un título que se adapta solo, con una sola línea de CSS y <strong>cero</strong> media queries.</p>
+<p>¿Cómo se lee <code>clamp(1.5rem, 1rem + 3vw, 3rem)</code>? En una pantalla muy pequeña, <code>1rem + 3vw</code> daría un número bajo, así que gana el <strong>mínimo</strong> (1.5rem) y el título no se vuelve ilegible. En una pantalla mediana, manda el valor ideal y el texto crece con suavidad. En una pantalla enorme, <code>1rem + 3vw</code> sería gigante, pero el <strong>máximo</strong> (3rem) lo frena. ¿El resultado? Un título que se adapta solo, con una sola línea de CSS y <strong>cero</strong> media queries.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <strong>Faro</strong> (Next.js + Tailwind), Tailwind moderno permite tamaños arbitrarios como <code>text-[clamp(1.5rem,1rem+3vw,3rem)]</code>. Saber qué hace <code>clamp()</code> te deja escribir titulares fluidos en el dashboard de proyectos sin pelear con breakpoints. Y en <strong>tunal-digital</strong>, donde escribes CSS a mano en <code>styles.css</code>, <code>clamp()</code> reemplaza varias <code>@media</code> que antes necesitabas solo para ajustar tamaños de letra.</p>
+<p>En <strong>Faro</strong> (Next.js + Tailwind), el Tailwind moderno admite tamaños arbitrarios como <code>text-[clamp(1.5rem,1rem+3vw,3rem)]</code>. Saber qué hace <code>clamp()</code> te deja escribir titulares fluidos en el dashboard de proyectos sin pelearte con los breakpoints. Y en <strong>tunal-digital</strong>, donde escribes CSS a mano en <code>styles.css</code>, <code>clamp()</code> reemplaza varias <code>@media</code> que antes necesitabas solo para ajustar tamaños de letra.</p>
 <h3 id="tip_5">💡 Tip</h3>
-<p>Fórmula mental para <code>clamp()</code> tipográfico: el segundo valor (ideal) casi siempre se ve como <code>algo_rem + algo_vw</code>. La parte en <code>rem</code> es la "base" que respeta el zoom; la parte en <code>vw</code> es el "crecimiento" con la pantalla. Empieza con <code>clamp(1rem, 0.5rem + 2vw, 2rem)</code> y ajusta los números a ojo hasta que se vea bien en móvil y desktop.</p>
+<p>Fórmula mental para el <code>clamp()</code> tipográfico: el segundo valor (el ideal) casi siempre tiene la forma <code>algo_rem + algo_vw</code>. La parte en <code>rem</code> es la "base" que respeta el zoom; la parte en <code>vw</code> es el "crecimiento" con la pantalla. Empieza con <code>clamp(1rem, 0.5rem + 2vw, 2rem)</code> y ajusta los números a ojo hasta que se vea bien en móvil y en desktop.</p>
 </blockquote>
 <hr />
 <h2 id="7-aspect-ratio-proporciones-sin-trucos">7. <code>aspect-ratio</code>: proporciones sin trucos</h2>
-<p>Antes, mantener una caja con proporción fija (como un video 16:9) requería un truco horrible con <code>padding</code> en porcentaje. Hoy hay una propiedad dedicada y limpia.</p>
+<p>Antes, mantener una caja con una proporción fija (como un video 16:9) pedía un truco horrible con <code>padding</code> en porcentaje. Hoy hay una propiedad dedicada y limpia.</p>
 <blockquote class="def">
 <h3 id="que-significa-aspect-ratio">🟦 ¿Qué significa? — <em>aspect-ratio</em></h3>
-<p><code>aspect-ratio</code> fija la <strong>proporción entre ancho y alto</strong> de un elemento. Escribes <code>aspect-ratio: 16 / 9</code> y, si defines el ancho, el alto se calcula solo para mantener esa relación (y viceversa). Sirve para imágenes, videos, miniaturas y tarjetas que no deben deformarse al cambiar de pantalla. En <strong>tunal-digital</strong>, una galería de miniaturas cuadradas (<code>aspect-ratio: 1 / 1</code>) se mantendría prolija en cualquier ancho.</p>
+<p><code>aspect-ratio</code> fija la <strong>proporción entre ancho y alto</strong> de un elemento. Escribes <code>aspect-ratio: 16 / 9</code> y, si defines el ancho, el alto se calcula solo para mantener esa relación (y al revés también). Sirve para imágenes, videos, miniaturas y tarjetas que no deben deformarse al cambiar de pantalla. En <strong>tunal-digital</strong>, una galería de miniaturas cuadradas (<code>aspect-ratio: 1 / 1</code>) se mantendría prolija en cualquier ancho.</p>
 </blockquote>
 <pre><code class="language-css">.video {
   width: 100%;
@@ -216,15 +216,15 @@ h1 {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-object-fit">🟦 ¿Qué significa? — <em>object-fit</em></h3>
-<p><code>object-fit</code> decide <strong>cómo se acomoda una imagen (o video) dentro de la caja que la contiene</strong> cuando sus proporciones no coinciden con las de la caja. El valor <code>cover</code> recorta lo que sobra y llena todo el espacio <strong>sin deformar</strong> la imagen; <code>contain</code> muestra la imagen entera dejando huecos; <code>fill</code> (el de por defecto) la estira y la deforma. Va casi siempre de la mano de <code>aspect-ratio</code>: tú fijas la proporción de la caja con <code>aspect-ratio</code> y dejas que <code>object-fit: cover</code> meta dentro la foto sin estirarla. En una galería de miniaturas de <strong>tunal-digital</strong>, sin <code>object-fit</code> las fotos se verían achatadas; con <code>cover</code> se ven prolijas y uniformes.</p>
+<p><code>object-fit</code> decide <strong>cómo se acomoda una imagen (o un video) dentro de la caja que la contiene</strong> cuando sus proporciones no coinciden con las de la caja. El valor <code>cover</code> recorta lo que sobra y llena todo el espacio <strong>sin deformar</strong> la imagen; <code>contain</code> muestra la imagen entera dejando huecos; <code>fill</code> (el de por defecto) la estira y la deforma. Va casi siempre de la mano de <code>aspect-ratio</code>: tú fijas la proporción de la caja con <code>aspect-ratio</code> y dejas que <code>object-fit: cover</code> meta la foto dentro sin estirarla. En una galería de miniaturas de <strong>tunal-digital</strong>, sin <code>object-fit</code> las fotos se verían achatadas; con <code>cover</code> se ven prolijas y uniformes.</p>
 <h3 id="tip_6">💡 Tip</h3>
-<p><code>aspect-ratio</code> se lleva de maravilla con grids responsivos. Si tienes una galería con columnas que cambian de ancho, darle <code>aspect-ratio: 1 / 1</code> a cada celda mantiene todas las miniaturas cuadradas sin importar cuántas columnas haya. <code>object-fit: cover</code> evita que las fotos se estiren.</p>
+<p><code>aspect-ratio</code> se lleva de maravilla con los grids responsivos. Si tienes una galería con columnas que cambian de ancho, darle <code>aspect-ratio: 1 / 1</code> a cada celda mantiene todas las miniaturas cuadradas, haya las columnas que haya. Y <code>object-fit: cover</code> evita que las fotos se estiren.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
 <p>En <strong>RachaSimple</strong> (React + Tailwind) puedes usar la clase <code>aspect-square</code> o <code>aspect-video</code>, que son exactamente <code>aspect-ratio: 1/1</code> y <code>16/9</code>. Entender la propiedad de fondo te ayuda a saber cuándo aplicarla a las tarjetas de rachas para que se vean uniformes en la cuadrícula.</p>
 </blockquote>
 <hr />
 <h2 id="8-juntando-todo-menos-media-queries-mas-fluidez">8. Juntando todo: menos media queries, más fluidez</h2>
-<p>La gran idea de este capítulo es que muchas adaptaciones que antes pedían <code>@media (max-width: ...)</code> ahora se resuelven con unidades relativas y funciones. Veamos un mini ejemplo realista para <code>styles.css</code> de <strong>tunal-digital</strong>:</p>
+<p>La gran idea del capítulo es que muchas adaptaciones que antes pedían <code>@media (max-width: ...)</code> hoy se resuelven con unidades relativas y funciones. Veamos un mini ejemplo realista para el <code>styles.css</code> de <strong>tunal-digital</strong>:</p>
 <pre><code class="language-css">:root {
   font-size: 16px; /* base para rem */
 }
@@ -250,14 +250,14 @@ h1 {
   object-fit: cover;
 }
 </code></pre>
-<p>Fíjate: no hay ni una sola media query, y aun así el diseño se comporta bien desde un teléfono hasta un monitor 4K. El contenedor se topa en 1100px, los títulos y párrafos escalan con límites, las líneas de texto se mantienen legibles y las imágenes guardan su proporción. Esto es lo que llamamos <strong>diseño fluido</strong>.</p>
+<p>Fíjate: no hay ni una sola media query, y aun así el diseño se porta bien desde un teléfono hasta un monitor 4K. El contenedor se topa en 1100px, los títulos y párrafos escalan con sus límites, las líneas de texto se mantienen legibles y las imágenes guardan su proporción. A esto lo llamamos <strong>diseño fluido</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-margin-inline-padding-inline">🟦 ¿Qué significa? — <em>margin-inline / padding-inline</em></h3>
-<p>Son propiedades <strong>lógicas</strong> que aplican margen o relleno a los <strong>dos lados del eje de la línea de texto</strong> a la vez (en español, izquierda y derecha). <code>margin-inline: auto</code> es la forma moderna de centrar un bloque horizontalmente (equivale al clásico <code>margin: 0 auto</code> pero solo en el eje horizontal); <code>padding-inline: clamp(1rem, 4vw, 3rem)</code> pone ese relleno fluido a izquierda y derecha sin tocar arriba ni abajo. Se llaman "lógicas" porque se adaptan solas si el idioma se escribe de derecha a izquierda. Las menciono aquí porque las verás cada vez más en CSS moderno y en lo que genera Tailwind.</p>
+<p>Son propiedades <strong>lógicas</strong> que aplican margen o relleno a los <strong>dos lados del eje de la línea de texto</strong> a la vez (en español, izquierda y derecha). <code>margin-inline: auto</code> es la forma moderna de centrar un bloque horizontalmente (equivale al clásico <code>margin: 0 auto</code>, pero solo en el eje horizontal); <code>padding-inline: clamp(1rem, 4vw, 3rem)</code> pone ese relleno fluido a izquierda y derecha sin tocar arriba ni abajo. Se llaman "lógicas" porque se adaptan solas si el idioma se escribe de derecha a izquierda. Las menciono aquí porque las verás cada vez más en el CSS moderno y en lo que genera Tailwind.</p>
 <h3 id="tip_7">💡 Tip</h3>
-<p>Las media queries <strong>no desaparecen</strong>: siguen siendo necesarias cuando quieres <strong>reorganizar</strong> el layout (por ejemplo, pasar de dos columnas a una). Lo que cambia es que ya no las necesitas para ajustar <em>tamaños</em>. Usa funciones fluidas para tamaños y reserva las <code>@media</code> para cambios estructurales de verdad.</p>
+<p>Las media queries <strong>no desaparecen</strong>: siguen haciendo falta cuando quieres <strong>reorganizar</strong> el layout, por ejemplo pasar de dos columnas a una. Lo que cambia es que ya no las necesitas para ajustar <em>tamaños</em>. Usa funciones fluidas para los tamaños y guarda las <code>@media</code> para los cambios estructurales de verdad.</p>
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>No abuses de <code>vw</code> en todo. Si pones <code>vw</code> sin límites en demasiados sitios, perderás control y el zoom del usuario dejará de funcionar bien (problema de accesibilidad). La regla de Bit: <code>vw</code> casi siempre va <strong>dentro</strong> de un <code>clamp()</code> con un mínimo en <code>rem</code>. Así escala, pero respeta a las personas. 🐾</p>
+<p>No abuses de <code>vw</code> por todos lados. Si pones <code>vw</code> sin límites en demasiados sitios, perderás el control y el zoom del usuario dejará de funcionar bien (un problema de accesibilidad). La regla de Bit: <code>vw</code> casi siempre va <strong>dentro</strong> de un <code>clamp()</code> con un mínimo en <code>rem</code>. Así escala, pero sin faltarle el respeto a las personas. 🐾</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

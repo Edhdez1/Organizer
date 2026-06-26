@@ -23,53 +23,53 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora cada componente guardaba su propio estado con <code>useState</code> y, cuando un dato
-tenía que viajar, lo pasabas por <strong>props</strong> de padre a hijo. Eso funciona genial para
-distancias cortas. Pero ¿qué pasa cuando el dato —por ejemplo <em>quién está conectado</em>—
-lo necesitan veinte componentes repartidos por toda la app, en rincones muy lejanos del
-árbol? Pasarlo por props uno a uno se vuelve un suplicio. En este capítulo conocerás la
-<strong>Context API</strong> de React: la forma oficial de compartir un dato con toda la app sin tener
-que pasarlo a mano de nivel en nivel. Lo verás con el <code>AuthContext</code> real de RachaSimple,
-el que sabe en todo momento qué usuario tiene la sesión abierta. Bit, nuestro ajolote,
-está cansado de pasarse el mismo cubito de agua de mano en mano: hoy aprende a abrir
-un grifo para todos.</p>
+<p>Hasta ahora cada componente guardaba su propio estado con <code>useState</code>, y cuando un dato
+tenía que viajar de un sitio a otro, lo pasabas por <strong>props</strong> de padre a hijo. Para
+distancias cortas eso va de maravilla. El problema llega cuando un dato —pongamos <em>quién
+está conectado</em>— hace falta en veinte componentes repartidos por toda la app, en rincones
+muy alejados del árbol. Pasarlo de la mano uno por uno se convierte en un suplicio. En este
+capítulo vas a conocer la <strong>Context API</strong> de React: la manera oficial de compartir un dato
+con toda la app sin tener que ir entregándolo nivel por nivel. Lo veremos con el
+<code>AuthContext</code> real de RachaSimple, ese que sabe en cada momento qué usuario tiene la sesión
+abierta. Bit, nuestro ajolote, está harto de pasarse el mismo cubito de agua de mano en
+mano: hoy aprende a abrir un grifo que sirva a todos.</p>
 </blockquote>
 <hr />
 <h2 id="1-repaso-rapido-props-van-de-padre-a-hijo">1. Repaso rápido: props van de padre a hijo</h2>
-<p>En el Capítulo 03 aprendiste las <strong>props</strong>. Recordemos el término, porque es la base de todo
-lo que viene.</p>
+<p>En el Capítulo 03 aprendiste las <strong>props</strong>. Vale la pena recordar el término, porque es la
+base de todo lo que viene después.</p>
 <blockquote class="def">
 <h3 id="que-significa-prop">🟦 ¿Qué significa? — <em>Prop</em></h3>
 <p>Una <strong>prop</strong> (de <em>property</em>, propiedad) es un dato que un componente padre le entrega a un
-componente hijo cuando lo dibuja. Sirve para <strong>configurar</strong> al hijo desde fuera: el padre
-decide qué información recibe. En RachaSimple, <code>HabitCard</code> recibe por props el hábito que
-debe mostrar; la página <code>Today</code> se lo pasa. Las props siempre fluyen en una sola dirección:
-<strong>de arriba (padre) hacia abajo (hijo)</strong>, nunca al revés.</p>
+componente hijo en el momento de dibujarlo. Sirve para <strong>configurar</strong> al hijo desde fuera:
+es el padre quien decide qué información recibe. En RachaSimple, <code>HabitCard</code> recibe por
+props el hábito que tiene que mostrar, y la página <code>Today</code> se lo pasa. Las props fluyen
+siempre en una sola dirección: <strong>de arriba (padre) hacia abajo (hijo)</strong>, nunca al revés.</p>
 </blockquote>
-<p>Esa dirección única es una virtud: hace que el flujo de datos sea predecible. Si un dato se
-ve mal, sabes que vino del padre. Pero esa misma regla tiene una cara incómoda cuando el
-camino de arriba a abajo es muy largo.</p>
+<p>Esa dirección única tiene su lado bueno: hace que el flujo de datos sea predecible. Si un
+dato se ve raro en pantalla, sabes que vino del padre. Pero esa misma regla tiene una cara
+incómoda cuando el camino de arriba a abajo se hace muy largo.</p>
 <blockquote class="def">
 <h3 id="que-significa-arbol-de-componentes">🟦 ¿Qué significa? — <em>Árbol de componentes</em></h3>
-<p>El <strong>árbol de componentes</strong> es la forma de pensar tu app: un componente raíz arriba (en
-RachaSimple es <code>App</code>), que dibuja otros componentes dentro, que a su vez dibujan más, como
-las ramas de un árbol. Sirve para <strong>entender quién contiene a quién</strong>. En RachaSimple,
-<code>App</code> contiene <code>AppRoutes</code>, que contiene la página <code>Today</code>, que contiene varias <code>HabitCard</code>.
-Cuando un dato vive arriba y se necesita muy abajo, tiene que "bajar" rama por rama.</p>
+<p>El <strong>árbol de componentes</strong> es una forma de imaginar tu app: un componente raíz arriba (en
+RachaSimple es <code>App</code>) que dibuja otros componentes dentro, los cuales a su vez dibujan más,
+igual que las ramas de un árbol. Sirve para <strong>ver de un vistazo quién contiene a quién</strong>. En
+RachaSimple, <code>App</code> contiene <code>AppRoutes</code>, que contiene la página <code>Today</code>, que contiene varias
+<code>HabitCard</code>. Cuando un dato vive arriba y se necesita muy abajo, le toca "bajar" rama por rama.</p>
 </blockquote>
 <hr />
 <h2 id="2-el-problema-prop-drilling">2. El problema: prop drilling</h2>
 <p>Imagina que el dato <code>user</code> (el usuario que inició sesión) nace en <code>App</code>, pero quien de verdad
-lo necesita es un botón de "cerrar sesión" que vive cinco niveles más abajo. Con solo props,
-tendrías que pasar <code>user</code> a cada componente intermedio, aunque a esos componentes el dato no
-les importe para nada: solo lo reciben para <strong>pasarlo al siguiente</strong>. A eso se le llama
-<em>prop drilling</em>.</p>
+lo necesita es un botón de "cerrar sesión" que vive cinco niveles más abajo. Si solo cuentas
+con props, te toca pasar <code>user</code> por cada componente intermedio, aunque a esos componentes el
+dato les dé exactamente igual: lo reciben únicamente para <strong>reenviarlo al siguiente</strong>. A eso
+se le conoce como <em>prop drilling</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-prop-drilling-perforacion-de-props">🟦 ¿Qué significa? — <em>Prop drilling (perforación de props)</em></h3>
-<p>El <strong>prop drilling</strong> es el problema de tener que pasar una prop a través de muchos
+<p>El <strong>prop drilling</strong> es el problema de tener que pasar una prop a través de un montón de
 componentes intermedios que no la usan, solo para que llegue a un componente lejano que sí
-la necesita. <em>Drill</em> es "taladrar": vas perforando nivel tras nivel. Sirve para nombrar un
-dolor muy concreto. En código se ve así:</p>
+la necesita. <em>Drill</em> es "taladrar": vas perforando nivel tras nivel. Sirve para ponerle
+nombre a un dolor muy concreto. En código se ve así:</p>
 </blockquote>
 <pre><code class="language-tsx">// Versión SUFRIDA con prop drilling (esto NO está en RachaSimple, es para ilustrar)
 function App() {
@@ -92,37 +92,37 @@ function ProfileMenu({ user }) {
   return &lt;span&gt;Hola, {user.email}&lt;/span&gt;;
 }
 </code></pre>
-<p>Fíjate en lo absurdo: <code>Layout</code> y <code>Sidebar</code> no hacen nada con <code>user</code>, pero están obligados a
-declararlo y reenviarlo. Si mañana <code>ProfileMenu</code> necesita otro dato, vuelves a tocar <em>todos</em>
-los intermedios. Es frágil y cansa.</p>
+<p>Mira lo absurdo de la situación: <code>Layout</code> y <code>Sidebar</code> no hacen nada con <code>user</code>, pero están
+obligados a declararlo y reenviarlo. Y si mañana <code>ProfileMenu</code> necesita otro dato más, te toca
+volver a tocar <em>todos</em> los intermedios. Es frágil y agota.</p>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>El prop drilling no siempre es malo. Pasar una prop uno o dos niveles es perfectamente
-normal y suele ser <strong>más claro</strong> que montar un contexto. El problema aparece cuando el dato
-atraviesa <strong>muchos</strong> niveles o lo necesita <strong>media app</strong>. No saltes a Context al primer
-nivel: es como usar una grúa para mover una silla.</p>
+<p>El prop drilling no es malo siempre. Pasar una prop uno o dos niveles es de lo más normal, y
+muchas veces queda <strong>más claro</strong> que montar un contexto. El problema asoma cuando el dato
+atraviesa <strong>muchos</strong> niveles, o cuando lo necesita <strong>media app</strong>. No corras a Context al
+primer nivel: sería como usar una grúa para mover una silla.</p>
 </blockquote>
 <hr />
 <h2 id="3-la-solucion-la-context-api">3. La solución: la Context API</h2>
-<p>React tiene una herramienta diseñada exactamente para esto: el <strong>contexto</strong>.</p>
+<p>React trae una herramienta pensada justo para esto: el <strong>contexto</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-contexto-context">🟦 ¿Qué significa? — <em>Contexto (Context)</em></h3>
 <p>Un <strong>contexto</strong> es un canal que React crea para compartir un dato con todos los componentes
 que estén "por debajo" de cierto punto del árbol, <strong>sin pasarlo por props</strong>. Sirve para que
-un dato global (el usuario, el idioma, el tema visual) esté disponible en cualquier rincón
-de la app sin perforar nada. En RachaSimple existe el <code>AuthContext</code>, que comparte quién es
-el usuario conectado con toda la aplicación.</p>
+un dato global (el usuario, el idioma, el tema visual) esté disponible en cualquier rincón de
+la app sin perforar nada. En RachaSimple existe el <code>AuthContext</code>, que comparte con toda la
+aplicación quién es el usuario conectado.</p>
 </blockquote>
-<p>La metáfora de Bit: en vez de pasar el cubito de agua de mano en mano, abres un <strong>grifo</strong>
-arriba del árbol. Cualquier componente que esté debajo solo tiene que acercar su vaso y
-servirse. No importa cuán lejos esté del grifo.</p>
-<p>El contexto tiene <strong>tres piezas</strong> y vamos a verlas una a una con el código real de
+<p>La metáfora de Bit: en lugar de ir pasando el cubito de agua de mano en mano, abres un
+<strong>grifo</strong> arriba del todo del árbol. Cualquier componente que esté por debajo solo tiene que
+acercar su vaso y servirse. Da igual lo lejos que esté del grifo.</p>
+<p>El contexto se compone de <strong>tres piezas</strong>, y vamos a verlas una a una con el código real de
 RachaSimple.</p>
 <h3 id="31-createcontext-crear-el-canal">3.1. <code>createContext</code>: crear el canal</h3>
 <blockquote class="def">
 <h3 id="que-significa-createcontext">🟦 ¿Qué significa? — <em><code>createContext</code></em></h3>
-<p><code>createContext</code> es la función de React que <strong>crea un contexto nuevo</strong>. Le pasas un valor
-por defecto y te devuelve un objeto de contexto que luego usarás para entregar y leer datos.
+<p><code>createContext</code> es la función de React que <strong>crea un contexto nuevo</strong>. Le pasas un valor por
+defecto y te devuelve un objeto de contexto que después usarás para entregar y leer datos.
 Sirve para declarar "voy a compartir este tipo de información". En RachaSimple vive en
 <code>src/auth/AuthContext.ts</code>:</p>
 </blockquote>
@@ -142,38 +142,40 @@ export interface AuthContextValue {
 
 export const AuthContext = createContext&lt;AuthContextValue | null&gt;(null);
 </code></pre>
-<p>Vamos despacio, porque aquí hay TypeScript del Módulo 05.</p>
+<p>Vamos despacio, que aquí aparece TypeScript del Módulo 05.</p>
 <blockquote class="def">
 <h3 id="que-significa-interface-authcontextvalue">🟦 ¿Qué significa? — <em>Interface (<code>AuthContextValue</code>)</em></h3>
 <p>Una <strong>interface</strong> en TypeScript describe la <strong>forma</strong> que tiene un objeto: qué propiedades
 tiene y de qué tipo es cada una. Sirve para que el editor te avise si te equivocas. Aquí
 <code>AuthContextValue</code> dice: "todo lo que viaje por este contexto tendrá un <code>user</code>, una <code>session</code>,
-un <code>loading</code>, y cuatro funciones para entrar y salir". Es el <strong>contrato</strong> del canal.</p>
+un <code>loading</code> y cuatro funciones para entrar y salir". Es el <strong>contrato</strong> del canal.</p>
 </blockquote>
-<p>Fíjate en <code>createContext&lt;AuthContextValue | null&gt;(null)</code>. Eso significa: "este contexto
+<p>Fíjate en <code>createContext&lt;AuthContextValue | null&gt;(null)</code>. Lo que dice es: "este contexto
 transporta un valor de tipo <code>AuthContextValue</code>, o bien <code>null</code>". El valor por defecto es <code>null</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-valor-por-defecto-del-contexto">🟦 ¿Qué significa? — <em>Valor por defecto del contexto</em></h3>
-<p>El <strong>valor por defecto</strong> es lo que un componente recibirá si lee el contexto <strong>sin que nadie
-se lo haya entregado</strong> arriba. Sirve como red de seguridad. En RachaSimple es <code>null</code> a
-propósito: significa "todavía nadie ha encendido el grifo". Más adelante verás que esto
-permite detectar errores de configuración.</p>
+<p>El <strong>valor por defecto</strong> es lo que recibirá un componente si lee el contexto <strong>sin que nadie
+se lo haya entregado</strong> arriba. Funciona como red de seguridad. En RachaSimple es <code>null</code> a
+propósito, y significa "todavía nadie ha abierto el grifo". Más adelante verás que ese <code>null</code>
+nos sirve para detectar errores de configuración.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>Date cuenta de un detalle muy ordenado de RachaSimple: este archivo es <code>.ts</code>, no <code>.tsx</code>.
-Es porque <strong>solo define</strong> el contexto y su tipo, no dibuja nada de interfaz. Separar la
-<em>definición</em> del contexto de quien <em>entrega</em> los valores mantiene el código limpio.</p>
+<p>Hay un detalle muy cuidado en RachaSimple que conviene notar: este archivo es <code>.ts</code>, no
+<code>.tsx</code>. ¿Por qué? Porque <strong>solo define</strong> el contexto y su tipo, no dibuja nada de interfaz.
+Separar la <em>definición</em> del contexto de quien <em>entrega</em> los valores ayuda a mantener el
+código ordenado.</p>
 </blockquote>
 <h3 id="32-el-provider-encender-el-grifo">3.2. El <code>Provider</code>: encender el grifo</h3>
-<p>Crear el contexto no basta: hay que <strong>entregar</strong> un valor real. Eso lo hace el <em>Provider</em>.</p>
+<p>Crear el contexto no basta: hay que <strong>entregar</strong> un valor de verdad. De eso se encarga el
+<em>Provider</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-provider-proveedor">🟦 ¿Qué significa? — <em>Provider (proveedor)</em></h3>
-<p>El <strong>Provider</strong> es un componente especial que viene dentro de cada contexto (se escribe
-<code>AuthContext.Provider</code>). Envuelve a una parte del árbol y le entrega un <code>value</code>: el dato que
-todos los hijos podrán leer. Sirve para <strong>decidir qué valor circula</strong> por el canal y <strong>hasta
+<p>El <strong>Provider</strong> es un componente especial que viene incluido en cada contexto (se escribe
+<code>AuthContext.Provider</code>). Envuelve una parte del árbol y le entrega un <code>value</code>: el dato que
+todos sus hijos podrán leer. Sirve para <strong>decidir qué valor circula</strong> por el canal y <strong>hasta
 dónde llega</strong>. Solo los componentes que estén <em>dentro</em> del Provider verán ese valor.</p>
 </blockquote>
-<p>En RachaSimple, el Provider está en <code>src/auth/AuthProvider.tsx</code>. Es un componente que guarda
-el usuario en estado, escucha a Supabase y entrega todo por el contexto:</p>
+<p>En RachaSimple, el Provider está en <code>src/auth/AuthProvider.tsx</code>. Es un componente que guarda el
+usuario en estado, escucha a Supabase y entrega todo a través del contexto:</p>
 <pre><code class="language-tsx">// src/auth/AuthProvider.tsx (RachaSimple) — versión resumida
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
@@ -235,30 +237,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;;
 }
 </code></pre>
-<p>Hay varias cosas que ya conoces de capítulos anteriores y una nueva. Vamos por partes.</p>
+<p>Hay aquí varias cosas que ya conoces de capítulos anteriores y una nueva. Vamos por partes.</p>
 <blockquote class="def">
 <h3 id="que-significa-children">🟦 ¿Qué significa? — <em><code>children</code></em></h3>
-<p><code>children</code> es una prop especial: representa <strong>lo que pongas dentro</strong> del componente cuando
-lo uses. Si escribes <code>&lt;AuthProvider&gt;&lt;App /&gt;&lt;/AuthProvider&gt;</code>, entonces <code>children</code> es <code>&lt;App /&gt;</code>.
-Sirve para que un componente envuelva a otros sin saber de antemano quiénes son. Su tipo es
-<code>ReactNode</code>, que significa "cualquier cosa que React pueda dibujar".</p>
+<p><code>children</code> es una prop especial: representa <strong>lo que pongas dentro</strong> del componente al usarlo.
+Si escribes <code>&lt;AuthProvider&gt;&lt;App /&gt;&lt;/AuthProvider&gt;</code>, entonces <code>children</code> es <code>&lt;App /&gt;</code>. Sirve
+para que un componente envuelva a otros sin saber de antemano quiénes son. Su tipo es
+<code>ReactNode</code>, que viene a significar "cualquier cosa que React sea capaz de dibujar".</p>
 <h3 id="que-significa-usememo">🟦 ¿Qué significa? — <em><code>useMemo</code></em></h3>
 <p><code>useMemo</code> es un hook que <strong>memoriza</strong> (guarda en caché) el resultado de un cálculo y solo lo
-vuelve a calcular cuando cambian las dependencias que le indicas. Sirve para no rehacer
-trabajo caro en cada render. Aquí RachaSimple lo usa para que el objeto <code>value</code> solo se
-reconstruya cuando cambien <code>user</code>, <code>session</code> o <code>loading</code> —no en cada parpadeo de la pantalla.</p>
+rehace cuando cambian las dependencias que le indicas. Sirve para no repetir trabajo caro en
+cada render. Aquí RachaSimple lo usa para que el objeto <code>value</code> solo se reconstruya cuando
+cambien <code>user</code>, <code>session</code> o <code>loading</code>, y no en cada parpadeo de la pantalla.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>¿Por qué tanto cuidado con memorizar el <code>value</code>? Porque <strong>cada vez que el <code>value</code> del Provider
-cambia, TODOS los componentes que leen ese contexto se vuelven a dibujar</strong>. Si crearas el
-objeto nuevo en cada render (<code>value={{ user, ... }}</code> directo), React pensaría "cambió" cada
-vez y redibujaría media app sin necesidad. El <code>useMemo</code> evita ese desperdicio.</p>
+<p>¿Y a qué viene tanto cuidado con memorizar el <code>value</code>? Pues a que <strong>cada vez que el <code>value</code>
+del Provider cambia, TODOS los componentes que leen ese contexto se vuelven a dibujar</strong>. Si
+creases el objeto de cero en cada render (<code>value={{ user, ... }}</code> directo), React pensaría
+que "cambió" cada vez y redibujaría media app sin ninguna necesidad. El <code>useMemo</code> evita ese
+desperdicio.</p>
 </blockquote>
-<p>Fíjate en la última línea: <code>return &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;</code>.
-Ahí es donde se <strong>enciende el grifo</strong>: todo lo que esté dentro de <code>{children}</code> podrá servirse
-del <code>value</code>.</p>
+<p>Mira la última línea: <code>return &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;</code>.
+Ahí es donde se <strong>abre el grifo</strong>: todo lo que esté dentro de <code>{children}</code> podrá servirse del
+<code>value</code>.</p>
 <h3 id="33-envolver-la-app-con-el-provider">3.3. Envolver la app con el Provider</h3>
-<p>Para que el contexto cubra <strong>toda</strong> la app, el Provider se coloca bien arriba. En RachaSimple,
-en <code>src/App.tsx</code>:</p>
+<p>Para que el contexto llegue a <strong>toda</strong> la app, el Provider se coloca bien arriba. En
+RachaSimple, en <code>src/App.tsx</code>:</p>
 <pre><code class="language-tsx">// src/App.tsx (RachaSimple) — el árbol de Providers
 export default function App() {
   return (
@@ -278,22 +281,23 @@ export default function App() {
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
 <p>Mira el orden de las muñecas rusas: primero <code>QueryClientProvider</code> (para TanStack Query, los
 datos del servidor), luego <code>AuthProvider</code> (el usuario), luego <code>I18nProvider</code> (idioma y tema)
-y por último el enrutador. Cada Provider envuelve al siguiente. Como <code>AppRoutes</code> está en el
+y al final el enrutador. Cada Provider envuelve al siguiente. Como <code>AppRoutes</code> queda en el
 centro de todo, <strong>cualquier página</strong> de RachaSimple puede leer el usuario, el idioma o las
-consultas. Eso es exactamente lo que queríamos: un grifo arriba, vasos abajo.</p>
+consultas. Justo lo que buscábamos: un grifo arriba, vasos abajo.</p>
 </blockquote>
 <h3 id="34-usecontext-servirse-del-grifo">3.4. <code>useContext</code>: servirse del grifo</h3>
-<p>Ya tenemos el canal creado y el valor entregado. Falta lo más rico: <strong>leerlo</strong> desde un
-componente lejano.</p>
+<p>Ya tenemos el canal creado y el valor entregado. Falta la parte más jugosa: <strong>leerlo</strong> desde
+un componente lejano.</p>
 <blockquote class="def">
 <h3 id="que-significa-usecontext">🟦 ¿Qué significa? — <em><code>useContext</code></em></h3>
 <p><code>useContext</code> es el hook que <strong>lee el valor actual de un contexto</strong>. Le pasas el objeto de
 contexto (<code>AuthContext</code>) y te devuelve lo que el Provider más cercano esté entregando. Sirve
-para que cualquier componente, sin importar lo profundo que esté, acceda al dato compartido
-en una sola línea. Es el "acercar el vaso al grifo".</p>
+para que cualquier componente, por hondo que esté, acceda al dato compartido en una sola
+línea. Es el "acercar el vaso al grifo".</p>
 </blockquote>
-<p>RachaSimple no llama <code>useContext</code> directamente en cada página. Hace algo más elegante: lo
-envuelve en un <strong>hook personalizado</strong> (¿recuerdas el Capítulo 09?). Está en <code>src/auth/useAuth.ts</code>:</p>
+<p>RachaSimple no llama a <code>useContext</code> directamente en cada página. Hace algo más elegante: lo
+envuelve en un <strong>hook personalizado</strong> (¿te acuerdas del Capítulo 09?). Está en
+<code>src/auth/useAuth.ts</code>:</p>
 <pre><code class="language-ts">// src/auth/useAuth.ts (RachaSimple)
 import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
@@ -304,16 +308,17 @@ export function useAuth() {
   return ctx;
 }
 </code></pre>
-<p>Aquí se entiende por fin para qué servía aquel valor por defecto <code>null</code>. Si un componente llama
+<p>Aquí se ve por fin para qué servía aquel valor por defecto <code>null</code>. Si un componente llama a
 <code>useAuth()</code> pero <strong>no está dentro del <code>AuthProvider</code></strong>, <code>useContext</code> devuelve <code>null</code>, y este
-hook lanza un error claro: <em>"useAuth debe usarse dentro de un AuthProvider"</em>. En vez de un
-fallo misterioso más adelante, recibes un mensaje que te dice exactamente qué arreglar.</p>
+hook lanza un error bien claro: <em>"useAuth debe usarse dentro de un AuthProvider"</em>. En lugar de
+un fallo misterioso que estalla más tarde, recibes un mensaje que te dice exactamente qué
+arreglar.</p>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Este patrón —un contexto + un hook <code>useX</code> que lo lee y verifica— es oro puro. Los
-componentes nunca tocan <code>useContext</code> ni <code>AuthContext</code> directamente: solo llaman <code>useAuth()</code>.
-Así el contexto queda escondido como un detalle interno, y si mañana cambias cómo funciona
-la autenticación, solo tocas estos tres archivos pequeñitos.</p>
+<p>Este patrón —un contexto más un hook <code>useX</code> que lo lee y lo verifica— es oro puro. Los
+componentes nunca tocan <code>useContext</code> ni <code>AuthContext</code> directamente: solo llaman a <code>useAuth()</code>.
+Así el contexto queda escondido como un detalle interno, y si mañana cambias cómo funciona la
+autenticación, solo tienes que tocar estos tres archivos pequeñitos.</p>
 </blockquote>
 <hr />
 <h2 id="4-usar-el-contexto-en-componentes-reales">4. Usar el contexto en componentes reales</h2>
@@ -328,8 +333,8 @@ export function LoginPage() {
   // await signInWithGoogle();
 }
 </code></pre>
-<p>Y el <strong>guardián de rutas</strong>, que decide si te deja pasar a una página privada, lee <code>user</code> y
-<code>loading</code> del mismo contexto:</p>
+<p>Y el <strong>guardián de rutas</strong>, que decide si te deja entrar a una página privada, lee <code>user</code> y
+<code>loading</code> de ese mismo contexto:</p>
 <pre><code class="language-tsx">// src/App.tsx (RachaSimple)
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -340,55 +345,55 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>Busca con tu editor todas las veces que aparece <code>useAuth()</code> en RachaSimple: lo verás en
+<p>Busca con tu editor todas las veces que aparece <code>useAuth()</code> en RachaSimple: lo encontrarás en
 <code>Login</code>, <code>Today</code>, <code>Settings</code>, <code>ShareCard</code>, <code>ProPlan</code>, <code>Feedback</code> y dentro de hooks como
-<code>useHabits</code>, <code>useCheckins</code> y <code>useUserProfile</code>. Imagina pasar <code>user</code> por props hasta cada uno
-de esos lugares. El contexto borra ese sufrimiento de un plumazo.</p>
+<code>useHabits</code>, <code>useCheckins</code> y <code>useUserProfile</code>. Imagínate pasando <code>user</code> por props hasta cada
+uno de esos sitios. El contexto borra ese sufrimiento de un plumazo.</p>
 </blockquote>
-<p>Fíjate en <code>useUserProfile</code>: un hook que llama a otro hook. <code>useUserProfile</code> hace
+<p>Mira en concreto <code>useUserProfile</code>: es un hook que llama a otro hook. Hace
 <code>const { user } = useAuth()</code> para saber de quién pedir el perfil. Los contextos y los hooks
 personalizados encajan como piezas de Lego.</p>
 <hr />
 <h2 id="5-cuando-usar-contexto-y-cuando-estado-local">5. ¿Cuándo usar contexto y cuándo estado local?</h2>
-<p>Esta es la pregunta del millón. La respuesta corta: <strong>usa el estado local por defecto, y
-sube a contexto solo cuando un dato lo necesita mucha gente.</strong></p>
+<p>Esta es la pregunta del millón. La respuesta corta: <strong>tira de estado local por defecto, y sube
+a contexto solo cuando un dato lo necesita mucha gente.</strong></p>
 <blockquote class="def">
 <h3 id="que-significa-estado-local">🟦 ¿Qué significa? — <em>Estado local</em></h3>
 <p>El <strong>estado local</strong> es el <code>useState</code> que vive <strong>dentro de un solo componente</strong> y solo le
-importa a él (y quizá a un par de hijos directos vía props). Sirve para cosas pasajeras y
+importa a él (y como mucho a un par de hijos directos vía props). Sirve para cosas pasajeras y
 acotadas. En <code>Login.tsx</code>, los campos <code>email</code>, <code>password</code> y <code>mode</code> son estado local: solo el
-formulario de login los necesita; nadie más en la app.</p>
+formulario de login los necesita, nadie más en la app.</p>
 <h3 id="que-significa-estado-global">🟦 ¿Qué significa? — <em>Estado global</em></h3>
-<p>El <strong>estado global</strong> es un dato que <strong>muchos componentes lejanos</strong> comparten: el usuario
+<p>El <strong>estado global</strong> es un dato que comparten <strong>muchos componentes lejanos</strong>: el usuario
 conectado, el idioma elegido, el tema claro/oscuro. Sirve para información que define el
 estado de <em>toda</em> la app. En RachaSimple, el usuario (<code>AuthContext</code>) y el idioma/tema
-(<code>I18nContext</code>) son globales; por eso viven en contextos.</p>
+(<code>I18nContext</code>) son globales, y por eso viven en contextos.</p>
 </blockquote>
 <p>Una guía práctica para decidir:</p>
 <ul>
 <li><strong>Estado local (<code>useState</code>)</strong> → si el dato solo le importa a un componente o a sus hijos
-  inmediatos. Ejemplo: el texto que escribes en un input, si un menú está abierto.</li>
-<li><strong>Props</strong> → si el dato baja uno o dos niveles a un hijo concreto. Ejemplo: pasarle un hábito
-  a <code>HabitCard</code>.</li>
+  inmediatos. Ejemplo: el texto que escribes en un input, o si un menú está abierto.</li>
+<li><strong>Props</strong> → si el dato baja uno o dos niveles hasta un hijo concreto. Ejemplo: pasarle un
+  hábito a <code>HabitCard</code>.</li>
 <li><strong>Contexto</strong> → si el dato lo necesita gente repartida por toda la app y pasarlo por props
   sería prop drilling. Ejemplo: el usuario, el idioma, el tema.</li>
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>No metas en un contexto datos que cambian <strong>muchísimo</strong> y muy rápido (como la posición del
-ratón o cada letra de un input grande). Recuerda: cambiar el <code>value</code> del Provider redibuja a
-todos sus lectores. Para datos que parpadean sin parar, el estado local o herramientas
-especializadas son mejores. El contexto brilla con datos que cambian <strong>de vez en cuando</strong>:
+<p>No metas en un contexto datos que cambian <strong>muchísimo</strong> y muy deprisa (como la posición del
+ratón o cada letra de un input grande). Acuérdate: cambiar el <code>value</code> del Provider redibuja a
+todos sus lectores. Para datos que parpadean sin descanso, el estado local o herramientas
+especializadas funcionan mejor. El contexto brilla con datos que cambian <strong>de vez en cuando</strong>:
 entras, sales, cambias de idioma.</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>RachaSimple separa bien dos tipos de "global": los <strong>datos del servidor</strong> (hábitos,
-check-ins) van por TanStack Query (<code>QueryClientProvider</code>), y los <strong>datos de sesión y
-preferencias</strong> (usuario, idioma, tema) van por contextos propios. No todo lo global tiene
-que ser un contexto que escribas tú; a veces una librería ya resuelve esa parte.</p>
+<p>RachaSimple separa con buen criterio dos tipos de "global": los <strong>datos del servidor</strong>
+(hábitos, check-ins) van por TanStack Query (<code>QueryClientProvider</code>), y los <strong>datos de sesión y
+preferencias</strong> (usuario, idioma, tema) van por contextos propios. No todo lo global tiene que
+ser un contexto escrito por ti; a veces una librería ya resuelve esa parte por su cuenta.</p>
 </blockquote>
 <hr />
 <h2 id="6-un-segundo-ejemplo-i18ncontext">6. Un segundo ejemplo: <code>I18nContext</code></h2>
-<p>Para que veas que el patrón se repite igualito, mira el contexto de idioma y tema de
+<p>Para que veas que el patrón se repite calcadito, mira el contexto de idioma y tema de
 RachaSimple, en <code>src/i18n/I18nContext.ts</code>:</p>
 <pre><code class="language-ts">// src/i18n/I18nContext.ts (RachaSimple)
 import { createContext } from 'react';
@@ -405,60 +410,60 @@ export interface I18nContextValue {
 
 export const I18nContext = createContext&lt;I18nContextValue | null&gt;(null);
 </code></pre>
-<p>Misma receta de tres pasos: <code>createContext</code> con un tipo y <code>null</code> por defecto, un <code>I18nProvider</code>
-que entrega el <code>value</code>, y un hook <code>useI18n()</code> que lo lee con verificación. La función <code>t</code> que
-ves ahí traduce textos; cualquier componente la usa con <code>const { t } = useI18n()</code> y luego
-<code>t('common_error')</code>. Cuando aprendes el patrón una vez, lo reconoces en cualquier parte.</p>
+<p>La misma receta de tres pasos: <code>createContext</code> con un tipo y <code>null</code> por defecto, un
+<code>I18nProvider</code> que entrega el <code>value</code>, y un hook <code>useI18n()</code> que lo lee con verificación. La
+función <code>t</code> que ves ahí traduce textos; cualquier componente la usa con <code>const { t } = useI18n()</code>
+y luego <code>t('common_error')</code>. Una vez aprendes el patrón, lo reconoces en cualquier parte.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>En <code>Login.tsx</code> de RachaSimple conviven <strong>dos</strong> contextos en la misma línea de arriba:
-<code>const { t } = useI18n();</code> y <code>const { signInWithPassword, ... } = useAuth();</code>. Una sola
-página se sirve de dos grifos distintos a la vez sin despeinarse. Esa es la elegancia de
-tener cada dato global en su propio contexto bien separado.</p>
+<p>En el <code>Login.tsx</code> de RachaSimple conviven <strong>dos</strong> contextos en las primeras líneas:
+<code>const { t } = useI18n();</code> y <code>const { signInWithPassword, ... } = useAuth();</code>. Una sola página
+se sirve de dos grifos distintos a la vez sin despeinarse. En eso está la elegancia de tener
+cada dato global en su propio contexto, bien separado.</p>
 </blockquote>
 <hr />
 <h2 id="7-y-faro-el-contexto-en-nextjs">7. ¿Y Faro? El contexto en Next.js</h2>
-<p>Faro está hecho con Next.js 15 y React 19, y maneja la autenticación de forma algo distinta:
-buena parte de la lógica de sesión vive en el <strong>servidor</strong> (con Supabase y <code>middleware.ts</code>),
-no en un contexto del navegador. Esto no contradice nada de lo aprendido; simplemente, en
+<p>Faro está hecho con Next.js 15 y React 19, y maneja la autenticación de una forma algo distinta:
+buena parte de la lógica de sesión vive en el <strong>servidor</strong> (con Supabase y <code>middleware.ts</code>), no
+en un contexto del navegador. Esto no contradice nada de lo que has aprendido; sencillamente, en
 Next.js algunos datos se resuelven antes de llegar al navegador.</p>
 <blockquote class="def">
 <h3 id="que-significa-componente-de-servidor-vs-de-cliente-nextjs">🟦 ¿Qué significa? — <em>Componente de servidor vs. de cliente (Next.js)</em></h3>
 <p>En Next.js, un <strong>componente de servidor</strong> se ejecuta en el servidor antes de enviarse al
-navegador, y un <strong>componente de cliente</strong> (marcado con <code>'use client'</code>) corre en el navegador
-y puede usar hooks como <code>useState</code> o <code>useContext</code>. Sirve para repartir el trabajo. La regla
-de oro: <strong><code>createContext</code> y <code>useContext</code> solo funcionan dentro de componentes de cliente</strong>,
-porque el contexto vive en la memoria del navegador.</p>
+navegador, y un <strong>componente de cliente</strong> (marcado con <code>'use client'</code>) corre en el navegador y
+sí puede usar hooks como <code>useState</code> o <code>useContext</code>. Sirve para repartir el trabajo entre los
+dos lados. La regla de oro: <strong><code>createContext</code> y <code>useContext</code> solo funcionan dentro de
+componentes de cliente</strong>, porque el contexto vive en la memoria del navegador.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Cuando en Faro o cualquier app de Next.js quieras montar un contexto al estilo del
-<code>AuthContext</code> de RachaSimple, el archivo del Provider debe empezar con <code>'use client'</code> en su
-primera línea. Si lo olvidas, Next.js te dirá que <code>createContext</code> no está disponible. Es el
-error de novato más típico al mezclar contextos con Next.js.</p>
+<p>Cuando en Faro, o en cualquier app de Next.js, quieras montar un contexto al estilo del
+<code>AuthContext</code> de RachaSimple, el archivo del Provider tiene que empezar con <code>'use client'</code> en
+su primera línea. Si se te olvida, Next.js te avisará de que <code>createContext</code> no está
+disponible. Es el tropiezo de novato más típico al mezclar contextos con Next.js.</p>
 </blockquote>
 <p>Y un recordatorio de las reglas de Faro: el contexto del navegador es ideal para datos
-<strong>públicos</strong> del usuario (su email, su nombre). Pero <strong>los tokens y secretos jamás</strong> se ponen
-en un contexto del cliente: viven solo en el servidor, en variables de entorno o en la tabla
-<code>user_connections</code> protegida con RLS. Un contexto es visible para todo el navegador; un secreto
-en un contexto es un secreto regalado.</p>
+<strong>públicos</strong> del usuario (su email, su nombre). Pero <strong>los tokens y secretos jamás</strong> van en un
+contexto del cliente: viven solo en el servidor, en variables de entorno o en la tabla
+<code>user_connections</code> protegida con RLS. Un contexto es visible para todo el navegador, así que un
+secreto metido en un contexto es un secreto regalado.</p>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Que un dato sea "global" no significa que sea seguro ponerlo en un contexto. El email del
-usuario, vale. El token de acceso de GitHub, <strong>nunca</strong>. Pregúntate siempre: "si esto viaja
-por el navegador, ¿pasa algo si alguien lo ve?". Si la respuesta te incomoda, va al servidor,
-no al contexto.</p>
+<p>Que un dato sea "global" no lo convierte en seguro de poner en un contexto. El email del
+usuario, vale. El token de acceso de GitHub, <strong>nunca</strong>. Pregúntate siempre: "si esto viaja por
+el navegador, ¿pasa algo si alguien lo ve?". Si la respuesta te incomoda, va al servidor, no
+al contexto.</p>
 </blockquote>
 <hr />
 <h2 id="8-el-patron-completo-de-un-vistazo">8. El patrón completo, de un vistazo</h2>
-<p>Para grabarlo, aquí está la receta de RachaSimple en cuatro pasos, que puedes copiar para
-cualquier dato global tuyo:</p>
+<p>Para que se te quede grabado, aquí tienes la receta de RachaSimple en cuatro pasos, lista para
+copiarla con cualquier dato global tuyo:</p>
 <ol>
 <li><strong>Definir</strong> el contexto y su tipo en un archivo <code>.ts</code> con <code>createContext</code> (→ <code>AuthContext.ts</code>).</li>
 <li><strong>Crear</strong> un <code>Provider</code> que guarda el estado y entrega el <code>value</code> con <code>useMemo</code> (→ <code>AuthProvider.tsx</code>).</li>
 <li><strong>Envolver</strong> la app con ese Provider, bien arriba (→ <code>App.tsx</code>).</li>
 <li><strong>Leer</strong> el contexto desde un hook <code>useX()</code> que verifica que haya Provider (→ <code>useAuth.ts</code>).</li>
 </ol>
-<p>Tres archivos pequeños y un componente raíz que envuelve. Con eso, todo el árbol tiene acceso
-al dato sin una sola prop perforada. Bit guarda su cubito: ya hay grifo para todos.</p>
+<p>Tres archivos pequeños y un componente raíz que envuelve. Con eso, todo el árbol tiene acceso al
+dato sin una sola prop perforada. Bit guarda su cubito: ya hay grifo para todos.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

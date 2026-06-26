@@ -23,45 +23,45 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora has tratado a tu NAS como si fuera una caja que "simplemente funciona": prendes el laptop <strong>polypaw-nas</strong> y, como por arte de magia, aparece el recurso compartido en la red, el panel web de Cockpit responde en el puerto 9090, Tailscale te deja entrar desde fuera de casa y AdGuard bloquea anuncios. Pero nada de eso es magia: detras hay un director de orquesta llamado <strong>systemd</strong> que enciende, vigila y reinicia cada uno de esos programas. En este capitulo vas a conocer a ese director, aprender a darle ordenes y, sobre todo, a entender que pasa cuando algo no arranca. Bit, el ajolote, te acompaña con su cara de "yo tambien me confundo a veces".</p>
+<p>Hasta ahora has tratado a tu NAS como una caja que "simplemente funciona": prendes el laptop <strong>polypaw-nas</strong> y, sin que tengas que hacer nada, aparece el recurso compartido en la red, el panel web de Cockpit responde en el puerto 9090, Tailscale te deja entrar desde fuera de casa y AdGuard bloquea anuncios. No hay truco en eso. Detras de cada cosa hay un director de orquesta llamado <strong>systemd</strong> que enciende, vigila y reinicia cada uno de esos programas. En este capitulo vas a conocer a ese director, aprender a darle ordenes y, sobre todo, a entender que pasa cuando algo no arranca. Bit, el ajolote, te acompaña con su cara de "yo tambien me confundo a veces".</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-un-servicio-un-daemon">1. ¿Que es un servicio (un daemon)?</h2>
-<p>Cuando abres un editor de texto en tu computadora, lo ves: hay una ventana, tu interactuas con el y, cuando terminas, lo cierras. Un <strong>servicio</strong> es lo contrario: es un programa que vive en segundo plano, sin ventana, esperando peticiones y haciendo su trabajo en silencio. Samba espera a que alguien pida archivos. AdGuard espera a que alguien pregunte "¿cual es la direccion de tal pagina?". Ninguno tiene pantalla; trabajan por debajo.</p>
+<p>Cuando abres un editor de texto en tu computadora, lo ves: hay una ventana, interactuas con ella y, cuando terminas, la cierras. Un <strong>servicio</strong> es justo lo contrario. Es un programa que vive en segundo plano, sin ventana, esperando peticiones y haciendo su trabajo en silencio. Samba espera a que alguien pida archivos. AdGuard espera a que alguien pregunte "¿cual es la direccion de tal pagina?". Ninguno tiene pantalla; trabajan por debajo, sin que te enteres.</p>
 <blockquote class="def">
 <h3 id="que-significa-servicio-daemon">🟦 ¿Que significa? — <em>Servicio (daemon)</em></h3>
-<p>Un <strong>servicio</strong> (en ingles <em>service</em> o <em>daemon</em>, que se pronuncia "diimon") es un programa que se ejecuta en segundo plano de forma continua, sin que nadie tenga que abrirlo a mano cada vez. Sirve para tareas que deben estar siempre disponibles: compartir archivos, responder DNS, atender un panel web.
-<strong>Donde aparece en polypaw-nas:</strong> practicamente todo lo importante de tu NAS es un servicio. Samba es el servicio <code>smbd</code>, AdGuard es <code>AdGuardHome</code>, la VPN es <code>tailscaled</code>, el panel web es <code>cockpit</code>. Tu laptop puede estar con la tapa cerrada y todos esos servicios siguen trabajando.</p>
+<p>Un <strong>servicio</strong> (en ingles <em>service</em> o <em>daemon</em>, que se pronuncia "diimon") es un programa que se ejecuta en segundo plano de forma continua, sin que nadie tenga que abrirlo a mano cada vez. Esta pensado para tareas que deben estar siempre disponibles: compartir archivos, responder DNS, atender un panel web.
+<strong>Donde aparece en polypaw-nas:</strong> casi todo lo importante de tu NAS es un servicio. Samba es el servicio <code>smbd</code>, AdGuard es <code>AdGuardHome</code>, la VPN es <code>tailscaled</code>, el panel web es <code>cockpit</code>. Tu laptop puede estar con la tapa cerrada y todos esos servicios siguen trabajando.</p>
 </blockquote>
-<p>La palabra "daemon" viene del griego y se refiere a un espiritu que trabaja sin que lo veas. Por eso muchos nombres de servicios en Linux terminan en la letra <strong>d</strong>: <code>smbd</code>, <code>tailscaled</code>, <code>sshd</code>. Esa "d" final significa "daemon".</p>
+<p>La palabra "daemon" viene del griego y se refiere a un espiritu que trabaja sin que lo veas. De ahi que tantos nombres de servicios en Linux terminen en la letra <strong>d</strong>: <code>smbd</code>, <code>tailscaled</code>, <code>sshd</code>. Esa "d" final es por "daemon".</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Si ves un comando o programa que termina en "d" (como <code>dockerd</code>, <code>sshd</code>, <code>containerd</code>), casi seguro estas viendo un servicio que corre en segundo plano. Es una pista visual muy util.</p>
+<p>Si ves un comando o programa que termina en "d" (como <code>dockerd</code>, <code>sshd</code>, <code>containerd</code>), lo mas probable es que estes viendo un servicio que corre en segundo plano. Es una pista visual que engaña poco.</p>
 </blockquote>
 <hr />
 <h2 id="2-systemd-el-director-de-orquesta">2. systemd: el director de orquesta</h2>
-<p>Linux necesita <em>algo</em> que arranque todos esos servicios cuando enciendes el equipo, que los apague de forma ordenada cuando lo reinicias, y que decida en que orden empiezan (no tiene sentido arrancar Samba antes de que la red este lista). Ese "algo" es <strong>systemd</strong>.</p>
+<p>Linux necesita <em>algo</em> que arranque todos esos servicios cuando enciendes el equipo, que los apague de forma ordenada cuando lo reinicias y que decida en que orden empiezan, porque no tiene sentido arrancar Samba antes de que la red este lista. Ese "algo" es <strong>systemd</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-systemd">🟦 ¿Que significa? — <em>systemd</em></h3>
-<p><strong>systemd</strong> es el primer programa que Linux arranca al encender (tiene el numero 1, el "proceso padre" de todos los demas) y se encarga de iniciar, detener, vigilar y ordenar todos los servicios del sistema. Sirve como gestor central: en lugar de que cada programa se las arregle por su cuenta, systemd los coordina a todos.
+<p><strong>systemd</strong> es el primer programa que Linux arranca al encender (tiene el numero 1, el "proceso padre" de todos los demas) y se encarga de iniciar, detener, vigilar y ordenar todos los servicios del sistema. Funciona como gestor central: en vez de que cada programa se las arregle por su cuenta, systemd los coordina a todos.
 <strong>Donde aparece en polypaw-nas:</strong> es el corazon invisible de tu Ubuntu Server 26.04. Cada vez que tu NAS arranca, systemd lee una lista de servicios que debe encender (Samba, Cockpit, Tailscale, AdGuard, Docker) y los pone en marcha en el orden correcto.</p>
 </blockquote>
-<p>Cada servicio que systemd gestiona se describe en un archivito de texto llamado <strong>unidad</strong> (en ingles, <em>unit</em>). Ese archivo dice cosas como "el programa a ejecutar es tal", "si se cae, reincialo", "no arranques hasta que la red este lista".</p>
+<p>Cada servicio que systemd gestiona se describe en un archivito de texto llamado <strong>unidad</strong> (en ingles, <em>unit</em>). Ese archivo dice cosas como "el programa a ejecutar es tal", "si se cae, reinicialo", "no arranques hasta que la red este lista".</p>
 <blockquote class="def">
 <h3 id="que-significa-unidad-unit">🟦 ¿Que significa? — <em>Unidad (unit)</em></h3>
-<p>Una <strong>unidad</strong> es un archivo de configuracion que le dice a systemd como gestionar un servicio: que programa ejecutar, cuando arrancarlo, que hacer si falla. Los servicios usan unidades que terminan en <code>.service</code>. Sirve para que toda la informacion de un servicio este en un solo lugar ordenado.
-<strong>Donde aparece en polypaw-nas:</strong> el servicio de Samba vive en una unidad llamada <code>smbd.service</code>; el de Tailscale en <code>tailscaled.service</code>. Tu rara vez editas estos archivos a mano, pero saber que existen te ayuda a entender los mensajes de error.</p>
+<p>Una <strong>unidad</strong> es un archivo de configuracion que le dice a systemd como gestionar un servicio: que programa ejecutar, cuando arrancarlo y que hacer si falla. Los servicios usan unidades que terminan en <code>.service</code>. Asi toda la informacion de un servicio queda en un solo lugar ordenado.
+<strong>Donde aparece en polypaw-nas:</strong> el servicio de Samba vive en una unidad llamada <code>smbd.service</code>; el de Tailscale en <code>tailscaled.service</code>. Rara vez vas a editar estos archivos a mano, pero saber que existen te ayuda a entender los mensajes de error.</p>
 <h3 id="en-tu-servidor">🔎 En tu servidor</h3>
 <p>Antes de Ubuntu hubo otros sistemas de arranque (uno famoso se llamaba <code>init</code> o <code>SysVinit</code>). Hoy casi todas las distribuciones grandes —Ubuntu, Debian, Fedora— usan systemd. Asi que lo que aprendas aqui te servira en cualquier servidor moderno, no solo en polypaw-nas.</p>
 </blockquote>
 <hr />
 <h2 id="3-systemctl-tu-control-remoto-de-servicios">3. systemctl: tu control remoto de servicios</h2>
-<p><code>systemd</code> es el director; <strong><code>systemctl</code></strong> es el control remoto con el que tu le das ordenes. Es el comando que mas vas a usar en este capitulo. Su forma general es:</p>
+<p>Si <code>systemd</code> es el director, <strong><code>systemctl</code></strong> es el control remoto con el que tu le das ordenes. Es el comando que mas vas a usar en este capitulo. Su forma general es:</p>
 <pre><code class="language-bash">sudo systemctl ACCION nombre-del-servicio
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-systemctl">🟦 ¿Que significa? — <em>systemctl</em></h3>
-<p><strong><code>systemctl</code></strong> (de "system control") es el comando de terminal con el que controlas a systemd: arrancar un servicio, detenerlo, ver si esta vivo, o pedir que arranque solo al encender. Sirve como tu interfaz principal para administrar todo lo que corre en el NAS.
+<p><strong><code>systemctl</code></strong> (de "system control") es el comando de terminal con el que controlas a systemd: arrancar un servicio, detenerlo, ver si esta vivo o pedir que arranque solo al encender. Es tu interfaz principal para administrar todo lo que corre en el NAS.
 <strong>Donde aparece en polypaw-nas:</strong> cuando entras a tu NAS por SSH y escribes <code>sudo systemctl status smbd</code>, estas usando systemctl para preguntarle a systemd como esta Samba.</p>
 </blockquote>
 <h3 id="las-cuatro-ordenes-basicas">Las cuatro ordenes basicas</h3>
@@ -79,13 +79,13 @@
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-sudo">🟦 ¿Que significa? — <em>sudo</em></h3>
-<p><strong><code>sudo</code></strong> significa "hazlo como super-usuario" (el administrador del sistema, llamado <em>root</em>). Arrancar o detener servicios afecta a todo el equipo, asi que Linux exige permisos de administrador. Sirve para evitar que cualquiera, o un programa cualquiera, apague servicios sin permiso.
+<p><strong><code>sudo</code></strong> significa "hazlo como super-usuario" (el administrador del sistema, llamado <em>root</em>). Arrancar o detener servicios afecta a todo el equipo, asi que Linux te exige permisos de administrador. Es una traba a proposito: evita que cualquiera, o cualquier programa, apague servicios sin permiso.
 <strong>Donde aparece en polypaw-nas:</strong> casi todos los comandos de servicios de este capitulo llevan <code>sudo</code> delante. Te pedira tu contraseña la primera vez.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Para preguntar el estado (<code>status</code>) muchas veces <em>no</em> necesitas <code>sudo</code>. Pero para arrancar, detener o reiniciar, casi siempre si. Si un comando te responde "Access denied" o "permission denied", lo primero que debes probar es ponerle <code>sudo</code> delante.</p>
+<p>Para preguntar el estado (<code>status</code>) muchas veces <em>no</em> necesitas <code>sudo</code>. Pero para arrancar, detener o reiniciar, casi siempre si. Si un comando te responde "Access denied" o "permission denied", lo primero que vale la pena probar es ponerle <code>sudo</code> delante.</p>
 </blockquote>
 <h3 id="leyendo-la-salida-de-status">Leyendo la salida de <code>status</code></h3>
-<p>Cuando ejecutas <code>systemctl status smbd</code>, lo importante esta en dos lineas. Algo asi:</p>
+<p>Cuando ejecutas <code>systemctl status smbd</code>, lo importante esta en dos lineas. Veras algo asi:</p>
 <pre><code>● smbd.service - Samba SMB Daemon
      Loaded: loaded (/usr/lib/systemd/system/smbd.service; enabled)
      Active: active (running) since Fri 2026-06-26 09:14:02 -05; 3h ago
@@ -97,25 +97,25 @@
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-active-running-dead-failed">🟦 ¿Que significa? — <em>active (running) / dead / failed</em></h3>
-<p>Son los estados en que puede estar un servicio. <strong><code>active (running)</code></strong> = vivo y funcionando. <strong><code>inactive (dead)</code></strong> = apagado, pero sin error (alguien lo detuvo o nunca arranco). <strong><code>failed</code></strong> = intento arrancar y se cayo: algo salio mal. Sirven para diagnosticar de un vistazo.
+<p>Son los estados en que puede estar un servicio. <strong><code>active (running)</code></strong> = vivo y funcionando. <strong><code>inactive (dead)</code></strong> = apagado, pero sin error (alguien lo detuvo o nunca arranco). <strong><code>failed</code></strong> = intento arrancar y se cayo: algo salio mal. Con verlos diagnosticas de un vistazo.
 <strong>Donde aparece en polypaw-nas:</strong> si un dia no puedes ver tu carpeta compartida, lo primero es <code>sudo systemctl status smbd</code>; si dice <code>failed</code>, ya sabes por donde empezar a investigar.</p>
 </blockquote>
 <hr />
 <h2 id="4-journalctl-el-cuaderno-de-bitacora">4. journalctl: el cuaderno de bitacora</h2>
-<p><code>systemctl status</code> te dice <em>si</em> un servicio esta bien o mal, pero no siempre te dice <em>por que</em>. Para eso esta el diario (el "log") que systemd guarda de todo lo que pasa. Se lee con <strong><code>journalctl</code></strong>.</p>
+<p><code>systemctl status</code> te dice <em>si</em> un servicio esta bien o mal, pero no siempre el <em>por que</em>. Para eso esta el diario (el "log") que systemd guarda de todo lo que pasa. Se lee con <strong><code>journalctl</code></strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-registro-log">🟦 ¿Que significa? — <em>Registro / Log</em></h3>
-<p>Un <strong>registro</strong> (o <em>log</em>) es un cuaderno donde los programas van anotando lo que hacen y los errores que encuentran, con fecha y hora. Sirve para investigar problemas: si algo fallo a las 3 de la mañana, el log lo cuenta aunque tu estuvieras dormido.
+<p>Un <strong>registro</strong> (o <em>log</em>) es un cuaderno donde los programas van anotando lo que hacen y los errores que encuentran, con fecha y hora. Es lo que te permite investigar problemas: si algo fallo a las 3 de la mañana, el log lo cuenta aunque tu estuvieras dormido.
 <strong>Donde aparece en polypaw-nas:</strong> cada servicio de tu NAS escribe sus mensajes en el diario de systemd. Cuando AdGuard no responde, sus quejas estan ahi esperando que las leas.</p>
 <h3 id="que-significa-journalctl">🟦 ¿Que significa? — <em>journalctl</em></h3>
-<p><strong><code>journalctl</code></strong> (de "journal control", control del diario) es el comando para leer los registros que systemd guarda de todos los servicios. Sirve para investigar por que algo fallo, ver mensajes de arranque y seguir lo que un servicio esta haciendo en tiempo real.
+<p><strong><code>journalctl</code></strong> (de "journal control", control del diario) es el comando para leer los registros que systemd guarda de todos los servicios. Con el investigas por que algo fallo, revisas mensajes de arranque y sigues lo que un servicio esta haciendo en tiempo real.
 <strong>Donde aparece en polypaw-nas:</strong> es tu herramienta numero uno de diagnostico. Cuando un servicio dice <code>failed</code>, journalctl te muestra las palabras exactas del error.</p>
 </blockquote>
 <h3 id="ver-el-registro-de-un-servicio-concreto">Ver el registro de un servicio concreto</h3>
-<p>La forma mas util: pedir el log de <strong>un solo servicio</strong>, con <code>-u</code> (de <em>unit</em>, unidad):</p>
+<p>Lo mas util es pedir el log de <strong>un solo servicio</strong>, con <code>-u</code> (de <em>unit</em>, unidad):</p>
 <pre><code class="language-bash">sudo journalctl -u smbd
 </code></pre>
-<p>Eso puede ser largo. Para ver solo las ultimas lineas (lo mas reciente, que suele ser donde esta el problema), usa <code>-n</code>:</p>
+<p>Eso puede salir largo. Para ver solo las ultimas lineas (lo mas reciente, que suele ser donde esta el problema), usa <code>-n</code>:</p>
 <pre><code class="language-bash">sudo journalctl -u smbd -n 50
 </code></pre>
 <p>Ese comando muestra las <strong>ultimas 50 lineas</strong> del registro de Samba.</p>
@@ -123,12 +123,12 @@
 <p>Si quieres ver los mensajes aparecer en tiempo real —por ejemplo, mientras intentas conectarte desde otro equipo— usa <code>-f</code> (de <em>follow</em>, seguir):</p>
 <pre><code class="language-bash">sudo journalctl -u tailscaled -f
 </code></pre>
-<p>La terminal se quedara "escuchando" y mostrara cada mensaje nuevo. Para salir, presiona <strong>Ctrl + C</strong>.</p>
+<p>La terminal se queda "escuchando" y muestra cada mensaje nuevo a medida que llega. Para salir, presiona <strong>Ctrl + C</strong>.</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Combinacion ganadora para diagnosticar: primero <code>systemctl status nombre</code> para ver el estado, y si esta <code>failed</code>, enseguida <code>journalctl -u nombre -n 50</code> para leer el error. Casi siempre la causa esta en esas ultimas lineas, escrita con todas sus letras.</p>
+<p>La combinacion que mejor funciona para diagnosticar: primero <code>systemctl status nombre</code> para ver el estado, y si esta <code>failed</code>, enseguida <code>journalctl -u nombre -n 50</code> para leer el error. Casi siempre la causa esta en esas ultimas lineas, escrita con todas sus letras.</p>
 <h3 id="que-significa-booteo-boot">🟦 ¿Que significa? — <em>Booteo / Boot</em></h3>
-<p>El <strong>booteo</strong> (o <em>boot</em>) es el proceso de encendido del equipo, desde que pulsas el boton hasta que el sistema esta listo. Sirve para referirse a "este arranque" frente a arranques anteriores.
+<p>El <strong>booteo</strong> (o <em>boot</em>) es el proceso de encendido del equipo, desde que pulsas el boton hasta que el sistema esta listo. La palabra te sirve para distinguir "este arranque" de arranques anteriores.
 <strong>Donde aparece en polypaw-nas:</strong> con <code>sudo journalctl -b</code> ves solo los mensajes del arranque actual de tu NAS, util para revisar si algo fallo al encender.</p>
 </blockquote>
 <pre><code class="language-bash">sudo journalctl -b -p err
@@ -136,27 +136,27 @@
 <p>Ese comando muestra solo los mensajes de <strong>error</strong> (<code>-p err</code>, de <em>priority error</em>) del arranque actual. Es un buen chequeo rapido de salud: si sale poco o nada, tu NAS arranco limpio.</p>
 <hr />
 <h2 id="5-que-un-servicio-arranque-solo-al-encender">5. Que un servicio arranque solo al encender</h2>
-<p>Hay una diferencia que confunde a mucha gente al principio, asi que vamos despacio.</p>
+<p>Aqui hay una diferencia que confunde a mucha gente al principio, asi que vamos despacio.</p>
 <ul>
 <li><code>systemctl start smbd</code> arranca Samba <strong>ahora</strong>, pero solo por esta vez. Si reinicias el NAS, Samba podria no volver.</li>
 <li><code>systemctl enable smbd</code> no arranca nada ahora: le dice a systemd <strong>"de ahora en adelante, arranca Samba sola cada vez que el equipo encienda"</strong>.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-enable-disable">🟦 ¿Que significa? — <em>enable / disable</em></h3>
-<p><strong><code>enable</code></strong> marca un servicio para que arranque automaticamente cada vez que el NAS se enciende. <strong><code>disable</code></strong> quita esa marca (el servicio ya no arranca solo, aunque puedes arrancarlo a mano). Sirven para decidir que servicios son permanentes.
+<p><strong><code>enable</code></strong> marca un servicio para que arranque automaticamente cada vez que el NAS se enciende. <strong><code>disable</code></strong> quita esa marca (el servicio ya no arranca solo, aunque puedes arrancarlo a mano). Con estas dos ordenes decides que servicios son permanentes.
 <strong>Donde aparece en polypaw-nas:</strong> quieres que Samba, AdGuard, Tailscale y Cockpit esten <em>enabled</em>, porque tu NAS debe ofrecer esos servicios siempre, incluso despues de un corte de luz que lo obligue a reiniciar.</p>
 </blockquote>
 <p>Para que un servicio quede activado de forma permanente <strong>y</strong> arranque ahora mismo, hay un atajo muy comodo: <code>enable --now</code>:</p>
 <pre><code class="language-bash">sudo systemctl enable --now smbd
 </code></pre>
-<p>Eso hace las dos cosas: lo marca para futuros arranques <em>y</em> lo enciende en este momento. Su opuesto:</p>
+<p>Eso hace las dos cosas de un tiron: lo marca para futuros arranques <em>y</em> lo enciende en este momento. Lo contrario:</p>
 <pre><code class="language-bash">sudo systemctl disable --now smbd
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
-<p>Tu laptop polypaw-nas tiene una ventaja escondida: <strong>su bateria funciona como una UPS natural</strong>. Si se va la luz en casa, el laptop sigue encendido con su bateria y tus servicios no se interrumpen. Aun asi, conviene tener todo en <code>enabled</code>: cuando la bateria se agote del todo o reinicies por una actualizacion, los servicios deben volver solos sin que tu tengas que tocar nada.</p>
+<p>Tu laptop polypaw-nas tiene una ventaja escondida: <strong>su bateria funciona como una UPS natural</strong>. Si se va la luz en casa, el laptop sigue encendido con su bateria y tus servicios no se interrumpen. Aun asi, conviene tener todo en <code>enabled</code>: cuando la bateria se agote del todo o reinicies por una actualizacion, los servicios deben volver solos sin que tengas que tocar nada.</p>
 <h3 id="que-significa-ups">🟦 ¿Que significa? — <em>UPS</em></h3>
-<p>Una <strong>UPS</strong> (del ingles <em>Uninterruptible Power Supply</em>, fuente de alimentacion ininterrumpida) es una bateria que mantiene un equipo encendido durante un apagon. Sirve para que el servidor no se apague de golpe (lo cual puede corromper archivos).
+<p>Una <strong>UPS</strong> (del ingles <em>Uninterruptible Power Supply</em>, fuente de alimentacion ininterrumpida) es una bateria que mantiene un equipo encendido durante un apagon. Evita que el servidor se apague de golpe, que es algo que puede corromper archivos.
 <strong>Donde aparece en polypaw-nas:</strong> no compraste una UPS aparte; la bateria interna del Acer Nitro hace ese papel mientras este sana. Tenlo presente: una bateria de laptop no dura para siempre.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
 <p>Tu NAS tiene dos discos: el <strong>SSD de 238 GB</strong> donde vive Ubuntu Server (el sistema y los servicios) y el <strong>HDD de 954 GB</strong> montado en <code>/srv/nas</code>, donde guardas los datos compartidos. Ese HDD se monta solo al arrancar, y ese montaje tambien depende de systemd. Si ese disco no se monta, <strong>Samba puede arrancar pero compartir una carpeta vacia</strong>. Por eso, si "desaparecieron" tus archivos, revisa primero que el disco este montado (<code>df -h</code> y busca <code>/srv/nas</code>) antes de culpar a Samba.</p>
@@ -167,7 +167,7 @@
 <h3 id="61-samba-smbd">6.1 Samba — <code>smbd</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-samba-smbd">🟦 ¿Que significa? — <em>Samba (smbd)</em></h3>
-<p><strong>Samba</strong> es el programa que permite compartir carpetas en la red para que Windows, Mac, Linux y tu telefono las vean como una unidad de red. Su servicio se llama <code>smbd</code>. Sirve para que tu NAS sea, literalmente, un disco compartido en casa.
+<p><strong>Samba</strong> es el programa que permite compartir carpetas en la red para que Windows, Mac, Linux y tu telefono las vean como una unidad de red. Su servicio se llama <code>smbd</code>. Gracias a el tu NAS es, literalmente, un disco compartido en casa.
 <strong>Donde aparece en polypaw-nas:</strong> es el que ofrece tu recurso compartido <strong>PolyPawNAS</strong>, apoyado en el HDD montado en <code>/srv/nas</code>. Ahi guardas respaldos de tus proyectos como tunal-digital, PolyPaw, RachaSimple y Faro/Organizer.</p>
 </blockquote>
 <pre><code class="language-bash">sudo systemctl status smbd
@@ -176,19 +176,19 @@ sudo systemctl restart smbd   # tras cambiar la config de Samba
 <h3 id="62-cockpit-cockpit">6.2 Cockpit — <code>cockpit</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-cockpit">🟦 ¿Que significa? — <em>Cockpit</em></h3>
-<p><strong>Cockpit</strong> es un panel de administracion que abres en el navegador y te deja ver y manejar el servidor (uso de RAM, discos, servicios, registros) sin escribir comandos. Su servicio principal usa el puerto 9090. Sirve para administrar el NAS con clics en vez de terminal.
-<strong>Donde aparece en polypaw-nas:</strong> lo abres en <code>https://polypaw-nas:9090</code> desde tu navegador. Curiosamente, dentro de Cockpit veras estos mismos servicios con botones de start/stop: es systemctl con cara bonita.</p>
+<p><strong>Cockpit</strong> es un panel de administracion que abres en el navegador y te deja ver y manejar el servidor (uso de RAM, discos, servicios, registros) sin escribir comandos. Su servicio principal usa el puerto 9090. Es la forma de administrar el NAS con clics en vez de terminal.
+<strong>Donde aparece en polypaw-nas:</strong> lo abres en <code>https://polypaw-nas:9090</code> desde tu navegador. Y un detalle curioso: dentro de Cockpit veras estos mismos servicios con botones de start/stop. Es systemctl con cara bonita.</p>
 </blockquote>
 <pre><code class="language-bash">sudo systemctl status cockpit
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Cockpit usa un mecanismo de "arranque bajo demanda": el puerto 9090 esta escuchando, pero el servicio solo se despierta del todo cuando alguien abre la pagina. No te asustes si en <code>status</code> aparece como inactivo mientras nadie lo usa: eso es normal y ahorra esos preciados 8 GB de RAM.</p>
+<p>Cockpit usa un mecanismo de "arranque bajo demanda": el puerto 9090 esta escuchando, pero el servicio solo se despierta del todo cuando alguien abre la pagina. No te asustes si en <code>status</code> aparece como inactivo mientras nadie lo usa: es lo normal, y ademas ahorra esos preciados 8 GB de RAM.</p>
 </blockquote>
 <h3 id="63-tailscale-tailscaled">6.3 Tailscale — <code>tailscaled</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-tailscale-tailscaled-y-vpn">🟦 ¿Que significa? — <em>Tailscale (tailscaled) y VPN</em></h3>
-<p>Una <strong>VPN</strong> (red privada virtual) crea un tunel cifrado que conecta tus dispositivos como si estuvieran en la misma red local, aunque esten en ciudades distintas. <strong>Tailscale</strong> es una VPN facil de usar; su servicio es <code>tailscaled</code>. Sirve para entrar a tu NAS desde fuera de casa <strong>sin abrir puertos al internet</strong>.
+<p>Una <strong>VPN</strong> (red privada virtual) crea un tunel cifrado que conecta tus dispositivos como si estuvieran en la misma red local, aunque esten en ciudades distintas. <strong>Tailscale</strong> es una VPN facil de usar; su servicio es <code>tailscaled</code>. Con ella entras a tu NAS desde fuera de casa <strong>sin abrir puertos al internet</strong>.
 <strong>Donde aparece en polypaw-nas:</strong> gracias a tailscaled, desde tu telefono en la calle puedes llegar a PolyPawNAS y a Cockpit como si estuvieras en tu sala, de forma segura.</p>
 </blockquote>
 <pre><code class="language-bash">sudo systemctl status tailscaled
@@ -197,26 +197,26 @@ sudo tailscale status   # ver que dispositivos estan conectados a tu red privada
 <h3 id="64-adguard-home-adguardhome">6.4 AdGuard Home — <code>AdGuardHome</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-adguard-home-y-dns">🟦 ¿Que significa? — <em>AdGuard Home y DNS</em></h3>
-<p>El <strong>DNS</strong> es la "guia telefonica" de internet: traduce nombres (como <code>ejemplo.com</code>) a direcciones numericas. <strong>AdGuard Home</strong> es un servidor DNS que ademas bloquea las direcciones de anuncios y rastreadores. Sirve para que toda tu casa navegue con menos publicidad.
-<strong>Donde aparece en polypaw-nas:</strong> AdGuard responde las consultas DNS de tus dispositivos. Si un dia <em>toda</em> la casa se queda sin internet, sospecha de este servicio: si el DNS no responde, parece que "no hay internet" aunque la conexion este bien.</p>
+<p>El <strong>DNS</strong> es la "guia telefonica" de internet: traduce nombres (como <code>ejemplo.com</code>) a direcciones numericas. <strong>AdGuard Home</strong> es un servidor DNS que ademas bloquea las direcciones de anuncios y rastreadores. Con el, toda tu casa navega con menos publicidad.
+<strong>Donde aparece en polypaw-nas:</strong> AdGuard responde las consultas DNS de tus dispositivos. Si un dia <em>toda</em> la casa se queda sin internet, sospecha de este servicio: si el DNS no responde, parece que "no hay internet" aunque la conexion este perfecta.</p>
 </blockquote>
 <pre><code class="language-bash">sudo systemctl status AdGuardHome
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>AdGuard es un punto unico de fallo para el internet de tu casa: si lo configuraste como el DNS de tu router y el servicio se cae, <strong>nadie podra navegar</strong>. Por eso es buena idea configurar un DNS secundario en el router (por ejemplo <code>1.1.1.1</code>) como red de seguridad, y tener mucho cuidado al reiniciar este servicio.</p>
+<p>AdGuard es un punto unico de fallo para el internet de tu casa: si lo configuraste como el DNS de tu router y el servicio se cae, <strong>nadie podra navegar</strong>. Por eso vale la pena configurar un DNS secundario en el router (por ejemplo <code>1.1.1.1</code>) como red de seguridad, y tener mucho cuidado al reiniciar este servicio.</p>
 </blockquote>
 <h3 id="65-docker-podman-docker">6.5 Docker / Podman — <code>docker</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-docker-podman-contenedores">🟦 ¿Que significa? — <em>Docker / Podman (contenedores)</em></h3>
-<p>Un <strong>contenedor</strong> es una cajita aislada que empaqueta un programa con todo lo que necesita para correr, sin ensuciar el resto del sistema. <strong>Docker</strong> y <strong>Podman</strong> son herramientas para correr contenedores. Sirven para instalar aplicaciones de forma limpia y desmontarlas sin dejar rastro.
+<p>Un <strong>contenedor</strong> es una cajita aislada que empaqueta un programa con todo lo que necesita para correr, sin ensuciar el resto del sistema. <strong>Docker</strong> y <strong>Podman</strong> son herramientas para correr contenedores. Te dejan instalar aplicaciones de forma limpia y desmontarlas sin que quede rastro.
 <strong>Donde aparece en polypaw-nas:</strong> los tienes instalados para alojar aplicaciones futuras. El servicio de Docker es <code>docker</code>; Podman, en cambio, puede correr sin un servicio permanente, asi que no siempre veras un <code>podman.service</code> activo.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
 <p>Con solo <strong>8 GB de RAM</strong>, cada contenedor que enciendas come memoria. Vigila con <code>free -h</code> o desde Cockpit cuanta RAM queda libre antes de levantar algo nuevo. Si la RAM se agota, Linux empieza a matar servicios al azar para sobrevivir (lo llaman "OOM killer", <em>Out Of Memory</em>), y podrias encontrar a Samba o AdGuard <code>failed</code> sin causa aparente. La RAM es tu recurso mas escaso en este equipo.</p>
 </blockquote>
 <hr />
 <h2 id="7-diagnosticar-por-que-un-servicio-no-arranca">7. Diagnosticar por que un servicio no arranca</h2>
-<p>Esta es la parte que de verdad te hace administrador de tu NAS. Cuando algo falla, sigue esta rutina ordenada en lugar de reiniciar a ciegas.</p>
+<p>Esta es la parte que de verdad te convierte en administrador de tu NAS. Cuando algo falla, sigue esta rutina ordenada en lugar de reiniciar a ciegas.</p>
 <p><strong>Paso 1 — Mira el estado.</strong> Empieza siempre aqui:</p>
 <pre><code class="language-bash">sudo systemctl status AdGuardHome
 </code></pre>
@@ -224,14 +224,14 @@ sudo tailscale status   # ver que dispositivos estan conectados a tu red privada
 <p><strong>Paso 2 — Lee el error en el diario.</strong> Las ultimas lineas suelen decir la causa exacta:</p>
 <pre><code class="language-bash">sudo journalctl -u AdGuardHome -n 50
 </code></pre>
-<p>Busca palabras como <code>error</code>, <code>failed</code>, <code>permission denied</code>, <code>address already in use</code> o <code>no such file</code>. No tienes que entender cada linea: con encontrar la frase del error suele bastar.</p>
-<p><strong>Paso 3 — Reconoce las causas tipicas.</strong> La mayoria de los fallos caen en una de estas:</p>
+<p>Busca palabras como <code>error</code>, <code>failed</code>, <code>permission denied</code>, <code>address already in use</code> o <code>no such file</code>. No necesitas entender cada linea: con encontrar la frase del error suele bastar.</p>
+<p><strong>Paso 3 — Reconoce las causas tipicas.</strong> La mayoria de los fallos cae en una de estas:</p>
 <ul>
 <li><strong>Puerto ocupado</strong> (<code>address already in use</code>): otro programa ya usa ese puerto. Por ejemplo, si Ubuntu tiene su propio resolvedor DNS escuchando en el puerto 53, AdGuard no podra arrancar porque quiere ese mismo puerto.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
-<p>Un <strong>puerto</strong> es como una puerta numerada por la que un servicio recibe conexiones. Cada servicio escucha en su puerto: Cockpit en el 9090, el DNS en el 53, Samba en el 445. Sirve para que muchos servicios convivan en una sola direccion sin pisarse.
+<p>Un <strong>puerto</strong> es como una puerta numerada por la que un servicio recibe conexiones. Cada servicio escucha en el suyo: Cockpit en el 9090, el DNS en el 53, Samba en el 445. Es lo que permite que muchos servicios convivan en una sola direccion sin pisarse.
 <strong>Donde aparece en polypaw-nas:</strong> si dos servicios quieren el mismo puerto, el segundo falla. Por eso conviene saber que puerto usa cada uno.</p>
 </blockquote>
 <ul>
@@ -249,19 +249,19 @@ sudo systemctl status AdGuardHome
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>¿Que puerto esta ocupado y por quien? Este comando lo dice (con <code>ss</code>, una herramienta de red):
+<p>¿Que puerto esta ocupado y por quien? Este comando te lo dice (con <code>ss</code>, una herramienta de red):
 <code>bash
 sudo ss -tulpn | grep 53</code>
 Te muestra que programa esta escuchando en el puerto 53. Cambia el numero para investigar otros puertos.</p>
 <h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
-<p>Bit el ajolote te recuerda su regla de oro: <strong>nunca reinicies el NAS entero solo porque un servicio falla.</strong> Reiniciar tapa el sintoma pero no enseña nada, y si el problema era de configuracion, volvera. Diagnostica primero el servicio concreto; reiniciar el equipo completo es el ultimo recurso, no el primero.</p>
+<p>Bit el ajolote te recuerda su regla de oro: <strong>nunca reinicies el NAS entero solo porque un servicio falla.</strong> Reiniciar tapa el sintoma pero no te enseña nada, y si el problema era de configuracion, va a volver. Diagnostica primero el servicio concreto; reiniciar el equipo completo es el ultimo recurso, no el primero.</p>
 </blockquote>
 <hr />
 <h2 id="8-seguridad-la-parte-que-no-debes-saltarte">8. Seguridad: la parte que no debes saltarte</h2>
 <p>Administrar servicios es tambien decidir <em>quien puede llegar a ellos</em>. Tres reglas que valen mas que cualquier comando:</p>
 <blockquote class="warn">
 <h3 id="cuidado-no-abras-puertos-al-internet-sin-necesidad">⚠️ Cuidado — No abras puertos al internet sin necesidad</h3>
-<p>Es tentador "abrir el puerto 9090 en el router" para entrar a Cockpit desde fuera. <strong>No lo hagas.</strong> Un puerto abierto al internet es una puerta que los atacantes de todo el mundo intentaran forzar a toda hora. En vez de eso, usa <strong>Tailscale</strong>: te da acceso remoto seguro y cifrado sin exponer ni un solo puerto. Tailscale primero, abrir puertos casi nunca.</p>
+<p>Es tentador "abrir el puerto 9090 en el router" para entrar a Cockpit desde fuera. <strong>No lo hagas.</strong> Un puerto abierto al internet es una puerta que los atacantes de todo el mundo intentaran forzar a toda hora. En vez de eso, usa <strong>Tailscale</strong>: te da acceso remoto seguro y cifrado sin exponer ni un solo puerto. Tailscale primero; abrir puertos, casi nunca.</p>
 <h3 id="tip-contrasenas-fuertes-en-cada-servicio">💡 Tip — Contraseñas fuertes en cada servicio</h3>
 <p>Cada servicio tiene su propia puerta: el usuario de Samba, el login de Cockpit, el panel de AdGuard. Ponle a cada uno una contraseña larga y distinta. Un gestor de contraseñas te quita el trabajo de recordarlas. La contraseña "12345" en AdGuard es una invitacion abierta.</p>
 <h3 id="cuidado-las-copias-de-respaldo-no-son-opcionales">⚠️ Cuidado — Las copias de respaldo no son opcionales</h3>

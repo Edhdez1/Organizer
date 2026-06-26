@@ -5,29 +5,29 @@
 </p>
 
 
-> Llegaste al gran momento del módulo de HTML: vas a construir, con tus propias manos y solo con HTML, una **landing page** completa para un negocio. Nada de copiar y pegar a ciegas: vamos paso a paso, etiqueta por etiqueta, entendiendo *por qué* va cada cosa donde va. Al terminar tendrás una página de verdad, con su menú, sus secciones y hasta un formulario de contacto. Bit, nuestro ajolote pixel art, va a estar a tu lado dándote ánimos (y de vez en cuando moviendo sus branquias de la emoción). ¿List@? Respira, abre tu editor y vamos. 💻
+> Llegamos al momento que esperabas en todo el módulo de HTML: vas a construir, con tus propias manos y solo con HTML, una **landing page** completa para un negocio. Aquí nada de copiar y pegar a ciegas. Iremos paso a paso, etiqueta por etiqueta, entendiendo *por qué* va cada cosa donde va. Cuando termines tendrás una página de verdad, con su menú, sus secciones y hasta un formulario de contacto. Bit, nuestro ajolote pixel art, te acompaña en todo el camino dándote ánimos (y de cuando en cuando moviendo sus branquias de pura emoción). ¿List@? Respira, abre tu editor y arrancamos. 💻
 
 > ### 🟦 ¿Qué significa? — *Landing page*
-> Es una **página web pensada para recibir a quien llega** (en inglés *to land* es "aterrizar"). Suele ser una sola página que cuenta quién eres, qué ofreces y cómo te pueden contactar. **¿Para qué sirve?** Para dar una primera impresión clara y hacer que la persona haga algo: escribirte, comprar, registrarse.
-> **¿Dónde se usa en tu proyecto?** En **tunal-digital** justamente: el archivo `sitio-web/index.html` es la landing del negocio. En este capítulo construimos una versión mínima de esa idea.
+> Es una **página web pensada para recibir a quien llega** (en inglés *to land* es "aterrizar"). Suele ser una sola página que cuenta quién eres, qué ofreces y cómo te pueden contactar. **¿Para qué sirve?** Para dar una primera impresión clara y empujar a la persona a hacer algo: escribirte, comprar, registrarse.
+> **¿Dónde se usa en tu proyecto?** En **tunal-digital**, precisamente: el archivo `sitio-web/index.html` es la landing del negocio. En este capítulo construimos una versión mínima de esa misma idea.
 
 ---
 
 ## 1. Qué vamos a construir (mirar el plano antes de clavar el primer clavo)
 
-Antes de escribir código, imaginemos la página como una casa vista de frente. De arriba hacia abajo tendrá cuatro grandes piezas:
+Antes de escribir una sola línea de código, imaginemos la página como una casa vista de frente. De arriba hacia abajo tendrá cuatro piezas grandes:
 
 1. Un **header** (encabezado) con el nombre del negocio y un **menú de navegación**.
 2. Un **main** (contenido principal) con tres secciones: **servicios**, **sobre nosotros** y **contacto** (con formulario).
 3. Un **footer** (pie de página) con un mensajito y el año.
 
-Vamos a llamar al negocio **"Tunal Digital"**, igual que tu proyecto real, para que se sienta cercano. Pero todo lo que aprendas aquí sirve para cualquier negocio: una panadería, un salón de uñas, un taller mecánico.
+Al negocio lo llamaremos **"Tunal Digital"**, igual que tu proyecto real, para que se sienta cercano. Pero ojo: todo lo que aprendas aquí te sirve para cualquier negocio, sea una panadería, un salón de uñas o un taller mecánico.
 
 > ### 💡 Tip — Dibuja antes de teclear
-> Tomar una hoja y dibujar rectángulos (header arriba, secciones en medio, footer abajo) te ahorra muchísimo tiempo. Programar es, en buena parte, *pensar antes de escribir*. A esto se le llama **maquetar** o **bosquejar**.
+> Coger una hoja y dibujar rectángulos (header arriba, secciones en medio, footer abajo) te ahorra muchísimo tiempo. Programar es, en buena medida, *pensar antes de escribir*. A esto se le llama **maquetar** o **bosquejar**.
 
 > ### 🟦 ¿Qué significa? — *Semántica (HTML semántico)*
-> "Semántico" quiere decir que cada etiqueta **describe lo que contiene**, no solo cómo se ve. Usar `<header>` en vez de un `<div>` cualquiera le dice al navegador (y a Google, y a los lectores de pantalla) "esto es el encabezado". **¿Para qué sirve?** Para que tu página sea más fácil de entender por máquinas y por personas con discapacidad. Es buena educación digital.
+> "Semántico" quiere decir que cada etiqueta **describe lo que contiene**, no solo cómo se ve. Usar `<header>` en lugar de un `<div>` cualquiera le dice al navegador (y a Google, y a los lectores de pantalla) "esto es el encabezado". **¿Para qué sirve?** Para que tu página sea más fácil de entender, tanto para las máquinas como para las personas con discapacidad. Es buena educación digital.
 
 ---
 
@@ -49,30 +49,30 @@ Empecemos por el cascarón. Crea un archivo nuevo llamado `index.html` y escribe
 </html>
 ```
 
-Repasemos rapidito, porque ya viste estas piezas en capítulos anteriores:
+Repasemos rápido, porque estas piezas ya las viste en capítulos anteriores:
 
 > ### 🟦 ¿Qué significa? — *`<!DOCTYPE html>`*
-> Es la **primera línea** que le avisa al navegador "esto es HTML moderno". **¿Para qué sirve?** Para que el navegador no entre en un modo viejo y raro. Va siempre arriba del todo, una sola vez.
+> Es la **primera línea**, la que le avisa al navegador "esto es HTML moderno". **¿Para qué sirve?** Para que el navegador no se vaya a un modo viejo y raro. Va siempre arriba del todo, una sola vez.
 
 > ### 🟦 ¿Qué significa? — *Atributo `lang="es"`*
-> Un **atributo** es información extra que le ponemos a una etiqueta. Aquí `lang="es"` significa "el idioma de esta página es español". **¿Para qué sirve?** Ayuda a buscadores y a lectores de pantalla a pronunciar bien. Como tu manual y tus proyectos son en español, esto es lo correcto.
+> Un **atributo** es información extra que le ponemos a una etiqueta. Aquí `lang="es"` significa "el idioma de esta página es español". **¿Para qué sirve?** Ayuda a los buscadores y a los lectores de pantalla a pronunciar bien. Como tu manual y tus proyectos están en español, esto es lo correcto.
 
 > ### 🟦 ¿Qué significa? — *`<meta charset="UTF-8">`*
 > Define el **juego de caracteres**: el conjunto de letras y símbolos que la página entiende. UTF-8 incluye tildes, ñ, ¿, ¡ y emojis. **¿Para qué sirve?** Para que "diseño", "niño" o "café" no salgan con símbolos rotos.
 
 > ### 🟦 ¿Qué significa? — *`<meta name="viewport" ...>`*
-> El **viewport** es el área visible de la pantalla. Esta línea le dice "ajústate al ancho del dispositivo". **¿Para qué sirve?** Para que la página se vea bien en el celular y no diminuta. Es la base de lo que se llama diseño *responsive* (adaptable).
+> El **viewport** es el área visible de la pantalla. Esta línea le dice "ajústate al ancho del dispositivo". **¿Para qué sirve?** Para que la página se vea bien en el celular y no salga diminuta. Es la base de lo que llaman diseño *responsive* (adaptable).
 
 > ### ⚠️ Cuidado — Lo del `<head>` no se ve, pero importa
-> Todo lo de adentro de `<head>` es información **para el navegador**, no para el visitante. Si olvidas el `charset`, tu página *parece* funcionar... hasta que aparece "Diseño" en vez de "Diseño". Pequeños detalles, grandes dolores de cabeza.
+> Todo lo que va dentro de `<head>` es información **para el navegador**, no para el visitante. Si olvidas el `charset`, tu página *parece* funcionar... hasta que aparece "Diseño" en vez de "Diseño". Detalles pequeños, dolores de cabeza grandes.
 
-A partir de aquí, todo lo que escribamos va **dentro de `<body>`**, donde dice el comentario `<!-- ... -->`.
+De aquí en adelante, todo lo que escribamos va **dentro de `<body>`**, donde está el comentario `<!-- ... -->`.
 
 ---
 
 ## 3. El header con navegación (la bienvenida y el menú)
 
-El **header** es lo primero que ve quien llega. Pondremos el nombre del negocio y un menú para saltar a las secciones.
+El **header** es lo primero que ve quien llega. Ahí pondremos el nombre del negocio y un menú para saltar a las secciones.
 
 ```html
 <header>
@@ -89,7 +89,7 @@ El **header** es lo primero que ve quien llega. Pondremos el nombre del negocio 
 </header>
 ```
 
-Hay varias cosas nuevas. Vamos despacio.
+Hay varias cosas nuevas aquí. Vamos despacio.
 
 > ### 🟦 ¿Qué significa? — *`<header>`*
 > Es la etiqueta semántica del **encabezado** de la página: lo de arriba, la presentación. Suele llevar el título y el menú. **¿Para qué sirve?** Para agrupar de forma clara la "portada" de tu sitio.
@@ -98,22 +98,22 @@ Hay varias cosas nuevas. Vamos despacio.
 > Viene de *navigation* (navegación). Marca el bloque que contiene los **enlaces del menú**. **¿Para qué sirve?** Para que el navegador y los lectores de pantalla sepan "este es el menú principal" y puedan saltar directo a él.
 
 > ### 🟦 ¿Qué significa? — *`<ul>` y `<li>`*
-> `<ul>` es una **lista sin orden** (*unordered list*) y cada `<li>` es un **elemento de la lista** (*list item*). **¿Para qué sirve?** Un menú es, en el fondo, una lista de opciones; por eso se construye así. Es la forma correcta y accesible de hacer menús.
+> `<ul>` es una **lista sin orden** (*unordered list*) y cada `<li>` es un **elemento de la lista** (*list item*). **¿Para qué sirve?** Un menú es, en el fondo, una lista de opciones; por eso se arma así. Es la forma correcta y accesible de hacer menús.
 
 > ### 🟦 ¿Qué significa? — *Enlace interno con `#` (ancla)*
 > Cuando un enlace apunta a `href="#servicios"`, no va a otra página: **salta a un trozo de esta misma página** que tenga `id="servicios"`. A ese punto se le llama **ancla**. **¿Para qué sirve?** Para que al hacer clic en "Servicios" la pantalla baje sola hasta esa sección. Pura comodidad.
 
 > ### 🟦 ¿Qué significa? — *Atributo `aria-label`*
-> `aria-label` le da un **nombre invisible** a un elemento para las personas que usan lectores de pantalla. Aquí dice "este `nav` es el Menú principal". **¿Para qué sirve?** Para **accesibilidad**: alguien que no ve la pantalla escucha "Menú principal" y entiende qué es. No cambia nada visualmente.
+> `aria-label` le da un **nombre invisible** a un elemento para quienes usan lectores de pantalla. Aquí dice "este `nav` es el Menú principal". **¿Para qué sirve?** Para **accesibilidad**: alguien que no ve la pantalla escucha "Menú principal" y entiende qué es. Visualmente no cambia nada.
 
 > ### 🟦 ¿Qué significa? — *Accesibilidad*
-> Es hacer que tu página la pueda usar **todo el mundo**, incluidas personas ciegas, con baja visión o que navegan solo con teclado. **¿Para qué sirve?** Porque la web es para todos, y además los buscadores premian las páginas accesibles. No cuesta más; solo es escribir con cuidado.
+> Es hacer que tu página la pueda usar **todo el mundo**, incluidas las personas ciegas, con baja visión o que navegan solo con teclado. **¿Para qué sirve?** Porque la web es para todos, y de paso los buscadores premian las páginas accesibles. No cuesta más; es solo escribir con cuidado.
 
 > ### ⚠️ Cuidado — Un solo `<h1>` por página
 > El `<h1>` es el **título más importante** de la página, como el titular de un periódico. Pon **solo uno** y que sea el nombre del sitio. Para los títulos de cada sección usaremos `<h2>`, que es el segundo nivel.
 
 > ### 🔎 En tu código
-> En **tunal-digital** (`sitio-web/index.html`) hay un header parecido con el logo y el menú. Más adelante ese menú se "activa" con `main.js` (JavaScript) para abrirse en el celular, pero la **estructura** —el `<nav>` con su lista— nace aquí, en HTML puro. Lo que estás aprendiendo es el cimiento real de tu propio sitio.
+> En **tunal-digital** (`sitio-web/index.html`) hay un header parecido, con el logo y el menú. Más adelante ese menú se "activa" con `main.js` (JavaScript) para abrirse en el celular, pero la **estructura** —el `<nav>` con su lista— nace aquí, en HTML puro. Lo que estás aprendiendo es el cimiento real de tu propio sitio.
 
 ---
 
@@ -154,7 +154,7 @@ Escribe esto **dentro de `<body>`, justo debajo del `</header>`**:
 ```
 
 > ### 🟦 ¿Qué significa? — *Atributo `id`*
-> El `id` es un **nombre único** que le ponemos a un elemento, como una etiqueta con su nombre pegada. Aquí `id="servicios"`. **¿Para qué sirve?** Es el destino al que apunta el enlace `href="#servicios"` del menú. El `id` y el `#` del enlace deben escribirse **igualito** (mayúsculas, tildes, todo).
+> El `id` es un **nombre único** que le ponemos a un elemento, como pegarle una etiqueta con su nombre. Aquí `id="servicios"`. **¿Para qué sirve?** Es el destino al que apunta el enlace `href="#servicios"` del menú. El `id` y el `#` del enlace deben escribirse **igualito** (mayúsculas, tildes, todo).
 
 > ### 🟦 ¿Qué significa? — *`<h3>` (y la jerarquía de títulos)*
 > Los títulos van por niveles: `<h1>` el más importante, luego `<h2>`, luego `<h3>`, como los capítulos y subcapítulos de un libro. **¿Para qué sirve?** Cada servicio es un sub-tema dentro de la sección "Servicios" (que es `<h2>`), así que su título es `<h3>`. Respetar el orden ayuda a la accesibilidad y al buscador.
@@ -184,19 +184,19 @@ Esta es más cortita. Sirve para contar quién eres y generar confianza.
 </section>
 ```
 
-Esta sección va **dentro de `<main>`**, justo después de cerrar la sección de servicios (`</section>`). Fíjate que ya no hay etiquetas nuevas: solo `<section>`, `<h2>` y `<p>`. Esa es la belleza de HTML: con pocas piezas, repitiéndolas con cabeza, construyes páginas enteras.
+Esta sección va **dentro de `<main>`**, justo después de cerrar la sección de servicios (`</section>`). Fíjate en que aquí no hay etiquetas nuevas: solo `<section>`, `<h2>` y `<p>`. Esa es la gracia de HTML: con pocas piezas, repitiéndolas con cabeza, levantas páginas enteras.
 
 > ### 💡 Tip — Texto real, no "Lorem ipsum" para siempre
-> Está bien empezar con texto de relleno mientras maquetas, pero cuando puedas escribe texto **de verdad**: qué hace el negocio, por qué confiar en él. El texto auténtico es lo que de verdad convence a quien visita.
+> Está bien empezar con texto de relleno mientras maquetas, pero en cuanto puedas escribe texto **de verdad**: qué hace el negocio, por qué confiar en él. El texto auténtico es lo que de verdad convence a quien visita.
 
 > ### 🔎 En tu código
-> Cada uno de tus proyectos podría tener una sección "Sobre": **PolyPaw** contaría que es una app de mascotas hecha en Python; **RachaSimple** explicaría que ayuda a mantener rachas de hábitos; **Faro** (carpeta Organizer) diría que organiza tus proyectos leyendo GitHub y Drive. La etiqueta es la misma `<section>`; solo cambia lo que escribes dentro.
+> Cualquiera de tus proyectos podría tener una sección "Sobre": **PolyPaw** contaría que es una app de mascotas hecha en Python; **RachaSimple** explicaría que ayuda a mantener rachas de hábitos; **Faro** (carpeta Organizer) diría que organiza tus proyectos leyendo GitHub y Drive. La etiqueta es la misma `<section>`; lo único que cambia es lo que escribes dentro.
 
 ---
 
 ## 6. La sección de Contacto con formulario
 
-Aquí viene la estrella del capítulo: un **formulario**. Es el lugar donde el visitante deja sus datos para que lo contactes.
+Aquí llega la estrella del capítulo: un **formulario**. Es el lugar donde el visitante deja sus datos para que lo contactes.
 
 > ### 🟦 ¿Qué significa? — *Formulario (`<form>`)*
 > Un formulario es un **conjunto de campos** donde la persona escribe información (nombre, correo, mensaje) y luego la envía. **¿Para qué sirve?** Para recibir mensajes, registros o pedidos. La etiqueta que lo envuelve todo es `<form>`.
@@ -229,37 +229,37 @@ Aquí viene la estrella del capítulo: un **formulario**. Es el lugar donde el v
 </section>
 ```
 
-Vamos campo por campo, que aquí hay mucho que aprender.
+Vamos campo por campo, que aquí hay bastante que aprender.
 
 > ### 🟦 ¿Qué significa? — *Atributos `action` y `method`*
-> `action` dice **a dónde se mandan** los datos cuando se envía el formulario; `method` dice **cómo** se mandan (`post` es lo normal para enviar datos). **¿Para qué sirve?** Por ahora pusimos `action="#"` (no va a ningún lado de verdad) porque con solo HTML no podemos procesar el envío todavía. Eso se hace después con un servidor o un servicio.
+> `action` dice **a dónde se mandan** los datos cuando se envía el formulario; `method` dice **cómo** se mandan (`post` es lo normal para enviar datos). **¿Para qué sirve?** Por ahora pusimos `action="#"` (no va a ningún lado de verdad) porque con solo HTML todavía no podemos procesar el envío. Eso llega después, con un servidor o un servicio.
 
 > ### 🟦 ¿Qué significa? — *`<label>` y su atributo `for`*
-> `<label>` es la **etiqueta de texto** que describe un campo ("Tu nombre"). El atributo `for="nombre"` la **conecta** con el campo que tiene `id="nombre"`. **¿Para qué sirve?** Para accesibilidad: al hacer clic en el texto, el cursor salta al campo, y los lectores de pantalla leen el campo con su nombre. El `for` y el `id` deben coincidir exactamente.
+> `<label>` es la **etiqueta de texto** que describe un campo ("Tu nombre"). El atributo `for="nombre"` la **conecta** con el campo que tiene `id="nombre"`. **¿Para qué sirve?** Para accesibilidad: al hacer clic en el texto, el cursor salta al campo, y los lectores de pantalla leen el campo con su nombre. El `for` y el `id` tienen que coincidir exactamente.
 
 > ### 🟦 ¿Qué significa? — *`<input>`*
 > Es una **casilla donde se escribe** un dato. Es una etiqueta que se cierra sola (no lleva `</input>`). **¿Para qué sirve?** Para recoger texto corto: un nombre, un correo, un teléfono.
 
 > ### 🟦 ¿Qué significa? — *Atributo `type` del input*
-> `type` dice **qué clase de dato** espera el campo. `type="text"` es texto normal; `type="email"` es un correo (el navegador revisa que tenga forma de correo). **¿Para qué sirve?** Para ayudar a quien escribe y para evitar errores. Hay muchos: `password`, `number`, `date`...
+> `type` dice **qué clase de dato** espera el campo. `type="text"` es texto normal; `type="email"` es un correo (y el navegador revisa que tenga forma de correo). **¿Para qué sirve?** Para echarle una mano a quien escribe y evitar errores. Hay muchos tipos: `password`, `number`, `date`...
 
 > ### 🟦 ¿Qué significa? — *Atributo `name`*
-> `name` es el **nombre con el que viaja el dato** cuando se envía el formulario. **¿Para qué sirve?** El servidor que reciba el formulario verá "nombre = Edwar", "correo = ...". Sin `name`, el dato no se envía. Es distinto del `id` (el `id` es para conectar con el `label`; el `name` es para el envío).
+> `name` es el **nombre con el que viaja el dato** cuando se envía el formulario. **¿Para qué sirve?** El servidor que reciba el formulario verá "nombre = Edwar", "correo = ...". Sin `name`, el dato ni siquiera se envía. Y ojo, no es lo mismo que el `id`: el `id` sirve para conectar con el `label`; el `name`, para el envío.
 
 > ### 🟦 ¿Qué significa? — *Atributo `required`*
-> `required` significa **"obligatorio"**: el formulario no se envía si ese campo está vacío. **¿Para qué sirve?** Para no recibir mensajes sin nombre o sin correo. El navegador muestra solito un aviso "completa este campo".
+> `required` significa **"obligatorio"**: el formulario no se envía si ese campo está vacío. **¿Para qué sirve?** Para no recibir mensajes sin nombre o sin correo. El navegador muestra solito un aviso de "completa este campo".
 
 > ### 🟦 ¿Qué significa? — *`<textarea>`*
-> Es una **caja de texto grande**, de varias líneas, para mensajes largos. El atributo `rows="4"` dice que se muestre con 4 líneas de alto. **¿Para qué sirve?** Para que la persona escriba su mensaje cómodamente. Ojo: sí lleva cierre `</textarea>`.
+> Es una **caja de texto grande**, de varias líneas, para mensajes largos. El atributo `rows="4"` indica que se muestre con 4 líneas de alto. **¿Para qué sirve?** Para que la persona escriba su mensaje con comodidad. Ojo: esta sí lleva cierre `</textarea>`.
 
 > ### 🟦 ¿Qué significa? — *`<button type="submit">`*
-> Es el **botón de enviar**. `type="submit"` significa "al pulsarme, envía el formulario". **¿Para qué sirve?** Es la acción final: el visitante hace clic y sus datos se mandan.
+> Es el **botón de enviar**. `type="submit"` significa "al pulsarme, envía el formulario". **¿Para qué sirve?** Es la acción final: el visitante hace clic y sus datos salen.
 
 > ### ⚠️ Cuidado — `id` único, siempre
 > Cada `id` de la página tiene que ser **único**: no puede haber dos `id="nombre"`. Si repites un `id`, los enlaces y los `label` se confunden y dejan de funcionar bien. Piensa en el `id` como el número de cédula de cada elemento.
 
 > ### 🔎 En tu código
-> En **tunal-digital**, cuando alguien envía el formulario de contacto, el dato no se queda en el HTML: viaja a un **Cloudflare Worker** (un pequeño programa en la nube) que incluso usa la **API de Claude** para procesar el mensaje. Pero todo ese viaje **empieza aquí**, en este `<form>` de HTML. Sin este formulario bien hecho, no hay nada que enviar. Por eso este capítulo es tan importante.
+> En **tunal-digital**, cuando alguien envía el formulario de contacto, el dato no se queda en el HTML: viaja a un **Cloudflare Worker** (un pequeño programa en la nube) que incluso usa la **API de Claude** para procesar el mensaje. Pero todo ese viaje **empieza aquí**, en este `<form>` de HTML. Sin este formulario bien hecho, no hay nada que enviar. Por eso este capítulo pesa tanto.
 
 ---
 
@@ -277,19 +277,19 @@ Para cerrar, el pie: un mensajito y el año.
 Esta va **dentro de `<body>`, después de cerrar `</main>`**.
 
 > ### 🟦 ¿Qué significa? — *`<footer>`*
-> Es la etiqueta semántica del **pie de página**: lo de abajo del todo. Suele llevar el aviso de derechos, contacto secundario o enlaces legales. **¿Para qué sirve?** Para cerrar la página con la información "de cierre" de forma ordenada y reconocible.
+> Es la etiqueta semántica del **pie de página**: lo de abajo del todo. Suele llevar el aviso de derechos, un contacto secundario o enlaces legales. **¿Para qué sirve?** Para cerrar la página con la información "de cierre" de forma ordenada y reconocible.
 
 > ### 🟦 ¿Qué significa? — *`&copy;` (entidad HTML)*
 > `&copy;` es un **código especial** que el navegador dibuja como el símbolo de copyright ©. **¿Para qué sirve?** Algunos símbolos no se escriben directo y se ponen con estas "entidades". Otra muy usada es `&amp;` para el símbolo `&`.
 
 > ### 💡 Tip — Que el año no envejezca
-> Escribir "2026" a mano funciona hoy, pero el año que viene quedará viejo. Con solo HTML no podemos poner el año automático (eso pide JavaScript), así que por ahora recuerda actualizarlo. Es un detalle pequeño que demuestra cuidado.
+> Escribir "2026" a mano funciona hoy, pero el año que viene quedará viejo. Con solo HTML no podemos poner el año automático (eso ya pide JavaScript), así que por ahora acuérdate de actualizarlo. Es un detalle pequeño que demuestra cuidado.
 
 ---
 
 ## 8. Todo junto: la landing completa
 
-Aquí está tu página entera, de principio a fin. Copia esto en `index.html`, guárdalo y **ábrelo con doble clic** en tu navegador. 💻
+Aquí tienes tu página entera, de principio a fin. Copia esto en `index.html`, guárdalo y **ábrelo con doble clic** en tu navegador. 💻
 
 ```html
 <!DOCTYPE html>
@@ -376,16 +376,16 @@ Aquí está tu página entera, de principio a fin. Copia esto en `index.html`, g
 ```
 
 > ### 💡 Tip — Pruébala de verdad
-> Al abrirla, haz clic en los enlaces del menú: la pantalla debería **saltar** a cada sección. Escribe en el formulario y pulsa "Enviar mensaje" dejando un campo vacío: verás el aviso de campo obligatorio. ¡Eso es tu HTML funcionando! Se ve sencillo (todavía sin colores) porque el **diseño visual** llega en el módulo de CSS. Aquí construimos los **huesos**; el CSS pone la piel y la ropa.
+> Al abrirla, haz clic en los enlaces del menú: la pantalla debería **saltar** a cada sección. Escribe algo en el formulario y pulsa "Enviar mensaje" dejando un campo vacío: verás el aviso de campo obligatorio. ¡Eso es tu HTML funcionando! Se ve sencilla (todavía sin colores) porque el **diseño visual** llega en el módulo de CSS. Aquí construimos los **huesos**; el CSS pone la piel y la ropa.
 
 > ### ⚠️ Cuidado — Cierra cada etiqueta que abriste
-> Si abres `<section>` y olvidas `</section>`, la página se desordena. Un truco: cada vez que escribas una etiqueta de apertura, escribe **enseguida** la de cierre y luego rellena el medio. Así nunca se te olvida ninguna.
+> Si abres `<section>` y olvidas `</section>`, la página se desordena. Un truco: cada vez que escribas una etiqueta de apertura, escribe **enseguida** la de cierre y luego rellena el medio. Así no se te olvida ninguna.
 
 ---
 
 ## 9. Lo que lograste (en serio, párate a verlo)
 
-Hace catorce capítulos no sabías qué era una etiqueta. Hoy acabas de construir, **tú solit@**, una landing page con:
+Hace catorce capítulos no sabías ni qué era una etiqueta. Hoy acabas de construir, **tú solit@**, una landing page con:
 
 - Un documento HTML bien formado, con su `<head>` correcto.
 - Un **header** con título y menú de navegación accesible.
@@ -394,7 +394,7 @@ Hace catorce capítulos no sabías qué era una etiqueta. Hoy acabas de construi
 - Un **footer** con derechos de autor.
 - Y todo con HTML **semántico y accesible**, hecho con criterio profesional.
 
-Bit está dando saltitos pixelados de orgullo. Esto no es un ejercicio de juguete: es la misma estructura que sostiene sitios reales como tu **tunal-digital**. Lo que sigue (CSS para los colores, JavaScript para la magia) se monta **encima** de estos cimientos que ya dominas. Celebra: te lo ganaste. 🎉
+Bit está dando saltitos pixelados de orgullo. Esto no es un ejercicio de juguete: es la misma estructura que sostiene sitios reales como tu **tunal-digital**. Lo que viene después (CSS para los colores, JavaScript para la magia) se monta **encima** de estos cimientos que ya dominas. Celebra: te lo ganaste. 🎉
 
 ---
 

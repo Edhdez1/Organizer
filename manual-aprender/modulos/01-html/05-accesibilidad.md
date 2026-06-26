@@ -1,97 +1,106 @@
 # Capítulo 05 — Accesibilidad y buenas prácticas
 
-> Cerramos HTML con lo que separa a un principiante de un profesional: hacer páginas que
-> **cualquiera** pueda usar, incluidas personas con discapacidad. No es un "extra bonito": es
-> calidad, es ley en muchos países, y Google lo premia. Y casi todo se logra escribiendo el
-> HTML correctamente, que es justo lo que ya aprendiste.
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> Cerramos HTML con algo que de verdad marca la diferencia entre un principiante y un
+> profesional: hacer páginas que **cualquiera** pueda usar, incluidas personas con discapacidad.
+> No es un adorno opcional. Es calidad, en muchos países es ley, y Google lo tiene en cuenta para
+> posicionarte. Lo mejor: casi todo se consigue escribiendo bien el HTML, que es justo lo que ya
+> sabes hacer.
 
 ---
 
 ## 1. Qué es la accesibilidad web
 
 > ### 🟦 ¿Qué significa? — *Accesibilidad (a11y)*
-> La **accesibilidad web** es diseñar páginas que puedan usar **todas** las personas,
-> incluyendo quienes tienen discapacidad visual, auditiva, motriz o cognitiva. Se abrevia
-> **a11y** (la "a", 11 letras, y la "y"). No es una función aparte: es una forma de construir.
+> La **accesibilidad web** consiste en diseñar páginas que puedan usar **todas** las personas,
+> también quienes tienen alguna discapacidad visual, auditiva, motriz o cognitiva. Se abrevia
+> **a11y** (la "a", las 11 letras que van en medio, y la "y" final). No es un módulo aparte que se
+> añade al final: es una manera de construir desde el principio.
 
 > ### 🟦 ¿Qué significa? — *Lector de pantalla*
-> Un **lector de pantalla** (*screen reader*) es un programa que **lee en voz alta** lo que hay
-> en la pantalla, para personas ciegas o con baja visión. Recorre tu HTML y lo narra: "encabezado
-> nivel 1: Mi negocio… enlace: Contacto… campo de texto: Correo". Si tu HTML está bien hecho,
-> la experiencia es fluida; si no, es un caos. Por eso todo lo "semántico" del capítulo 03
-> importa tanto.
+> Un **lector de pantalla** (*screen reader*) es un programa que **lee en voz alta** lo que aparece
+> en la pantalla, pensado para personas ciegas o con baja visión. Va recorriendo tu HTML y lo va
+> narrando: "encabezado nivel 1: Mi negocio… enlace: Contacto… campo de texto: Correo". Cuando el
+> HTML está bien hecho, la experiencia fluye sin esfuerzo; cuando no, todo se vuelve un lío. Por eso
+> lo "semántico" que viste en el capítulo 03 pesa tanto.
 
 ---
 
 ## 2. Las reglas de oro (que ya casi dominas)
 
-La buena noticia: la mayoría de la accesibilidad **sale gratis** si escribes HTML correcto.
-Repaso de lo que ya viste, ahora con nombre y propósito:
+La buena noticia es que la mayor parte de la accesibilidad **sale gratis** con solo escribir HTML
+correcto. Vamos a repasar lo que ya conoces, esta vez poniéndole nombre y explicando para qué sirve:
 
 1. **Usa HTML semántico** (`<header>`, `<nav>`, `<main>`, `<footer>`): el lector de pantalla
-   anuncia cada zona y permite saltar entre ellas.
-2. **Encabezados en orden** (`<h1>` → `<h2>` → `<h3>`, sin saltarse): forman un índice por el
-   que el usuario navega.
-3. **Todas las imágenes con `alt`** descriptivo (o `alt=""` si son decorativas).
-4. **Todo campo de formulario con su `<label>`**.
-5. **Enlaces con texto claro**: "Ver precios", no "haz clic aquí". El lector de pantalla a
-   veces lista solo los enlaces; "clic aquí" fuera de contexto no dice nada.
-6. **El idioma declarado** (`<html lang="es">`): así el lector usa la pronunciación correcta.
+   anuncia cada zona y deja saltar de una a otra.
+2. **Encabezados en orden** (`<h1>` → `<h2>` → `<h3>`, sin saltarse ninguno): funcionan como un
+   índice por el que el usuario se mueve.
+3. **Todas las imágenes con `alt`** descriptivo (o `alt=""` cuando son solo decorativas).
+4. **Cada campo de formulario con su `<label>`**.
+5. **Enlaces con texto claro**: "Ver precios" en lugar de "haz clic aquí". A veces el lector de
+   pantalla lista solo los enlaces, y un "clic aquí" suelto, fuera de contexto, no dice absolutamente
+   nada.
+6. **El idioma declarado** (`<html lang="es">`): así el lector aplica la pronunciación correcta.
 
 > ### 💡 Tip — La prueba del teclado
-> Muchas personas navegan **sin ratón**, solo con el teclado (por discapacidad motriz o
-> preferencia). Prueba tu página pulsando la tecla **Tab** repetidamente: el foco debe ir
-> saltando por enlaces, campos y botones en un orden lógico, y debe **verse** dónde está. Si
-> puedes usar todo con el teclado, vas muy bien.
+> Mucha gente navega **sin ratón**, solo con el teclado, ya sea por una discapacidad motriz o por
+> simple preferencia. Haz una prueba en tu página: pulsa la tecla **Tab** varias veces. El foco
+> debería ir saltando por enlaces, campos y botones en un orden lógico, y siempre tienes que **ver**
+> dónde está parado. Si logras usar toda la página solo con el teclado, vas por muy buen camino.
 
 ---
 
 ## 3. Cuando el HTML semántico no alcanza: ARIA
 
-A veces construyes algo interactivo que el HTML normal no describe bien (un menú desplegable
-complejo, una ventana emergente). Ahí entran los atributos ARIA.
+A veces armas algo interactivo que el HTML de toda la vida no describe bien: un menú desplegable
+complicado, una ventana emergente. Para esos casos aparecen los atributos ARIA.
 
 > ### 🟦 ¿Qué significa? — *ARIA*
 > **ARIA** (*Accessible Rich Internet Applications*) es un conjunto de **atributos extra** que
-> le dan información de accesibilidad al navegador y a los lectores de pantalla cuando el HTML
-> por sí solo no basta. Ejemplos:
-> - `aria-label="Cerrar"` → le da un nombre a un botón que solo tiene un icono "✕".
-> - `aria-hidden="true"` → le dice al lector de pantalla que ignore algo puramente decorativo.
-> - `role="navigation"` → describe el papel de un elemento (aunque con `<nav>` ya no hace falta).
+> aportan información de accesibilidad al navegador y a los lectores de pantalla cuando el HTML por
+> sí solo se queda corto. Algunos ejemplos:
+> - `aria-label="Cerrar"` → le pone nombre a un botón que solo muestra un icono "✕".
+> - `aria-hidden="true"` → le indica al lector de pantalla que ignore algo puramente decorativo.
+> - `role="navigation"` → describe el papel de un elemento (aunque si usas `<nav>` ya no te hace falta).
 
 > ### ⚠️ Cuidado — La primera regla de ARIA es: no uses ARIA
-> Suena raro, pero es la recomendación oficial: **si una etiqueta HTML normal ya hace el
-> trabajo, úsala en vez de ARIA.** Un `<button>` real es mejor que un `<div role="button">` con
-> cinco atributos ARIA. ARIA es un parche para casos especiales, no un sustituto del HTML
-> semántico. Por eso lo vemos al final: primero domina lo semántico; ARIA es la excepción.
+> Suena contradictorio, pero es la recomendación oficial: **si una etiqueta HTML normal ya hace el
+> trabajo, úsala en lugar de ARIA.** Un `<button>` de verdad es mejor que un `<div role="button">`
+> cargado de cinco atributos ARIA. ARIA es un parche para situaciones especiales, no un reemplazo del
+> HTML semántico. Por eso lo dejamos para el final: primero dominas lo semántico, y ARIA queda como
+> la excepción.
 
 > ### 🔎 En tu código
-> En `tunal-digital/sitio-web/index.html`, el botón del menú móvil y el chat usan algún
-> `aria-label` para que su función quede clara aunque solo muestren un icono. Cuando lo
-> inspecciones con `F12`, busca atributos que empiecen con `aria-`.
+> En `tunal-digital/sitio-web/index.html`, el botón del menú móvil y el del chat usan algún
+> `aria-label` para que su función quede clara aunque por fuera solo se vea un icono. Cuando lo
+> inspecciones con `F12`, fíjate en los atributos que empiezan con `aria-`.
 
 ---
 
 ## 4. Contraste y color (un puente al módulo de CSS)
 
 > ### 🟦 ¿Qué significa? — *Contraste*
-> El **contraste** es la diferencia de luminosidad entre el texto y su fondo. Texto gris claro
-> sobre blanco es difícil de leer para mucha gente. Existe un estándar, **WCAG**, que define un
-> contraste mínimo (la relación recomendada para texto normal es **4.5:1**).
-> **¿Dónde se usa en tu proyecto?** Tanto tu sitio como Faro mencionan cumplir "WCAG AA": es
-> justo este criterio de contraste. El color se controla con **CSS** (módulo 02), pero la
-> *decisión* de que sea legible es de accesibilidad.
+> El **contraste** es la diferencia de luminosidad entre el texto y su fondo. Un texto gris clarito
+> sobre blanco le cuesta a mucha gente. Hay un estándar, **WCAG**, que fija un contraste mínimo (para
+> texto normal recomienda una relación de **4.5:1**).
+> **¿Dónde aparece esto en tu proyecto?** Tanto tu sitio como Faro hablan de cumplir "WCAG AA", que
+> es precisamente este criterio de contraste. El color se controla desde **CSS** (módulo 02), pero
+> *decidir* que el texto sea legible es cosa de accesibilidad.
 
 > ### 💡 Tip — No comuniques solo con color
-> Nunca digas únicamente "los campos en rojo son obligatorios": una persona daltónica no lo
-> distingue. Acompaña el color con un texto o un icono ("Obligatorio *"). El color **refuerza**,
-> no comunica solo.
+> Nunca te quedes en "los campos en rojo son obligatorios": una persona daltónica no va a notar la
+> diferencia. Acompaña siempre el color con un texto o un icono ("Obligatorio *"). El color
+> **refuerza** el mensaje, no lo carga él solo.
 
 ---
 
 ## 5. Cierre del módulo: tu mapa de HTML
 
-Repasa todo lo que ahora sabes hacer:
+Mira todo lo que ya eres capaz de hacer:
 
 ```
 HTML
@@ -105,8 +114,8 @@ HTML
 └── Accesibilidad: alt, label, ARIA, WCAG  (cap. 05)
 ```
 
-Con esto puedes leer y escribir el **esqueleto** de cualquier página, incluido tu propio sitio.
-Lo que aún se ve "sin pintar" lo resolverás en el módulo siguiente.
+Con esto ya puedes leer y escribir el **esqueleto** de cualquier página, el de tu propio sitio
+incluido. Eso que todavía se ve "sin pintar" lo arreglarás en el módulo que viene.
 
 ---
 

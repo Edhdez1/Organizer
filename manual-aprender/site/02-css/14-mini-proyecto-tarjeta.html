@@ -23,21 +23,21 @@
 </p>
 
 <blockquote>
-<p>¡Llegó el día! Durante trece capítulos fuiste juntando piezas: selectores, colores, el modelo de caja, tipografía, sombras, transiciones. Hoy las usamos todas juntas para construir algo de verdad: una <strong>tarjeta</strong> bonita, de esas que ves en mil sitios web (un producto, un perfil, una publicación). Lo haremos paso a paso, en tu computadora 💻, y al final tendrás una pieza que podrías pegar tal cual en tu proyecto <strong>tunal-digital</strong>. Bit, el ajolote, ya tiene puestas las gafas de obra y trae su casquito rosa. Vamos a construir.</p>
+<p>¡Llegó el día! Durante trece capítulos fuiste juntando piezas sueltas: selectores, colores, el modelo de caja, tipografía, sombras, transiciones. Hoy las juntamos todas para construir algo de verdad: una <strong>tarjeta</strong> bonita, de esas que ves en mil sitios web (un producto, un perfil, una publicación). Lo haremos paso a paso, en tu computadora 💻, y al final tendrás una pieza que podrías pegar tal cual en tu proyecto <strong>tunal-digital</strong>. Bit, el ajolote, ya tiene puestas las gafas de obra y trae su casquito rosa. A construir.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-vamos-a-construir-y-por-que-una-tarjeta">1. ¿Qué vamos a construir y por qué una tarjeta?</h2>
-<p>Una <strong>tarjeta</strong> (en inglés <em>card</em>) es un bloque rectangular que agrupa información relacionada: una imagen, un título, un texto corto y, casi siempre, un botón. Es uno de los patrones de diseño más comunes de la web. Si abres una tienda online, cada producto es una tarjeta. Si abres una red social, cada publicación es una tarjeta.</p>
+<p>Una <strong>tarjeta</strong> (en inglés <em>card</em>) es un bloque rectangular que agrupa información relacionada: una imagen, un título, un texto corto y, casi siempre, un botón. Es uno de los patrones de diseño más comunes de la web. Abre una tienda online: cada producto es una tarjeta. Abre una red social: cada publicación es una tarjeta.</p>
 <blockquote class="def">
 <h3 id="que-significa-tarjeta-card">🟦 ¿Qué significa? — <em>Tarjeta (card)</em></h3>
 <p>Es un patrón visual: un contenedor con bordes redondeados, algo de relleno por dentro y normalmente una sombra suave que la separa del fondo. No es una etiqueta de HTML especial; la construimos con un <code>&lt;div&gt;</code> (o mejor, una etiqueta semántica como <code>&lt;article&gt;</code>) y la vestimos con CSS.
 <strong>Para qué sirve:</strong> ordenar información en piezas reutilizables y fáciles de leer.
 <strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, la sección de servicios o de portafolio podría mostrarse como una rejilla de tarjetas; en <strong>RachaSimple</strong> (React + Tailwind), cada racha del usuario probablemente se pinta como una tarjeta con clases de Tailwind.</p>
 </blockquote>
-<p>La gracia de hacerla "a mano" con CSS puro es que entiendes qué hace cada propiedad. Más adelante, cuando uses <strong>Tailwind</strong> en RachaSimple o Faro, vas a reconocer que <code>rounded-xl</code>, <code>shadow-md</code> o <code>p-6</code> son exactamente las mismas ideas que hoy escribiremos con nombres largos.</p>
+<p>Lo bueno de hacerla "a mano" con CSS puro es que entiendes qué hace cada propiedad. Más adelante, cuando uses <strong>Tailwind</strong> en RachaSimple o Faro, vas a reconocer que <code>rounded-xl</code>, <code>shadow-md</code> o <code>p-6</code> son exactamente las mismas ideas que hoy escribiremos con nombres largos.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>No copies y pegues el código de golpe. Escríbelo tú, línea por línea, mirando cómo cambia la tarjeta en el navegador cada vez que guardas. Aprender CSS es como aprender a cocinar: hay que probar la sopa mientras la haces.</p>
+<p>No copies y pegues el código de golpe. Escríbelo tú, línea por línea, mirando cómo cambia la tarjeta en el navegador cada vez que guardas. Aprender CSS se parece a aprender a cocinar: hay que probar la sopa mientras la haces.</p>
 </blockquote>
 <hr />
 <h2 id="2-preparar-el-terreno-html-y-css-enlazados">2. Preparar el terreno: HTML y CSS enlazados</h2>
@@ -74,7 +74,7 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>Mira que envolví todo en <code>&lt;article class="tarjeta"&gt;</code>. Usé <code>&lt;article&gt;</code> en lugar de <code>&lt;div&gt;</code> porque es <strong>HTML semántico</strong>: le dice al navegador (y a los lectores de pantalla) "esto es una pieza de contenido independiente".</p>
+<p>Fíjate en que envolví todo en <code>&lt;article class="tarjeta"&gt;</code>. Usé <code>&lt;article&gt;</code> en lugar de <code>&lt;div&gt;</code> porque es <strong>HTML semántico</strong>: le dice al navegador (y a los lectores de pantalla) "esto es una pieza de contenido independiente".</p>
 <blockquote class="def">
 <h3 id="que-significa-etiqueta-semantica">🟦 ¿Qué significa? — <em>Etiqueta semántica</em></h3>
 <p>Es una etiqueta de HTML cuyo nombre describe <strong>qué tipo de contenido</strong> contiene, no cómo se ve. <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code> y <code>&lt;footer&gt;</code> son semánticas; <code>&lt;div&gt;</code> y <code>&lt;span&gt;</code> son neutras (no significan nada en particular).
@@ -85,14 +85,14 @@
 <strong>Para qué sirve:</strong> accesibilidad. Una imagen sin <code>alt</code> es invisible para quien no puede verla.
 <strong>Dónde se usa:</strong> en TODO proyecto serio. Acostúmbrate desde ya.</p>
 </blockquote>
-<p>Fíjate también en los nombres de clase tipo <code>tarjeta__cuerpo</code>. Ese doble guion bajo es una convención llamada <strong>BEM</strong> que ayuda a no perderte. No es obligatorio, pero ordena mucho.</p>
+<p>Mira también los nombres de clase tipo <code>tarjeta__cuerpo</code>. Ese doble guion bajo viene de una convención llamada <strong>BEM</strong> que ayuda a no perderte. No es obligatorio, pero ordena mucho.</p>
 <blockquote class="def">
 <h3 id="que-significa-bem-block-element-modifier">🟦 ¿Qué significa? — <em>BEM (Block, Element, Modifier)</em></h3>
 <p>Es una forma de nombrar clases CSS. <code>bloque__elemento--modificador</code>. El bloque es la tarjeta, los elementos son sus partes (<code>__titulo</code>, <code>__boton</code>) y los modificadores son variantes (<code>--destacada</code>).
 <strong>Para qué sirve:</strong> que el nombre de una clase te diga a qué pertenece y evites colisiones.
 <strong>Dónde se usa en un repo real:</strong> muchos <code>styles.css</code> vanilla como el de <strong>tunal-digital</strong> lo usan; con Tailwind (RachaSimple, Faro) no hace falta porque las clases ya son utilitarias.</p>
 </blockquote>
-<p>Si abres <code>index.html</code> en el navegador ahora, verás un desastre sin estilo: una imagen enorme, texto pegado a la izquierda y un botón gris feo. Perfecto. Ese es nuestro punto de partida. Bit dice que toda escultura empieza siendo un bloque de piedra.</p>
+<p>Si abres <code>index.html</code> en el navegador ahora mismo, verás un desastre sin estilo: una imagen enorme, texto pegado a la izquierda y un botón gris feo. Perfecto. Ese es nuestro punto de partida. Bit dice que toda escultura empieza siendo un bloque de piedra.</p>
 <hr />
 <h2 id="3-la-caja-relleno-bordes-redondeados-y-sombra">3. La caja: relleno, bordes redondeados y sombra</h2>
 <p>Vamos al <code>estilos.css</code>. Primero, un pequeño reseteo y un fondo para que la tarjeta no flote en blanco:</p>
@@ -151,7 +151,7 @@ body {
 </blockquote>
 <hr />
 <h2 id="4-la-imagen-que-llene-su-espacio-sin-deformarse">4. La imagen: que llene su espacio sin deformarse</h2>
-<p>La imagen del HTML mide originalmente 400x250 (la pedimos así a <code>picsum.photos</code>), pero nuestra tarjeta mide 320px de ancho. Hay que ajustarla:</p>
+<p>La imagen del HTML mide originalmente 400x250 (la pedimos así a <code>picsum.photos</code>), pero nuestra tarjeta mide 320px de ancho. Toca ajustarla:</p>
 <pre><code class="language-css">.tarjeta__imagen {
   width: 100%;
   height: 180px;
@@ -323,7 +323,7 @@ body {
 <p>Mueve el elemento en el eje vertical sin afectar a los vecinos. <code>translateY(-4px)</code> lo sube 4 píxeles (negativo = arriba).
 <strong>Para qué sirve:</strong> aquí, el efecto de "levitar" al pasar el ratón. Combinado con una sombra más grande, parece que la tarjeta se acerca a ti.</p>
 </blockquote>
-<p>Mira el resultado: la tarjeta sube suavemente y su sombra crece, como si se despegara del fondo. Con <code>transition</code> ya declarada, el movimiento es fluido. Estos detalles pequeños son los que separan una página que "funciona" de una que se siente cuidada.</p>
+<p>Mira el resultado: la tarjeta sube suavemente y su sombra crece, como si se despegara del fondo. Con la <code>transition</code> ya declarada, el movimiento es fluido. Estos detalles pequeños son los que separan una página que "funciona" de una que se siente cuidada.</p>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
 <p>No abuses de los efectos. Una tarjeta que se mueve está bien; una página donde TODO salta, gira y parpadea marea. El buen diseño es como la sal: justo la necesaria.</p>

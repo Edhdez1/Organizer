@@ -23,31 +23,31 @@
 </p>
 
 <blockquote>
-<p>En este capítulo vas a descubrir cómo cuenta una computadora por dentro. Te aseguro que no usa los diez dedos como nosotros: solo conoce dos estados, encendido y apagado. A partir de ahí construye <strong>todo</strong>: números, las letras de este texto, las fotos de tu galería y los colores de tu sitio web. Entender esto te quita el miedo a símbolos raros como <code>#1B6B6B</code> que aparecen en tu CSS, y te da una intuición que vas a usar durante toda tu vida como programador. Bit, nuestro ajolote pixelado, te acompaña: él, después de todo, está hecho de bits.</p>
+<p>En este capítulo vamos a mirar cómo cuenta una computadora por dentro. Y no, no usa los diez dedos como tú y yo: por dentro solo distingue dos estados, encendido y apagado. Con eso tan simple arma <strong>todo</strong>: los números, las letras de este texto, las fotos de tu galería, los colores de tu sitio web. Cuando entiendes esto, símbolos raros como <code>#1B6B6B</code> que aparecen en tu CSS dejan de darte miedo, y te queda una intuición que vas a aprovechar el resto de tu vida programando. Bit, nuestro ajolote pixelado, viene contigo en el viaje; al fin y al cabo, él también está hecho de bits.</p>
 </blockquote>
 <h2 id="1-por-que-una-computadora-solo-cuenta-con-0-y-1">1. ¿Por qué una computadora solo cuenta con 0 y 1?</h2>
-<p>Imagina un interruptor de luz en la pared. Solo tiene dos posiciones: encendido o apagado. No hay un "medio encendido" estable y fácil de medir. Una computadora está hecha de millones (¡miles de millones!) de interruptores diminutos. Cada uno solo sabe estar en uno de dos estados.</p>
-<p>Como solo hay dos estados posibles, decidimos representarlos con dos símbolos: <strong>0</strong> (apagado) y <strong>1</strong> (encendido). Eso es todo. No hay magia: la computadora es una montaña gigantesca de interruptores, y programar es, en el fondo, decidir cuáles se encienden y cuáles se apagan.</p>
+<p>Piensa en el interruptor de luz de tu pared. Tiene dos posiciones y ya: encendido o apagado. No existe un "medio encendido" estable que se pueda medir bien. Una computadora es, en el fondo, millones (¡miles de millones!) de interruptores diminutos, y cada uno solo sabe estar en una de esas dos posiciones.</p>
+<p>Como solo hay dos estados, los representamos con dos símbolos: <strong>0</strong> para apagado y <strong>1</strong> para encendido. Eso es absolutamente todo. No hay truco escondido: la computadora es una montaña enorme de interruptores, y programar es, si lo piensas, decidir cuáles se encienden y cuáles se apagan.</p>
 <blockquote class="def">
 <h3 id="que-significa-bit">🟦 ¿Qué significa? — <em>Bit</em></h3>
-<p>Un <strong>bit</strong> es la unidad más pequeña de información en una computadora: un solo valor que solo puede ser <strong>0</strong> o <strong>1</strong> (apagado o encendido). El nombre viene del inglés <em>binary digit</em> (dígito binario). Sirve como el "ladrillo" mínimo con el que se construye absolutamente todo lo demás. Un bit solo no dice mucho; el poder aparece cuando juntamos muchos.</p>
+<p>Un <strong>bit</strong> es la pieza de información más pequeña que maneja una computadora: un único valor que solo puede ser <strong>0</strong> o <strong>1</strong> (apagado o encendido). El nombre sale del inglés <em>binary digit</em>, "dígito binario". Es el ladrillo mínimo con el que se levanta todo lo demás. Un bit solo, por sí mismo, dice bastante poco; la cosa se pone interesante cuando juntas muchos.</p>
 <h3 id="que-significa-sistema-binario">🟦 ¿Qué significa? — <em>Sistema binario</em></h3>
-<p>El <strong>sistema binario</strong> es la forma de contar usando solo dos símbolos: 0 y 1. Es "base 2". Nosotros, los humanos, usamos el sistema <strong>decimal</strong> ("base 10") con diez símbolos: 0, 1, 2, 3, 4, 5, 6, 7, 8 y 9, probablemente porque tenemos diez dedos. La computadora usa binario porque sus interruptores solo tienen dos posiciones.</p>
+<p>El <strong>sistema binario</strong> es contar usando solo dos símbolos: 0 y 1. Por eso decimos que es "base 2". Nosotros los humanos contamos en <strong>decimal</strong> ("base 10"), con diez símbolos: 0, 1, 2, 3, 4, 5, 6, 7, 8 y 9, seguramente porque tenemos diez dedos. La computadora cuenta en binario porque sus interruptores solo tienen dos posiciones.</p>
 <h3 id="tip-no-te-asustes-con-la-palabra-base">💡 Tip — No te asustes con la palabra "base"</h3>
-<p>"Base 10" solo significa "usamos 10 símbolos distintos". "Base 2" significa "usamos 2 símbolos distintos". El mecanismo de contar es el mismo en ambos; cambia cuántos símbolos tenemos antes de quedarnos sin ellos y tener que "llevar uno". Eso lo vemos enseguida.</p>
+<p>"Base 10" no quiere decir nada raro: solo significa "usamos 10 símbolos distintos". "Base 2", "usamos 2 símbolos distintos". La forma de contar es la misma en los dos casos; lo único que cambia es cuántos símbolos tenemos antes de quedarnos sin ellos y vernos obligados a "llevar uno". Eso lo vemos en un momento.</p>
 </blockquote>
 <h2 id="2-como-contamos-los-humanos-para-entender-como-cuenta-la-maquina">2. Cómo contamos los humanos (para entender cómo cuenta la máquina)</h2>
-<p>Antes de entrar al binario, fijémonos en algo que hacemos sin pensar. Cuando contamos en decimal y llegamos al 9, nos quedamos sin símbolos. ¿Qué hacemos? Reiniciamos la primera posición a 0 y agregamos un 1 a la izquierda: pasamos de <strong>9</strong> a <strong>10</strong>. Volvemos a llenar hasta <strong>19</strong>, y entonces saltamos a <strong>20</strong>. Así hasta <strong>99</strong>, y luego <strong>100</strong>.</p>
-<p>La clave es esta: cada posición vale diez veces más que la de su derecha. En el número <strong>347</strong>:</p>
+<p>Antes de meternos en el binario, fíjate en algo que haces sin pensar. Cuando cuentas en decimal y llegas al 9, te quedas sin símbolos. ¿Y qué haces entonces? Reinicias esa primera posición a 0 y pones un 1 a la izquierda: del <strong>9</strong> saltas al <strong>10</strong>. Vuelves a llenar hasta el <strong>19</strong> y entonces das el salto al <strong>20</strong>. Así hasta el <strong>99</strong>, y luego el <strong>100</strong>.</p>
+<p>Lo importante es esto: cada posición vale diez veces más que la de su derecha. Tomemos el número <strong>347</strong>:</p>
 <ul>
-<li>el <strong>7</strong> está en la posición de las unidades (vale 7 × 1 = 7),</li>
-<li>el <strong>4</strong> está en la posición de las decenas (vale 4 × 10 = 40),</li>
-<li>el <strong>3</strong> está en la posición de las centenas (vale 3 × 100 = 300).</li>
+<li>el <strong>7</strong> está en las unidades (vale 7 × 1 = 7),</li>
+<li>el <strong>4</strong> está en las decenas (vale 4 × 10 = 40),</li>
+<li>el <strong>3</strong> está en las centenas (vale 3 × 100 = 300).</li>
 </ul>
-<p>Sumando: 300 + 40 + 7 = 347. Lo hacías de niño sin darte cuenta de la mecánica.</p>
-<p>El binario funciona <strong>igualito</strong>, pero como solo hay dos símbolos, cada posición vale <strong>el doble</strong> que la de su derecha, no diez veces más.</p>
+<p>Y al sumar: 300 + 40 + 7 = 347. Lo hacías de niño sin pararte a pensar en la mecánica que había debajo.</p>
+<p>El binario funciona <strong>igualito</strong>, con una sola diferencia: como solo hay dos símbolos, cada posición vale <strong>el doble</strong> que la de su derecha, en lugar de diez veces más.</p>
 <h2 id="3-contar-en-binario-paso-a-paso">3. Contar en binario, paso a paso</h2>
-<p>En binario solo tenemos 0 y 1. Empecemos a contar desde cero, y observa qué pasa cuando nos quedamos sin símbolos (que ocurre rápido, porque solo hay dos):</p>
+<p>En binario solo tenemos 0 y 1. Empecemos a contar desde cero y mira lo que pasa cuando nos quedamos sin símbolos (cosa que ocurre enseguida, porque solo hay dos):</p>
 <table>
 <thead>
 <tr>
@@ -94,61 +94,61 @@
 </tr>
 </tbody>
 </table>
-<p>¿Ves el patrón? Cuando llegamos al 1 y queremos sumar uno más, no tenemos un "2", así que reiniciamos a 0 y llevamos uno a la izquierda: de <code>1</code> pasamos a <code>10</code> (que se lee "uno-cero", <strong>no</strong> "diez", y vale 2 en decimal). Es exactamente lo que hacíamos al pasar de 9 a 10 en decimal, solo que ocurre muchísimo más seguido.</p>
+<p>¿Ves el patrón? Cuando llegamos al 1 y queremos sumar uno más, no hay ningún "2" al que recurrir, así que reiniciamos a 0 y llevamos uno a la izquierda: de <code>1</code> pasamos a <code>10</code> (que se lee "uno-cero", <strong>no</strong> "diez", y vale 2 en decimal). Es justo lo mismo que hacíamos al pasar de 9 a 10 en decimal, solo que aquí ocurre muchísimo más a menudo.</p>
 <blockquote class="tip">
 <h3 id="tip-leelo-digito-por-digito">💡 Tip — Léelo dígito por dígito</h3>
-<p>El binario <code>101</code> no se lee "ciento uno". Se lee "uno, cero, uno". Decir "ciento uno" es mezclar decimal con binario y te confunde. Pronuncia cada cifra por separado.</p>
+<p>El binario <code>101</code> no se lee "ciento uno". Se lee "uno, cero, uno". Decir "ciento uno" es mezclar decimal con binario y solo consigues hacerte un lío. Pronuncia cada cifra por separado.</p>
 </blockquote>
 <h3 id="el-truco-de-las-posiciones-potencias-de-2">El truco de las posiciones (potencias de 2)</h3>
-<p>Cada posición en binario tiene un valor fijo. Empezando por la derecha: 1, 2, 4, 8, 16, 32, 64, 128... (cada una es el doble de la anterior). Para saber cuánto vale un número binario, sumas los valores de las posiciones donde hay un <strong>1</strong>.</p>
-<p>Veamos <code>1101</code>:</p>
+<p>Cada posición en binario tiene un valor fijo. Si empiezas por la derecha, van así: 1, 2, 4, 8, 16, 32, 64, 128... cada una es el doble de la anterior. Para saber cuánto vale un número binario, sumas los valores de las posiciones donde haya un <strong>1</strong>.</p>
+<p>Veámoslo con <code>1101</code>:</p>
 <pre><code>Posición:    8   4   2   1
 Bits:        1   1   0   1
 </code></pre>
-<p>Hay un 1 en las posiciones de 8, de 4 y de 1 (la de 2 tiene un 0, así que no cuenta). Sumamos: 8 + 4 + 0 + 1 = <strong>13</strong>. Listo: <code>1101</code> en binario es <strong>13</strong> en decimal.</p>
+<p>Hay un 1 en la posición del 8, en la del 4 y en la del 1 (la del 2 tiene un 0, así que esa no suma). Sumamos: 8 + 4 + 0 + 1 = <strong>13</strong>. Y ya está: <code>1101</code> en binario es <strong>13</strong> en decimal.</p>
 <blockquote class="def">
 <h3 id="que-significa-byte">🟦 ¿Qué significa? — <em>Byte</em></h3>
-<p>Un <strong>byte</strong> (se pronuncia "bait") es un grupo de <strong>8 bits</strong>. Con 8 bits puedes formar 256 combinaciones distintas (de <code>00000000</code> a <code>11111111</code>, es decir del 0 al 255). El byte es la unidad práctica con la que se mide casi todo en computación: un carácter de texto, el tamaño de un archivo (kilobytes, megabytes, gigabytes) y, como verás, cada componente de color. Tu disco <code>polypaw-nas</code> con "238 GB" usa esta misma escala: G de giga, B de bytes.</p>
+<p>Un <strong>byte</strong> (se pronuncia "bait") es un grupo de <strong>8 bits</strong>. Con 8 bits puedes formar 256 combinaciones distintas (desde <code>00000000</code> hasta <code>11111111</code>, o sea del 0 al 255). El byte es la unidad práctica con la que se mide casi todo en computación: un carácter de texto, el tamaño de un archivo (kilobytes, megabytes, gigabytes) y, como vas a ver, cada componente de color. Cuando tu disco <code>polypaw-nas</code> marca "238 GB", está usando esta misma escala: la G es de giga y la B de bytes.</p>
 <h3 id="tip-de-ahi-salen-los-256-y-255-que-ves-por-todas-partes">💡 Tip — De ahí salen los "256" y "255" que ves por todas partes</h3>
-<p>Cuando veas números como 255, 256, 128, 1024 o 65535 en programación, casi siempre vienen de potencias de 2. No son arbitrarios: son "hasta dónde llega" cierta cantidad de bits. 8 bits llegan a 255; 16 bits llegan a 65535. Reconocer estos números es señal de que ya estás pensando como la máquina.</p>
+<p>Cuando te encuentres con números como 255, 256, 128, 1024 o 65535 en programación, casi siempre vienen de potencias de 2. No son caprichosos: marcan "hasta dónde llega" cierta cantidad de bits. 8 bits llegan a 255; 16 bits llegan a 65535. El día que reconozcas estos números de un vistazo, es señal de que ya empiezas a pensar como la máquina.</p>
 </blockquote>
 <h2 id="4-como-se-guarda-un-numero-una-letra-y-un-texto">4. Cómo se guarda un número, una letra y un texto</h2>
-<p>Ya sabemos que un grupo de bits puede representar un número. ¿Pero cómo guarda la computadora una letra como la <strong>A</strong>, si solo sabe de 0 y 1?</p>
-<p>La respuesta es un acuerdo: una <strong>tabla</strong> que dice "tal número representa tal carácter". El acuerdo histórico más famoso se llama <strong>ASCII</strong>.</p>
+<p>Ya sabemos que un grupo de bits sirve para representar un número. ¿Pero cómo guarda la computadora una letra como la <strong>A</strong>, si lo único que conoce son ceros y unos?</p>
+<p>La respuesta es un acuerdo: una <strong>tabla</strong> que dice "tal número representa tal carácter". El acuerdo más famoso de la historia se llama <strong>ASCII</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-ascii">🟦 ¿Qué significa? — <em>ASCII</em></h3>
-<p><strong>ASCII</strong> (se lee "aski") es una tabla creada en los años 60 que asigna un número a cada carácter del inglés. Por ejemplo: la <strong>A</strong> mayúscula es el número 65, la <strong>B</strong> es 66, la <strong>a</strong> minúscula es 97, el espacio es 32 y el dígito <strong>0</strong> (como carácter de texto) es 48. Como esos números caben en un byte, cada carácter ocupa exactamente un byte. Sirvió para que computadoras distintas se entendieran al intercambiar texto.</p>
+<p><strong>ASCII</strong> (se lee "aski") es una tabla nacida en los años 60 que le pone un número a cada carácter del inglés. Por ejemplo: la <strong>A</strong> mayúscula es el 65, la <strong>B</strong> es el 66, la <strong>a</strong> minúscula es el 97, el espacio es el 32 y el dígito <strong>0</strong> (como carácter de texto) es el 48. Como todos esos números caben en un byte, cada carácter ocupa exactamente un byte. Gracias a ASCII, computadoras distintas podían entenderse al intercambiar texto.</p>
 </blockquote>
-<p>Así, la palabra <strong>Bit</strong> se guarda como tres números (66, 105, 116), y cada uno como un patrón de 8 bits encendidos y apagados. La pantalla, al leer el 66, sabe que debe dibujar una "B".</p>
-<p>El problema de ASCII es que solo pensó en inglés. No tiene <strong>ñ</strong>, ni <strong>á</strong>, ni emojis, ni caracteres del chino o del árabe. Por eso se inventó algo más grande.</p>
+<p>Así que la palabra <strong>Bit</strong> se guarda como tres números (66, 105, 116), y cada uno como un patrón de 8 bits encendidos y apagados. La pantalla, cuando lee el 66, sabe que toca dibujar una "B".</p>
+<p>El problema de ASCII es que solo pensó en el inglés. No tiene <strong>ñ</strong>, ni <strong>á</strong>, ni emojis, ni nada del chino o del árabe. Por eso, más adelante, hubo que inventar algo más grande.</p>
 <blockquote class="def">
 <h3 id="que-significa-unicode-y-utf-8">🟦 ¿Qué significa? — <em>Unicode (y UTF-8)</em></h3>
-<p><strong>Unicode</strong> es una tabla gigante y moderna que le asigna un número único a <strong>cada</strong> carácter de <strong>todos</strong> los idiomas del mundo, más símbolos y emojis (¡el ajolote 🦎 incluido!). <strong>UTF-8</strong> es la forma más común de guardar esos caracteres en bytes; tiene la gran ventaja de ser compatible con ASCII para las letras básicas. Sirve para que tu texto en español, con sus "ñ" y tildes, se vea igual en cualquier dispositivo del planeta.</p>
+<p><strong>Unicode</strong> es una tabla gigante y moderna que le da un número único a <strong>cada</strong> carácter de <strong>todos</strong> los idiomas del mundo, más símbolos y emojis (¡el ajolote 🦎 incluido!). <strong>UTF-8</strong> es la manera más común de guardar esos caracteres en bytes, y tiene una ventaja enorme: es compatible con ASCII para las letras básicas. Gracias a esto, tu texto en español, con sus "ñ" y sus tildes, se ve igual en cualquier dispositivo del planeta.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En tu proyecto <strong>tunal-digital</strong>, el archivo <code>sitio-web/index.html</code> probablemente empieza con una línea como <code>&lt;meta charset="UTF-8"&gt;</code>. Esa etiqueta le dice al navegador: "este texto está guardado en UTF-8, interprétalo así". Gracias a ella, palabras como "diseño" o "información" se muestran correctas y no como símbolos rotos (<code>dise�o</code>). Si alguna vez ves caracteres raros en una web, casi siempre es un problema de codificación de caracteres.</p>
+<p>En tu proyecto <strong>tunal-digital</strong>, el archivo <code>sitio-web/index.html</code> seguramente arranca con una línea parecida a <code>&lt;meta charset="UTF-8"&gt;</code>. Esa etiqueta le avisa al navegador: "este texto está guardado en UTF-8, interprétalo así". Por ella, palabras como "diseño" o "información" salen bien y no convertidas en símbolos rotos (<code>dise�o</code>). Si algún día ves caracteres extraños en una web, casi siempre es un problema de codificación de caracteres.</p>
 <h3 id="cuidado-numero-y-caracter-no-son-lo-mismo">⚠️ Cuidado — "Número" y "carácter" no son lo mismo</h3>
-<p>El número <strong>5</strong> (la cantidad) y el carácter <strong>"5"</strong> (el símbolo que se imprime) se guardan distinto. La cantidad cinco es el binario <code>101</code>; el carácter "5" es, en ASCII, el número <strong>53</strong>. Por eso en programación a veces hay que "convertir" un texto a número antes de hacer cuentas. En tu app <strong>RachaSimple</strong> (React + TypeScript), si lees <code>"7"</code> de un campo de texto y quieres sumarlo, primero debes transformarlo en el número 7; si no, <code>"7" + 1</code> podría darte <code>"71"</code> en vez de <code>8</code>. Lo verás más adelante con los tipos de datos.</p>
+<p>El número <strong>5</strong> (la cantidad) y el carácter <strong>"5"</strong> (el símbolo que se imprime en pantalla) se guardan de forma distinta. La cantidad cinco es el binario <code>101</code>; el carácter "5" es, en ASCII, el número <strong>53</strong>. Por eso en programación a veces toca "convertir" un texto en número antes de hacer cuentas. En tu app <strong>RachaSimple</strong> (React + TypeScript), si lees <code>"7"</code> de un campo de texto y quieres sumarlo, primero tienes que pasarlo al número 7; si no, <code>"7" + 1</code> podría darte <code>"71"</code> en lugar de <code>8</code>. Lo verás con calma más adelante, cuando lleguemos a los tipos de datos.</p>
 </blockquote>
 <h2 id="5-los-colores-tambien-son-numeros">5. Los colores también son números</h2>
-<p>Aquí es donde todo conecta con lo que ya tocas en tus proyectos. Las pantallas forman cada color mezclando tres luces: <strong>R</strong>ojo, <strong>V</strong>erde y <strong>A</strong>zul (en inglés RGB: <em>Red, Green, Blue</em>). Es como tener tres focos de colores y subirles o bajarles la intensidad.</p>
+<p>Aquí es donde todo se conecta con lo que ya tocas en tus proyectos. Las pantallas arman cada color mezclando tres luces: <strong>R</strong>ojo, <strong>V</strong>erde y <strong>A</strong>zul (en inglés RGB: <em>Red, Green, Blue</em>). Imagínalo como tener tres focos de colores y poder subirles o bajarles la intensidad a cada uno.</p>
 <blockquote class="def">
 <h3 id="que-significa-rgb">🟦 ¿Qué significa? — <em>RGB</em></h3>
-<p><strong>RGB</strong> son las iniciales en inglés de <strong>R</strong>ed, <strong>G</strong>reen, <strong>B</strong>lue (rojo, verde, azul). Es el modelo que usan las pantallas para formar cualquier color combinando esas tres luces. A cada una le das una intensidad de 0 a 255 (un byte). Por eso un color es, en el fondo, <strong>tres números</strong>. Es un modelo "aditivo": partes del negro (todo apagado) y vas sumando luz hasta llegar al blanco (todo a tope).</p>
+<p><strong>RGB</strong> son las iniciales en inglés de <strong>R</strong>ed, <strong>G</strong>reen, <strong>B</strong>lue (rojo, verde, azul). Es el modelo que usan las pantallas para formar cualquier color combinando esas tres luces. A cada una le das una intensidad de 0 a 255 (un byte). Por eso, en el fondo, un color son <strong>tres números</strong>. Es un modelo "aditivo": arrancas del negro (todo apagado) y vas sumando luz hasta llegar al blanco (todo a tope).</p>
 </blockquote>
-<p>¿Cuánta intensidad puede tener cada foco? Un valor de <strong>0 a 255</strong>. ¿Y por qué justo 255? Porque cada componente usa <strong>un byte</strong> (8 bits), y ya vimos que un byte llega hasta 255. Todo encaja:</p>
+<p>¿Cuánta intensidad puede tener cada foco? Un valor de <strong>0 a 255</strong>. ¿Y por qué precisamente 255? Porque cada componente usa <strong>un byte</strong> (8 bits), y ya vimos que un byte llega justo hasta 255. Todo encaja:</p>
 <ul>
 <li>Rojo a tope, verde y azul apagados → rojo puro: (255, 0, 0).</li>
 <li>Los tres apagados → negro: (0, 0, 0).</li>
 <li>Los tres a tope → blanco: (255, 255, 255).</li>
 </ul>
-<p>Mezclando las tres intensidades obtienes alrededor de 16,7 millones de colores. Es decir: un color es solo <strong>tres números</strong>, y cada número es solo <strong>un byte</strong>.</p>
+<p>Combinando las tres intensidades sacas alrededor de 16,7 millones de colores. Resumiendo: un color son solo <strong>tres números</strong>, y cada número es solo <strong>un byte</strong>.</p>
 <h2 id="6-el-sistema-hexadecimal-escribir-bytes-de-forma-corta">6. El sistema hexadecimal: escribir bytes de forma corta</h2>
-<p>Escribir colores como (27, 107, 107) funciona, pero los programadores querían algo más compacto y que se alineara perfecto con los bytes. Ahí entra el <strong>hexadecimal</strong>.</p>
+<p>Escribir colores como (27, 107, 107) funciona, claro, pero los programadores querían algo más compacto y que encajara al milímetro con los bytes. Ahí aparece el <strong>hexadecimal</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-sistema-hexadecimal-hex">🟦 ¿Qué significa? — <em>Sistema hexadecimal (hex)</em></h3>
-<p>El <strong>sistema hexadecimal</strong> es contar en "base 16": usa dieciséis símbolos. Como solo tenemos diez dígitos (0–9), se piden prestadas seis letras para los que faltan: <strong>A=10, B=11, C=12, D=13, E=14, F=15</strong>. Así, después del 9 viene A, luego B... hasta F, y entonces se "lleva uno" (la F va seguida de 10, que en hex vale dieciséis). Sirve para escribir valores de bytes de forma corta y ordenada.</p>
+<p>El <strong>sistema hexadecimal</strong> es contar en "base 16": dieciséis símbolos. Como solo tenemos diez dígitos (0–9), se piden prestadas seis letras para los que faltan: <strong>A=10, B=11, C=12, D=13, E=14, F=15</strong>. Entonces, después del 9 viene A, luego B... hasta llegar a la F, y ahí se "lleva uno" (a la F le sigue 10, que en hex vale dieciséis). Sirve para escribir valores de bytes de forma corta y ordenada.</p>
 </blockquote>
-<p>¿Por qué hexadecimal y no otra base? Por una coincidencia preciosa: <strong>dos dígitos hexadecimales representan exactamente un byte</strong> (un número de 0 a 255). Ni más ni menos. Un dígito hex equivale a 4 bits, así que dos dígitos = 8 bits = 1 byte. Por eso encaja como anillo al dedo con los colores.</p>
+<p>¿Por qué hexadecimal y no cualquier otra base? Por una coincidencia preciosa: <strong>dos dígitos hexadecimales representan exactamente un byte</strong> (un número de 0 a 255). Ni uno más, ni uno menos. Un dígito hex equivale a 4 bits, así que dos dígitos suman 8 bits = 1 byte. Por eso encaja con los colores como anillo al dedo.</p>
 <p>Mira la correspondencia:</p>
 <table>
 <thead>
@@ -184,27 +184,27 @@ Bits:        1   1   0   1
 </tr>
 </tbody>
 </table>
-<p>El valor más grande de un byte, 255, se escribe <code>FF</code> en hex (la F vale 15: 15×16 + 15 = 255). Lo más bajo, 0, es <code>00</code>. Compacto y predecible.</p>
+<p>El valor más alto de un byte, 255, se escribe <code>FF</code> en hex (la F vale 15: 15×16 + 15 = 255). Y el más bajo, 0, es <code>00</code>. Compacto y predecible.</p>
 <blockquote class="tip">
 <h3 id="tip-como-leer-un-par-hexadecimal">💡 Tip — Cómo leer un par hexadecimal</h3>
-<p>Para convertir un par hex a decimal: el primer dígito vale "su valor × 16", y le sumas el segundo. Por ejemplo <code>1B</code>: la <strong>1</strong> vale 1×16 = 16; la <strong>B</strong> vale 11. Total: 16 + 11 = <strong>27</strong>. No necesitas hacerlo mentalmente cada vez (las herramientas lo hacen por ti), pero entender el mecanismo te da intuición.</p>
+<p>Para pasar un par hex a decimal: el primer dígito vale "su valor × 16", y a eso le sumas el segundo. Por ejemplo <code>1B</code>: la <strong>1</strong> vale 1×16 = 16; la <strong>B</strong> vale 11. En total: 16 + 11 = <strong>27</strong>. No hace falta que lo calcules de cabeza cada vez (las herramientas lo hacen por ti), pero entender el mecanismo te da intuición.</p>
 </blockquote>
 <h2 id="7-por-que-los-colores-css-usan-hex-el-caso-de-tunal-digital">7. Por qué los colores CSS usan hex: el caso de tunal-digital</h2>
 <blockquote class="def">
 <h3 id="que-significa-css">🟦 ¿Qué significa? — <em>CSS</em></h3>
-<p><strong>CSS</strong> (del inglés <em>Cascading Style Sheets</em>, "hojas de estilo en cascada") es el lenguaje con el que se le da <strong>aspecto</strong> a una página web: colores, tamaños, tipos de letra, espacios y posiciones. Si el HTML es el "esqueleto" del contenido, el CSS es la "ropa y el maquillaje". Los archivos <code>.css</code>, como <code>styles.css</code> en <strong>tunal-digital</strong>, contienen estas reglas de estilo, y ahí es donde escribes los colores en hexadecimal.</p>
+<p><strong>CSS</strong> (del inglés <em>Cascading Style Sheets</em>, "hojas de estilo en cascada") es el lenguaje con el que se le da <strong>aspecto</strong> a una página web: colores, tamaños, tipos de letra, espacios y posiciones. Si el HTML es el "esqueleto" del contenido, el CSS es "la ropa y el maquillaje". Los archivos <code>.css</code>, como <code>styles.css</code> en <strong>tunal-digital</strong>, guardan estas reglas de estilo, y es justo ahí donde escribes los colores en hexadecimal.</p>
 </blockquote>
-<p>Ahora sí, lleguemos a ese <code>#1B6B6B</code> que aparece en tu <code>styles.css</code>. Un color en CSS escrito en hexadecimal tiene esta forma:</p>
+<p>Ahora sí, vamos con ese <code>#1B6B6B</code> que aparece en tu <code>styles.css</code>. Un color en CSS escrito en hexadecimal tiene esta pinta:</p>
 <pre><code>#RRGGBB
 </code></pre>
-<p>Es decir, la almohadilla <code>#</code> seguida de <strong>tres pares</strong> de dígitos hex: el primer par es el Rojo, el segundo el Verde y el tercero el Azul. Cada par es un byte (0 a 255). Descifremos el color de tu marca:</p>
+<p>O sea: la almohadilla <code>#</code> seguida de <strong>tres pares</strong> de dígitos hex. El primer par es el Rojo, el segundo el Verde y el tercero el Azul. Cada par es un byte (de 0 a 255). Vamos a descifrar el color de tu marca:</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <strong>tunal-digital</strong>, dentro de <code>sitio-web/styles.css</code>, usas el color <code>#1B6B6B</code>. Vamos a traducirlo:
+<p>En <strong>tunal-digital</strong>, dentro de <code>sitio-web/styles.css</code>, usas el color <code>#1B6B6B</code>. Traduzcámoslo:
 - <strong>1B</strong> (rojo) = 1×16 + 11 = <strong>27</strong>
 - <strong>6B</strong> (verde) = 6×16 + 11 = <strong>107</strong>
 - <strong>6B</strong> (azul) = 6×16 + 11 = <strong>107</strong></p>
-<p>O sea, en RGB es <strong>(27, 107, 107)</strong>: poco rojo y cantidades iguales y medias de verde y azul. Eso da un <strong>verde azulado oscuro</strong> (un tono "teal"), perfecto para una identidad sobria y profesional. ¡Ahora ya no es un símbolo misterioso: sabes exactamente qué luces está pidiendo a la pantalla!</p>
+<p>Es decir, en RGB queda <strong>(27, 107, 107)</strong>: poco rojo y cantidades iguales y medias de verde y azul. Eso te da un <strong>verde azulado oscuro</strong> (un tono "teal"), perfecto para una identidad sobria y profesional. Ya no es un símbolo misterioso: sabes exactamente qué luces le está pidiendo a la pantalla.</p>
 </blockquote>
 <pre><code class="language-css">/* Un fragmento como el de tu styles.css */
 :root {
@@ -215,26 +215,26 @@ Bits:        1   1   0   1
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-el-atajo-de-3-digitos">💡 Tip — El atajo de 3 dígitos</h3>
-<p>A veces verás colores de solo 3 dígitos, como <code>#FFF</code> o <code>#1B6</code>. Es una abreviatura: CSS duplica cada dígito. <code>#FFF</code> equivale a <code>#FFFFFF</code> (blanco) y <code>#F00</code> a <code>#FF0000</code> (rojo puro). Útil cuando los pares tienen dígitos repetidos.</p>
+<p>A veces verás colores de solo 3 dígitos, como <code>#FFF</code> o <code>#1B6</code>. Es una abreviatura: CSS duplica cada dígito por su cuenta. <code>#FFF</code> equivale a <code>#FFFFFF</code> (blanco) y <code>#F00</code> a <code>#FF0000</code> (rojo puro). Resulta útil cuando los pares tienen dígitos repetidos.</p>
 <h3 id="cuidado-hex-no-es-solo-para-colores">⚠️ Cuidado — Hex no es solo para colores</h3>
-<p>El hexadecimal aparece en muchos otros sitios: direcciones de memoria, identificadores, códigos de error, claves. En tu app <strong>PolyPaw</strong> (Python + Flet), si guardas o muestras ciertos identificadores, podrías toparte con cadenas hex largas. Y un emoji como 🦎 tiene un "punto de código" Unicode que suele escribirse en hex (<code>U+1F98E</code>). Reconocer "esto es hexadecimal" ya es media batalla ganada.</p>
+<p>El hexadecimal asoma en muchos otros sitios: direcciones de memoria, identificadores, códigos de error, claves. En tu app <strong>PolyPaw</strong> (Python + Flet), si guardas o muestras ciertos identificadores, puedes toparte con cadenas hex largas. Y un emoji como 🦎 tiene un "punto de código" Unicode que suele escribirse en hex (<code>U+1F98E</code>). Reconocer "esto es hexadecimal" ya es media batalla ganada.</p>
 </blockquote>
 <h2 id="8-y-para-que-me-sirve-saber-todo-esto-en-la-practica">8. ¿Y para qué me sirve saber todo esto en la práctica?</h2>
-<p>Quizá pienses: "las herramientas convierten por mí, ¿para qué memorizar tablas?". Tienes razón en algo: <strong>no</strong> debes memorizar conversiones. Pero entender el concepto te da superpoderes cotidianos:</p>
+<p>A lo mejor piensas: "si las herramientas convierten por mí, ¿para qué memorizar tablas?". Y tienes parte de razón: <strong>no</strong> hace falta que te memorices conversiones. Pero entender el concepto te da algunos superpoderes para el día a día:</p>
 <ul>
-<li><strong>Eliges colores con criterio.</strong> Sabes que <code>#000000</code> es negro y <code>#FFFFFF</code> blanco, que subir los números aclara y bajarlos oscurece. En tunal-digital puedes ajustar un tono a mano sin adivinar.</li>
-<li><strong>Entiendes los tamaños.</strong> Cuando tu <code>polypaw-nas</code> dice "8 GB de RAM" o "954 GB de disco", sabes que B es bytes y que todo se mide en potencias de 2.</li>
-<li><strong>Diagnosticas texto roto.</strong> Si una página muestra <code>Ã±</code> en lugar de <code>ñ</code>, sospechas de un problema de codificación (UTF-8 mal configurado), como el <code>&lt;meta charset&gt;</code> de tu HTML.</li>
-<li><strong>Lees mensajes técnicos sin pánico.</strong> Códigos de error, hashes, tokens... muchos están en hex, y ya no te parecen jeroglíficos.</li>
+<li><strong>Eliges colores con criterio.</strong> Sabes que <code>#000000</code> es negro y <code>#FFFFFF</code> blanco, que subir los números aclara el color y bajarlos lo oscurece. En tunal-digital puedes afinar un tono a mano sin ir a ciegas.</li>
+<li><strong>Entiendes los tamaños.</strong> Cuando tu <code>polypaw-nas</code> dice "8 GB de RAM" o "954 GB de disco", sabes que la B es de bytes y que todo se mide en potencias de 2.</li>
+<li><strong>Diagnosticas texto roto.</strong> Si una página te muestra <code>Ã±</code> donde debería haber una <code>ñ</code>, ya sospechas de un problema de codificación (UTF-8 mal configurado), como el <code>&lt;meta charset&gt;</code> de tu HTML.</li>
+<li><strong>Lees mensajes técnicos sin entrar en pánico.</strong> Códigos de error, hashes, tokens... muchos vienen en hex, y dejan de parecerte jeroglíficos.</li>
 </ul>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>En <strong>Faro</strong> (carpeta <code>Organizer</code>, Next.js + TypeScript), cuando tu backend en <code>src/app/api</code> maneje tokens, identificadores de Supabase o respuestas de la API de OpenAI, verás cadenas largas de letras y números. Buena parte usa hexadecimal o codificaciones derivadas de bytes. No tienes que descifrarlas a mano, pero saber "esto representa bytes en hex" te ayuda a no confundir un identificador con texto legible.</p>
+<p>En <strong>Faro</strong> (carpeta <code>Organizer</code>, Next.js + TypeScript), cuando tu backend en <code>src/app/api</code> maneje tokens, identificadores de Supabase o respuestas de la API de OpenAI, te vas a encontrar cadenas largas de letras y números. Buena parte usa hexadecimal o codificaciones derivadas de bytes. No tienes que descifrarlas a mano, pero saber que "esto representa bytes en hex" te evita confundir un identificador con texto legible.</p>
 <h3 id="tip-una-calculadora-siempre-a-mano">💡 Tip — Una calculadora siempre a mano</h3>
-<p>En tu computadora, la app <strong>Calculadora</strong> suele tener un "modo programador" que convierte entre decimal, binario y hexadecimal con un clic. Es perfecta para comprobar tus conversiones mientras aprendes. Bit la usa todo el tiempo; no es trampa, es ser práctico.</p>
+<p>En tu computadora, la app <strong>Calculadora</strong> suele traer un "modo programador" que convierte entre decimal, binario y hexadecimal con un clic. Es ideal para comprobar tus conversiones mientras aprendes. Bit la usa todo el tiempo; no es hacer trampa, es ser práctico.</p>
 </blockquote>
 <h2 id="9-resumen-visual-de-las-tres-capas">9. Resumen visual de las tres "capas"</h2>
-<p>Para que quede grabado, así se conecta todo, de lo más pequeño a lo más cercano a ti:</p>
+<p>Para que se te quede grabado, así se conecta todo, de lo más pequeño a lo más cercano a ti:</p>
 <pre><code>BITS (0 y 1)  →  agrupados en BYTES (8 bits, hasta 255)
    ↓
 Un byte puede ser:

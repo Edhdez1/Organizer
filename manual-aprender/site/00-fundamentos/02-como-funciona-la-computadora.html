@@ -18,120 +18,135 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-02-como-funciona-una-computadora">Capítulo 02 — Cómo funciona una computadora</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Para programar bien ayuda tener un modelo mental simple de qué hay "dentro" de una
-computadora. No necesitas ser ingeniero de hardware; sí necesitas estas piezas básicas,
-porque aparecerán todo el tiempo (sobre todo en el módulo del NAS).</p>
+<p>Programar se vuelve más fácil cuando tienes en la cabeza una imagen simple de qué hay
+"dentro" de una computadora. No hace falta que seas ingeniero de hardware; sí te conviene
+conocer estas piezas básicas, porque van a salir una y otra vez (sobre todo cuando lleguemos
+al módulo del NAS).</p>
 </blockquote>
 <hr />
 <h2 id="1-hardware-y-software">1. Hardware y software</h2>
 <blockquote class="def">
 <h3 id="que-significa-hardware">🟦 ¿Qué significa? — <em>Hardware</em></h3>
-<p>El <strong>hardware</strong> es <strong>todo lo físico</strong> que puedes tocar: la pantalla, el teclado, los chips,
-los discos. En tu caso, tu Acer Nitro 5 es hardware.</p>
+<p>El <strong>hardware</strong> es <strong>todo lo físico</strong>, lo que puedes tocar: la pantalla, el teclado, los
+chips, los discos. Tu Acer Nitro 5, por ejemplo, es hardware.</p>
 <h3 id="que-significa-software">🟦 ¿Qué significa? — <em>Software</em></h3>
-<p>El <strong>software</strong> es <strong>todo lo que no puedes tocar</strong>: los programas, el sistema operativo, tu
-código. Son instrucciones y datos. El software le dice al hardware qué hacer.</p>
+<p>El <strong>software</strong> es justo lo contrario: <strong>todo lo que no puedes tocar</strong>. Los programas, el
+sistema operativo, tu propio código. Son instrucciones y datos, y son los que le dicen al
+hardware qué tiene que hacer.</p>
 </blockquote>
-<p>Analogía: el hardware es el cuerpo; el software es lo que el cuerpo <em>sabe hacer</em> y <em>piensa</em>.</p>
+<p>Para que se entienda con una imagen: el hardware es el cuerpo; el software es lo que ese
+cuerpo <em>sabe hacer</em> y <em>piensa</em>.</p>
 <hr />
 <h2 id="2-las-cuatro-piezas-que-debes-conocer">2. Las cuatro piezas que debes conocer</h2>
 <h3 id="a-el-procesador-cpu">a) El procesador (CPU)</h3>
 <blockquote class="def">
 <h3 id="que-significa-cpu-procesador">🟦 ¿Qué significa? — <em>CPU (procesador)</em></h3>
-<p>La <strong>CPU</strong> (<em>Central Processing Unit</em>, "unidad central de procesamiento") es <strong>el cerebro</strong>:
-ejecuta las instrucciones de los programas, una tras otra, a enorme velocidad.
+<p>La <strong>CPU</strong> (<em>Central Processing Unit</em>, "unidad central de procesamiento") es <strong>el cerebro</strong>
+de la máquina: va ejecutando las instrucciones de los programas, una tras otra, a una
+velocidad enorme.
 <strong>¿Dónde se usa en tu proyecto?</strong> Tu NAS tiene una CPU <strong>Intel Core i5-9300H</strong> con
 <strong>4 núcleos / 8 hilos</strong>.</p>
 <h3 id="que-significa-nucleo-core-e-hilo-thread">🟦 ¿Qué significa? — <em>Núcleo (core) e hilo (thread)</em></h3>
-<p>Un <strong>núcleo</strong> es como un "cerebro" independiente dentro de la CPU. Tener 4 núcleos es como
-tener 4 trabajadores que pueden hacer 4 tareas <strong>a la vez</strong>. Un <strong>hilo</strong> es una "línea de
-trabajo": con tecnología de <em>hyper-threading</em>, cada núcleo simula 2 hilos, por eso "4
-núcleos / 8 hilos". Más núcleos/hilos = más cosas en paralelo.</p>
+<p>Un <strong>núcleo</strong> es como un "cerebro" independiente dentro de la CPU. Tener 4 núcleos es tener
+4 trabajadores capaces de hacer 4 tareas <strong>a la vez</strong>. Un <strong>hilo</strong> es una "línea de trabajo":
+gracias a una tecnología llamada <em>hyper-threading</em>, cada núcleo simula 2 hilos, y de ahí sale
+ese "4 núcleos / 8 hilos". La idea es simple: cuantos más núcleos e hilos, más cosas pueden
+ocurrir en paralelo.</p>
 </blockquote>
 <h3 id="b-la-memoria-ram">b) La memoria RAM</h3>
 <blockquote class="def">
 <h3 id="que-significa-ram-memoria">🟦 ¿Qué significa? — <em>RAM (memoria)</em></h3>
-<p>La <strong>RAM</strong> (<em>Random Access Memory</em>) es la <strong>memoria de trabajo</strong>, rapidísima pero
-<strong>temporal</strong>: guarda lo que la computadora está usando <em>ahora mismo</em>. Cuando apagas el
-equipo, <strong>se borra</strong>.
-Analogía: es tu <strong>escritorio</strong>. Cuanto más grande, más papeles (programas) puedes tener
-abiertos a la vez sin amontonarte.
-<strong>¿Dónde se usa en tu proyecto?</strong> Tu NAS tiene <strong>8 GB de RAM</strong>. Por eso, si le sumas
-<em>muchos</em> servicios a la vez, ese escritorio se llena: la RAM es el principal límite de tu
-NAS hoy.</p>
+<p>La <strong>RAM</strong> (<em>Random Access Memory</em>) es la <strong>memoria de trabajo</strong>: rapidísima, pero
+<strong>temporal</strong>. Guarda lo que la computadora está usando <em>en este preciso momento</em>, y cuando
+apagas el equipo, <strong>se borra</strong>.
+Piénsalo como tu <strong>escritorio</strong>: cuanto más grande sea, más papeles (programas) puedes tener
+abiertos al mismo tiempo sin que se te amontonen.
+<strong>¿Dónde se usa en tu proyecto?</strong> Tu NAS tiene <strong>8 GB de RAM</strong>. Por eso, en cuanto le sumas
+<em>muchos</em> servicios a la vez, ese escritorio se llena: hoy por hoy, la RAM es el principal
+límite de tu NAS.</p>
 </blockquote>
 <h3 id="c-el-almacenamiento-disco">c) El almacenamiento (disco)</h3>
 <blockquote class="def">
 <h3 id="que-significa-almacenamiento-disco-ssd-y-hdd">🟦 ¿Qué significa? — <em>Almacenamiento (disco): SSD y HDD</em></h3>
-<p>El <strong>almacenamiento</strong> guarda los datos de forma <strong>permanente</strong>: sigue ahí aunque apagues el
-equipo. Hay dos tipos comunes:
+<p>El <strong>almacenamiento</strong> guarda los datos de forma <strong>permanente</strong>: siguen ahí aunque apagues el
+equipo. Hay dos tipos que verás todo el tiempo:
 - <strong>SSD</strong> (<em>Solid State Drive</em>): rápido, sin partes móviles. Ideal para el sistema.
 - <strong>HDD</strong> (<em>Hard Disk Drive</em>): más lento y mecánico, pero más barato por espacio. Ideal
   para guardar muchos archivos.
-Analogía: si la RAM es tu escritorio, el disco es tu <strong>archivero</strong>: grande y permanente,
-pero más lento de consultar.
+Siguiendo la analogía anterior: si la RAM es tu escritorio, el disco es tu <strong>archivero</strong>.
+Grande y permanente, pero más lento de consultar.
 <strong>¿Dónde se usa en tu proyecto?</strong> Tu NAS usa un <strong>SSD NVMe de 238 GB</strong> para el sistema
 (Ubuntu) y un <strong>HDD de 954 GB</strong> para los datos (en la carpeta <code>/srv/nas</code>).</p>
 <h3 id="tip-ram-vs-disco-la-confusion-mas-comun">💡 Tip — RAM vs. disco, la confusión más común</h3>
-<p>Mucha gente cree que "quedarse sin memoria" y "quedarse sin espacio" son lo mismo. No lo
-son: <strong>memoria = RAM</strong> (trabajo temporal), <strong>espacio = disco</strong> (guardado permanente). Tu
-NAS tiene poco de lo primero (8 GB) y mucho de lo segundo (casi 1 TB casi vacío).</p>
+<p>Hay una mezcla que casi todo el mundo hace al principio: creer que "quedarse sin memoria" y
+"quedarse sin espacio" son lo mismo. No lo son. <strong>Memoria = RAM</strong> (trabajo temporal) y
+<strong>espacio = disco</strong> (guardado permanente). Tu NAS tiene poco de lo primero (8 GB) y mucho de
+lo segundo (casi 1 TB, y casi vacío).</p>
 </blockquote>
 <h3 id="d-la-placa-y-lo-demas">d) La placa y lo demás</h3>
-<p>Hay más piezas (la placa base que conecta todo, la tarjeta gráfica, etc.), pero para
-programar y administrar servidores, <strong>CPU + RAM + disco</strong> son las tres que más vas a nombrar.</p>
+<p>Hay más piezas dentro de una computadora (la placa base, que conecta todo; la tarjeta gráfica,
+y unas cuantas más), pero para programar y administrar servidores hay tres nombres que vas a
+repetir sin parar: <strong>CPU + RAM + disco</strong>.</p>
 <hr />
 <h2 id="3-el-sistema-operativo-el-jefe-que-organiza-todo">3. El sistema operativo: el jefe que organiza todo</h2>
 <blockquote class="def">
 <h3 id="que-significa-sistema-operativo-so">🟦 ¿Qué significa? — <em>Sistema operativo (SO)</em></h3>
-<p>El <strong>sistema operativo</strong> es el programa principal que <strong>controla el hardware</strong> y permite que
-los demás programas funcionen. Reparte la CPU y la RAM entre programas, gestiona archivos y
-dispositivos. Sin SO, tu computadora sería hardware inerte.
-Ejemplos: <strong>Windows</strong>, <strong>macOS</strong> (Apple), <strong>Linux</strong> (con muchas variantes, llamadas
-"distribuciones": Ubuntu, Debian…).
+<p>El <strong>sistema operativo</strong> es el programa principal: <strong>controla el hardware</strong> y hace posible
+que el resto de programas funcione. Reparte la CPU y la RAM entre ellos, gestiona los
+archivos y los dispositivos. Sin un SO, tu computadora sería solo hardware inerte.
+Ejemplos que ya conoces: <strong>Windows</strong>, <strong>macOS</strong> (Apple) y <strong>Linux</strong> (que viene en muchas
+variantes, llamadas "distribuciones": Ubuntu, Debian…).
 <strong>¿Dónde se usa en tu proyecto?</strong> Tu computadora usa Windows o macOS; tu <strong>NAS usa Linux</strong>,
-concretamente <strong>Ubuntu Server 26.04</strong>. El módulo 09 te enseña Linux desde cero.</p>
+en concreto <strong>Ubuntu Server 26.04</strong>. En el módulo 09 verás Linux desde cero.</p>
 <h3 id="que-significa-programa-vs-proceso">🟦 ¿Qué significa? — <em>Programa vs. proceso</em></h3>
-<p>Un <strong>programa</strong> es el archivo con las instrucciones (ej.: el navegador instalado). Un
-<strong>proceso</strong> es ese programa <strong>mientras se está ejecutando</strong> en la memoria. Puedes tener un
-programa (Chrome) corriendo como varios procesos (varias pestañas) a la vez.</p>
+<p>Un <strong>programa</strong> es el archivo con las instrucciones (por ejemplo, el navegador que tienes
+instalado). Un <strong>proceso</strong> es ese mismo programa <strong>mientras se está ejecutando</strong> en la
+memoria. Por eso un solo programa (Chrome) puede correr como varios procesos a la vez (cada
+pestaña, por ejemplo).</p>
 </blockquote>
 <hr />
 <h2 id="4-archivos-y-carpetas-el-sistema-de-archivos">4. Archivos y carpetas (el sistema de archivos)</h2>
-<p>Todo en una computadora se guarda como <strong>archivos</strong>, organizados en <strong>carpetas</strong> (también
-llamadas <em>directorios</em>), que pueden contener otras carpetas, formando un árbol.</p>
+<p>Todo lo que hay en una computadora se guarda como <strong>archivos</strong>, y esos archivos se organizan en
+<strong>carpetas</strong> (también llamadas <em>directorios</em>). Una carpeta puede contener otras carpetas, y así
+se va formando una especie de árbol.</p>
 <blockquote class="def">
 <h3 id="que-significa-ruta-path">🟦 ¿Qué significa? — <em>Ruta (path)</em></h3>
-<p>La <strong>ruta</strong> es la "dirección" de un archivo dentro del árbol de carpetas. Por ejemplo:
-<code>tunal-digital/sitio-web/main.js</code> significa: dentro de la carpeta <code>tunal-digital</code>, dentro de
-<code>sitio-web</code>, el archivo <code>main.js</code>.
+<p>La <strong>ruta</strong> es la "dirección" de un archivo dentro de ese árbol de carpetas. Por ejemplo,
+<code>tunal-digital/sitio-web/main.js</code> se lee así: dentro de la carpeta <code>tunal-digital</code>, dentro de
+<code>sitio-web</code>, está el archivo <code>main.js</code>.
 - En Linux/macOS las rutas usan <code>/</code> (ej. <code>/srv/nas</code>).
 - En Windows usan <code>\</code> (ej. <code>C:\Usuarios\Edwar</code>).</p>
 <h3 id="que-significa-extension-de-archivo">🟦 ¿Qué significa? — <em>Extensión de archivo</em></h3>
-<p>La parte final del nombre tras el punto indica <strong>qué tipo de archivo</strong> es: <code>.html</code>, <code>.css</code>,
-<code>.js</code>, <code>.py</code>, <code>.json</code>, <code>.md</code>. No cambia mágicamente el contenido, pero le dice a los
-programas (y a ti) cómo interpretarlo. <code>main.js</code> es un archivo de JavaScript; <code>estilos.css</code>
-es de CSS.</p>
+<p>La parte final del nombre, después del punto, te dice <strong>qué tipo de archivo</strong> es: <code>.html</code>,
+<code>.css</code>, <code>.js</code>, <code>.py</code>, <code>.json</code>, <code>.md</code>. No cambia por arte de magia el contenido, pero sí le
+indica a los programas (y a ti) cómo hay que interpretarlo. <code>main.js</code> es un archivo de
+JavaScript; <code>estilos.css</code>, uno de CSS.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Abre mentalmente <code>RachaSimple</code>: verás carpetas como <code>src/components/</code> (piezas de interfaz),
-<code>src/pages/</code> (las pantallas) y archivos <code>.tsx</code> (React con TypeScript). Esa organización en
-carpetas <strong>no es decorativa</strong>: ayuda a encontrar y mantener el código. Lo estudiaremos.</p>
+<p>Imagina por un momento <code>RachaSimple</code>: verás carpetas como <code>src/components/</code> (las piezas de la
+interfaz), <code>src/pages/</code> (las pantallas) y archivos <code>.tsx</code> (React con TypeScript). Esa forma de
+ordenar las carpetas <strong>no es solo decoración</strong>: es lo que te permite encontrar y mantener el
+código sin volverte loco. Lo veremos con calma.</p>
 </blockquote>
 <hr />
 <h2 id="5-bits-bytes-y-por-que-todo-son-numeros">5. Bits, bytes y por qué todo son números</h2>
-<p>En el fondo, la computadora solo entiende <strong>dos estados</strong>: encendido o apagado, que
-representamos como <strong>1</strong> y <strong>0</strong>.</p>
+<p>En el fondo, una computadora solo entiende <strong>dos estados</strong>: encendido o apagado. Esos dos
+estados los representamos con <strong>1</strong> y <strong>0</strong>, y de ahí sale absolutamente todo lo demás.</p>
 <blockquote class="def">
 <h3 id="que-significa-bit-y-byte">🟦 ¿Qué significa? — <em>Bit y byte</em></h3>
-<p>Un <strong>bit</strong> es la unidad mínima: un 1 o un 0. Un <strong>byte</strong> son 8 bits juntos, y alcanza para
-representar, por ejemplo, una letra. A partir de ahí:
+<p>Un <strong>bit</strong> es la unidad mínima: un 1 o un 0. Un <strong>byte</strong> son 8 bits juntos, lo justo para
+representar, por ejemplo, una letra. A partir de ahí las medidas van creciendo:
 - <strong>KB</strong> (kilobyte) ≈ mil bytes
 - <strong>MB</strong> (megabyte) ≈ un millón
 - <strong>GB</strong> (gigabyte) ≈ mil millones
 - <strong>TB</strong> (terabyte) ≈ un billón
-Por eso "8 GB de RAM" o "954 GB de disco" son medidas de <strong>cuántos datos</strong> caben. Texto,
-imágenes, video… todo, dentro de la máquina, son combinaciones de bits.</p>
+Por eso, cuando hablamos de "8 GB de RAM" o "954 GB de disco", estamos diciendo <strong>cuántos
+datos</strong> caben dentro. Y al final todo (el texto, las imágenes, el video) no es más que
+combinaciones de bits dentro de la máquina.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -144,7 +159,8 @@ imágenes, video… todo, dentro de la máquina, son combinaciones de bits.</p>
 </ul>
 <hr />
 <h2 id="ejercicios">🧪 Ejercicios</h2>
-<p>Algunos puedes hacerlos hoy desde el teléfono; otros se marcan "💻" para tu computadora.</p>
+<p>Algunos puedes hacerlos hoy mismo desde el teléfono; otros llevan "💻" porque necesitas tu
+computadora.</p>
 <ol>
 <li><strong>Clasifica.</strong> Haz dos columnas, <em>Hardware</em> y <em>Software</em>, y coloca: pantalla, Chrome,
    Ubuntu, RAM, tu código de PolyPaw, el teclado, un archivo <code>.json</code>.</li>

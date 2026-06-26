@@ -5,24 +5,24 @@
 </p>
 
 
-> Hola otra vez. Soy **Bit**, tu ajolote guia, y este es el capitulo donde respiramos hondo. No vamos a aprender nada nuevo: vamos a **ordenar** todo lo que ya vimos en el modulo de JavaScript. Piensa en este capitulo como el cajon de tu escritorio: aqui guardamos cada palabra rara que aparecio, le ponemos una etiqueta clara y la dejamos lista para cuando la necesites. Si en algun capitulo te perdiste con una palabra, este es el sitio para volver. Lo usaremos con el ejemplo estrella del modulo: el `main.js` del sitio **tunal-digital**. Vamos despacio, que ningun termino se quede sin definir.
+> Hola de nuevo. Soy **Bit**, tu ajolote guia, y este es el capitulo para respirar hondo. No vamos a aprender nada nuevo: vamos a **ordenar** lo que ya vimos en el modulo de JavaScript. Imagina este capitulo como el cajon de tu escritorio: aqui guardamos cada palabra rara que fue apareciendo, le pegamos una etiqueta clara y la dejamos a mano para cuando la necesites. Si en algun momento te perdiste con un termino, este es el sitio al que volver. Lo recorreremos con el ejemplo estrella del modulo: el `main.js` del sitio **tunal-digital**. Vamos sin prisa, que ninguna palabra se quede sin definir.
 
 ## 1. Como usar este glosario
 
-Este capitulo es distinto a los demas. No hay un proyecto que construir paso a paso: hay un **diccionario** ordenado alfabeticamente. Cada palabra tecnica vive en su propio recuadro azul, con tres cosas:
+Este capitulo no se parece a los demas. No hay un proyecto que construir paso a paso: hay un **diccionario** ordenado de la A a la Z. Cada palabra tecnica tiene su propio recuadro azul, y en cada uno encontraras tres cosas:
 
-1. **Que significa** en palabras simples.
+1. **Que significa**, en palabras simples.
 2. **Para que sirve** (por que existe).
 3. **Donde se usa en un repo real** de los que ya conoces.
 
-Antes del glosario, mira el mapa mental para tener la foto completa. Despues del glosario, hay un repaso final y, al cierre, unos ejercicios cortos para fijar todo.
+Antes del glosario, echa un vistazo al mapa mental para tener la foto completa. Despues vienen un repaso final y, al cierre, unos ejercicios cortos para que todo se asiente.
 
 > ### 💡 Tip
-> No leas el glosario de corrido como una novela. Leelo a saltos: cuando estes programando y veas una palabra que no recuerdes, ven aqui, buscala y vuelve a tu codigo. Asi se usa un diccionario de verdad.
+> No leas el glosario de corrido como una novela. Leelo a saltos: cuando estes programando y te tropieces con una palabra que no recuerdas, ven aqui, buscala y vuelve a tu codigo. Asi se usa un diccionario de verdad.
 
 ## 2. El mapa mental de JavaScript
 
-Antes de las definiciones, aqui tienes el **mapa**: como se conectan las piezas grandes del modulo. Lo dibujamos con texto (un esquema con sangrias) para que lo puedas copiar a tu cuaderno.
+Antes de las definiciones, aqui tienes el **mapa**: como encajan las piezas grandes del modulo. Lo dibujamos con texto (un esquema con sangrias) para que lo puedas copiar a tu cuaderno.
 
 ```
 JAVASCRIPT
@@ -60,19 +60,19 @@ JAVASCRIPT
 ```
 
 > ### 💡 Tip
-> Fijate que el mapa va de **lo mas simple** (guardar un dato) a **lo mas avanzado** (hablar con internet). Ese es justo el orden en que crece tu codigo: primero guardas, luego haces, luego decides, luego pintas la pagina y al final pides datos de afuera.
+> Fijate que el mapa avanza de **lo mas simple** (guardar un dato) a **lo mas avanzado** (hablar con internet). Y ese es el mismo orden en que crece tu codigo: primero guardas, luego haces, luego decides, luego pintas la pagina y, al final, pides datos de afuera.
 
-En el `main.js` de **tunal-digital** estan casi todas las ramas a la vez: hay variables y funciones de atajo (rama 1 y 2), hay seleccion de elementos y eventos del formulario y del chat (rama 4) y hay `fetch` al Worker de IA con `async/await` y `JSON` (rama 5). Por eso es nuestro ejemplo principal: cabe casi todo el mapa en un archivo.
+En el `main.js` de **tunal-digital** conviven casi todas las ramas al mismo tiempo: hay variables y funciones de atajo (ramas 1 y 2), hay seleccion de elementos y eventos del formulario y del chat (rama 4), y hay `fetch` al Worker de IA con `async/await` y `JSON` (rama 5). Por eso es nuestro ejemplo principal: en un solo archivo cabe casi todo el mapa.
 
 ## 3. Glosario alfabetico
 
-Aqui van los terminos, de la A a la Z. Cada uno con su recuadro.
+Aqui van los terminos, de la A a la Z, cada uno con su recuadro.
 
 > ### 🟦 ¿Que significa? — *Argumento*
-> El **valor concreto** que le pasas a una funcion cuando la llamas. Sirve para darle a la funcion el dato real con el que va a trabajar. En **tunal-digital**, cuando llamas a una funcion de atajo como `$('#chat')`, el texto `'#chat'` es el argumento.
+> El **valor concreto** que le pasas a una funcion en el momento de llamarla. Es el dato real con el que va a trabajar. En **tunal-digital**, cuando llamas a una funcion de atajo como `$('#chat')`, el texto `'#chat'` es el argumento.
 
 > ### 🟦 ¿Que significa? — *Array*
-> Una **lista ordenada** de valores, escrita entre corchetes `[ ]`. Sirve para guardar muchas cosas bajo un solo nombre y recorrerlas. En **tunal-digital** se usa, por ejemplo, para guardar la lista de mensajes del chat antes de pintarlos.
+> Una **lista ordenada** de valores, escrita entre corchetes `[ ]`. Te deja guardar muchas cosas bajo un solo nombre y recorrerlas de una. En **tunal-digital** se usa, por ejemplo, para guardar la lista de mensajes del chat antes de pintarlos.
 
 ```javascript
 const mensajes = ["Hola", "Soy el bot", "Cuentame de tu negocio"];
@@ -82,10 +82,10 @@ mensajes.forEach(function (texto) {
 ```
 
 > ### 🟦 ¿Que significa? — *async (palabra clave)*
-> Una etiqueta que pones antes de una funcion para avisar: "esta funcion hace cosas que tardan, podra usar `await`". Sirve para escribir codigo que espera resultados de internet sin enredarse. En **tunal-digital**, la funcion que envia el mensaje al chat de IA es `async` porque adentro espera la respuesta del Worker.
+> Una etiqueta que pones delante de una funcion para avisar: "esta funcion hace cosas que tardan, asi que podra usar `await`". Sirve para escribir codigo que espera resultados de internet sin enredarse. En **tunal-digital**, la funcion que envia el mensaje al chat de IA es `async`, porque adentro espera la respuesta del Worker.
 
 > ### 🟦 ¿Que significa? — *await (palabra clave)*
-> Le dice a JavaScript: "espera aqui a que esta promesa termine antes de seguir". Solo funciona dentro de una funcion `async`. Sirve para leer un resultado que tarda como si fuera normal. En **tunal-digital** se usa `await fetch(...)` para esperar la respuesta del servidor de IA.
+> Le dice a JavaScript: "espera aqui a que esta promesa termine antes de seguir". Solo funciona dentro de una funcion `async`. Gracias a el lees un resultado que tarda como si fuera un valor normal. En **tunal-digital** se usa `await fetch(...)` para esperar la respuesta del servidor de IA.
 
 ```javascript
 async function enviarMensaje(texto) {
@@ -96,13 +96,13 @@ async function enviarMensaje(texto) {
 ```
 
 > ### 🟦 ¿Que significa? — *Booleano (boolean)*
-> Un tipo de dato que solo puede valer `true` (verdadero) o `false` (falso). Sirve para responder preguntas de si/no y controlar decisiones. En **tunal-digital**, una variable booleana como `enviando` indica si el formulario ya esta procesando un envio.
+> Un tipo de dato que solo puede valer `true` (verdadero) o `false` (falso). Es el que usas para responder preguntas de si o no y controlar decisiones. En **tunal-digital**, una variable booleana como `enviando` indica si el formulario ya esta procesando un envio.
 
 > ### 🟦 ¿Que significa? — *Bucle (loop)*
-> Una estructura que **repite** un bloque de codigo varias veces (`for`, `forEach`, `map`). Sirve para no escribir lo mismo una y otra vez. En **tunal-digital** se recorre la lista de mensajes con un bucle para pintarlos todos en pantalla.
+> Una estructura que **repite** un bloque de codigo varias veces (`for`, `forEach`, `map`). Te ahorra escribir lo mismo una y otra vez. En **tunal-digital** se recorre la lista de mensajes con un bucle para pintarlos todos en pantalla.
 
 > ### 🟦 ¿Que significa? — *Callback*
-> Una funcion que le entregas a otra funcion para que la llame **cuando termine** algo. Sirve para reaccionar a eventos o a tareas que tardan. En **tunal-digital**, la funcion que reacciona al `submit` del formulario es un callback: el navegador la llama cuando el usuario envia.
+> Una funcion que le entregas a otra para que la llame **cuando termine** algo. Con ella reaccionas a eventos o a tareas que tardan. En **tunal-digital**, la funcion que responde al `submit` del formulario es un callback: el navegador la llama cuando el usuario envia.
 
 ```javascript
 boton.addEventListener("click", function () {
@@ -112,10 +112,10 @@ boton.addEventListener("click", function () {
 ```
 
 > ### ⚠️ Cuidado
-> Un callback no se ejecuta cuando lo escribes, sino **mas tarde**, cuando ocurre el evento. Por eso ves logs en un orden que parece "fuera de lugar": es normal, el callback espero su turno.
+> Un callback no se ejecuta cuando lo escribes, sino **mas tarde**, cuando ocurre el evento. Por eso a veces ves los logs en un orden que parece "fuera de lugar". Es normal: el callback espero su turno.
 
 > ### 🟦 ¿Que significa? — *Closure (clausura)*
-> Una funcion que **recuerda** las variables del lugar donde nacio, aunque ese lugar ya haya terminado. Sirve para guardar un estado privado sin variables globales. En **tunal-digital**, una funcion de atajo que "recuerda" un contador interno entre llamadas usa una closure.
+> Una funcion que **recuerda** las variables del lugar donde nacio, aunque ese lugar ya haya terminado. Te permite guardar un estado privado sin recurrir a variables globales. En **tunal-digital**, una funcion de atajo que "recuerda" un contador interno entre llamadas se apoya en una closure.
 
 ```javascript
 function crearContador() {
@@ -131,16 +131,16 @@ siguiente(); // 2  (recordo el valor anterior)
 ```
 
 > ### 🟦 ¿Que significa? — *Condicional (if / else)*
-> Una bifurcacion: "si pasa esto, haz A; si no, haz B". Sirve para que el programa tome decisiones. En **tunal-digital**, un `if` revisa si el campo del formulario esta vacio antes de enviar.
+> Una bifurcacion: "si pasa esto, haz A; si no, haz B". Es la forma en que el programa toma decisiones. En **tunal-digital**, un `if` revisa si el campo del formulario esta vacio antes de enviar.
 
 > ### 🟦 ¿Que significa? — *const*
-> Una forma de declarar una variable cuyo **nombre no se reasigna** a otro valor. Sirve para datos que no deben cambiar de referencia, dando mas seguridad. En **tunal-digital**, los elementos de la pagina se guardan con `const` porque apuntan siempre al mismo nodo.
+> Una forma de declarar una variable cuyo **nombre no se reasigna** a otro valor. Va bien para datos que no deben cambiar de referencia y aporta algo de seguridad. En **tunal-digital**, los elementos de la pagina se guardan con `const` porque apuntan siempre al mismo nodo.
 
 > ### 🟦 ¿Que significa? — *console.log*
-> Una orden que **escribe un mensaje** en la consola del navegador. Sirve para ver que esta pasando y depurar errores. En **tunal-digital** se usa durante el desarrollo para revisar que el `fetch` devolvio lo esperado.
+> Una orden que **escribe un mensaje** en la consola del navegador. Es tu herramienta para ver que esta pasando y cazar errores. En **tunal-digital** se usa durante el desarrollo para comprobar que el `fetch` devolvio lo que esperabas.
 
 > ### 🟦 ¿Que significa? — *DOM (Document Object Model)*
-> El **arbol** que el navegador arma con tu pagina HTML: cada etiqueta es una rama que JavaScript puede leer y cambiar. Sirve para que tu codigo modifique lo que se ve. En **tunal-digital**, escribir la respuesta del bot en el chat es cambiar el DOM.
+> El **arbol** que el navegador arma con tu pagina HTML: cada etiqueta es una rama que JavaScript puede leer y cambiar. Es lo que tu codigo toca para modificar lo que se ve. En **tunal-digital**, escribir la respuesta del bot en el chat es cambiar el DOM.
 
 ```javascript
 const caja = document.querySelector("#chat");
@@ -148,10 +148,10 @@ caja.textContent = "Hola desde JavaScript"; // cambiamos el DOM
 ```
 
 > ### 🟦 ¿Que significa? — *Elemento*
-> Cada pieza del DOM que corresponde a una etiqueta HTML (un `<button>`, un `<form>`, un `<div>`). Sirve como el "objeto" sobre el que actuas en la pagina. En **tunal-digital**, el formulario de contacto es un elemento que seleccionas y al que le pones un listener.
+> Cada pieza del DOM que corresponde a una etiqueta HTML (un `<button>`, un `<form>`, un `<div>`). Es el "objeto" sobre el que actuas en la pagina. En **tunal-digital**, el formulario de contacto es un elemento que seleccionas y al que le pones un listener.
 
 > ### 🟦 ¿Que significa? — *Evento*
-> Algo que **pasa** en la pagina: un click, un envio de formulario, mover el raton, escribir una tecla. Sirve para que tu programa reaccione al usuario. En **tunal-digital**, el evento `submit` del formulario dispara el envio del mensaje.
+> Algo que **pasa** en la pagina: un click, el envio de un formulario, mover el raton, pulsar una tecla. Es la senal a la que tu programa reacciona. En **tunal-digital**, el evento `submit` del formulario dispara el envio del mensaje.
 
 > ### 🔎 En tu codigo
 > En el `main.js` de **tunal-digital** busca la linea con `addEventListener("submit", ...)`. Ese es el corazon del formulario: ahi conectas un **evento** (submit) con un **callback** que decide que hacer cuando el usuario manda sus datos.
@@ -165,13 +165,13 @@ const datos = await respuesta.json();
 ```
 
 > ### ⚠️ Cuidado
-> `fetch` no falla automaticamente cuando el servidor responde con un error tipo 404 o 500: te entrega la respuesta igual. Revisa `respuesta.ok` antes de confiar en los datos.
+> `fetch` no falla solo cuando el servidor responde con un error tipo 404 o 500: te entrega la respuesta igual. Revisa `respuesta.ok` antes de fiarte de los datos.
 
 > ### 🟦 ¿Que significa? — *forEach*
-> Un metodo de los arrays que **recorre cada elemento** y ejecuta una funcion con el. Sirve para hacer algo con cada item de una lista. En **tunal-digital** se usa para pintar cada mensaje del chat en pantalla.
+> Un metodo de los arrays que **recorre cada elemento** y ejecuta una funcion con el. Es para hacer algo con cada item de una lista. En **tunal-digital** se usa para pintar cada mensaje del chat en pantalla.
 
 > ### 🟦 ¿Que significa? — *Funcion*
-> Una **receta reutilizable**: un bloque de codigo con nombre que puedes llamar cuando quieras. Sirve para no repetir codigo y para organizar tareas. En **tunal-digital**, las "funciones de atajo" (como un `$` que envuelve `querySelector`) son funciones que usas en todo el archivo.
+> Una **receta reutilizable**: un bloque de codigo con nombre que llamas cuando quieras. Te evita repetir codigo y te ayuda a ordenar tareas. En **tunal-digital**, las "funciones de atajo" (como un `$` que envuelve `querySelector`) son funciones que usas a lo largo de todo el archivo.
 
 ```javascript
 function saludar(nombre) {
@@ -181,7 +181,7 @@ saludar("Bit"); // "Hola, Bit"
 ```
 
 > ### 🟦 ¿Que significa? — *Funcion flecha (arrow function)*
-> Una forma corta de escribir funciones con `=>`. Sirve para que los callbacks queden mas breves y legibles. En **tunal-digital** se usan funciones flecha como callbacks de eventos y dentro de `forEach`.
+> Una forma corta de escribir funciones, con `=>`. Deja los callbacks mas breves y faciles de leer. En **tunal-digital** se usan funciones flecha como callbacks de eventos y dentro de `forEach`.
 
 ```javascript
 const doble = (n) => n * 2;
@@ -189,10 +189,10 @@ doble(4); // 8
 ```
 
 > ### 🟦 ¿Que significa? — *Global (ambito global)*
-> El espacio "de afuera de todo", donde una variable es visible desde cualquier parte del archivo. Sirve para datos compartidos, pero conviene usarlo poco. En **tunal-digital**, casi nada es global a proposito: cada cosa vive dentro de su funcion para evitar choques.
+> El espacio "de afuera de todo", donde una variable es visible desde cualquier parte del archivo. Va bien para datos compartidos, pero conviene usarlo con cuentagotas. En **tunal-digital**, casi nada es global a proposito: cada cosa vive dentro de su funcion para evitar choques.
 
 > ### 🟦 ¿Que significa? — *JSON (JavaScript Object Notation)*
-> Un **formato de texto** para representar datos (objetos y listas) que viaja facil por internet. Sirve para que el navegador y el servidor se entiendan. En **tunal-digital**, la respuesta del Worker de IA llega como JSON y se convierte con `.json()`.
+> Un **formato de texto** para representar datos (objetos y listas) que viaja facil por internet. Es el idioma comun con el que el navegador y el servidor se entienden. En **tunal-digital**, la respuesta del Worker de IA llega como JSON y se convierte con `.json()`.
 
 ```javascript
 // Esto es JSON (texto): el servidor te lo manda asi
@@ -203,13 +203,13 @@ doble(4); // 8
 > JSON aparece en mas de un repo de tu lista. En **PolyPaw** (Python/Flet) las misiones se guardan en archivos `.json`. En **tunal-digital** el JSON llega por la red desde el Worker. Mismo formato, dos usos: uno en disco, otro viajando por internet.
 
 > ### 🟦 ¿Que significa? — *let*
-> Una forma de declarar una variable que **si puede cambiar** de valor mas adelante. Sirve para datos que evolucionan, como un contador o un estado. En **tunal-digital**, una bandera como `let enviando = false` usa `let` porque cambia mientras se manda el formulario.
+> Una forma de declarar una variable que **si puede cambiar** de valor mas adelante. Va para datos que evolucionan, como un contador o un estado. En **tunal-digital**, una bandera como `let enviando = false` usa `let` porque cambia mientras se manda el formulario.
 
 > ### 🟦 ¿Que significa? — *Listener (escuchador de eventos)*
-> El "vigilante" que pones con `addEventListener` para quedarte atento a un evento. Sirve para conectar un evento con la funcion que debe reaccionar. En **tunal-digital**, hay un listener en el formulario y otro en el boton de enviar del chat.
+> El "vigilante" que pones con `addEventListener` para quedarte atento a un evento. Conecta ese evento con la funcion que debe reaccionar. En **tunal-digital** hay un listener en el formulario y otro en el boton de enviar del chat.
 
 > ### 🟦 ¿Que significa? — *map (metodo)*
-> Un metodo de los arrays que **crea una lista nueva** transformando cada elemento. Sirve para convertir datos sin tocar el array original. En **tunal-digital** se puede usar para convertir una lista de textos en una lista de elementos HTML del chat.
+> Un metodo de los arrays que **crea una lista nueva** transformando cada elemento. Te deja convertir datos sin tocar el array original. En **tunal-digital** se puede usar para convertir una lista de textos en una lista de elementos HTML del chat.
 
 ```javascript
 const numeros = [1, 2, 3];
@@ -217,13 +217,13 @@ const dobles = numeros.map((n) => n * 2); // [2, 4, 6]
 ```
 
 > ### 🟦 ¿Que significa? — *null*
-> Un valor especial que significa "aqui, a proposito, no hay nada". Sirve para decir "vacio intencional". En **tunal-digital**, si `querySelector` no encuentra un elemento, devuelve `null`, y conviene revisarlo antes de usarlo.
+> Un valor especial que significa "aqui, a proposito, no hay nada". Es la forma de decir "vacio intencional". En **tunal-digital**, si `querySelector` no encuentra un elemento devuelve `null`, asi que conviene revisarlo antes de usarlo.
 
 > ### 🟦 ¿Que significa? — *Number (numero)*
-> El tipo de dato para los **numeros** (enteros y decimales). Sirve para contar, medir y calcular. En **tunal-digital**, un contador de caracteres del mensaje del chat es un Number.
+> El tipo de dato para los **numeros**, enteros y decimales. Es con lo que cuentas, mides y calculas. En **tunal-digital**, un contador de caracteres del mensaje del chat es un Number.
 
 > ### 🟦 ¿Que significa? — *Objeto*
-> Una **ficha** con pares etiqueta-valor, escrita entre llaves `{ }`. Sirve para agrupar datos relacionados bajo nombres claros. En **tunal-digital**, las opciones que le pasas a `fetch` (`{ method: "POST", body: ... }`) son un objeto.
+> Una **ficha** con pares etiqueta-valor, escrita entre llaves `{ }`. Agrupa datos relacionados bajo nombres claros. En **tunal-digital**, las opciones que le pasas a `fetch` (`{ method: "POST", body: ... }`) son un objeto.
 
 ```javascript
 const usuario = {
@@ -235,16 +235,16 @@ console.log(usuario.nombre); // "Edwar"
 ```
 
 > ### 🟦 ¿Que significa? — *Operador*
-> Un simbolo que **combina o compara** valores: `+` suma, `===` compara, `&&` es "y", `||` es "o". Sirve para hacer calculos y decisiones. En **tunal-digital**, un `if (texto === "")` usa el operador `===` para ver si el campo esta vacio.
+> Un simbolo que **combina o compara** valores: `+` suma, `===` compara, `&&` es "y", `||` es "o". Con ellos haces calculos y decisiones. En **tunal-digital**, un `if (texto === "")` usa el operador `===` para ver si el campo esta vacio.
 
 > ### ⚠️ Cuidado
-> Usa siempre `===` (triple) para comparar, no `==` (doble). El doble hace conversiones raras (por ejemplo `0 == ""` da `true`) y te mete bichos dificiles de encontrar.
+> Para comparar usa siempre `===` (triple), no `==` (doble). El doble hace conversiones raras (por ejemplo, `0 == ""` da `true`) y te mete bichos dificiles de encontrar.
 
 > ### 🟦 ¿Que significa? — *Parametro*
-> El **nombre** que escribes entre parentesis al definir una funcion, como hueco que se llenara al llamarla. Sirve para que la funcion reciba datos. En **tunal-digital**, en `function saludar(nombre)`, `nombre` es el parametro; el texto que pasas al llamar es el argumento.
+> El **nombre** que escribes entre parentesis al definir una funcion: un hueco que se llenara cuando la llames. Es la via por la que la funcion recibe datos. En **tunal-digital**, en `function saludar(nombre)`, `nombre` es el parametro; el texto que pasas al llamar es el argumento.
 
 > ### 🟦 ¿Que significa? — *Promesa (Promise)*
-> Un **pagare**: un objeto que representa un resultado que llegara despues (o un error). Sirve para manejar tareas que tardan, como pedir datos. En **tunal-digital**, `fetch` devuelve una promesa que se resuelve cuando el Worker responde.
+> Un **pagare**: un objeto que representa un resultado que llegara despues (o un error). Te ayuda a manejar tareas que tardan, como pedir datos. En **tunal-digital**, `fetch` devuelve una promesa que se resuelve cuando el Worker responde.
 
 ```javascript
 fetch("/api/chat")
@@ -254,28 +254,28 @@ fetch("/api/chat")
 ```
 
 > ### 💡 Tip
-> Una promesa tiene tres estados: **pendiente** (esperando), **cumplida** (llego el dato) y **rechazada** (hubo error). `await` te da el dato cuando se cumple; el `.catch` o el `try/catch` atrapan el rechazo.
+> Una promesa tiene tres estados: **pendiente** (esperando), **cumplida** (llego el dato) y **rechazada** (hubo error). `await` te entrega el dato cuando se cumple; el `.catch` o el `try/catch` atrapan el rechazo.
 
 > ### 🟦 ¿Que significa? — *querySelector*
-> Un metodo del documento que **busca el primer elemento** que coincide con un selector CSS. Sirve para encontrar la pieza del DOM con la que vas a trabajar. En **tunal-digital**, las funciones de atajo en `main.js` envuelven `querySelector` para escribir menos.
+> Un metodo del documento que **busca el primer elemento** que coincide con un selector CSS. Es como encuentras la pieza del DOM con la que vas a trabajar. En **tunal-digital**, las funciones de atajo en `main.js` envuelven `querySelector` para escribir menos.
 
 > ### 🟦 ¿Que significa? — *return*
-> La palabra que hace que una funcion **devuelva un valor** y termine. Sirve para que la receta entregue su resultado a quien la llamo. En **tunal-digital**, una funcion de atajo hace `return document.querySelector(sel)` para entregarte el elemento.
+> La palabra que hace que una funcion **devuelva un valor** y termine. Es la forma en que la receta entrega su resultado a quien la llamo. En **tunal-digital**, una funcion de atajo hace `return document.querySelector(sel)` para entregarte el elemento.
 
 > ### ⚠️ Cuidado
-> Despues de `return`, la funcion se detiene: el codigo escrito debajo no se ejecuta. Si pusiste algo importante despues de un `return`, nunca correra.
+> Despues de un `return`, la funcion se detiene: el codigo que dejaste debajo no se ejecuta. Si pusiste algo importante despues, nunca correra.
 
 > ### 🟦 ¿Que significa? — *Scope (ambito)*
-> La **zona donde vive** una variable y donde se la puede ver. Sirve para mantener el codigo ordenado y evitar que unas variables pisen a otras. En **tunal-digital**, una variable declarada dentro del callback del formulario solo existe dentro de ese callback.
+> La **zona donde vive** una variable y desde donde se la puede ver. Mantiene el codigo ordenado y evita que unas variables pisen a otras. En **tunal-digital**, una variable declarada dentro del callback del formulario solo existe dentro de ese callback.
 
 > ### 🔎 En tu codigo
-> Si en **tunal-digital** declaras una variable con `let` dentro de la funcion del chat, no podras leerla desde el formulario: tienen **scopes distintos**. Para compartir un dato entre ambos, lo declaras un nivel mas arriba.
+> Si en **tunal-digital** declaras una variable con `let` dentro de la funcion del chat, no podras leerla desde el formulario: tienen **scopes distintos**. Para compartir un dato entre ambos, declaralo un nivel mas arriba.
 
 > ### 🟦 ¿Que significa? — *Selector*
-> Una **cadena de texto** (como `#chat` o `.boton`) que describe que elemento del DOM quieres. Sirve para apuntar a la pieza correcta de la pagina. En **tunal-digital**, los selectores `#` (por id) y `.` (por clase) se pasan a las funciones de atajo.
+> Una **cadena de texto** (como `#chat` o `.boton`) que describe que elemento del DOM quieres. Es como apuntas a la pieza correcta de la pagina. En **tunal-digital**, los selectores `#` (por id) y `.` (por clase) se pasan a las funciones de atajo.
 
 > ### 🟦 ¿Que significa? — *String (cadena de texto)*
-> El tipo de dato para **texto**, escrito entre comillas. Sirve para guardar nombres, mensajes y cualquier letra. En **tunal-digital**, el mensaje que el usuario escribe en el chat es un string.
+> El tipo de dato para **texto**, escrito entre comillas. Guarda nombres, mensajes y cualquier letra. En **tunal-digital**, el mensaje que el usuario escribe en el chat es un string.
 
 ```javascript
 const saludo = "Hola";
@@ -284,7 +284,7 @@ console.log(saludo + ", " + nombre); // "Hola, Bit"
 ```
 
 > ### 🟦 ¿Que significa? — *Template literal (plantilla)*
-> Una forma de escribir texto con **acentos graves** y huecos `${ }` para meter variables. Sirve para armar mensajes sin pegar trozos con `+`. En **tunal-digital** se usan para construir el HTML de cada burbuja del chat.
+> Una forma de escribir texto con **acentos graves** y huecos `${ }` para meter variables. Sirve para armar mensajes sin andar pegando trozos con `+`. En **tunal-digital** se usan para construir el HTML de cada burbuja del chat.
 
 ```javascript
 const nombre = "Edwar";
@@ -292,10 +292,10 @@ const mensaje = `Hola, ${nombre}, bienvenido a Tunal`;
 ```
 
 > ### 🟦 ¿Que significa? — *Tipo de dato*
-> La **categoria** de un valor: string, number, boolean, null, undefined, objeto o array. Sirve para saber que puedes hacer con un dato. En **tunal-digital**, antes de enviar el formulario revisas que el texto sea un string y no este vacio.
+> La **categoria** de un valor: string, number, boolean, null, undefined, objeto o array. Saberla te dice que puedes hacer con ese dato. En **tunal-digital**, antes de enviar el formulario compruebas que el texto sea un string y no este vacio.
 
 > ### 🟦 ¿Que significa? — *try / catch*
-> Un bloque para **intentar** algo riesgoso (`try`) y **atrapar** el error si falla (`catch`), sin que se caiga toda la pagina. Sirve para manejar fallos con elegancia. En **tunal-digital**, el `fetch` al Worker va dentro de un `try/catch` por si la red falla.
+> Un bloque para **intentar** algo riesgoso (`try`) y **atrapar** el error si falla (`catch`), sin que se caiga toda la pagina. Es la forma elegante de manejar fallos. En **tunal-digital**, el `fetch` al Worker va dentro de un `try/catch` por si la red falla.
 
 ```javascript
 try {
@@ -307,16 +307,16 @@ try {
 ```
 
 > ### 🟦 ¿Que significa? — *undefined*
-> El valor que tiene una variable que **existe pero aun no tiene contenido**. Sirve para detectar "todavia no le di valor a esto". En **tunal-digital**, si lees una propiedad que no existe en la respuesta JSON, obtienes `undefined`.
+> El valor que tiene una variable que **existe pero aun no tiene contenido**. Te avisa de "todavia no le di valor a esto". En **tunal-digital**, si lees una propiedad que no existe en la respuesta JSON, obtienes `undefined`.
 
 > ### ⚠️ Cuidado
-> `null` y `undefined` parecen lo mismo pero no lo son. `undefined` es "nunca le di valor"; `null` es "le di valor vacio a proposito". Confundirlos es fuente clasica de errores.
+> `null` y `undefined` parecen lo mismo, pero no lo son. `undefined` es "nunca le di valor"; `null` es "le di valor vacio a proposito". Confundirlos es una fuente clasica de errores.
 
 > ### 🟦 ¿Que significa? — *var*
-> La forma **antigua** de declarar variables, anterior a `let` y `const`. Sirve... cada vez menos: se recomienda evitarla porque su scope es confuso. En **tunal-digital** no se usa `var`: todo es `let` o `const`, que es la practica moderna.
+> La forma **antigua** de declarar variables, anterior a `let` y `const`. Sirve... cada vez menos: conviene evitarla porque su scope es confuso. En **tunal-digital** no se usa `var`: todo es `let` o `const`, que es la practica moderna.
 
 > ### 🟦 ¿Que significa? — *Variable*
-> Una **caja con nombre** donde guardas un valor para usarlo despues. Sirve como la base de todo: sin variables no hay datos que mover. En **tunal-digital**, cada elemento del DOM, cada bandera y cada mensaje vive en una variable.
+> Una **caja con nombre** donde guardas un valor para usarlo despues. Es la base de todo: sin variables no hay datos que mover. En **tunal-digital**, cada elemento del DOM, cada bandera y cada mensaje vive en una variable.
 
 ```javascript
 let mensaje = "Hola";     // puede cambiar
@@ -325,16 +325,16 @@ const limite = 280;       // no se reasigna
 
 ## 4. Terminos que cruzan con otros modulos
 
-JavaScript no vive solo. Algunas palabras del modulo aparecen tambien en tus otros repos. Aqui las anclamos para que las reconozcas en cualquier sitio.
+JavaScript no vive solo. Algunas palabras del modulo asoman tambien en tus otros repos. Aqui las anclamos para que las reconozcas en cualquier sitio.
 
 > ### 🟦 ¿Que significa? — *Componente*
-> En frameworks como React, un **trozo de interfaz reutilizable** que es, en el fondo, una funcion que devuelve lo que se ve. Sirve para construir pantallas por piezas. En **RachaSimple** (React + TypeScript) cada tarjeta de racha es un componente.
+> En frameworks como React, un **trozo de interfaz reutilizable** que, en el fondo, es una funcion que devuelve lo que se ve. Te deja construir pantallas por piezas. En **RachaSimple** (React + TypeScript) cada tarjeta de racha es un componente.
 
 > ### 🟦 ¿Que significa? — *Estado (state)*
-> Datos que **cambian con el tiempo** dentro de una app y que, al cambiar, redibujan la pantalla. Sirve para apps que reaccionan al usuario. En **RachaSimple** y en **Faro/Organizer** (Next.js + React) el estado guarda lo que el usuario ve y edita.
+> Datos que **cambian con el tiempo** dentro de una app y que, al cambiar, redibujan la pantalla. Es lo que hace que una app reaccione al usuario. En **RachaSimple** y en **Faro/Organizer** (Next.js + React), el estado guarda lo que el usuario ve y edita.
 
 > ### 🟦 ¿Que significa? — *TypeScript*
-> Un JavaScript con **etiquetas de tipo**: avisa errores antes de ejecutar. Sirve para escribir codigo mas seguro en proyectos grandes. **RachaSimple** y **Faro/Organizer** usan TypeScript; **tunal-digital** usa JavaScript "vanilla" (sin framework).
+> Un JavaScript con **etiquetas de tipo**: avisa de errores antes de ejecutar. Te ayuda a escribir codigo mas seguro en proyectos grandes. **RachaSimple** y **Faro/Organizer** usan TypeScript; **tunal-digital** usa JavaScript "vanilla" (sin framework).
 
 > ### 🔎 En tu codigo
 > El salto natural despues de dominar el `main.js` de **tunal-digital** es entender **RachaSimple**: alli el mismo JavaScript se escribe con TypeScript, dentro de componentes de React, y los datos viajan con TanStack Query a Supabase. Las palabras de este glosario (funcion, objeto, array, fetch, promesa, async) siguen siendo las mismas; solo cambia el envoltorio.
@@ -350,7 +350,7 @@ Cerremos el modulo armando la historia completa, usando solo palabras del glosar
 2. Tu `main.js` usa **funciones** de atajo (que por dentro llaman a `querySelector`) para tomar **elementos**: el **formulario** y la caja del **chat**. Cada uno se guarda en una **variable** declarada con `const`.
 3. Pones un **listener** con `addEventListener` al **evento** `submit`. Le entregas un **callback**.
 4. Cuando el usuario envia, el callback corre. Dentro, un **condicional** (`if`) revisa con el **operador** `===` que el **string** del mensaje no este vacio.
-5. Si todo bien, una funcion `async` hace `await fetch(...)` al Worker. `fetch` devuelve una **promesa**; `await` espera el resultado.
+5. Si todo va bien, una funcion `async` hace `await fetch(...)` al Worker. `fetch` devuelve una **promesa**; `await` espera el resultado.
 6. La respuesta llega como **JSON**; con `.json()` la conviertes en un **objeto** de JavaScript y lees su propiedad `reply` (un **string**).
 7. Recorres los mensajes con un **bucle** (`forEach`) y, con un **template literal**, escribes cada burbuja en el **DOM**.
 8. Si la red falla, el **try/catch** atrapa el error y muestra un aviso amable en vez de romper la pagina.
@@ -387,5 +387,5 @@ Eso es JavaScript de principio a fin: **guardar** (variables, tipos), **hacer** 
 
 6. **Explicaselo a alguien.** Elige tres palabras del glosario que mas te costaron y explicalas en voz alta a otra persona (o a tu mascota, Bit no juzga) sin leer el recuadro. Si logras explicarlas, ya son tuyas.
 
-> Y con esto cerramos el modulo de JavaScript. Lo hiciste muy bien: pasaste de "estas palabras me marean" a tener un mapa y un diccionario propios. Guarda este capitulo cerca; volveras a el mas de lo que crees. Nos vemos en el siguiente modulo, donde el mismo JavaScript se pone su traje de React. Un abrazo con aleta. — **Bit** 🐾
+> Y con esto cerramos el modulo de JavaScript. Lo hiciste muy bien: pasaste de "estas palabras me marean" a tener tu propio mapa y tu propio diccionario. Guarda este capitulo cerca; volveras a el mas de lo que crees. Nos vemos en el siguiente modulo, donde este mismo JavaScript se pone su traje de React. Un abrazo con aleta. — **Bit** 🐾
 ```

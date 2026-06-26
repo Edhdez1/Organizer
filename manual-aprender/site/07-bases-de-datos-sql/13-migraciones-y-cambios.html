@@ -23,62 +23,62 @@
 </p>
 
 <blockquote>
-<p>Hola, soy Bit, tu ajolote acompanante. Los ajolotes tenemos un superpoder: regeneramos partes de nuestro cuerpo sin morir en el intento. Hoy aprenderas a hacer lo mismo con tus tablas: cambiarlas, hacerlas crecer y arreglarlas <strong>sin perder datos y sin romper la app</strong>. A eso se le llama una <em>migracion</em>, y es de las habilidades mas tranquilizadoras que vas a tener como programador. Respira, que aqui vamos paso a paso.</p>
+<p>Hola, soy Bit, tu ajolote acompanante. Los ajolotes tenemos una rareza preciosa: nos regenera el cuerpo sin morir en el intento. Hoy vas a aprender a hacer algo parecido con tus tablas: cambiarlas, hacerlas crecer y repararlas <strong>sin perder datos y sin romper la app</strong>. A ese cambio cuidadoso se le llama <em>migracion</em>, y te aseguro que es una de las habilidades que mas te van a tranquilizar como programador. Respira, que vamos despacio.</p>
 </blockquote>
-<p>Hasta ahora pensaste tus tablas como si fueran para siempre: creas <code>habitos</code>, creas <code>proyectos</code>, y listo. Pero el software vivo cambia. Un dia quieres anadir una columna de color al habito. Otro dia te das cuenta de que un campo deberia guardar un numero y no texto. Otro dia borras una columna que ya nadie usa. Cada uno de esos cambios es un riesgo: si lo haces mal, puedes perder informacion de personas reales o dejar la aplicacion sin arrancar. Este capitulo te ensena a hacerlo con red de seguridad.</p>
+<p>Hasta ahora pensabas tus tablas como si fueran eternas: creas <code>habitos</code>, creas <code>proyectos</code>, y ya. Pero un programa que esta vivo cambia. Un dia quieres anadirle un color a cada habito. Otro dia descubres que un campo deberia guardar un numero y no texto. Otro dia eliminas una columna que ya nadie mira. Cada uno de esos cambios trae un riesgo: si lo haces mal, puedes perder informacion de gente real o dejar la aplicacion sin arrancar. Aqui vas a aprender a hacerlo con red debajo.</p>
 <hr />
 <h2 id="1-que-es-una-migracion">1. Que es una migracion</h2>
-<p>Imagina que tienes una casa habitada (tu base de datos con datos reales dentro) y quieres anadir una habitacion. No puedes demoler la casa y construir otra: hay gente viviendo ahi. Tienes que hacer una <em>reforma controlada</em>, paso a paso, sin que se caiga el techo. Eso es exactamente una migracion en bases de datos.</p>
+<p>Imagina una casa habitada (tu base de datos, con datos reales dentro) a la que quieres anadirle una habitacion. No puedes demolerla y levantar otra: hay gente viviendo ahi. Lo que haces es una reforma controlada, paso a paso, cuidando que no se venga abajo el techo. Una migracion en bases de datos es exactamente eso.</p>
 <blockquote class="def">
 <h3 id="que-significa-migracion-migration">🟦 ¿Que significa? — <em>Migracion (migration)</em></h3>
-<p>Una migracion es un <strong>cambio versionado y guardado</strong> en la estructura de tu base de datos: anadir una tabla, anadir una columna, cambiar un tipo de dato, crear un indice, etc. Lo importante es que queda <strong>escrito en un archivo</strong> con un orden, de modo que el mismo cambio se pueda repetir en cualquier entorno (tu maquina, el servidor de pruebas, produccion) y obtener el mismo resultado.
-<strong>Para que sirve:</strong> para que el esquema de la base de datos evolucione de forma ordenada y reproducible, sin que cada persona del equipo tenga que cambiar tablas a mano.
-<strong>Donde se usa en un repo real:</strong> en <strong>Faro/Organizer</strong> y en <strong>RachaSimple</strong>, que usan Supabase (Postgres). Supabase guarda las migraciones en una carpeta <code>supabase/migrations/</code> y cada archivo es un cambio con fecha en el nombre, por ejemplo <code>20260101120000_crear_tabla_proyectos.sql</code>.</p>
+<p>Una migracion es un <strong>cambio versionado y guardado</strong> en la estructura de tu base de datos: anadir una tabla, anadir una columna, cambiar un tipo de dato, crear un indice... Lo importante es que queda <strong>escrito en un archivo</strong>, con un orden, de modo que el mismo cambio se puede repetir en cualquier entorno (tu maquina, el servidor de pruebas, produccion) y siempre da el mismo resultado.
+<strong>Para que sirve:</strong> para que el esquema de la base de datos evolucione de forma ordenada y reproducible, sin que cada persona del equipo ande cambiando tablas a mano.
+<strong>Donde se usa en un repo real:</strong> en <strong>Faro/Organizer</strong> y en <strong>RachaSimple</strong>, que usan Supabase (Postgres). Supabase guarda las migraciones en una carpeta <code>supabase/migrations/</code>, y cada archivo es un cambio con fecha en el nombre, por ejemplo <code>20260101120000_crear_tabla_proyectos.sql</code>.</p>
 </blockquote>
-<p>La diferencia clave con un cambio "a mano" es la palabra <strong>versionado</strong>. Si entras al panel de Supabase y agregas una columna haciendo clic, el cambio ocurre, pero nadie sabe quien lo hizo, ni cuando, ni como repetirlo. Una migracion, en cambio, es un archivo <code>.sql</code> que vive en tu repositorio junto al codigo.</p>
+<p>Lo que separa una migracion de un cambio "a mano" es esa palabra: <strong>versionado</strong>. Si entras al panel de Supabase y agregas una columna con un clic, el cambio sucede, pero nadie sabe quien lo hizo, ni cuando, ni como repetirlo. Una migracion, en cambio, es un archivo <code>.sql</code> que vive en tu repositorio, al lado del codigo.</p>
 <blockquote class="def">
 <h3 id="que-significa-esquema-schema">🟦 ¿Que significa? — <em>Esquema (schema)</em></h3>
-<p>El esquema es la <strong>forma</strong> de tu base de datos: que tablas existen, que columnas tiene cada una, de que tipo es cada columna y que reglas las relacionan. No son los datos, sino el "molde" donde caben los datos.
+<p>El esquema es la <strong>forma</strong> de tu base de datos: que tablas existen, que columnas tiene cada una, de que tipo es cada columna y que reglas las conectan. No son los datos, sino el "molde" donde caben los datos.
 <strong>Para que sirve:</strong> define la estructura. Si los datos son el agua, el esquema es el vaso.
 <strong>Donde se usa en un repo real:</strong> el esquema de <strong>RachaSimple</strong> incluye tablas como <code>habitos</code>, <code>registros_racha</code> y <code>perfiles</code>; el de <strong>Faro</strong> incluye <code>proyectos</code>, <code>fases</code> y <code>user_connections</code>.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>Piensa en una migracion como en un commit de Git, pero para la <strong>estructura</strong> de la base de datos. Igual que Git guarda la historia de tu codigo, las migraciones guardan la historia de tu esquema. De hecho, viven dentro del mismo repositorio y viajan en el mismo PR.</p>
+<p>Piensa en una migracion como en un commit de Git, pero para la <strong>estructura</strong> de la base de datos. Igual que Git guarda la historia de tu codigo, las migraciones guardan la historia de tu esquema. De hecho viven en el mismo repositorio y viajan en el mismo PR.</p>
 </blockquote>
 <h3 id="y-los-proyectos-que-no-tienen-base-de-datos">Y los proyectos que NO tienen base de datos?</h3>
-<p>No todos los proyectos necesitan migraciones. Conviene contrastar para entender por que.</p>
+<p>No todo proyecto necesita migraciones. Conviene mirar los que no las usan para entender por que.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p><strong>PolyPaw</strong> guarda sus datos en archivos <strong>JSON</strong> (Python/Flet), no en una base de datos relacional. Cuando quieres "anadir un campo" a una mascota en PolyPaw, simplemente empiezas a escribir esa clave nueva en el JSON. No hay <code>ALTER TABLE</code>, no hay migracion formal. Eso suena comodo, pero tiene un costo: si la mitad de tus archivos JSON viejos no tienen la clave nueva, tu codigo Python tiene que acordarse de comprobar "y si no existe?" en cada lectura. En un Postgres bien migrado, en cambio, <em>todas</em> las filas comparten la misma forma. <strong>tunal-digital</strong> (HTML/CSS/JS vanilla) ni siquiera tiene datos persistentes de usuario, asi que el tema de migraciones no lo toca. Y <strong>polypaw-nas</strong> (Ubuntu/Samba/Cockpit) gestiona archivos en disco, otro mundo distinto. Las migraciones son cosa de <strong>RachaSimple</strong> y <strong>Faro</strong>, que si tienen Postgres.</p>
+<p><strong>PolyPaw</strong> guarda sus datos en archivos <strong>JSON</strong> (Python/Flet), no en una base de datos relacional. Cuando quieres "anadir un campo" a una mascota en PolyPaw, basta con que empieces a escribir esa clave nueva en el JSON. No hay <code>ALTER TABLE</code>, no hay migracion formal. Suena comodisimo, pero se paga: si la mitad de tus archivos JSON viejos no tienen la clave nueva, tu codigo Python tiene que acordarse de comprobar "y si no existe?" en cada lectura. En un Postgres bien migrado, en cambio, <em>todas</em> las filas comparten la misma forma. <strong>tunal-digital</strong> (HTML/CSS/JS vanilla) ni siquiera guarda datos persistentes de usuario, asi que el tema de migraciones ni lo roza. Y <strong>polypaw-nas</strong> (Ubuntu/Samba/Cockpit) administra archivos en disco, que es otro mundo. Las migraciones son cosa de <strong>RachaSimple</strong> y <strong>Faro</strong>, que si tienen Postgres.</p>
 </blockquote>
 <hr />
 <h2 id="2-alter-table-cambiar-una-tabla-que-ya-existe">2. ALTER TABLE: cambiar una tabla que ya existe</h2>
 <p>El comando estrella de las migraciones es <code>ALTER TABLE</code>. Sirve para modificar una tabla <strong>sin volver a crearla</strong>, conservando los datos que ya tiene dentro.</p>
 <blockquote class="def">
 <h3 id="que-significa-alter-table">🟦 ¿Que significa? — <em>ALTER TABLE</em></h3>
-<p>Es la instruccion SQL que modifica la estructura de una tabla existente: anadir columnas, quitarlas, cambiar su tipo, renombrarlas o anadir restricciones. La tabla y sus filas siguen ahi; solo cambia su forma.
-<strong>Para que sirve:</strong> evolucionar una tabla en produccion sin tener que borrarla y perder los datos.
-<strong>Donde se usa en un repo real:</strong> cada vez que <strong>RachaSimple</strong> o <strong>Faro</strong> necesitan un campo nuevo, la migracion correspondiente contiene un <code>ALTER TABLE</code>.</p>
+<p>Es la instruccion SQL que modifica la estructura de una tabla que ya existe: anadir columnas, quitarlas, cambiarles el tipo, renombrarlas o ponerles restricciones. La tabla y sus filas siguen ahi; lo unico que cambia es su forma.
+<strong>Para que sirve:</strong> evolucionar una tabla en produccion sin tener que borrarla (y perder los datos).
+<strong>Donde se usa en un repo real:</strong> cada vez que <strong>RachaSimple</strong> o <strong>Faro</strong> necesitan un campo nuevo, la migracion correspondiente lleva dentro un <code>ALTER TABLE</code>.</p>
 </blockquote>
 <h3 id="anadir-una-columna">Anadir una columna</h3>
-<p>Supongamos que en <strong>RachaSimple</strong> queremos que cada habito tenga un color para mostrarlo en la interfaz. La tabla <code>habitos</code> ya existe y tiene habitos de usuarios reales. Anadimos la columna asi:</p>
+<p>Supongamos que en <strong>RachaSimple</strong> queremos que cada habito tenga un color, para mostrarlo en la interfaz. La tabla <code>habitos</code> ya existe y tiene habitos de usuarios reales. Anadimos la columna asi:</p>
 <pre><code class="language-sql">ALTER TABLE habitos
 ADD COLUMN color text NOT NULL DEFAULT '#22c55e';
 </code></pre>
-<p>Vamos a leer esto despacio, porque cada pieza importa:</p>
+<p>Leamoslo despacio, que cada pieza cuenta:</p>
 <blockquote class="def">
 <h3 id="que-significa-columna-column">🟦 ¿Que significa? — <em>Columna (column)</em></h3>
-<p>Una columna es un <strong>dato concreto que guardas para cada fila</strong> de la tabla. En <code>habitos</code>, columnas tipicas son <code>id</code>, <code>nombre</code>, <code>user_id</code> y ahora <code>color</code>. Cada fila (cada habito) tiene un valor para cada columna.
+<p>Una columna es un <strong>dato concreto que guardas para cada fila</strong> de la tabla. En <code>habitos</code>, columnas tipicas son <code>id</code>, <code>nombre</code>, <code>user_id</code> y ahora <code>color</code>. Cada fila (cada habito) tiene su propio valor para cada columna.
 <strong>Para que sirve:</strong> organizar la informacion en campos con nombre y tipo.
 <strong>Donde se usa en un repo real:</strong> la tabla <code>proyectos</code> de <strong>Faro</strong> tiene columnas como <code>nombre</code>, <code>descripcion</code>, <code>estado</code> y <code>progreso</code>.</p>
 <h3 id="que-significa-default-valor-por-defecto">🟦 ¿Que significa? — <em>DEFAULT (valor por defecto)</em></h3>
-<p>Es el valor que la base de datos pone <strong>automaticamente</strong> cuando no le das uno. En el ejemplo, <code>DEFAULT '#22c55e'</code> significa: si no especifico color, sera verde.
-<strong>Para que sirve:</strong> rellenar de forma sensata las filas que ya existian (que no traian color) y las nuevas que no lo manden.
-<strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, la columna <code>progreso</code> de <code>proyectos</code> puede tener <code>DEFAULT 0</code>, para que un proyecto recien creado empiece en 0%.</p>
+<p>Es el valor que la base de datos coloca <strong>sola</strong> cuando tu no le das uno. En el ejemplo, <code>DEFAULT '#22c55e'</code> quiere decir: si no especifico color, que sea verde.
+<strong>Para que sirve:</strong> rellenar con algo razonable las filas que ya existian (que no traian color) y las nuevas que tampoco lo manden.
+<strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, la columna <code>progreso</code> de <code>proyectos</code> puede llevar <code>DEFAULT 0</code>, para que un proyecto recien creado arranque en 0%.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Cuando anades una columna <code>NOT NULL</code> (obligatoria) a una tabla que <strong>ya tiene filas dentro</strong>, <em>tienes</em> que darle un <code>DEFAULT</code>. Si no, Postgres no sabe que poner en las filas viejas y la migracion falla con un error tipo "column contains null values". El truco es simple: <code>NOT NULL</code> siempre acompanado de <code>DEFAULT</code> cuando la tabla ya tiene datos.</p>
+<p>Cuando anades una columna <code>NOT NULL</code> (obligatoria) a una tabla que <strong>ya tiene filas dentro</strong>, <em>tienes</em> que darle un <code>DEFAULT</code>. Si no, Postgres no sabe que poner en las filas viejas y la migracion revienta con un error tipo "column contains null values". La regla es facil de recordar: si la tabla ya tiene datos, <code>NOT NULL</code> viene siempre acompanado de <code>DEFAULT</code>.</p>
 <h3 id="que-significa-not-null">🟦 ¿Que significa? — <em>NOT NULL</em></h3>
-<p>Es una restriccion que obliga a que una columna <strong>nunca este vacia</strong>. Si intentas guardar una fila sin ese valor, la base de datos lo rechaza.
-<strong>Para que sirve:</strong> garantizar que ciertos datos imprescindibles siempre estan presentes (un habito sin <code>user_id</code> no tendria sentido).
+<p>Es una restriccion que obliga a que una columna <strong>nunca quede vacia</strong>. Si intentas guardar una fila sin ese valor, la base de datos la rechaza.
+<strong>Para que sirve:</strong> asegurar que ciertos datos imprescindibles siempre esten presentes (un habito sin <code>user_id</code> no tendria ningun sentido).
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, la columna <code>user_id</code> de <code>habitos</code> es <code>NOT NULL</code>, porque un habito siempre pertenece a alguien.</p>
 </blockquote>
 <h3 id="quitar-una-columna">Quitar una columna</h3>
@@ -90,39 +90,39 @@ DROP COLUMN notas_internas;
 <h3 id="que-significa-drop-column">🟦 ¿Que significa? — <em>DROP COLUMN</em></h3>
 <p>Es la instruccion que <strong>elimina una columna</strong> de una tabla, junto con todos los datos que esa columna guardaba.
 <strong>Para que sirve:</strong> limpiar el esquema de campos que ya no se usan.
-<strong>Donde se usa en un repo real:</strong> se usaria en <strong>Faro</strong> al retirar un campo experimental de <code>proyectos</code> que ya no aporta.</p>
+<strong>Donde se usa en un repo real:</strong> se usaria en <strong>Faro</strong> al retirar un campo experimental de <code>proyectos</code> que dejo de aportar.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p><code>DROP COLUMN</code> <strong>borra los datos de esa columna para siempre</strong>. No hay papelera de reciclaje. Antes de soltar una columna en produccion, pregúntate: alguna parte de la app todavia la lee? hice una copia de seguridad? Bit ha visto ajolotes valientes perder un brazo aqui. Mide dos veces, corta una.</p>
+<p><code>DROP COLUMN</code> <strong>borra los datos de esa columna para siempre</strong>. No hay papelera de reciclaje. Antes de soltar una columna en produccion, hazte dos preguntas: alguna parte de la app todavia la lee? hay una copia de seguridad? Bit ha visto a ajolotes valientes perder un brazo justo aqui. Mide dos veces, corta una sola.</p>
 </blockquote>
 <h3 id="cambiar-el-tipo-de-una-columna">Cambiar el tipo de una columna</h3>
-<p>A veces te das cuenta de que un dato esta guardado con el tipo equivocado.</p>
+<p>A veces caes en la cuenta de que un dato esta guardado con el tipo equivocado.</p>
 <blockquote class="def">
 <h3 id="que-significa-tipo-de-dato-data-type">🟦 ¿Que significa? — <em>Tipo de dato (data type)</em></h3>
-<p>Es la clase de informacion que una columna puede guardar: <code>text</code> (texto), <code>integer</code> (numero entero), <code>boolean</code> (verdadero/falso), <code>timestamptz</code> (fecha y hora con zona horaria), <code>uuid</code> (identificador unico), etc. El tipo define que valores son validos y cuanto ocupan.
-<strong>Para que sirve:</strong> asegurar que cada columna guarde solo datos coherentes (no puedes guardar la palabra "hola" en una columna <code>integer</code>).
+<p>Es la clase de informacion que una columna puede guardar: <code>text</code> (texto), <code>integer</code> (numero entero), <code>boolean</code> (verdadero/falso), <code>timestamptz</code> (fecha y hora con zona horaria), <code>uuid</code> (identificador unico), etc. El tipo decide que valores son validos y cuanto ocupan.
+<strong>Para que sirve:</strong> garantizar que cada columna guarde solo datos coherentes (no puedes meter la palabra "hola" en una columna <code>integer</code>).
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, <code>registros_racha</code> usa <code>date</code> para el dia del registro y <code>boolean</code> para si se cumplio; en <strong>Faro</strong>, <code>proyectos.creado_en</code> es <code>timestamptz</code>.</p>
 </blockquote>
-<p>Supongamos que en <strong>Faro</strong> guardamos <code>progreso</code> como <code>text</code> ("75") por error y queremos que sea numero entero:</p>
+<p>Pongamos que en <strong>Faro</strong> guardamos <code>progreso</code> como <code>text</code> ("75") por error, y queremos que sea un numero entero:</p>
 <pre><code class="language-sql">ALTER TABLE proyectos
 ALTER COLUMN progreso TYPE integer
 USING progreso::integer;
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-cast-using">🟦 ¿Que significa? — <em>Cast / USING (<code>::</code>)</em></h3>
-<p>Un <em>cast</em> es una <strong>conversion</strong> de un tipo a otro. La clausula <code>USING progreso::integer</code> le dice a Postgres como transformar el texto existente en numeros mientras cambia el tipo. El <code>::</code> es el operador de cast de Postgres.
-<strong>Para que sirve:</strong> convertir los datos que ya estan guardados al nuevo tipo, sin perderlos.
-<strong>Donde se usa en un repo real:</strong> seria necesario en <strong>Faro</strong> si un campo numerico se hubiera creado por error como texto.</p>
+<p>Un <em>cast</em> es una <strong>conversion</strong> de un tipo a otro. La clausula <code>USING progreso::integer</code> le explica a Postgres como transformar el texto que ya esta guardado en numeros mientras cambia el tipo. El <code>::</code> es el operador de cast de Postgres.
+<strong>Para que sirve:</strong> pasar al nuevo tipo los datos que ya tienes guardados, sin perderlos por el camino.
+<strong>Donde se usa en un repo real:</strong> haria falta en <strong>Faro</strong> si un campo numerico se hubiera creado por error como texto.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Cambiar el tipo de una columna es de las migraciones mas delicadas. Si tienes texto como "setenta y cinco" intentando volverse <code>integer</code>, la conversion explota. Antes de cambiar un tipo, <strong>revisa que todos los datos existentes sean convertibles</strong>. En produccion, esto se prueba primero en otro entorno (lo veremos en la seccion 6).</p>
+<p>Cambiar el tipo de una columna es de las migraciones mas delicadas. Si tienes un texto como "setenta y cinco" intentando convertirse en <code>integer</code>, la conversion explota. Antes de tocar un tipo, <strong>revisa que todos los datos existentes se puedan convertir</strong>. En produccion esto se prueba primero en otro entorno (lo vemos en la seccion 6).</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Renombrar tambien es <code>ALTER TABLE</code>: <code>ALTER TABLE habitos RENAME COLUMN color TO color_hex;</code>. Renombrar no pierde datos, pero <strong>si rompe el codigo</strong> que todavia busca el nombre viejo. Cambia la columna y el codigo en el mismo PR.</p>
+<p>Renombrar tambien es <code>ALTER TABLE</code>: <code>ALTER TABLE habitos RENAME COLUMN color TO color_hex;</code>. Renombrar no pierde datos, pero <strong>si rompe el codigo</strong> que sigue buscando el nombre viejo. Cambia la columna y el codigo en el mismo PR.</p>
 </blockquote>
 <h3 id="crear-un-indice">Crear un indice</h3>
-<p>Otro cambio de esquema muy comun, que tambien viaja como migracion, es crear un indice.</p>
+<p>Otro cambio de esquema muy frecuente, que tambien viaja como migracion, es crear un indice.</p>
 <blockquote class="def">
 <h3 id="que-significa-indice-index">🟦 ¿Que significa? — <em>Indice (index)</em></h3>
-<p>Un indice es una <strong>estructura auxiliar</strong> que la base de datos mantiene para encontrar filas mas rapido, parecido al indice alfabetico al final de un libro: en vez de leer pagina por pagina, saltas directo a lo que buscas. Se crea con <code>CREATE INDEX</code> sobre una o varias columnas.
-<strong>Para que sirve:</strong> acelerar las consultas que filtran u ordenan por esa columna. Sin indice, la base recorre toda la tabla; con indice, va directa.
+<p>Un indice es una <strong>estructura auxiliar</strong> que la base de datos mantiene para encontrar filas mas rapido. Funciona como el indice alfabetico del final de un libro: en lugar de leer pagina por pagina, saltas directo a lo que buscas. Se crea con <code>CREATE INDEX</code> sobre una o varias columnas.
+<strong>Para que sirve:</strong> acelerar las consultas que filtran u ordenan por esa columna. Sin indice, la base recorre toda la tabla; con indice, va directa al grano.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, un indice sobre <code>registros_racha(habito_id, fecha)</code> hace rapido pintar la racha de un habito; en <strong>Faro</strong>, un indice sobre <code>proyectos(user_id)</code> agiliza listar los proyectos de cada usuario.</p>
 </blockquote>
 <pre><code class="language-sql">-- Crear un indice para acelerar las consultas por habito y fecha.
@@ -131,25 +131,25 @@ ON registros_racha (habito_id, fecha);
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Crear un indice no cambia ni borra datos: solo anade una "ayuda de busqueda". Por eso es una migracion segura. Aun asi, en tablas enormes puede tardar; en produccion conviene crearlos cuando hay poco trafico.</p>
+<p>Crear un indice no cambia ni borra datos: solo agrega una "ayuda de busqueda". Por eso es una migracion segura. Aun asi, en tablas enormes puede tardar; en produccion conviene crearlos cuando hay poco trafico.</p>
 </blockquote>
 <hr />
 <h2 id="3-versionar-el-esquema-la-carpeta-de-migraciones">3. Versionar el esquema: la carpeta de migraciones</h2>
-<p>Ya sabes <em>que</em> cambios hacer. Ahora, el habito que te salva la vida: <strong>guardarlos en orden</strong>.</p>
+<p>Ya sabes <em>que</em> cambios hacer. Ahora viene el habito que te salva la vida: <strong>guardarlos en orden</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-versionar-el-esquema">🟦 ¿Que significa? — <em>Versionar el esquema</em></h3>
-<p>Es guardar cada cambio del esquema como un archivo numerado o fechado, en orden cronologico, dentro del repositorio. Asi cualquiera puede reconstruir la base de datos aplicando las migraciones una tras otra, desde la primera hasta la ultima.
-<strong>Para que sirve:</strong> que el estado de la base de datos sea reproducible y auditable; que un companero nuevo levante una base identica a la tuya corriendo las migraciones.
+<p>Es guardar cada cambio del esquema como un archivo numerado o fechado, en orden cronologico, dentro del repositorio. Asi cualquiera puede reconstruir la base de datos aplicando las migraciones una tras otra, de la primera a la ultima.
+<strong>Para que sirve:</strong> que el estado de la base de datos sea reproducible y auditable; que un companero nuevo levante una base identica a la tuya solo corriendo las migraciones.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> y <strong>RachaSimple</strong> guardan sus migraciones en <code>supabase/migrations/</code>, con nombres como <code>20260115093000_add_color_a_habitos.sql</code>.</p>
 </blockquote>
-<p>El nombre de cada archivo empieza con una marca de tiempo (ano-mes-dia-hora-minuto-segundo). Eso fija el orden: las migraciones se aplican de la mas antigua a la mas reciente, siempre igual. Asi, dos personas distintas que corran las migraciones obtienen exactamente el mismo esquema.</p>
+<p>El nombre de cada archivo arranca con una marca de tiempo (ano-mes-dia-hora-minuto-segundo). Eso fija el orden: las migraciones se aplican de la mas antigua a la mas reciente, siempre en la misma secuencia. Por eso dos personas distintas que las corran terminan con exactamente el mismo esquema.</p>
 <blockquote class="def">
 <h3 id="que-significa-aplicar-una-migracion">🟦 ¿Que significa? — <em>Aplicar una migracion</em></h3>
-<p>Es ejecutar el SQL de un archivo de migracion contra una base de datos concreta. Supabase recuerda cuales ya aplico (en una tabla interna), asi que no las repite.
+<p>Es ejecutar el SQL de un archivo de migracion contra una base de datos concreta. Supabase lleva la cuenta de cuales ya aplico (en una tabla interna), asi que no las repite.
 <strong>Para que sirve:</strong> llevar una base "atrasada" hasta el ultimo estado del esquema, ejecutando solo las migraciones que le faltan.
 <strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, al desplegar, las migraciones nuevas se aplican sobre la base de produccion.</p>
 </blockquote>
-<p>Con el cliente de Supabase, cuando tu codigo TypeScript consulta una tabla, <strong>da por hecho que el esquema ya esta migrado</strong>. Por ejemplo, en <strong>RachaSimple</strong> (que usa TanStack Query para pedir datos):</p>
+<p>Con el cliente de Supabase, cuando tu codigo TypeScript consulta una tabla, <strong>da por sentado que el esquema ya esta migrado</strong>. Por ejemplo, en <strong>RachaSimple</strong> (que usa TanStack Query para pedir datos):</p>
 <pre><code class="language-ts">// RachaSimple: leer los habitos del usuario actual.
 // Esto asume que la columna 'color' YA existe (la migracion ya corrio).
 const { data: habitos } = await supabase
@@ -159,29 +159,29 @@ const { data: habitos } = await supabase
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Si tu codigo TypeScript pide <code>color</code> pero la migracion que crea esa columna <strong>todavia no se aplico</strong> en ese entorno, la consulta falla. Por eso la regla de oro: <strong>la migracion va antes (o junto) al codigo que la usa</strong>, nunca despues. Primero existe la columna, luego la pides.</p>
+<p>Si tu codigo TypeScript pide <code>color</code> pero la migracion que crea esa columna <strong>todavia no se aplico</strong> en ese entorno, la consulta falla. De ahi la regla de oro: <strong>la migracion va antes (o junto) al codigo que la usa</strong>, nunca despues. Primero existe la columna, despues la pides.</p>
 <h3 id="que-significa-select">🟦 ¿Que significa? — <em>SELECT</em></h3>
-<p>Es la instruccion SQL que <strong>lee filas</strong> de una tabla, sin modificarlas. Le dices que columnas quieres (<code>SELECT id, nombre, color</code>) y de que tabla, y la base te devuelve los datos que cumplen tus condiciones. Es la operacion mas comun: consultar.
-<strong>Para que sirve:</strong> recuperar informacion para mostrarla o procesarla. Tambien sirve para <strong>comprobar</strong> que una migracion hizo lo esperado (por ejemplo, leer una columna recien anadida y ver que las filas viejas tienen el <code>DEFAULT</code>).
+<p>Es la instruccion SQL que <strong>lee filas</strong> de una tabla, sin tocarlas. Le dices que columnas quieres (<code>SELECT id, nombre, color</code>) y de que tabla, y la base te devuelve los datos que cumplen tus condiciones. Es la operacion mas comun de todas: consultar.
+<strong>Para que sirve:</strong> recuperar informacion para mostrarla o procesarla. Tambien sirve para <strong>comprobar</strong> que una migracion hizo lo que esperabas (por ejemplo, leer una columna recien anadida y ver que las filas viejas quedaron con el <code>DEFAULT</code>).
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, <code>supabase.from("habitos").select("id, nombre, color")</code> es por debajo un <code>SELECT</code>; en <strong>Faro</strong>, cada vez que la app lista los <code>proyectos</code> del usuario hace un <code>SELECT</code>.</p>
 <h3 id="que-significa-cliente-de-supabase-supabase-client">🟦 ¿Que significa? — <em>Cliente de Supabase (Supabase client)</em></h3>
-<p>Es la libreria de JavaScript/TypeScript que tu app usa para hablar con la base de datos sin escribir SQL a mano. <code>supabase.from("habitos").select(...)</code> se traduce internamente a una consulta SQL.
+<p>Es la libreria de JavaScript/TypeScript que tu app usa para hablar con la base de datos sin escribir SQL a mano. <code>supabase.from("habitos").select(...)</code> se traduce por dentro a una consulta SQL.
 <strong>Para que sirve:</strong> consultar y modificar datos desde el frontend o el backend de forma comoda y segura.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> (combinado con TanStack Query para cachear) y en <strong>Faro</strong> (Next.js, normalmente desde el servidor para proteger las llaves).</p>
 </blockquote>
 <hr />
 <h2 id="4-no-perder-datos-el-corazon-del-asunto">4. No perder datos: el corazon del asunto</h2>
-<p>Toda esta disciplina existe por una sola razon: <strong>no perder informacion de personas reales</strong>. Cuando una racha de 200 dias desaparece por una migracion descuidada, no es un bug abstracto; es la motivacion de alguien tirada a la basura.</p>
+<p>Toda esta disciplina existe por una razon, y solo una: <strong>no perder informacion de personas reales</strong>. Cuando una racha de 200 dias desaparece por una migracion descuidada, no es un bug abstracto; es la motivacion de alguien tirada a la basura.</p>
 <blockquote class="def">
 <h3 id="que-significa-migracion-destructiva">🟦 ¿Que significa? — <em>Migracion destructiva</em></h3>
-<p>Es cualquier cambio que <strong>puede borrar datos</strong>: <code>DROP COLUMN</code>, <code>DROP TABLE</code>, cambiar un tipo de forma que no convierta bien, o anadir un <code>NOT NULL</code> sin <code>DEFAULT</code> a una tabla con filas. "Destructiva" no significa prohibida, significa que exige cuidado extra.
-<strong>Para que sirve:</strong> etiquetar mentalmente los cambios peligrosos para tratarlos con respeto.
+<p>Es cualquier cambio que <strong>puede borrar datos</strong>: <code>DROP COLUMN</code>, <code>DROP TABLE</code>, cambiar un tipo de forma que no convierta bien, o anadir un <code>NOT NULL</code> sin <code>DEFAULT</code> a una tabla con filas. "Destructiva" no quiere decir prohibida; quiere decir que pide cuidado extra.
+<strong>Para que sirve:</strong> etiquetar en tu cabeza los cambios peligrosos para tratarlos con respeto.
 <strong>Donde se usa en un repo real:</strong> retirar la tabla <code>notas_internas</code> de <strong>Faro</strong> seria una migracion destructiva.</p>
 </blockquote>
-<p>Estrategias para no perder datos:</p>
+<p>Algunas estrategias para no perder datos:</p>
 <ol>
 <li>
-<p><strong>Anade antes de borrar.</strong> Si quieres reemplazar la columna <code>nombre</code> por <code>titulo</code>, primero anade <code>titulo</code>, copia los datos, actualiza el codigo, y solo despues (en otra migracion, otro dia) borra <code>nombre</code>. A esto se le llama <em>migracion en dos fases</em> o <em>expand/contract</em>.</p>
+<p><strong>Anade antes de borrar.</strong> Si quieres reemplazar la columna <code>nombre</code> por <code>titulo</code>, primero anades <code>titulo</code>, copias los datos, actualizas el codigo, y solo despues (en otra migracion, otro dia) borras <code>nombre</code>. A esto se le llama <em>migracion en dos fases</em> o <em>expand/contract</em>.</p>
 </li>
 <li>
 <p><strong>Usa <code>DEFAULT</code> para las columnas obligatorias nuevas</strong>, como vimos en la seccion 2.</p>
@@ -201,25 +201,25 @@ ALTER TABLE proyectos DROP COLUMN nombre;
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-update-en-migraciones">🟦 ¿Que significa? — <em>UPDATE (en migraciones)</em></h3>
-<p><code>UPDATE</code> modifica los <strong>datos</strong> existentes (no la estructura). Dentro de una migracion se usa para rellenar o transformar valores: copiar de una columna a otra, normalizar formatos, etc.
+<p><code>UPDATE</code> modifica los <strong>datos</strong> existentes (no la estructura). Dentro de una migracion se usa para rellenar o transformar valores: copiar de una columna a otra, normalizar formatos, ese tipo de cosas.
 <strong>Para que sirve:</strong> mover o ajustar datos que ya estan guardados, como parte del cambio de esquema.
 <strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, al copiar <code>nombre</code> hacia el nuevo <code>titulo</code> antes de eliminar el campo viejo.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Separar "anadir" y "borrar" en migraciones de dias distintos te da una red enorme: si algo sale mal tras anadir, la columna vieja todavia esta ahi para volver atras. La prisa es la principal causa de datos perdidos.</p>
+<p>Separar "anadir" y "borrar" en migraciones de dias distintos te regala una red enorme: si algo sale mal despues de anadir, la columna vieja sigue ahi para volver atras. La prisa es la principal causa de datos perdidos.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En <strong>RachaSimple</strong>, las tablas <code>habitos</code>, <code>registros_racha</code> y <code>perfiles</code> estan protegidas con <strong>RLS</strong> (Row Level Security): cada usuario solo ve sus propias filas. Cuando anades una columna nueva con una migracion, <strong>las politicas de RLS existentes siguen funcionando</strong> sobre la tabla; no se borran. Pero si tu nueva columna necesita una regla de acceso propia, tendras que anadir o ajustar la politica <strong>en la misma migracion</strong>. Olvidar esto es un clasico: anades la columna, la app la pide, y RLS la bloquea o, peor, la deja demasiado abierta.</p>
+<p>En <strong>RachaSimple</strong>, las tablas <code>habitos</code>, <code>registros_racha</code> y <code>perfiles</code> estan protegidas con <strong>RLS</strong> (Row Level Security): cada usuario solo ve sus propias filas. Cuando anades una columna nueva con una migracion, <strong>las politicas de RLS que ya existen siguen funcionando</strong> sobre la tabla; no se borran. Pero si tu columna nueva necesita su propia regla de acceso, tendras que anadir o ajustar la politica <strong>en la misma migracion</strong>. Olvidarlo es un clasico: anades la columna, la app la pide, y RLS la bloquea o, peor, la deja demasiado abierta.</p>
 <h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
 <p>Es un mecanismo de Postgres que filtra <strong>que filas puede ver o tocar cada usuario</strong>, segun reglas (politicas) que tu defines. Por ejemplo: "un usuario solo lee los habitos donde <code>user_id</code> es el suyo".
-<strong>Para que sirve:</strong> seguridad de datos: que nadie acceda a informacion de otra persona, incluso si la app tuviera un bug.
+<strong>Para que sirve:</strong> seguridad de datos. Que nadie acceda a la informacion de otra persona, ni siquiera si la app tuviera un bug.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> (habitos, registros, perfiles) y en <strong>Faro</strong> (<code>proyectos</code>, <code>fases</code>, <code>user_connections</code>, donde ademas viven tokens sensibles que jamas deben filtrarse).</p>
 </blockquote>
 <hr />
 <h2 id="5-seeds-datos-de-ejemplo-para-trabajar-comodo">5. Seeds: datos de ejemplo para trabajar comodo</h2>
-<p>Una base de datos recien migrada esta <strong>vacia</strong>: tiene la forma correcta pero ni una sola fila. Para desarrollar comodo necesitas datos de mentira con los que probar.</p>
+<p>Una base de datos recien migrada esta <strong>vacia</strong>: tiene la forma correcta pero ni una sola fila. Para desarrollar a gusto necesitas datos de mentira con los que probar.</p>
 <blockquote class="def">
 <h3 id="que-significa-seed-datos-semilla">🟦 ¿Que significa? — <em>Seed (datos semilla)</em></h3>
-<p>Un seed es un conjunto de <strong>datos de ejemplo</strong> que insertas en una base recien creada para no trabajar sobre tablas vacias. Suelen ser unos cuantos <code>INSERT</code> que crean usuarios falsos, habitos de prueba, proyectos de muestra, etc.
-<strong>Para que sirve:</strong> poder ver la app funcionando con contenido realista durante el desarrollo, sin tener que crear todo a mano cada vez.
+<p>Un seed es un conjunto de <strong>datos de ejemplo</strong> que insertas en una base recien creada para no trabajar sobre tablas vacias. Suelen ser unos cuantos <code>INSERT</code> que crean usuarios falsos, habitos de prueba, proyectos de muestra y demas.
+<strong>Para que sirve:</strong> ver la app funcionando con contenido realista mientras desarrollas, sin tener que crear todo a mano cada vez.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, un seed podria crear un par de habitos con varios dias de racha para ver la pantalla "con vida"; en <strong>Faro</strong>, unos proyectos de ejemplo con sus fases.</p>
 </blockquote>
 <pre><code class="language-sql">-- Seed de ejemplo para RachaSimple (datos de mentira, solo para desarrollo).
@@ -239,40 +239,40 @@ INSERT INTO registros_racha (habito_id, fecha, cumplido) VALUES
 <strong>Para que sirve:</strong> crear datos, ya sea de verdad (cuando un usuario usa la app) o de ejemplo (en un seed).
 <strong>Donde se usa en un repo real:</strong> cada vez que en <strong>Faro</strong> se crea un proyecto, por debajo ocurre un <code>INSERT</code> en la tabla <code>proyectos</code>.</p>
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>Los seeds son <strong>solo para desarrollo y pruebas</strong>. Nunca corras un seed contra produccion: meterias usuarios falsos y proyectos de mentira en la base donde viven los datos reales de la gente. Por eso los seeds suelen ir en un archivo aparte (<code>supabase/seed.sql</code>) y no se aplican automaticamente al desplegar.</p>
+<p>Los seeds son <strong>solo para desarrollo y pruebas</strong>. Nunca corras un seed contra produccion: meterias usuarios falsos y proyectos de mentira en la base donde viven los datos reales de la gente. Por eso los seeds suelen ir en un archivo aparte (<code>supabase/seed.sql</code>) y no se aplican solos al desplegar.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>Aqui <strong>PolyPaw</strong> vuelve a contrastar: como sus datos viven en archivos JSON, su "seed" es literalmente un archivo JSON de ejemplo que el programa lee al arrancar. No hay <code>INSERT</code> ni tablas; solo un fichero con mascotas de muestra. Es mas simple para empezar, pero no escala igual que un Postgres con seeds versionados.</p>
+<p>Aqui <strong>PolyPaw</strong> vuelve a servir de contraste: como sus datos viven en archivos JSON, su "seed" es, literalmente, un archivo JSON de ejemplo que el programa lee al arrancar. No hay <code>INSERT</code> ni tablas; solo un fichero con mascotas de muestra. Es mas simple para empezar, pero no escala igual que un Postgres con seeds versionados.</p>
 </blockquote>
 <hr />
 <h2 id="6-entornos-desarrollo-vs-produccion">6. Entornos: desarrollo vs produccion</h2>
-<p>Una pregunta natural: donde pruebo todo esto sin miedo? La respuesta son los <em>entornos</em>.</p>
+<p>Una pregunta sale sola: donde pruebo todo esto sin miedo? La respuesta son los <em>entornos</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-entorno-environment">🟦 ¿Que significa? — <em>Entorno (environment)</em></h3>
-<p>Un entorno es una <strong>copia independiente</strong> de tu sistema (base de datos incluida) destinada a un uso concreto. Los dos clasicos son <strong>desarrollo</strong> (donde experimentas y puedes romper cosas) y <strong>produccion</strong> (la que usan las personas reales, donde nada puede romperse).
-<strong>Para que sirve:</strong> probar cambios peligrosos en un lugar seguro antes de aplicarlos donde importa.
+<p>Un entorno es una <strong>copia independiente</strong> de tu sistema (base de datos incluida) pensada para un uso concreto. Los dos clasicos son <strong>desarrollo</strong> (donde experimentas y puedes romper cosas) y <strong>produccion</strong> (la que usan las personas reales, donde nada puede romperse).
+<strong>Para que sirve:</strong> probar cambios peligrosos en un lugar seguro antes de aplicarlos donde de verdad importa.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> y <strong>RachaSimple</strong> tienen una base de desarrollo (o un proyecto Supabase de pruebas) separada de la de produccion.</p>
 <h3 id="que-significa-produccion-production">🟦 ¿Que significa? — <em>Produccion (production)</em></h3>
 <p>Es el entorno <strong>real y en vivo</strong>, el que usan los usuarios de verdad, con sus datos de verdad. Un error aqui afecta a personas.
-<strong>Para que sirve:</strong> servir la aplicacion al mundo. Es sagrado: se toca con cuidado y siempre tras haber probado en desarrollo.
+<strong>Para que sirve:</strong> servir la aplicacion al mundo. Es sagrado: se toca con cuidado y siempre despues de haber probado en desarrollo.
 <strong>Donde se usa en un repo real:</strong> la <strong>Faro</strong> que el dueno del proyecto usa a diario corre en produccion (Next.js desplegado, con su Supabase de produccion).</p>
 </blockquote>
 <p>El flujo seguro es siempre el mismo:</p>
 <ol>
 <li>Escribes la migracion y la pruebas en <strong>desarrollo</strong>. Si rompe algo, no pasa nada: ahi no hay datos reales.</li>
-<li>Verificas que la app sigue funcionando con el nuevo esquema (en Faro, recuerda la regla del repo: <code>npm run build</code> debe pasar).</li>
-<li>Solo entonces aplicas la migracion en <strong>produccion</strong>, idealmente con un backup reciente a mano.</li>
+<li>Verificas que la app sigue funcionando con el esquema nuevo (en Faro, recuerda la regla del repo: <code>npm run build</code> debe pasar).</li>
+<li>Recien entonces aplicas la migracion en <strong>produccion</strong>, idealmente con un backup reciente a mano.</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-variables-de-entorno-environment-variables">🟦 ¿Que significa? — <em>Variables de entorno (environment variables)</em></h3>
 <p>Son valores de configuracion que cambian segun el entorno, como la direccion y las llaves de la base de datos. La misma app, en desarrollo, apunta a una base; en produccion, a otra, gracias a estas variables.
-<strong>Para que sirve:</strong> que un mismo codigo se conecte a la base correcta sin cambiar el codigo, solo la configuracion. Y que las llaves secretas <strong>no</strong> queden escritas en el codigo.
+<strong>Para que sirve:</strong> que un mismo codigo se conecte a la base correcta sin cambiar el codigo, solo la configuracion. Y que las llaves secretas <strong>no</strong> queden escritas dentro del codigo.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> guarda en variables de entorno la URL de Supabase, las llaves y la clave de OpenAI; segun el CLAUDE.md del repo, <strong>los tokens y secretos viven solo en el servidor</strong>, nunca en el cliente ni commiteados.</p>
 <h3 id="cuidado_5">⚠️ Cuidado</h3>
-<p>Jamas pongas tus llaves de produccion en el codigo ni las subas a Git. En <strong>Faro</strong>, las claves de Supabase y OpenAI, y los tokens de <code>user_connections</code>, solo viven en variables de entorno del servidor y protegidos por RLS. Una llave filtrada en un commit es un incidente de seguridad de verdad.</p>
+<p>Jamas pongas tus llaves de produccion en el codigo ni las subas a Git. En <strong>Faro</strong>, las claves de Supabase y OpenAI, y los tokens de <code>user_connections</code>, solo viven en variables de entorno del servidor y protegidos por RLS. Una llave filtrada en un commit es un incidente de seguridad de verdad, no una anecdota.</p>
 <h3 id="tip_4">💡 Tip</h3>
-<p>Algunas plataformas (Supabase incluida) ofrecen "ramas" o entornos de preview que crean una copia temporal de la base para probar una rama de Git. Es como un entorno de desarrollo desechable por cada PR. Cuando lo tengas disponible, usalo: pruebas la migracion en un clon y la fusionas con confianza.</p>
+<p>Algunas plataformas (Supabase entre ellas) ofrecen "ramas" o entornos de preview que crean una copia temporal de la base para probar una rama de Git. Es como un entorno de desarrollo desechable por cada PR. Cuando lo tengas disponible, usalo: pruebas la migracion en un clon y la fusionas con confianza.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>Recuerda la regla del repo <strong>Faro</strong>: cualquier cambio funcional (incluida una migracion que cambia el esquema o las variables de entorno) <strong>debe actualizar el <code>README.md</code> en el mismo PR</strong>, y en español. Si tu migracion anade una columna que la app expone, o cambia una variable de entorno necesaria, el README tiene que reflejarlo. Una migracion sin su nota en el README es una migracion a medias.</p>
+<p>Recuerda la regla del repo <strong>Faro</strong>: cualquier cambio funcional (incluida una migracion que toca el esquema o las variables de entorno) <strong>debe actualizar el <code>README.md</code> en el mismo PR</strong>, y en español. Si tu migracion anade una columna que la app expone, o cambia una variable de entorno necesaria, el README tiene que reflejarlo. Una migracion sin su nota en el README es una migracion a medias.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -314,7 +314,7 @@ INSERT INTO registros_racha (habito_id, fecha, cumplido) VALUES
 </ol>
 <hr />
 <blockquote>
-<p>Lo lograste. Ahora tus tablas pueden crecer, cambiar de forma y sanar sin perder ni una gota de datos, igual que un ajolote regenera sin drama. La proxima vez que necesites un campo nuevo, ya no diras "y si rompo todo?", sino "voy a escribir una migracion, probarla en desarrollo y dejarla anotada en el README". Eso, pequeño humano, es trabajar como profesional. Nos vemos en el siguiente capitulo. — Bit 🐾</p>
+<p>Lo lograste. Ahora tus tablas pueden crecer, cambiar de forma y sanar sin perder ni una gota de datos, igual que un ajolote se regenera sin drama. La proxima vez que necesites un campo nuevo, ya no diras "y si lo rompo todo?", sino "voy a escribir una migracion, probarla en desarrollo y dejarla anotada en el README". Eso, pequeño humano, es trabajar como profesional. Nos vemos en el siguiente capitulo. — Bit 🐾</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

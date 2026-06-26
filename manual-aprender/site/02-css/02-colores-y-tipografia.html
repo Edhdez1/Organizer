@@ -18,6 +18,10 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-02-colores-unidades-y-tipografia">Capítulo 02 — Colores, unidades y tipografía</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
 <p>Este es <strong>el</strong> capítulo que te da el superpoder que pediste: elegir colores con un código
 exacto y controlar tamaños con precisión. Cuando lo termines, podrás decir <em>"el fondo en
@@ -26,13 +30,15 @@ significa cada cosa.</p>
 </blockquote>
 <hr />
 <h2 id="1-los-colores-en-css-cuatro-formas-de-nombrarlos">1. Los colores en CSS: cuatro formas de nombrarlos</h2>
-<p>Hay varias maneras de escribir un color. Las verás todas en código real, así que conviene
-entenderlas.</p>
+<p>Resulta que un mismo color se puede escribir de varias maneras. Las cuatro aparecen en código
+real todo el tiempo, así que vale la pena conocerlas para no quedarte mirando una pantalla sin
+entender qué dice.</p>
 <h3 id="a-por-nombre">a) Por nombre</h3>
 <blockquote class="def">
 <h3 id="que-significa-colores-con-nombre">🟦 ¿Qué significa? — <em>Colores con nombre</em></h3>
-<p>CSS entiende unos 140 nombres de color en inglés: <code>red</code>, <code>blue</code>, <code>white</code>, <code>tomato</code>,
-<code>teal</code>… Cómodos para pruebas, pero <strong>limitados</strong> (no puedes afinar el tono exacto).
+<p>CSS reconoce unos 140 nombres de color escritos en inglés: <code>red</code>, <code>blue</code>, <code>white</code>, <code>tomato</code>,
+<code>teal</code>… Son cómodos para salir del paso y hacer pruebas rápidas, pero se quedan <strong>cortos</strong>: no
+hay forma de afinar el tono exacto que tienes en la cabeza.
 <code>css
 h1 { color: teal; }</code></p>
 </blockquote>
@@ -40,103 +46,111 @@ h1 { color: teal; }</code></p>
 <blockquote class="def">
 <h3 id="que-significa-color-hexadecimal-hex">🟦 ¿Qué significa? — <em>Color hexadecimal (hex)</em></h3>
 <p>Un color <strong>hexadecimal</strong> se escribe con <code>#</code> seguido de <strong>6 caracteres</strong>, en tres parejas que
-representan la cantidad de <strong>R</strong>ojo, <strong>V</strong>erde y <strong>A</strong>zul (en inglés RGB). Cada pareja va de
-<code>00</code> (nada) a <code>FF</code> (máximo).
+indican cuánto hay de <strong>R</strong>ojo, <strong>V</strong>erde y <strong>A</strong>zul (en inglés RGB). Cada pareja va desde
+<code>00</code> (nada) hasta <code>FF</code> (al máximo).
 <code>css
 color: #1B6B6B;
 /*       │ │ │
          │ │ └─ azul:  6B
          │ └─── verde: 6B
          └───── rojo:  1B   → poco rojo, bastante verde y azul = verde-azulado */</code>
-<strong>¿Por qué "hexadecimal"?</strong> Porque cuenta en base 16 (0-9 y luego A-F), no en base 10. No
-necesitas hacer las cuentas a mano: lo importante es <strong>reconocer el formato</strong> y saber copiarlo.</p>
+<strong>¿Por qué "hexadecimal"?</strong> Porque cuenta en base 16 (del 0 al 9 y luego de la A a la F), no en
+base 10 como estamos acostumbrados. Tranquilo, nadie hace estas cuentas a mano: basta con
+<strong>reconocer el formato</strong> y saber copiarlo.</p>
 <h3 id="tip-como-elegir-un-hex-exacto">💡 Tip — Cómo elegir un hex exacto</h3>
 <ul>
-<li>En cualquier buscador escribe <strong>"color picker"</strong> (selector de color): te da una rueda donde
-  eliges visualmente y te entrega el código hex listo para copiar.</li>
-<li>En las herramientas de desarrollador (<code>F12</code>), al lado de cualquier propiedad <code>color</code> hay un
-  cuadradito; haz clic y se abre un selector.</li>
-<li>Atajo: un hex de 3 cifras es una abreviatura del de 6 (<code>#1B6</code> = <code>#11BB66</code>).</li>
+<li>En cualquier buscador escribe <strong>"color picker"</strong> (selector de color): aparece una rueda donde
+  eliges el tono a ojo y te entrega el código hex listo para copiar.</li>
+<li>En las herramientas de desarrollador (<code>F12</code>), junto a cualquier propiedad <code>color</code> verás un
+  cuadradito de color; haz clic y se abre el selector.</li>
+<li>Un atajo útil: un hex de 3 cifras es la abreviatura de uno de 6 (<code>#1B6</code> equivale a <code>#11BB66</code>).</li>
 </ul>
-<p>Estos son los colores de <strong>tu</strong> manual, por ejemplo: <code>#1B6B6B</code> (teal), <code>#D98A3D</code> (naranja),
+<p>Por ejemplo, estos son los colores de <strong>tu</strong> manual: <code>#1B6B6B</code> (teal), <code>#D98A3D</code> (naranja),
 <code>#FBF9F4</code> (crema), <code>#1F2733</code> (tinta).</p>
 </blockquote>
 <h3 id="c-rgb-y-rgba-con-transparencia">c) RGB y RGBA (con transparencia)</h3>
 <blockquote class="def">
 <h3 id="que-significa-rgb-y-el-canal-alfa-rgba">🟦 ¿Qué significa? — <em>RGB y el canal alfa (RGBA)</em></h3>
-<p><strong>RGB</strong> dice lo mismo que el hex pero en números del 0 al 255: <code>rgb(27, 107, 107)</code> es igual
-que <code>#1B6B6B</code>. La ventaja viene con <strong>RGBA</strong>, que añade un cuarto valor, el <strong>alfa</strong>
-(transparencia), de 0 (invisible) a 1 (opaco):
+<p><strong>RGB</strong> dice exactamente lo mismo que el hex, pero con números del 0 al 255: <code>rgb(27, 107, 107)</code>
+es el mismo color que <code>#1B6B6B</code>. Lo interesante llega con <strong>RGBA</strong>, que suma un cuarto valor, el
+<strong>alfa</strong> (la transparencia), que va de 0 (invisible) a 1 (totalmente opaco):
 <code>css
 background: rgba(27, 107, 107, 0.5);  /* el mismo teal, pero medio transparente */</code>
-<strong>¿Para qué sirve la transparencia?</strong> Para superponer capas: un texto sobre una foto con un
-velo oscuro semitransparente detrás, por ejemplo.</p>
+<strong>¿Para qué sirve la transparencia?</strong> Para superponer capas. Piensa en un texto sobre una foto
+con un velo oscuro semitransparente detrás para que se lea bien: justo eso.</p>
 </blockquote>
 <h3 id="d-hsl-la-mas-intuitiva-para-humanos">d) HSL (la más intuitiva para humanos)</h3>
 <blockquote class="def">
 <h3 id="que-significa-hsl">🟦 ¿Qué significa? — <em>HSL</em></h3>
-<p><strong>HSL</strong> describe el color como lo piensa una persona: <strong>H</strong>ue (tono, 0-360° en un círculo
-cromático), <strong>S</strong>aturation (saturación, 0-100%) y <strong>L</strong>ightness (luminosidad, 0-100%).
+<p><strong>HSL</strong> describe el color de la forma en que lo piensa una persona: <strong>H</strong>ue (el tono, de 0 a 360°
+en un círculo cromático), <strong>S</strong>aturation (la saturación, de 0 a 100%) y <strong>L</strong>ightness (la
+luminosidad, de 0 a 100%).
 <code>css
 color: hsl(180, 60%, 27%);  /* tono cian, saturado, oscuro = parecido al teal */</code>
-<strong>¿Por qué es útil?</strong> Porque para "el mismo color pero más claro" solo subes la L, sin tocar
-el tono. Muy práctico para crear variantes (un botón y su versión al pasar el cursor).</p>
+<strong>¿Por qué es útil?</strong> Porque para conseguir "el mismo color pero más claro" basta con subir la L,
+sin tocar nada más. Es comodísimo para crear variantes, como un botón y su versión cuando pasas
+el cursor por encima.</p>
 <h3 id="tip-cual-uso">💡 Tip — ¿Cuál uso?</h3>
-<p>En la práctica: <strong>hexadecimal</strong> para la mayoría (es lo que verás en todo código), <strong>rgba</strong>
-cuando necesites transparencia, y <strong>hsl</strong> cuando quieras generar variantes de un mismo tono.
-Los tres describen colores; elige según la tarea.</p>
+<p>En el día a día la cosa es así: <strong>hexadecimal</strong> para casi todo (es lo que vas a ver por todas
+partes), <strong>rgba</strong> cuando necesites transparencia, y <strong>hsl</strong> cuando quieras sacar variantes de un
+mismo tono. Los tres describen colores; elige según lo que vayas a hacer.</p>
 </blockquote>
 <hr />
 <h2 id="2-unidades-de-tamano-px-rem-em">2. Unidades de tamaño: <code>px</code>, <code>rem</code>, <code>em</code>, <code>%</code></h2>
-<p>Para tamaños de letra, espacios y anchos, CSS usa unidades. Estas son las cuatro clave.</p>
+<p>Para los tamaños de letra, los espacios y los anchos, CSS trabaja con unidades. Hay muchas, pero
+con estas cuatro te mueves en casi cualquier situación.</p>
 <blockquote class="def">
 <h3 id="que-significa-pixel-px-unidad-absoluta">🟦 ¿Qué significa? — <em>Píxel (<code>px</code>) — unidad absoluta</em></h3>
-<p>Un <strong>píxel</strong> es un punto en la pantalla. <code>font-size: 16px</code> significa "16 puntos de alto". Es
-<strong>absoluta</strong>: 16px son 16px pase lo que pase. Fácil de entender, pero <strong>rígida</strong>: no se adapta
-si el usuario cambia el tamaño de letra de su navegador (algo que hacen muchas personas
-mayores o con baja visión).</p>
+<p>Un <strong>píxel</strong> es un punto en la pantalla. <code>font-size: 16px</code> quiere decir "16 puntos de alto". Es
+una unidad <strong>absoluta</strong>: 16px son 16px y punto, pase lo que pase. Es fácil de entender, pero
+también <strong>rígida</strong>: no se ajusta si el usuario cambia el tamaño de letra de su navegador, algo
+que hace mucha gente mayor o con poca visión.</p>
 <h3 id="que-significa-rem-unidad-relativa-la-recomendada-para-texto">🟦 ¿Qué significa? — <em><code>rem</code> — unidad relativa (la recomendada para texto)</em></h3>
-<p>Un <strong>rem</strong> es relativo al tamaño de letra <strong>base</strong> del navegador (por defecto <code>16px</code>). Así,
-<code>1rem = 16px</code>, <code>1.5rem = 24px</code>, <code>0.875rem = 14px</code>.
-<strong>¿Por qué es mejor que px para texto?</strong> Porque si el usuario agranda la letra base (por
-accesibilidad), <strong>todo tu texto en rem crece proporcionalmente</strong>. Respeta sus preferencias.
-Regla mental: divide los px deseados entre 16. ¿Quieres 18px? → <code>18/16 = 1.125rem</code>.</p>
+<p>Un <strong>rem</strong> se mide en relación con el tamaño de letra <strong>base</strong> del navegador (por defecto, <code>16px</code>).
+Así que <code>1rem = 16px</code>, <code>1.5rem = 24px</code> y <code>0.875rem = 14px</code>.
+<strong>¿Por qué es mejor que px para texto?</strong> Porque si el usuario agranda la letra base por
+accesibilidad, <strong>todo tu texto en rem crece con ella</strong>, de forma proporcional. En otras palabras,
+respeta lo que esa persona prefiere. La regla mental es simple: divide los px que quieres entre 16.
+¿Buscas 18px? → <code>18/16 = 1.125rem</code>.</p>
 <h3 id="que-significa-em-relativa-al-elemento-padre">🟦 ¿Qué significa? — <em><code>em</code> — relativa al elemento padre</em></h3>
-<p>Un <strong>em</strong> es relativo al tamaño de letra del <strong>elemento que lo contiene</strong>, no al del
-navegador. Es útil para espaciados que deben escalar con su texto, pero puede "acumularse"
-(un em dentro de otro em se multiplica), así que para texto general se prefiere <code>rem</code>.</p>
+<p>Un <strong>em</strong> se mide en relación con el tamaño de letra del <strong>elemento que lo contiene</strong>, no con el
+del navegador. Va bien para espaciados que deben crecer junto a su texto, pero tiene una trampa:
+se "acumula" (un em dentro de otro em se multiplica), así que para el texto en general es más
+seguro tirar de <code>rem</code>.</p>
 <h3 id="que-significa-porcentaje">🟦 ¿Qué significa? — <em>Porcentaje (<code>%</code>)</em></h3>
-<p>El <strong>porcentaje</strong> es relativo al <strong>tamaño del contenedor</strong>. <code>width: 50%</code> significa "la mitad
-del ancho de la caja que me contiene". Es la base del diseño que se adapta: un bloque al 100%
-ocupa todo el ancho disponible, sea una pantalla grande o un teléfono.</p>
+<p>El <strong>porcentaje</strong> se mide en relación con el <strong>tamaño del contenedor</strong>. <code>width: 50%</code> significa
+"la mitad del ancho de la caja que me contiene". Es la base de cualquier diseño que se adapta: un
+bloque al 100% ocupa todo el ancho disponible, lo mismo en una pantalla grande que en un teléfono.</p>
 <h3 id="tip-receta-practica-de-unidades">💡 Tip — Receta práctica de unidades</h3>
 <ul>
-<li><strong>Texto</strong> → <code>rem</code> (respeta accesibilidad).</li>
-<li><strong>Espaciados</strong> (márgenes, padding) → <code>rem</code> o <code>px</code>, según gusto.</li>
+<li><strong>Texto</strong> → <code>rem</code> (respeta la accesibilidad).</li>
+<li><strong>Espaciados</strong> (márgenes, padding) → <code>rem</code> o <code>px</code>, según prefieras.</li>
 <li><strong>Anchos que se adaptan</strong> → <code>%</code> o unidades de pantalla (<code>vw</code>, que es "% del ancho de la
   ventana").</li>
-<li>Empieza usando <code>rem</code> para texto y <code>px</code> para detalles finos; con eso vas bien.</li>
+<li>Para arrancar, usa <code>rem</code> en el texto y <code>px</code> en los detalles finos; con eso vas más que bien.</li>
 </ul>
 </blockquote>
 <hr />
 <h2 id="3-tipografia-controlar-la-letra">3. Tipografía: controlar la letra</h2>
 <blockquote class="def">
 <h3 id="que-significa-font-family-la-fuente-tipografica">🟦 ¿Qué significa? — <em><code>font-family</code> (la fuente tipográfica)</em></h3>
-<p>La <strong>fuente</strong> o <em>tipografía</em> es el "estilo de letra". Se elige con <code>font-family</code>, y se da una
-<strong>lista de respaldo</strong> por si la primera no está disponible:
+<p>La <strong>fuente</strong> o <em>tipografía</em> es el "estilo de letra". Se elige con <code>font-family</code>, y conviene dar
+una <strong>lista de respaldo</strong> por si la primera opción no está disponible en el equipo del usuario:
 <code>css
 body {
   font-family: "Hanken Grotesk", Helvetica, Arial, sans-serif;
 }</code>
-El navegador intenta la primera; si no la tiene, baja a la siguiente, hasta <code>sans-serif</code>
-(una fuente genérica "de palo seco"). <strong>¿Dónde se usa en tu proyecto?</strong> Tu sitio usa
-<strong>Fraunces</strong> para títulos y <strong>Hanken Grotesk</strong> para el cuerpo (cargadas desde Google Fonts).</p>
+El navegador prueba con la primera; si no la encuentra, pasa a la siguiente, y así hasta llegar a
+<code>sans-serif</code> (una fuente genérica "de palo seco"). <strong>¿Dónde se usa en tu proyecto?</strong> Tu sitio usa
+<strong>Fraunces</strong> para los títulos y <strong>Hanken Grotesk</strong> para el cuerpo (ambas cargadas desde Google
+Fonts).</p>
 <h3 id="que-significa-serif-vs-sans-serif">🟦 ¿Qué significa? — <em>Serif vs. sans-serif</em></h3>
 <ul>
-<li><strong>Serif</strong>: fuentes con "remates" (pequeños adornos en las puntas), como Times. Dan un aire
-  clásico/editorial. Tu sitio usa una serif (Fraunces) para los títulos.</li>
-<li><strong>Sans-serif</strong> ("sin serif"): fuentes limpias sin adornos, como Arial. Se leen muy bien en
-  pantalla; por eso se usan para el cuerpo de texto.</li>
+<li><strong>Serif</strong>: fuentes con "remates" (esos pequeños adornos en las puntas de las letras), como
+  Times. Transmiten un aire clásico, de libro o periódico. Tu sitio usa una serif (Fraunces) para
+  los títulos.</li>
+<li><strong>Sans-serif</strong> ("sin serif"): fuentes limpias, sin esos adornos, como Arial. Se leen muy bien en
+  pantalla, y por eso suelen reservarse para el cuerpo de texto.</li>
 </ul>
 <h3 id="que-significa-propiedades-de-texto-mas-usadas">🟦 ¿Qué significa? — <em>Propiedades de texto más usadas</em></h3>
 <p><code>css
@@ -147,21 +161,23 @@ p {
   text-align: center;      /* alineación: left, center, right, justify */
   letter-spacing: 0.02em;  /* espacio entre letras */
 }</code>
-- <code>line-height</code> (interlineado) es clave para la legibilidad: <code>1.5</code>–<code>1.7</code> es cómodo de leer.
-- <code>font-weight</code> usa números de 100 a 900; 400 es normal, 700 negrita.</p>
+- El <code>line-height</code> (el interlineado) marca una diferencia enorme en la legibilidad: un valor entre
+  <code>1.5</code> y <code>1.7</code> se lee con comodidad.
+- El <code>font-weight</code> va con números del 100 al 900; 400 es el grosor normal y 700 la negrita.</p>
 <h3 id="que-significa-fuentes-web-google-fonts">🟦 ¿Qué significa? — <em>Fuentes web (Google Fonts)</em></h3>
-<p>Las computadoras solo traen unas pocas fuentes instaladas. Para usar una tipografía bonita que
-no todos tienen, se <strong>carga desde internet</strong>. <strong>Google Fonts</strong> es un servicio gratuito que
-aloja cientos de fuentes; añades un <code>&lt;link&gt;</code> en tu <code>&lt;head&gt;</code> y ya puedes usarlas en <code>font-family</code>.
-Así es como tu sitio usa Fraunces y Hanken Grotesk.</p>
+<p>Los equipos solo traen instaladas unas pocas fuentes. Cuando quieres usar una tipografía bonita
+que no todo el mundo tiene, la solución es <strong>cargarla desde internet</strong>. <strong>Google Fonts</strong> es un
+servicio gratuito que aloja cientos de fuentes: añades un <code>&lt;link&gt;</code> en tu <code>&lt;head&gt;</code> y a partir de ahí
+ya puedes nombrarlas en <code>font-family</code>. Así es exactamente como tu sitio usa Fraunces y Hanken
+Grotesk.</p>
 </blockquote>
 <hr />
 <h2 id="4-variables-css-define-un-color-una-vez-usalo-en-todos-lados">4. Variables CSS: define un color una vez, úsalo en todos lados</h2>
 <blockquote class="def">
 <h3 id="que-significa-variables-css-custom-properties">🟦 ¿Qué significa? — <em>Variables CSS (custom properties)</em></h3>
-<p>Una <strong>variable CSS</strong> guarda un valor (como un color) con un nombre, para reutilizarlo. Se
-definen (normalmente en <code>:root</code>, que representa toda la página) con <code>--nombre</code>, y se usan con
-<code>var(--nombre)</code>:
+<p>Una <strong>variable CSS</strong> guarda un valor (un color, por ejemplo) bajo un nombre, para poder reutilizarlo
+cuantas veces quieras. Se definen normalmente en <code>:root</code> (que representa toda la página) con la
+sintaxis <code>--nombre</code>, y se usan con <code>var(--nombre)</code>:
 <code>css
 :root {
   --color-primario: #1B6B6B;
@@ -169,9 +185,10 @@ definen (normalmente en <code>:root</code>, que representa toda la página) con 
 }
 h1     { color: var(--color-primario); }
 .boton { background: var(--color-acento); }</code>
-<strong>¿Por qué es genial?</strong> Si decides cambiar tu color primario, lo cambias <strong>en un solo lugar</strong> y
-se actualiza en todo el sitio. Es exactamente la técnica que usa la hoja de estilos de <strong>este
-manual</strong> (<code>site/estilos.css</code>) y la que permite los "temas" (claro/oscuro) de RachaSimple.</p>
+<strong>¿Por qué es genial?</strong> Porque el día que decidas cambiar tu color primario, lo cambias <strong>en un
+solo sitio</strong> y se actualiza en toda la página de golpe. Es justo la técnica que usa la hoja de
+estilos de <strong>este manual</strong> (<code>site/estilos.css</code>), y también la que hace posibles los "temas"
+(claro/oscuro) de RachaSimple.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

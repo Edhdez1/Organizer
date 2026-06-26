@@ -5,26 +5,26 @@
 </p>
 
 
-> Hasta ahora has escrito tipos: interfaces, uniones, genéricos, props de React. Pero seamos honestos
-> sobre cómo se siente programar de verdad: el 80% del tiempo no estás escribiendo tipos nuevos,
-> estás **leyendo errores rojos** que TypeScript te subraya y preguntándote "¿y ahora qué quiere de
-> mí?". Buenas noticias de parte de Bit, tu ajolote: esos errores no son tu enemigo. Son un revisor
-> obsesivo que leyó todo tu código antes de que se ejecute y te avisa, **antes de que la app falle
-> frente a un usuario**, que algo no encaja. Este capítulo te enseña a leer un error de TypeScript
-> como quien lee un mapa: de dónde sale, qué te está diciendo y cómo arreglarlo de verdad (no
-> taparlo). Vamos a usar los errores **reales** que aparecen al trabajar en RachaSimple (la app de
-> hábitos) y en Faro (tu organizador de proyectos). Y recuerda lo de siempre: **TypeScript es
-> JavaScript con tipos.** El error no cambia tu código que corre; cambia lo que TypeScript te deja
-> escribir.
+> Hasta aquí has escrito tipos: interfaces, uniones, genéricos, props de React. Pero seamos sinceros
+> sobre cómo es programar de verdad: la mayor parte del tiempo no estás creando tipos nuevos, estás
+> **leyendo errores rojos** que TypeScript te subraya, preguntándote "¿y ahora qué quiere de mí?".
+> Bit, tu ajolote, te trae buenas noticias: esos errores no son tu enemigo. Son como un revisor muy
+> minucioso que se leyó todo tu código antes de ejecutarlo y te avisa, **antes de que la app falle
+> delante de un usuario**, que algo no encaja. En este capítulo vas a aprender a leer un error de
+> TypeScript como quien lee un mapa: de dónde sale, qué te dice y cómo arreglarlo de raíz (no
+> taparlo). Trabajaremos con errores **reales**, de los que salen al programar en RachaSimple (la app
+> de hábitos) y en Faro (tu organizador de proyectos). Y nunca olvides la idea de fondo: **TypeScript
+> es JavaScript con tipos.** El error no toca el código que se ejecuta; solo cambia lo que TypeScript
+> te permite escribir.
 
 ---
 
 ## 1. Anatomía de un error de TypeScript
 
-Cuando TypeScript no está contento, te subraya un trozo de código con una línea ondulada roja y, al
-poner el cursor encima (o en la pestaña "Problems" de VS Code, o en la terminal cuando corres
-`npm run build`), te muestra un mensaje. Ese mensaje siempre tiene la misma forma. Mira uno real que
-aparece en Faro si te equivocas:
+Cuando TypeScript no está conforme, te subraya un trozo de código con una línea ondulada roja. Si
+pones el cursor encima (o miras la pestaña "Problems" de VS Code, o la terminal al correr
+`npm run build`), aparece un mensaje. Ese mensaje siempre tiene la misma forma. Aquí va uno de verdad
+que sale en Faro si te equivocas:
 
 ```typescript
 // project.description es de tipo `string | null`
@@ -33,45 +33,46 @@ const inicial = project.description.trim();
 //              ts(18047)
 ```
 
-Vamos a despiezar lo que ves:
+Despiecemos lo que tienes delante:
 
-- **El lugar subrayado** (`project.description`): el trozo exacto donde TS detectó el problema.
-- **El mensaje** ("'project.description' is possibly 'null'"): la explicación en inglés.
-- **El número** (`ts(18047)`): el código del error. No tienes que memorizarlos, pero te sirve para
-  buscar en Google "ts 18047" y encontrar gente con tu mismo problema.
+- **El lugar subrayado** (`project.description`): el punto exacto donde TS detectó el problema.
+- **El mensaje** ("'project.description' is possibly 'null'"): la explicación, en inglés.
+- **El número** (`ts(18047)`): el código del error. No hace falta memorizarlos, pero te viene de
+  perlas para buscar en Google "ts 18047" y dar con gente que tuvo tu mismo problema.
 
 > ### 🟦 ¿Qué significa? — *Error de tipos (type error)*
 > Un aviso que da TypeScript cuando el **tipo** de un valor no coincide con lo que tu código intenta
-> hacer con él. No es un error que ocurre al ejecutar; es un error que TS detecta **antes**, leyendo
-> los tipos. **Para qué sirve:** atrapar bugs (como acceder a algo que podría ser `null`) en tu
-> editor, mucho antes de que se rompa en producción. **Dónde se usa:** en Faro, `npm run build`
-> falla si hay un solo error de tipos, así que arreglarlos es obligatorio antes de fusionar un PR.
+> hacer con él. No es un error que ocurra al ejecutar; es uno que TS detecta **antes**, leyendo los
+> tipos. **Para qué sirve:** atrapar bugs (como acceder a algo que podría ser `null`) en tu editor,
+> mucho antes de que reviente en producción. **Dónde se usa:** en Faro, `npm run build` falla si hay
+> un solo error de tipos, así que arreglarlos es obligatorio antes de fusionar un PR.
 
 > ### 🟦 ¿Qué significa? — *Compilador (compiler)*
-> El programa de TypeScript (`tsc`) que lee tu código `.ts`/`.tsx`, revisa todos los tipos y traduce
-> a JavaScript normal. **Para qué sirve:** es quien "se queja" con los errores de tipos. **Dónde se
-> usa:** cuando corres `npm run build` en Faro o `tsc --noEmit` en RachaSimple, ese es el compilador
-> revisando todo tu proyecto de una sola pasada.
+> El programa de TypeScript (`tsc`) que lee tu código `.ts`/`.tsx`, revisa todos los tipos y lo
+> traduce a JavaScript normal. **Para qué sirve:** es quien "se queja" con los errores de tipos.
+> **Dónde se usa:** cuando corres `npm run build` en Faro o `tsc --noEmit` en RachaSimple, ese es el
+> compilador revisando todo tu proyecto de una pasada.
 
 > ### 💡 Tip
-> El número de error (`ts(2339)`, `ts(18047)`, etc.) es tu mejor amigo para buscar ayuda. Copia el
-> mensaje completo en inglés en el buscador; casi siempre alguien ya tuvo exactamente ese error.
+> El número de error (`ts(2339)`, `ts(18047)`, etc.) es tu mejor amigo a la hora de pedir ayuda.
+> Pega el mensaje completo en inglés en el buscador; casi siempre alguien ya pasó por exactamente ese
+> error.
 
 > ### ⚠️ Cuidado
-> Un error de tipos **no** significa que tu app esté rota *ahora mismo*. A veces el código hasta
-> funciona en ejecución. Pero TS te avisa porque podría romperse con ciertos datos (un `null` que
-> aún no has visto). Ignorarlo es jugar a la lotería con tus usuarios.
+> Un error de tipos **no** quiere decir que tu app esté rota *ahora mismo*. A veces el código hasta
+> funciona en ejecución. Pero TS te avisa porque podría romperse con ciertos datos (un `null` que aún
+> no has visto pasar). Ignorarlo es jugar a la lotería con tus usuarios.
 
 ---
 
 ## 2. Leer el error de adentro hacia afuera
 
-Los mensajes de TypeScript pueden parecer un muro de texto, sobre todo con tipos complicados. El
-truco profesional es leerlos **de adentro hacia afuera**: busca primero el dato más concreto (el
-nombre de la variable, el tipo más pequeño) y desde ahí entiende el resto.
+Los mensajes de TypeScript pueden parecer un muro de texto, sobre todo cuando hay tipos enredados. El
+truco que usan los profesionales es leerlos **de adentro hacia afuera**: localiza primero el dato más
+concreto (el nombre de la variable, el tipo más pequeño) y desde ahí entiende el resto.
 
-Imagina que en RachaSimple intentas pasarle a `HabitCard` un objeto equivocado. El componente espera
-esto (es su código real):
+Imagina que en RachaSimple le pasas a `HabitCard` un objeto equivocado. El componente espera esto (es
+su código real):
 
 ```typescript
 interface HabitCardProps {
@@ -94,15 +95,15 @@ Léelo de adentro hacia afuera:
 2. **Con qué se compara:** `type 'Habit'` → lo que el componente ESPERA.
 3. **El verbo clave:** `is not assignable to` → "no se puede meter esto en aquello".
 
-Traducido a humano: *"me diste un texto, pero `habit` necesita un objeto `Habit`."* Casi todos los
-errores de "tipos incompatibles" tienen esta estructura: **`Type A is not assignable to type B`**,
-donde A es lo que pusiste y B es lo que se esperaba.
+En cristiano: *"me diste un texto, pero `habit` necesita un objeto `Habit`."* Casi todos los errores
+de "tipos incompatibles" siguen esta estructura: **`Type A is not assignable to type B`**, donde A es
+lo que pusiste y B es lo que se esperaba.
 
 > ### 🟦 ¿Qué significa? — *"is not assignable to" (no asignable a)*
 > La frase clave de los errores de incompatibilidad. Significa "el valor de la izquierda no cabe en
-> el hueco de la derecha porque sus tipos no encajan". **Para qué sirve:** te dice exactamente las
-> dos piezas que no coinciden. **Dónde se usa:** sale en RachaSimple cada vez que pasas una prop con
-> el tipo equivocado a un componente como `HabitCard` o `MetricCard`.
+> el hueco de la derecha porque sus tipos no encajan". **Para qué sirve:** te señala justo las dos
+> piezas que no coinciden. **Dónde se usa:** sale en RachaSimple cada vez que pasas una prop con el
+> tipo equivocado a un componente como `HabitCard` o `MetricCard`.
 
 > ### 🟦 ¿Qué significa? — *Prop*
 > Un valor que le pasas a un componente de React desde fuera, como un argumento de función pero en
@@ -110,16 +111,16 @@ donde A es lo que pusiste y B es lo que se esperaba.
 > usa:** `habit` y `todayCheckin` son las props de `HabitCard` en RachaSimple.
 
 > ### 💡 Tip
-> Cuando el error sea largo, lee solo la **última línea** primero. Suele tener el resumen
+> Cuando el error sea largo, lee primero solo la **última línea**. Ahí suele estar el resumen
 > ("Type 'X' is not assignable to type 'Y'"). El resto del muro es TS explicándote *por qué*, campo
-> por campo. Si la última línea ya te basta, no leas lo demás.
+> por campo. Si con la última línea ya te basta, deja el resto.
 
 ---
 
 ## 3. Error común: "el objeto posiblemente es null o undefined"
 
-Este es, de lejos, el error que más vas a ver. Aparece porque muchos de tus datos tienen tipos como
-`string | null` o `Algo | undefined`. Mira los tipos reales de Faro:
+Este es, con diferencia, el error que más vas a ver. Aparece porque muchos de tus datos tienen tipos
+como `string | null` o `Algo | undefined`. Mira los tipos reales de Faro:
 
 ```typescript
 export interface Project {
@@ -131,19 +132,19 @@ export interface Project {
 }
 ```
 
-El `| null` no es un descuido: significa "este proyecto **todavía no tiene** descripción porque
-nadie ha disparado el análisis con IA". Entonces, si haces esto:
+Ese `| null` no es un descuido: quiere decir "este proyecto **todavía no tiene** descripción porque
+nadie ha disparado el análisis con IA". Así que, si escribes esto:
 
 ```typescript
 const resumen = project.ai_summary.slice(0, 100);
 //                                 ~~~~~ 'project.ai_summary' is possibly 'null'. ts(18047)
 ```
 
-TS te frena porque si `ai_summary` fuera `null`, llamar a `.slice()` reventaría en ejecución con el
-clásico *"Cannot read properties of null"*. TS te está salvando de un bug real.
+TS te frena porque, si `ai_summary` fuera `null`, llamar a `.slice()` reventaría en ejecución con el
+clásico *"Cannot read properties of null"*. O sea, TS te está salvando de un bug de verdad.
 
 > ### 🟦 ¿Qué significa? — *null y undefined*
-> Dos formas de decir "aquí no hay valor". `null` suele significar "vacío a propósito" (un proyecto
+> Dos maneras de decir "aquí no hay valor". `null` suele significar "vacío a propósito" (un proyecto
 > sin descripción aún). `undefined` suele significar "esto no existe / no se pasó". **Para qué
 > sirven:** representar la ausencia de un dato. **Dónde se usan:** en Faro `description: string | null`
 > marca un campo que puede venir vacío de la base de datos; en RachaSimple `todayCheckin: DailyCheckin | undefined`
@@ -151,11 +152,11 @@ clásico *"Cannot read properties of null"*. TS te está salvando de un bug real
 
 > ### 🟦 ¿Qué significa? — *Estrechar el tipo (narrowing)*
 > Reducir un tipo amplio (`string | null`) a uno más concreto (`string`) demostrándole a TS, con un
-> `if` o similar, que en ese punto el valor ya no puede ser `null`. **Para qué sirve:** después de
-> estrechar, TS te deja usar el valor sin quejarse. **Dónde se usa:** lo viste en el Capítulo 06; es
+> `if` o algo parecido, que en ese punto el valor ya no puede ser `null`. **Para qué sirve:** una vez
+> estrechado, TS te deja usar el valor sin quejarse. **Dónde se usa:** lo viste en el Capítulo 06; es
 > la forma correcta de resolver los errores de "possibly null".
 
-La forma más limpia de resolverlo es **estrechar con un `if`**:
+La salida más limpia es **estrechar con un `if`**:
 
 ```typescript
 if (project.ai_summary !== null) {
@@ -166,7 +167,7 @@ if (project.ai_summary !== null) {
 
 > ### 🔎 En tu código
 > En Faro, el componente `ProjectCard` recibe un `Project` cuyo `description` es `string | null`. Por
-> eso verás patrones como `project.description ?? "Sin descripción aún"`: es la manera de dar un texto
+> eso verás patrones como `project.description ?? "Sin descripción aún"`: es la forma de dar un texto
 > de respaldo cuando el dato viene vacío. No es paranoia; es que la base de datos **de verdad**
 > devuelve `null` mientras no corras el análisis.
 
@@ -175,7 +176,7 @@ if (project.ai_summary !== null) {
 ## 4. Error común: "la propiedad no existe en este tipo"
 
 El segundo gran clásico: `Property 'X' does not exist on type 'Y'` (`ts(2339)`). Significa que estás
-pidiendo un campo que ese tipo no tiene. Casi siempre es un **typo** o que confundiste dos tipos.
+pidiendo un campo que ese tipo no tiene. Casi siempre es un **typo**, o que confundiste dos tipos.
 
 ```typescript
 // El tipo Project tiene `progress_pct`, no `progress`
@@ -195,21 +196,21 @@ diez veces, ese es el arreglo.
 > archivos de tipos, y por eso TS sabe cuáles existen y cuáles no.
 
 > ### ⚠️ Cuidado
-> Si TS dice "Property 'foo' does not exist" y estás **segurísimo** de que existe, revisa que estés
+> Si TS dice "Property 'foo' does not exist" y tú estás **segurísimo** de que existe, revisa que estés
 > importando el tipo correcto. En RachaSimple es fácil confundir `Habit` con `NewHabit` (el primero
 > tiene `id`, el segundo no). El error no miente: estás mirando el tipo equivocado.
 
 > ### 💡 Tip
 > ¿No recuerdas qué campos tiene un tipo? Escribe el objeto, pon un punto (`project.`) y deja que el
-> autocompletado de VS Code te muestre la lista completa. Esa lista sale directa de tus tipos, así
-> que es la verdad absoluta.
+> autocompletado de VS Code te muestre la lista entera. Esa lista sale directa de tus tipos, así que
+> es la verdad absoluta.
 
 ---
 
 ## 5. `?.` y `??`: tus dos herramientas para null/undefined
 
-Estrechar con `if` está bien, pero a veces es demasiado aparatoso. TypeScript (y JavaScript moderno)
-te dan dos operadores cortitos que resuelven la mayoría de los casos.
+Estrechar con `if` está bien, pero a veces resulta demasiado aparatoso. TypeScript (y el JavaScript
+moderno) te dan dos operadores cortitos que resuelven la mayoría de los casos.
 
 ### El optional chaining `?.`
 
@@ -219,13 +220,13 @@ const status = todayCheckin?.status;
 ```
 
 El `?.` significa: *"si `todayCheckin` es `null` o `undefined`, no sigas; devuelve `undefined`. Si
-no, sigue y dame `.status`."* Es exactamente el código real de `HabitCard`. Sin `?.`, TS se quejaría
-de que `todayCheckin` podría ser `undefined`.
+no, sigue y dame `.status`."* Es tal cual el código real de `HabitCard`. Sin el `?.`, TS protestaría
+porque `todayCheckin` podría ser `undefined`.
 
 > ### 🟦 ¿Qué significa? — *Optional chaining (`?.`, encadenamiento opcional)*
 > Un operador que accede a una propiedad **solo si** el valor de antes no es `null`/`undefined`; si lo
 > es, frena y devuelve `undefined` sin reventar. **Para qué sirve:** leer datos anidados que podrían
-> faltar, sin escribir `if` por todos lados. **Dónde se usa:** `todayCheckin?.status` en el
+> faltar, sin sembrar `if` por todos lados. **Dónde se usa:** `todayCheckin?.status` en el
 > `HabitCard` de RachaSimple; en Faro, cosas como `snapshot?.last_commit?.message`.
 
 ### El nullish coalescing `??`
@@ -236,7 +237,7 @@ const texto = project.description ?? "Sin descripción todavía";
 ```
 
 El `??` significa: *"usa lo de la izquierda, **a menos que** sea `null` o `undefined`; en ese caso,
-usa lo de la derecha."* Es perfecto para valores por defecto.
+usa lo de la derecha."* Va de maravilla para valores por defecto.
 
 > ### 🟦 ¿Qué significa? — *Nullish coalescing (`??`, fusión de nulos)*
 > Un operador que devuelve el valor de la izquierda salvo que sea `null` o `undefined`, en cuyo caso
@@ -253,33 +254,34 @@ const ultimo = snapshot?.last_commit?.message ?? "sin commits";
 
 > ### ⚠️ Cuidado: `??` NO es lo mismo que `||`
 > Quizá conozcas `||` del Módulo 03. La diferencia te puede morder: `||` reemplaza **cualquier valor
-> falsy** (incluido `0`, `""` y `false`). `??` solo reemplaza `null` y `undefined`. En Faro,
+> falsy** (incluidos `0`, `""` y `false`). `??` solo reemplaza `null` y `undefined`. En Faro,
 > `progress_pct ?? 0` está bien; pero `progress_pct || 100` sería un **bug**: si el progreso real es
 > `0`, ¡`||` lo tomaría como falsy y lo cambiaría a 100! Para datos numéricos, casi siempre quieres
 > `??`.
 
 > ### 🟦 ¿Qué significa? — *Valor falsy*
-> En JavaScript, un valor que se considera "falso" cuando se usa en una condición. Los falsy son
+> En JavaScript, un valor que se considera "falso" al usarlo en una condición. Los falsy son
 > exactamente seis: `false`, `0`, `""` (texto vacío), `null`, `undefined` y `NaN`. Todo lo demás es
 > "truthy" (verdadero). **Para qué sirve:** entender qué reemplaza `||` (cualquier falsy) frente a
 > qué reemplaza `??` (solo `null` y `undefined`). **Dónde se usa:** en Faro, `progress_pct` puede ser
-> `0`, que es falsy; por eso usar `||` ahí lo trataría como "vacío" por error y `??` es la opción
+> `0`, que es falsy; por eso usar `||` ahí lo trataría como "vacío" por error, y `??` es la opción
 > correcta.
 
 ---
 
 ## 6. Optional chaining "tipado": qué te devuelve realmente
 
-Un detalle que confunde a principiantes: cuando usas `?.`, el tipo del resultado **cambia**. Mira:
+Hay un detalle que despista a quien empieza: cuando usas `?.`, el tipo del resultado **cambia**.
+Mira:
 
 ```typescript
 // status NO es CheckinStatus. Es CheckinStatus | undefined.
 const status = todayCheckin?.status;
 ```
 
-Aunque `DailyCheckin.status` sea de tipo `CheckinStatus`, al usar `?.` TS le añade `| undefined`,
-porque el `?.` puede frenar y devolver `undefined`. Esto significa que el error de "possibly
-undefined" puede **mudarse** una línea más abajo:
+Aunque `DailyCheckin.status` sea de tipo `CheckinStatus`, al usar `?.` TS le suma `| undefined`,
+porque el `?.` puede frenar y devolver `undefined`. ¿Consecuencia? El error de "possibly undefined"
+puede **mudarse** una línea más abajo:
 
 ```typescript
 const status = todayCheckin?.status;
@@ -287,8 +289,8 @@ const etiqueta = statusLabel[status];
 //                           ~~~~~~ 'status' is possibly 'undefined'. ts(18048)
 ```
 
-Para resolverlo, vuelves a tus herramientas: un `if`, un `??` con valor por defecto, o un valor de
-respaldo:
+Para resolverlo, vuelves a tus herramientas de siempre: un `if`, un `??` con valor por defecto, o un
+valor de respaldo:
 
 ```typescript
 const status = todayCheckin?.status ?? "not_done";
@@ -301,16 +303,16 @@ const status = todayCheckin?.status ?? "not_done";
 > lo que produce `todayCheckin?.status`; en Faro, `string | null` es la unión más común en `Project`.
 
 > ### 🔎 En tu código
-> En RachaSimple verás muchos `?? valorPorDefecto` justo después de un `?.`. No es casualidad: es el
-> patrón estándar para "leer algo que puede faltar y quedarme con un tipo concreto al final". Primero
-> `?.` para no reventar, luego `??` para quitar el `undefined`.
+> En RachaSimple verás un montón de `?? valorPorDefecto` justo después de un `?.`. No es casualidad:
+> es el patrón estándar para "leer algo que puede faltar y quedarme con un tipo concreto al final".
+> Primero `?.` para no reventar, luego `??` para quitar el `undefined`.
 
 ---
 
 ## 7. El `as`: el botón rojo que casi nunca debes apretar
 
-Tarde o temprano descubrirás `as`, y parecerá magia: silencia errores al instante. Por eso mismo es
-peligroso.
+Tarde o temprano vas a descubrir `as`, y parecerá magia: silencia errores al instante. Justo por eso
+es peligroso.
 
 > ### 🟦 ¿Qué significa? — *Aserción de tipo (`as`)*
 > Una forma de decirle a TypeScript "confía en mí, este valor es de tipo X aunque tú no lo veas".
@@ -318,7 +320,7 @@ peligroso.
 > con mucha mesura; en RachaSimple aparece como `['habits'] as const` (un uso seguro y legítimo).
 
 El problema es que `as` **no comprueba nada**: es una promesa tuya, no una verificación. Si mientes
-(aunque sea sin querer), TS te cree y el bug pasa a ejecución:
+(aunque sea sin querer), TS te cree y el bug se cuela hasta la ejecución:
 
 ```typescript
 // MAL: estás obligando a TS a creerte que nunca es null.
@@ -326,9 +328,9 @@ const resumen = (project.ai_summary as string).slice(0, 100);
 // Compila sin error... pero si ai_summary ES null, REVIENTA en ejecución.
 ```
 
-Con `as` apagaste exactamente la alarma que existía para protegerte. La forma correcta era estrechar
-con `if` o usar `??`. Regla de Bit: **si tu primer instinto al ver un error rojo es escribir `as`,
-respira y busca el `if` o el `??` primero.**
+Con `as` apagaste justo la alarma que existía para protegerte. Lo correcto era estrechar con `if` o
+usar `??`. Regla de Bit: **si tu primer instinto al ver un error rojo es escribir `as`, respira y
+busca antes el `if` o el `??`.**
 
 > ### ⚠️ Cuidado
 > `as` no convierte nada. `valor as string` no transforma un número en texto; solo le tapa los ojos
@@ -337,22 +339,22 @@ respira y busca el `if` o el `??` primero.**
 
 ### ¿Cuándo SÍ es legítimo usar `as`?
 
-- **`as const`**, como en `const KEY = ['habits'] as const` de RachaSimple: aquí no estás mintiendo,
-  estás pidiéndole a TS que trate ese array como algo fijo e inmutable. Uso seguro.
+- **`as const`**, como en `const KEY = ['habits'] as const` de RachaSimple: aquí no mientes, le pides
+  a TS que trate ese array como algo fijo e inmutable. Uso seguro.
 - **Datos de los que TÚ eres responsable de validar**, como `await request.json()` en una ruta de
-  Faro, donde el JSON entrante no tiene tipo y *después de revisarlo a mano* lo afirmas. Pero incluso
-  ahí, lo ideal es validar de verdad.
+  Faro, donde el JSON entrante no tiene tipo y *después de revisarlo a mano* lo afirmas. Aun así, lo
+  ideal sería validar de verdad.
 
 > ### 💡 Tip
-> Una regla mental simple: usa `as` para **darle forma a algo que TS no podía conocer** (como un JSON
-> externo), nunca para **callar un error sobre algo que TS sí conocía** (como un `string | null`). En
-> el segundo caso, el error tenía razón.
+> Una regla mental sencilla: usa `as` para **darle forma a algo que TS no podía conocer** (como un
+> JSON externo), nunca para **callar un error sobre algo que TS sí conocía** (como un `string | null`).
+> En el segundo caso, el error tenía razón.
 
 ---
 
 ## 8. Errores típicos al trabajar en Faro y RachaSimple
 
-Recopilemos los que más vas a encontrar en estos dos repos, con su arreglo correcto:
+Juntemos los que más te vas a encontrar en estos dos repos, cada uno con su arreglo correcto:
 
 **1. "is possibly 'null'" en campos de Faro.** Casi cualquier campo de IA (`ai_summary`,
 `ai_description`, `progress_pct`) es `| null` porque puede no estar generado todavía.
@@ -391,7 +393,7 @@ valor.
 
 > ### 🔎 En tu código
 > Cuando `npm run build` falla en Faro (la regla del proyecto es que el build debe pasar antes de
-> fusionar), lo más probable es que sea uno de estos cinco. La terminal te dará archivo, línea y el
+> fusionar), lo más probable es que sea uno de estos cinco. La terminal te da archivo, línea y el
 > mensaje `tsXXXX`: léelo de adentro hacia afuera y casi siempre el arreglo es un `??`, un `if` o
 > corregir un nombre.
 
@@ -414,7 +416,7 @@ valor.
 
 ## 🧪 Ejercicios
 
-1. **Despieza el mensaje.** Toma este error y escribe, en tus palabras, qué diste tú y qué se
+1. **Despieza el mensaje.** Toma este error y escribe, con tus palabras, qué diste tú y qué se
    esperaba: `Type 'number' is not assignable to type 'string'. ts(2322)`. ¿Cuál es A y cuál es B?
 
 2. 💻 **Provoca el "possibly null".** En un archivo `.ts` de prueba, copia el tipo `Project` de Faro

@@ -1,9 +1,15 @@
 # Capítulo 05 — Apps con Flet
 
-> Ya sabes Python: variables, decisiones, bucles, funciones, listas, diccionarios y archivos
-> JSON. Cerramos el módulo viendo cómo todo eso se convierte en una **app con interfaz** usando
-> **Flet**, el framework con el que está hecho PolyPaw. No buscamos que domines Flet hoy, sino
-> que **entiendas cómo está armada tu app** y puedas leer su código.
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> A estas alturas ya manejas Python: variables, decisiones, bucles, funciones, listas,
+> diccionarios y archivos JSON. Para cerrar el módulo vamos a ver cómo todo eso termina
+> convirtiéndose en una **app con interfaz** usando **Flet**, el framework con el que está hecho
+> PolyPaw. La meta de hoy no es que domines Flet, sino que **entiendas cómo está armada tu app**
+> y seas capaz de leer su código sin perderte.
 
 ---
 
@@ -11,15 +17,15 @@
 
 > ### 🟦 ¿Qué significa? — *Framework (marco de trabajo)*
 > Un **framework** es un conjunto de herramientas y reglas ya construidas que te dan la
-> estructura para crear cierto tipo de programa, para que no empieces de cero. Si una librería
-> es "una caja de herramientas", un framework es "el taller completo con las reglas de cómo
-> trabajar en él".
+> estructura para crear cierto tipo de programa, de modo que no tengas que empezar de cero. Si
+> una librería es "una caja de herramientas", un framework es "el taller completo, con sus reglas
+> de cómo trabajar dentro de él".
 
 > ### 🟦 ¿Qué significa? — *Flet*
-> **Flet** es un framework de Python para crear **interfaces gráficas** (apps con botones,
-> textos, imágenes) que funcionan en **móvil, web y escritorio** con el mismo código. Su gran
-> ventaja: escribes solo Python, sin necesidad de HTML/CSS/JavaScript, y Flet se encarga de
-> dibujar la interfaz.
+> **Flet** es un framework de Python para crear **interfaces gráficas** —apps con botones,
+> textos, imágenes— que funcionan en **móvil, web y escritorio** con el mismo código. Su gran
+> ventaja es que escribes solo Python, sin tocar HTML, CSS ni JavaScript: Flet se encarga de
+> dibujar la interfaz por ti.
 > **¿Dónde se usa en tu proyecto?** PolyPaw está construido **completamente con Flet**. Por eso
 > es Python de principio a fin.
 
@@ -29,7 +35,7 @@
 
 > ### 🟦 ¿Qué significa? — *Controles (controls)*
 > En Flet, cada elemento de la pantalla es un **control**: un objeto de Python que representa un
-> botón, un texto, una imagen, una fila, una columna. Construyes la interfaz **creando estos
+> botón, un texto, una imagen, una fila o una columna. La interfaz la construyes **creando esos
 > objetos y agregándolos** a la página.
 > ```python
 > import flet as ft
@@ -37,12 +43,13 @@
 > texto = ft.Text("¡Hola desde Flet!")
 > boton = ft.ElevatedButton("Púlsame")
 > ```
-> `ft.Text(...)` crea un control de texto; `ft.ElevatedButton(...)` crea un botón. Cada uno es
-> un objeto con propiedades que puedes configurar (color, tamaño, etc.).
+> `ft.Text(...)` crea un control de texto y `ft.ElevatedButton(...)` crea un botón. Cada uno es
+> un objeto con propiedades que puedes configurar: color, tamaño, etc.
 
 > ### 🟦 ¿Qué significa? — *Contenedores de layout: `Row` y `Column`*
 > Para organizar controles, Flet usa `ft.Row` (en fila, horizontal) y `ft.Column` (en columna,
-> vertical). ¿Te suena? Es la misma idea que **Flexbox** en CSS (Módulo 02), pero en Python:
+> vertical). ¿Te suena? Es la misma idea de **Flexbox** en CSS (Módulo 02), solo que aquí en
+> Python:
 > ```python
 > ft.Column([
 >     ft.Text("Título"),
@@ -50,8 +57,8 @@
 >     ft.ElevatedButton("Aceptar"),
 > ])
 > ```
-> Esto apila los tres controles verticalmente. Los conceptos de diseño se repiten entre
-> tecnologías: aprender uno te ayuda con los demás.
+> Eso apila los tres controles uno debajo del otro. Fíjate cómo los conceptos de diseño se
+> repiten entre tecnologías: lo que aprendiste para una te sirve para las demás.
 
 ---
 
@@ -70,21 +77,21 @@ ft.app(target=main)           # arranca la app, usando la función main
 ```
 
 > ### 🔎 Línea por línea
-> - `import flet as ft` → trae Flet y lo llama `ft` (un alias corto, muy común).
+> - `import flet as ft` → trae Flet y lo llama `ft`, un alias corto muy habitual.
 > - `def main(page):` → una función que **recibe la página** y construye la interfaz dentro.
 > - `page.add(...)` → añade controles a la pantalla.
 > - `ft.app(target=main)` → enciende la app y le dice "usa `main` para construir la interfaz".
 > **¿Dónde se usa en tu proyecto?** El `main.py` de PolyPaw tiene exactamente esta forma: una
-> función `main(page)` que arma todo, y `ft.app(...)` al final que la arranca.
+> función `main(page)` que arma todo, y un `ft.app(...)` al final que la pone en marcha.
 
 ---
 
 ## 4. Hacer la app interactiva: eventos
 
-Igual que en JavaScript reaccionabas a clics, en Flet los controles tienen eventos.
+Así como en JavaScript reaccionabas a los clics, en Flet los controles también tienen eventos.
 
 > ### 🟦 ¿Qué significa? — *El evento `on_click`*
-> Un botón puede ejecutar una función cuando se pulsa, mediante `on_click`:
+> Un botón puede ejecutar una función cuando lo pulsas, a través de `on_click`:
 > ```python
 > import flet as ft
 >
@@ -101,19 +108,20 @@ Igual que en JavaScript reaccionabas a clics, en Flet los controles tienen event
 >
 > ft.app(target=main)
 > ```
-> La función `sumar` es un **callback** (como en JavaScript): se ejecuta cuando ocurre el clic.
+> La función `sumar` es un **callback**, igual que en JavaScript: se ejecuta justo cuando ocurre
+> el clic.
 
 > ### 🟦 ¿Qué significa? — *`page.update()`*
-> Cambiar `contador.value` en Python no actualiza solo la pantalla; debes pedir a Flet que
-> **redibuje** con `page.update()`. Es parecido a cuando en el DOM cambiabas `textContent`: hay
-> un paso explícito para reflejar el cambio. Olvidarlo es un error común (cambias el dato pero
-> "no se ve").
+> Cambiar `contador.value` en Python no actualiza la pantalla por sí solo; tienes que pedirle a
+> Flet que **redibuje** con `page.update()`. Es como cuando en el DOM cambiabas `textContent`:
+> hace falta un paso explícito para que el cambio se vea. Olvidarlo es uno de los errores más
+> comunes: el dato cambia, pero en pantalla "no pasa nada".
 
 ---
 
 ## 5. Cómo está organizado PolyPaw (lectura guiada)
 
-Con todo lo aprendido, ya puedes entender el mapa de tu app:
+Con todo lo que llevas aprendido, ya puedes leer el mapa de tu app:
 
 | Archivo (en PolyPaw) | Qué hace | Conceptos que ya conoces |
 |---|---|---|
@@ -126,11 +134,12 @@ Con todo lo aprendido, ya puedes entender el mapa de tu app:
 | `polypaw_db.json` | Los datos del usuario | un diccionario persistido |
 
 > ### 💡 Tip — Cómo "leer" un proyecto que no escribiste
-> Ahora que conoces las piezas, abrir PolyPaw ya no da miedo. Estrategia para entender cualquier
-> proyecto: 1) empieza por `main.py` (el punto de entrada); 2) sigue los `import` para ver qué
-> archivos usa; 3) busca las funciones por su nombre (`cargar`, `guardar`, `mostrar`); 4) no
-> intentes entenderlo todo de golpe, sigue **un** flujo (por ejemplo, "qué pasa al completar una
-> misión"). Esta habilidad —leer código ajeno— es tan valiosa como escribirlo.
+> Ahora que conoces las piezas, abrir PolyPaw deja de dar miedo. Una buena estrategia para
+> entender cualquier proyecto: empieza por `main.py`, que es el punto de entrada; sigue los
+> `import` para ver qué archivos usa; busca las funciones por su nombre (`cargar`, `guardar`,
+> `mostrar`); y no pretendas entenderlo todo de un tirón, mejor sigue **un** solo flujo, por
+> ejemplo "qué pasa cuando completo una misión". Saber leer código ajeno es una habilidad tan
+> valiosa como saber escribirlo.
 
 ---
 
@@ -161,8 +170,8 @@ Con todo lo aprendido, ya puedes entender el mapa de tu app:
 
 ---
 
-🎉 **¡Terminaste el Módulo 04 — Python!** Ahora conoces un segundo lenguaje completo y entiendes
+🎉 **¡Terminaste el Módulo 04 — Python!** Ya conoces un segundo lenguaje completo y entiendes
 cómo está construida PolyPaw por dentro: su Python, sus datos en JSON y su interfaz con Flet.
-Con dos lenguajes en tu haber, ya piensas como programador, no como copista.
+Con dos lenguajes a tu favor, ya piensas como programador, no como copista.
 
 ➡️ Siguiente módulo: **[05 — TypeScript](../05-typescript/README.md)** *(en preparación)*.

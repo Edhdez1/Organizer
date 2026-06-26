@@ -18,25 +18,30 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-apps-con-flet">Capítulo 05 — Apps con Flet</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Ya sabes Python: variables, decisiones, bucles, funciones, listas, diccionarios y archivos
-JSON. Cerramos el módulo viendo cómo todo eso se convierte en una <strong>app con interfaz</strong> usando
-<strong>Flet</strong>, el framework con el que está hecho PolyPaw. No buscamos que domines Flet hoy, sino
-que <strong>entiendas cómo está armada tu app</strong> y puedas leer su código.</p>
+<p>A estas alturas ya manejas Python: variables, decisiones, bucles, funciones, listas,
+diccionarios y archivos JSON. Para cerrar el módulo vamos a ver cómo todo eso termina
+convirtiéndose en una <strong>app con interfaz</strong> usando <strong>Flet</strong>, el framework con el que está hecho
+PolyPaw. La meta de hoy no es que domines Flet, sino que <strong>entiendas cómo está armada tu app</strong>
+y seas capaz de leer su código sin perderte.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-un-framework-y-que-es-flet">1. Qué es un framework y qué es Flet</h2>
 <blockquote class="def">
 <h3 id="que-significa-framework-marco-de-trabajo">🟦 ¿Qué significa? — <em>Framework (marco de trabajo)</em></h3>
 <p>Un <strong>framework</strong> es un conjunto de herramientas y reglas ya construidas que te dan la
-estructura para crear cierto tipo de programa, para que no empieces de cero. Si una librería
-es "una caja de herramientas", un framework es "el taller completo con las reglas de cómo
-trabajar en él".</p>
+estructura para crear cierto tipo de programa, de modo que no tengas que empezar de cero. Si
+una librería es "una caja de herramientas", un framework es "el taller completo, con sus reglas
+de cómo trabajar dentro de él".</p>
 <h3 id="que-significa-flet">🟦 ¿Qué significa? — <em>Flet</em></h3>
-<p><strong>Flet</strong> es un framework de Python para crear <strong>interfaces gráficas</strong> (apps con botones,
-textos, imágenes) que funcionan en <strong>móvil, web y escritorio</strong> con el mismo código. Su gran
-ventaja: escribes solo Python, sin necesidad de HTML/CSS/JavaScript, y Flet se encarga de
-dibujar la interfaz.
+<p><strong>Flet</strong> es un framework de Python para crear <strong>interfaces gráficas</strong> —apps con botones,
+textos, imágenes— que funcionan en <strong>móvil, web y escritorio</strong> con el mismo código. Su gran
+ventaja es que escribes solo Python, sin tocar HTML, CSS ni JavaScript: Flet se encarga de
+dibujar la interfaz por ti.
 <strong>¿Dónde se usa en tu proyecto?</strong> PolyPaw está construido <strong>completamente con Flet</strong>. Por eso
 es Python de principio a fin.</p>
 </blockquote>
@@ -45,25 +50,26 @@ es Python de principio a fin.</p>
 <blockquote class="def">
 <h3 id="que-significa-controles-controls">🟦 ¿Qué significa? — <em>Controles (controls)</em></h3>
 <p>En Flet, cada elemento de la pantalla es un <strong>control</strong>: un objeto de Python que representa un
-botón, un texto, una imagen, una fila, una columna. Construyes la interfaz <strong>creando estos
+botón, un texto, una imagen, una fila o una columna. La interfaz la construyes <strong>creando esos
 objetos y agregándolos</strong> a la página.
 ```python
 import flet as ft</p>
 <p>texto = ft.Text("¡Hola desde Flet!")
 boton = ft.ElevatedButton("Púlsame")
-<code>``</code>ft.Text(...)<code>crea un control de texto;</code>ft.ElevatedButton(...)` crea un botón. Cada uno es
-un objeto con propiedades que puedes configurar (color, tamaño, etc.).</p>
+<code>``</code>ft.Text(...)<code>crea un control de texto y</code>ft.ElevatedButton(...)` crea un botón. Cada uno es
+un objeto con propiedades que puedes configurar: color, tamaño, etc.</p>
 <h3 id="que-significa-contenedores-de-layout-row-y-column">🟦 ¿Qué significa? — <em>Contenedores de layout: <code>Row</code> y <code>Column</code></em></h3>
 <p>Para organizar controles, Flet usa <code>ft.Row</code> (en fila, horizontal) y <code>ft.Column</code> (en columna,
-vertical). ¿Te suena? Es la misma idea que <strong>Flexbox</strong> en CSS (Módulo 02), pero en Python:
+vertical). ¿Te suena? Es la misma idea de <strong>Flexbox</strong> en CSS (Módulo 02), solo que aquí en
+Python:
 <code>python
 ft.Column([
     ft.Text("Título"),
     ft.Text("Subtítulo"),
     ft.ElevatedButton("Aceptar"),
 ])</code>
-Esto apila los tres controles verticalmente. Los conceptos de diseño se repiten entre
-tecnologías: aprender uno te ayuda con los demás.</p>
+Eso apila los tres controles uno debajo del otro. Fíjate cómo los conceptos de diseño se
+repiten entre tecnologías: lo que aprendiste para una te sirve para las demás.</p>
 </blockquote>
 <hr />
 <h2 id="3-la-estructura-minima-de-una-app-flet">3. La estructura mínima de una app Flet</h2>
@@ -80,20 +86,20 @@ ft.app(target=main)           # arranca la app, usando la función main
 <blockquote class="code">
 <h3 id="linea-por-linea">🔎 Línea por línea</h3>
 <ul>
-<li><code>import flet as ft</code> → trae Flet y lo llama <code>ft</code> (un alias corto, muy común).</li>
+<li><code>import flet as ft</code> → trae Flet y lo llama <code>ft</code>, un alias corto muy habitual.</li>
 <li><code>def main(page):</code> → una función que <strong>recibe la página</strong> y construye la interfaz dentro.</li>
 <li><code>page.add(...)</code> → añade controles a la pantalla.</li>
 <li><code>ft.app(target=main)</code> → enciende la app y le dice "usa <code>main</code> para construir la interfaz".
 <strong>¿Dónde se usa en tu proyecto?</strong> El <code>main.py</code> de PolyPaw tiene exactamente esta forma: una
-función <code>main(page)</code> que arma todo, y <code>ft.app(...)</code> al final que la arranca.</li>
+función <code>main(page)</code> que arma todo, y un <code>ft.app(...)</code> al final que la pone en marcha.</li>
 </ul>
 </blockquote>
 <hr />
 <h2 id="4-hacer-la-app-interactiva-eventos">4. Hacer la app interactiva: eventos</h2>
-<p>Igual que en JavaScript reaccionabas a clics, en Flet los controles tienen eventos.</p>
+<p>Así como en JavaScript reaccionabas a los clics, en Flet los controles también tienen eventos.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-evento-on_click">🟦 ¿Qué significa? — <em>El evento <code>on_click</code></em></h3>
-<p>Un botón puede ejecutar una función cuando se pulsa, mediante <code>on_click</code>:
+<p>Un botón puede ejecutar una función cuando lo pulsas, a través de <code>on_click</code>:
 ```python
 import flet as ft</p>
 <p>def main(page: ft.Page):
@@ -108,16 +114,17 @@ page.add(contador, boton)
 </code></pre>
 <p>ft.app(target=main)
 <code>``
-La función</code>sumar` es un <strong>callback</strong> (como en JavaScript): se ejecuta cuando ocurre el clic.</p>
+La función</code>sumar` es un <strong>callback</strong>, igual que en JavaScript: se ejecuta justo cuando ocurre
+el clic.</p>
 <h3 id="que-significa-pageupdate">🟦 ¿Qué significa? — <em><code>page.update()</code></em></h3>
-<p>Cambiar <code>contador.value</code> en Python no actualiza solo la pantalla; debes pedir a Flet que
-<strong>redibuje</strong> con <code>page.update()</code>. Es parecido a cuando en el DOM cambiabas <code>textContent</code>: hay
-un paso explícito para reflejar el cambio. Olvidarlo es un error común (cambias el dato pero
-"no se ve").</p>
+<p>Cambiar <code>contador.value</code> en Python no actualiza la pantalla por sí solo; tienes que pedirle a
+Flet que <strong>redibuje</strong> con <code>page.update()</code>. Es como cuando en el DOM cambiabas <code>textContent</code>:
+hace falta un paso explícito para que el cambio se vea. Olvidarlo es uno de los errores más
+comunes: el dato cambia, pero en pantalla "no pasa nada".</p>
 </blockquote>
 <hr />
 <h2 id="5-como-esta-organizado-polypaw-lectura-guiada">5. Cómo está organizado PolyPaw (lectura guiada)</h2>
-<p>Con todo lo aprendido, ya puedes entender el mapa de tu app:</p>
+<p>Con todo lo que llevas aprendido, ya puedes leer el mapa de tu app:</p>
 <table>
 <thead>
 <tr>
@@ -166,11 +173,12 @@ un paso explícito para reflejar el cambio. Olvidarlo es un error común (cambia
 </table>
 <blockquote class="tip">
 <h3 id="tip-como-leer-un-proyecto-que-no-escribiste">💡 Tip — Cómo "leer" un proyecto que no escribiste</h3>
-<p>Ahora que conoces las piezas, abrir PolyPaw ya no da miedo. Estrategia para entender cualquier
-proyecto: 1) empieza por <code>main.py</code> (el punto de entrada); 2) sigue los <code>import</code> para ver qué
-archivos usa; 3) busca las funciones por su nombre (<code>cargar</code>, <code>guardar</code>, <code>mostrar</code>); 4) no
-intentes entenderlo todo de golpe, sigue <strong>un</strong> flujo (por ejemplo, "qué pasa al completar una
-misión"). Esta habilidad —leer código ajeno— es tan valiosa como escribirlo.</p>
+<p>Ahora que conoces las piezas, abrir PolyPaw deja de dar miedo. Una buena estrategia para
+entender cualquier proyecto: empieza por <code>main.py</code>, que es el punto de entrada; sigue los
+<code>import</code> para ver qué archivos usa; busca las funciones por su nombre (<code>cargar</code>, <code>guardar</code>,
+<code>mostrar</code>); y no pretendas entenderlo todo de un tirón, mejor sigue <strong>un</strong> solo flujo, por
+ejemplo "qué pasa cuando completo una misión". Saber leer código ajeno es una habilidad tan
+valiosa como saber escribirlo.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -198,9 +206,9 @@ misión"). Esta habilidad —leer código ajeno— es tan valiosa como escribirl
    <strong>reste</strong>. (¡Acabas de hacer una app con interfaz!)</li>
 </ol>
 <hr />
-<p>🎉 <strong>¡Terminaste el Módulo 04 — Python!</strong> Ahora conoces un segundo lenguaje completo y entiendes
+<p>🎉 <strong>¡Terminaste el Módulo 04 — Python!</strong> Ya conoces un segundo lenguaje completo y entiendes
 cómo está construida PolyPaw por dentro: su Python, sus datos en JSON y su interfaz con Flet.
-Con dos lenguajes en tu haber, ya piensas como programador, no como copista.</p>
+Con dos lenguajes a tu favor, ya piensas como programador, no como copista.</p>
 <p>➡️ Siguiente módulo: <strong><a href="../05-typescript/README.html">05 — TypeScript</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

@@ -18,85 +18,93 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-01-que-es-un-servidor-y-un-nas">Capítulo 01 — ¿Qué es un servidor y un NAS?</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Cambiamos de tema: de escribir apps a las <strong>máquinas que las hacen funcionar</strong>. Lo bueno es que
-tú ya tienes un servidor de verdad (tu <code>polypaw-nas</code>), así que esto no será teoría abstracta:
-entenderás exactamente qué tienes en casa y por qué es tan útil.</p>
+<p>Cambiamos de tema: pasamos de escribir apps a las <strong>máquinas que las hacen funcionar</strong>. Y aquí
+tienes una ventaja: ya posees un servidor de verdad (tu <code>polypaw-nas</code>), así que nada de esto va a
+quedarse en teoría abstracta. Vas a entender exactamente qué tienes en casa y por qué te sirve
+tanto.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-un-servidor-de-verdad-sin-misterio">1. Qué es un servidor (de verdad, sin misterio)</h2>
-<p>Ya viste la palabra en el Módulo 00. Recapitulemos y profundicemos.</p>
+<p>La palabra ya apareció en el Módulo 00. Vamos a recordarla y a meternos un poco más a fondo.</p>
 <blockquote class="def">
 <h3 id="que-significa-servidor">🟦 ¿Qué significa? — <em>Servidor</em></h3>
 <p>Un <strong>servidor</strong> es una computadora (o un programa) que está <strong>encendida y a la espera</strong>, lista
 para <strong>dar un servicio</strong> a otras computadoras que se lo pidan: entregar páginas web, archivos,
-datos, correo… "Servidor" viene de <em>servir</em>. No es un tipo especial de máquina: es un <strong>papel</strong>.
-Cualquier computadora puede ser servidor si tiene un programa que "sirve" algo y está disponible
-para otros.</p>
+datos, correo… La palabra viene de <em>servir</em>, sin más. No es un tipo especial de máquina: es un
+<strong>papel</strong>. Cualquier computadora puede ser servidor si tiene un programa que "sirve" algo y está
+disponible para que otros lo usen.</p>
 <h3 id="tip-servidor-caja-misteriosa-en-una-sala-fria">💡 Tip — Servidor ≠ caja misteriosa en una sala fría</h3>
-<p>Solemos imaginar los servidores como armarios llenos de luces en un centro de datos. Algunos lo
-son, pero un servidor también puede ser <strong>un laptop viejo en tu casa</strong>. La diferencia con tu
-computadora normal no es el hardware, sino <strong>el papel</strong>: tu laptop normal <em>consume</em> servicios
-(cliente); un servidor <em>los ofrece</em>. Tu Acer Nitro pasó de cliente (jugar) a servidor (servir
-archivos y agentes).</p>
+<p>Casi siempre imaginamos los servidores como armarios llenos de lucecitas en un centro de datos.
+Algunos son así, sí, pero un servidor también puede ser <strong>un laptop viejo en tu casa</strong>. Lo que lo
+separa de tu computadora normal no es el hardware, sino <strong>el papel</strong> que cumple: tu laptop de
+diario <em>consume</em> servicios (cliente), mientras que un servidor <em>los ofrece</em>. Tu Acer Nitro hizo
+justo ese salto: de cliente (jugar) a servidor (servir archivos y agentes).</p>
 <h3 id="que-significa-cliente-y-servidor-repaso-aplicado">🟦 ¿Qué significa? — <em>Cliente y servidor (repaso aplicado)</em></h3>
-<p>Cuando desde tu teléfono abres un archivo guardado en el NAS: tu teléfono es el <strong>cliente</strong>
-(pide), el NAS es el <strong>servidor</strong> (responde con el archivo). Es el mismo modelo del Módulo 00,
-ahora <strong>dentro de tu casa</strong>, no por internet.</p>
+<p>Imagina que desde tu teléfono abres un archivo guardado en el NAS: tu teléfono es el <strong>cliente</strong>
+(el que pide) y el NAS es el <strong>servidor</strong> (el que responde con el archivo). Es el mismo modelo
+del Módulo 00, solo que ahora ocurre <strong>dentro de tu casa</strong> y no por internet.</p>
 </blockquote>
 <hr />
 <h2 id="2-que-es-un-nas">2. Qué es un NAS</h2>
 <blockquote class="def">
 <h3 id="que-significa-nas-network-attached-storage">🟦 ¿Qué significa? — <em>NAS (Network Attached Storage)</em></h3>
 <p>Un <strong>NAS</strong> (<em>Network Attached Storage</em>, "almacenamiento conectado a la red") es un <strong>servidor
-especializado en guardar archivos</strong> y compartirlos con todos los dispositivos de tu red. En vez
-de tener tus fotos en una memoria USB que pasas de un aparato a otro, viven en el NAS, y tu
-teléfono, laptop y tele las ven <strong>a la vez</strong>, por la red de tu casa.
-Piensa en él como <strong>tu propia "nube" privada en casa</strong>: como Google Drive o Dropbox, pero el
-disco es tuyo, está en tu hogar, y no pagas mensualidad ni dependes de una empresa.</p>
+especializado en guardar archivos</strong> y compartirlos con todos los dispositivos de tu red. En lugar
+de tener tus fotos en una memoria USB que vas pasando de un aparato a otro, viven en el NAS, y tu
+teléfono, tu laptop y tu tele las ven <strong>a la vez</strong>, a través de la red de tu casa.
+Piénsalo como <strong>tu propia "nube" privada en casa</strong>: parecido a Google Drive o Dropbox, pero el
+disco es tuyo, está bajo tu techo, y no pagas mensualidad ni dependes de ninguna empresa.</p>
 <h3 id="tip-por-que-un-nas-es-tan-util">💡 Tip — Por qué un NAS es tan útil</h3>
 <ul>
-<li><strong>Centraliza</strong>: todos tus archivos en un solo lugar, accesibles desde cualquier dispositivo.</li>
+<li><strong>Centraliza</strong>: todos tus archivos en un solo sitio, accesibles desde cualquier dispositivo.</li>
 <li><strong>Respalda</strong>: copias de seguridad automáticas de tus equipos.</li>
-<li><strong>Comparte</strong>: varias personas (familia) usan los mismos archivos.</li>
-<li><strong>Privacidad y costo</strong>: tus datos en tu casa; sin cuotas mensuales de almacenamiento.</li>
+<li><strong>Comparte</strong>: varias personas (la familia) trabajan sobre los mismos archivos.</li>
+<li><strong>Privacidad y costo</strong>: tus datos se quedan en tu casa, sin cuotas mensuales de almacenamiento.</li>
 <li><strong>Más que archivos</strong>: puede correr otros servicios (como hace el tuyo con AdGuard y OpenClaw).</li>
 </ul>
 </blockquote>
 <hr />
 <h2 id="3-tu-nas-concreto-un-acer-nitro-reconvertido">3. Tu NAS concreto: un Acer Nitro reconvertido</h2>
-<p>Veamos por qué tu equipo es un buen servidor, pieza por pieza (¿recuerdas el hardware del Módulo
-00?):</p>
+<p>Veamos, pieza por pieza, por qué tu equipo es un buen servidor (¿te acuerdas del hardware del
+Módulo 00?):</p>
 <blockquote class="code">
 <h3 id="en-tu-equipo-polypaw-nas">🔎 En tu equipo — <code>polypaw-nas</code></h3>
 <ul>
-<li><strong>CPU Intel i5-9300H (4 núcleos / 8 hilos)</strong>: suficiente "cerebro" para servir archivos y
-  correr varios servicios a la vez. (Núcleos/hilos = cuántas tareas en paralelo, Módulo 00.)</li>
-<li><strong>8 GB de RAM</strong>: su memoria de trabajo. Es el <strong>límite principal</strong> a futuro: cada servicio
-  que sumes consume RAM, y 8 GB se llenan si pones muchos. (RAM = escritorio, Módulo 00.)</li>
-<li><strong>SSD NVMe 238 GB (sistema) + HDD 954 GB (datos en <code>/srv/nas</code>)</strong>: el SSD, rápido, para que
-  Ubuntu arranque ágil; el HDD, grande y barato, para guardar los archivos. División clásica y
-  acertada. El disco de datos está casi vacío (~890 GB libres): espacio de sobra.</li>
+<li><strong>CPU Intel i5-9300H (4 núcleos / 8 hilos)</strong>: "cerebro" de sobra para servir archivos y correr
+  varios servicios a la vez. (Núcleos/hilos = cuántas tareas puede atender en paralelo, Módulo 00.)</li>
+<li><strong>8 GB de RAM</strong>: su memoria de trabajo. Aquí está el <strong>límite principal</strong> de cara al futuro:
+  cada servicio que añadas consume RAM, y 8 GB se llenan si metes demasiados. (RAM = el escritorio,
+  Módulo 00.)</li>
+<li><strong>SSD NVMe 238 GB (sistema) + HDD 954 GB (datos en <code>/srv/nas</code>)</strong>: el SSD, que es rápido, hace que
+  Ubuntu arranque ágil; el HDD, grande y barato, guarda los archivos. Una división clásica y bien
+  pensada. El disco de datos está casi vacío (~890 GB libres), así que espacio te sobra.</li>
 </ul>
 <h3 id="tip-la-bateria-como-ups-un-detalle-genial">💡 Tip — La batería como UPS (un detalle genial)</h3>
-<p>Un <strong>UPS</strong> (<em>Uninterruptible Power Supply</em>, "fuente de alimentación ininterrumpida") es una
-batería que mantiene un equipo encendido unos minutos si se va la luz, evitando apagones
-bruscos que pueden corromper datos. Los servidores serios usan uno. <strong>Tu laptop ya trae batería
-integrada</strong>: funciona como UPS gratis. Si parpadea la luz, tu NAS no se apaga ni se corrompe.
-Una ventaja real de usar un laptop como servidor.</p>
+<p>Un <strong>UPS</strong> (<em>Uninterruptible Power Supply</em>, "fuente de alimentación ininterrumpida") es una batería
+que mantiene el equipo encendido unos minutos cuando se va la luz, para evitar apagones bruscos que
+podrían corromper datos. Los servidores serios usan uno. Lo curioso es que <strong>tu laptop ya trae su
+batería integrada</strong>, así que tienes UPS gratis. Si la luz parpadea, tu NAS no se apaga ni se
+corrompe. Es una ventaja muy real de usar un laptop como servidor.</p>
 </blockquote>
 <hr />
 <h2 id="4-nas-dedicado-o-hecho-a-mano-el-caso-de-tu-equipo">4. ¿NAS dedicado o "hecho a mano"? El caso de tu equipo</h2>
 <blockquote class="def">
 <h3 id="que-significa-nas-appliance-vs-servidor-generico">🟦 ¿Qué significa? — <em>NAS "appliance" vs. servidor genérico</em></h3>
-<p>Hay dos caminos para tener un NAS:
-- <strong>Aparato dedicado</strong> (Synology, QNAP) o sistemas como <strong>TrueNAS / OpenMediaVault</strong>: traen una
-  interfaz lista para NAS, fácil pero más cerrada.
+<p>Para tener un NAS hay básicamente dos caminos:
+- <strong>Aparato dedicado</strong> (Synology, QNAP) o sistemas como <strong>TrueNAS / OpenMediaVault</strong>: vienen con
+  una interfaz lista para NAS. Es cómodo, pero también más cerrado.
 - <strong>Servidor genérico hecho a mano</strong>: una computadora con un Linux normal (como tu <strong>Ubuntu
-  Server</strong>) al que tú le instalas las piezas (Samba para compartir, Cockpit para administrar).
-  <strong>Más flexible y educativo</strong> (aprendes de verdad cómo funciona), aunque requiere configurarlo.
-<strong>Tu NAS es del segundo tipo</strong>: Ubuntu Server + Samba + Cockpit, armado a mano. Por eso este
-módulo te enseña tanto: cada pieza la entiendes porque está puesta a propósito, no escondida.</p>
+  Server</strong>) a la que tú le vas instalando las piezas (Samba para compartir, Cockpit para
+  administrar). Resulta <strong>más flexible y educativo</strong> —aprendes de verdad cómo funciona por dentro—,
+  aunque toca configurarlo tú.
+<strong>Tu NAS es del segundo tipo</strong>: Ubuntu Server + Samba + Cockpit, armado a mano. Por eso este módulo
+te enseña tanto: entiendes cada pieza porque está puesta a propósito, no escondida detrás de una
+interfaz.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -109,8 +117,8 @@ módulo te enseña tanto: cada pieza la entiendes porque está puesta a propósi
 </ul>
 <hr />
 <h2 id="ejercicios">🧪 Ejercicios</h2>
-<p>Este módulo es práctico-conceptual; varios ejercicios los harás <strong>conectándote a tu NAS</strong> (lo
-verás cómo en los próximos capítulos). Por ahora, de razonamiento:</p>
+<p>Este módulo es práctico-conceptual, y varios ejercicios los harás <strong>conectándote a tu NAS</strong> (verás
+cómo en los próximos capítulos). Por ahora, puro razonamiento:</p>
 <ol>
 <li><strong>Cliente o servidor.</strong> En estas escenas, di quién es cliente y quién servidor: (a) ves una
    película guardada en el NAS desde la tele; (b) tu NAS le pide una página a Google.</li>

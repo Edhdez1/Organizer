@@ -18,35 +18,40 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-04-funciones-tipadas-y-genericos">Capítulo 04 — Funciones tipadas y genéricos</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
 <p>Las funciones son donde los tipos más brillan: declaras qué <strong>reciben</strong> y qué <strong>devuelven</strong>, y
-TypeScript vigila ambos extremos. Al final asomamos los <strong>genéricos</strong>, que suenan intimidantes
-pero la idea es sencilla.</p>
+TypeScript vigila los dos extremos. Al final le echamos un vistazo a los <strong>genéricos</strong>, que
+suenan intimidantes pero esconden una idea bastante sencilla.</p>
 </blockquote>
 <hr />
 <h2 id="1-tipar-parametros-y-el-valor-de-retorno">1. Tipar parámetros y el valor de retorno</h2>
 <blockquote class="def">
 <h3 id="que-significa-funcion-tipada">🟦 ¿Qué significa? — <em>Función tipada</em></h3>
-<p>En una función, anotas el tipo de cada <strong>parámetro</strong> y, opcionalmente, el tipo de lo que
-<strong>devuelve</strong> (después de los paréntesis, con <code>: tipo</code>):
+<p>En una función anotas el tipo de cada <strong>parámetro</strong> y, si quieres, el tipo de lo que
+<strong>devuelve</strong> (va después de los paréntesis, con <code>: tipo</code>):
 <code>typescript
 function precioConIva(precio: number): number {
   return precio * 1.13;
 }</code>
 - <code>precio: number</code> → el parámetro debe ser un número.
 - <code>: number</code> después de <code>()</code> → la función devuelve un número.</p>
-<p>Ahora, si alguien la llama mal, error inmediato:
+<p>Si alguien la llama mal, salta el error en el acto:
 <code>typescript
 precioConIva("100");   // ❌ se esperaba number, llegó string</code></p>
 <h3 id="tip-el-tipo-de-retorno-se-suele-inferir">💡 Tip — El tipo de retorno se suele inferir</h3>
-<p>TypeScript normalmente <strong>deduce</strong> lo que devuelve una función (por el <code>return</code>), así que el
-<code>: number</code> final es opcional. Muchos lo escriben igual, como documentación y para evitar
-sorpresas. Los <strong>parámetros</strong>, en cambio, casi siempre conviene anotarlos.</p>
+<p>Por lo general TypeScript <strong>deduce</strong> lo que devuelve una función mirando el <code>return</code>, así que
+ese <code>: number</code> del final es opcional. Aun así mucha gente lo escribe, tanto para documentar
+como para no llevarse sorpresas. Con los <strong>parámetros</strong> la cosa cambia: ahí casi siempre vale
+la pena anotarlos.</p>
 <h3 id="que-significa-funciones-flecha-tipadas">🟦 ¿Qué significa? — <em>Funciones flecha tipadas</em></h3>
-<p>La forma flecha (que viste en JS) se tipa igual:
+<p>La forma flecha (la que viste en JS) se tipa igual:
 <code>typescript
 const precioConIva = (precio: number): number =&gt; precio * 1.13;</code>
-Así verás la mayoría de funciones en RachaSimple y Faro.</p>
+Así verás escritas la mayoría de funciones en RachaSimple y Faro.</p>
 </blockquote>
 <hr />
 <h2 id="2-parametros-opcionales-y-por-defecto">2. Parámetros opcionales y por defecto</h2>
@@ -58,13 +63,14 @@ function saludar(nombre: string, saludo?: string): string {
 }
 saludar("Edwar");            // "Hola, Edwar"
 saludar("Ana", "Buenas");    // "Buenas, Ana"</code>
-- <code>saludo?</code> → el parámetro es opcional (puede no pasarse).
-- <code>??</code> (operador de coalescencia nula) → "usa lo de la izquierda, y si es <code>null</code>/<code>undefined</code>,
-  usa lo de la derecha". Aquí: si no hay <code>saludo</code>, usa <code>"Hola"</code>.</p>
+- <code>saludo?</code> → el parámetro es opcional, puedes no pasarlo.
+- <code>??</code> (operador de coalescencia nula) → significa "usa lo de la izquierda, y si resulta ser
+  <code>null</code>/<code>undefined</code>, usa lo de la derecha". Aquí: si no llega <code>saludo</code>, se usa <code>"Hola"</code>.</p>
 </blockquote>
 <hr />
 <h2 id="3-tipar-funciones-que-reciben-tus-objetos">3. Tipar funciones que reciben tus objetos</h2>
-<p>Lo más útil en la práctica: combinar funciones con las <strong>interfaces</strong> del capítulo anterior.</p>
+<p>Esto es lo más útil en el día a día: juntar las funciones con las <strong>interfaces</strong> del capítulo
+anterior.</p>
 <pre><code class="language-typescript">interface Habito {
   nombre: string;
   hecho: boolean;
@@ -75,18 +81,18 @@ function describir(habito: Habito): string {
   return `${estado} ${habito.nombre}`;
 }
 </code></pre>
-<p>Dentro de <code>describir</code>, TypeScript <strong>sabe</strong> que <code>habito</code> tiene <code>nombre</code> y <code>hecho</code>, así que te
-autocompleta esas propiedades y te avisa si escribes <code>habito.nombr</code> (error de tipeo). Esa ayuda
-constante es el día a día de programar con tipos.</p>
+<p>Dentro de <code>describir</code>, TypeScript <strong>sabe</strong> que <code>habito</code> tiene <code>nombre</code> y <code>hecho</code>. Por eso te
+autocompleta esas propiedades y te avisa si escribes <code>habito.nombr</code> por un despiste. Tener esa
+ayuda todo el rato es, en buena parte, lo que se siente al programar con tipos.</p>
 <hr />
 <h2 id="4-genericos-funciones-que-sirven-para-cualquier-tipo-pero-con-seguridad">4. Genéricos: funciones que sirven para "cualquier tipo, pero con seguridad"</h2>
 <blockquote class="def">
 <h3 id="que-significa-generico">🟦 ¿Qué significa? — <em>Genérico</em></h3>
-<p>Un <strong>genérico</strong> es una forma de escribir una función (o tipo) que funciona con <strong>distintos
-tipos</strong>, pero <strong>manteniendo la información del tipo</strong>. Es el punto medio entre "solo number" y
-el peligroso <code>any</code>.</p>
-<p>Imagina una función que devuelve el primer elemento de una lista. Sin genéricos tendrías que
-elegir un tipo (<code>number[]</code>) o usar <code>any</code> (inseguro). Con genéricos, se adapta:
+<p>Un <strong>genérico</strong> es una manera de escribir una función (o un tipo) que funciona con <strong>distintos
+tipos</strong> sin perder por el camino la <strong>información del tipo</strong>. Es el punto medio entre quedarte
+en "solo number" y caer en el peligroso <code>any</code>.</p>
+<p>Piensa en una función que devuelve el primer elemento de una lista. Sin genéricos tendrías que
+casarte con un tipo (<code>number[]</code>) o tirar de <code>any</code>, que es inseguro. Con genéricos, se adapta:
 ```typescript
 function primero<T>(lista: T[]): T {
   return lista[0];
@@ -94,15 +100,16 @@ function primero<T>(lista: T[]): T {
 <p>primero<number>([10, 20, 30]);     // devuelve un number (10)
 primero<string>(["a", "b"]);        // devuelve un string ("a")
 <code>``
-La</code><T><code>es un **"tipo comodín"**: un marcador que se rellena con el tipo real al usar la
-función.</code>T` es solo una letra convencional (de <em>Type</em>); podría llamarse distinto. Así, la
-función sirve para listas de cualquier tipo <strong>y</strong> TypeScript sigue sabiendo qué devuelve.</p>
+Esa</code><T><code>es un **"tipo comodín"**: un hueco que se rellena con el tipo real en el momento de
+usar la función. La</code>T` es solo una letra por convención (viene de <em>Type</em>); podrías llamarla de
+otra forma. Así la función te vale para listas de cualquier tipo <strong>y</strong> TypeScript sigue sabiendo
+qué te devuelve.</p>
 <h3 id="tip-no-te-agobies-con-los-genericos-todavia">💡 Tip — No te agobies con los genéricos todavía</h3>
-<p>Es un concepto avanzado. Por ahora basta con <strong>reconocerlos</strong> cuando los veas (esa <code>&lt;T&gt;</code> o
-<code>&lt;Habito&gt;</code> junto a una función o tipo) y saber que significan "esto se adapta a varios tipos
-sin perder seguridad". Los usarás de verdad con TanStack Query en React (Módulo 06), donde
-verás cosas como <code>useQuery&lt;Habito[]&gt;(...)</code>: ahí el genérico le dice "esta consulta devuelve una
-lista de hábitos".</p>
+<p>Es un concepto avanzado, así que tranquilo. De momento te basta con <strong>reconocerlos</strong> cuando los
+veas (esa <code>&lt;T&gt;</code> o <code>&lt;Habito&gt;</code> pegada a una función o a un tipo) y tener claro que quieren decir
+"esto se adapta a varios tipos sin perder seguridad". Los empezarás a usar de verdad con
+TanStack Query en React (Módulo 06), donde verás cosas como <code>useQuery&lt;Habito[]&gt;(...)</code>: ahí el
+genérico le está diciendo "esta consulta devuelve una lista de hábitos".</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

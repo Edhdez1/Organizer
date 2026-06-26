@@ -23,66 +23,66 @@
 </p>
 
 <blockquote>
-<p>En el Capítulo 03 viste a vuelo de pájaro qué es internet: una red de computadoras que se hablan entre sí. Ahora vamos a bajar al detalle. Vas a entender cómo tu mensaje se parte en pedacitos (paquetes) que viajan por rutas distintas, cómo TCP/IP los vuelve a armar, qué hace un router, qué es un puerto, y por qué el candado del navegador (HTTPS) significa que nadie puede leer tus datos en el camino. Todo esto no es teoría suelta: es exactamente lo que ocurre cuando alguien visita <strong>tunal-digital</strong> en Cloudflare o cuando tú entras a tu <strong>polypaw-nas</strong> desde lejos con Tailscale. Bit, el ajolote, te acompaña con la linterna.</p>
+<p>En el Capítulo 03 viste a vuelo de pájaro qué es internet: una red de computadoras que se hablan entre sí. Ahora toca bajar al detalle. Vas a ver cómo tu mensaje se parte en pedacitos (paquetes) que viajan por rutas distintas, cómo TCP/IP los vuelve a armar al otro lado, qué hace exactamente un router, qué es un puerto, y por qué ese candado del navegador (HTTPS) significa que nadie puede leer tus datos mientras viajan. Nada de esto es teoría suelta: es justo lo que pasa cuando alguien visita <strong>tunal-digital</strong> en Cloudflare, o cuando tú entras a tu <strong>polypaw-nas</strong> desde lejos con Tailscale. Bit, el ajolote, te acompaña con la linterna.</p>
 </blockquote>
 <h2 id="1-la-idea-grande-internet-es-correo-no-telefono">1. La idea grande: internet es correo, no teléfono</h2>
-<p>Cuando hablas por teléfono fijo de los de antes, se abre un cable dedicado entre tú y la otra persona durante toda la llamada. Internet <strong>no</strong> funciona así. Internet funciona más como el correo postal: tú escribes una carta, la metes en sobres, y el sistema postal se encarga de llevar cada sobre a su destino, aunque cada uno tome un camino distinto.</p>
-<p>Esa diferencia lo cambia todo. No hay un "cable exclusivo" entre tu computadora y el servidor de un sitio web. Hay una red gigante y compartida por la que viajan millones de sobrecitos al mismo tiempo, y unos aparatos llamados routers deciden por dónde mandar cada uno.</p>
+<p>Con un teléfono fijo de los de antes, mientras dura la llamada se abre un cable dedicado entre tú y la otra persona. Internet <strong>no</strong> funciona así. Se parece mucho más al correo postal: escribes una carta, la metes en sobres, y el sistema postal se encarga de llevar cada sobre a su destino, aunque cada uno tome un camino distinto.</p>
+<p>Esa diferencia lo cambia todo. No existe un "cable exclusivo" entre tu computadora y el servidor de un sitio web. Lo que hay es una red enorme y compartida por la que viajan millones de sobrecitos a la vez, y unos aparatos llamados routers que van decidiendo por dónde mandar cada uno.</p>
 <blockquote class="def">
 <h3 id="que-significa-paquete">🟦 ¿Qué significa? — <em>Paquete</em></h3>
-<p>Un <strong>paquete</strong> es un pedacito pequeño de información con una etiqueta de dirección. En lugar de mandar un archivo o una página entera de golpe, internet la parte en muchos paquetes. Cada uno lleva: de dónde viene, a dónde va, qué número de pedazo es (1 de 100, 2 de 100...) y un trocito de los datos. Sirve para que la información viaje en partes manejables y se pueda rearmar al final, aunque algunos pedazos lleguen tarde o se pierdan.</p>
+<p>Un <strong>paquete</strong> es un pedacito pequeño de información con una etiqueta de dirección pegada. En vez de mandar un archivo o una página entera de un solo golpe, internet la corta en muchos paquetes. Cada uno lleva: de dónde viene, a dónde va, qué número de pedazo es (1 de 100, 2 de 100...) y un trocito de los datos. Así la información viaja en partes manejables y se puede rearmar al final, aunque algunos pedazos lleguen tarde o se pierdan por el camino.</p>
 <h3 id="tip-por-que-partir-en-pedazos-es-buena-idea">💡 Tip — Por qué partir en pedazos es buena idea</h3>
-<p>Si mandas todo en un solo bloque gigante y se corrompe a la mitad, perdiste todo. Con paquetes, si uno falla, se reenvía <strong>solo ese</strong>. Además, muchos paquetes de muchas personas pueden compartir los mismos cables sin que nadie tenga que "esperar su turno" para una llamada completa.</p>
+<p>Si mandas todo en un solo bloque gigante y se corrompe a la mitad, perdiste todo y hay que empezar de cero. Con paquetes, si uno falla, se reenvía <strong>solo ese</strong>. Y como bonus, muchos paquetes de muchas personas pueden compartir los mismos cables a la vez, sin que nadie tenga que "esperar su turno" para una llamada completa.</p>
 </blockquote>
 <h2 id="2-direcciones-ip-el-numero-de-casa-de-cada-computadora">2. Direcciones IP: el número de casa de cada computadora</h2>
-<p>Para que un paquete llegue a algún lado, necesita una dirección. En internet esa dirección se llama dirección IP.</p>
+<p>Para que un paquete llegue a algún lado, necesita una dirección. En internet, esa dirección se llama dirección IP.</p>
 <blockquote class="def">
 <h3 id="que-significa-direccion-ip">🟦 ¿Qué significa? — <em>Dirección IP</em></h3>
-<p>Una <strong>dirección IP</strong> (IP = <em>Internet Protocol</em>) es el número que identifica a una computadora dentro de una red, como el número de una casa en una calle. Hay de dos tipos comunes: IPv4, que se ve así <code>192.168.1.40</code>, y IPv6, más larga, así <code>2001:db8::7334</code>. Sirve para que los paquetes sepan a qué máquina exacta llegar.</p>
+<p>Una <strong>dirección IP</strong> (IP = <em>Internet Protocol</em>) es el número que identifica a una computadora dentro de una red, igual que el número identifica una casa en una calle. Hay dos tipos comunes: IPv4, que se ve así <code>192.168.1.40</code>, e IPv6, más larga, así <code>2001:db8::7334</code>. Gracias a ella, los paquetes saben a qué máquina exacta tienen que llegar.</p>
 </blockquote>
-<p>Hay direcciones IP <strong>públicas</strong> (visibles desde todo internet, como la de tu router de casa hacia afuera) e IP <strong>privadas</strong> (solo válidas dentro de tu red local, como <code>192.168.x.x</code>). Tu <strong>polypaw-nas</strong> tiene una IP privada dentro de tu casa; los dispositivos de tu hogar lo encuentran por ahí. Pero desde la calle, esa IP privada no sirve: por eso más adelante entra Tailscale.</p>
+<p>Hay direcciones IP <strong>públicas</strong> (visibles desde todo internet, como la de tu router de casa hacia afuera) e IP <strong>privadas</strong> (que solo valen dentro de tu red local, como <code>192.168.x.x</code>). Tu <strong>polypaw-nas</strong> tiene una IP privada dentro de tu casa, y los dispositivos del hogar lo encuentran por ahí. Pero desde la calle esa IP privada no sirve de nada: justo por eso, más adelante, entra Tailscale.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Cuando arrancas Faro (carpeta <code>Organizer</code>) en tu máquina con <code>npm run dev</code>, Next.js te dice algo como <code>http://localhost:3000</code>. Ese <code>localhost</code> es un apodo de la IP <code>127.0.0.1</code>, que siempre significa "esta misma computadora". Por eso solo tú lo ves: es una dirección que apunta a ti mismo.</p>
+<p>Cuando arrancas Faro (carpeta <code>Organizer</code>) en tu máquina con <code>npm run dev</code>, Next.js te suelta algo como <code>http://localhost:3000</code>. Ese <code>localhost</code> es un apodo de la IP <code>127.0.0.1</code>, que siempre quiere decir "esta misma computadora". Por eso solo lo ves tú: es una dirección que apunta a ti mismo.</p>
 </blockquote>
 <h2 id="3-tcpip-en-terminos-simples-las-reglas-del-juego">3. TCP/IP en términos simples: las reglas del juego</h2>
 <p>Para que computadoras de marcas y países distintos se entiendan, todas siguen las mismas reglas. A un conjunto de reglas de comunicación se le llama protocolo.</p>
 <blockquote class="def">
 <h3 id="que-significa-protocolo">🟦 ¿Qué significa? — <em>Protocolo</em></h3>
-<p>Un <strong>protocolo</strong> es un acuerdo de cómo se hablan dos máquinas: en qué orden mandan los datos, cómo confirman que llegaron, qué hacer si algo falla. Es como las reglas de cortesía de una conversación ("tú hablas, yo confirmo que entendí, luego respondo"). Sirve para que aparatos distintos se entiendan sin caos.</p>
+<p>Un <strong>protocolo</strong> es un acuerdo de cómo se hablan dos máquinas: en qué orden mandan los datos, cómo confirman que llegaron, qué hacer si algo se rompe. Son como las reglas de cortesía de una conversación: "tú hablas, yo confirmo que entendí, luego respondo". Gracias a ellas, aparatos completamente distintos se entienden sin caos.</p>
 </blockquote>
-<p>El protocolo más famoso de internet es en realidad una pareja: <strong>TCP/IP</strong>. Conviene verlos por separado.</p>
+<p>El protocolo más famoso de internet es en realidad una pareja: <strong>TCP/IP</strong>. Vale la pena verlos por separado, porque cada uno hace una cosa.</p>
 <blockquote class="def">
 <h3 id="que-significa-ip-internet-protocol">🟦 ¿Qué significa? — <em>IP (Internet Protocol)</em></h3>
-<p><strong>IP</strong> es la parte que se encarga de las <strong>direcciones</strong> y de mover paquetes de un punto a otro. IP no garantiza que lleguen, ni en orden: solo dice "este paquete va para allá, que los routers lo empujen". Es rápido pero descuidado, como echar cartas al buzón sin acuse de recibo.</p>
+<p><strong>IP</strong> es la parte que se ocupa de las <strong>direcciones</strong> y de mover paquetes de un punto a otro. No promete que lleguen, ni que lleguen en orden: solo dice "este paquete va para allá, que los routers lo empujen". Es rápido pero descuidado, como echar cartas al buzón sin pedir acuse de recibo.</p>
 <h3 id="que-significa-tcp-transmission-control-protocol">🟦 ¿Qué significa? — <em>TCP (Transmission Control Protocol)</em></h3>
-<p><strong>TCP</strong> es la parte cuidadosa que va <strong>encima</strong> de IP. Se asegura de que todos los paquetes lleguen, los pone en orden (1, 2, 3...) y pide de nuevo los que se perdieron. Si IP es el cartero apurado, TCP es el supervisor que cuenta los sobres y dice "falta el número 7, reenvíalo". Sirve para que recibas la página o el archivo completo y correcto.</p>
+<p><strong>TCP</strong> es la parte cuidadosa que va <strong>encima</strong> de IP. Se asegura de que todos los paquetes lleguen, los pone en orden (1, 2, 3...) y vuelve a pedir los que se perdieron. Si IP es el cartero apurado, TCP es el supervisor que cuenta los sobres y avisa: "falta el número 7, reenvíalo". Gracias a él recibes la página o el archivo completo y correcto.</p>
 </blockquote>
-<p>Hay un primo de TCP llamado <strong>UDP</strong>, que es más rápido pero no garantiza orden ni reenvíos; se usa en videollamadas o juegos donde es mejor perder un pedacito que esperar. Para la web normal manda TCP.</p>
+<p>TCP tiene un primo llamado <strong>UDP</strong>, más rápido pero sin garantía de orden ni reenvíos. Se usa en videollamadas o juegos, donde es mejor perder un pedacito que esperar. Para la web normal, manda TCP.</p>
 <blockquote class="def">
 <h3 id="que-significa-udp-user-datagram-protocol">🟦 ¿Qué significa? — <em>UDP (User Datagram Protocol)</em></h3>
-<p><strong>UDP</strong> es otra forma de mandar paquetes que, a diferencia de TCP, <strong>no</strong> confirma que lleguen ni los reordena: los dispara y sigue. Es como gritar un mensaje sin esperar a que el otro diga "lo escuché". Sirve cuando la velocidad importa más que la perfección, como en videollamadas, juegos en línea o transmisiones en vivo: si se pierde un pedacito, mejor seguir adelante que congelar todo esperando a que se reenvíe.</p>
+<p><strong>UDP</strong> es otra forma de mandar paquetes que, al revés que TCP, <strong>no</strong> confirma que lleguen ni los reordena: los dispara y sigue su camino. Es como gritar un mensaje sin esperar a que el otro diga "lo escuché". Funciona bien cuando la velocidad importa más que la perfección: videollamadas, juegos en línea, transmisiones en vivo. Si se pierde un pedacito, mejor seguir adelante que congelar todo esperando a que se reenvíe.</p>
 <h3 id="tip-el-apreton-de-manos">💡 Tip — El "apretón de manos"</h3>
-<p>Antes de mandarte datos, TCP hace un saludo de tres pasos (<em>three-way handshake</em>): tu máquina dice "¿hola, estás?", el servidor responde "sí, aquí estoy, ¿y tú?", y tu máquina cierra con "confirmado, empecemos". Recién entonces fluyen los datos. Es como tocar la puerta y esperar el "pase" antes de entrar.</p>
+<p>Antes de mandarte datos, TCP hace un saludo de tres pasos (<em>three-way handshake</em>): tu máquina dice "¿hola, estás ahí?", el servidor responde "sí, aquí estoy, ¿y tú?", y tu máquina cierra con "confirmado, empecemos". Recién entonces empiezan a fluir los datos. Es como tocar la puerta y esperar el "pase" antes de entrar.</p>
 </blockquote>
 <h2 id="4-routers-los-carteros-que-deciden-el-camino">4. Routers: los carteros que deciden el camino</h2>
-<p>Los paquetes no saltan mágicamente del origen al destino. Pasan por máquinas intermedias que los van empujando hacia su meta. Esas máquinas son los routers.</p>
+<p>Los paquetes no saltan por arte de magia del origen al destino. Van pasando por máquinas intermedias que los empujan hacia su meta. Esas máquinas son los routers.</p>
 <blockquote class="def">
 <h3 id="que-significa-router">🟦 ¿Qué significa? — <em>Router</em></h3>
-<p>Un <strong>router</strong> (enrutador) es un aparato que recibe paquetes y decide hacia dónde mandarlos para que se acerquen a su destino. Cada router conoce a sus vecinos y elige el siguiente "salto". Sirve para conectar redes distintas: el router de tu casa une tu red local con la de tu proveedor de internet, y ese a su vez con el resto del mundo.</p>
+<p>Un <strong>router</strong> (enrutador) es un aparato que recibe paquetes y decide hacia dónde mandarlos para acercarlos a su destino. Cada router conoce a sus vecinos y elige el siguiente "salto". Su trabajo es conectar redes distintas: el router de tu casa une tu red local con la de tu proveedor de internet, y ese a su vez con el resto del mundo.</p>
 </blockquote>
-<p>Un paquete que va de tu casa a un servidor lejano puede pasar por 10, 15 o 20 routers distintos. A cada uno de esos pasos se le llama un <em>salto</em> (<em>hop</em>). Lo asombroso es que dos paquetes del mismo mensaje pueden tomar rutas diferentes y aun así llegar bien, porque TCP los reordena al final.</p>
+<p>Un paquete que va de tu casa a un servidor lejano puede pasar por 10, 15 o 20 routers distintos. A cada uno de esos pasos se le llama un <em>salto</em> (<em>hop</em>). Lo más curioso es que dos paquetes del mismo mensaje pueden tomar rutas diferentes y aun así llegar bien, porque TCP los reordena al final.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>Tu <strong>polypaw-nas</strong> (la Acer Nitro con Ubuntu Server 26.04) está conectada al router de tu casa. Cuando desde tu laptop abres <strong>Cockpit</strong> en <code>http://&lt;ip-del-nas&gt;:9090</code>, el paquete sale de tu laptop, llega al router de casa, este ve que la IP de destino es local y lo entrega directo al NAS sin salir a internet. Rápido y privado.</p>
+<p>Tu <strong>polypaw-nas</strong> (la Acer Nitro con Ubuntu Server 26.04) está conectada al router de tu casa. Cuando desde tu laptop abres <strong>Cockpit</strong> en <code>http://&lt;ip-del-nas&gt;:9090</code>, el paquete sale de tu laptop, llega al router de casa, este ve que la IP de destino es local y se lo entrega directo al NAS sin salir a internet. Rápido y privado.</p>
 <h3 id="tip-ver-los-saltos-tu-mismo">💡 Tip — Ver los saltos tú mismo</h3>
 <p>En una terminal puedes escribir <code>traceroute tunaldigital.com</code> (en Windows es <code>tracert</code>). Te muestra la lista de routers por los que pasan tus paquetes hasta llegar al sitio. Es como ver el itinerario de tu carta, parada por parada.</p>
 </blockquote>
 <h2 id="5-puertos-las-puertas-numeradas-de-cada-computadora">5. Puertos: las puertas numeradas de cada computadora</h2>
-<p>Una computadora hace muchas cosas a la vez: navega, recibe correo, comparte archivos. Si solo tuviera una dirección IP, ¿cómo sabría que un paquete es para el navegador y no para el servidor de archivos? La respuesta son los puertos.</p>
+<p>Una computadora hace muchas cosas a la vez: navega, recibe correo, comparte archivos. Si solo tuviera una dirección IP, ¿cómo sabría que un paquete es para el navegador y no para el servidor de archivos? Ahí entran los puertos.</p>
 <blockquote class="def">
 <h3 id="que-significa-puerto">🟦 ¿Qué significa? — <em>Puerto</em></h3>
-<p>Un <strong>puerto</strong> es un número (del 0 al 65535) que identifica a <strong>qué programa</strong> dentro de una computadora va dirigido un paquete. Si la IP es la dirección del edificio, el puerto es el número del apartamento. Sirve para que una misma máquina ofrezca varios servicios al mismo tiempo sin confundirlos.</p>
+<p>Un <strong>puerto</strong> es un número (del 0 al 65535) que indica a <strong>qué programa</strong> dentro de una computadora va dirigido un paquete. Si la IP es la dirección del edificio, el puerto es el número del apartamento. Gracias a él, una misma máquina puede ofrecer varios servicios al mismo tiempo sin confundirlos.</p>
 </blockquote>
 <p>Hay puertos "famosos" que casi todo el mundo respeta por convención:</p>
 <table>
@@ -123,27 +123,27 @@
 </table>
 <blockquote class="def">
 <h3 id="que-significa-ssh-secure-shell">🟦 ¿Qué significa? — <em>SSH (Secure Shell)</em></h3>
-<p><strong>SSH</strong> es una forma segura de conectarte a otra computadora y darle órdenes por terminal, como si estuvieras sentado frente a ella, pero a distancia y con todo cifrado. Usa el puerto 22. Sirve para administrar servidores (por ejemplo, entrar a tu <strong>polypaw-nas</strong> y escribir comandos sin tener un monitor enchufado a él).</p>
+<p><strong>SSH</strong> es una forma segura de conectarte a otra computadora y darle órdenes por terminal, como si estuvieras sentado frente a ella, pero a distancia y con todo cifrado. Usa el puerto 22. Te sirve para administrar servidores; por ejemplo, entrar a tu <strong>polypaw-nas</strong> y escribir comandos sin tener un monitor enchufado a él.</p>
 <h3 id="que-significa-smb-samba">🟦 ¿Qué significa? — <em>SMB / Samba</em></h3>
-<p><strong>SMB</strong> es el protocolo que usan las computadoras para <strong>compartir carpetas y archivos</strong> en una red local, de modo que una carpeta de un equipo aparezca como una unidad en otro. <strong>Samba</strong> es el programa que hace funcionar SMB en Linux. Usa el puerto 445. Sirve para que el share <strong>PolyPawNAS</strong> de tu NAS se vea desde tu laptop como una carpeta más.</p>
+<p><strong>SMB</strong> es el protocolo que usan las computadoras para <strong>compartir carpetas y archivos</strong> en una red local, de modo que una carpeta de un equipo aparezca como una unidad en otro. <strong>Samba</strong> es el programa que hace funcionar SMB en Linux. Usa el puerto 445. Es lo que hace que el share <strong>PolyPawNAS</strong> de tu NAS se vea desde tu laptop como una carpeta más.</p>
 <h3 id="que-significa-cockpit">🟦 ¿Qué significa? — <em>Cockpit</em></h3>
-<p><strong>Cockpit</strong> es un panel de control que se abre en el navegador para administrar un servidor Linux con clics en vez de comandos: ver uso de disco, memoria, servicios, actualizaciones. Escucha en el puerto 9090. Sirve para que manejes tu <strong>polypaw-nas</strong> de forma visual y cómoda.</p>
+<p><strong>Cockpit</strong> es un panel de control que se abre en el navegador para administrar un servidor Linux a base de clics en vez de comandos: ver uso de disco, memoria, servicios, actualizaciones. Escucha en el puerto 9090. Te sirve para manejar tu <strong>polypaw-nas</strong> de forma visual y cómoda.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
 <p>Tu <strong>polypaw-nas</strong> usa puertos a cada rato. <strong>Cockpit</strong> escucha en el <code>:9090</code> (por eso entras con <code>...:9090</code>). <strong>Samba</strong> (servicio <code>smbd</code>, share <code>PolyPawNAS</code>) usa el puerto 445 para que tu carpeta compartida aparezca en otros equipos. Y cuando desarrollas <strong>Faro</strong>, Next.js usa el <code>:3000</code>. Cada número es una puerta distinta hacia un programa distinto en la misma máquina.</p>
 <h3 id="cuidado-abrir-puertos-a-internet-es-peligroso">⚠️ Cuidado — Abrir puertos a internet es peligroso</h3>
-<p>Un puerto abierto hacia internet es una puerta por la que pueden tocar <strong>desconocidos</strong>. Si expusieras el puerto 445 de Samba directo a internet, cualquiera en el mundo podría intentar entrar a tus archivos. Por eso <strong>no</strong> se abren puertos sensibles al exterior. La forma correcta de llegar a tu NAS desde fuera es una VPN como Tailscale, que veremos abajo.</p>
+<p>Un puerto abierto hacia internet es una puerta por la que pueden tocar <strong>desconocidos</strong>. Si expusieras el puerto 445 de Samba directo a internet, cualquiera en el mundo podría intentar colarse a tus archivos. Por eso <strong>no</strong> se abren puertos sensibles al exterior. La forma correcta de llegar a tu NAS desde fuera es una VPN como Tailscale, que veremos abajo.</p>
 </blockquote>
 <h2 id="6-http-y-https-hablar-en-voz-alta-o-hablar-en-clave">6. HTTP y HTTPS: hablar en voz alta o hablar en clave</h2>
-<p>Ya sabes que la web usa los puertos 80 y 443. La diferencia entre ellos es enorme y tiene que ver con quién puede escuchar tu conversación.</p>
+<p>Ya sabes que la web usa los puertos 80 y 443. La diferencia entre ellos es enorme, y tiene que ver con quién puede escuchar tu conversación.</p>
 <blockquote class="def">
 <h3 id="que-significa-http">🟦 ¿Qué significa? — <em>HTTP</em></h3>
-<p><strong>HTTP</strong> (<em>HyperText Transfer Protocol</em>) es el idioma con el que tu navegador le pide páginas a un servidor: "dame la página de inicio", "envío este formulario". El problema: HTTP viaja <strong>en texto plano</strong>, sin cifrar. Cualquiera que intercepte los paquetes en el camino (en un wifi público, por ejemplo) puede leerlos. Sirve para la web, pero hoy se considera inseguro por sí solo.</p>
+<p><strong>HTTP</strong> (<em>HyperText Transfer Protocol</em>) es el idioma con el que tu navegador le pide páginas a un servidor: "dame la página de inicio", "envío este formulario". El problema es que HTTP viaja <strong>en texto plano</strong>, sin cifrar. Cualquiera que intercepte los paquetes por el camino (en un wifi público, por ejemplo) puede leerlos tal cual. Funciona para la web, pero hoy se considera inseguro por sí solo.</p>
 <h3 id="que-significa-cifrado">🟦 ¿Qué significa? — <em>Cifrado</em></h3>
-<p><strong>Cifrar</strong> es transformar un mensaje legible en algo que parece basura sin sentido, de modo que solo quien tenga la "llave" correcta pueda volverlo a leer. Es escribir en clave secreta. Sirve para que, aunque alguien intercepte tus paquetes, no entienda nada: vería letras y números revueltos en vez de tu contraseña.</p>
+<p><strong>Cifrar</strong> es transformar un mensaje legible en algo que parece basura sin sentido, de modo que solo quien tenga la "llave" correcta pueda volver a leerlo. Es escribir en clave secreta. Sirve para que, aunque alguien intercepte tus paquetes, no entienda nada: vería letras y números revueltos en lugar de tu contraseña.</p>
 <h3 id="que-significa-https">🟦 ¿Qué significa? — <em>HTTPS</em></h3>
-<p><strong>HTTPS</strong> es HTTP <strong>con cifrado</strong> (la "S" es de <em>Secure</em>). Por debajo usa una capa llamada TLS que encripta todo lo que viaja entre tu navegador y el servidor. Es lo que provoca el <strong>candado</strong> en la barra de direcciones. Sirve para que tus contraseñas, mensajes y datos de pago viajen ilegibles para curiosos. Hoy es el estándar: casi toda web seria usa HTTPS.</p>
+<p><strong>HTTPS</strong> es HTTP <strong>con cifrado</strong> (la "S" es de <em>Secure</em>). Por debajo usa una capa llamada TLS que encripta todo lo que viaja entre tu navegador y el servidor. Es lo que provoca el <strong>candado</strong> en la barra de direcciones. Gracias a él, tus contraseñas, mensajes y datos de pago viajan ilegibles para los curiosos. Hoy es el estándar: casi toda web seria usa HTTPS.</p>
 <h3 id="que-significa-tls-transport-layer-security">🟦 ¿Qué significa? — <em>TLS (Transport Layer Security)</em></h3>
-<p><strong>TLS</strong> es la "capa de seguridad" que se encarga del cifrado en HTTPS. Es el mecanismo que, justo después del apretón de manos de TCP, negocia una llave secreta entre tu navegador y el servidor y revuelve todos los datos con ella. Antes se llamaba <strong>SSL</strong> (por eso a veces verás "certificado SSL/TLS"); TLS es la versión moderna y segura. Sirve para que nadie en el camino —ni el dueño del wifi del café— pueda leer lo que mandas.</p>
+<p><strong>TLS</strong> es la "capa de seguridad" que se ocupa del cifrado en HTTPS. Es el mecanismo que, justo después del apretón de manos de TCP, negocia una llave secreta entre tu navegador y el servidor y revuelve todos los datos con ella. Antes se llamaba <strong>SSL</strong> (por eso a veces verás "certificado SSL/TLS"); TLS es la versión moderna y segura. Gracias a él, nadie en el camino —ni el dueño del wifi del café— puede leer lo que mandas.</p>
 <h3 id="tip-el-candado-no-dice-esta-web-es-buena">💡 Tip — El candado no dice "esta web es buena"</h3>
 <p>El candado significa "la conexión está cifrada", no "esta web es honesta". Una web fraudulenta también puede tener candado. El candado protege el <strong>camino</strong>, no garantiza las intenciones de quien está al otro lado. Verifica siempre que el dominio sea el correcto (que diga <code>tunaldigital.com</code> y no <code>tunaldlgital.com</code>).</p>
 </blockquote>
@@ -153,47 +153,47 @@
 <h3 id="que-significa-certificado-digital-ssltls">🟦 ¿Qué significa? — <em>Certificado (digital / SSL/TLS)</em></h3>
 <p>Un <strong>certificado</strong> es un archivo que demuestra la identidad de un sitio web, firmado por una entidad de confianza llamada <em>Autoridad Certificadora</em> (CA). Es como una credencial con sello oficial. Tu navegador trae una lista de autoridades en las que confía; si el certificado del sitio está firmado por una de ellas y coincide con el dominio, muestra el candado. Sirve para evitar que alguien se haga pasar por el sitio que quieres visitar.</p>
 </blockquote>
-<p>El certificado cumple dos funciones: <strong>identidad</strong> (esto es de verdad tunaldigital.com) y <strong>llave</strong> (contiene la información criptográfica para arrancar el cifrado TLS). Sin un certificado válido, el navegador te muestra una pantalla roja de advertencia.</p>
+<p>El certificado hace dos cosas a la vez: confirma la <strong>identidad</strong> (esto es de verdad tunaldigital.com) y aporta la <strong>llave</strong> (la información criptográfica con la que arranca el cifrado TLS). Sin un certificado válido, el navegador te planta una pantalla roja de advertencia.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
-<p><strong>tunal-digital</strong> vive en <strong>Cloudflare</strong>. Cuando publicas tu sitio (<code>sitio-web/index.html</code>, <code>styles.css</code>, <code>main.js</code>) detrás de Cloudflare, este emite y renueva automáticamente el certificado HTTPS de <code>tunaldigital.com</code>. No tienes que crearlo a mano: por eso los visitantes ven el candado sin que tú hagas nada extra. Cloudflare también esconde la IP real de tu origen y filtra tráfico malicioso.</p>
+<p><strong>tunal-digital</strong> vive en <strong>Cloudflare</strong>. Cuando publicas tu sitio (<code>sitio-web/index.html</code>, <code>styles.css</code>, <code>main.js</code>) detrás de Cloudflare, este emite y renueva solo el certificado HTTPS de <code>tunaldigital.com</code>. No tienes que crearlo a mano: por eso los visitantes ven el candado sin que tú hagas nada extra. De paso, Cloudflare esconde la IP real de tu origen y filtra el tráfico malicioso.</p>
 <h3 id="tip-mira-el-certificado-de-cualquier-sitio">💡 Tip — Mira el certificado de cualquier sitio</h3>
-<p>En el navegador, haz clic en el candado de la barra de direcciones y busca "el certificado es válido" o "más información". Verás quién lo emitió, para qué dominio y hasta cuándo es válido. Hazlo con <code>tunaldigital.com</code> y observa que Cloudflare aparece por ahí.</p>
+<p>En el navegador, haz clic en el candado de la barra de direcciones y busca "el certificado es válido" o "más información". Verás quién lo emitió, para qué dominio y hasta cuándo es válido. Hazlo con <code>tunaldigital.com</code> y fíjate en que Cloudflare aparece por ahí.</p>
 </blockquote>
 <h2 id="8-como-encaja-tu-worker-de-cloudflare">8. Cómo encaja tu Worker de Cloudflare</h2>
-<p>Tu sitio <strong>tunal-digital</strong> no es solo HTML estático: tiene un cerebro pequeño en el servidor, el <code>backend/worker.js</code>. Vale la pena ver dónde encaja en todo este viaje de paquetes.</p>
+<p>Tu sitio <strong>tunal-digital</strong> no es solo HTML estático: tiene un pequeño cerebro en el servidor, el <code>backend/worker.js</code>. Vale la pena ver dónde encaja en todo este viaje de paquetes.</p>
 <blockquote class="def">
 <h3 id="que-significa-cloudflare-worker">🟦 ¿Qué significa? — <em>Cloudflare Worker</em></h3>
-<p>Un <strong>Worker</strong> es un trocito de código (en tu caso JavaScript) que Cloudflare ejecuta en sus servidores repartidos por el mundo, muy cerca de quien visita tu web. Cuando llega una petición HTTPS, en lugar de ir hasta un servidor lejano, el Worker la atiende en el centro de datos más cercano al visitante. Sirve para responder rápido y para hacer tareas en el servidor (como hablar con la API de Claude) sin exponer tus claves al navegador.</p>
+<p>Un <strong>Worker</strong> es un trocito de código (en tu caso JavaScript) que Cloudflare ejecuta en sus servidores repartidos por el mundo, muy cerca de quien visita tu web. Cuando llega una petición HTTPS, en vez de viajar hasta un servidor lejano, el Worker la atiende en el centro de datos más cercano al visitante. Eso le permite responder rápido y hacer tareas de servidor (como hablar con la API de Claude) sin exponer tus claves al navegador.</p>
 </blockquote>
 <p>El flujo completo, paso a paso, cuando alguien usa tu sitio:</p>
 <ol>
-<li>El visitante escribe <code>tunaldigital.com</code>. Su computadora pregunta a un servicio de nombres cuál es la IP (eso es DNS, lo viste en el cap. 03).</li>
+<li>El visitante escribe <code>tunaldigital.com</code>. Su computadora le pregunta a un servicio de nombres cuál es la IP (eso es DNS, lo viste en el cap. 03).</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-dns-domain-name-system">🟦 ¿Qué significa? — <em>DNS (Domain Name System)</em></h3>
-<p>El <strong>DNS</strong> es la "agenda de contactos" de internet: traduce nombres fáciles de recordar (como <code>tunaldigital.com</code>) a la dirección IP numérica de la máquina que sirve ese sitio. Las personas recordamos nombres; las computadoras necesitan números. Sirve para que escribas un dominio en vez de memorizar una IP. Lo viste a vuelo de pájaro en el cap. 03; aquí solo recordamos que es el primer paso de cualquier visita.
+<p>El <strong>DNS</strong> es la "agenda de contactos" de internet: traduce nombres fáciles de recordar (como <code>tunaldigital.com</code>) a la dirección IP numérica de la máquina que sirve ese sitio. Las personas recordamos nombres; las computadoras necesitan números. Gracias a él escribes un dominio en lugar de memorizar una IP. Lo viste a vuelo de pájaro en el cap. 03; aquí solo recordamos que es el primer paso de cualquier visita.
 2. Se abre una conexión TCP al puerto 443 de Cloudflare y se hace el apretón de manos TLS usando el certificado.
-3. Ya cifrado, el navegador manda la petición HTTPS. Tu <code>main.js</code> quizá llama a tu Worker.
+3. Ya con todo cifrado, el navegador manda la petición HTTPS. Tu <code>main.js</code> quizá llame a tu Worker.
 4. El <code>worker.js</code> recibe la petición, habla con la <strong>API de Claude</strong> usando una clave que vive <strong>solo en el servidor</strong>, y devuelve la respuesta.
 5. Todo regresa por la misma conexión cifrada. El visitante ve el resultado y el candado.</p>
 <h3 id="cuidado-la-clave-de-claude-nunca-va-al-navegador">⚠️ Cuidado — La clave de Claude nunca va al navegador</h3>
-<p>Esto conecta con las reglas de seguridad de tus proyectos: la clave de la API de Claude vive en el Worker (servidor), nunca en <code>main.js</code> (cliente). Si la pusieras en el JavaScript del navegador, cualquiera podría abrir las herramientas de desarrollo, copiarla y gastar tu cuenta. Igual que en <strong>Faro</strong> los tokens viven solo en el servidor y en <code>user_connections</code> con RLS, nunca en el cliente.</p>
+<p>Esto enlaza directo con las reglas de seguridad de tus proyectos: la clave de la API de Claude vive en el Worker (servidor), nunca en <code>main.js</code> (cliente). Si la pusieras en el JavaScript del navegador, cualquiera podría abrir las herramientas de desarrollo, copiarla y gastarse tu cuenta. Igual que en <strong>Faro</strong> los tokens viven solo en el servidor y en <code>user_connections</code> con RLS, nunca en el cliente.</p>
 </blockquote>
 <h2 id="9-tailscale-tu-tunel-privado-al-nas">9. Tailscale: tu túnel privado al NAS</h2>
-<p>Quedó pendiente: ¿cómo entras a tu <strong>polypaw-nas</strong> desde la calle sin abrir puertos peligrosos a internet? Con una VPN, y la tuya es Tailscale.</p>
+<p>Quedaba pendiente una pregunta: ¿cómo entras a tu <strong>polypaw-nas</strong> desde la calle sin abrir puertos peligrosos a internet? Con una VPN, y la tuya es Tailscale.</p>
 <blockquote class="def">
 <h3 id="que-significa-vpn">🟦 ¿Qué significa? — <em>VPN</em></h3>
-<p>Una <strong>VPN</strong> (<em>Virtual Private Network</em>, red privada virtual) crea un túnel cifrado entre tus dispositivos a través de internet, de modo que se comporten como si estuvieran en la misma red local, aunque estén en ciudades distintas. Sirve para llegar a equipos privados (como tu NAS) de forma segura, sin exponerlos al mundo.</p>
+<p>Una <strong>VPN</strong> (<em>Virtual Private Network</em>, red privada virtual) crea un túnel cifrado entre tus dispositivos a través de internet, de modo que se comporten como si estuvieran en la misma red local aunque estén en ciudades distintas. Sirve para llegar a equipos privados (como tu NAS) de forma segura, sin tener que exponerlos al mundo.</p>
 <h3 id="que-significa-tailscale">🟦 ¿Qué significa? — <em>Tailscale</em></h3>
-<p><strong>Tailscale</strong> es una VPN fácil de usar que construye esos túneles cifrados entre tus aparatos. Le instalas su programa al NAS y a tu laptop, inicias sesión con la misma cuenta, y ambos quedan en una red privada propia. Sirve para que desde cualquier lugar entres a tu <strong>polypaw-nas</strong> (a Cockpit, a Samba, a AdGuard) como si estuvieras en casa, sin abrir ni un solo puerto al internet público.</p>
+<p><strong>Tailscale</strong> es una VPN fácil de usar que construye esos túneles cifrados entre tus aparatos. Le instalas su programa al NAS y a tu laptop, inicias sesión con la misma cuenta, y ambos quedan en una red privada solo tuya. Así, desde cualquier lugar entras a tu <strong>polypaw-nas</strong> (a Cockpit, a Samba, a AdGuard) como si estuvieras en casa, sin abrir ni un solo puerto al internet público.</p>
 </blockquote>
-<p>La gran ventaja: en vez de exponer el puerto 9090 o el 445 a todo el mundo (peligrosísimo), Tailscale solo deja pasar a <strong>tus</strong> dispositivos autenticados, y todo el tráfico va cifrado. Es la respuesta correcta al "Cuidado" de la sección 5.</p>
+<p>La gran ventaja: en lugar de exponer el puerto 9090 o el 445 a todo el mundo (peligrosísimo), Tailscale solo deja pasar a <strong>tus</strong> dispositivos autenticados, y todo el tráfico va cifrado. Es la respuesta correcta al "Cuidado" de la sección 5.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_4">🔎 En tu código</h3>
 <p>Con Tailscale activo en tu <strong>polypaw-nas</strong>, desde tu laptop fuera de casa puedes abrir <code>http://&lt;nombre-tailscale-del-nas&gt;:9090</code> y entrar a <strong>Cockpit</strong>, o montar el share <strong>PolyPawNAS</strong> de Samba, como si estuvieras en tu sala. AdGuard Home y los contenedores de Docker/Podman quedan igual de accesibles, todo dentro del túnel privado. Nadie más en internet ve esas puertas.</p>
 <h3 id="tip-vpn-vs-https-no-es-lo-mismo">💡 Tip — VPN vs. HTTPS no es lo mismo</h3>
-<p>HTTPS cifra <strong>una conversación con un sitio web</strong>. Una VPN cifra <strong>todo el camino entre tus aparatos</strong>. Puedes usar las dos a la vez: entrar por el túnel Tailscale (VPN) a un servicio que además habla HTTPS. Capas de seguridad que se suman, no que se reemplazan.</p>
+<p>HTTPS cifra <strong>una conversación con un sitio web</strong>. Una VPN cifra <strong>todo el camino entre tus aparatos</strong>. Y puedes usar las dos a la vez: entrar por el túnel Tailscale (VPN) a un servicio que además habla HTTPS. Son capas de seguridad que se suman, no que se reemplazan.</p>
 </blockquote>
 <h2 id="10-juntando-todo-el-viaje-de-un-clic">10. Juntando todo: el viaje de un clic</h2>
 <p>Imagina que estás en una cafetería con wifi público y abres <code>tunaldigital.com</code> desde el celular. Esto es lo que pasa, ahora que entiendes cada palabra:</p>

@@ -5,13 +5,13 @@
 </p>
 
 
-> Ya sabes escribir HTML que funciona. Ahora vamos a dar un paso más: escribir HTML que funciona **bien**. En este capítulo Bit, nuestro ajolote pixelado, te enseñará a revisar tu código con el validador W3C, a ordenarlo para que cualquiera (incluido tu yo del futuro) lo entienda, a elegir buenos nombres y a esquivar los errores que tropiezan a casi todos los principiantes. Nada de magia: solo costumbres pequeñas que, juntas, hacen una diferencia enorme. Usaremos como ejemplo principal tu propio sitio **tunal-digital** (el archivo `index.html`).
+> Ya sabes escribir HTML que funciona. Toca dar un paso más: escribir HTML que funciona **bien**. En este capítulo Bit, nuestro ajolote pixelado, te va a mostrar cómo revisar tu código con el validador W3C, cómo ordenarlo para que cualquiera (tu yo del futuro incluido) lo entienda a la primera, cómo elegir buenos nombres y cómo esquivar los tropiezos que casi todos los principiantes cometen. Aquí no hay trucos secretos: son costumbres pequeñas que, sumadas, marcan una diferencia enorme. Como ejemplo iremos a tu propio sitio **tunal-digital**, en concreto el archivo `index.html`.
 
 ## 1. ¿Por qué "buenas prácticas"?
 
-Un sitio puede verse perfecto en tu navegador y, aun así, estar lleno de problemas escondidos: etiquetas mal cerradas, código imposible de leer, imágenes que nadie puede entender. El navegador es muy paciente y "perdona" muchos errores: intenta mostrar la página de todos modos. El problema es que ese perdón es engañoso. El día que algo se rompe, no sabes por qué.
+Un sitio puede verse perfecto en tu navegador y, por dentro, estar lleno de problemas escondidos: etiquetas mal cerradas, código imposible de leer, imágenes que nadie sabe qué muestran. El navegador es muy paciente y "perdona" un montón de errores: hace lo posible por mostrar la página igual. El truco está en que ese perdón te engaña. El día que algo se rompe de verdad, no tienes ni idea de por qué.
 
-Las **buenas prácticas** son acuerdos que la comunidad de programadores ha ido puliendo durante años para que el código sea:
+Las **buenas prácticas** son acuerdos que la comunidad de programadores fue afinando durante años para que el código sea:
 
 - **Correcto**: cumple las reglas oficiales de HTML.
 - **Legible**: una persona lo entiende de un vistazo.
@@ -19,14 +19,14 @@ Las **buenas prácticas** son acuerdos que la comunidad de programadores ha ido 
 - **Mantenible**: lo puedes cambiar mañana sin miedo.
 
 > ### 🟦 ¿Qué significa? — *Mantenible*
-> Un código es **mantenible** cuando es fácil de modificar más adelante sin romper nada. Sirve para que, cuando vuelvas a tocar tu proyecto dentro de tres meses, no tengas que adivinar qué hace cada línea.
-> **¿Dónde se usa en tu proyecto?** En **tunal-digital**, si tu `index.html` está ordenado, agregar una sección nueva mañana será cuestión de minutos en lugar de una tarde entera de pelea.
+> Un código es **mantenible** cuando lo puedes modificar más adelante sin romper nada. La idea es que, cuando vuelvas a tu proyecto dentro de tres meses, no tengas que ponerte a adivinar qué hace cada línea.
+> **¿Dónde se usa en tu proyecto?** En **tunal-digital**, si tu `index.html` está ordenado, agregar una sección nueva mañana te llevará minutos en vez de una tarde entera peleando con el archivo.
 
 Bit lo resume así: *"El navegador te perdona; tu yo del futuro, no tanto."*
 
 ## 2. Validar tu HTML con el validador W3C
 
-La primera buena práctica es **validar**. Validar significa pasar tu archivo por una herramienta oficial que revisa si cumple las reglas del lenguaje.
+La primera buena práctica es **validar**. Validar quiere decir pasar tu archivo por una herramienta oficial que comprueba si cumple las reglas del lenguaje.
 
 > ### 🟦 ¿Qué significa? — *Validar HTML*
 > **Validar** es comprobar de forma automática que tu HTML respeta las reglas oficiales: que las etiquetas estén bien escritas, bien cerradas y bien anidadas. Sirve para encontrar errores que el navegador esconde.
@@ -35,23 +35,23 @@ La primera buena práctica es **validar**. Validar significa pasar tu archivo po
 > ### 🟦 ¿Qué significa? — *W3C*
 > El **W3C** (World Wide Web Consortium) es la organización internacional que define los estándares de la web, incluido HTML. Es como la institución que decide "las reglas del juego" para todos los navegadores.
 
-La herramienta se llama **W3C Markup Validation Service** y vive en `https://validator.w3.org`. Tiene tres modos:
+La herramienta se llama **W3C Markup Validation Service** y vive en `https://validator.w3.org`. Funciona de tres maneras:
 
 1. **Validate by URI**: le das la dirección de un sitio ya publicado.
 2. **Validate by File Upload**: le subes tu archivo `index.html`.
 3. **Validate by Direct Input**: pegas tu código en una caja de texto.
 
-Para tunal-digital, mientras trabajas en tu computadora, lo más cómodo es **subir el archivo** o **pegar el código**.
+Para tunal-digital, mientras trabajas en tu computadora, lo más cómodo es **subir el archivo** o **pegar el código** directamente.
 
 > ### 🟦 ¿Qué significa? — *URI*
 > Una **URI** es, en la práctica, una dirección que identifica un recurso en la web (puedes pensarla como un primo de la URL). Sirve para que el validador sepa qué página visitar.
 
-Cuando validas, recibes dos tipos de avisos:
+Al validar recibes dos tipos de avisos:
 
 > ### 🟦 ¿Qué significa? — *Error vs. Warning (advertencia)*
-> Un **error** es algo que rompe las reglas y deberías arreglar siempre. Un **warning** (advertencia) es algo que no está prohibido, pero que podría mejorarse o que es sospechoso. Sirve para que priorices: primero los errores, luego las advertencias.
+> Un **error** es algo que rompe las reglas y deberías arreglar siempre. Un **warning** (advertencia) es algo que no está prohibido, pero que conviene mejorar o que resulta sospechoso. Sirve para que priorices: primero los errores, luego las advertencias.
 
-Mira este HTML con un error típico:
+Fíjate en este HTML con un error de los típicos:
 
 ```html
 <!DOCTYPE html>
@@ -67,7 +67,7 @@ Mira este HTML con un error típico:
 </html>
 ```
 
-El validador te diría algo como: *"Unclosed element h1"* (elemento `h1` sin cerrar). Falta el `</h1>`. Corregido:
+El validador te respondería algo parecido a *"Unclosed element h1"* (elemento `h1` sin cerrar). Falta el `</h1>`. Así queda corregido:
 
 ```html
 <h1>Bienvenido a Tunal Digital</h1>
@@ -82,13 +82,13 @@ El validador te diría algo como: *"Unclosed element h1"* (elemento `h1` sin cer
 
 ## 3. Indentación y legibilidad
 
-**Indentar** es dejar espacios al principio de cada línea para mostrar qué etiqueta está dentro de cuál. El navegador ignora esos espacios, pero para tus ojos hacen toda la diferencia.
+**Indentar** es dejar espacios al principio de cada línea para mostrar qué etiqueta está dentro de cuál. El navegador ignora esos espacios por completo, pero a tus ojos les cambian la vida.
 
 > ### 🟦 ¿Qué significa? — *Indentación (sangría)*
 > La **indentación** es el espacio en blanco al inicio de una línea que indica el nivel de anidamiento. Sirve para ver de un vistazo qué elementos están "dentro" de otros.
 > **¿Dónde se usa en tu proyecto?** En `index.html` de **tunal-digital**, cada vez que metes una etiqueta dentro de otra (por ejemplo un `<p>` dentro de una `<section>`), la corres un nivel más a la derecha.
 
-Compara. Sin indentar es un muro ilegible:
+Compara las dos versiones. Sin indentar, es un muro ilegible:
 
 ```html
 <section>
@@ -100,7 +100,7 @@ Compara. Sin indentar es un muro ilegible:
 </section>
 ```
 
-Indentado, la estructura se "ve":
+Indentado, la estructura se "ve" sola:
 
 ```html
 <section>
@@ -112,7 +112,7 @@ Indentado, la estructura se "ve":
 </section>
 ```
 
-La regla más común es **2 espacios por nivel** (también se usan 4 o un tabulador; lo importante es ser **consistente**: elige uno y no lo mezcles).
+Lo más habitual son **2 espacios por nivel** (también se usan 4 o un tabulador; lo que de verdad importa es ser **consistente**: elige uno y no lo mezcles con otro).
 
 > ### 🟦 ¿Qué significa? — *Anidamiento*
 > **Anidar** es colocar una etiqueta dentro de otra, como cajas dentro de cajas. La etiqueta de afuera es la "madre" y la de adentro es la "hija". Sirve para construir la estructura de la página.
@@ -121,18 +121,18 @@ La regla más común es **2 espacios por nivel** (también se usan 4 o un tabula
 > Editores como VS Code formatean tu HTML automáticamente. Busca la opción *"Format Document"* (suele estar en `Shift + Alt + F`). Extensiones como **Prettier** lo hacen al guardar. Así nunca peleas con la indentación a mano.
 
 > ### 🔎 En tu código
-> Abre `sitio-web/index.html` de tunal-digital y, si lo ves desordenado, ejecuta *Format Document*. Verás cómo las secciones quedan alineadas y de pronto entiendes la estructura de toda la página.
+> Abre `sitio-web/index.html` de tunal-digital y, si lo ves desordenado, ejecuta *Format Document*. Verás cómo las secciones se alinean y, de golpe, entiendes la estructura de toda la página.
 
-Otras costumbres de legibilidad:
+Otras costumbres que ayudan a la legibilidad:
 
 - **Una etiqueta de bloque por línea** (no amontones diez `<div>` en una sola línea).
-- **Líneas en blanco** para separar secciones grandes (la cabecera, el menú, el contenido).
+- **Líneas en blanco** para separar las secciones grandes (la cabecera, el menú, el contenido).
 - **Minúsculas** en nombres de etiquetas y atributos: `<section>`, no `<SECTION>`.
 - **Comillas siempre** en los valores de atributos: `class="boton"`, no `class=boton`.
 
 ## 4. Buenos nombres de clases
 
-Las **clases** son etiquetas que les pones a tus elementos para luego darles estilo con CSS o seleccionarlos con JavaScript. El nombre que elijas importa muchísimo.
+Las **clases** son etiquetas que les pones a tus elementos para luego darles estilo con CSS o seleccionarlos con JavaScript. El nombre que elijas importa muchísimo, más de lo que parece.
 
 > ### 🟦 ¿Qué significa? — *Clase (class)*
 > Una **clase** es un nombre que asignas a uno o varios elementos con el atributo `class`. Sirve para agruparlos y aplicarles el mismo estilo o comportamiento. Por ejemplo, todos los botones con `class="boton-principal"` pueden compartir color y forma.
@@ -148,13 +148,13 @@ Un buen nombre describe **qué es** el elemento o **qué papel cumple**, no cóm
 <button class="boton-contacto">Contáctanos</button>
 ```
 
-¿Por qué? Si mañana decides que el botón sea verde, `class="azul-grande"` se vuelve una mentira. `boton-contacto` sigue siendo verdad.
+¿Por qué? Si mañana decides que el botón sea verde, `class="azul-grande"` se convierte en una mentira. `boton-contacto`, en cambio, sigue siendo verdad.
 
-Convenciones útiles:
+Algunas convenciones que vale la pena seguir:
 
-- Usa **minúsculas** y separa palabras con **guiones**: `tarjeta-servicio`, `menu-principal`. Este estilo se llama *kebab-case* (como palabras unidas por guiones, igual que las brochetas).
-- Sé **específico pero corto**: `precio-plan` es mejor que `el-texto-que-muestra-el-precio`.
-- Sé **consistente**: si usas español, usa español en todas. No mezcles `boton` y `button`.
+- Usa **minúsculas** y separa las palabras con **guiones**: `tarjeta-servicio`, `menu-principal`. A este estilo se le llama *kebab-case* (palabras unidas por guiones, igual que las brochetas).
+- Sé **específico pero corto**: `precio-plan` gana a `el-texto-que-muestra-el-precio`.
+- Sé **consistente**: si escribes en español, hazlo en todas. No mezcles `boton` con `button`.
 
 > ### 🟦 ¿Qué significa? — *kebab-case*
 > **kebab-case** es una forma de escribir nombres compuestos usando minúsculas y guiones entre palabras, por ejemplo `menu-principal`. Sirve para que los nombres de clase sean legibles y compatibles con CSS.
@@ -173,7 +173,7 @@ Esta es, quizá, la práctica que más distingue a un principiante de alguien co
 > ### 🟦 ¿Qué significa? — *"Divitis"*
 > **Divitis** es el apodo (medio en broma) para la mala costumbre de construir toda la página solo con etiquetas `<div>`, sin usar etiquetas semánticas. Se llama así porque parece una "enfermedad" de tantos `<div>`. El problema: nadie entiende qué es cada parte.
 
-Mira el mismo encabezado de dos formas. Con divitis:
+Mira el mismo encabezado escrito de dos maneras. Con divitis:
 
 ```html
 <div class="cabecera">
@@ -199,7 +199,7 @@ Con HTML semántico:
 </header>
 ```
 
-La segunda versión le dice a todo el mundo: "esto es la cabecera, esto es la navegación, esto es una lista de enlaces". La primera solo dice "div, div, div".
+La segunda versión le anuncia a todo el mundo: "esto es la cabecera, esto es la navegación, esto es una lista de enlaces". La primera solo sabe decir "div, div, div".
 
 > ### 🟦 ¿Qué significa? — *Lector de pantalla*
 > Un **lector de pantalla** es un programa que lee en voz alta el contenido de la página para personas con discapacidad visual. Sirve para que tu sitio sea usable por todos. El HTML semántico le permite anunciar "menú de navegación", "encabezado", etc.
@@ -208,14 +208,14 @@ La segunda versión le dice a todo el mundo: "esto es la cabecera, esto es la na
 > Antes de escribir `<div>`, pregúntate qué papel cumple. ¿Es el menú? `<nav>`. ¿El contenido principal? `<main>`. ¿Un bloque temático? `<section>`. Solo usa `<div>` cuando de verdad sea una caja genérica sin significado especial (por ejemplo, para agrupar cosas solo por motivos de diseño).
 
 > ### 🔎 En tu código
-> Revisa el `index.html` de tunal-digital y cuenta cuántos `<div>` tienes. Cada uno que puedas reemplazar por una etiqueta semántica mejora el SEO, la accesibilidad y la legibilidad de un solo golpe.
+> Abre el `index.html` de tunal-digital y cuenta cuántos `<div>` tienes. Cada uno que puedas cambiar por una etiqueta semántica mejora a la vez el SEO, la accesibilidad y la legibilidad.
 
 > ### 🟦 ¿Qué significa? — *SEO*
 > **SEO** (Search Engine Optimization, optimización para motores de búsqueda) es el conjunto de prácticas que ayudan a que tu sitio aparezca mejor posicionado en buscadores como Google. El HTML semántico ayuda al SEO porque Google entiende mejor tu contenido.
 
 ## 6. Los errores más frecuentes (y cómo evitarlos)
 
-Bit ha visto estos cuatro errores miles de veces. Si los conoces, ya vas un paso adelante.
+Bit ha visto estos cuatro errores miles de veces. Si los conoces, ya vas un paso por delante.
 
 ### 6.1 Etiquetas sin cerrar
 
@@ -232,7 +232,7 @@ La mayoría de las etiquetas vienen en pareja: apertura y cierre. Olvidar el cie
 > ### 🟦 ¿Qué significa? — *Etiqueta de cierre*
 > Una **etiqueta de cierre** es la versión con barra (`</p>`, `</a>`) que marca dónde termina un elemento. Sirve para que el navegador sepa hasta dónde llega su contenido.
 
-Hay etiquetas que **no se cierran** porque no tienen contenido dentro, como `<img>`, `<br>` y `<meta>`. Se llaman elementos vacíos y eso es normal, no un error.
+Hay etiquetas que **no se cierran** porque no llevan contenido dentro, como `<img>`, `<br>` y `<meta>`. Se llaman elementos vacíos y eso es lo normal, no un error.
 
 ### 6.2 Atributo `alt` faltante en imágenes
 
@@ -276,7 +276,7 @@ Un **id** es un identificador único para un elemento. La palabra clave es **ún
 
 ### 6.4 Anidamiento inválido
 
-Algunas etiquetas no pueden ir dentro de otras. El caso clásico: un elemento de bloque dentro de un `<p>`.
+Algunas etiquetas no pueden ir dentro de otras. El caso clásico: un elemento de bloque metido dentro de un `<p>`.
 
 > ### 🟦 ¿Qué significa? — *Elemento de bloque vs. en línea*
 > Un **elemento de bloque** (como `<div>`, `<section>`, `<ul>`) ocupa todo el ancho disponible y empieza en una línea nueva. Un **elemento en línea** (como `<a>`, `<span>`, `<strong>`) fluye dentro del texto. Sirve saber la diferencia porque ciertas combinaciones de anidamiento están prohibidas.
@@ -305,7 +305,7 @@ El validador W3C caza estos errores enseguida. Por eso la sección 2 y esta van 
 
 ## 7. Rendimiento básico desde el HTML
 
-El **rendimiento** es qué tan rápido carga y responde tu página. Aunque mucho del rendimiento se afina con CSS y JavaScript, hay decisiones que se toman ya en el HTML.
+El **rendimiento** es qué tan rápido carga y responde tu página. Buena parte del rendimiento se afina con CSS y JavaScript, pero hay decisiones que ya se toman en el HTML.
 
 > ### 🟦 ¿Qué significa? — *Rendimiento*
 > El **rendimiento** mide qué tan rápido tu página se carga y funciona. Sirve porque una página lenta espanta visitantes. En **tunal-digital**, publicado en Cloudflare, un HTML liviano carga más rápido para tus clientes.
@@ -329,14 +329,14 @@ Cosas sencillas que ayudan:
 ```
 
 > ### 🔎 En tu código
-> En **tunal-digital**, revisa cómo cargas `main.js`. Si lo incluyes con `defer` o justo antes de `</body>`, el texto de tu página aparece sin esperar a que el JavaScript termine de descargarse. Pequeño cambio, sensación de velocidad mucho mayor.
+> En **tunal-digital**, revisa cómo cargas `main.js`. Si lo incluyes con `defer` o justo antes de `</body>`, el texto de tu página aparece sin esperar a que el JavaScript termine de descargarse. Cambio pequeño, sensación de velocidad mucho mayor.
 
 > ### 💡 Tip — Menos es más
 > El HTML más rápido es el que no tiene basura: etiquetas vacías que no sirven, capas y capas de `<div>` innecesarios, comentarios viejos. Limpiar tu HTML también lo hace más liviano.
 
 ## 8. Comentarios útiles
 
-Un **comentario** es texto en tu código que el navegador ignora; sirve solo para que los humanos lean.
+Un **comentario** es texto dentro de tu código que el navegador ignora; está ahí solo para que lo lean las personas.
 
 > ### 🟦 ¿Qué significa? — *Comentario en HTML*
 > Un **comentario** es una nota dentro del código, escrita entre `<!--` y `-->`, que el navegador no muestra. Sirve para explicar partes del código o marcar secciones.
@@ -370,7 +370,7 @@ Pero ojo: un buen comentario explica **por qué**, no **qué**. El código ya di
 > Cualquiera puede ver tus comentarios HTML con "Ver código fuente" en el navegador. **Nunca** escribas en ellos contraseñas, claves de API ni información privada. Recuerda la regla de tu propio proyecto Faro: los secretos van solo en el servidor, jamás en el cliente.
 
 > ### 💡 Tip — Borra los comentarios "zombi"
-> Cuando comentas un bloque de código para "probarlo desactivado" y luego lo dejas ahí para siempre, se convierte en ruido. Si ya no lo usas, bórralo. Tu archivo estará más limpio y liviano.
+> Cuando comentas un bloque de código para "probarlo desactivado" y luego lo dejas ahí para siempre, se convierte en ruido. Si ya no lo usas, bórralo. Tu archivo quedará más limpio y liviano.
 
 ## ✅ Checklist — ¿ya domino esto?
 

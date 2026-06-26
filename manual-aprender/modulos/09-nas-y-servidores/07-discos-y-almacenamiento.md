@@ -5,34 +5,34 @@
 </p>
 
 
-> Hola de nuevo. Soy **Bit**, tu ajolote guia. Hoy bajamos al sotano de tu NAS: los discos. Tu servidor **polypaw-nas** (un laptop Acer Nitro AN515-54) tiene **dos discos** muy distintos, y entender quien es quien te va a salvar de muchos sustos. Vamos a aprender a ver los discos, medir cuanto espacio te queda, montar el HDD de datos en `/srv/nas`, hacer que se monte solo al encender y vigilar la salud de los discos para que tus respaldos no desaparezcan un mal dia. Respira: es mas facil de lo que parece, y lo haremos con calma. 🪼
+> Hola otra vez. Soy **Bit**, tu ajolote guia. Hoy bajamos al sotano de tu NAS, donde viven los discos. Tu servidor **polypaw-nas** (un laptop Acer Nitro AN515-54) lleva **dos discos** bien distintos, y saber quien es quien te va a ahorrar mas de un susto. Vamos a aprender a verlos, a medir cuanto espacio te queda, a montar el HDD de datos en `/srv/nas`, a conseguir que se monte solo cada vez que enciendes y a vigilar la salud de los discos para que tus respaldos no se esfumen el peor dia. Tranquilo: es mas sencillo de lo que parece, y vamos sin prisa. 🪼
 
 ---
 
 ## 1. Los dos discos de polypaw-nas
 
-Antes de tocar comandos, fija una idea: tu NAS no tiene un disco, tiene **dos**, y cumplen papeles diferentes.
+Antes de tocar ningun comando, quedate con esta idea: tu NAS no tiene un disco, tiene **dos**, y cada uno juega un papel distinto.
 
 - **El SSD de 238 GB** → es el **disco de sistema**. Ahi vive Ubuntu Server, los programas (Samba, Cockpit, Docker/Podman...) y la configuracion. Es rapido.
 - **El HDD de 954 GB** → es el **disco de datos**. Ahi van tus archivos del recurso compartido, los respaldos de tus repos (`tunal-digital`, `PolyPaw`, `RachaSimple`, `Faro/Organizer`), tus fotos, etc. Es mas grande pero mas lento.
 
 > ### 🟦 ¿Que significa? — *SSD (Solid State Drive)*
-> Un disco **de estado solido**: guarda datos en memoria tipo "chip", sin partes que giren. Es muy rapido y silencioso. **Para que sirve:** arrancar el sistema y abrir programas veloz. **En tu polypaw-nas:** es el disco de **238 GB** donde esta instalado Ubuntu Server. Como es mas pequeno, NO conviene llenarlo de archivos personales.
+> Un disco **de estado solido**: guarda los datos en memoria tipo "chip", sin piezas que giren. Es muy rapido y silencioso. **Para que sirve:** arrancar el sistema y abrir programas en un suspiro. **En tu polypaw-nas:** es el disco de **238 GB** donde esta instalado Ubuntu Server. Como es el mas pequeno, no conviene llenarlo de archivos personales.
 
 > ### 🟦 ¿Que significa? — *HDD (Hard Disk Drive)*
-> Un disco **duro mecanico**: guarda datos en platos que giran con una aguja, como un tocadiscos diminuto. Es mas lento que un SSD pero suele dar **mas espacio por menos dinero**. **Para que sirve:** almacenar muchos archivos que no necesitas abrir a maxima velocidad. **En tu polypaw-nas:** es el disco de **954 GB** que montas en `/srv/nas` y que comparte Samba.
+> Un disco **duro mecanico**: guarda los datos en platos que giran con una aguja, como un tocadiscos en miniatura. Es mas lento que un SSD, pero a cambio te da **mas espacio por menos dinero**. **Para que sirve:** almacenar muchos archivos que no necesitas abrir a toda velocidad. **En tu polypaw-nas:** es el disco de **954 GB** que montas en `/srv/nas` y que comparte Samba.
 
 > ### 💡 Tip
-> Regla de oro casera: **el sistema en el SSD, tus datos en el HDD.** Si pones tus respaldos en el SSD, lo llenas rapido y el servidor empieza a fallar. Manten cada cosa en su lugar.
+> Regla de oro casera: **el sistema en el SSD, tus datos en el HDD.** Si metes los respaldos en el SSD, lo llenas en un parpadeo y el servidor empieza a fallar. Cada cosa en su sitio.
 
 ---
 
 ## 2. Como ve Linux los discos: `lsblk`
 
-En Linux, **todo es un archivo**, y los discos tambien. Cada disco aparece con un nombre dentro de la carpeta `/dev` (de "devices", dispositivos).
+En Linux **todo es un archivo**, y los discos no son la excepcion. Cada uno aparece con un nombre dentro de la carpeta `/dev` (de "devices", dispositivos).
 
 > ### 🟦 ¿Que significa? — *Dispositivo de bloque (block device)*
-> Es como Linux llama a un disco o memoria donde se leen y escriben datos en **bloques** (trozos). **Para que sirve:** darle a cada disco un nombre con el que referirte a el. **En tu polypaw-nas:** tus discos aparecen como `/dev/sda`, `/dev/sdb`, `/dev/nvme0n1`, etc. La "b" de `sdb` no significa "segundo bueno", solo es el orden en que el sistema los encontro.
+> Es como Linux llama a un disco o memoria donde se leen y escriben datos en **bloques** (trozos). **Para que sirve:** darle a cada disco un nombre con el que referirte a el. **En tu polypaw-nas:** tus discos aparecen como `/dev/sda`, `/dev/sdb`, `/dev/nvme0n1`, etc. La "b" de `sdb` no quiere decir "segundo bueno": solo marca el orden en que el sistema los fue encontrando.
 
 El comando estrella para ver tus discos es `lsblk` (de "list block devices", listar dispositivos de bloque):
 
@@ -41,9 +41,9 @@ lsblk
 ```
 
 > ### 🟦 ¿Que significa? — *`lsblk`*
-> Comando que **dibuja un arbol** de todos tus discos, sus particiones y donde estan montados. **Para que sirve:** ver de un vistazo "que discos tengo y como estan organizados". **En tu polypaw-nas:** lo usaras para distinguir el SSD del HDD y confirmar que `/srv/nas` apunta al disco correcto.
+> Comando que **dibuja un arbol** con todos tus discos, sus particiones y el lugar donde estan montados. **Para que sirve:** ver de un vistazo "que discos tengo y como estan organizados". **En tu polypaw-nas:** lo usaras para distinguir el SSD del HDD y confirmar que `/srv/nas` apunta al disco correcto.
 
-Una salida tipica en tu Acer Nitro se veria parecida a esto (los nombres exactos pueden variar):
+En tu Acer Nitro, una salida tipica se veria parecida a esto (los nombres exactos pueden variar):
 
 ```bash
 NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
@@ -54,43 +54,43 @@ nvme0n1     259:0    0 238.5G  0 disk
 └─nvme0n1p2 259:2    0   238G  0 part /
 ```
 
-Leelo asi:
+Asi se lee:
 
-- `nvme0n1` es tu **SSD de 238 GB** (los SSD modernos suelen llamarse `nvme...`). Su particion `nvme0n1p2` esta montada en `/` (la raiz del sistema).
+- `nvme0n1` es tu **SSD de 238 GB** (los SSD modernos suelen aparecer como `nvme...`). Su particion `nvme0n1p2` esta montada en `/` (la raiz del sistema).
 - `sda` es tu **HDD de 954 GB**. Su particion `sda1` esta montada en `/srv/nas`. ¡Ese es tu disco de datos!
-- La columna `SIZE` es el tamano, `TYPE` dice si es disco (`disk`) o particion (`part`), y `MOUNTPOINTS` dice donde esta "enganchado" en el sistema.
+- La columna `SIZE` es el tamano, `TYPE` indica si es disco (`disk`) o particion (`part`), y `MOUNTPOINTS` dice donde esta "enganchado" dentro del sistema.
 
 > ### 🔎 En tu servidor
-> Conectate por SSH a polypaw-nas y corre `lsblk`. Identifica cual linea es el SSD (238 GB, raiz `/`) y cual es el HDD (954 GB, `/srv/nas`). Si el HDD no muestra `/srv/nas` en MOUNTPOINTS, es que no esta montado todavia: lo arreglaremos en la seccion 6.
+> Conectate por SSH a polypaw-nas y corre `lsblk`. Identifica cual linea es el SSD (238 GB, raiz `/`) y cual es el HDD (954 GB, `/srv/nas`). Si el HDD no muestra `/srv/nas` en MOUNTPOINTS, es que aun no esta montado: lo arreglaremos en la seccion 6.
 
 ---
 
 ## 3. Particiones y sistemas de archivos
 
-Un disco "crudo" recien comprado no sirve para guardar archivos directamente. Hay que hacer dos cosas: **particionarlo** y **formatearlo**.
+Un disco "crudo", recien sacado de la caja, no sirve para guardar archivos tal cual. Hay que hacerle dos cosas: **particionarlo** y **formatearlo**.
 
 > ### 🟦 ¿Que significa? — *Particion*
-> Es **dividir un disco en zonas** independientes, como separar una habitacion grande con paredes. Cada zona se trata como si fuera un disco aparte. **Para que sirve:** organizar el espacio (por ejemplo, una zona para el sistema y otra para datos). **En tu polypaw-nas:** el HDD tiene una particion grande, `sda1`, que ocupa casi todo el disco y guarda tus datos del NAS.
+> Es **dividir un disco en zonas** independientes, como levantar paredes dentro de una habitacion grande. Cada zona se trata como si fuera un disco aparte. **Para que sirve:** organizar el espacio (por ejemplo, una zona para el sistema y otra para datos). **En tu polypaw-nas:** el HDD tiene una particion grande, `sda1`, que ocupa casi todo el disco y guarda tus datos del NAS.
 
 > ### 🟦 ¿Que significa? — *Sistema de archivos (filesystem)*
-> Es el **idioma con el que un disco organiza los archivos**: como guarda nombres, carpetas, permisos y donde esta cada cosa. **Para que sirve:** sin el, el disco seria un monton de bytes sin orden. **En tu polypaw-nas:** tanto el SSD como el HDD usan **ext4**, el sistema de archivos estandar de Linux.
+> Es el **idioma con el que un disco organiza los archivos**: como guarda nombres, carpetas, permisos y la posicion de cada cosa. **Para que sirve:** sin el, el disco no seria mas que un monton de bytes sin orden ni concierto. **En tu polypaw-nas:** tanto el SSD como el HDD usan **ext4**, el sistema de archivos estandar de Linux.
 
 > ### 🟦 ¿Que significa? — *ext4*
-> Es el **sistema de archivos por defecto en Ubuntu**. Maduro, estable y muy probado. **Para que sirve:** guardar tus archivos de forma segura y con permisos de usuario. **En tu polypaw-nas:** es el formato del HDD en `/srv/nas`. Cuando ves `ext4` en los comandos, es "el idioma" de tu disco de datos.
+> Es el **sistema de archivos por defecto en Ubuntu**. Maduro, estable y probadisimo. **Para que sirve:** guardar tus archivos de forma segura y con permisos de usuario. **En tu polypaw-nas:** es el formato del HDD en `/srv/nas`. Cuando veas `ext4` en los comandos, es "el idioma" de tu disco de datos.
 
 > ### 🟦 ¿Que significa? — *Formatear*
 > Es **escribir un sistema de archivos vacio en una particion**, dejandola lista para usar. ¡OJO! Formatear **borra todo** lo que hubiera dentro. **Para que sirve:** preparar un disco nuevo. **En tu polypaw-nas:** solo lo harias **una vez**, al estrenar un disco. No vuelvas a formatear el HDD si ya tiene tus datos.
 
-Para ver el tipo de sistema de archivos de cada particion, usa `lsblk` con la opcion `-f`:
+Para ver que sistema de archivos lleva cada particion, usa `lsblk` con la opcion `-f`:
 
 ```bash
 lsblk -f
 ```
 
-Veras una columna `FSTYPE` con `ext4` en tus particiones de datos y sistema, y un valor `UUID` larguisimo que sera clave en la seccion 6.
+Veras una columna `FSTYPE` con `ext4` en tus particiones de datos y de sistema, y un `UUID` larguisimo que sera clave en la seccion 6.
 
 > ### 🟦 ¿Que significa? — *`mkfs` (make filesystem)*
-> Comando que **crea un sistema de archivos vacio** en una particion, es decir, la formatea. La version para ext4 es `mkfs.ext4`. **Para que sirve:** dejar un disco nuevo listo para guardar datos. **En tu polypaw-nas:** es el comando mas peligroso del capitulo. Solo se usa **una vez**, cuando estrenas un disco. Si lo corres sobre el HDD que ya tiene tus respaldos, los borra sin posibilidad de recuperarlos.
+> Comando que **crea un sistema de archivos vacio** en una particion, es decir, la formatea. La version para ext4 es `mkfs.ext4`. **Para que sirve:** dejar un disco nuevo listo para guardar datos. **En tu polypaw-nas:** es el comando mas peligroso del capitulo. Solo se usa **una vez**, al estrenar un disco. Si lo corres sobre el HDD que ya tiene tus respaldos, los borra sin vuelta atras.
 
 > ### ⚠️ Cuidado
 > El comando para formatear es `mkfs` (make filesystem). **Nunca** lo corras "para probar". Si escribes `sudo mkfs.ext4 /dev/sda1` sobre tu HDD lleno de respaldos, **se borra todo en segundos y no hay deshacer**. Antes de cualquier comando que mencione un `/dev/sdX`, respira y confirma con `lsblk` que es el disco correcto.
@@ -99,12 +99,12 @@ Veras una columna `FSTYPE` con `ext4` en tus particiones de datos y sistema, y u
 
 ## 4. Cuanto espacio me queda: `df -h`
 
-La pregunta mas frecuente en un NAS es: **¿cuanto espacio me queda?** Para eso esta `df`.
+La pregunta que mas se repite frente a un NAS es: **¿cuanto espacio me queda?** Para eso esta `df`.
 
 > ### 🟦 ¿Que significa? — *`df` (disk free)*
-> Comando que muestra el **espacio libre y usado** de cada disco montado. **Para que sirve:** saber si te estas quedando sin espacio. **En tu polypaw-nas:** lo usaras para vigilar el HDD de `/srv/nas` antes de que se llene de respaldos.
+> Comando que muestra el **espacio libre y usado** de cada disco montado. **Para que sirve:** saber si te estas quedando sin sitio. **En tu polypaw-nas:** lo usaras para vigilar el HDD de `/srv/nas` antes de que se atasque de respaldos.
 
-La opcion `-h` significa "human-readable" (legible para humanos): muestra GB y MB en vez de numeros gigantescos.
+La opcion `-h` significa "human-readable" (legible para humanos): te muestra GB y MB en lugar de numeros kilometricos.
 
 ```bash
 df -h
@@ -119,31 +119,31 @@ Filesystem      Size  Used Avail Use% Mounted on
 tmpfs           3.9G     0  3.9G   0% /dev/shm
 ```
 
-Lee la fila de `/srv/nas`: tiene **938 GB de tamano**, **120 GB usados**, **770 GB libres** y un **14% de uso**. Eso es lo que te importa para tus datos.
+Fijate en la fila de `/srv/nas`: tiene **938 GB de tamano**, **120 GB usados**, **770 GB libres** y un **14% de uso**. Eso es lo que de verdad te importa para tus datos.
 
 > ### 💡 Tip
 > Si solo quieres ver el disco de datos, pasa la ruta directamente:
 > ```bash
 > df -h /srv/nas
 > ```
-> Asi evitas el ruido de `tmpfs` y otras lineas de sistema.
+> Asi te ahorras el ruido de `tmpfs` y otras lineas de sistema.
 
 > ### 🟦 ¿Que significa? — *Punto de montaje (mountpoint)*
-> Es la **carpeta donde "aparece" el contenido de un disco**. **Para que sirve:** acceder a un disco como si fuera una carpeta normal. **En tu polypaw-nas:** `/srv/nas` es el punto de montaje del HDD. Cuando entras a `/srv/nas`, en realidad estas dentro del disco de 954 GB.
+> Es la **carpeta donde "aparece" el contenido de un disco**. **Para que sirve:** entrar a un disco como si fuera una carpeta cualquiera. **En tu polypaw-nas:** `/srv/nas` es el punto de montaje del HDD. Cuando entras a `/srv/nas`, en realidad estas dentro del disco de 954 GB.
 
-¿Y para saber que carpeta esta ocupando mas? Usa `du` (disk usage):
+¿Y para descubrir que carpeta esta ocupando mas? Ahi entra `du` (disk usage):
 
 ```bash
 sudo du -h --max-depth=1 /srv/nas | sort -h
 ```
 
-Esto te dice cuanto pesa cada subcarpeta de `/srv/nas`, ordenado de menor a mayor. Util para descubrir que respaldo crecio de mas.
+Esto te dice cuanto pesa cada subcarpeta de `/srv/nas`, ordenado de menor a mayor. Perfecto para destapar que respaldo se desmadro de tamano.
 
 > ### 🟦 ¿Que significa? — *`du` (disk usage)*
-> Comando que mide **cuanto pesa cada carpeta**, sumando todos los archivos que tiene dentro. **Para que sirve:** mientras `df` te dice cuanto queda en el disco entero, `du` te dice **quien se esta comiendo el espacio**. **En tu polypaw-nas:** lo usas dentro de `/srv/nas` para cazar la carpeta o el respaldo gigante que llena el HDD de 954 GB. El `--max-depth=1` evita que liste cada archivo suelto y solo te muestre el peso de las carpetas de primer nivel.
+> Comando que mide **cuanto pesa cada carpeta**, sumando todos los archivos que lleva dentro. **Para que sirve:** mientras `df` te dice cuanto queda en el disco entero, `du` te senala **quien se esta comiendo el espacio**. **En tu polypaw-nas:** lo usas dentro de `/srv/nas` para cazar la carpeta o el respaldo gigante que llena el HDD de 954 GB. El `--max-depth=1` evita que liste archivo por archivo y te muestra solo el peso de las carpetas de primer nivel.
 
 > ### 🔎 En tu servidor
-> Cada cierto tiempo corre `df -h /srv/nas`. Si el `Use%` pasa del **80%**, empieza a planear: borra respaldos viejos o consigue mas disco. Un NAS lleno al 100% deja de funcionar bien, y Samba puede empezar a rechazar escrituras.
+> Cada cierto tiempo corre `df -h /srv/nas`. Si el `Use%` pasa del **80%**, ponte a planear: borra respaldos viejos o consigue mas disco. Un NAS lleno al 100% deja de funcionar como debe, y Samba puede empezar a rechazar escrituras.
 
 ---
 
@@ -152,10 +152,10 @@ Esto te dice cuanto pesa cada subcarpeta de `/srv/nas`, ordenado de menor a mayo
 "Montar" un disco es **engancharlo a una carpeta** para poder usarlo. "Desmontar" es soltarlo de forma segura.
 
 > ### 🟦 ¿Que significa? — *Montar (mount)*
-> Es **conectar un disco a una carpeta** del sistema para acceder a sus archivos. **Para que sirve:** sin montarlo, el disco existe pero no puedes entrar a el. **En tu polypaw-nas:** montar el HDD en `/srv/nas` es lo que hace que Samba pueda compartir tus datos.
+> Es **conectar un disco a una carpeta** del sistema para acceder a sus archivos. **Para que sirve:** sin montarlo, el disco existe pero no puedes entrar a el. **En tu polypaw-nas:** montar el HDD en `/srv/nas` es lo que permite que Samba comparta tus datos.
 
 > ### 🟦 ¿Que significa? — *Desmontar (umount)*
-> Es **soltar el disco de forma ordenada**, asegurando que todo lo que estaba a medio escribir se guarde. **Para que sirve:** evitar corromper datos al apagar o desconectar. **En tu polypaw-nas:** rara vez lo haras, pero es importante saber que existe.
+> Es **soltar el disco de forma ordenada**, asegurandote de que todo lo que estaba a medio escribir quede bien guardado. **Para que sirve:** evitar corromper datos al apagar o desconectar. **En tu polypaw-nas:** rara vez lo haras, pero conviene saber que existe.
 
 Montar el HDD a mano (ejemplo):
 
@@ -163,7 +163,7 @@ Montar el HDD a mano (ejemplo):
 sudo mount /dev/sda1 /srv/nas
 ```
 
-Esto dice: "engancha la particion `sda1` a la carpeta `/srv/nas`". Despues, `df -h /srv/nas` deberia mostrarte el disco de 938 GB.
+Esto le dice al sistema: "engancha la particion `sda1` a la carpeta `/srv/nas`". Despues, `df -h /srv/nas` deberia mostrarte el disco de 938 GB.
 
 Desmontar:
 
@@ -171,32 +171,32 @@ Desmontar:
 sudo umount /srv/nas
 ```
 
-(Si, se escribe `umount`, sin la "n" — es una rareza historica de Unix.)
+(Si, se escribe `umount`, sin la "n" — una rareza historica de Unix que arrastramos desde siempre.)
 
 > ### ⚠️ Cuidado
-> No desmontes `/srv/nas` mientras alguien copia archivos por Samba o un contenedor de Docker lo esta usando. Si lo intentas, veras "target is busy" (objetivo ocupado). **Avisa, espera a que nadie lo use, y entonces desmonta.** Para ver quien lo esta usando: `sudo lsof /srv/nas`.
+> No desmontes `/srv/nas` mientras alguien copia archivos por Samba o un contenedor de Docker lo esta usando. Si lo intentas, te saldra "target is busy" (objetivo ocupado). **Avisa, espera a que nadie lo use y entonces desmonta.** Para ver quien lo tiene abierto: `sudo lsof /srv/nas`.
 
-El problema de montar a mano es que **se olvida al reiniciar**. Si apagas y enciendes polypaw-nas (o se va la luz), el HDD vuelve a quedar sin montar. Para eso existe `/etc/fstab`.
+El problema de montar a mano es que **se olvida al reiniciar**. Si apagas y enciendes polypaw-nas (o se va la luz), el HDD vuelve a quedarse sin montar. Para eso existe `/etc/fstab`.
 
 > ### 💡 Tip
-> Tu Acer Nitro tiene una ventaja secreta: **la bateria del laptop funciona como una UPS natural**. Si se va la luz, el NAS sigue encendido con la bateria, dandote tiempo de apagarlo bien o de que vuelva la corriente. Aun asi, configurar `/etc/fstab` para que el disco se monte solo es imprescindible.
+> Tu Acer Nitro tiene una ventaja escondida: **la bateria del laptop hace de UPS natural**. Si se va la luz, el NAS sigue encendido con la bateria, dandote margen para apagarlo bien o para que vuelva la corriente. Aun asi, configurar `/etc/fstab` para que el disco se monte solo es imprescindible.
 
 > ### 🟦 ¿Que significa? — *UPS (Uninterruptible Power Supply)*
-> Una **bateria de respaldo** que mantiene un equipo encendido cuando se corta la luz. **Para que sirve:** evitar apagones bruscos que corrompen discos. **En tu polypaw-nas:** no necesitas comprar una; la **bateria interna del Acer Nitro** ya cumple ese papel mientras este sana.
+> Una **bateria de respaldo** que mantiene un equipo encendido cuando se corta la luz. **Para que sirve:** evitar apagones bruscos que corrompen discos. **En tu polypaw-nas:** no hace falta que compres una; la **bateria interna del Acer Nitro** ya cumple ese papel mientras siga sana.
 
 ---
 
 ## 6. Montar al arranque: `/etc/fstab`
 
-Aqui esta el corazon del capitulo. `/etc/fstab` es un archivo de texto que le dice a Ubuntu **que discos montar automaticamente al encender** y donde.
+Aqui esta el corazon del capitulo. `/etc/fstab` es un archivo de texto que le dice a Ubuntu **que discos montar automaticamente al encender** y donde colocarlos.
 
 > ### 🟦 ¿Que significa? — *`/etc/fstab` (file systems table)*
-> Es la **lista de discos que se montan solos al arrancar**. **Para que sirve:** que `/srv/nas` aparezca montado siempre, sin que tengas que escribir `mount` cada vez. **En tu polypaw-nas:** garantiza que despues de un reinicio, Samba siga compartiendo tus datos sin que muevas un dedo.
+> Es la **lista de discos que se montan solos al arrancar**. **Para que sirve:** que `/srv/nas` aparezca montado siempre, sin que tengas que escribir `mount` cada vez. **En tu polypaw-nas:** garantiza que, despues de un reinicio, Samba siga compartiendo tus datos sin que muevas un dedo.
 
-Para que `fstab` identifique el disco de forma segura, NO usamos `/dev/sda1` (ese nombre puede cambiar si conectas otro disco USB). Usamos el **UUID**.
+Para que `fstab` identifique el disco sin equivocarse, no usamos `/dev/sda1` (ese nombre puede cambiar si conectas otro disco USB). Usamos el **UUID**.
 
 > ### 🟦 ¿Que significa? — *UUID (identificador unico universal)*
-> Es un **codigo unico** que identifica una particion para siempre, aunque cambie de nombre o de puerto. Algo como `a1b2c3d4-...`. **Para que sirve:** que `fstab` siempre encuentre el disco correcto. **En tu polypaw-nas:** usar el UUID del HDD evita que un dia montes el disco equivocado en `/srv/nas`.
+> Es un **codigo unico** que identifica una particion para siempre, aunque cambie de nombre o de puerto. Algo del estilo `a1b2c3d4-...`. **Para que sirve:** que `fstab` siempre de con el disco correcto. **En tu polypaw-nas:** usar el UUID del HDD evita que un dia montes el disco equivocado en `/srv/nas`.
 
 Primero, averigua el UUID de tu HDD:
 
@@ -207,13 +207,13 @@ sudo blkid /dev/sda1
 > ### 🟦 ¿Que significa? — *`blkid`*
 > Comando que **lee la etiqueta de identidad** de una particion: su UUID y su tipo de sistema de archivos. **Para que sirve:** conseguir el UUID exacto que necesitas para `/etc/fstab`. **En tu polypaw-nas:** lo corres sobre `/dev/sda1` (tu HDD de 954 GB) para copiar su UUID y pegarlo en `fstab`, de modo que `/srv/nas` se monte siempre en el disco correcto aunque cambie de nombre.
 
-Te dara algo como:
+Te dara algo asi:
 
 ```bash
 /dev/sda1: UUID="a1b2c3d4-e5f6-7890-abcd-ef1234567890" TYPE="ext4"
 ```
 
-Copia ese UUID. Ahora edita `/etc/fstab` (usa `nano`, un editor sencillo):
+Copia ese UUID. Ahora edita `/etc/fstab` (con `nano`, un editor sencillito):
 
 ```bash
 sudo nano /etc/fstab
@@ -230,26 +230,26 @@ Que significa cada campo, de izquierda a derecha:
 1. **UUID=...** → que disco montar.
 2. **/srv/nas** → donde montarlo.
 3. **ext4** → el tipo de sistema de archivos.
-4. **defaults,nofail** → opciones. `defaults` son ajustes normales; `nofail` es clave: si el disco falta, el servidor **arranca igual** en vez de quedarse colgado.
-5. **0** → respaldo con la herramienta `dump` (casi nadie la usa hoy; deja 0).
+4. **defaults,nofail** → opciones. `defaults` son los ajustes normales; `nofail` es la pieza clave: si el disco falta, el servidor **arranca igual** en lugar de quedarse colgado.
+5. **0** → respaldo con la herramienta `dump` (hoy casi nadie la usa; deja 0).
 6. **2** → orden de revision al arrancar (1 para la raiz, 2 para los demas).
 
 > ### 🟦 ¿Que significa? — *`nofail`*
-> Opcion que le dice a Ubuntu: **"si este disco no esta, arranca de todas formas"**. **Para que sirve:** evitar que polypaw-nas se quede atascado en pantalla negra si el HDD falla o se desconecta. **En tu polypaw-nas:** ponla SIEMPRE en discos de datos. Sin ella, un disco con problemas puede dejarte el servidor inaccesible.
+> Opcion que le dice a Ubuntu: **"si este disco no esta, arranca de todos modos"**. **Para que sirve:** evitar que polypaw-nas se quede atascado en pantalla negra si el HDD falla o se desconecta. **En tu polypaw-nas:** ponla SIEMPRE en discos de datos. Sin ella, un disco con problemas puede dejarte el servidor inaccesible.
 
-Antes de reiniciar, **prueba** que `fstab` no tiene errores:
+Antes de reiniciar, **prueba** que `fstab` no tenga errores:
 
 ```bash
 sudo mount -a
 ```
 
-Esto monta todo lo de `fstab`. Si no da ningun error y `df -h /srv/nas` muestra tu disco, ¡quedo perfecto!
+Esto monta todo lo que aparece en `fstab`. Si no salta ningun error y `df -h /srv/nas` muestra tu disco, ¡quedo perfecto!
 
 > ### ⚠️ Cuidado
-> Un error en `/etc/fstab` (un UUID mal copiado, sin `nofail`) puede impedir que el servidor arranque. **Siempre** corre `sudo mount -a` despues de editar. Si no da errores, reiniciar es seguro. Esta es de las pocas cosas que pueden dejarte el NAS sin arrancar, asi que tomatelo en serio.
+> Un error en `/etc/fstab` (un UUID mal copiado, o que se te olvide `nofail`) puede impedir que el servidor arranque. **Siempre** corre `sudo mount -a` despues de editar. Si no da errores, reiniciar es seguro. Esta es de las pocas cosas capaces de dejarte el NAS sin arrancar, asi que tomatelo en serio.
 
 > ### 🔎 En tu servidor
-> Tambien puedes administrar discos desde **Cockpit** (el panel web en el puerto 9090). En su seccion de Almacenamiento ves los discos graficamente y puedes montar/desmontar con clics. Esta bien para mirar, pero entender `fstab` por texto te da control total cuando algo se rompe.
+> Tambien puedes administrar discos desde **Cockpit** (el panel web en el puerto 9090). En su seccion de Almacenamiento ves los discos de forma grafica y los montas o desmontas con clics. Esta bien para echar un ojo, pero entender `fstab` por texto te da control total cuando algo se tuerce.
 
 > ### ⚠️ Cuidado
 > Cockpit escucha en el puerto **9090**, pero eso NO significa que debas abrir ese puerto en tu router. Para entrar a Cockpit desde fuera de casa, conectate primero por **Tailscale** y luego abre `https://polypaw-nas:9090` dentro de esa red privada. Exponer el 9090 directo a internet es regalarle a cualquier atacante la puerta de administracion de todo tu NAS. Tailscale primero, siempre.
@@ -258,27 +258,27 @@ Esto monta todo lo de `fstab`. Si no da ningun error y `df -h /srv/nas` muestra 
 
 ## 7. LVM a grandes rasgos
 
-Quizas en `lsblk` veas nombres raros como `ubuntu--vg-ubuntu--lv`. Eso es **LVM**, y conviene saber que es aunque hoy no lo toques.
+Puede que en `lsblk` te topes con nombres raros como `ubuntu--vg-ubuntu--lv`. Eso es **LVM**, y conviene saber de que va aunque hoy no lo toques.
 
 > ### 🟦 ¿Que significa? — *LVM (Logical Volume Manager)*
-> Es una **capa flexible para manejar discos**. En vez de particiones rigidas, junta el espacio en un "monton" (grupo de volumenes) del que cortas "volumenes logicos" del tamano que quieras, y puedes agrandarlos despues. **Para que sirve:** ampliar espacio sin reformatear, o sumar varios discos en uno solo. **En tu polypaw-nas:** Ubuntu Server suele instalar el **sistema (el SSD)** sobre LVM. Tu HDD de `/srv/nas` puede estar en ext4 simple o sobre LVM, segun como lo configuraste.
+> Es una **capa flexible para manejar discos**. En lugar de particiones rigidas, junta el espacio en un "monton" (grupo de volumenes) del que vas cortando "volumenes logicos" del tamano que quieras, y que puedes agrandar despues. **Para que sirve:** ampliar espacio sin reformatear, o sumar varios discos como si fueran uno. **En tu polypaw-nas:** Ubuntu Server suele instalar el **sistema (el SSD)** sobre LVM. Tu HDD de `/srv/nas` puede estar en ext4 simple o sobre LVM, segun como lo configuraste.
 
-La idea en una frase: **LVM es como tener tabiques movibles** en vez de paredes de concreto. Si un dia tu volumen de sistema se queda corto, con LVM puedes agrandarlo sin reinstalar.
+La idea en una frase: **LVM es como tener tabiques movibles** en vez de paredes de concreto. Si un dia tu volumen de sistema se queda corto, con LVM lo agrandas sin reinstalar nada.
 
 > ### 💡 Tip
-> No necesitas dominar LVM para tener un NAS funcional. Para empezar, **ext4 simple en el HDD** es perfecto y mas facil de entender. Aprende LVM mas adelante, cuando quieras sumar un segundo disco de datos o redimensionar volumenes.
+> No necesitas dominar LVM para tener un NAS que funcione. Para empezar, **ext4 simple en el HDD** va de maravilla y es mas facil de entender. Deja LVM para mas adelante, cuando quieras sumar un segundo disco de datos o redimensionar volumenes.
 
 > ### 🟦 ¿Que significa? — *Volumen logico (logical volume)*
-> Es una **"particion flexible"** dentro de LVM que puedes agrandar o achicar. **Para que sirve:** ajustar el espacio segun lo que necesites. **En tu polypaw-nas:** si tu SSD de sistema usa LVM, la raiz `/` es en realidad un volumen logico.
+> Es una **"particion flexible"** dentro de LVM que puedes agrandar o achicar. **Para que sirve:** ajustar el espacio segun lo que vayas necesitando. **En tu polypaw-nas:** si tu SSD de sistema usa LVM, la raiz `/` es en realidad un volumen logico.
 
 ---
 
 ## 8. La salud del disco: SMART
 
-Los discos no son eternos. Un HDD mecanico, con sus partes que giran, **falla con el tiempo**. La buena noticia: los discos avisan antes de morir, gracias a SMART.
+Los discos no duran para siempre. Un HDD mecanico, con sus piezas girando dia y noche, **se va desgastando**. La buena noticia es que los discos avisan antes de morir, y de eso se encarga SMART.
 
 > ### 🟦 ¿Que significa? — *SMART (auto-diagnostico del disco)*
-> Es un sistema dentro del disco que **vigila su propia salud** y registra senales de desgaste: sectores danados, temperatura, errores de lectura. **Para que sirve:** avisarte ANTES de que el disco muera, para que respaldes a tiempo. **En tu polypaw-nas:** lo consultas con la herramienta `smartctl` para vigilar la salud del HDD de 954 GB, que es el que mas trabaja.
+> Es un sistema dentro del propio disco que **vigila su salud** y va anotando senales de desgaste: sectores danados, temperatura, errores de lectura. **Para que sirve:** avisarte ANTES de que el disco muera, para que respaldes a tiempo. **En tu polypaw-nas:** lo consultas con la herramienta `smartctl` para seguir de cerca la salud del HDD de 954 GB, que es el que mas trabaja.
 
 Primero instala las herramientas (si no las tienes):
 
@@ -292,7 +292,7 @@ Para ver la salud de tu HDD:
 sudo smartctl -H /dev/sda
 ```
 
-La linea importante dice:
+La linea que importa dice:
 
 ```bash
 SMART overall-health self-assessment test result: PASSED
@@ -308,9 +308,9 @@ sudo smartctl -a /dev/sda
 
 Mira sobre todo estos valores:
 
-- **Reallocated_Sector_Ct** → sectores danados que el disco tuvo que "jubilar". Si crece, mala senal.
-- **Power_On_Hours** → cuantas horas lleva encendido. Un NAS acumula muchas.
-- **Temperature** → temperatura. En un laptop dentro de una caja cerrada puede subir; vigilala.
+- **Reallocated_Sector_Ct** → sectores danados que el disco tuvo que "jubilar". Si va creciendo, mala senal.
+- **Power_On_Hours** → cuantas horas lleva encendido. Un NAS acumula un monton.
+- **Temperature** → la temperatura. Dentro de un laptop metido en una caja cerrada puede subir; tenla vigilada.
 
 Tambien puedes lanzar una prueba corta:
 
@@ -318,42 +318,42 @@ Tambien puedes lanzar una prueba corta:
 sudo smartctl -t short /dev/sda
 ```
 
-Espera unos minutos y luego mira el resultado con `sudo smartctl -a /dev/sda`.
+Espera unos minutos y luego revisa el resultado con `sudo smartctl -a /dev/sda`.
 
 > ### ⚠️ Cuidado
-> SMART avisa, pero **no siempre con tiempo**. La unica proteccion real contra perder datos es tener **copias de respaldo en otro lugar**. SMART te dice "este disco esta cansado"; tus respaldos te salvan cuando, aun asi, falla de golpe.
+> SMART avisa, pero **no siempre con tiempo de sobra**. La unica proteccion de verdad contra perder datos es tener **copias de respaldo en otro lugar**. SMART te dice "este disco esta cansado"; tus respaldos son los que te salvan cuando, aun asi, falla de golpe.
 
 > ### 🔎 En tu servidor
-> Revisa SMART del HDD una vez al mes. Como polypaw-nas vive encendido como NAS, el HDD de datos suma horas rapido. Si ves que `Reallocated_Sector_Ct` empieza a subir mes a mes, ve consiguiendo un disco nuevo sin prisa pero sin pausa.
+> Revisa el SMART del HDD una vez al mes. Como polypaw-nas vive encendido haciendo de NAS, el HDD de datos suma horas a buen ritmo. Si ves que `Reallocated_Sector_Ct` sube mes a mes, ve consiguiendo un disco nuevo: sin prisa, pero sin pausa.
 
 ---
 
 ## 9. Seguridad y respaldos: la parte que no se ve
 
-Hablar de discos sin hablar de seguridad seria dejarte a medias. Tus datos en `/srv/nas` valen mas que el hardware.
+Hablar de discos sin hablar de seguridad seria dejarte a medio camino. Tus datos en `/srv/nas` valen mas que el hardware que los guarda.
 
 **La regla 3-2-1 de respaldos** (simplificada para tu caso):
 
 - **3** copias de lo importante.
 - **2** soportes distintos (por ejemplo, el HDD del NAS + un disco USB externo).
-- **1** copia fuera de casa (otro lugar fisico, o un repo en GitHub como `Faro/Organizer` para codigo).
+- **1** copia fuera de casa (otro lugar fisico, o un repo en GitHub como `Faro/Organizer` para el codigo).
 
 > ### 💡 Tip
-> Tus repos (`tunal-digital`, `PolyPaw`, `RachaSimple`, `Faro/Organizer`) ya viven en GitHub, asi que el codigo tiene respaldo natural. Lo que de verdad debes respaldar del NAS son **los datos que solo existen ahi**: fotos, documentos, bases de datos de tus contenedores Docker.
+> Tus repos (`tunal-digital`, `PolyPaw`, `RachaSimple`, `Faro/Organizer`) ya viven en GitHub, asi que el codigo tiene respaldo de sobra. Lo que de verdad debes respaldar del NAS son **los datos que solo existen ahi**: fotos, documentos, bases de datos de tus contenedores Docker.
 
 Y sobre el acceso al NAS:
 
 > ### ⚠️ Cuidado
-> **No abras puertos de tu router hacia internet** para llegar al NAS (ni el 9090 de Cockpit, ni Samba, ni nada). Abrir puertos expone polypaw-nas a todo el mundo y a ataques automaticos. **Usa Tailscale**, que crea una red privada cifrada: accedes a tu NAS desde fuera como si estuvieras en casa, sin abrir un solo puerto. Es la diferencia entre dejar la puerta abierta de par en par y tener una llave secreta.
+> **No abras puertos de tu router hacia internet** para llegar al NAS (ni el 9090 de Cockpit, ni Samba, ni nada). Abrir puertos deja a polypaw-nas a la vista de medio mundo y de los ataques automaticos. **Usa Tailscale**, que crea una red privada cifrada: accedes a tu NAS desde fuera como si estuvieras en casa, sin abrir un solo puerto. Es la diferencia entre dejar la puerta abierta de par en par y tener una llave secreta.
 
 > ### 🟦 ¿Que significa? — *Tailscale*
-> Es una **VPN sencilla** que conecta tus dispositivos en una red privada y cifrada, sin configurar el router. **Para que sirve:** acceder a tu NAS de forma segura desde cualquier lugar. **En tu polypaw-nas:** ya esta instalado; es tu via segura para llegar a Cockpit (9090) y a Samba sin exponer nada a internet.
+> Es una **VPN sencilla** que conecta tus dispositivos en una red privada y cifrada, sin tener que tocar el router. **Para que sirve:** acceder a tu NAS de forma segura desde cualquier lugar. **En tu polypaw-nas:** ya esta instalado; es tu via segura para llegar a Cockpit (9090) y a Samba sin exponer nada a internet.
 
 > ### 💡 Tip
 > Pon **contrasenas fuertes** al usuario de Samba (el recurso `PolyPawNAS`) y a tu cuenta de Ubuntu. Un disco bien montado pero con clave "1234" es como una caja fuerte con la puerta entreabierta.
 
 > ### 🔎 En tu servidor
-> Recuerda el limite de **8 GB de RAM** del Acer Nitro. Los discos en si no gastan RAM, pero copiar archivos enormes por Samba o correr muchos contenedores Docker a la vez si la consume. Vigila la memoria con `free -h` mientras mueves datos grandes; si la RAM se agota, el sistema se pone lento o mata procesos. Datos y memoria van de la mano.
+> No pierdas de vista el limite de **8 GB de RAM** del Acer Nitro. Los discos en si no gastan RAM, pero copiar archivos enormes por Samba o correr muchos contenedores Docker a la vez si la consume. Vigila la memoria con `free -h` mientras mueves datos grandes; si la RAM se agota, el sistema se vuelve lento o empieza a matar procesos. Datos y memoria van de la mano.
 
 ---
 

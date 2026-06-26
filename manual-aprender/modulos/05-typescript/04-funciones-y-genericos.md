@@ -1,16 +1,21 @@
 # Capítulo 04 — Funciones tipadas y genéricos
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Las funciones son donde los tipos más brillan: declaras qué **reciben** y qué **devuelven**, y
-> TypeScript vigila ambos extremos. Al final asomamos los **genéricos**, que suenan intimidantes
-> pero la idea es sencilla.
+> TypeScript vigila los dos extremos. Al final le echamos un vistazo a los **genéricos**, que
+> suenan intimidantes pero esconden una idea bastante sencilla.
 
 ---
 
 ## 1. Tipar parámetros y el valor de retorno
 
 > ### 🟦 ¿Qué significa? — *Función tipada*
-> En una función, anotas el tipo de cada **parámetro** y, opcionalmente, el tipo de lo que
-> **devuelve** (después de los paréntesis, con `: tipo`):
+> En una función anotas el tipo de cada **parámetro** y, si quieres, el tipo de lo que
+> **devuelve** (va después de los paréntesis, con `: tipo`):
 > ```typescript
 > function precioConIva(precio: number): number {
 >   return precio * 1.13;
@@ -19,22 +24,23 @@
 > - `precio: number` → el parámetro debe ser un número.
 > - `: number` después de `()` → la función devuelve un número.
 >
-> Ahora, si alguien la llama mal, error inmediato:
+> Si alguien la llama mal, salta el error en el acto:
 > ```typescript
 > precioConIva("100");   // ❌ se esperaba number, llegó string
 > ```
 
 > ### 💡 Tip — El tipo de retorno se suele inferir
-> TypeScript normalmente **deduce** lo que devuelve una función (por el `return`), así que el
-> `: number` final es opcional. Muchos lo escriben igual, como documentación y para evitar
-> sorpresas. Los **parámetros**, en cambio, casi siempre conviene anotarlos.
+> Por lo general TypeScript **deduce** lo que devuelve una función mirando el `return`, así que
+> ese `: number` del final es opcional. Aun así mucha gente lo escribe, tanto para documentar
+> como para no llevarse sorpresas. Con los **parámetros** la cosa cambia: ahí casi siempre vale
+> la pena anotarlos.
 
 > ### 🟦 ¿Qué significa? — *Funciones flecha tipadas*
-> La forma flecha (que viste en JS) se tipa igual:
+> La forma flecha (la que viste en JS) se tipa igual:
 > ```typescript
 > const precioConIva = (precio: number): number => precio * 1.13;
 > ```
-> Así verás la mayoría de funciones en RachaSimple y Faro.
+> Así verás escritas la mayoría de funciones en RachaSimple y Faro.
 
 ---
 
@@ -48,15 +54,16 @@
 > saludar("Edwar");            // "Hola, Edwar"
 > saludar("Ana", "Buenas");    // "Buenas, Ana"
 > ```
-> - `saludo?` → el parámetro es opcional (puede no pasarse).
-> - `??` (operador de coalescencia nula) → "usa lo de la izquierda, y si es `null`/`undefined`,
->   usa lo de la derecha". Aquí: si no hay `saludo`, usa `"Hola"`.
+> - `saludo?` → el parámetro es opcional, puedes no pasarlo.
+> - `??` (operador de coalescencia nula) → significa "usa lo de la izquierda, y si resulta ser
+>   `null`/`undefined`, usa lo de la derecha". Aquí: si no llega `saludo`, se usa `"Hola"`.
 
 ---
 
 ## 3. Tipar funciones que reciben tus objetos
 
-Lo más útil en la práctica: combinar funciones con las **interfaces** del capítulo anterior.
+Esto es lo más útil en el día a día: juntar las funciones con las **interfaces** del capítulo
+anterior.
 
 ```typescript
 interface Habito {
@@ -70,21 +77,21 @@ function describir(habito: Habito): string {
 }
 ```
 
-Dentro de `describir`, TypeScript **sabe** que `habito` tiene `nombre` y `hecho`, así que te
-autocompleta esas propiedades y te avisa si escribes `habito.nombr` (error de tipeo). Esa ayuda
-constante es el día a día de programar con tipos.
+Dentro de `describir`, TypeScript **sabe** que `habito` tiene `nombre` y `hecho`. Por eso te
+autocompleta esas propiedades y te avisa si escribes `habito.nombr` por un despiste. Tener esa
+ayuda todo el rato es, en buena parte, lo que se siente al programar con tipos.
 
 ---
 
 ## 4. Genéricos: funciones que sirven para "cualquier tipo, pero con seguridad"
 
 > ### 🟦 ¿Qué significa? — *Genérico*
-> Un **genérico** es una forma de escribir una función (o tipo) que funciona con **distintos
-> tipos**, pero **manteniendo la información del tipo**. Es el punto medio entre "solo number" y
-> el peligroso `any`.
+> Un **genérico** es una manera de escribir una función (o un tipo) que funciona con **distintos
+> tipos** sin perder por el camino la **información del tipo**. Es el punto medio entre quedarte
+> en "solo number" y caer en el peligroso `any`.
 >
-> Imagina una función que devuelve el primer elemento de una lista. Sin genéricos tendrías que
-> elegir un tipo (`number[]`) o usar `any` (inseguro). Con genéricos, se adapta:
+> Piensa en una función que devuelve el primer elemento de una lista. Sin genéricos tendrías que
+> casarte con un tipo (`number[]`) o tirar de `any`, que es inseguro. Con genéricos, se adapta:
 > ```typescript
 > function primero<T>(lista: T[]): T {
 >   return lista[0];
@@ -93,16 +100,17 @@ constante es el día a día de programar con tipos.
 > primero<number>([10, 20, 30]);     // devuelve un number (10)
 > primero<string>(["a", "b"]);        // devuelve un string ("a")
 > ```
-> La `<T>` es un **"tipo comodín"**: un marcador que se rellena con el tipo real al usar la
-> función. `T` es solo una letra convencional (de *Type*); podría llamarse distinto. Así, la
-> función sirve para listas de cualquier tipo **y** TypeScript sigue sabiendo qué devuelve.
+> Esa `<T>` es un **"tipo comodín"**: un hueco que se rellena con el tipo real en el momento de
+> usar la función. La `T` es solo una letra por convención (viene de *Type*); podrías llamarla de
+> otra forma. Así la función te vale para listas de cualquier tipo **y** TypeScript sigue sabiendo
+> qué te devuelve.
 
 > ### 💡 Tip — No te agobies con los genéricos todavía
-> Es un concepto avanzado. Por ahora basta con **reconocerlos** cuando los veas (esa `<T>` o
-> `<Habito>` junto a una función o tipo) y saber que significan "esto se adapta a varios tipos
-> sin perder seguridad". Los usarás de verdad con TanStack Query en React (Módulo 06), donde
-> verás cosas como `useQuery<Habito[]>(...)`: ahí el genérico le dice "esta consulta devuelve una
-> lista de hábitos".
+> Es un concepto avanzado, así que tranquilo. De momento te basta con **reconocerlos** cuando los
+> veas (esa `<T>` o `<Habito>` pegada a una función o a un tipo) y tener claro que quieren decir
+> "esto se adapta a varios tipos sin perder seguridad". Los empezarás a usar de verdad con
+> TanStack Query en React (Módulo 06), donde verás cosas como `useQuery<Habito[]>(...)`: ahí el
+> genérico le está diciendo "esta consulta devuelve una lista de hábitos".
 
 ---
 

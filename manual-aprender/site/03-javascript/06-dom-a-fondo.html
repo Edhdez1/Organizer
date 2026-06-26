@@ -23,29 +23,29 @@
 </p>
 
 <blockquote>
-<p>Hola, soy Bit, tu ajolote guia. En el capitulo anterior aprendimos a <em>encontrar</em> elementos en la pagina y a <em>escuchar</em> clics. Hoy vamos a hacer algo mucho mas poderoso: vamos a <strong>crear</strong> elementos nuevos con codigo, <strong>insertarlos</strong> donde queramos, <strong>eliminarlos</strong>, <strong>movernos</strong> por el arbol de la pagina y <strong>leer o cambiar</strong> sus atributos. Al final construiremos pedazos de HTML a partir de datos, igual que lo hace <code>main.js</code> en el sitio real <code>tunal-digital</code>. Respira: lo haremos paso a pasito. 🟦</p>
+<p>Hola, soy Bit, tu ajolote guia. En el capitulo pasado aprendimos a <em>encontrar</em> elementos en la pagina y a <em>escuchar</em> clics. Hoy damos un salto: vamos a <strong>crear</strong> elementos nuevos con codigo, <strong>colocarlos</strong> donde queramos, <strong>borrarlos</strong>, <strong>movernos</strong> por el arbol de la pagina y <strong>leer o cambiar</strong> sus atributos. Para cerrar, armaremos pedazos de HTML a partir de datos, tal como lo hace <code>main.js</code> en el sitio real <code>tunal-digital</code>. Tranquilo, que iremos paso a pasito. 🟦</p>
 </blockquote>
 <h2 id="1-recordando-que-es-el-dom-en-una-frase">1. Recordando que es el DOM (en una frase)</h2>
 <p>Cuando el navegador carga una pagina HTML, no se queda con el texto plano: lo convierte en un <strong>arbol de objetos</strong> que JavaScript puede tocar. Ese arbol es el DOM.</p>
 <blockquote class="def">
 <h3 id="que-significa-dom-document-object-model">🟦 ¿Que significa? — <em>DOM (Document Object Model)</em></h3>
-<p>Es la representacion en memoria de tu pagina HTML como un <strong>arbol de objetos</strong>. Cada etiqueta (<code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;button&gt;</code>...) se vuelve un <strong>nodo</strong> que puedes leer y modificar desde JavaScript.
-<strong>Para que sirve:</strong> te permite cambiar la pagina <em>despues</em> de cargada, sin recargar nada (crear una tarjeta, ocultar un menu, mostrar un mensaje).
-<strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, el archivo <code>main.js</code> toca el DOM todo el tiempo: abre el menu movil, pinta las respuestas del chat de IA y muestra mensajes del formulario de contacto.</p>
+<p>Es la representacion en memoria de tu pagina HTML como un <strong>arbol de objetos</strong>. Cada etiqueta (<code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;button&gt;</code>...) se convierte en un <strong>nodo</strong> que puedes leer y modificar desde JavaScript.
+<strong>Para que sirve:</strong> te deja cambiar la pagina <em>despues</em> de cargada, sin recargar nada (crear una tarjeta, ocultar un menu, mostrar un mensaje).
+<strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, el archivo <code>main.js</code> toca el DOM a cada rato: abre el menu movil, pinta las respuestas del chat de IA y muestra mensajes del formulario de contacto.</p>
 <h3 id="que-significa-nodo">🟦 ¿Que significa? — <em>Nodo</em></h3>
-<p>Es cada "pieza" del arbol del DOM. La mayoria de las piezas que tocaras son <strong>nodos de elemento</strong> (una etiqueta HTML), pero tambien hay nodos de texto y de comentario.
-<strong>Para que sirve:</strong> pensar en "nodos" te ayuda a entender que el DOM es una jerarquia de piezas conectadas (padres, hijos, hermanos), no una lista plana.
+<p>Es cada "pieza" del arbol del DOM. La mayoria de las piezas que vas a tocar son <strong>nodos de elemento</strong> (una etiqueta HTML), aunque tambien existen nodos de texto y de comentario.
+<strong>Para que sirve:</strong> pensar en "nodos" te ayuda a ver el DOM como una jerarquia de piezas conectadas (padres, hijos, hermanos), y no como una lista plana.
 <strong>Donde se usa:</strong> cada vez que <code>tunal-digital</code> agrega una burbuja de chat, esta creando un nodo de elemento nuevo.</p>
 <h3 id="que-significa-elemento">🟦 ¿Que significa? — <em>Elemento</em></h3>
 <p>Es un nodo que corresponde a una etiqueta HTML concreta, por ejemplo un <code>&lt;button&gt;</code> o un <code>&lt;article&gt;</code>. En JavaScript lo manejas como un objeto con propiedades (<code>.textContent</code>, <code>.className</code>) y metodos (<code>.append()</code>, <code>.remove()</code>).
 <strong>Para que sirve:</strong> es la pieza que vas a crear, mover, leer y borrar la mayor parte del tiempo.
-<strong>Donde se usa:</strong> las tarjetas de proyecto que veras en <code>Faro/Organizer</code> son, en el navegador, elementos del DOM generados a partir de datos.</p>
+<strong>Donde se usa:</strong> las tarjetas de proyecto que veras en <code>Faro/Organizer</code> son, dentro del navegador, elementos del DOM generados a partir de datos.</p>
 </blockquote>
 <h2 id="2-crear-elementos-con-createelement">2. Crear elementos con <code>createElement</code></h2>
-<p>Hasta ahora solo <em>buscabamos</em> cosas que ya estaban en el HTML. Ahora vamos a fabricarlas desde cero.</p>
+<p>Hasta ahora solo <em>buscabamos</em> cosas que ya estaban en el HTML. Toca fabricarlas desde cero.</p>
 <blockquote class="def">
 <h3 id="que-significa-createelement">🟦 ¿Que significa? — <em>createElement</em></h3>
-<p>Es un metodo de <code>document</code> que <strong>fabrica un elemento nuevo</strong> del tipo que le pidas, pero todavia <em>fuera</em> de la pagina (en memoria). Tu decides despues donde colocarlo.
+<p>Es un metodo de <code>document</code> que <strong>fabrica un elemento nuevo</strong> del tipo que le pidas, pero todavia <em>fuera</em> de la pagina (en memoria). Mas adelante tu decides donde colocarlo.
 <strong>Para que sirve:</strong> crear contenido dinamico: una tarjeta, un parrafo, un boton, una fila de tabla.
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, cuando llega la respuesta del chat de IA, se crea un elemento nuevo para la burbuja del mensaje antes de mostrarla.</p>
 </blockquote>
@@ -60,31 +60,31 @@ parrafo.className = &quot;mensaje&quot;;
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-textcontent">🟦 ¿Que significa? — <em>textContent</em></h3>
-<p>Es una propiedad que representa <strong>el texto que hay dentro</strong> de un elemento. Si la lees, obtienes el texto; si le asignas un valor, reemplazas el contenido.
-<strong>Para que sirve:</strong> poner o leer texto de forma segura, sin interpretar etiquetas HTML.
-<strong>Donde se usa:</strong> <code>main.js</code> de <code>tunal-digital</code> usa <code>textContent</code> para mostrar el texto del usuario en el chat, evitando que alguien inyecte HTML malicioso.</p>
+<p>Es una propiedad que representa <strong>el texto que hay dentro</strong> de un elemento. Si la lees, obtienes ese texto; si le asignas un valor, reemplazas el contenido.
+<strong>Para que sirve:</strong> poner o leer texto de forma segura, sin que el navegador interprete etiquetas HTML.
+<strong>Donde se usa:</strong> el <code>main.js</code> de <code>tunal-digital</code> usa <code>textContent</code> para mostrar el texto del usuario en el chat, de modo que nadie pueda colar HTML malicioso.</p>
 <h3 id="que-significa-innerhtml">🟦 ¿Que significa? — <em>innerHTML</em></h3>
-<p>Es una propiedad que representa <strong>el contenido HTML</strong> que hay dentro de un elemento, como texto. A diferencia de <code>textContent</code>, si le asignas algo con etiquetas (<code>&lt;b&gt;hola&lt;/b&gt;</code>), el navegador las <strong>interpreta</strong> y las convierte en elementos reales.
+<p>Es una propiedad que representa, en forma de texto, <strong>el contenido HTML</strong> que hay dentro de un elemento. A diferencia de <code>textContent</code>, si le asignas algo con etiquetas (<code>&lt;b&gt;hola&lt;/b&gt;</code>), el navegador las <strong>interpreta</strong> y las convierte en elementos reales.
 <strong>Para que sirve:</strong> leer o reemplazar de golpe el HTML interno de un elemento (por ejemplo, vaciar un contenedor con <code>contenedor.innerHTML = ""</code>).
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, antes de pintar resultados nuevos se limpia el contenedor con <code>innerHTML = ""</code> para no acumular contenido viejo.</p>
 <h3 id="que-significa-xss-cross-site-scripting">🟦 ¿Que significa? — <em>XSS (Cross-Site Scripting)</em></h3>
-<p>Es un tipo de ataque en el que alguien logra <strong>inyectar codigo malicioso</strong> (normalmente JavaScript) dentro de una pagina, aprovechando que esa pagina mete texto sin filtrar en el HTML.
-<strong>Para que sirve (saberlo):</strong> te recuerda por que <code>textContent</code> es seguro y <code>innerHTML</code> puede ser peligroso si el texto viene de un usuario.
+<p>Es un tipo de ataque en el que alguien consigue <strong>inyectar codigo malicioso</strong> (casi siempre JavaScript) dentro de una pagina, aprovechando que esa pagina mete texto sin filtrar en el HTML.
+<strong>Para que sirve (saberlo):</strong> te recuerda por que <code>textContent</code> es seguro y por que <code>innerHTML</code> puede ser peligroso cuando el texto viene de un usuario.
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, el chat usa <code>textContent</code> para el mensaje del usuario justamente para evitar un XSS.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Existe tambien <code>innerHTML</code>, que <strong>si interpreta etiquetas HTML</strong>. Es comodo, pero peligroso: si metes texto que escribio un usuario dentro de <code>innerHTML</code>, podrias permitir codigo malicioso (un ataque llamado XSS). Regla de Bit: para texto plano usa <code>textContent</code>; usa <code>innerHTML</code> solo con contenido que tu controlas.</p>
+<p>Existe tambien <code>innerHTML</code>, que <strong>si interpreta etiquetas HTML</strong>. Es comodo, pero peligroso: si metes dentro de <code>innerHTML</code> texto que escribio un usuario, podrias dejar pasar codigo malicioso (un ataque llamado XSS). La regla de Bit es sencilla: para texto plano usa <code>textContent</code>; deja <code>innerHTML</code> solo para contenido que tu mismo controlas.</p>
 <h3 id="que-significa-classname">🟦 ¿Que significa? — <em>className</em></h3>
-<p>Es una propiedad que contiene <strong>las clases CSS</strong> de un elemento como un solo texto. Asignarle un valor cambia todas sus clases de golpe.
-<strong>Para que sirve:</strong> dar estilo al elemento que acabas de crear, reutilizando tu CSS.
+<p>Es una propiedad que guarda <strong>las clases CSS</strong> de un elemento como un solo texto. Si le asignas un valor, cambias todas sus clases de golpe.
+<strong>Para que sirve:</strong> darle estilo al elemento que acabas de crear, reaprovechando tu CSS.
 <strong>Donde se usa:</strong> al crear burbujas de chat en <code>tunal-digital</code>, se asigna una clase distinta segun si el mensaje es del usuario o de la IA.</p>
 </blockquote>
 <h2 id="3-insertar-elementos-append-prepend-y-compania">3. Insertar elementos: <code>append</code>, <code>prepend</code> y compania</h2>
-<p>Crear un elemento no lo hace aparecer. Hay que <strong>colgarlo del arbol</strong> dentro de otro elemento que ya este en la pagina.</p>
+<p>Crear un elemento no lo hace aparecer. Hay que <strong>colgarlo del arbol</strong>, dentro de otro elemento que ya este en la pagina.</p>
 <blockquote class="def">
 <h3 id="que-significa-append">🟦 ¿Que significa? — <em>append</em></h3>
 <p>Es un metodo que mete uno o varios elementos (o texto) <strong>al final</strong> de los hijos de un elemento padre.
-<strong>Para que sirve:</strong> agregar contenido nuevo despues de lo que ya existe (por ejemplo, una burbuja de chat al final de la conversacion).
-<strong>Donde se usa:</strong> <code>tunal-digital</code> hace <code>append</code> de cada burbuja nueva dentro del contenedor del chat para que aparezca abajo del todo.</p>
+<strong>Para que sirve:</strong> agregar contenido nuevo despues de lo que ya hay (por ejemplo, una burbuja de chat al final de la conversacion).
+<strong>Donde se usa:</strong> <code>tunal-digital</code> hace <code>append</code> de cada burbuja nueva dentro del contenedor del chat para que aparezca hasta abajo.</p>
 </blockquote>
 <pre><code class="language-javascript">// Suponemos que existe &lt;div id=&quot;chat&quot;&gt;&lt;/div&gt; en el HTML
 const chat = document.getElementById(&quot;chat&quot;);
@@ -98,26 +98,26 @@ chat.append(burbuja);
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-elemento-padre-elemento-hijo">🟦 ¿Que significa? — <em>Elemento padre / elemento hijo</em></h3>
-<p>En el arbol del DOM, un elemento que contiene a otros es el <strong>padre</strong>, y los que estan dentro son sus <strong>hijos</strong>. Es la misma idea que carpetas y archivos.
-<strong>Para que sirve:</strong> entender quien contiene a quien para insertar en el lugar correcto.
+<p>En el arbol del DOM, un elemento que contiene a otros es el <strong>padre</strong>, y los que estan dentro son sus <strong>hijos</strong>. Es la misma idea de carpetas y archivos.
+<strong>Para que sirve:</strong> saber quien contiene a quien para insertar en el lugar correcto.
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, el <code>&lt;div id="chat"&gt;</code> es el padre y cada burbuja es un hijo.</p>
 <h3 id="que-significa-prepend">🟦 ¿Que significa? — <em>prepend</em></h3>
-<p>Igual que <code>append</code>, pero inserta <strong>al principio</strong>, antes de los demas hijos.
-<strong>Para que sirve:</strong> mostrar lo mas nuevo arriba (por ejemplo, notificaciones recientes primero).
-<strong>Donde se usa:</strong> util en un panel como el de <code>Faro/Organizer</code> si quisieras mostrar el ultimo proyecto analizado en la parte superior de la lista.</p>
+<p>Funciona igual que <code>append</code>, pero inserta <strong>al principio</strong>, por delante de los demas hijos.
+<strong>Para que sirve:</strong> mostrar lo mas nuevo arriba (por ejemplo, las notificaciones recientes primero).
+<strong>Donde se usa:</strong> vendria bien en un panel como el de <code>Faro/Organizer</code> si quisieras mostrar el ultimo proyecto analizado en la parte superior de la lista.</p>
 <h3 id="tip">💡 Tip</h3>
-<p><code>append</code> acepta varios argumentos de una sola vez: <code>padre.append(titulo, descripcion, boton)</code>. Tambien acepta texto suelto: <code>padre.append("Hola ", nombreEspan)</code>. Menos lineas, mismo resultado.</p>
+<p><code>append</code> acepta varios argumentos de una sola vez: <code>padre.append(titulo, descripcion, boton)</code>. Y tambien acepta texto suelto: <code>padre.append("Hola ", nombreEspan)</code>. Menos lineas, mismo resultado.</p>
 <h3 id="que-significa-insertbefore">🟦 ¿Que significa? — <em>insertBefore</em></h3>
-<p>Es un metodo mas antiguo que inserta un elemento <strong>justo antes</strong> de otro hijo concreto que tu indiques. Su forma es <code>padre.insertBefore(nuevo, referencia)</code>.
+<p>Es un metodo mas antiguo que inserta un elemento <strong>justo antes</strong> de otro hijo concreto que tu le indiques. Se escribe asi: <code>padre.insertBefore(nuevo, referencia)</code>.
 <strong>Para que sirve:</strong> colocar un elemento en una posicion exacta del medio, no solo al inicio o al final.
-<strong>Donde se usa:</strong> cuando necesitas precision; en codigo moderno suele bastar con <code>append</code>/<code>prepend</code>, pero veras <code>insertBefore</code> en proyectos antiguos.</p>
+<strong>Donde se usa:</strong> cuando necesitas precision; en codigo moderno casi siempre basta con <code>append</code>/<code>prepend</code>, pero te toparas con <code>insertBefore</code> en proyectos antiguos.</p>
 </blockquote>
 <h2 id="4-eliminar-elementos-con-remove">4. Eliminar elementos con <code>remove</code></h2>
 <p>Lo que se crea, a veces se borra: cerrar una notificacion, quitar una tarjeta, limpiar un error.</p>
 <blockquote class="def">
 <h3 id="que-significa-remove">🟦 ¿Que significa? — <em>remove</em></h3>
-<p>Es un metodo que <strong>saca un elemento del DOM</strong>, eliminandolo de la pagina. Lo llamas directamente sobre el elemento que quieres borrar.
-<strong>Para que sirve:</strong> quitar cosas que ya no deben verse (un mensaje de exito que desaparece, una fila eliminada).
+<p>Es un metodo que <strong>saca un elemento del DOM</strong> y lo elimina de la pagina. Lo llamas directamente sobre el elemento que quieres borrar.
+<strong>Para que sirve:</strong> quitar cosas que ya no deben verse (un mensaje de exito que se va solo, una fila que eliminaste).
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, el mensaje del formulario de contacto se puede quitar con <code>remove()</code> despues de unos segundos.</p>
 </blockquote>
 <pre><code class="language-javascript">const aviso = document.querySelector(&quot;.aviso-exito&quot;);
@@ -128,18 +128,18 @@ aviso.remove();
 <blockquote class="def">
 <h3 id="que-significa-removechild">🟦 ¿Que significa? — <em>removeChild</em></h3>
 <p>Es la forma antigua de borrar: el <strong>padre</strong> elimina a un <strong>hijo</strong> con <code>padre.removeChild(hijo)</code>.
-<strong>Para que sirve:</strong> lo mismo que <code>remove</code>, pero requiere conocer al padre.
-<strong>Donde se usa:</strong> en codigo viejo. Hoy <code>elemento.remove()</code> es mas simple y se prefiere.</p>
+<strong>Para que sirve:</strong> lo mismo que <code>remove</code>, solo que aqui necesitas tener a mano al padre.
+<strong>Donde se usa:</strong> en codigo viejo. Hoy <code>elemento.remove()</code> es mas simple y es lo que se prefiere.</p>
 <h3 id="tip_1">💡 Tip</h3>
 <p>Para vaciar un contenedor entero (borrar todos los hijos), lo mas claro es <code>contenedor.innerHTML = ""</code>. En <code>tunal-digital</code>, antes de pintar resultados nuevos conviene limpiar lo anterior asi, para no acumular contenido viejo.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Al hacer <code>remove()</code>, el elemento desaparece de la pantalla, pero si guardaste su referencia en una variable, esa variable sigue apuntando al objeto en memoria. No intentes "volver a usarlo" como si estuviera en la pagina; crea uno nuevo si lo necesitas.</p>
+<p>Cuando haces <code>remove()</code>, el elemento desaparece de la pantalla, pero si guardaste su referencia en una variable, esa variable sigue apuntando al objeto en memoria. No intentes "reusarlo" como si siguiera en la pagina; si lo necesitas de nuevo, crea uno desde cero.</p>
 </blockquote>
 <h2 id="5-recorrer-el-dom-moverse-por-el-arbol">5. Recorrer el DOM: moverse por el arbol</h2>
 <p>A veces tienes un elemento y necesitas llegar a su <strong>padre</strong>, a sus <strong>hijos</strong> o a un <strong>ancestro</strong> mas arriba. Para eso existen propiedades de navegacion.</p>
 <blockquote class="def">
 <h3 id="que-significa-parentelement">🟦 ¿Que significa? — <em>parentElement</em></h3>
-<p>Es una propiedad que devuelve el <strong>elemento padre</strong> del elemento actual: quien lo contiene directamente.
+<p>Es una propiedad que devuelve el <strong>elemento padre</strong> del actual: quien lo contiene directamente.
 <strong>Para que sirve:</strong> subir un nivel en el arbol (por ejemplo, desde un boton "borrar" llegar a la tarjeta que lo contiene para eliminarla entera).
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, desde el boton de cerrar de un aviso puedes hacer <code>boton.parentElement.remove()</code> para quitar el aviso completo.</p>
 </blockquote>
@@ -152,9 +152,9 @@ botonCerrar.addEventListener(&quot;click&quot;, () =&gt; {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-children">🟦 ¿Que significa? — <em>children</em></h3>
-<p>Es una propiedad que devuelve <strong>los elementos hijos</strong> de un elemento, como una lista parecida a un array (pero no exactamente un array).
+<p>Es una propiedad que devuelve <strong>los elementos hijos</strong> de un elemento, en una lista parecida a un array (aunque no sea exactamente un array).
 <strong>Para que sirve:</strong> recorrer o contar los hijos directos de un contenedor.
-<strong>Donde se usa:</strong> util para saber cuantas tarjetas hay dentro de la lista de proyectos de <code>Faro/Organizer</code>.</p>
+<strong>Donde se usa:</strong> sirve para saber cuantas tarjetas hay dentro de la lista de proyectos de <code>Faro/Organizer</code>.</p>
 </blockquote>
 <pre><code class="language-javascript">const lista = document.querySelector(&quot;#proyectos&quot;);
 
@@ -168,13 +168,13 @@ console.log(&quot;Total:&quot;, lista.children.length);
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-coleccion-tipo-array-htmlcollection-nodelist">🟦 ¿Que significa? — <em>Coleccion tipo array (HTMLCollection / NodeList)</em></h3>
-<p>Es una lista de elementos que <strong>parece</strong> un array (tiene <code>.length</code> y puedes recorrerla), pero no trae todos los metodos de un array de verdad como <code>.map()</code>.
-<strong>Para que sirve:</strong> representar grupos de elementos del DOM. Si necesitas metodos de array, la conviertes con <code>Array.from(coleccion)</code>.
+<p>Es una lista de elementos que <strong>parece</strong> un array (tiene <code>.length</code> y la puedes recorrer), pero que no trae todos los metodos de un array de verdad como <code>.map()</code>.
+<strong>Para que sirve:</strong> representar grupos de elementos del DOM. Si te hacen falta los metodos de array, la conviertes con <code>Array.from(coleccion)</code>.
 <strong>Donde se usa:</strong> <code>document.querySelectorAll</code> en <code>tunal-digital</code> devuelve una de estas colecciones cuando selecciona varios enlaces del menu.</p>
 <h3 id="que-significa-closest">🟦 ¿Que significa? — <em>closest</em></h3>
 <p>Es un metodo que, partiendo de un elemento, <strong>sube por el arbol</strong> buscando el ancestro mas cercano que coincida con un selector CSS. Si no encuentra ninguno, devuelve <code>null</code>.
-<strong>Para que sirve:</strong> desde un elemento interno (un icono, un texto) encontrar el contenedor importante que lo envuelve.
-<strong>Donde se usa:</strong> muy comun en listas: si haces clic en cualquier parte de una tarjeta, <code>evento.target.closest(".tarjeta")</code> te da la tarjeta completa sin importar donde exacto clicaste.</p>
+<strong>Para que sirve:</strong> desde un elemento interno (un icono, un texto) dar con el contenedor importante que lo envuelve.
+<strong>Donde se usa:</strong> es muy comun en listas: si haces clic en cualquier parte de una tarjeta, <code>evento.target.closest(".tarjeta")</code> te entrega la tarjeta completa sin importar donde exacto clicaste.</p>
 </blockquote>
 <pre><code class="language-javascript">document.querySelector(&quot;#proyectos&quot;).addEventListener(&quot;click&quot;, (evento) =&gt; {
   // Sin importar si clicaste el titulo o el icono,
@@ -187,27 +187,27 @@ console.log(&quot;Total:&quot;, lista.children.length);
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>El patron <code>closest</code> + un solo escuchador en el contenedor padre se llama <strong>delegacion de eventos</strong>. En <code>tunal-digital</code>, en lugar de poner un escuchador en cada enlace, podrias poner uno en el <code>&lt;nav&gt;</code> y usar <code>closest("a")</code> para saber que enlace se clico. Menos escuchadores, mismo resultado, y funciona aunque agregues enlaces nuevos despues.</p>
+<p>El patron <code>closest</code> + un solo escuchador en el contenedor padre tiene nombre: <strong>delegacion de eventos</strong>. En <code>tunal-digital</code>, en vez de poner un escuchador en cada enlace, podrias poner uno solo en el <code>&lt;nav&gt;</code> y usar <code>closest("a")</code> para saber que enlace se clico. Menos escuchadores, mismo resultado, y sigue funcionando aunque agregues enlaces nuevos despues.</p>
 <h3 id="que-significa-nextelementsibling-previouselementsibling">🟦 ¿Que significa? — <em>nextElementSibling / previousElementSibling</em></h3>
 <p>Son propiedades que te llevan al <strong>elemento hermano</strong> siguiente o anterior (los que comparten el mismo padre).
-<strong>Para que sirve:</strong> moverte de lado en el arbol (por ejemplo, del titulo a la descripcion que esta justo despues).
-<strong>Donde se usa:</strong> util para acordeones o pasos de un formulario donde un elemento controla al que tiene al lado.</p>
+<strong>Para que sirve:</strong> moverte de lado en el arbol (por ejemplo, del titulo a la descripcion que viene justo despues).
+<strong>Donde se usa:</strong> vienen bien para acordeones o para pasos de un formulario donde un elemento controla al que tiene al lado.</p>
 </blockquote>
 <h2 id="6-atributos-leer-y-cambiar-con-getattribute-setattribute-y-dataset">6. Atributos: leer y cambiar con <code>getAttribute</code>, <code>setAttribute</code> y <code>dataset</code></h2>
 <p>Los <strong>atributos</strong> son esos pares que escribes dentro de las etiquetas: <code>href="..."</code>, <code>src="..."</code>, <code>disabled</code>, <code>data-id="..."</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-atributo">🟦 ¿Que significa? — <em>Atributo</em></h3>
 <p>Es informacion extra que pones en una etiqueta HTML para configurarla, escrita como <code>nombre="valor"</code>. Ejemplos: <code>class</code>, <code>id</code>, <code>href</code>, <code>src</code>, <code>alt</code>.
-<strong>Para que sirve:</strong> decirle al navegador como comportarse o guardar datos en el HTML.
+<strong>Para que sirve:</strong> decirle al navegador como comportarse, o guardar datos dentro del HTML.
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, los enlaces tienen <code>href</code>, las imagenes tienen <code>src</code> y <code>alt</code>, y los botones pueden tener <code>disabled</code>.</p>
 <h3 id="que-significa-getattribute">🟦 ¿Que significa? — <em>getAttribute</em></h3>
 <p>Es un metodo que <strong>lee el valor de un atributo</strong> por su nombre.
-<strong>Para que sirve:</strong> averiguar a donde apunta un enlace, que imagen carga un <code>&lt;img&gt;</code>, etc.
+<strong>Para que sirve:</strong> averiguar a donde apunta un enlace, que imagen carga un <code>&lt;img&gt;</code>, y cosas asi.
 <strong>Donde se usa:</strong> leer el <code>href</code> de un enlace del menu en <code>tunal-digital</code> para saber a que seccion lleva.</p>
 <h3 id="que-significa-setattribute">🟦 ¿Que significa? — <em>setAttribute</em></h3>
 <p>Es un metodo que <strong>escribe (o cambia)</strong> el valor de un atributo: <code>elemento.setAttribute("nombre", "valor")</code>.
 <strong>Para que sirve:</strong> modificar el HTML desde JavaScript (deshabilitar un boton, cambiar el destino de un enlace).
-<strong>Donde se usa:</strong> en el formulario de <code>tunal-digital</code>, mientras se envia el mensaje al Worker, se puede poner el boton como <code>disabled</code> con <code>setAttribute</code> para evitar envios dobles.</p>
+<strong>Donde se usa:</strong> en el formulario de <code>tunal-digital</code>, mientras se envia el mensaje al Worker, se puede dejar el boton como <code>disabled</code> con <code>setAttribute</code> para evitar envios dobles.</p>
 </blockquote>
 <pre><code class="language-javascript">const enlace = document.querySelector(&quot;nav a&quot;);
 
@@ -224,12 +224,12 @@ boton.setAttribute(&quot;disabled&quot;, &quot;&quot;);
 <blockquote class="def">
 <h3 id="que-significa-worker-cloudflare-worker">🟦 ¿Que significa? — <em>Worker (Cloudflare Worker)</em></h3>
 <p>Es un pequeño programa que corre en el servidor (en la red de Cloudflare), no en el navegador. El sitio le envia datos y el responde.
-<strong>Para que sirve:</strong> hacer tareas que no deben estar en el cliente, como hablar con la IA o procesar el formulario de contacto sin exponer claves secretas.
+<strong>Para que sirve:</strong> hacer tareas que no deben vivir en el cliente, como hablar con la IA o procesar el formulario de contacto sin exponer claves secretas.
 <strong>Donde se usa:</strong> <code>tunal-digital</code> hace <code>fetch</code> a su Worker tanto para el chat de IA como para el formulario de contacto.</p>
 <h3 id="que-significa-dataset-atributos-data-">🟦 ¿Que significa? — <em>dataset (atributos data-</em>)*</h3>
 <p>Es una propiedad que da acceso comodo a los atributos personalizados que empiezan con <code>data-</code>. Un atributo <code>data-id="42"</code> se lee en JavaScript como <code>elemento.dataset.id</code>.
-<strong>Para que sirve:</strong> guardar datos propios en el HTML (un id, un estado, una categoria) sin inventar atributos invalidos.
-<strong>Donde se usa:</strong> ideal para que cada tarjeta de proyecto en <code>Faro/Organizer</code> lleve su <code>data-id</code>, y al clicarla sepas exactamente cual es.</p>
+<strong>Para que sirve:</strong> guardar datos propios dentro del HTML (un id, un estado, una categoria) sin tener que inventar atributos invalidos.
+<strong>Donde se usa:</strong> es ideal para que cada tarjeta de proyecto en <code>Faro/Organizer</code> lleve su <code>data-id</code>, y al clicarla sepas exactamente cual es.</p>
 </blockquote>
 <pre><code class="language-javascript">const tarjeta = document.createElement(&quot;article&quot;);
 tarjeta.className = &quot;tarjeta&quot;;
@@ -244,17 +244,17 @@ console.log(tarjeta.dataset.estado); // &quot;activo&quot;
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>En HTML escribes <code>data-estado-actual</code>, pero en <code>dataset</code> se lee en <em>camelCase</em>: <code>elemento.dataset.estadoActual</code>. El navegador hace esa conversion por ti. Recuerdalo y te ahorras dolores de cabeza.</p>
+<p>En HTML escribes <code>data-estado-actual</code>, pero en <code>dataset</code> se lee en <em>camelCase</em>: <code>elemento.dataset.estadoActual</code>. El navegador hace esa conversion por ti. Tenlo presente y te ahorras mas de un dolor de cabeza.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Los valores de <code>dataset</code> siempre son <strong>texto</strong> (string). Si guardas <code>data-id="42"</code>, al leerlo obtienes <code>"42"</code> (con comillas), no el numero <code>42</code>. Si necesitas un numero, conviertelo con <code>Number(tarjeta.dataset.id)</code>.</p>
+<p>Los valores de <code>dataset</code> siempre son <strong>texto</strong> (string). Si guardas <code>data-id="42"</code>, al leerlo obtienes <code>"42"</code> (entre comillas), no el numero <code>42</code>. Cuando necesites un numero, conviertelo con <code>Number(tarjeta.dataset.id)</code>.</p>
 </blockquote>
 <h2 id="7-clonar-elementos-con-clonenode">7. Clonar elementos con <code>cloneNode</code></h2>
-<p>A veces ya tienes un elemento bien armado y solo quieres copias de el (una plantilla de tarjeta, una fila base).</p>
+<p>A veces ya tienes un elemento bien armado y lo unico que quieres son copias de el (una plantilla de tarjeta, una fila base).</p>
 <blockquote class="def">
 <h3 id="que-significa-clonenode">🟦 ¿Que significa? — <em>cloneNode</em></h3>
-<p>Es un metodo que crea una <strong>copia</strong> de un elemento. Si le pasas <code>true</code> (<code>elemento.cloneNode(true)</code>), copia tambien todo su contenido interno (copia profunda); con <code>false</code>, solo el elemento vacio.
-<strong>Para que sirve:</strong> duplicar una estructura ya hecha sin recrearla a mano cada vez.
-<strong>Donde se usa:</strong> util cuando tienes una "plantilla" de tarjeta oculta en el HTML y clonas una por cada proyecto a mostrar.</p>
+<p>Es un metodo que crea una <strong>copia</strong> de un elemento. Si le pasas <code>true</code> (<code>elemento.cloneNode(true)</code>), copia tambien todo su contenido interno (copia profunda); con <code>false</code>, copia solo el elemento vacio.
+<strong>Para que sirve:</strong> duplicar una estructura ya hecha sin volver a armarla a mano cada vez.
+<strong>Donde se usa:</strong> viene bien cuando tienes una "plantilla" de tarjeta oculta en el HTML y clonas una por cada proyecto que quieres mostrar.</p>
 </blockquote>
 <pre><code class="language-javascript">// Una plantilla oculta en el HTML: &lt;article class=&quot;plantilla&quot;&gt;...&lt;/article&gt;
 const plantilla = document.querySelector(&quot;.plantilla&quot;);
@@ -272,10 +272,10 @@ document.querySelector(&quot;#proyectos&quot;).append(copia);
 <strong>Para que sirve:</strong> agregar o quitar clases sueltas sin pisar las demas (a diferencia de <code>className</code>, que las reemplaza todas de golpe).
 <strong>Donde se usa:</strong> en <code>tunal-digital</code>, abrir el menu movil es tan simple como <code>menu.classList.toggle("abierto")</code> cada vez que se clica el boton.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Para clonar de verdad (copia profunda con todo el contenido), casi siempre quieres <code>cloneNode(true)</code>. El <code>false</code> solo copia la cascara vacia, y se olvida facil que existe. Bit recomienda: si dudas, usa <code>true</code>.</p>
+<p>Para clonar de verdad (copia profunda, con todo su contenido), casi siempre quieres <code>cloneNode(true)</code>. El <code>false</code> solo copia la cascara vacia, y es facil olvidar que existe. Bit recomienda: ante la duda, usa <code>true</code>.</p>
 </blockquote>
 <h2 id="8-construir-html-desde-datos">8. Construir HTML desde datos</h2>
-<p>Aqui se junta todo. Casi siempre los datos vienen como una <strong>lista de objetos</strong> (de un <code>fetch</code>, de un JSON) y tu tienes que convertir cada objeto en HTML. Esta es la tarea estrella del DOM.</p>
+<p>Aqui se junta todo. Casi siempre los datos llegan como una <strong>lista de objetos</strong> (de un <code>fetch</code>, de un JSON) y tu tienes que convertir cada objeto en HTML. Esta es la tarea estrella del DOM.</p>
 <blockquote class="def">
 <h3 id="que-significa-array-de-objetos">🟦 ¿Que significa? — <em>Array de objetos</em></h3>
 <p>Es una lista (<code>[ ... ]</code>) donde cada elemento es un objeto (<code>{ ... }</code>) con datos relacionados, por ejemplo <code>{ titulo: "...", estado: "..." }</code>.
@@ -308,17 +308,17 @@ for (const proyecto of proyectos) {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-iterar-recorrer-con-un-bucle">🟦 ¿Que significa? — <em>Iterar (recorrer con un bucle)</em></h3>
-<p>Es repetir una accion para cada elemento de una lista, usando un bucle como <code>for...of</code>. En cada vuelta trabajas con un elemento distinto.
+<p>Es repetir una accion para cada elemento de una lista, con un bucle como <code>for...of</code>. En cada vuelta trabajas con un elemento distinto.
 <strong>Para que sirve:</strong> hacer lo mismo (crear una tarjeta) por cada dato sin escribirlo a mano N veces.
-<strong>Donde se usa:</strong> en <code>RachaSimple</code> (React) los datos se recorren con <code>.map()</code> para pintar cada racha; en JS vanilla como <code>tunal-digital</code>, se usa <code>for...of</code> o <code>forEach</code>.</p>
+<strong>Donde se usa:</strong> en <code>RachaSimple</code> (React) los datos se recorren con <code>.map()</code> para pintar cada racha; en JS vanilla como el de <code>tunal-digital</code>, se usa <code>for...of</code> o <code>forEach</code>.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En <code>tunal-digital</code> el chat de IA hace justo esto en pequeño: por cada mensaje (del usuario o de la IA) crea una burbuja, le pone clase y texto, y la mete con <code>append</code> al contenedor del chat. Es el mismo patron "dato -&gt; elemento -&gt; insertar", solo que de uno en uno.</p>
+<p>En <code>tunal-digital</code> el chat de IA hace justo esto, pero en pequeño: por cada mensaje (del usuario o de la IA) crea una burbuja, le pone clase y texto, y la mete con <code>append</code> en el contenedor del chat. Es el mismo patron "dato -&gt; elemento -&gt; insertar", solo que de uno en uno.</p>
 <h3 id="tip-fragmentos-para-muchas-inserciones">💡 Tip — fragmentos para muchas inserciones</h3>
-<p>Si vas a insertar <strong>muchos</strong> elementos, insertarlos uno por uno hace que el navegador redibuje muchas veces. Puedes juntarlos primero en un <code>DocumentFragment</code> y hacer un solo <code>append</code> al final.</p>
+<p>Si vas a insertar <strong>muchos</strong> elementos, meterlos uno por uno obliga al navegador a redibujar muchas veces. Puedes juntarlos primero en un <code>DocumentFragment</code> y hacer un solo <code>append</code> al final.</p>
 <h3 id="que-significa-documentfragment">🟦 ¿Que significa? — <em>DocumentFragment</em></h3>
 <p>Es un contenedor <strong>temporal e invisible</strong> donde armas varios elementos antes de meterlos a la pagina de un solo golpe.
 <strong>Para que sirve:</strong> mejorar el rendimiento cuando insertas muchos elementos a la vez.
-<strong>Donde se usa:</strong> util en una lista larga de proyectos en <code>Faro/Organizer</code>; primero armas todo en el fragmento y luego un unico <code>append</code>.</p>
+<strong>Donde se usa:</strong> util en una lista larga de proyectos en <code>Faro/Organizer</code>; primero armas todo en el fragmento y luego haces un unico <code>append</code>.</p>
 </blockquote>
 <pre><code class="language-javascript">const fragmento = document.createDocumentFragment();
 
@@ -331,12 +331,12 @@ for (const proyecto of proyectos) {
 document.querySelector(&quot;#proyectos&quot;).append(fragmento); // una sola insercion
 </code></pre>
 <h2 id="9-las-funciones-de-atajo-de-mainjs">9. Las funciones de atajo de <code>main.js</code></h2>
-<p>En el sitio real <code>tunal-digital</code>, escribir <code>document.querySelector(...)</code> y <code>document.querySelectorAll(...)</code> una y otra vez cansa. Por eso <code>main.js</code> define <strong>funciones de atajo</strong>: nombres cortos que envuelven a esos metodos largos.</p>
+<p>En el sitio real <code>tunal-digital</code>, escribir <code>document.querySelector(...)</code> y <code>document.querySelectorAll(...)</code> una y otra vez termina cansando. Por eso <code>main.js</code> define <strong>funciones de atajo</strong>: nombres cortos que envuelven esos metodos tan largos.</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-de-atajo-helper">🟦 ¿Que significa? — <em>Funcion de atajo (helper)</em></h3>
 <p>Es una funcion pequeña que tu defines para <strong>acortar o simplificar</strong> una tarea repetitiva. No es magia del navegador: es codigo tuyo que envuelve otro codigo.
-<strong>Para que sirve:</strong> escribir menos y leer mejor. En vez de <code>document.querySelector("#chat")</code> escribes <code>$("#chat")</code>.
-<strong>Donde se usa:</strong> <code>main.js</code> de <code>tunal-digital</code> define atajos para seleccionar elementos, asi todo el resto del archivo queda mas corto y claro.</p>
+<strong>Para que sirve:</strong> escribir menos y leer mejor. En lugar de <code>document.querySelector("#chat")</code> escribes <code>$("#chat")</code>.
+<strong>Donde se usa:</strong> el <code>main.js</code> de <code>tunal-digital</code> define atajos para seleccionar elementos, y asi todo el resto del archivo queda mas corto y claro.</p>
 </blockquote>
 <pre><code class="language-javascript">// Atajo para seleccionar UN elemento
 const $ = (selector, contexto = document) =&gt; contexto.querySelector(selector);
@@ -355,24 +355,24 @@ enlaces.forEach((enlace) =&gt; {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-queryselector-queryselectorall">🟦 ¿Que significa? — <em>querySelector / querySelectorAll</em></h3>
-<p><code>querySelector</code> busca y devuelve <strong>el primer</strong> elemento que coincide con un selector CSS. <code>querySelectorAll</code> devuelve <strong>todos</strong> los que coinciden, en una coleccion.
-<strong>Para que sirve:</strong> encontrar elementos usando la misma sintaxis de tus selectores CSS (<code>.clase</code>, <code>#id</code>, <code>nav a</code>).
+<p><code>querySelector</code> busca y devuelve <strong>el primer</strong> elemento que coincide con un selector CSS. <code>querySelectorAll</code> devuelve <strong>todos</strong> los que coinciden, dentro de una coleccion.
+<strong>Para que sirve:</strong> encontrar elementos con la misma sintaxis de tus selectores CSS (<code>.clase</code>, <code>#id</code>, <code>nav a</code>).
 <strong>Donde se usa:</strong> son la base de los atajos <code>$</code> y <code>$$</code> de <code>tunal-digital</code>.</p>
 <h3 id="que-significa-arrayfrom">🟦 ¿Que significa? — <em>Array.from</em></h3>
 <p>Es una funcion que convierte una coleccion tipo array (como la que devuelve <code>querySelectorAll</code>) en un <strong>array de verdad</strong>, con todos sus metodos (<code>.map</code>, <code>.filter</code>, <code>.forEach</code>).
 <strong>Para que sirve:</strong> poder usar metodos de array sobre elementos del DOM.
-<strong>Donde se usa:</strong> dentro del atajo <code>$$</code> para que devuelva algo comodo de recorrer.</p>
+<strong>Donde se usa:</strong> dentro del atajo <code>$$</code>, para que devuelva algo comodo de recorrer.</p>
 <h3 id="que-significa-parametro-por-defecto">🟦 ¿Que significa? — <em>Parametro por defecto</em></h3>
-<p>Es un valor que toma un parametro <strong>si no le pasas otro</strong> al llamar la funcion. En <code>(selector, contexto = document)</code>, si no das <code>contexto</code>, vale <code>document</code>.
-<strong>Para que sirve:</strong> hacer funciones flexibles: por defecto buscan en toda la pagina, pero puedes limitar la busqueda a un elemento concreto.
-<strong>Donde se usa:</strong> en los atajos <code>$</code>/<code>$$</code> para poder buscar dentro de un contenedor especifico cuando hace falta.</p>
+<p>Es un valor que toma un parametro <strong>cuando no le pasas otro</strong> al llamar la funcion. En <code>(selector, contexto = document)</code>, si no das <code>contexto</code>, vale <code>document</code>.
+<strong>Para que sirve:</strong> hacer funciones flexibles: por defecto buscan en toda la pagina, pero puedes acotar la busqueda a un elemento concreto.
+<strong>Donde se usa:</strong> en los atajos <code>$</code>/<code>$$</code>, para poder buscar dentro de un contenedor especifico cuando hace falta.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>Cuando abras <code>main.js</code> de <code>tunal-digital</code>, busca al inicio del archivo definiciones cortas tipo <code>$</code> o nombres como <code>qs</code>/<code>qsa</code>. Ese es el patron de atajo. Reconocerlo te ayuda a leer el resto del archivo mucho mas rapido, porque sabras que <code>$("#algo")</code> es solo "busca este elemento".</p>
+<p>Cuando abras el <code>main.js</code> de <code>tunal-digital</code>, fijate al inicio del archivo en definiciones cortas tipo <code>$</code> o en nombres como <code>qs</code>/<code>qsa</code>. Ese es el patron de atajo. Reconocerlo te ayuda a leer el resto del archivo mucho mas rapido, porque ya sabras que <code>$("#algo")</code> no es mas que "busca este elemento".</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Los atajos <code>$</code> y <code>$$</code> que defines tu <strong>no tienen nada que ver con jQuery</strong> (una libreria antigua que tambien usa <code>$</code>). Aqui son funciones tuyas de una sola linea. No las confundas ni asumas que traen los poderes de jQuery.</p>
+<p>Los atajos <code>$</code> y <code>$$</code> que defines tu <strong>no tienen nada que ver con jQuery</strong> (una libreria antigua que tambien usa <code>$</code>). Aqui son funciones tuyas de una sola linea. No las confundas ni des por hecho que traen los poderes de jQuery.</p>
 </blockquote>
 <h2 id="10-juntando-todo-un-mini-ejemplo-realista">10. Juntando todo: un mini ejemplo realista</h2>
-<p>Imagina una pequeña lista de proyectos con un boton para eliminar cada uno. Usaremos casi todo lo de este capitulo.</p>
+<p>Imagina una pequeña lista de proyectos con un boton para eliminar cada uno. Vamos a usar casi todo lo de este capitulo.</p>
 <pre><code class="language-javascript">const $ = (sel, ctx = document) =&gt; ctx.querySelector(sel);
 
 const proyectos = [
@@ -407,7 +407,7 @@ lista.addEventListener(&quot;click&quot;, (evento) =&gt; {
   tarjeta.remove();
 });
 </code></pre>
-<p>Fijate como encaja la historia completa: creamos elementos (<code>createElement</code>), los configuramos (<code>textContent</code>, <code>dataset</code>), los insertamos (<code>append</code>), recorremos el arbol hacia arriba (<code>closest</code>) y borramos (<code>remove</code>). Asi se construyen las interfaces de verdad. 🐾</p>
+<p>Mira como encaja la historia completa: creamos elementos (<code>createElement</code>), los configuramos (<code>textContent</code>, <code>dataset</code>), los insertamos (<code>append</code>), recorremos el arbol hacia arriba (<code>closest</code>) y borramos (<code>remove</code>). Asi, ni mas ni menos, se construyen las interfaces de verdad. 🐾</p>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
 <li>[ ] Se que el DOM es el arbol de objetos de la pagina y se que es un nodo y un elemento.</li>
@@ -420,7 +420,7 @@ lista.addEventListener(&quot;click&quot;, (evento) =&gt; {
 <li>[ ] Guardo y leo datos propios con <code>dataset</code> (y recuerdo que siempre son texto).</li>
 <li>[ ] Hago copias con <code>cloneNode(true)</code>.</li>
 <li>[ ] Construyo HTML recorriendo un array de objetos con un bucle.</li>
-<li>[ ] Reconozco las funciones de atajo (<code>$</code>, <code>$$</code>) al estilo de <code>main.js</code> de <code>tunal-digital</code>.</li>
+<li>[ ] Reconozco las funciones de atajo (<code>$</code>, <code>$$</code>) al estilo del <code>main.js</code> de <code>tunal-digital</code>.</li>
 </ul>
 <h2 id="ejercicios">🧪 Ejercicios</h2>
 <ol>
@@ -444,7 +444,7 @@ lista.addEventListener(&quot;click&quot;, (evento) =&gt; {
 </li>
 </ol>
 <blockquote class="def">
-<p>Lo lograste. 🟦 Ya no solo lees la pagina: la <strong>construyes</strong>. En el proximo capitulo daremos vida a estos elementos con eventos mas avanzados y con datos que llegan de la red. Sigue practicando, que cada tarjeta que pintas te acerca a interfaces reales como las de tus propios repos. — Bit</p>
+<p>Lo lograste. 🟦 Ya no solo lees la pagina: la <strong>construyes</strong>. En el proximo capitulo les daremos vida a estos elementos con eventos mas avanzados y con datos que llegan de la red. Sigue practicando, que cada tarjeta que pintas te acerca a interfaces reales como las de tus propios repos. — Bit</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

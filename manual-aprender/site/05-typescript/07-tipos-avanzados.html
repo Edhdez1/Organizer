@@ -23,12 +23,12 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora creaste tus propios tipos con <code>interface</code> y <code>type</code>. En este capítulo Bit te enseña
-a <strong>derivar</strong> tipos nuevos a partir de los que ya tienes, sin copiar y pegar. Es la diferencia
-entre escribir un tipo "a mano" diez veces y decir "este tipo es como aquel, pero <strong>sin</strong> el
-<code>id</code>". RachaSimple y Faro hacen esto todo el tiempo: tienen un puñado de tipos base (un hábito,
-un proyecto) y de ahí sacan decenas de variantes. Menos repetición, menos errores, y cuando
-cambias el tipo base, <strong>todo lo demás se actualiza solo</strong>.</p>
+<p>Hasta ahora has creado tus propios tipos con <code>interface</code> y <code>type</code>. En este capítulo Bit te enseña
+a <strong>derivar</strong> tipos nuevos a partir de los que ya tienes, sin andar copiando y pegando. La
+diferencia es enorme: en lugar de escribir un tipo "a mano" diez veces, dices "este tipo es como
+aquel, pero <strong>sin</strong> el <code>id</code>" y listo. RachaSimple y Faro funcionan así todo el rato: tienen un
+puñado de tipos base (un hábito, un proyecto) y de ahí sacan decenas de variantes. Menos
+repetición, menos errores, y cuando cambias el tipo base, <strong>todo lo demás se actualiza solo</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-repetir-tipos-a-mano">1. El problema: repetir tipos a mano</h2>
@@ -41,19 +41,19 @@ cambias el tipo base, <strong>todo lo demás se actualiza solo</strong>.</p>
   creado_en: string;
 }
 </code></pre>
-<p>Ahora necesitas un tipo para el <strong>formulario</strong> de crear un hábito. Ahí todavía no hay <code>id</code> (lo
+<p>Ahora necesitas un tipo para el <strong>formulario</strong> de crear un hábito. Ahí todavía no hay <code>id</code> (eso lo
 pone la base de datos), ni <code>user_id</code> (lo pone el servidor), ni <code>creado_en</code>. Solo <code>nombre</code> y
-<code>color</code>. La tentación del principiante es escribir <strong>otra interface</strong> a mano:</p>
+<code>color</code>. Y aquí es donde el principiante cae en la tentación de escribir <strong>otra interface</strong> a mano:</p>
 <pre><code class="language-typescript">// 😩 repetido: si mañana renombras &quot;nombre&quot; a &quot;titulo&quot;, tienes que cambiarlo en DOS sitios
 interface NuevoHabito {
   nombre: string;
   color: string;
 }
 </code></pre>
-<p>El problema no es escribirlo una vez: es que ahora tienes <strong>dos fuentes de la verdad</strong>. Si el
-campo <code>nombre</code> cambia de tipo, o agregas <code>icono</code>, tienes que acordarte de tocar las dos. Tarde o
-temprano se desincronizan. La solución de TypeScript: <strong>derivar</strong> <code>NuevoHabito</code> <em>a partir de</em>
-<code>Habito</code>. Eso es lo que veremos.</p>
+<p>El problema no es escribirlo una vez. Es que ahora tienes <strong>dos fuentes de la verdad</strong>. Si el
+campo <code>nombre</code> cambia de tipo, o agregas <code>icono</code>, tienes que acordarte de tocar las dos. Y tarde o
+temprano se desincronizan: te olvidas de una y empiezan los errores raros. TypeScript tiene una
+salida mejor: <strong>derivar</strong> <code>NuevoHabito</code> <em>a partir de</em> <code>Habito</code>. Eso es justo lo que veremos.</p>
 <blockquote class="tip">
 <h3 id="tip-una-sola-fuente-de-la-verdad">💡 Tip — Una sola fuente de la verdad</h3>
 <p>La idea grande de todo este capítulo es <strong>DRY</strong> (<em>Don't Repeat Yourself</em>, "no te repitas").
@@ -65,11 +65,11 @@ original, los derivados cambian con él. Bit lo resume así: "un tipo manda, los
 <blockquote class="def">
 <h3 id="que-significa-tipo-utilitario">🟦 ¿Qué significa? — <em>Tipo utilitario</em></h3>
 <p>Un <strong>tipo utilitario</strong> (en inglés <em>utility type</em>) es una herramienta que <strong>ya viene dentro de
-TypeScript</strong> y que toma un tipo y te devuelve <strong>otro tipo modificado</strong>. Funciona parecido a una
-función, pero en vez de operar sobre datos, opera sobre <strong>tipos</strong>: le das un tipo de entrada y
-te da un tipo de salida.</p>
-<p>Se usan con la sintaxis <code>Utilitario&lt;TuTipo&gt;</code> (el tipo entre los signos <code>&lt;</code> y <code>&gt;</code>, igual que con
-los genéricos del capítulo 04). No tienes que instalar nada: están siempre disponibles.</p>
+TypeScript</strong>: toma un tipo y te devuelve <strong>otro tipo modificado</strong>. Piensa en él como una función,
+solo que en lugar de operar sobre datos, opera sobre <strong>tipos</strong>. Le das un tipo de entrada y te
+da un tipo de salida.</p>
+<p>Se usan con la sintaxis <code>Utilitario&lt;TuTipo&gt;</code> (el tipo va entre los signos <code>&lt;</code> y <code>&gt;</code>, igual que
+con los genéricos del capítulo 04). No tienes que instalar nada: están siempre disponibles.</p>
 </blockquote>
 <p>Los seis más útiles para empezar son <code>Partial</code>, <code>Required</code>, <code>Pick</code>, <code>Omit</code>, <code>Record</code> y
 <code>Readonly</code>. Vamos uno por uno.</p>
@@ -77,11 +77,12 @@ los genéricos del capítulo 04). No tienes que instalar nada: están siempre di
 <blockquote class="def">
 <h3 id="que-significa-partialt">🟦 ¿Qué significa? — <em><code>Partial&lt;T&gt;</code></em></h3>
 <p><code>Partial&lt;T&gt;</code> toma un tipo <code>T</code> y devuelve una copia donde <strong>todas las propiedades pasan a ser
-opcionales</strong> (les pone el <code>?</code> que viste en el capítulo 03). Sirve para cuando vas a <strong>actualizar
-solo algunos campos</strong> de un objeto, no todos.</p>
+opcionales</strong> (les pone el <code>?</code> que viste en el capítulo 03). Es justo lo que necesitas cuando vas
+a <strong>actualizar solo algunos campos</strong> de un objeto, no todos.</p>
 </blockquote>
-<p>Donde brilla: una función de <strong>editar</strong>. Cuando editas un hábito, quizá solo cambias el color, no
-todo. Así que el objeto de cambios puede traer cualquier subconjunto de campos:</p>
+<p>Donde más se nota su utilidad es en una función de <strong>editar</strong>. Cuando editas un hábito, a lo mejor
+solo cambias el color y nada más. Así que el objeto de cambios puede traer cualquier subconjunto
+de campos:</p>
 <pre><code class="language-typescript">// Partial&lt;Habito&gt; = un Habito donde cada campo puede venir o no
 function actualizarHabito(id: string, cambios: Partial&lt;Habito&gt;) {
   // cambios podría ser { color: &quot;azul&quot; } o { nombre: &quot;Leer&quot;, color: &quot;rojo&quot; }
@@ -92,15 +93,16 @@ actualizarHabito(&quot;h1&quot;, { nombre: &quot;Meditar&quot; });     // ✅ so
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo-rachasimple">🔎 En tu código — RachaSimple</h3>
-<p>Las mutaciones de TanStack Query que actualizan un hábito en <code>RachaSimple</code> reciben justo esto:
-un <code>Partial</code> del tipo del hábito. Así una sola función sirve para cambiar el nombre, el color o
-lo que sea, sin escribir un tipo distinto por cada combinación posible.</p>
+<p>Las mutaciones de TanStack Query que actualizan un hábito en <code>RachaSimple</code> reciben exactamente
+esto: un <code>Partial</code> del tipo del hábito. De ese modo una sola función sirve para cambiar el
+nombre, el color o lo que sea, sin tener que escribir un tipo distinto por cada combinación
+posible.</p>
 </blockquote>
 <h3 id="22-requiredt-todo-obligatorio">2.2 <code>Required&lt;T&gt;</code> — "todo obligatorio"</h3>
 <blockquote class="def">
 <h3 id="que-significa-requiredt">🟦 ¿Qué significa? — <em><code>Required&lt;T&gt;</code></em></h3>
-<p>Es el <strong>opuesto</strong> de <code>Partial</code>: toma un tipo y le <strong>quita el <code>?</code> a todas las propiedades</strong>, es
-decir, las vuelve <strong>obligatorias</strong>. Sirve cuando tienes un tipo con campos opcionales pero, en
+<p>Es lo <strong>contrario</strong> de <code>Partial</code>: toma un tipo y le <strong>quita el <code>?</code> a todas las propiedades</strong>, o
+sea, las vuelve <strong>obligatorias</strong>. Viene bien cuando tienes un tipo con campos opcionales pero, en
 cierto punto del programa, ya sabes que <strong>todos</strong> deben estar presentes.</p>
 </blockquote>
 <pre><code class="language-typescript">interface Config {
@@ -116,8 +118,8 @@ function aplicarConfig(config: Required&lt;Config&gt;) {
 <h3 id="23-pickt-k-elige-solo-estos-campos">2.3 <code>Pick&lt;T, K&gt;</code> — "elige solo estos campos"</h3>
 <blockquote class="def">
 <h3 id="que-significa-pickt-k">🟦 ¿Qué significa? — <em><code>Pick&lt;T, K&gt;</code></em></h3>
-<p><code>Pick</code> (en inglés, "escoger") toma un tipo <code>T</code> y una lista de nombres de propiedades <code>K</code>, y
-devuelve un tipo <strong>con solo esas propiedades</strong>. Las demás se descartan. Los nombres se escriben
+<p><code>Pick</code> (en inglés, "escoger") toma un tipo <code>T</code> y una lista de nombres de propiedades <code>K</code>, y te
+devuelve un tipo <strong>con solo esas propiedades</strong>. El resto se descarta. Los nombres se escriben
 como <strong>uniones de texto</strong>: <code>"nombre" | "color"</code>.</p>
 </blockquote>
 <pre><code class="language-typescript">// Solo quiero el nombre y el color del Habito
@@ -131,17 +133,18 @@ type ResumenHabito = Pick&lt;Habito, &quot;nombre&quot; | &quot;color&quot;&gt;;
 propiedades que le indicas en <code>K</code>. En vez de decir "quiero estos", dices "quiero todos <strong>menos</strong>
 estos".</p>
 </blockquote>
-<p>Aquí resolvemos por fin el problema del inicio del capítulo. El formulario de crear un hábito es
-el <code>Habito</code> <strong>sin</strong> los campos que pone el sistema:</p>
+<p>Con esto resolvemos por fin el problema del principio del capítulo. El formulario de crear un
+hábito no es más que el <code>Habito</code> <strong>sin</strong> los campos que pone el sistema:</p>
 <pre><code class="language-typescript">// Un Habito sin id, sin user_id y sin creado_en → lo que llena el usuario
 type NuevoHabito = Omit&lt;Habito, &quot;id&quot; | &quot;user_id&quot; | &quot;creado_en&quot;&gt;;
 // Resultado automático: { nombre: string; color: string }
 </code></pre>
-<p>Si mañana agregas <code>icono</code> a <code>Habito</code>, <code>NuevoHabito</code> lo incluirá <strong>solo</strong>. Una fuente de la verdad.</p>
+<p>Si mañana agregas <code>icono</code> a <code>Habito</code>, <code>NuevoHabito</code> lo incluirá <strong>solo</strong>, sin que muevas un dedo.
+Una fuente de la verdad.</p>
 <blockquote class="tip">
 <h3 id="tip-pick-u-omit-elige-el-mas-corto">💡 Tip — ¿<code>Pick</code> u <code>Omit</code>? Elige el más corto</h3>
 <p>Si te quedas con <strong>pocos</strong> campos de muchos, usa <code>Pick</code>. Si descartas <strong>pocos</strong> de muchos, usa
-<code>Omit</code>. El resultado es el mismo tipo; escoge el que se lea más claro. En la práctica, para
+<code>Omit</code>. El resultado es el mismo tipo; quédate con el que se lea más claro. En la práctica, para
 "quitar las columnas que pone la base de datos" casi siempre se usa <code>Omit</code>.</p>
 </blockquote>
 <h3 id="25-recordk-v-un-diccionario-tipado">2.5 <code>Record&lt;K, V&gt;</code> — "un diccionario tipado"</h3>
@@ -159,7 +162,7 @@ const conteo: ConteoPorColor = {
   rojo: 1,
 };
 </code></pre>
-<p>Puedes restringir las claves a un conjunto fijo usando una unión de texto:</p>
+<p>También puedes limitar las claves a un conjunto fijo con una unión de texto:</p>
 <pre><code class="language-typescript">type Estado = &quot;activo&quot; | &quot;pausado&quot; | &quot;archivado&quot;;
 
 // Una etiqueta legible por cada estado posible
@@ -172,16 +175,17 @@ const etiquetas: Record&lt;Estado, string&gt; = {
 <blockquote class="code">
 <h3 id="en-tu-codigo-faro">🔎 En tu código — Faro</h3>
 <p>En <code>Faro</code>, los proyectos tienen un <strong>estado</strong> (<code>activo</code>, <code>en pausa</code>, etc.). Un <code>Record&lt;Estado,
-string&gt;</code> como el de arriba es perfecto para mapear cada estado a su texto o a su color de
-insignia en la interfaz, y TypeScript te obliga a <strong>cubrir todos los estados</strong>: si olvidas uno,
-error. Cuando agregas un estado nuevo a la unión, te avisa en cada <code>Record</code> que faltó.</p>
+string&gt;</code> como el de arriba viene perfecto para mapear cada estado a su texto o a su color de
+insignia en la interfaz. Y hay un detalle muy cómodo: TypeScript te obliga a <strong>cubrir todos los
+estados</strong>, así que si olvidas uno, error. Cuando agregas un estado nuevo a la unión, te avisa en
+cada <code>Record</code> donde falte.</p>
 </blockquote>
 <h3 id="26-readonlyt-solo-lectura">2.6 <code>Readonly&lt;T&gt;</code> — "solo lectura"</h3>
 <blockquote class="def">
 <h3 id="que-significa-readonlyt">🟦 ¿Qué significa? — <em><code>Readonly&lt;T&gt;</code></em></h3>
 <p><code>Readonly</code> ("solo lectura") toma un tipo y marca <strong>todas sus propiedades como inmutables</strong>: una
-vez creado el objeto, TypeScript <strong>no te deja reasignar</strong> ninguna propiedad. Sirve para datos que
-no deberían cambiar después de crearse, como la configuración o las props que llegan a un
+vez creado el objeto, TypeScript <strong>no te deja reasignar</strong> ninguna propiedad. Es ideal para datos
+que no deberían cambiar después de crearse, como la configuración o las props que llegan a un
 componente.</p>
 </blockquote>
 <pre><code class="language-typescript">const habito: Readonly&lt;Habito&gt; = obtenerHabito();
@@ -190,7 +194,7 @@ habito.nombre = &quot;Otro&quot;; // ❌ Error: no se puede asignar, es de solo 
 <blockquote class="warn">
 <h3 id="cuidado-es-una-proteccion-de-tipos-no-del-dato-real">⚠️ Cuidado — Es una protección de tipos, no del dato real</h3>
 <p><code>Readonly</code> solo actúa <strong>mientras escribes</strong> (en la fase de tipos). En el JavaScript final el
-objeto sigue siendo modificable; nadie lo "congela" de verdad. Es un seguro contra errores
+objeto sigue siendo modificable; nadie lo "congela" de verdad. Es un seguro contra despistes
 tuyos al programar, no una cerradura en tiempo de ejecución. Para eso último existe
 <code>Object.freeze()</code>, que es otra cosa.</p>
 </blockquote>
@@ -198,12 +202,12 @@ tuyos al programar, no una cerradura en tiempo de ejecución. Para eso último e
 <h2 id="3-interseccion-combinar-tipos-con">3. Intersección: combinar tipos con <code>&amp;</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-interseccion-a-b">🟦 ¿Qué significa? — <em>Intersección (<code>A &amp; B</code>)</em></h3>
-<p>La <strong>intersección</strong> combina dos (o más) tipos en uno solo que tiene <strong>todas las propiedades de
-ambos a la vez</strong>. Se escribe con el signo <code>&amp;</code> ("y"). Un valor de tipo <code>A &amp; B</code> debe cumplir lo de
-<code>A</code> <strong>y</strong> lo de <code>B</code>.</p>
+<p>La <strong>intersección</strong> junta dos (o más) tipos en uno solo que tiene <strong>todas las propiedades de
+ambos a la vez</strong>. Se escribe con el signo <code>&amp;</code> ("y"). Un valor de tipo <code>A &amp; B</code> tiene que cumplir
+lo de <code>A</code> <strong>y</strong> lo de <code>B</code>.</p>
 </blockquote>
-<p>Ojo con la intuición: aunque <code>&amp;</code> se lee "y", el resultado es un objeto <strong>más grande</strong> (suma de
-campos), no más pequeño. Es como pegar dos fichas en una.</p>
+<p>Cuidado con la intuición aquí: aunque <code>&amp;</code> se lee "y", el resultado es un objeto <strong>más grande</strong>
+(suma de campos), no más pequeño. Es como pegar dos fichas en una sola.</p>
 <pre><code class="language-typescript">interface Identificable {
   id: string;
 }
@@ -220,15 +224,15 @@ const h: Habito = { id: &quot;h1&quot;, nombre: &quot;Leer&quot;, color: &quot;a
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-para-props-de-react">💡 Tip — <code>&amp;</code> para props de React</h3>
-<p>En React (Módulo 06) verás mucho la intersección para <strong>props</strong>. Por ejemplo, combinar tus
-propias props con las de un botón HTML estándar: <code>type Props = MisProps &amp;
+<p>En React (Módulo 06) verás muchísimo la intersección para las <strong>props</strong>. Por ejemplo, combinar
+tus propias props con las de un botón HTML estándar: <code>type Props = MisProps &amp;
 React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;</code>. Así tu componente acepta tanto tus campos como
 todos los atributos normales de un <code>&lt;button&gt;</code>. No te asustes cuando lo veas: es solo "esto <strong>y</strong>
 aquello".</p>
 <h3 id="cuidado-no-confundas-con">⚠️ Cuidado — No confundas <code>&amp;</code> con <code>|</code></h3>
 <p>Ya viste la <strong>unión</strong> <code>|</code> ("o") en el capítulo 03: <code>string | number</code> es "texto <strong>o</strong> número".
-La <strong>intersección</strong> <code>&amp;</code> ("y") es lo contrario: junta. <code>A | B</code> = "uno de los dos"; <code>A &amp; B</code> =
-"los dos a la vez". Bit lo recuerda así: la barra <code>|</code> divide, el <code>&amp;</code> ("ampersand") amontona.</p>
+La <strong>intersección</strong> <code>&amp;</code> ("y") es justo lo contrario: junta. <code>A | B</code> = "uno de los dos"; <code>A &amp; B</code>
+= "los dos a la vez". Bit lo recuerda así: la barra <code>|</code> divide, el <code>&amp;</code> ("ampersand") amontona.</p>
 </blockquote>
 <hr />
 <h2 id="4-keyof-las-claves-de-un-tipo-como-valores">4. <code>keyof</code>: las claves de un tipo como valores</h2>
@@ -237,7 +241,7 @@ La <strong>intersección</strong> <code>&amp;</code> ("y") es lo contrario: junt
 <p><code>keyof</code> toma un tipo de objeto y devuelve una <strong>unión de texto con los nombres de sus
 propiedades</strong> (sus "llaves"). Si <code>Habito</code> tiene <code>id</code>, <code>nombre</code> y <code>color</code>, entonces <code>keyof
 Habito</code> es el tipo <code>"id" | "nombre" | "color"</code>. Sirve para escribir funciones que reciben "el
-<strong>nombre</strong> de un campo" y garantizar que sea uno que existe de verdad.</p>
+<strong>nombre</strong> de un campo" y asegurar que sea uno que existe de verdad.</p>
 </blockquote>
 <pre><code class="language-typescript">interface Habito {
   id: string;
@@ -250,8 +254,8 @@ type ClaveHabito = keyof Habito; // &quot;id&quot; | &quot;nombre&quot; | &quot;
 const campo: ClaveHabito = &quot;nombre&quot;; // ✅
 const malo: ClaveHabito = &quot;precio&quot;;  // ❌ &quot;precio&quot; no es una clave de Habito
 </code></pre>
-<p>El gran valor de <code>keyof</code> es que si <strong>renombras</strong> un campo en la interface, la unión cambia sola.
-Nunca quedan "nombres mágicos" escritos a mano que apuntan a campos que ya no existen.</p>
+<p>Lo bueno de <code>keyof</code> es que si <strong>renombras</strong> un campo en la interface, la unión cambia sola. Nunca
+te quedan "nombres mágicos" escritos a mano apuntando a campos que ya no existen.</p>
 <hr />
 <h2 id="5-indexar-tipos-tk-el-tipo-de-un-campo-concreto">5. Indexar tipos: <code>T[K]</code>, el tipo de un campo concreto</h2>
 <blockquote class="def">
@@ -269,8 +273,8 @@ ese campo dentro de aquel tipo". Se llama <em>indexed access</em> (acceso indexa
 type TipoDelId = Habito[&quot;id&quot;];       // string
 type TipoDeVeces = Habito[&quot;veces&quot;];  // number
 </code></pre>
-<p>Esto evita repetir tipos: si el <code>id</code> cambiara de <code>string</code> a <code>number</code>, <code>TipoDelId</code> cambiaría con
-él. Combinado con <code>keyof</code>, es la base de funciones genéricas muy potentes:</p>
+<p>Esto te ahorra repetir tipos: si el <code>id</code> cambiara de <code>string</code> a <code>number</code>, <code>TipoDelId</code> cambiaría
+con él. Y combinado con <code>keyof</code>, es la base de funciones genéricas muy versátiles:</p>
 <pre><code class="language-typescript">// Lee un campo cualquiera de un objeto y devuelve EXACTAMENTE su tipo
 function leerCampo&lt;T, K extends keyof T&gt;(objeto: T, campo: K): T[K] {
   return objeto[campo];
@@ -283,9 +287,9 @@ const v = leerCampo(h, &quot;veces&quot;);  // y que v es number
 <blockquote class="tip">
 <h3 id="tip-leelo-despacio-no-lo-memorices">💡 Tip — Léelo despacio, no lo memorices</h3>
 <p><code>K extends keyof T</code> significa "<code>K</code> es <strong>alguna de las claves</strong> de <code>T</code>". Y <code>T[K]</code> es "el tipo de
-esa clave". Junto: "dame un campo que exista en el objeto y te devuelvo su tipo exacto". No
-necesitas escribir funciones así todavía; basta con <strong>entender</strong> la idea cuando la leas en
-código de librerías o de tus apps.</p>
+esa clave". Junta las dos: "dame un campo que exista en el objeto y te devuelvo su tipo exacto".
+No hace falta que escribas funciones así todavía; con que <strong>entiendas</strong> la idea cuando la veas
+en código de librerías o de tus apps, vas bien.</p>
 </blockquote>
 <hr />
 <h2 id="6-typeof-a-nivel-de-tipo-del-valor-al-tipo">6. <code>typeof</code> a nivel de tipo: del valor al tipo</h2>
@@ -309,23 +313,23 @@ type Config = typeof configPorDefecto;
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo-faro-y-constantes-compartidas">🔎 En tu código — Faro y constantes compartidas</h3>
-<p>En <code>Faro</code> es común tener un objeto con <strong>constantes</strong> (por ejemplo, los nombres de las fuentes:
-GitHub, Google Drive) y derivar su tipo con <code>typeof</code> en lugar de duplicarlo. Así el objeto real
-y su tipo nunca se desincronizan: el tipo <strong>es</strong> un reflejo del valor.</p>
+<p>En <code>Faro</code> es habitual tener un objeto con <strong>constantes</strong> (por ejemplo, los nombres de las
+fuentes: GitHub, Google Drive) y derivar su tipo con <code>typeof</code> en lugar de duplicarlo. Así el
+objeto real y su tipo nunca se desincronizan: el tipo <strong>es</strong> un reflejo del valor.</p>
 <h3 id="cuidado-son-dos-typeof-distintos">⚠️ Cuidado — Son dos <code>typeof</code> distintos</h3>
 <p><code>typeof</code> dentro de una expresión normal (un <code>if</code>, una variable) es el de JavaScript y devuelve
 texto. <code>typeof</code> dentro de un <code>type ... =</code> o de una anotación es el de TypeScript y devuelve un
-<strong>tipo</strong>. Mismo nombre, contextos distintos. Si estás "del lado de los tipos" (después de <code>:</code> o
-en un <code>type</code>), es el segundo.</p>
+<strong>tipo</strong>. Mismo nombre, contextos distintos. La regla rápida: si estás "del lado de los tipos"
+(después de <code>:</code> o dentro de un <code>type</code>), es el segundo.</p>
 </blockquote>
 <hr />
 <h2 id="7-alias-de-tipo-reutilizables-ponle-nombre-a-tus-combinaciones">7. Alias de tipo reutilizables: ponle nombre a tus combinaciones</h2>
 <blockquote class="def">
 <h3 id="que-significa-alias-de-tipo">🟦 ¿Qué significa? — <em>Alias de tipo</em></h3>
-<p>Un <strong>alias de tipo</strong> es simplemente darle un <strong>nombre</strong> a un tipo con la palabra <code>type</code>, para
-poder reutilizarlo. Ya lo viste en el capítulo 03, pero ahora cobra sentido: cuando empiezas a
-combinar utilitarios, intersecciones y <code>keyof</code>, los tipos se vuelven largos. Un alias los
-guarda bajo un nombre claro y los reutilizas en todo el proyecto.</p>
+<p>Un <strong>alias de tipo</strong> es, sencillamente, darle un <strong>nombre</strong> a un tipo con la palabra <code>type</code> para
+poder reutilizarlo. Ya lo viste en el capítulo 03, pero ahora cobra todo su sentido: en cuanto
+empiezas a combinar utilitarios, intersecciones y <code>keyof</code>, los tipos se vuelven largos. Un alias
+los guarda bajo un nombre claro y los reutilizas en todo el proyecto.</p>
 </blockquote>
 <pre><code class="language-typescript">// Sin alias: ilegible y repetido en cada función
 function guardar(h: Omit&lt;Habito, &quot;id&quot; | &quot;user_id&quot; | &quot;creado_en&quot;&gt;) { /* ... */ }
@@ -339,21 +343,21 @@ function validar(h: NuevoHabito) { /* ... */ }
 <blockquote class="code">
 <h3 id="en-tu-codigo-rachasimple-y-faro">🔎 En tu código — RachaSimple y Faro</h3>
 <p>Tanto <code>RachaSimple</code> (en sus archivos de <code>src/types/</code>) como <code>Faro</code> definen <strong>un puñado de tipos
-base</strong> y, a partir de ellos, una familia de alias: el tipo de la fila en la base de datos, el
-tipo "para insertar" (sin <code>id</code>), el tipo "para actualizar" (<code>Partial</code>), el tipo "resumido para
+base</strong> y, a partir de ellos, toda una familia de alias: el tipo de la fila en la base de datos,
+el tipo "para insertar" (sin <code>id</code>), el tipo "para actualizar" (<code>Partial</code>), el tipo "resumido para
 la lista" (<code>Pick</code>). Todos cuelgan del mismo origen. Por eso cambiar un campo en el modelo se
-propaga a toda la app sin cacería de errores manual.</p>
+propaga a toda la app sin que tengas que ir cazando errores uno por uno.</p>
 <h3 id="tip-supabase-genera-tipos-por-ti">💡 Tip — Supabase genera tipos por ti</h3>
 <p>En proyectos con <code>Supabase</code> (RachaSimple y Faro) hay una herramienta que <strong>lee tu base de
 datos</strong> y genera un archivo de tipos automáticamente (algo como <code>database.types.ts</code>). De ahí
-sale el tipo base de cada tabla, y tú aplicas <code>Pick</code>, <code>Omit</code> y <code>Partial</code> encima. Es la forma más
-pura de "una sola fuente de la verdad": la verdad es la <strong>base de datos</strong>, y los tipos la
+sale el tipo base de cada tabla, y tú le aplicas <code>Pick</code>, <code>Omit</code> y <code>Partial</code> encima. Es la forma
+más pura de "una sola fuente de la verdad": la verdad es la <strong>base de datos</strong>, y los tipos la
 reflejan sin que escribas nada a mano.</p>
 </blockquote>
 <hr />
 <h2 id="8-todo-junto-un-caso-real">8. Todo junto: un caso real</h2>
-<p>Veamos cómo encajan estas piezas para modelar un hábito en una app como RachaSimple, partiendo de
-<strong>un solo</strong> tipo base:</p>
+<p>Veamos cómo encajan todas estas piezas para modelar un hábito en una app como RachaSimple,
+partiendo de <strong>un solo</strong> tipo base:</p>
 <pre><code class="language-typescript">// 1. El tipo base (idealmente generado desde Supabase)
 interface Habito {
   id: string;
@@ -424,9 +428,9 @@ tipos sin repetir. Bit aplaude con sus cuatro patitas.</p>
 </li>
 </ol>
 <hr />
-<p>🎉 Con esto sabes <strong>derivar</strong> tipos en vez de repetirlos: la marca de un código TypeScript maduro,
-como el de RachaSimple y Faro. En el siguiente módulo todo esto se vuelve indispensable: en
-<strong>React</strong>, las props de los componentes y los hooks tipados se apoyan constantemente en <code>Pick</code>,
+<p>🎉 Con esto ya sabes <strong>derivar</strong> tipos en vez de repetirlos: la marca de un código TypeScript
+maduro, como el de RachaSimple y Faro. En el siguiente módulo todo esto se vuelve indispensable:
+en <strong>React</strong>, las props de los componentes y los hooks tipados se apoyan constantemente en <code>Pick</code>,
 <code>Omit</code>, intersecciones y <code>keyof</code>.</p>
 <p>➡️ Siguiente módulo: <strong><a href="../06-react/README.html">06 — React</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>

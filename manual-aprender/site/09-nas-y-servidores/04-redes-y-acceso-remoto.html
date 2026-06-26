@@ -18,94 +18,108 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-04-redes-desde-cero-y-acceso-remoto">Capítulo 04 — Redes desde cero y acceso remoto</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Para usar tu NAS necesitas entender un poco de <strong>redes</strong>: cómo se encuentran los dispositivos,
-qué es una IP, un puerto, y —lo más jugoso— cómo entrar a tu NAS de forma <strong>segura desde fuera
-de casa</strong>. Tu equipo ya lo resuelve con <strong>Tailscale</strong> y administra con <strong>Cockpit</strong>. Aquí lo
-entiendes todo desde cero.</p>
+<p>Para sacarle partido a tu NAS hace falta entender algo de <strong>redes</strong>: cómo se encuentran los
+dispositivos entre sí, qué es una IP, qué es un puerto y, lo más divertido, cómo entrar a tu NAS
+de forma <strong>segura cuando estás fuera de casa</strong>. Tu equipo ya tiene esto resuelto: usa <strong>Tailscale</strong>
+para el acceso remoto y <strong>Cockpit</strong> para administrarlo. En este capítulo lo vas a entender todo,
+partiendo de cero.</p>
 </blockquote>
 <hr />
 <h2 id="1-tu-red-de-casa-lan">1. Tu red de casa (LAN)</h2>
 <blockquote class="def">
 <h3 id="que-significa-red-local-lan">🟦 ¿Qué significa? — <em>Red local (LAN)</em></h3>
-<p>Una <strong>LAN</strong> (<em>Local Area Network</em>, "red de área local") es la red <strong>de tu casa</strong>: todos los
-dispositivos conectados a tu router (por wifi o cable) forman una LAN y pueden hablar entre sí.
-Tu NAS, tu teléfono y tu laptop están en la misma LAN; por eso el teléfono ve los archivos del
-NAS sin pasar por internet.</p>
+<p>Una <strong>LAN</strong> (<em>Local Area Network</em>, "red de área local") es, sencillamente, la red <strong>de tu casa</strong>.
+Todo lo que está conectado a tu router (por wifi o por cable) forma esa LAN y puede hablar entre
+sí. Tu NAS, tu teléfono y tu laptop están en la misma LAN, y por eso el teléfono ve los archivos
+del NAS sin necesidad de salir a internet.</p>
 <h3 id="que-significa-ip-local-y-el-router">🟦 ¿Qué significa? — <em>IP local y el router</em></h3>
-<p>Recuerda la <strong>IP</strong> del Módulo 00 (la "dirección" de cada dispositivo). Dentro de tu casa, el
-<strong>router</strong> le da a cada aparato una <strong>IP local</strong> (suelen verse como <code>192.168.1.x</code>). El router es
-el "director de tráfico" de tu LAN y la puerta hacia internet. Tu NAS tiene una IP local fija (o
-casi) por la que lo encuentran los demás.</p>
+<p>¿Te acuerdas de la <strong>IP</strong> del Módulo 00, esa "dirección" que tiene cada dispositivo? Dentro de tu
+casa, quien reparte esas direcciones es el <strong>router</strong>: a cada aparato le asigna una <strong>IP local</strong>
+(las verás casi siempre con la forma <code>192.168.1.x</code>). El router es a la vez el director de tráfico
+de tu LAN y la puerta de salida hacia internet. Tu NAS tiene una IP local fija, o casi fija, y es
+por ahí por donde lo encuentran los demás equipos.</p>
 <h3 id="que-significa-nombre-de-host-hostname">🟦 ¿Qué significa? — <em>Nombre de host (hostname)</em></h3>
-<p>Recordar IPs es incómodo, así que cada equipo tiene un <strong>nombre</strong> (hostname). El de tu servidor
-es <strong><code>polypaw-nas</code></strong>. En muchas redes puedes usar el nombre en vez de la IP (<code>\\polypaw-nas</code> en
-vez de <code>\\192.168.1.50</code>). Más fácil de recordar.</p>
+<p>Memorizar IPs es un fastidio, así que cada equipo lleva también un <strong>nombre</strong> (hostname). El de tu
+servidor es <strong><code>polypaw-nas</code></strong>. En muchas redes puedes escribir el nombre directamente en lugar de
+la IP: <code>\\polypaw-nas</code> en vez de <code>\\192.168.1.50</code>. Mucho más cómodo de recordar.</p>
 </blockquote>
 <hr />
 <h2 id="2-puertos-las-puertas-de-un-servidor-repaso-aplicado">2. Puertos: las "puertas" de un servidor (repaso aplicado)</h2>
 <blockquote class="def">
 <h3 id="que-significa-puerto-aplicado-a-tu-nas">🟦 ¿Qué significa? — <em>Puerto (aplicado a tu NAS)</em></h3>
-<p>Como viste en el Módulo 00, si la IP es el edificio, el <strong>puerto</strong> es el apartamento: indica
-<strong>qué servicio</strong> atiende. Un mismo servidor ofrece varios servicios en puertos distintos:
+<p>Ya lo viste en el Módulo 00: si la IP es el edificio, el <strong>puerto</strong> es el número de apartamento,
+es decir, <strong>qué servicio</strong> concreto responde. Un mismo servidor ofrece varias cosas a la vez, cada
+una en su propio puerto:
 - Samba (archivos) usa los puertos 445/139.
-- <strong>Cockpit</strong> (panel web) usa el <strong>9090</strong> → por eso entras a <code>https://polypaw-nas:9090</code>.
-- AdGuard usa el suyo para su panel y el 53 (DNS).
-Cada servicio escucha en su puerto; el puerto enruta cada petición al programa correcto.</p>
+- <strong>Cockpit</strong> (el panel web) usa el <strong>9090</strong>, y por eso entras a <code>https://polypaw-nas:9090</code>.
+- AdGuard tiene un puerto para su panel y usa el 53 para el DNS.
+Cada servicio se queda escuchando en su puerto, y el puerto se encarga de llevar cada petición al
+programa que le toca.</p>
 </blockquote>
 <hr />
 <h2 id="3-administrar-con-cockpit-sin-terminal">3. Administrar con Cockpit (sin terminal)</h2>
 <blockquote class="def">
 <h3 id="que-significa-cockpit-panel-web-de-administracion">🟦 ¿Qué significa? — <em>Cockpit (panel web de administración)</em></h3>
-<p><strong>Cockpit</strong> es una <strong>interfaz web</strong> para administrar tu servidor Linux <strong>sin</strong> escribir
-comandos: ves el uso de CPU/RAM, los discos, la red, los servicios, los logs, e incluso tienes
-una terminal dentro del navegador. Entras desde otro equipo a <strong><code>https://polypaw-nas:9090</code></strong> con
-tu usuario de Linux.
-Es el complemento perfecto a la terminal: la terminal da control total; Cockpit da una vista
-cómoda y visual. Para el día a día (¿cuánta RAM uso?, ¿está vivo este servicio?), Cockpit es
-ideal.</p>
+<p><strong>Cockpit</strong> es una <strong>interfaz web</strong> desde la que administras tu servidor Linux <strong>sin</strong> teclear ni
+un solo comando. Ves de un vistazo el uso de CPU y RAM, los discos, la red, los servicios, los
+logs, e incluso tienes una terminal dentro del propio navegador por si la necesitas. Entras desde
+otro equipo a <strong><code>https://polypaw-nas:9090</code></strong> con tu usuario de Linux.
+Es el acompañante ideal de la terminal: la terminal te da control total, y Cockpit te da una vista
+cómoda y visual. Para las preguntas del día a día (¿cuánta RAM estoy usando?, ¿sigue vivo este
+servicio?), Cockpit te lo resuelve en segundos.</p>
 <h3 id="tip-https-y-el-aviso-de-no-seguro">💡 Tip — HTTPS y el aviso de "no seguro"</h3>
-<p>Cockpit usa <strong>HTTPS</strong> (Módulo 00) con un certificado <strong>autofirmado</strong> (hecho por tu propio
-servidor, no por una autoridad pública). Por eso el navegador muestra un aviso de "conexión no
-privada" la primera vez. <strong>Dentro de tu red, es normal y seguro</strong>: el aviso es porque el
-certificado no lo emitió una empresa externa, no porque haya peligro. Aceptas y entras.</p>
+<p>Cockpit funciona con <strong>HTTPS</strong> (Módulo 00), pero usa un certificado <strong>autofirmado</strong>, es decir,
+generado por tu propio servidor y no por una autoridad pública. Por eso la primera vez el navegador
+te suelta el aviso de "conexión no privada". <strong>Dentro de tu red, eso es normal y seguro</strong>: salta
+porque el certificado no lo emitió una empresa externa, no porque exista ningún peligro real. Lo
+aceptas y entras tranquilo.</p>
 </blockquote>
 <hr />
 <h2 id="4-el-reto-entrar-desde-fuera-de-casa-de-forma-segura">4. El reto: entrar desde FUERA de casa (de forma segura)</h2>
-<p>Dentro de casa es fácil (misma LAN). Pero ¿y si quieres tus archivos desde el trabajo? Tu NAS
-está detrás del router, "escondido" de internet. Hay dos caminos:</p>
+<p>Dentro de casa todo es sencillo, porque estás en la misma LAN. ¿Pero qué pasa cuando quieres tus
+archivos desde el trabajo? Tu NAS vive detrás del router, oculto del resto de internet. Para llegar
+a él desde fuera hay dos caminos posibles.</p>
 <blockquote class="warn">
 <h3 id="cuidado-el-camino-peligroso-abrir-puertos">⚠️ Cuidado — El camino peligroso: abrir puertos</h3>
-<p>La forma "antigua" es <strong>abrir puertos</strong> en el router (<em>port forwarding</em>): decirle "las
-peticiones de internet al puerto X mándalas al NAS". El problema: eso <strong>expone tu NAS a TODO
-internet</strong>, y los bots escanean constantemente buscando servidores expuestos para atacarlos. Es
-arriesgado y desaconsejado para principiantes. <strong>Tu NAS NO hace esto</strong> (bien hecho).</p>
+<p>El método "de toda la vida" es <strong>abrir puertos</strong> en el router (lo que se llama <em>port forwarding</em>):
+básicamente le dices "las peticiones que lleguen de internet al puerto X mándaselas al NAS". El
+problema es que así <strong>dejas tu NAS expuesto a TODO internet</strong>, y por ahí pululan bots que escanean
+sin parar buscando servidores abiertos para atacarlos. Es arriesgado y no es nada recomendable para
+quien empieza. <strong>Tu NAS NO hace esto</strong>, y hace bien.</p>
 <h3 id="que-significa-vpn-red-privada-virtual">🟦 ¿Qué significa? — <em>VPN (red privada virtual)</em></h3>
-<p>Una <strong>VPN</strong> (<em>Virtual Private Network</em>) crea una <strong>red privada y cifrada</strong> que conecta tus
-dispositivos <strong>como si estuvieran en la misma LAN</strong>, aunque estén en lugares distintos del
-mundo. En vez de abrir tu NAS a internet, tus dispositivos entran a una "red privada" donde
-<strong>solo ellos</strong> se ven. Es como un túnel secreto entre tu teléfono y tu NAS.</p>
+<p>Una <strong>VPN</strong> (<em>Virtual Private Network</em>) levanta una <strong>red privada y cifrada</strong> que conecta tus
+dispositivos <strong>como si estuvieran en la misma LAN</strong>, aunque en realidad estén en puntos distintos
+del mundo. En vez de abrir tu NAS a internet, lo que haces es meter tus dispositivos en una red
+privada donde <strong>solo ellos</strong> se ven entre sí. Imagínalo como un túnel secreto entre tu teléfono y
+tu NAS.</p>
 <h3 id="que-significa-tailscale-tu-solucion-real">🟦 ¿Qué significa? — <em>Tailscale (tu solución real)</em></h3>
-<p><strong>Tailscale</strong> es una VPN modernísima y fácil: instalas su app en tu NAS y en tus dispositivos,
-inicias sesión con la misma cuenta, y todos quedan en una <strong>red privada</strong> entre ellos, sin abrir
-ni un puerto del router. Desde el trabajo, tu teléfono ve al <code>polypaw-nas</code> como si estuvieras en
-casa, <strong>cifrado</strong> y <strong>sin exponerlo</strong> a desconocidos.
-<strong>Tu NAS usa Tailscale</strong>: por eso te conectas a él de forma segura desde donde sea. Es, con
-diferencia, la forma recomendada hoy para acceso remoto casero. (Por debajo usa una tecnología
-llamada WireGuard; no necesitas dominarla, solo saber que Tailscale = "VPN fácil y segura".)</p>
+<p><strong>Tailscale</strong> es una VPN moderna y muy fácil de usar: instalas su app en el NAS y en tus
+dispositivos, inicias sesión con la misma cuenta en todos, y de pronto quedan formando una <strong>red
+privada</strong> entre ellos, sin que tengas que abrir ni un solo puerto del router. Desde el trabajo, tu
+teléfono ve al <code>polypaw-nas</code> como si estuvieras sentado en casa, todo <strong>cifrado</strong> y <strong>sin
+exponerlo</strong> a desconocidos.
+<strong>Tu NAS usa Tailscale</strong>, y por eso te conectas a él de forma segura estés donde estés. Hoy por hoy
+es, de lejos, la forma recomendada para el acceso remoto casero. (Por debajo funciona con una
+tecnología llamada WireGuard, pero no necesitas dominarla; te basta con saber que Tailscale es la
+"VPN fácil y segura".)</p>
 </blockquote>
 <hr />
 <h2 id="5-adguard-home-tu-nas-como-filtro-de-la-red">5. AdGuard Home: tu NAS como filtro de la red</h2>
 <blockquote class="def">
 <h3 id="que-significa-dns-repaso-y-adguard-home">🟦 ¿Qué significa? — <em>DNS (repaso) y AdGuard Home</em></h3>
-<p>Recuerda el <strong>DNS</strong> del Módulo 00: la "agenda" que traduce nombres (<code>google.com</code>) a IPs.
-<strong>AdGuard Home</strong> es un <strong>servidor DNS</strong> que instalas en tu NAS y que, además de traducir,
-<strong>bloquea</strong> los dominios de anuncios y rastreadores: cuando una web pide cargar un anuncio,
-AdGuard responde "ese dominio no existe" y el anuncio no aparece.
+<p>Recupera el <strong>DNS</strong> del Módulo 00: esa "agenda" que traduce nombres como <code>google.com</code> a IPs.
+<strong>AdGuard Home</strong> es un <strong>servidor DNS</strong> que instalas en tu NAS y que, además de traducir, también
+<strong>bloquea</strong> los dominios de anuncios y rastreadores. Cuando una web intenta cargar un anuncio,
+AdGuard responde "ese dominio no existe" y el anuncio sencillamente no aparece.
 Si configuras tu router para que use el AdGuard de tu NAS como DNS, <strong>todos</strong> los dispositivos de
-la casa navegan sin gran parte de los anuncios, sin instalar nada en cada uno. Tu NAS deja de ser
-solo "almacenamiento" y se vuelve <strong>infraestructura útil de tu hogar</strong>. Es un primer paso
-buenísimo en el mundo del <em>self-hosting</em> (capítulo 05).</p>
+la casa navegan sin buena parte de los anuncios, y sin tener que instalar nada en cada uno. Ahí tu
+NAS deja de ser solo "almacenamiento" y pasa a ser <strong>infraestructura útil para tu hogar</strong>. Es un
+primerísimo paso, y de los buenos, dentro del mundo del <em>self-hosting</em> (capítulo 05).</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

@@ -18,97 +18,104 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-usarlo-y-montar-uno-desde-cero">Capítulo 05 — Usarlo y montar uno desde cero</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Cerramos el módulo (y el manual) con lo más práctico: <strong>qué hacer con tu NAS</strong> más allá de
-guardar archivos, y una <strong>guía para montar uno desde cero</strong> entendiendo cada decisión, no
-copiando comandos a ciegas. Es el paso final para dejar atrás el "vibe coding" también en el
-mundo de los servidores.</p>
+<p>Cerramos el módulo (y el manual) con la parte más práctica: <strong>qué hacer con tu NAS</strong>
+aparte de guardar archivos, y una <strong>guía para montar uno desde cero</strong> entendiendo cada
+decisión en lugar de copiar comandos a ciegas. Es el paso final para dejar atrás el "vibe
+coding" también en el mundo de los servidores.</p>
 </blockquote>
 <hr />
 <h2 id="1-self-hosting-tu-nas-como-plataforma-de-servicios">1. Self-hosting: tu NAS como plataforma de servicios</h2>
 <blockquote class="def">
 <h3 id="que-significa-self-hosting-autoalojamiento">🟦 ¿Qué significa? — <em>Self-hosting (autoalojamiento)</em></h3>
-<p><strong>Self-hosting</strong> es <strong>correr tú mismo</strong> los servicios que normalmente alquilarías a empresas:
-tu nube de archivos (en vez de Google Drive), tu bloqueador de anuncios (AdGuard, que ya
-tienes), tu servidor multimedia, tus respaldos, tus apps. Las ventajas: <strong>privacidad</strong> (tus
-datos en casa), <strong>control</strong> y <strong>sin cuotas mensuales</strong>. Tu NAS ya es una plataforma de
-self-hosting: corre AdGuard y tu compañía de agentes <strong>OpenClaw</strong>.</p>
+<p><strong>Self-hosting</strong> significa <strong>correr tú mismo</strong> los servicios que normalmente le alquilarías
+a una empresa: tu nube de archivos (en lugar de Google Drive), tu bloqueador de anuncios
+(AdGuard, que ya tienes), tu servidor multimedia, tus respaldos, tus apps. ¿Qué ganas?
+<strong>Privacidad</strong> (tus datos están en casa), <strong>control</strong> y <strong>cero cuotas mensuales</strong>. Tu NAS
+ya es, de hecho, una plataforma de self-hosting: corre AdGuard y tu compañía de agentes
+<strong>OpenClaw</strong>.</p>
 <h3 id="que-significa-contenedores-y-docker">🟦 ¿Qué significa? — <em>Contenedores y Docker</em></h3>
-<p>Un <strong>contenedor</strong> es una forma de <strong>empaquetar una aplicación con todo lo que necesita</strong> para
-correr, aislada del resto del sistema, de modo que se instala y se quita limpiamente sin
+<p>Un <strong>contenedor</strong> es una manera de <strong>empaquetar una aplicación junto con todo lo que necesita</strong>
+para funcionar, aislada del resto del sistema. Así se instala y se quita de forma limpia, sin
 "ensuciar" el servidor. <strong>Docker</strong> (y su primo <strong>Podman</strong>) es la herramienta que crea y corre
-contenedores.
-Analogía: cada servicio va en su propia "caja" sellada con sus piezas; pones y quitas cajas sin
-que se estorben. Por eso el self-hosting moderno usa contenedores: instalar un servicio nuevo es
-"bajar su caja y encenderla".
-<strong>Tu NAS tiene Docker/Podman instalados</strong> (aunque inactivos por ahora): listos para cuando
-quieras añadir servicios en contenedor.</p>
+esos contenedores.
+Para que se entienda: cada servicio va en su propia "caja" sellada con todas sus piezas dentro;
+pones y quitas cajas sin que una estorbe a la otra. Por eso el self-hosting moderno se apoya en
+contenedores: instalar un servicio nuevo es, básicamente, "bajar su caja y encenderla".
+<strong>Tu NAS ya trae Docker/Podman instalados</strong> (aunque por ahora estén inactivos): listos para el
+día que quieras añadir servicios en contenedor.</p>
 <h3 id="tip-ideas-de-servicios-para-tu-nas-a-futuro">💡 Tip — Ideas de servicios para tu NAS (a futuro)</h3>
-<p>Cuando quieras crecer (¡y con cuidado de la RAM!): un servidor multimedia (Jellyfin), una nube
-de archivos con interfaz (Nextcloud), gestión de fotos, respaldos automáticos de tus equipos. Se
-instalan como contenedores. Empieza con uno y observa cómo afecta a la RAM.</p>
+<p>Cuando quieras crecer (¡y vigilando la RAM!): un servidor multimedia (Jellyfin), una nube de
+archivos con interfaz (Nextcloud), gestión de fotos, respaldos automáticos de tus equipos. Todo
+eso se instala como contenedor. Empieza con uno solo y mira cómo le afecta a la RAM antes de
+sumar el siguiente.</p>
 </blockquote>
 <hr />
 <h2 id="2-respaldos-la-regla-mas-importante-de-todas">2. Respaldos: la regla más importante de todas</h2>
 <blockquote class="warn">
 <h3 id="cuidado-un-nas-no-es-un-respaldo-por-si-solo">⚠️ Cuidado — Un NAS NO es un respaldo por sí solo</h3>
-<p>Esto salva datos (y lágrimas): tener tus archivos <strong>solo</strong> en el NAS <strong>no</strong> es estar respaldado.
-Si se daña el disco del NAS, lo pierdes todo. Un NAS centraliza, pero hay que <strong>respaldar el
-propio NAS</strong>.</p>
+<p>Esto te salva datos (y lágrimas): tener tus archivos <strong>solo</strong> en el NAS <strong>no</strong> es estar
+respaldado. Si el disco del NAS se daña, lo pierdes todo. El NAS centraliza, sí, pero al propio
+NAS también hay que <strong>respaldarlo</strong>.</p>
 <h3 id="que-significa-la-regla-3-2-1-de-respaldo">🟦 ¿Qué significa? — <em>La regla 3-2-1 de respaldo</em></h3>
 <p>Una guía clásica para no perder datos:
 - <strong>3</strong> copias de tus datos importantes,
-- en <strong>2</strong> medios distintos (ej. el HDD del NAS y un disco externo),
-- con <strong>1</strong> copia <strong>fuera de casa</strong> (otra ubicación o una nube), por si hay incendio/robo.
-No necesitas montarlo hoy, pero llévate la idea: <strong>lo importante va por triplicado</strong>. Tu disco
-de datos tiene 890 GB libres; sobra espacio para organizar respaldos de tus equipos hacia él, y
-luego una copia externa del NAS.</p>
+- en <strong>2</strong> medios distintos (por ejemplo, el HDD del NAS y un disco externo),
+- con <strong>1</strong> copia <strong>fuera de casa</strong> (otra ubicación o una nube), por si hay un incendio o un robo.
+No hace falta que lo montes hoy, pero quédate con la idea: <strong>lo importante va por triplicado</strong>.
+Tu disco de datos tiene 890 GB libres, así que espacio te sobra para organizar ahí los respaldos
+de tus equipos y, más adelante, una copia externa del NAS.</p>
 </blockquote>
 <hr />
 <h2 id="3-montar-un-nas-desde-cero-entendiendo-cada-paso">3. Montar un NAS desde cero (entendiendo cada paso)</h2>
-<p>Esta es la receta general que siguió tu <code>polypaw-nas</code>, explicada para que <strong>entiendas</strong> por qué
-cada paso, no para copiar a ciegas. Sirve para cualquier servidor casero.</p>
+<p>Esta es la receta general que siguió tu <code>polypaw-nas</code>, contada para que <strong>entiendas</strong> el porqué de
+cada paso, no para copiarla a ciegas. Sirve igual para cualquier servidor casero.</p>
 <blockquote class="def">
 <h3 id="guia-conceptual-de-laptop-a-nas">🟦 Guía conceptual — De laptop a NAS</h3>
 <ol>
-<li><strong>Elegir y preparar el hardware.</strong> Un equipo que pueda estar encendido (un laptop viejo es
-   ideal: bajo consumo + batería-UPS). Idealmente un disco para el sistema y otro para datos
-   (como tu SSD + HDD).</li>
-<li><strong>Instalar el sistema operativo.</strong> Descargar <strong>Ubuntu Server</strong>, ponerlo en un USB de
-   arranque, e instalarlo. Sin escritorio (ahorra recursos). Aquí creas tu <strong>usuario</strong> y la
+<li><strong>Elegir y preparar el hardware.</strong> Un equipo que pueda quedarse encendido (un laptop viejo es
+   ideal: consume poco y su batería hace de UPS). Lo mejor es tener un disco para el sistema y
+   otro para los datos (como tu SSD + HDD).</li>
+<li><strong>Instalar el sistema operativo.</strong> Descargar <strong>Ubuntu Server</strong>, ponerlo en un USB de arranque
+   e instalarlo. Sin escritorio, para ahorrar recursos. Aquí es donde creas tu <strong>usuario</strong> y su
    contraseña.</li>
 <li><strong>Primeros ajustes.</strong> Conectarte por <strong>SSH</strong> desde otro equipo, actualizar todo
-   (<code>sudo apt update &amp;&amp; sudo apt upgrade</code>), y darle un <strong>hostname</strong> claro (<code>polypaw-nas</code>).</li>
+   (<code>sudo apt update &amp;&amp; sudo apt upgrade</code>) y ponerle un <strong>hostname</strong> claro (<code>polypaw-nas</code>).</li>
 <li><strong>Preparar el disco de datos.</strong> Formatear el HDD y <strong>montarlo</strong> en una carpeta (<code>/srv/nas</code>),
-   con permisos correctos (<code>chown</code>/<code>chmod</code>) para tu usuario.</li>
+   con los permisos correctos (<code>chown</code>/<code>chmod</code>) para tu usuario.</li>
 <li><strong>Instalar Samba</strong> (<code>sudo apt install samba</code>), definir el <strong>share</strong> en <code>smb.conf</code>
-   (<code>[PolyPawNAS]</code>, <code>path</code>, <code>valid users</code>), crear la <strong>contraseña de Samba</strong> (<code>smbpasswd</code>), y
+   (<code>[PolyPawNAS]</code>, <code>path</code>, <code>valid users</code>), crear la <strong>contraseña de Samba</strong> (<code>smbpasswd</code>) y
    reiniciar el servicio. → Ya compartes archivos.</li>
-<li><strong>Instalar Cockpit</strong> (<code>sudo apt install cockpit</code>) para administrar por web en el <strong>9090</strong>.</li>
-<li><strong>Instalar Tailscale</strong> en el NAS y tus dispositivos → acceso remoto <strong>seguro</strong> sin abrir
+<li><strong>Instalar Cockpit</strong> (<code>sudo apt install cockpit</code>) para administrarlo desde el navegador en el
+   <strong>9090</strong>.</li>
+<li><strong>Instalar Tailscale</strong> en el NAS y en tus dispositivos → acceso remoto <strong>seguro</strong> sin abrir
    puertos.</li>
 <li><strong>(Opcional) Servicios extra</strong>: AdGuard Home (DNS/anti-anuncios), contenedores con
    Docker/Podman, respaldos.</li>
 </ol>
-<p>Cada paso usa conceptos que ya conoces de este módulo: usuarios/permisos (cap. 02), Samba (cap.
-03), redes/Cockpit/Tailscale (cap. 04). Eso es entender, no copiar: ahora podrías <strong>dar
-instrucciones precisas</strong> sobre tu servidor, justo la meta del manual.</p>
+<p>Fíjate en que cada paso usa conceptos que ya viste en este módulo: usuarios y permisos (cap. 02),
+Samba (cap. 03), redes, Cockpit y Tailscale (cap. 04). Eso es entender en lugar de copiar: ahora
+podrías <strong>dar instrucciones precisas</strong> sobre tu propio servidor, que es justo la meta del manual.</p>
 <h3 id="tip-la-regla-de-oro-del-administrador">💡 Tip — La regla de oro del administrador</h3>
-<p>Cuando configures un servidor, <strong>cambia una cosa a la vez y verifica</strong> que sigue funcionando
-antes del siguiente paso. Si algo se rompe, sabrás exactamente qué lo causó. Y <strong>anota lo que
-haces</strong> (un archivo de notas): tu yo futuro lo agradecerá, igual que con los mensajes de commit
-(Módulo 00).</p>
+<p>Cuando configures un servidor, <strong>cambia una sola cosa a la vez y verifica</strong> que todo sigue
+funcionando antes de pasar al siguiente paso. Si algo se rompe, sabrás exactamente qué lo causó. Y
+<strong>anota lo que haces</strong> en un archivo de notas: tu yo del futuro lo agradecerá, igual que pasa con
+los mensajes de commit (Módulo 00).</p>
 </blockquote>
 <hr />
 <h2 id="4-servidores-en-general-mas-alla-del-nas">4. Servidores en general (más allá del NAS)</h2>
 <blockquote class="tip">
 <h3 id="tip-lo-que-aprendiste-vale-para-cualquier-servidor">💡 Tip — Lo que aprendiste vale para CUALQUIER servidor</h3>
-<p>Un NAS es un servidor especializado en archivos, pero los conceptos —Linux, usuarios/permisos,
-servicios con systemd, puertos, SSH, redes, seguridad— son los <strong>mismos</strong> para un servidor web,
-uno de base de datos, o uno en la nube (un "VPS" que alquilas por unos dólares al mes). Con este
-módulo tienes la base de la <strong>administración de sistemas</strong>. El siguiente paso natural, cuando
-quieras, es alquilar un pequeño servidor en la nube y practicar desplegando ahí una de tus apps:
-unirías la programación (módulos 00–08) con la infraestructura (este módulo).</p>
+<p>Un NAS es un servidor especializado en archivos, pero los conceptos —Linux, usuarios y permisos,
+servicios con systemd, puertos, SSH, redes, seguridad— son <strong>los mismos</strong> para un servidor web,
+uno de base de datos o uno en la nube (un "VPS" que alquilas por unos pocos dólares al mes). Con
+este módulo ya tienes la base de la <strong>administración de sistemas</strong>. El siguiente paso natural,
+cuando te apetezca, es alquilar un servidor pequeño en la nube y practicar desplegando ahí una de
+tus apps: ahí unirías la programación (módulos 00–08) con la infraestructura (este módulo).</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -135,14 +142,15 @@ unirías la programación (módulos 00–08) con la infraestructura (este módul
 <hr />
 <h2 id="terminaste-el-modulo-09-y-todo-el-manual">🎉 ¡Terminaste el Módulo 09 y TODO el manual!</h2>
 <p>Has recorrido el camino completo: desde "qué es programar" hasta administrar tu propio servidor.
-Ahora entiendes, por dentro, tus cuatro proyectos <strong>y</strong> tu NAS, y —lo más importante— puedes dar
+Ahora entiendes, por dentro, tus cuatro proyectos <strong>y</strong> tu NAS, y —lo más importante— ya puedes dar
 <strong>órdenes precisas</strong>: "este color en <code>#1B6B6B</code>", "esta parte hazla con un componente React tipado
-así", "crea esta tabla con RLS", "comparte esta carpeta del NAS por Samba con estos permisos". Eso
+así", "crea esta tabla con RLS", "comparte esta carpeta del NAS por Samba con estos permisos". Esa
 era la meta: dejar el "vibe coding" y programar (y administrar) <strong>con criterio</strong>.</p>
 <blockquote>
-<p>🦎 <strong>Bit se despide… por ahora.</strong> Lo que sigue es <strong>practicar</strong>: vuelve a los ejercicios con tu
-computadora, toca tus propios repos, rompe cosas y arréglalas. Aprender a programar no termina;
-apenas empieza. Y ya tienes la base para que cada nuevo tema te cueste menos. ¡Felicidades!</p>
+<p>🦎 <strong>Bit se despide… por ahora.</strong> Lo que viene ahora es <strong>practicar</strong>: vuelve a los ejercicios con
+tu computadora, mete mano en tus propios repos, rompe cosas y vuelve a arreglarlas. Aprender a
+programar no se termina nunca; apenas empieza. Y ya tienes la base para que cada tema nuevo te
+cueste menos que el anterior. ¡Felicidades!</p>
 </blockquote>
 <p>➡️ Vuelve al <strong><a href="../../README.html">índice del manual</a></strong> para repasar cualquier módulo.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>

@@ -1,91 +1,102 @@
 # Capítulo 01 — ¿Qué es una API?
 
-> La palabra "API" suena técnica e intimidante, pero la idea es de lo más cotidiana. Cuando la
-> entiendas, verás APIs por todas partes: son cómo los programas se piden cosas entre sí. Ya
-> tienes media batalla ganada con el modelo cliente–servidor del Módulo 00.
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> La palabra "API" suena a término de ingeniero, pero detrás hay una idea de lo más
+> cotidiana. Una vez que la captas, empiezas a verlas por todas partes: son la forma en que
+> los programas se piden cosas unos a otros. Y como ya entendiste el modelo cliente–servidor
+> del Módulo 00, tienes media batalla ganada.
 
 ---
 
 ## 1. La idea: cómo dos programas se piden cosas
 
-Imagina un restaurante. Tú (cliente) no entras a la cocina a cocinar: le dices al **mesero** lo
-que quieres, él lo lleva a la cocina y te trae el plato. El mesero es un **intermediario** con
-un **menú** de lo que puedes pedir y reglas de cómo pedirlo. Eso es una API.
+Piensa en un restaurante. Tú, que eres el cliente, no entras a la cocina a ponerte a cocinar:
+le dices al **mesero** qué quieres, él lleva tu pedido a la cocina y vuelve con el plato. El
+mesero es un **intermediario**, y trae consigo un **menú** con lo que puedes pedir y unas
+reglas de cómo pedirlo. Pues eso, ni más ni menos, es una API.
 
 > ### 🟦 ¿Qué significa? — *API*
 > **API** significa *Application Programming Interface* ("interfaz de programación de
 > aplicaciones"). Es un **conjunto de reglas y "puntos de entrada"** que un programa ofrece para
-> que **otros programas** le pidan datos o acciones, sin saber cómo funciona por dentro.
-> En la analogía: el **menú + el mesero**. Tú pides del menú (las funciones disponibles) y
-> recibes el plato (la respuesta), sin entrar a la cocina (el código interno).
+> que **otros programas** le pidan datos o acciones, sin necesidad de saber cómo funciona por
+> dentro. En la analogía: el **menú + el mesero**. Tú pides del menú (las funciones disponibles)
+> y recibes el plato (la respuesta), sin pisar la cocina (el código interno).
 
 > ### 💡 Tip — Por qué las APIs lo cambian todo
-> Gracias a las APIs, tu app no tiene que hacerlo todo. ¿Quieres mapas? Usas la API de Google
-> Maps. ¿Pagos? La API de Stripe. ¿IA? La API de Claude. **Te montas sobre el trabajo de otros**,
-> como bloques. Faro no "tiene" tus repos: se los **pide** a la API de GitHub. Es la diferencia
-> entre construir todo desde cero y ensamblar piezas potentes.
+> Gracias a las APIs, tu app no tiene que resolverlo todo sola. ¿Necesitas mapas? Te apoyas en
+> la API de Google Maps. ¿Pagos? La de Stripe. ¿IA? La de Claude. **Te subes sobre el trabajo de
+> otros**, como quien ensambla bloques. Faro, por ejemplo, no "tiene" guardados tus repos: se los
+> **pide** a la API de GitHub cada vez. Esa es la diferencia entre levantar todo desde cero y
+> juntar piezas que ya funcionan.
 
 ---
 
 ## 2. APIs web y REST
 
-Hay muchos tipos de API; la más común en la web es la **API REST**.
+Existen muchos tipos de API. La que más te vas a cruzar en la web es la **API REST**.
 
 > ### 🟦 ¿Qué significa? — *API web*
 > Una **API web** es una API a la que se accede **por internet**, usando HTTP (Módulo 00). Tu app
-> hace una petición HTTP a una dirección, y la API responde, normalmente con datos en **JSON**
-> (Módulo 03). Es, literalmente, el modelo cliente–servidor aplicado entre programas.
+> lanza una petición HTTP a una dirección y la API responde, casi siempre con datos en **JSON**
+> (Módulo 03). En el fondo es, tal cual, el modelo cliente–servidor aplicado entre dos programas.
 
 > ### 🟦 ¿Qué significa? — *REST*
-> **REST** es un **estilo** muy usado para diseñar APIs web. No te agobies con la sigla; lo
-> importante es su idea: organizar la API alrededor de **recursos** (cosas como "usuarios",
-> "repos", "proyectos"), cada uno con su **dirección**, y usar los **métodos HTTP** que ya
-> conoces (GET para leer, POST para crear, etc.). Una API que sigue ese estilo se llama "RESTful".
+> **REST** es un **estilo** muy extendido para diseñar APIs web. No te agobies con la sigla; lo
+> que importa es la idea de fondo: organizar la API alrededor de **recursos** (cosas como
+> "usuarios", "repos", "proyectos"), darle a cada uno su **dirección** y usar los **métodos HTTP**
+> que ya conoces (GET para leer, POST para crear, etc.). A una API que sigue ese estilo se le
+> llama "RESTful".
 
 > ### 🟦 ¿Qué significa? — *Endpoint (punto de acceso)*
 > Un **endpoint** es **una dirección concreta** de la API para una cosa específica. Por ejemplo,
 > en la API de GitHub:
 > - `https://api.github.com/users/Edhdez1` → tus datos de usuario.
 > - `https://api.github.com/users/Edhdez1/repos` → tus repositorios.
-> Cada endpoint es un "plato del menú". Combinas el endpoint (qué recurso) con el método HTTP
-> (qué hacer con él).
+> Cada endpoint vendría a ser un "plato del menú". Combinas el endpoint (qué recurso quieres) con
+> el método HTTP (qué quieres hacer con él).
 
 ---
 
 ## 3. Anatomía de una llamada a una API
 
-Cuando tu app llama a una API, la petición tiene varias partes (todas ya las viste sueltas):
+Cuando tu app llama a una API, esa petición se compone de varias partes (y todas las viste ya
+por separado en módulos anteriores):
 
 > ### 🟦 ¿Qué significa? — *Las partes de una petición a una API*
 > - **URL/endpoint**: a dónde (`https://api.github.com/users/Edhdez1`).
 > - **Método**: qué hacer (`GET`, `POST`…).
-> - **Headers (cabeceras)**: información extra de la petición; aquí suele ir la **autenticación**
->   (tu clave/token) y el formato.
+> - **Headers (cabeceras)**: información extra de la petición; aquí suele viajar la
+>   **autenticación** (tu clave/token) y el formato.
 > - **Body (cuerpo)**: los datos que envías (en POST/PUT), normalmente en JSON.
 > - **Respuesta**: lo que devuelve la API: un **código de estado** (200, 404…) y un **body** con
 >   los datos en JSON.
 
 > ### 🟦 ¿Qué significa? — *Header (cabecera)*
-> Un **header** es un par "nombre: valor" que acompaña a la petición o respuesta con metadatos:
-> qué formato esperas, quién eres (autenticación), etc. Por ejemplo
-> `Authorization: Bearer TU_TOKEN` le dice a la API "soy yo, aquí está mi credencial". Lo verás
-> en el capítulo 02.
+> Un **header** es un par "nombre: valor" que acompaña a la petición o a la respuesta con
+> metadatos: qué formato esperas, quién eres (autenticación), etc. Por ejemplo,
+> `Authorization: Bearer TU_TOKEN` le dice a la API "soy yo, aquí tienes mi credencial". Lo verás
+> en acción en el capítulo 02.
 
 ---
 
 ## 4. La documentación: el "menú" de cada API
 
 > ### 🟦 ¿Qué significa? — *Documentación de una API*
-> Cada API publica su **documentación**: el "menú" que explica qué endpoints tiene, qué métodos
-> aceptan, qué hay que enviar y qué devuelven. Aprender a **leer la documentación** de una API es
-> una habilidad clave: no memorizas APIs, las consultas. Cuando uses una API nueva, lo primero es
-> buscar "[nombre] API docs".
+> Cada API publica su **documentación**: ese "menú" donde se explica qué endpoints tiene, qué
+> métodos aceptan, qué hay que enviarles y qué devuelven. Saber **leer la documentación** de una
+> API es una de las habilidades que más te va a servir: las APIs no se memorizan, se consultan.
+> Cuando te toque usar una API nueva, lo primero que haces es buscar "[nombre] API docs".
 
 > ### 🔎 En tu código
-> Faro tiene, en `src/app/api/`, **endpoints propios** (su propia API) y, en `src/lib/`, código
-> que **consume APIs ajenas**: `github.ts` (API de GitHub), `google-drive.ts` (API de Drive),
-> `openai.ts` (API de OpenAI). Es decir, Faro **es cliente** de unas APIs **y servidor** de la
-> suya. Las dos caras que verás en este módulo.
+> Faro tiene, en `src/app/api/`, **endpoints propios** (es decir, su propia API) y, en
+> `src/lib/`, código que **consume APIs ajenas**: `github.ts` (API de GitHub), `google-drive.ts`
+> (API de Drive), `openai.ts` (API de OpenAI). Dicho de otro modo: Faro **es cliente** de unas
+> APIs **y a la vez servidor** de la suya. Esas son las dos caras que vas a ir viendo a lo largo
+> de este módulo.
 
 ---
 

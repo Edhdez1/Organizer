@@ -18,34 +18,40 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-04-formularios">Capítulo 04 — Formularios</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Los formularios son cómo tu página <strong>recibe datos</strong> del usuario: un nombre, un correo, un
-mensaje. Tu sitio tiene uno (el de contacto) que envía la info a tu WhatsApp. Aquí entenderás
-cada pieza y, de paso, conceptos que reaparecerán en React (módulo 06).</p>
+<p>Un formulario es la forma en que tu página <strong>recibe datos</strong> del usuario: su nombre, su correo,
+un mensaje. Tu sitio ya tiene uno, el de contacto, que termina enviando la info a tu WhatsApp.
+En este capítulo vamos pieza por pieza y, de paso, verás ideas que volverán a aparecer cuando
+trabajemos con React (módulo 06).</p>
 </blockquote>
 <hr />
 <h2 id="1-el-contenedor-form">1. El contenedor: <code>&lt;form&gt;</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-form-formulario">🟦 ¿Qué significa? — <em><code>&lt;form&gt;</code> (formulario)</em></h3>
-<p>La etiqueta <code>&lt;form&gt;</code> <strong>agrupa</strong> los campos que se enviarán juntos. Tiene dos atributos
-importantes:
-- <code>action</code> → <strong>a dónde</strong> se envían los datos (una URL que los procesa).
-- <code>method</code> → <strong>cómo</strong> se envían: normalmente <code>post</code> (recuerda los métodos HTTP del Módulo 00:
-  <code>POST</code> = "toma estos datos").
+<p>La etiqueta <code>&lt;form&gt;</code> <strong>agrupa</strong> todos los campos que se mandan juntos. Tiene dos atributos que
+conviene tener claros:
+- <code>action</code> → <strong>a dónde</strong> van los datos (una URL que se encarga de procesarlos).
+- <code>method</code> → <strong>cómo</strong> viajan: casi siempre <code>post</code> (acuérdate de los métodos HTTP del Módulo 00:
+  <code>POST</code> significa "toma estos datos").
 <code>html
 &lt;form action="https://api.web3forms.com/submit" method="post"&gt;
   …campos…
 &lt;/form&gt;</code>
-<strong>¿Dónde se usa en tu proyecto?</strong> Tu formulario de contacto envía los datos a <strong>Web3Forms</strong>
-(un servicio que recibe envíos sin que tengas que programar un servidor) y, mediante un
-Cloudflare Worker, te avisa por WhatsApp.</p>
+<strong>¿Dónde se usa en tu proyecto?</strong> Tu formulario de contacto manda los datos a <strong>Web3Forms</strong>,
+un servicio que recibe los envíos sin que tengas que montar un servidor propio, y de ahí, con
+ayuda de un Cloudflare Worker, te llega el aviso por WhatsApp.</p>
 </blockquote>
 <hr />
 <h2 id="2-los-campos-input-y-sus-tipos">2. Los campos: <code>&lt;input&gt;</code> y sus tipos</h2>
 <blockquote class="def">
 <h3 id="que-significa-input-campo-de-entrada">🟦 ¿Qué significa? — <em><code>&lt;input&gt;</code> (campo de entrada)</em></h3>
-<p><code>&lt;input&gt;</code> es el campo donde el usuario escribe o elige algo. Es un elemento "vacío" (no se
-cierra). Su atributo <code>type</code> <strong>cambia por completo</strong> lo que hace:
+<p><code>&lt;input&gt;</code> es el campo donde el usuario escribe o elige algo. Es un elemento "vacío", o sea que
+no se cierra. Lo curioso es su atributo <code>type</code>: según el valor que le pongas, <strong>cambia por
+completo</strong> lo que el campo hace:
 | <code>type</code> | Qué muestra |
 |---|---|
 | <code>text</code> | Una caja de texto normal |
@@ -59,46 +65,46 @@ cierra). Su atributo <code>type</code> <strong>cambia por completo</strong> lo q
 | <code>submit</code> | El <strong>botón</strong> que envía el formulario |</p>
 <h3 id="que-significa-atributos-comunes-de-un-input">🟦 ¿Qué significa? — <em>Atributos comunes de un input</em></h3>
 <ul>
-<li><code>name</code> → <strong>el nombre del dato</strong> que se envía (imprescindible; sin <code>name</code> el dato no viaja).</li>
-<li><code>placeholder</code> → el texto gris de ejemplo dentro del campo ("tu@correo.com").</li>
+<li><code>name</code> → <strong>el nombre del dato</strong> que se envía. Es imprescindible: sin <code>name</code>, el dato no viaja.</li>
+<li><code>placeholder</code> → el texto gris de ejemplo que aparece dentro del campo ("tu@correo.com").</li>
 <li><code>required</code> → marca el campo como <strong>obligatorio</strong>; el navegador no deja enviar si está vacío.</li>
 <li><code>value</code> → un valor inicial.</li>
 </ul>
 </blockquote>
-<p>Ejemplo de un campo de correo obligatorio:</p>
+<p>Así se vería un campo de correo obligatorio:</p>
 <pre><code class="language-html">&lt;input type=&quot;email&quot; name=&quot;correo&quot; placeholder=&quot;tu@correo.com&quot; required&gt;
 </code></pre>
 <hr />
 <h2 id="3-etiquetas-de-campo-label-no-opcional">3. Etiquetas de campo: <code>&lt;label&gt;</code> (no opcional)</h2>
 <blockquote class="def">
 <h3 id="que-significa-label-etiqueta-de-campo">🟦 ¿Qué significa? — <em><code>&lt;label&gt;</code> (etiqueta de campo)</em></h3>
-<p>Un <code>&lt;label&gt;</code> es el <strong>texto que describe</strong> un campo ("Nombre", "Correo"). Se conecta al
-<code>&lt;input&gt;</code> mediante el atributo <code>for</code>, que apunta al <code>id</code> del input:
+<p>Un <code>&lt;label&gt;</code> es el <strong>texto que describe</strong> un campo: "Nombre", "Correo", etc. Se conecta con su
+<code>&lt;input&gt;</code> a través del atributo <code>for</code>, que apunta al <code>id</code> del input:
 <code>html
 &lt;label for="correo"&gt;Tu correo&lt;/label&gt;
 &lt;input type="email" id="correo" name="correo" required&gt;</code>
-<strong>¿Por qué es obligatorio?</strong> Porque:
-1. Al tocar el <code>&lt;label&gt;</code>, el cursor salta al campo (más fácil en móvil).
-2. Los lectores de pantalla leen "Tu correo, campo de texto" en vez de un campo mudo.
-Un formulario sin <code>&lt;label&gt;</code> es inaccesible. (Lo profundizamos en el capítulo 05.)</p>
+<strong>¿Por qué digo que no es opcional?</strong> Por dos motivos concretos:
+1. Al tocar el <code>&lt;label&gt;</code>, el cursor salta directo al campo (mucho más cómodo en móvil).
+2. Los lectores de pantalla leen "Tu correo, campo de texto" en lugar de un campo mudo.
+Sin <code>&lt;label&gt;</code>, el formulario es inaccesible. Lo veremos con más calma en el capítulo 05.</p>
 </blockquote>
 <hr />
 <h2 id="4-areas-de-texto-y-botones">4. Áreas de texto y botones</h2>
 <blockquote class="def">
 <h3 id="que-significa-textarea-area-de-texto">🟦 ¿Qué significa? — <em><code>&lt;textarea&gt;</code> (área de texto)</em></h3>
-<p>Para textos largos (un mensaje), se usa <code>&lt;textarea&gt;</code> en vez de <code>&lt;input&gt;</code>. A diferencia de
-<code>&lt;input&gt;</code>, <strong>sí</strong> lleva etiqueta de cierre:
+<p>Cuando el texto es largo, como un mensaje, no usamos <code>&lt;input&gt;</code> sino <code>&lt;textarea&gt;</code>. La diferencia
+es que <code>&lt;textarea&gt;</code> <strong>sí</strong> lleva etiqueta de cierre:
 <code>html
 &lt;label for="mensaje"&gt;Tu mensaje&lt;/label&gt;
 &lt;textarea id="mensaje" name="mensaje" rows="5"&gt;&lt;/textarea&gt;</code></p>
 <h3 id="que-significa-el-boton-de-envio">🟦 ¿Qué significa? — <em>El botón de envío</em></h3>
-<p>El botón que manda el formulario puede ser <code>&lt;input type="submit" value="Enviar"&gt;</code> o, más
-moderno y flexible, <code>&lt;button type="submit"&gt;Enviar&lt;/button&gt;</code>. Al pulsarlo, el navegador
-recoge todos los campos con <code>name</code> y los envía a la <code>action</code> del <code>&lt;form&gt;</code>.</p>
+<p>Para mandar el formulario tienes dos opciones: <code>&lt;input type="submit" value="Enviar"&gt;</code> o, lo más
+moderno y flexible, <code>&lt;button type="submit"&gt;Enviar&lt;/button&gt;</code>. Al pulsarlo, el navegador junta
+todos los campos que tengan <code>name</code> y los manda a la <code>action</code> del <code>&lt;form&gt;</code>.</p>
 </blockquote>
 <hr />
 <h2 id="5-un-formulario-de-contacto-completo">5. Un formulario de contacto completo</h2>
-<p>Juntando todo, un formulario como el de tu sitio:</p>
+<p>Si juntamos todas las piezas, queda un formulario parecido al de tu sitio:</p>
 <pre><code class="language-html">&lt;form action=&quot;https://api.web3forms.com/submit&quot; method=&quot;post&quot;&gt;
   &lt;label for=&quot;nombre&quot;&gt;Nombre&lt;/label&gt;
   &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot; required&gt;
@@ -114,16 +120,18 @@ recoge todos los campos con <code>name</code> y los envía a la <code>action</co
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-validacion-del-lado-del-cliente">🟦 ¿Qué significa? — <em>Validación del lado del cliente</em></h3>
-<p>Cuando el navegador comprueba, <strong>antes de enviar</strong>, que el correo tiene formato válido o que
-un campo <code>required</code> no está vacío, eso es <strong>validación del lado del cliente</strong> ("cliente" =
-el navegador, como viste en el Módulo 00). Es cómoda y rápida, pero <strong>no es suficiente por sí
-sola</strong>: alguien malicioso podría saltársela. Por eso los datos también se validan en el
-<strong>servidor</strong>. Por ahora basta con que sepas que existen los dos niveles.</p>
+<p>Cuando el navegador revisa, <strong>antes de enviar</strong>, que el correo tenga formato válido o que un
+campo <code>required</code> no esté vacío, eso es <strong>validación del lado del cliente</strong> (recuerda que
+"cliente" es el navegador, como viste en el Módulo 00). Es rápida y cómoda, pero <strong>no alcanza
+por sí sola</strong>: alguien con malas intenciones podría saltársela sin problema. Por eso los datos
+se vuelven a revisar en el <strong>servidor</strong>. De momento, basta con que sepas que existen esos dos
+niveles.</p>
 <h3 id="cuidado-el-honeypot-una-trampa-para-robots">⚠️ Cuidado — El honeypot: una trampa para robots</h3>
-<p>Los formularios reciben spam de robots automáticos. Un truco común es añadir un campo
-<strong>oculto</strong> que una persona nunca ve ni llena, pero que un robot tonto sí completa; si llega
-lleno, descartas el envío. Se llama <em>honeypot</em> ("tarro de miel"). Tu sitio usa esta técnica.
-No necesitas implementarla aún, pero reconоce el nombre.</p>
+<p>Los formularios reciben mucho spam de robots automáticos. Un truco habitual es meter un campo
+<strong>oculto</strong> que una persona nunca ve ni rellena, pero que un robot poco listo sí completa. Si ese
+campo llega lleno, sabes que fue un bot y descartas el envío. Esa técnica se llama <em>honeypot</em>
+("tarro de miel"). Tu sitio la usa. No hace falta que la implementes todavía, pero quédate con
+el nombre.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

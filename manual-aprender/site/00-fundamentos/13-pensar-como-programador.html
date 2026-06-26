@@ -23,15 +23,15 @@
 </p>
 
 <blockquote>
-<p>En este capítulo no vas a aprender un lenguaje nuevo: vas a aprender la <strong>forma de pensar</strong> que está debajo de todos ellos. Descomponer un problema en pasos, escribir un plan en palabras antes de tocar el teclado, distinguir los datos de las decisiones y de las repeticiones, leer un mensaje de error sin asustarte, encontrar el bug paso a paso, pedir ayuda de forma que de verdad te respondan y, sobre todo, dar órdenes precisas a una IA. Esta es la habilidad que hace que todo lo demás cobre sentido. Bit, nuestro ajolote, dice que esto es como aprender a caminar antes de correr: aburrido al principio, imprescindible siempre.</p>
+<p>Aquí no vas a aprender un lenguaje nuevo. Vas a aprender la <strong>forma de pensar</strong> que está debajo de todos ellos. Partir un problema en pasos, escribir el plan con palabras antes de tocar el teclado, distinguir los datos de las decisiones y de las repeticiones, leer un mensaje de error sin que te tiemble el pulso, cazar el bug poco a poco, pedir ayuda de manera que de verdad te respondan y, sobre todo, dar órdenes precisas a una IA. Esta es la habilidad que le da sentido a todo lo demás. Bit, nuestro ajolote, lo compara con aprender a caminar antes de correr: pesado al principio, imprescindible siempre.</p>
 </blockquote>
 <h2 id="1-que-es-pensar-como-programador">1. ¿Qué es "pensar como programador"?</h2>
-<p>Mucha gente cree que programar es memorizar comandos raros. No lo es. Programar es, sobre todo, <strong>resolver problemas con pasos tan claros que una máquina pueda seguirlos sin equivocarse ni inventar nada</strong>. La computadora no entiende intenciones, solo instrucciones exactas.</p>
+<p>Mucha gente cree que programar es memorizar comandos raros. No lo es. Programar es, ante todo, <strong>resolver problemas con pasos tan claros que una máquina pueda seguirlos sin equivocarse ni inventarse nada</strong>. La computadora no entiende intenciones; entiende instrucciones exactas y poco más.</p>
 <blockquote class="def">
 <h3 id="que-significa-algoritmo">🟦 ¿Qué significa? — <em>Algoritmo</em></h3>
-<p>Un algoritmo es una lista de pasos ordenados que resuelve un problema o cumple una tarea. No tiene por qué estar en ningún lenguaje de programación: una receta de cocina o las instrucciones para armar un mueble también son algoritmos. Sirve para describir <em>qué hay que hacer</em> antes de preocuparte por <em>cómo escribirlo</em> en código.</p>
+<p>Un algoritmo es una lista de pasos ordenados que resuelve un problema o cumple una tarea. No tiene por qué estar en ningún lenguaje de programación: una receta de cocina o las instrucciones para armar un mueble también son algoritmos. Te sirve para describir <em>qué hay que hacer</em> antes de pelearte con <em>cómo escribirlo</em> en código.</p>
 </blockquote>
-<p>Pensar como programador significa adquirir cuatro reflejos:</p>
+<p>Pensar como programador es, en el fondo, tener cuatro reflejos:</p>
 <ol>
 <li><strong>Descomponer</strong>: partir un problema grande en problemas pequeños.</li>
 <li><strong>Reconocer patrones</strong>: ver lo que se parece a algo que ya resolviste.</li>
@@ -40,10 +40,10 @@
 </ol>
 <blockquote class="tip">
 <h3 id="tip-el-codigo-es-el-ultimo-paso">💡 Tip — El código es el último paso</h3>
-<p>Antes de escribir una sola línea, pregúntate: "¿Sabría explicarle esto a una persona, paso por paso, sin saltarme nada?". Si la respuesta es no, todavía no estás listo para programar. Estás listo para <em>pensar</em> un poco más.</p>
+<p>Antes de escribir una sola línea, hazte una pregunta: "¿Sabría explicarle esto a una persona, paso por paso, sin saltarme nada?". Si la respuesta es no, todavía no estás listo para programar. Estás listo para <em>pensar</em> un rato más.</p>
 </blockquote>
 <h2 id="2-descomponer-un-problema-en-pasos">2. Descomponer un problema en pasos</h2>
-<p>Imagina que en tu app de hábitos <strong>RachaSimple</strong> quieres una función nueva: "marcar un hábito como completado hoy". Suena pequeño, pero contiene varios pasos escondidos. Descomponer es sacarlos a la luz:</p>
+<p>Imagina que en tu app de hábitos <strong>RachaSimple</strong> quieres una función nueva: "marcar un hábito como completado hoy". Suena pequeño, pero esconde varios pasos. Descomponer es justo eso, sacarlos a la luz:</p>
 <ol>
 <li>Saber <strong>qué</strong> hábito se está marcando (su identificador).</li>
 <li>Saber <strong>qué día</strong> es hoy.</li>
@@ -52,10 +52,10 @@
 <li>Volver a calcular la <strong>racha</strong> (cuántos días seguidos lleva).</li>
 <li>Mostrar el cambio en la pantalla.</li>
 </ol>
-<p>Fíjate que un "simple botón" esconde seis decisiones. Esto es lo normal. Quien no descompone, se atasca; quien descompone, avanza paso a paso.</p>
+<p>Fíjate: un "simple botón" esconde seis decisiones. Y eso es lo normal. Quien no descompone se atasca; quien descompone avanza, paso a paso.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <strong>RachaSimple</strong> esos pasos se reparten entre carpetas: la pantalla y el botón viven en <code>src/components</code>, la lógica de "qué pasa al marcar" suele vivir en <code>src/hooks</code>, y la conversación con la base de datos en <code>src/repositories</code>. Descomponer también es decidir <em>dónde</em> va cada pieza.</p>
+<p>En <strong>RachaSimple</strong> esos pasos se reparten entre carpetas: la pantalla y el botón viven en <code>src/components</code>, la lógica de "qué pasa al marcar" suele estar en <code>src/hooks</code>, y la conversación con la base de datos en <code>src/repositories</code>. Descomponer también es decidir <em>dónde</em> va cada pieza.</p>
 <h3 id="tip-la-regla-del-y-luego">💡 Tip — La regla del "y luego"</h3>
 <p>Cuenta tu problema en voz alta usando "y luego". "El usuario toca el botón, <em>y luego</em> miro qué hábito es, <em>y luego</em> reviso si ya estaba marcado...". Cada "y luego" es, casi siempre, un paso de tu algoritmo.</p>
 </blockquote>
@@ -63,9 +63,9 @@
 <p>El pseudocódigo es el puente entre tu cabeza y el lenguaje de programación.</p>
 <blockquote class="def">
 <h3 id="que-significa-pseudocodigo">🟦 ¿Qué significa? — <em>Pseudocódigo</em></h3>
-<p>Es escribir los pasos de tu algoritmo en lenguaje casi humano, pero con la estructura de un programa (decisiones, repeticiones, datos). No se ejecuta en ninguna máquina; sirve para <em>pensar con orden</em> y para detectar errores de lógica antes de escribir código real. La palabra significa "casi-código".</p>
+<p>Es escribir los pasos de tu algoritmo en lenguaje casi humano, pero con la estructura de un programa (decisiones, repeticiones, datos). No se ejecuta en ninguna máquina; sirve para <em>pensar con orden</em> y para cazar errores de lógica antes de escribir código de verdad. La palabra significa "casi-código".</p>
 </blockquote>
-<p>Veamos el ejemplo de marcar un hábito en <strong>RachaSimple</strong>, ahora en pseudocódigo:</p>
+<p>Volvamos al ejemplo de marcar un hábito en <strong>RachaSimple</strong>, ahora en pseudocódigo:</p>
 <pre><code class="language-text">FUNCIÓN marcarHabito(idHabito):
     hoy = fecha de hoy
     SI el hábito idHabito ya está marcado en hoy:
@@ -77,8 +77,8 @@
     FIN SI
 FIN FUNCIÓN
 </code></pre>
-<p>No es JavaScript, no es Python, no es de nadie. Pero cualquier persona que sepa programar podría convertirlo a su lenguaje. Esa es la magia: <strong>el pseudocódigo separa la lógica del idioma</strong>.</p>
-<p>Otro ejemplo, esta vez de <strong>PolyPaw</strong>, tu app educativa en Python. Quieres elegir una misión al azar de las que el niño aún no ha completado:</p>
+<p>No es JavaScript, no es Python, no es de nadie. Pero cualquiera que sepa programar podría pasarlo a su lenguaje. Ahí está la gracia: <strong>el pseudocódigo separa la lógica del idioma</strong>.</p>
+<p>Otro ejemplo, esta vez de <strong>PolyPaw</strong>, tu app educativa en Python. Quieres elegir una misión al azar de las que el niño todavía no ha completado:</p>
 <pre><code class="language-text">FUNCIÓN elegirMision(misionesDisponibles, misionesHechas):
     pendientes = lista vacía
     PARA CADA mision EN misionesDisponibles:
@@ -91,21 +91,21 @@ FIN FUNCIÓN
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <strong>PolyPaw</strong> las misiones viven en archivos <code>missions/*.json</code> y el progreso del niño en <code>polypaw_db.json</code>. El pseudocódigo de arriba describe, sin tecnicismos, cómo <code>main.py</code> decidiría qué misión mostrar. Primero el plan, luego lo traduces a Python.</p>
+<p>En <strong>PolyPaw</strong> las misiones viven en archivos <code>missions/*.json</code> y el progreso del niño en <code>polypaw_db.json</code>. El pseudocódigo de arriba describe, sin tecnicismos, cómo <code>main.py</code> decidiría qué misión mostrar. Primero el plan; luego lo traduces a Python.</p>
 <h3 id="cuidado-no-saltes-este-paso-porque-es-obvio">⚠️ Cuidado — No saltes este paso "porque es obvio"</h3>
-<p>Los problemas que parecen obvios son los que más bugs esconden. Escribir cuatro líneas de pseudocódigo te cuesta dos minutos y te ahorra una hora de confusión. Bit ha visto a muchos atascarse por confiar demasiado en su memoria.</p>
+<p>Los problemas que parecen obvios son los que más bugs esconden. Escribir cuatro líneas de pseudocódigo te cuesta dos minutos y te ahorra una hora de líos. Bit ha visto a mucha gente atascarse por fiarse de más de su memoria.</p>
 </blockquote>
 <h2 id="4-las-tres-piezas-de-todo-programa-datos-decisiones-y-repeticiones">4. Las tres piezas de todo programa: datos, decisiones y repeticiones</h2>
-<p>Casi cualquier programa del mundo se construye con tres ingredientes. Saber reconocerlos te da rayos X para leer cualquier código.</p>
+<p>Casi cualquier programa del mundo se arma con tres ingredientes. Saber reconocerlos es como tener rayos X para leer cualquier código.</p>
 <h3 id="41-datos">4.1 Datos</h3>
 <blockquote class="def">
 <h3 id="que-significa-dato-variable">🟦 ¿Qué significa? — <em>Dato / Variable</em></h3>
-<p>Un <strong>dato</strong> es una pieza de información que tu programa guarda y usa: un nombre, un número, una fecha, una lista. Una <strong>variable</strong> es una caja con etiqueta donde guardas un dato para reutilizarlo. Si escribes <code>racha = 5</code>, "racha" es la variable y "5" es el dato.</p>
+<p>Un <strong>dato</strong> es una pieza de información que tu programa guarda y usa: un nombre, un número, una fecha, una lista. Una <strong>variable</strong> es una caja con etiqueta donde guardas un dato para reutilizarlo después. Si escribes <code>racha = 5</code>, "racha" es la variable y "5" es el dato.</p>
 </blockquote>
-<p>En <strong>RachaSimple</strong>, los datos son cosas como: el nombre del hábito, la fecha de hoy, el número de la racha, si está completado o no.</p>
+<p>En <strong>RachaSimple</strong>, los datos son cosas como el nombre del hábito, la fecha de hoy, el número de la racha o si está completado o no.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>En <strong>RachaSimple</strong> la forma exacta de tus datos está descrita en <code>src/types/database.ts</code>. Ese archivo es como el plano de qué información existe (qué es un hábito, qué campos tiene). Cuando dudes "¿qué datos manejo?", ese archivo te responde.</p>
+<p>En <strong>RachaSimple</strong> la forma exacta de tus datos está descrita en <code>src/types/database.ts</code>. Ese archivo es como el plano de qué información existe: qué es un hábito y qué campos tiene. Cuando dudes "¿qué datos manejo?", ese archivo te responde.</p>
 </blockquote>
 <h3 id="42-decisiones">4.2 Decisiones</h3>
 <blockquote class="def">
@@ -127,12 +127,12 @@ else:
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-el-juego-de-los-tres-colores">💡 Tip — El juego de los tres colores</h3>
-<p>Toma cualquier trozo de código (tuyo o ajeno) y subraya mentalmente: datos en azul, decisiones (<code>if</code>) en verde, repeticiones (<code>for</code>/<code>while</code>) en naranja. Verás que casi todo cae en uno de los tres. Reconocer la estructura es la mitad de entenderla.</p>
+<p>Toma cualquier trozo de código (tuyo o ajeno) y subraya mentalmente: datos en azul, decisiones (<code>if</code>) en verde, repeticiones (<code>for</code>/<code>while</code>) en naranja. Verás que casi todo cae en uno de los tres. Reconocer la estructura ya es media batalla ganada.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
-<p>En el backend de <strong>tunal-digital</strong> (<code>backend/worker.js</code>), un Cloudflare Worker que habla con la API de Claude, encontrarás los tres ingredientes: <strong>datos</strong> (el mensaje que envía el visitante), una <strong>decisión</strong> (¿la petición es válida o respondo con error?) y a veces una <strong>repetición</strong> (recorrer una lista de mensajes). Mismos tres ladrillos, otro proyecto.</p>
+<p>En el backend de <strong>tunal-digital</strong> (<code>backend/worker.js</code>), un Cloudflare Worker que habla con la API de Claude, están los tres ingredientes: <strong>datos</strong> (el mensaje que envía el visitante), una <strong>decisión</strong> (¿la petición es válida o respondo con error?) y a veces una <strong>repetición</strong> (recorrer una lista de mensajes). Mismos tres ladrillos, otro proyecto.</p>
 </blockquote>
 <h2 id="5-leer-y-entender-un-mensaje-de-error">5. Leer y entender un mensaje de error</h2>
-<p>Un error no es un castigo: es la computadora <strong>ayudándote</strong> a encontrar dónde se rompió algo. Aprender a leerlos es una superhabilidad.</p>
+<p>Un error no es un castigo: es la computadora <strong>echándote una mano</strong> para encontrar dónde se rompió algo. Aprender a leerlos es una superhabilidad.</p>
 <blockquote class="def">
 <h3 id="que-significa-error-excepcion">🟦 ¿Qué significa? — <em>Error / Excepción</em></h3>
 <p>Un error (o "excepción") es un aviso de que el programa no pudo seguir porque algo no cuadró: un archivo que no existe, una variable mal escrita, un número donde esperabas texto. El mensaje suele decir <strong>qué</strong> pasó, <strong>dónde</strong> (archivo y línea) y a veces <strong>por qué</strong>.</p>
@@ -143,29 +143,29 @@ else:
     titulo = mision[&quot;titulo&quot;]
 KeyError: 'titulo'
 </code></pre>
-<p>Vamos a leerlo de abajo hacia arriba, que es como más rápido se entiende:</p>
+<p>Vamos a leerlo de abajo hacia arriba, que es como se entiende más rápido:</p>
 <ul>
 <li><strong><code>KeyError: 'titulo'</code></strong> → el tipo de error: buscaste una clave llamada <code>titulo</code> que no existe.</li>
 <li><strong><code>File "main.py", line 42</code></strong> → dónde ocurrió: archivo <code>main.py</code>, línea 42.</li>
 <li><strong><code>in cargar_mision</code></strong> → dentro de qué función.</li>
 </ul>
-<p>Conclusión: una misión de tus <code>missions/*.json</code> no tiene el campo <code>titulo</code>, o lo escribiste distinto (<code>Titulo</code>, <code>title</code>). Sin entrar en pánico, el error ya te llevó casi de la mano al problema.</p>
+<p>Conclusión: una misión de tus <code>missions/*.json</code> no tiene el campo <code>titulo</code>, o lo escribiste distinto (<code>Titulo</code>, <code>title</code>). Sin entrar en pánico, el propio error ya te llevó casi de la mano hasta el problema.</p>
 <p>Ahora uno de <strong>RachaSimple</strong> (TypeScript/React):</p>
 <pre><code class="language-text">TypeError: Cannot read properties of undefined (reading 'nombre')
     at HabitCard (src/components/HabitCard.tsx:18:30)
 </code></pre>
-<p>Traducción: en <code>src/components/HabitCard.tsx</code>, línea 18, intentaste leer <code>.nombre</code> de algo que era <code>undefined</code> (no existía). Probablemente un hábito llegó vacío. El error te da archivo y línea exactos. Es un mapa, no un regaño.</p>
+<p>Traducción: en <code>src/components/HabitCard.tsx</code>, línea 18, intentaste leer <code>.nombre</code> de algo que era <code>undefined</code> (no existía). Lo más probable es que un hábito llegara vacío. El error te da archivo y línea exactos. Es un mapa, no un regaño.</p>
 <blockquote class="warn">
 <h3 id="cuidado-no-leas-solo-la-primera-linea-roja">⚠️ Cuidado — No leas solo la primera línea roja</h3>
-<p>Mucha gente ve rojo y cierra la terminal. El detalle útil suele estar en el <strong>nombre del error</strong> y en la <strong>línea de TU archivo</strong> (no la de las librerías). Busca tu nombre de archivo en el mensaje: ahí empieza la pista.</p>
+<p>Mucha gente ve rojo y cierra la terminal. El detalle útil casi siempre está en el <strong>nombre del error</strong> y en la <strong>línea de TU archivo</strong> (no la de las librerías). Busca el nombre de tu archivo en el mensaje: ahí empieza la pista.</p>
 <h3 id="tip-copia-el-error-completo-no-lo-cuentes-con-tus-palabras">💡 Tip — Copia el error completo, no lo cuentes con tus palabras</h3>
 <p>Cuando guardes un error para buscarlo o preguntarlo, copia el texto literal. "Me sale algo de undefined" no sirve; <code>TypeError: Cannot read properties of undefined (reading 'nombre')</code> sí.</p>
 </blockquote>
 <h2 id="6-depurar-paso-a-paso">6. Depurar paso a paso</h2>
-<p>Depurar es encontrar y arreglar errores. La palabra viene de "debug" (quitar el bicho, <em>bug</em>).</p>
+<p>Depurar es encontrar y arreglar errores. La palabra viene de "debug", quitar el bicho, el <em>bug</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-bug-y-depurar-debug">🟦 ¿Qué significa? — <em>Bug y depurar (debug)</em></h3>
-<p>Un <strong>bug</strong> es un fallo en el programa: hace algo distinto de lo que querías. <strong>Depurar</strong> es el proceso de encontrar por qué ocurre y corregirlo. No es magia: es un método ordenado de ir descartando sospechosos.</p>
+<p>Un <strong>bug</strong> es un fallo en el programa: hace algo distinto de lo que querías. <strong>Depurar</strong> es el proceso de averiguar por qué ocurre y corregirlo. No es magia: es un método ordenado de ir descartando sospechosos.</p>
 </blockquote>
 <h3 id="el-metodo-de-los-cuatro-pasos">El método de los cuatro pasos</h3>
 <ol>
@@ -185,11 +185,11 @@ KeyError: 'titulo'
 <h3 id="que-significa-print-consolelog">🟦 ¿Qué significa? — <em><code>print</code> / <code>console.log</code></em></h3>
 <p>Son instrucciones que muestran un valor en la pantalla o en la consola mientras el programa corre. <code>print</code> se usa en Python (PolyPaw); <code>console.log</code> en JavaScript y TypeScript (tunal-digital, RachaSimple, Faro). Sirven para "espiar" qué valen tus datos en un punto concreto y entender por qué algo falla.</p>
 <h3 id="en-tu-codigo_4">🔎 En tu código</h3>
-<p>En <strong>Faro</strong> (carpeta Organizer, Next.js + OpenAI), cuando una llamada a la IA devuelva algo inesperado, un <code>console.log</code> justo después de recibir la respuesta de OpenAI, dentro de <code>src/app/api</code>, te muestra exactamente qué llegó. Casi siempre el bug está en que lo recibido no tenía la forma que esperabas.</p>
+<p>En <strong>Faro</strong> (carpeta Organizer, Next.js + OpenAI), cuando una llamada a la IA devuelva algo raro, un <code>console.log</code> justo después de recibir la respuesta de OpenAI, dentro de <code>src/app/api</code>, te muestra exactamente qué llegó. Casi siempre el bug está en que lo recibido no tenía la forma que esperabas.</p>
 <h3 id="tip-el-patito-de-goma">💡 Tip — El patito de goma</h3>
 <p>Hay una técnica real y famosa: explícale tu bug en voz alta a un objeto (un patito, una taza... o a Bit). Al obligarte a contar el problema paso a paso, tu cerebro encuentra la falla solo. Suena raro; funciona muchísimo.</p>
 <h3 id="cuidado-no-cambie-nada-y-dejo-de-funcionar">⚠️ Cuidado — "No cambié nada y dejó de funcionar"</h3>
-<p>Casi siempre <strong>sí</strong> cambió algo: una actualización, un dato distinto, un archivo movido. En lugar de pelear con esa frase, pregúntate "¿qué fue lo último que toqué?" y empieza por ahí.</p>
+<p>Casi siempre <strong>sí</strong> cambió algo: una actualización, un dato distinto, un archivo movido. En lugar de pelearte con esa frase, pregúntate "¿qué fue lo último que toqué?" y empieza por ahí.</p>
 </blockquote>
 <h2 id="7-buscar-ayuda-eficazmente">7. Buscar ayuda eficazmente</h2>
 <p>Pedir ayuda no es trampa; es parte del oficio. Pero hay formas que funcionan y formas que no.</p>
@@ -209,15 +209,15 @@ KeyError: 'titulo'
 </ol>
 <blockquote class="tip">
 <h3 id="tip-el-ejemplo-minimo">💡 Tip — El ejemplo mínimo</h3>
-<p>Reduce tu problema al trozo más pequeño que aún falla. Si puedes reproducir el bug en 10 líneas en vez de 500, lo resolverás tú mismo la mitad de las veces <em>mientras</em> lo recortas. A esto se le llama "ejemplo reproducible mínimo".</p>
+<p>Reduce tu problema al trozo más pequeño que aún falla. Si consigues reproducir el bug en 10 líneas en vez de 500, la mitad de las veces lo resolverás tú mismo <em>mientras</em> lo recortas. A esto se le llama "ejemplo reproducible mínimo".</p>
 <h3 id="cuidado-nunca-pegues-tus-secretos">⚠️ Cuidado — Nunca pegues tus secretos</h3>
-<p>Al pedir ayuda (en un foro o a una IA), borra claves, tokens y contraseñas. En tus proyectos eso incluye la clave de la API de Claude en <strong>tunal-digital</strong>, las credenciales de Supabase en <strong>RachaSimple</strong> y <strong>Faro</strong>, o la clave de OpenAI en <strong>Faro</strong>. Esas viven en variables de entorno justo para no exponerlas. Si las pegas en internet, considéralas comprometidas.</p>
+<p>Al pedir ayuda (en un foro o a una IA), borra claves, tokens y contraseñas. En tus proyectos eso incluye la clave de la API de Claude en <strong>tunal-digital</strong>, las credenciales de Supabase en <strong>RachaSimple</strong> y <strong>Faro</strong>, o la clave de OpenAI en <strong>Faro</strong>. Esas viven en variables de entorno precisamente para no exponerlas. Si las pegas en internet, dalas por comprometidas.</p>
 </blockquote>
 <h2 id="8-como-dar-ordenes-precisas-a-una-ia">8. Cómo dar órdenes precisas a una IA</h2>
-<p>Este es el objetivo del manual, así que vamos despacio. Una IA como Claude es muy capaz, pero <strong>no adivina lo que tienes en la cabeza</strong>. Hace lo que le dices, no lo que querías decir. Pensar como programador es justo lo que te vuelve bueno pidiéndole cosas.</p>
+<p>Este es el objetivo del manual, así que vamos con calma. Una IA como Claude es muy capaz, pero <strong>no adivina lo que tienes en la cabeza</strong>. Hace lo que le dices, no lo que querías decir. Y pensar como programador es justo lo que te vuelve bueno pidiéndole cosas.</p>
 <blockquote class="def">
 <h3 id="que-significa-prompt">🟦 ¿Qué significa? — <em>Prompt</em></h3>
-<p>Un prompt es el mensaje o instrucción que le das a una IA para que haga algo. Un buen prompt es claro, da contexto y dice exactamente qué quieres de salida. Pedirle bien a una IA es una habilidad tan real como escribir código.</p>
+<p>Un prompt es el mensaje o la instrucción que le das a una IA para que haga algo. Un buen prompt es claro, da contexto y dice exactamente qué quieres de salida. Pedirle bien a una IA es una habilidad tan real como escribir código.</p>
 </blockquote>
 <h3 id="las-cinco-partes-de-una-buena-orden-a-la-ia">Las cinco partes de una buena orden a la IA</h3>
 <ol>
@@ -243,11 +243,11 @@ la función con comentarios en español. Aquí está mi tipo de hábito:
 <p>La segunda funciona porque <strong>descompusiste el problema antes de pedir</strong> (secciones 2 y 3), nombraste tus datos (sección 4) y diste contexto real. Pensar como programador es lo que te permite escribir el prompt de la derecha.</p>
 <blockquote class="tip">
 <h3 id="tip-pide-el-plan-antes-del-codigo">💡 Tip — Pide el plan antes del código</h3>
-<p>Una técnica poderosa: "Antes de escribir código, dame el pseudocódigo de los pasos y espera mi visto bueno." Así revisas la <em>lógica</em> antes de recibir 80 líneas. Si el plan está mal, el código estaría mal igual.</p>
+<p>Una técnica poderosa: "Antes de escribir código, dame el pseudocódigo de los pasos y espera mi visto bueno." Así revisas la <em>lógica</em> antes de recibir 80 líneas. Si el plan está mal, el código saldría mal igual.</p>
 <h3 id="tip-dale-el-error-literal-a-la-ia">💡 Tip — Dale el error literal a la IA</h3>
-<p>Igual que con un humano, pega el mensaje de error completo y el archivo y línea. "Tengo este <code>KeyError: 'titulo'</code> en main.py línea 42, aquí está la función y aquí un ejemplo de mi JSON de misión. ¿Por qué falla?". Con eso, la IA acierta muchísimo más.</p>
+<p>Igual que con una persona, pega el mensaje de error completo, con archivo y línea. "Tengo este <code>KeyError: 'titulo'</code> en main.py línea 42, aquí está la función y aquí un ejemplo de mi JSON de misión. ¿Por qué falla?". Con eso, la IA acierta muchísimo más.</p>
 <h3 id="cuidado-revisa-no-copies-a-ciegas">⚠️ Cuidado — Revisa, no copies a ciegas</h3>
-<p>La IA se equivoca, inventa funciones que no existen o asume cosas de tu proyecto que no son ciertas. Tú eres quien manda. Lee lo que te da, entiéndelo (para eso es este manual) y pruébalo antes de confiar. Una IA que programa por ti sin que entiendas nada te deja indefenso cuando algo falla.</p>
+<p>La IA se equivoca, inventa funciones que no existen o da por hechas cosas de tu proyecto que no son ciertas. Tú eres quien manda. Lee lo que te da, entiéndelo (para eso es este manual) y pruébalo antes de confiar. Una IA que programa por ti sin que entiendas nada te deja indefenso el día que algo falla.</p>
 <h3 id="en-tu-codigo_5">🔎 En tu código</h3>
 <p>Hasta para administrar tu <strong>polypaw-nas</strong> (Ubuntu Server, Samba, Docker/Podman, Cockpit) aplica lo mismo: si le pides ayuda a una IA con un servicio que no arranca, dile la versión exacta del sistema (Ubuntu Server 26.04), qué servicio falla (<code>smbd</code> de Samba, por ejemplo) y pega el mensaje de error literal del log. Contexto preciso, respuesta precisa.</p>
 </blockquote>

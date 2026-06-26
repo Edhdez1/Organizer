@@ -1,32 +1,39 @@
 # Capítulo 05 — Datos, JSON y fetch
 
-> Cerramos JavaScript con cómo se manejan **colecciones de datos** (listas y objetos), el
-> formato **JSON** (que usan PolyPaw y todas las APIs) y cómo **pedir datos a internet** con
-> `fetch`. Esto último es justo lo que hace el chat con IA de tu sitio.
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> Cerramos JavaScript con tres cosas que van de la mano: cómo se manejan **colecciones de
+> datos** (listas y objetos), el formato **JSON** (el que usan PolyPaw y prácticamente todas
+> las APIs) y cómo **pedirle datos a internet** con `fetch`. Esto último es, ni más ni menos,
+> lo que hace el chat con IA de tu sitio.
 
 ---
 
 ## 1. Arrays: listas de cosas
 
 > ### 🟦 ¿Qué significa? — *Array (arreglo / lista)*
-> Un **array** es una **lista ordenada** de valores, escrita entre corchetes `[ ]` y separada
-> por comas. Sirve para guardar varias cosas en una sola variable:
+> Un **array** es una **lista ordenada** de valores. Se escribe entre corchetes `[ ]` y los
+> valores van separados por comas. Te sirve para meter varias cosas dentro de una sola
+> variable:
 > ```javascript
 > const servicios = ["Diseño web", "IA", "Marketing"];
 > const numeros = [10, 25, 4, 99];
 > ```
 
 > ### 🟦 ¿Qué significa? — *Índice (acceder a un elemento)*
-> Cada elemento tiene una **posición** numérica llamada **índice**, que **empieza en 0**:
+> Cada elemento ocupa una **posición** numérica, su **índice**, y la cuenta **empieza en 0**:
 > ```javascript
 > servicios[0]   // "Diseño web"  (el primero)
 > servicios[2]   // "Marketing"   (el tercero)
 > servicios.length   // 3  (cuántos elementos hay)
 > ```
-> (¿Recuerdas que los bucles empezaban en 0? Es por esto.)
+> (¿Te acuerdas de que los bucles arrancaban en 0? Pues es por esto.)
 
 > ### 🟦 ¿Qué significa? — *Métodos útiles de array*
-> Los arrays traen "funciones incorporadas" (métodos) muy usadas:
+> Los arrays vienen con "funciones incorporadas" (los métodos) que vas a usar todo el rato:
 > ```javascript
 > servicios.push("SEO");        // añade al final
 > servicios.includes("IA");     // true/false: ¿está en la lista?
@@ -34,16 +41,17 @@
 >   console.log(s);
 > });
 > ```
-> `forEach` es un bucle más legible: "para cada servicio `s`, haz esto". Recorrer listas así es
-> pan de cada día en la web (mostrar productos, hábitos, mensajes…).
+> `forEach` es básicamente un bucle, pero se lee mucho mejor: "para cada servicio `s`, haz
+> esto". Recorrer listas así lo vas a hacer todos los días en la web: mostrar productos,
+> hábitos, mensajes y demás.
 
 ---
 
 ## 2. Objetos: datos con etiquetas
 
 > ### 🟦 ¿Qué significa? — *Objeto*
-> Un **objeto** agrupa datos relacionados usando **etiquetas** (llamadas *propiedades* o
-> *claves*) en lugar de posiciones. Se escribe entre llaves `{ }`:
+> Un **objeto** junta datos que están relacionados, pero en vez de posiciones usa **etiquetas**
+> (las llamamos *propiedades* o *claves*). Va entre llaves `{ }`:
 > ```javascript
 > const usuario = {
 >   nombre: "Edwar",
@@ -51,20 +59,20 @@
 >   activo: true
 > };
 > ```
-> Cada par es `clave: valor`. Mientras un array es "una fila de cosas", un objeto es "una ficha
-> con campos".
+> Cada par tiene la forma `clave: valor`. Si un array es "una fila de cosas", un objeto es más
+> bien "una ficha con campos".
 
 > ### 🟦 ¿Qué significa? — *Acceder a propiedades*
-> Se accede con un **punto** y el nombre de la propiedad:
+> Para llegar a un dato usas un **punto** seguido del nombre de la propiedad:
 > ```javascript
 > usuario.nombre     // "Edwar"
 > usuario.edad       // 25
-> usuario.edad = 26; // también se puede cambiar
+> usuario.edad = 26; // y también puedes cambiarlo
 > ```
 
 > ### 💡 Tip — Arrays y objetos se combinan
-> Lo normal es mezclarlos: una **lista de objetos**. Por ejemplo, los hábitos de RachaSimple o
-> las misiones de PolyPaw son arrays de objetos:
+> En la práctica casi siempre los vas a mezclar: una **lista de objetos**. Los hábitos de
+> RachaSimple o las misiones de PolyPaw, por ejemplo, son arrays de objetos:
 > ```javascript
 > const habitos = [
 >   { nombre: "Leer",      hecho: true },
@@ -79,8 +87,8 @@
 
 > ### 🟦 ¿Qué significa? — *JSON*
 > **JSON** (*JavaScript Object Notation*) es un **formato de texto** para guardar e intercambiar
-> datos, basado en la forma de los objetos y arrays de JavaScript. Es el idioma estándar con el
-> que las apps y los servidores se pasan información.
+> datos. Toma prestada la forma de los objetos y arrays de JavaScript, y se ha convertido en el
+> idioma estándar con el que las apps y los servidores se pasan información.
 > ```json
 > {
 >   "nombre": "Edwar",
@@ -88,16 +96,18 @@
 >   "activo": true
 > }
 > ```
-> Se parece muchísimo a un objeto de JavaScript. Diferencia clave: en JSON **las claves van
-> entre comillas dobles** y solo admite datos (no funciones).
-> **¿Dónde se usa en tu proyecto?** **PolyPaw** guarda TODAS sus misiones y la base de datos del
-> usuario en archivos `.json` (`missions/*.json`, `polypaw_db.json`). Y cada vez que una web
-> habla con una API, los datos viajan en JSON.
+> Como ves, se parece muchísimo a un objeto de JavaScript. La diferencia que más conviene
+> recordar: en JSON **las claves van entre comillas dobles** y dentro solo caben datos, nunca
+> funciones.
+> **¿Dónde aparece esto en tu proyecto?** **PolyPaw** guarda TODAS sus misiones y la base de
+> datos del usuario en archivos `.json` (`missions/*.json`, `polypaw_db.json`). Y cada vez que
+> una web habla con una API, los datos van y vienen en JSON.
 
 > ### 🟦 ¿Qué significa? — *Convertir entre texto JSON y objetos*
-> Como JSON es **texto**, para usarlo en JavaScript hay que convertirlo a objeto, y viceversa:
-> - `JSON.parse(texto)` → convierte texto JSON **a** objeto de JavaScript (para usarlo).
-> - `JSON.stringify(objeto)` → convierte un objeto **a** texto JSON (para enviarlo o guardarlo).
+> Como JSON es **texto**, para trabajar con él en JavaScript tienes que convertirlo a objeto, y
+> al revés:
+> - `JSON.parse(texto)` → pasa de texto JSON **a** objeto de JavaScript (para poder usarlo).
+> - `JSON.stringify(objeto)` → pasa de objeto **a** texto JSON (para enviarlo o guardarlo).
 > ```javascript
 > const texto = '{"nombre":"Edwar"}';
 > const obj = JSON.parse(texto);      // ahora obj.nombre es "Edwar"
@@ -108,24 +118,26 @@
 
 ## 4. Pedir datos a internet: `fetch` y `async/await`
 
-Aquí conectamos con el Módulo 00: el navegador (cliente) le pide datos a un servidor. En
+Aquí enlazamos con el Módulo 00: el navegador (el cliente) le pide datos a un servidor. En
 JavaScript eso se hace con `fetch`.
 
 > ### 🟦 ¿Qué significa? — *`fetch` (pedir/traer)*
-> `fetch(url)` hace una **petición HTTP** a una dirección y trae la respuesta. Es cómo tu código
-> habla con una API (un servidor que entrega datos).
+> `fetch(url)` lanza una **petición HTTP** a una dirección y te trae de vuelta la respuesta. Es
+> la forma en que tu código habla con una API, es decir, con un servidor que entrega datos.
 
 > ### 🟦 ¿Qué significa? — *Operación asíncrona*
-> Pedir algo a internet **toma tiempo** (puede tardar segundos). Una operación **asíncrona** es
-> una que no da el resultado al instante: el programa la "encarga" y sigue, y el resultado llega
-> después. Es como pedir comida a domicilio: no te quedas congelado en la puerta; haces otras
-> cosas y avisan cuando llega.
+> Pedir algo a internet **lleva su tiempo**: puede tardar unos segundos. Una operación
+> **asíncrona** es justo eso, una que no te da el resultado de inmediato: el programa la
+> "encarga", sigue con lo suyo, y el resultado llega más tarde. Piénsalo como pedir comida a
+> domicilio: no te quedas plantado en la puerta esperando; haces otras cosas y te avisan cuando
+> llega.
 
 > ### 🟦 ¿Qué significa? — *`async` y `await`*
-> Para trabajar con operaciones asíncronas de forma legible se usan dos palabras:
-> - `async` marca una función como asíncrona (que hará esperas).
-> - `await` ("espera") pausa **dentro** de esa función hasta que el resultado llegue, sin
->   congelar el resto de la página.
+> Para manejar operaciones asíncronas sin que el código se vuelva un lío, hay dos palabras que
+> trabajan juntas:
+> - `async` marca una función como asíncrona, o sea, una que va a tener esperas dentro.
+> - `await` ("espera") pone en pausa **lo que hay dentro** de esa función hasta que el resultado
+>   llega, pero sin congelar el resto de la página.
 > ```javascript
 > async function cargarDatos() {
 >   const respuesta = await fetch("https://api.ejemplo.com/datos");
@@ -134,17 +146,18 @@ JavaScript eso se hace con `fetch`.
 > }
 > cargarDatos();
 > ```
-> Se lee: "pide los datos (espera a que lleguen), conviértelos de JSON a objeto (espera), y
-> muéstralos". El `await respuesta.json()` es el `JSON.parse` de las respuestas web.
+> Léelo así: "pide los datos (espera a que lleguen), conviértelos de JSON a objeto (espera otra
+> vez), y muéstralos". Ese `await respuesta.json()` es el `JSON.parse` de las respuestas web.
 
 > ### 🟦 ¿Qué significa? — *Promesa (promise)*
-> Por debajo, `fetch` devuelve una **promesa**: un "vale" que representa un resultado que
-> **llegará en el futuro**. `await` es, en la práctica, "espera a que la promesa se cumpla y
-> dame el valor". No necesitas dominar las promesas a fondo todavía; con `async/await` te
-> alcanza para empezar.
+> Por debajo, lo que `fetch` te devuelve es una **promesa**: una especie de "vale" que
+> representa un resultado que **va a llegar en el futuro**. `await`, en el fondo, significa
+> "espera a que esa promesa se cumpla y dame el valor". No hace falta que domines las promesas
+> al detalle todavía; con `async/await` tienes de sobra para empezar.
 
 > ### ⚠️ Cuidado — Manejar errores con try/catch
-> Una petición puede fallar (sin internet, servidor caído). Se protege con `try/catch`:
+> Una petición puede salir mal: te quedas sin internet, el servidor está caído, lo que sea. Para
+> blindarte usas `try/catch`:
 > ```javascript
 > async function cargarDatos() {
 >   try {
@@ -156,13 +169,14 @@ JavaScript eso se hace con `fetch`.
 >   }
 > }
 > ```
-> `try` intenta el código; si algo revienta, salta al `catch` en vez de romper toda la página.
+> El `try` intenta ejecutar el código; si algo revienta, en lugar de tumbar la página entera, el
+> control salta directo al `catch`.
 
 > ### 🔎 En tu código
-> El **chat con IA** de tu sitio (`main.js`) hace exactamente esto: con `fetch` envía tu mensaje
-> al Cloudflare Worker, `await` espera la respuesta de Claude, la convierte de JSON y la muestra
-> en pantalla manipulando el DOM. Faro hace lo mismo para hablar con GitHub, Drive y OpenAI.
-> ¡Ya entiendes la pieza central de tus apps!
+> El **chat con IA** de tu sitio (`main.js`) hace exactamente esto: con `fetch` manda tu mensaje
+> al Cloudflare Worker, `await` se queda esperando la respuesta de Claude, la convierte de JSON
+> y la pinta en pantalla manipulando el DOM. Faro funciona igual cuando habla con GitHub, Drive
+> y OpenAI. Con esto ya entiendes la pieza central de tus apps.
 
 ---
 
@@ -200,8 +214,8 @@ JavaScript eso se hace con `fetch`.
 ---
 
 🎉 **¡Terminaste el Módulo 03 — JavaScript!** Ya programas de verdad: datos, decisiones, bucles,
-funciones, manipulación del DOM y peticiones a internet. Con esto entiendes el `main.js` de tu
-sitio **completo**. Y, lo más importante, tienes la base para los dos módulos que vienen
-(TypeScript y React), que son JavaScript llevado más lejos.
+funciones, manipulación del DOM y peticiones a internet. Con todo esto entiendes el `main.js` de
+tu sitio **de cabo a rabo**. Y, lo más importante, ya tienes la base para los dos módulos que
+vienen (TypeScript y React), que no son otra cosa que JavaScript llevado un paso más allá.
 
 ➡️ Siguiente módulo: **[04 — Python](../04-python/README.md)** *(en preparación)*.

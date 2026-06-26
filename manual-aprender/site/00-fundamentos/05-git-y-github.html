@@ -18,64 +18,74 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-git-y-github">Capítulo 05 — Git y GitHub</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Tus cuatro proyectos viven en GitHub. Cada vez que la IA "subió cambios" usó Git por debajo.
-Entender Git es entender cómo se guarda, versiona y comparte el código en el mundo real. Es,
-además, una red de seguridad que te deja experimentar sin miedo a romper nada.</p>
+<p>Tus cuatro proyectos viven en GitHub. Cada vez que la IA "subió cambios", por debajo estaba
+usando Git. Entender Git es entender cómo se guarda, se versiona y se comparte el código en el
+trabajo real. Y de paso te da una red de seguridad: puedes experimentar tranquilo, porque
+siempre hay un punto al que volver si algo se rompe.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-que-git-resuelve">1. El problema que Git resuelve</h2>
-<p>Imagina que escribes un trabajo y vas guardando: <code>trabajo.doc</code>, <code>trabajo_final.doc</code>,
-<code>trabajo_final_AHORA_SI.doc</code>, <code>trabajo_final_v3_bueno.doc</code>… Un caos. Y si trabajan dos
-personas, peor: ¿cómo juntan sus cambios sin pisarse?</p>
+<p>Seguro te ha pasado: escribes un trabajo y vas guardando copias para no perderlo. <code>trabajo.doc</code>,
+<code>trabajo_final.doc</code>, <code>trabajo_final_AHORA_SI.doc</code>, <code>trabajo_final_v3_bueno.doc</code>… y al final ni tú
+sabes cuál es el bueno. Ahora súmale otra persona trabajando en lo mismo: ¿cómo juntan sus
+cambios sin pisarse uno al otro? Ese caos es exactamente lo que Git vino a ordenar.</p>
 <blockquote class="def">
 <h3 id="que-significa-control-de-versiones">🟦 ¿Qué significa? — <em>Control de versiones</em></h3>
 <p>Un <strong>sistema de control de versiones</strong> es un programa que <strong>guarda el historial completo</strong> de
 los cambios de tus archivos: quién cambió qué, cuándo y por qué. Puedes volver a cualquier
-punto anterior, comparar versiones y combinar el trabajo de varias personas sin perder nada.</p>
+punto anterior, comparar versiones y combinar el trabajo de varias personas sin perder nada por
+el camino.</p>
 <h3 id="que-significa-git">🟦 ¿Qué significa? — <em>Git</em></h3>
-<p><strong>Git</strong> es <strong>el</strong> sistema de control de versiones más usado del mundo. Funciona en tu propia
-computadora (no necesita internet) y guarda "fotos" de tu proyecto a lo largo del tiempo.
-Lo creó en 2005 Linus Torvalds (el mismo de Linux).</p>
+<p><strong>Git</strong> es <strong>el</strong> sistema de control de versiones más usado del mundo. Vive en tu propia
+computadora (no necesita internet para funcionar) y va guardando "fotos" de tu proyecto a lo
+largo del tiempo. Lo creó en 2005 Linus Torvalds, el mismo que hizo Linux.</p>
 <h3 id="tip-git-github">💡 Tip — Git ≠ GitHub</h3>
-<p><strong>Git</strong> es la herramienta (vive en tu computadora). <strong>GitHub</strong> es un <strong>sitio web</strong> donde
-guardas una copia de tus proyectos Git en internet para respaldarlos y compartirlos. Puedes
-usar Git sin GitHub; GitHub sin Git no tiene sentido. (Existen alternativas a GitHub, como
-GitLab o Bitbucket: son "el mismo concepto", páginas para alojar repositorios Git.)</p>
+<p>No son lo mismo, aunque se confundan todo el tiempo. <strong>Git</strong> es la herramienta y vive en tu
+computadora. <strong>GitHub</strong> es un <strong>sitio web</strong> donde guardas una copia de tus proyectos Git en
+internet, para respaldarlos y compartirlos. Puedes usar Git sin GitHub; GitHub sin Git no tiene
+sentido. Y hay alternativas a GitHub, como GitLab o Bitbucket: son la misma idea, páginas para
+alojar repositorios Git.</p>
 </blockquote>
 <hr />
 <h2 id="2-el-vocabulario-esencial-de-git">2. El vocabulario esencial de Git</h2>
-<p>Estas cinco palabras te abren el 90% de Git. Léelas con calma.</p>
+<p>Con estas cinco palabras tienes cubierto el 90% de lo que vas a usar a diario. Léelas con calma,
+sin prisa.</p>
 <blockquote class="def">
 <h3 id="que-significa-repositorio-repo">🟦 ¿Qué significa? — <em>Repositorio (repo)</em></h3>
-<p>Un <strong>repositorio</strong> es <strong>la carpeta de tu proyecto con su historial de cambios incluido</strong>.
-Cuando "inicias Git" en una carpeta, esta se vuelve un repo: además de tus archivos, guarda
-(en una subcarpeta oculta <code>.git</code>) toda la historia. <code>tunal-digital</code>, <code>PolyPaw</code>, <code>RachaSimple</code>
-y <code>Faro</code> son cada uno un repositorio.</p>
+<p>Un <strong>repositorio</strong> es <strong>la carpeta de tu proyecto, con su historial de cambios incluido</strong>.
+Cuando "inicias Git" en una carpeta, esa carpeta se convierte en un repo: además de tus
+archivos, guarda toda la historia en una subcarpeta oculta llamada <code>.git</code>. <code>tunal-digital</code>,
+<code>PolyPaw</code>, <code>RachaSimple</code> y <code>Faro</code> son, cada uno, un repositorio.</p>
 <h3 id="que-significa-commit-punto-de-guardado">🟦 ¿Qué significa? — <em>Commit (punto de guardado)</em></h3>
-<p>Un <strong>commit</strong> es <strong>una "foto" del proyecto en un momento dado</strong>, con un mensaje que describe
-qué cambiaste. Es como un punto de guardado en un videojuego: siempre puedes volver a él.
-Cada commit tiene un identificador único (un código como <code>e7c66d6</code>).
-<strong>Buen hábito:</strong> commits pequeños y frecuentes, con mensajes claros ("añade formulario de
-contacto"), mejor que uno gigante ("muchos cambios").</p>
+<p>Un <strong>commit</strong> es <strong>una "foto" del proyecto en un momento dado</strong>, acompañada de un mensaje que
+describe qué cambiaste. Piensa en el punto de guardado de un videojuego: siempre puedes volver
+a él. Cada commit tiene un identificador único, un código como <code>e7c66d6</code>.
+<strong>Buen hábito:</strong> muchos commits pequeños y frecuentes, con mensajes claros ("añade formulario de
+contacto"), valen mucho más que uno gigante de "muchos cambios".</p>
 <h3 id="que-significa-rama-branch">🟦 ¿Qué significa? — <em>Rama (branch)</em></h3>
-<p>Una <strong>rama</strong> es <strong>una línea de trabajo paralela</strong>. La rama principal suele llamarse <code>main</code>.
-Si quieres probar algo sin arriesgar lo que funciona, creas una rama aparte, trabajas ahí, y
-si sale bien la <strong>unes</strong> de vuelta. Si sale mal, la descartas y <code>main</code> quedó intacta.
+<p>Una <strong>rama</strong> es <strong>una línea de trabajo paralela</strong>. La principal suele llamarse <code>main</code>. Cuando
+quieres probar algo sin arriesgar lo que ya funciona, creas una rama aparte, trabajas ahí, y si
+sale bien la <strong>unes</strong> de vuelta. Si sale mal, la descartas sin más y <code>main</code> ni se entera.
 <strong>¿Dónde se usó en tu proyecto?</strong> Este mismo manual se escribió en la rama
-<code>claude/programming-fundamentals-manual-p2xv7n</code>, separada de <code>main</code>, y luego se unió.</p>
+<code>claude/programming-fundamentals-manual-p2xv7n</code>, separada de <code>main</code>, y después se unió.</p>
 <h3 id="que-significa-merge-unir">🟦 ¿Qué significa? — <em>Merge (unir)</em></h3>
-<p>Hacer <strong>merge</strong> es <strong>combinar</strong> los cambios de una rama dentro de otra (por ejemplo, traer lo
-de tu rama de trabajo a <code>main</code>). Git intenta juntar los cambios automáticamente.</p>
+<p>Hacer <strong>merge</strong> es <strong>combinar</strong> los cambios de una rama dentro de otra; por ejemplo, traer lo
+de tu rama de trabajo a <code>main</code>. Git intenta juntar ambas partes automáticamente, sin que tengas
+que copiar nada a mano.</p>
 <h3 id="que-significa-conflicto-merge-conflict">🟦 ¿Qué significa? — <em>Conflicto (merge conflict)</em></h3>
-<p>Un <strong>conflicto</strong> ocurre cuando dos ramas cambiaron <strong>la misma línea</strong> de un archivo de forma
-distinta, y Git no sabe cuál conservar. No es un error grave: Git te marca las dos versiones
-y tú eliges. Pasa, y se resuelve a mano.</p>
+<p>Un <strong>conflicto</strong> aparece cuando dos ramas tocaron <strong>la misma línea</strong> de un archivo de formas
+distintas y Git no sabe con cuál quedarse. No te asustes: no es un error grave. Git te muestra
+las dos versiones y tú decides cuál vale. Pasa de vez en cuando, y se resuelve a mano.</p>
 </blockquote>
 <hr />
 <h2 id="3-los-tres-lugares-donde-vive-tu-cambio">3. Los tres "lugares" donde vive tu cambio</h2>
-<p>Esta es la idea que más confunde al principio, así que vamos despacio. Un cambio pasa por tres
-estados antes de quedar guardado en internet:</p>
+<p>Esta es la parte que más cuesta al principio, así que vamos despacio. Antes de quedar guardado en
+internet, un cambio pasa por tres estados:</p>
 <pre><code>   Tu carpeta            Zona de       Repositorio        GitHub
   (working dir)          preparación    local             (remoto)
         │                  (staging)        │                 │
@@ -84,17 +94,19 @@ estados antes de quedar guardado en internet:</p>
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-area-de-preparacion-staging">🟦 ¿Qué significa? — <em>Área de preparación (staging)</em></h3>
-<p>El <strong>staging</strong> es una "sala de espera" donde <strong>eliges qué cambios entran en el próximo
-commit</strong>. Editas muchos archivos, pero quizá solo quieres guardar algunos: con <code>git add</code>
-los pones en staging. Sirve para hacer commits ordenados.</p>
+<p>El <strong>staging</strong> es como una "sala de espera" donde <strong>decides qué cambios entran en el próximo
+commit</strong>. A veces editas muchos archivos a la vez pero solo quieres guardar algunos: con
+<code>git add</code> los mandas a esa sala de espera. Es lo que te permite hacer commits ordenados en vez
+de un revoltijo.</p>
 <h3 id="que-significa-local-vs-remoto">🟦 ¿Qué significa? — <em>Local vs. remoto</em></h3>
-<p><strong>Local</strong> = en tu computadora. <strong>Remoto</strong> = la copia en internet (GitHub). El remoto por
-convención se llama <code>origin</code>. Trabajas local y, cuando quieres respaldar/compartir, <strong>empujas</strong>
-(<code>push</code>) al remoto. Para traer cambios del remoto, <strong>jalas</strong> (<code>pull</code>).</p>
+<p><strong>Local</strong> es lo que está en tu computadora. <strong>Remoto</strong> es la copia que vive en internet
+(GitHub). Por convención, al remoto se le llama <code>origin</code>. Trabajas en local y, cuando quieres
+respaldar o compartir, <strong>empujas</strong> tus cambios (<code>push</code>) al remoto. Y para traerte lo que haya en
+el remoto, <strong>jalas</strong> (<code>pull</code>).</p>
 </blockquote>
 <hr />
 <h2 id="4-el-flujo-de-trabajo-con-sus-comandos">4. El flujo de trabajo, con sus comandos</h2>
-<p>Este es el ciclo que repetirás miles de veces:</p>
+<p>Este es el ciclo que vas a repetir miles de veces, casi sin pensarlo:</p>
 <table>
 <thead>
 <tr>
@@ -143,49 +155,54 @@ convención se llama <code>origin</code>. Trabajas local y, cuando quieres respa
 </table>
 <blockquote class="tip">
 <h3 id="tip-el-mensaje-de-commit-le-habla-a-tu-yo-futuro">💡 Tip — El mensaje de commit le habla a tu yo futuro</h3>
-<p>Dentro de seis meses no recordarás qué hiciste. Un buen mensaje ("corrige el cálculo de la
-racha cuando se salta un día") te ahorra horas. Escríbelos en presente y describe el <em>qué</em> y
-el <em>por qué</em>, no el <em>cómo</em>.</p>
+<p>Dentro de seis meses no vas a recordar qué hiciste hoy, palabra. Un buen mensaje ("corrige el
+cálculo de la racha cuando se salta un día") te ahorra horas de buscar a ciegas. Escríbelos en
+presente y cuenta el <em>qué</em> y el <em>por qué</em>, no el <em>cómo</em>.</p>
 <h3 id="cuidado-nunca-subas-secretos">⚠️ Cuidado — Nunca subas secretos</h3>
-<p>Contraseñas, claves de API y tokens <strong>jamás</strong> deben ir en un commit (quedan en el historial
-para siempre, aunque los borres después). Por eso existe el archivo <code>.gitignore</code>.</p>
+<p>Las contraseñas, claves de API y tokens <strong>jamás</strong> deben acabar en un commit. Una vez que entran,
+se quedan en el historial para siempre, aunque después los borres del archivo. Para eso existe
+el archivo <code>.gitignore</code>.</p>
 <h3 id="que-significa-gitignore">🟦 ¿Qué significa? — <em>.gitignore</em></h3>
-<p>Es un archivo de texto donde listas <strong>lo que Git debe ignorar</strong> (no guardar): claves
-secretas, la carpeta <code>node_modules</code> (dependencias que se reinstalan), archivos temporales.
-<strong>¿Dónde se usa en tu proyecto?</strong> Faro tiene un <code>.gitignore</code> que excluye <code>.env.local</code> (donde
-viven las claves de Supabase y OpenAI). Así nunca se suben por error. Lo recalca incluso el
-<code>CLAUDE.md</code> del proyecto: <em>"Nunca exponer claves en el cliente ni commitearlas."</em></p>
+<p>Es un archivo de texto donde listas <strong>lo que Git debe ignorar</strong>, es decir, lo que no quieres
+guardar: claves secretas, la carpeta <code>node_modules</code> (dependencias que se reinstalan solas),
+archivos temporales y demás.
+<strong>¿Dónde se usa en tu proyecto?</strong> Faro tiene un <code>.gitignore</code> que excluye <code>.env.local</code>, el
+archivo donde viven las claves de Supabase y OpenAI. Así no se suben por error nunca. El propio
+<code>CLAUDE.md</code> del proyecto lo deja por escrito: <em>"Nunca exponer claves en el cliente ni
+commitearlas."</em></p>
 </blockquote>
 <hr />
 <h2 id="5-pull-request-la-forma-de-proponer-cambios">5. Pull request: la forma de proponer cambios</h2>
 <blockquote class="def">
 <h3 id="que-significa-pull-request-pr">🟦 ¿Qué significa? — <em>Pull request (PR)</em></h3>
-<p>Un <strong>pull request</strong> ("solicitud de incorporación") es una <strong>propuesta</strong>, en GitHub, de unir
-tu rama a otra (normalmente a <code>main</code>). Dice: "preparé estos cambios, ¿los revisamos y
-unimos?". Permite ver el <em>diff</em> (las diferencias), comentar, y aprobar antes de fusionar.
-<strong>¿Dónde lo viste?</strong> Esta primera tanda del manual se subió como el <strong>Pull Request #14</strong> de
-tu repo <code>organizer</code>; tú lo revisaste y lo fusionaste a <code>main</code>. Ese es el flujo profesional:
-nada entra a <code>main</code> sin pasar por un PR.</p>
+<p>Un <strong>pull request</strong> ("solicitud de incorporación") es una <strong>propuesta</strong>, hecha en GitHub, de
+unir tu rama a otra (normalmente a <code>main</code>). Viene a decir: "preparé estos cambios, ¿los
+revisamos y los unimos?". Antes de fusionar nada, deja ver el <em>diff</em> (las diferencias),
+comentar y aprobar.
+<strong>¿Dónde lo viste?</strong> Esta primera tanda del manual se subió como el <strong>Pull Request #14</strong> de tu
+repo <code>organizer</code>; tú lo revisaste y lo fusionaste a <code>main</code>. Así funciona el flujo profesional:
+nada entra a <code>main</code> sin pasar antes por un PR.</p>
 <h3 id="que-significa-diff-diferencias">🟦 ¿Qué significa? — <em>Diff (diferencias)</em></h3>
-<p>El <strong>diff</strong> muestra, línea por línea, <strong>qué se añadió</strong> (normalmente en verde con <code>+</code>) y
-<strong>qué se quitó</strong> (en rojo con <code>-</code>) respecto a la versión anterior. Es cómo se revisa el
-trabajo sin leer todo el archivo de nuevo.</p>
+<p>El <strong>diff</strong> te muestra, línea por línea, <strong>qué se añadió</strong> (normalmente en verde con <code>+</code>) y
+<strong>qué se quitó</strong> (en rojo con <code>-</code>) respecto a la versión anterior. Es la manera de revisar el
+trabajo sin tener que releer el archivo entero.</p>
 </blockquote>
 <hr />
 <h2 id="6-instalarlo-cuando-estes-en-tu-computadora">6. Instalarlo (cuando estés en tu computadora)</h2>
 <ol>
-<li>Descarga Git de <a href="https://git-scm.com">https://git-scm.com</a> e instálalo (en macOS quizá ya lo tengas).</li>
-<li>Comprueba que quedó instalado: en la terminal, <code>git --version</code> (debe mostrar un número).</li>
-<li>Preséntate ante Git una sola vez (para que firme tus commits con tu nombre):
+<li>Descarga Git de <a href="https://git-scm.com">https://git-scm.com</a> e instálalo (si usas macOS, puede que ya lo tengas).</li>
+<li>Comprueba que quedó instalado: en la terminal escribe <code>git --version</code> y debe responderte con
+   un número.</li>
+<li>Preséntate ante Git una sola vez, para que firme tus commits con tu nombre:
    <code>git config --global user.name "Edwar"
    git config --global user.email "tu-correo@ejemplo.com"</code></li>
-<li>Crea una cuenta gratis en <a href="https://github.com">https://github.com</a> (ya la tienes: <code>Edhdez1</code>).</li>
+<li>Crea una cuenta gratis en <a href="https://github.com">https://github.com</a> (la tuya ya existe: <code>Edhdez1</code>).</li>
 </ol>
 <blockquote class="tip">
 <h3 id="tip-no-memorices-entiende-el-ciclo">💡 Tip — No memorices, entiende el ciclo</h3>
-<p>No necesitas saberte todos los comandos de Git de memoria (¡son cientos!). Con entender el
-ciclo <strong>editar → add → commit → push</strong>, y saber buscar el resto, vas sobradísimo para
-empezar. Lo demás lo aprenderás cuando lo necesites.</p>
+<p>No hace falta que te sepas todos los comandos de Git de memoria; hay cientos. Con tener claro el
+ciclo <strong>editar → add → commit → push</strong> y saber buscar el resto cuando lo necesites, vas más que
+sobrado para empezar. Lo demás llega solo con la práctica.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

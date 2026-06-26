@@ -23,7 +23,7 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora tu NAS <strong>polypaw-nas</strong> ha funcionado casi por arte de magia: enciendes el viejo Acer Nitro, abres Cockpit en el navegador y ahi esta. Pero detras de esa magia hay una red, con sus reglas, sus direcciones y sus puertas. En este capitulo abrimos esa caja con calma. Vas a entender quien es quien en tu casa digital: que es una IP, por que tu NAS necesita una direccion fija, que hace el router, como funciona el DNS (y por que tu polypaw-nas tiene su propio servidor DNS con AdGuard Home), que son los puertos y por que abrir uno al internet sin pensarlo es como dejar la puerta de la calle abierta de par en par. Bit, el ajolote, te acompana. Es chiquito, vive en el agua y tiene branquias rosas: el animal perfecto para recordarte que en redes todo respira tranquilo si no te apuras.</p>
+<p>Hasta ahora tu NAS <strong>polypaw-nas</strong> ha funcionado casi por arte de magia: enciendes el viejo Acer Nitro, abres Cockpit en el navegador y ahi esta, esperandote. Pero detras de esa magia hay una red, con sus reglas, sus direcciones y sus puertas. En este capitulo abrimos esa caja con calma. Vas a entender quien es quien en tu casa digital: que es una IP, por que tu NAS necesita una direccion fija, que hace exactamente el router, como funciona el DNS (y por que tu polypaw-nas tiene su propio servidor DNS con AdGuard Home), que son los puertos y por que abrir uno a internet sin pensarlo es como dejar la puerta de la calle de par en par. Bit, el ajolote, te acompana. Es chiquito, vive en el agua y tiene branquias rosas: el animal perfecto para recordarte que en redes todo respira tranquilo si no te apuras.</p>
 </blockquote>
 <hr />
 <h2 id="1-tu-casa-tiene-una-red-aunque-no-la-veas">1. Tu casa tiene una red, aunque no la veas</h2>
@@ -32,12 +32,12 @@
 <h3 id="que-significa-red-local-lan">🟦 ¿Que significa? — <em>Red local (LAN)</em></h3>
 <p>LAN viene de <em>Local Area Network</em>: red de area local. Es el conjunto de aparatos conectados entre si <strong>dentro de tu casa</strong> (por cable o WiFi), que pueden comunicarse sin salir a internet.
 <strong>Para que sirve:</strong> que tu laptop pueda ver la carpeta compartida de polypaw-nas, o que abras Cockpit desde el sofa, sin que esos datos pasen por internet.
-<strong>Donde aparece en tu NAS:</strong> tu polypaw-nas vive en tu LAN. Cuando copias archivos a la carpeta <code>PolyPawNAS</code> por Samba, los datos viajan solo por tu LAN, rapidos y privados.</p>
+<strong>Donde aparece en tu NAS:</strong> tu polypaw-nas vive en tu LAN. Cuando copias archivos a la carpeta <code>PolyPawNAS</code> por Samba, los datos viajan solo por tu LAN: rapidos y privados.</p>
 </blockquote>
 <p>Para que dos aparatos se hablen, cada uno necesita un nombre o numero unico, igual que en una calle cada casa tiene su numero. Ese numero es la <strong>direccion IP</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-direccion-ip">🟦 ¿Que significa? — <em>Direccion IP</em></h3>
-<p>IP viene de <em>Internet Protocol</em>. Una direccion IP es un numero que identifica a un aparato en una red, como <code>192.168.1.42</code>. Son cuatro numeros del 0 al 255 separados por puntos.
+<p>IP viene de <em>Internet Protocol</em>. Una direccion IP es un numero que identifica a un aparato dentro de una red, como <code>192.168.1.42</code>. Son cuatro numeros del 0 al 255 separados por puntos.
 <strong>Para que sirve:</strong> para que los datos sepan a donde ir. Si tu laptop quiere hablar con polypaw-nas, necesita su IP.
 <strong>Donde aparece en tu NAS:</strong> cuando escribes algo como <code>\\192.168.1.42\PolyPawNAS</code> o <code>http://192.168.1.42:9090</code> para abrir Cockpit, ese numero <strong>es</strong> la IP de tu NAS en la LAN.</p>
 </blockquote>
@@ -46,11 +46,11 @@
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-ssh">🟦 ¿Que significa? — <em>SSH</em></h3>
-<p>SSH viene de <em>Secure Shell</em>: caparazon seguro. Es una forma de abrir la terminal de otro equipo de forma remota y cifrada, escribiendo comandos en polypaw-nas desde tu laptop sin sentarte frente al Acer.
-<strong>Para que sirve:</strong> administrar el servidor por consola sin tener teclado y pantalla conectados a el; todo lo que escribes viaja cifrado por la LAN.
+<p>SSH viene de <em>Secure Shell</em>: caparazon seguro. Es una forma de abrir la terminal de otro equipo a distancia y de forma cifrada, para escribir comandos en polypaw-nas desde tu laptop sin sentarte frente al Acer.
+<strong>Para que sirve:</strong> administrar el servidor por consola sin tener teclado ni pantalla conectados a el; todo lo que escribes viaja cifrado por la LAN.
 <strong>Donde aparece en tu NAS:</strong> cuando haces <code>ssh tu-usuario@192.168.1.42</code> desde tu laptop, abres una sesion SSH en polypaw-nas. Por Tailscale puedes hacer lo mismo desde fuera de casa, sin abrir puertos.</p>
 </blockquote>
-<p>Veras una linea parecida a <code>inet 192.168.1.42/24</code>. Ese numero antes de la barra es la IP. El <code>/24</code> lo explicamos en un momento, ten paciencia (Bit ya esta nadando hacia alla).</p>
+<p>Veras una linea parecida a <code>inet 192.168.1.42/24</code>. El numero antes de la barra es la IP. El <code>/24</code> lo explicamos en un momento, ten paciencia (Bit ya esta nadando hacia alla).</p>
 <hr />
 <h2 id="2-ip-privada-vs-ip-publica-la-casa-y-el-barrio">2. IP privada vs IP publica: la casa y el barrio</h2>
 <p>Aqui hay un detalle que confunde a casi todo el mundo al principio: tu NAS tiene <strong>dos clases de direccion</strong> segun desde donde lo mires.</p>
@@ -60,68 +60,68 @@
 <strong>Para que sirve:</strong> identificar aparatos dentro de tu casa. Millones de casas usan <code>192.168.1.x</code> al mismo tiempo y no chocan, porque cada una es su propio mundo cerrado.
 <strong>Donde aparece en tu NAS:</strong> la IP <code>192.168.1.42</code> (o la que sea) de polypaw-nas es privada. Solo sirve estando conectado a tu WiFi o cable de casa.</p>
 <h3 id="que-significa-ip-publica">🟦 ¿Que significa? — <em>IP publica</em></h3>
-<p>Es la direccion que tu casa entera muestra <strong>al mundo de internet</strong>. Te la asigna tu proveedor de internet (la compania del cable o la fibra). Toda tu casa comparte una sola IP publica.
+<p>Es la direccion que tu casa entera muestra <strong>al mundo de internet</strong>. Te la asigna tu proveedor de internet (la compania del cable o de la fibra). Toda tu casa comparte una sola IP publica.
 <strong>Para que sirve:</strong> que internet sepa devolver respuestas a tu hogar. Cuando ves un video, la pagina responde a tu IP publica.
-<strong>Donde aparece en tu NAS:</strong> NO aparece directamente. polypaw-nas no tiene IP publica propia. Y eso, te adelanto, es una <strong>buena noticia para tu seguridad</strong>.</p>
+<strong>Donde aparece en tu NAS:</strong> NO aparece directamente. polypaw-nas no tiene IP publica propia. Y eso, te lo adelanto, es una <strong>buena noticia para tu seguridad</strong>.</p>
 </blockquote>
-<p>La analogia: tu <strong>IP publica</strong> es la direccion de tu edificio que ve el cartero del mundo. Tus <strong>IP privadas</strong> son los numeros de apartamento adentro. El cartero deja todo en la porteria (tu router) y la porteria reparte adentro.</p>
+<p>La analogia: tu <strong>IP publica</strong> es la direccion de tu edificio, la que ve el cartero del mundo. Tus <strong>IP privadas</strong> son los numeros de apartamento de adentro. El cartero deja todo en la porteria (tu router) y la porteria reparte puertas adentro.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Para ver tu IP publica, desde polypaw-nas ejecuta <code>curl ifconfig.me</code>. Veras un numero distinto al <code>192.168.x.x</code>. Ese es el rostro de tu casa hacia internet. No lo publiques por ahi sin razon.</p>
+<p>Para ver tu IP publica, desde polypaw-nas ejecuta <code>curl ifconfig.me</code>. Veras un numero distinto al <code>192.168.x.x</code>. Ese es el rostro de tu casa hacia internet, asi que no lo publiques por ahi sin razon.</p>
 <h3 id="en-tu-servidor">🔎 En tu servidor</h3>
-<p>Como polypaw-nas solo tiene IP privada, <strong>nadie desde internet puede tocarlo directamente</strong>. Para llegar a el de forma remota usas Tailscale, que te crea una red privada virtual segura sin abrir nada al mundo. Volveremos a esto en la seccion de seguridad: es el corazon de por que tu NAS esta tranquilo.</p>
+<p>Como polypaw-nas solo tiene IP privada, <strong>nadie desde internet puede tocarlo directamente</strong>. Para llegar a el de forma remota usas Tailscale, que te arma una red privada virtual segura sin abrir nada al mundo. Volveremos a esto en la seccion de seguridad: es el corazon de por que tu NAS esta tan tranquilo.</p>
 </blockquote>
 <hr />
 <h2 id="3-la-mascara-de-red-y-el-rango-de-tu-lan">3. La mascara de red y el rango de tu LAN</h2>
-<p>Vuelve a aquel <code>192.168.1.42/24</code>. Ese <code>/24</code> es la <strong>mascara de red</strong>, y define hasta donde llega tu vecindario local.</p>
+<p>Volvamos a aquel <code>192.168.1.42/24</code>. Ese <code>/24</code> es la <strong>mascara de red</strong>, y define hasta donde llega tu vecindario local.</p>
 <blockquote class="def">
 <h3 id="que-significa-mascara-de-red">🟦 ¿Que significa? — <em>Mascara de red</em></h3>
 <p>Es un valor que indica que parte de la IP identifica a <strong>la red</strong> (el barrio) y que parte identifica a <strong>el aparato</strong> (la casa). El <code>/24</code> significa que los primeros tres numeros (<code>192.168.1</code>) son el barrio, y el ultimo (<code>.42</code>) es la casa concreta.
 <strong>Para que sirve:</strong> que los aparatos sepan quien es vecino (misma red, se hablan directo) y quien esta afuera (hay que pasar por el router).
-<strong>Donde aparece en tu NAS:</strong> el <code>/24</code> en la salida de <code>ip addr</code> de polypaw-nas. Tambien se escribe como <code>255.255.255.0</code>, que es la misma cosa con otra notacion.</p>
+<strong>Donde aparece en tu NAS:</strong> el <code>/24</code> que ves en la salida de <code>ip addr</code> de polypaw-nas. Tambien se escribe como <code>255.255.255.0</code>, que es lo mismo con otra notacion.</p>
 </blockquote>
-<p>Con <code>/24</code>, tu rango de direcciones va de <code>192.168.1.1</code> a <code>192.168.1.254</code>. Eso te da espacio para unos 254 aparatos en casa, mas que suficiente.</p>
+<p>Con <code>/24</code>, tu rango de direcciones va de <code>192.168.1.1</code> a <code>192.168.1.254</code>. Eso te da sitio para unos 254 aparatos en casa: mas que de sobra.</p>
 <blockquote class="def">
 <h3 id="que-significa-rango-lan">🟦 ¿Que significa? — <em>Rango LAN</em></h3>
-<p>Es el conjunto de todas las direcciones validas de tu red local. Con mascara <code>/24</code> y red <code>192.168.1.x</code>, el rango util es <code>.1</code> a <code>.254</code>.
-<strong>Para que sirve:</strong> saber que direcciones puedes repartir. Tu router suele tomar la <code>.1</code>, y reparte el resto a los aparatos.
+<p>Es el conjunto de todas las direcciones validas de tu red local. Con mascara <code>/24</code> y red <code>192.168.1.x</code>, el rango util va de <code>.1</code> a <code>.254</code>.
+<strong>Para que sirve:</strong> saber que direcciones puedes repartir. Tu router suele quedarse con la <code>.1</code>, y reparte el resto entre los aparatos.
 <strong>Donde aparece en tu NAS:</strong> polypaw-nas vivira en alguna direccion dentro de ese rango. Mas adelante le daremos una fija para que nunca cambie.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Tu red podria no ser <code>192.168.1.x</code>. Muchos routers usan <code>192.168.0.x</code>, <code>192.168.100.x</code> o <code>10.0.0.x</code>. <strong>No copies mis numeros a ciegas:</strong> mira los reales de tu casa con <code>ip addr show</code> en polypaw-nas. Bit insiste: en redes, primero miras, despues escribes.</p>
+<p>Tu red podria no ser <code>192.168.1.x</code>. Muchos routers usan <code>192.168.0.x</code>, <code>192.168.100.x</code> o <code>10.0.0.x</code>. <strong>No copies mis numeros a ciegas:</strong> mira los reales de tu casa con <code>ip addr show</code> en polypaw-nas. Bit insiste: en redes, primero miras y despues escribes.</p>
 </blockquote>
 <hr />
 <h2 id="4-el-router-y-la-puerta-de-enlace-gateway">4. El router y la puerta de enlace (gateway)</h2>
-<p>En medio de toda tu red hay un aparato que es a la vez jefe, portero y traductor: el <strong>router</strong>.</p>
+<p>En medio de toda tu red hay un aparato que es jefe, portero y traductor a la vez: el <strong>router</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-router">🟦 ¿Que significa? — <em>Router</em></h3>
-<p>Es la caja que tu proveedor de internet te dio (o que compraste). Conecta tu LAN con internet y reparte la conexion entre todos tus aparatos, por cable y WiFi.
+<p>Es la caja que te dio tu proveedor de internet (o que compraste aparte). Conecta tu LAN con internet y reparte la conexion entre todos tus aparatos, por cable y por WiFi.
 <strong>Para que sirve:</strong> ser el punto por donde todo el trafico entra y sale de tu casa. Tambien reparte las IP privadas a los aparatos.
-<strong>Donde aparece en tu NAS:</strong> polypaw-nas se conecta a internet <strong>a traves de tu router</strong>. Cuando el NAS descarga una actualizacion de Ubuntu, pide los datos al router y este los trae de internet.</p>
+<strong>Donde aparece en tu NAS:</strong> polypaw-nas se conecta a internet <strong>a traves de tu router</strong>. Cuando el NAS descarga una actualizacion de Ubuntu, le pide los datos al router y este los trae de internet.</p>
 </blockquote>
-<p>Cuando un aparato quiere hablar con algo que NO esta en tu LAN (por ejemplo, una pagina web), no sabe el camino. Asi que entrega el paquete a una direccion especial: la <strong>puerta de enlace</strong>.</p>
+<p>Cuando un aparato quiere hablar con algo que NO esta en tu LAN (una pagina web, por ejemplo), no conoce el camino. Asi que entrega el paquete a una direccion especial: la <strong>puerta de enlace</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-puerta-de-enlace-gateway">🟦 ¿Que significa? — <em>Puerta de enlace (gateway)</em></h3>
 <p>Es la IP del router dentro de tu LAN, casi siempre la <code>.1</code> (como <code>192.168.1.1</code>). Es la "salida del barrio": todo lo que va hacia afuera pasa por ahi.
-<strong>Para que sirve:</strong> ser la unica puerta hacia internet. Si un aparato no sabe a donde mandar algo, se lo da a la gateway y ella se encarga.
+<strong>Para que sirve:</strong> ser la unica puerta hacia internet. Si un aparato no sabe a donde mandar algo, se lo entrega a la gateway y ella se encarga.
 <strong>Donde aparece en tu NAS:</strong> polypaw-nas tiene configurada una gateway. Cuando hace <code>apt update</code>, los datos salen por esa puerta.</p>
 </blockquote>
 <p>Para ver cual es tu gateway desde polypaw-nas:</p>
 <pre><code class="language-bash">ip route show
 </code></pre>
-<p>La linea que empieza con <code>default via</code> te muestra la IP de tu router. Por ejemplo <code>default via 192.168.1.1</code>. Esa es tu puerta de enlace.</p>
+<p>La linea que empieza con <code>default via</code> te muestra la IP de tu router. Por ejemplo, <code>default via 192.168.1.1</code>. Esa es tu puerta de enlace.</p>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Si conoces la IP de tu router (la gateway), puedes abrir su panel de configuracion escribiendola en el navegador: <code>http://192.168.1.1</code>. Ahi se hacen cosas importantes que veremos luego, como reservar la IP del NAS. Te pedira usuario y contrasena; suelen estar en una pegatina debajo del router.</p>
+<p>Si conoces la IP de tu router (la gateway), puedes abrir su panel de configuracion escribiendola en el navegador: <code>http://192.168.1.1</code>. Ahi se hacen cosas importantes que veremos luego, como reservar la IP del NAS. Te pedira usuario y contrasena; suelen venir en una pegatina debajo del router.</p>
 </blockquote>
 <hr />
 <h2 id="5-dns-con-mucha-calma">5. DNS, con mucha calma</h2>
-<p>Aqui viene el concepto que mas nervios da y menos razon tiene de darlos. Respira con Bit, que el DNS es facil cuando lo cuentas bien.</p>
-<p>Los humanos recordamos nombres: <code>google.com</code>, <code>github.com</code>. Las maquinas, en cambio, solo entienden numeros (IP). Hace falta una agenda telefonica que traduzca nombres a numeros. Esa agenda es el <strong>DNS</strong>.</p>
+<p>Llegamos al concepto que mas nervios provoca y menos razon tiene de provocarlos. Respira con Bit, que el DNS es facil cuando se cuenta bien.</p>
+<p>Los humanos recordamos nombres: <code>google.com</code>, <code>github.com</code>. Las maquinas, en cambio, solo entienden numeros (IP). Hace falta una agenda telefonica que traduzca nombres a numeros, y esa agenda es el <strong>DNS</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-dns">🟦 ¿Que significa? — <em>DNS</em></h3>
 <p>DNS viene de <em>Domain Name System</em>: sistema de nombres de dominio. Es el servicio que traduce un nombre como <code>github.com</code> a una direccion IP como <code>140.82.121.4</code>.
 <strong>Para que sirve:</strong> que escribas nombres faciles en vez de numeros imposibles de recordar. Sin DNS tendrias que memorizar la IP de cada web.
-<strong>Donde aparece en tu NAS:</strong> polypaw-nas usa DNS para resolver nombres cuando descarga paquetes o cuando clonas un repo como <code>tunal-digital</code> o <code>Faro/Organizer</code> desde GitHub. Y ademas, tu NAS <strong>es</strong> un servidor DNS gracias a AdGuard Home.</p>
+<strong>Donde aparece en tu NAS:</strong> polypaw-nas usa DNS para resolver nombres cuando descarga paquetes o cuando clonas un repo como <code>tunal-digital</code> o <code>Faro/Organizer</code> desde GitHub. Y, ademas, tu NAS <strong>es</strong> un servidor DNS gracias a AdGuard Home.</p>
 </blockquote>
 <p>El proceso, paso a paso, cuando tu laptop quiere entrar a una web:</p>
 <ol>
@@ -133,13 +133,13 @@
 <p>Todo esto pasa en milisegundos, cada vez que abres una pagina.</p>
 <blockquote class="def">
 <h3 id="que-significa-adguard-home">🟦 ¿Que significa? — <em>AdGuard Home</em></h3>
-<p>Es un programa que actua como tu servidor DNS personal y que, ademas de traducir nombres, <strong>bloquea</strong> los nombres de servidores conocidos de anuncios y rastreadores.
+<p>Es un programa que actua como tu servidor DNS personal y que, ademas de traducir nombres, <strong>bloquea</strong> los de los servidores conocidos de anuncios y rastreadores.
 <strong>Para que sirve:</strong> que la publicidad y los rastreadores no carguen, en todos los aparatos de tu casa a la vez, sin instalar nada en cada uno.
 <strong>Donde aparece en tu NAS:</strong> AdGuard Home corre en polypaw-nas. Cuando un aparato pide la IP de un servidor de anuncios, AdGuard responde "no existe" y el anuncio nunca aparece. Es DNS con superpoderes.</p>
 <h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
-<p>Para que AdGuard Home proteja toda tu casa, hay que decirle al <strong>router</strong> que el servidor DNS de la red es la IP de polypaw-nas. Asi todos los aparatos preguntan al NAS, y el NAS filtra anuncios para todos. Si solo lo configuras en un aparato, solo ese queda protegido.</p>
+<p>Para que AdGuard Home proteja toda tu casa, hay que decirle al <strong>router</strong> que el servidor DNS de la red es la IP de polypaw-nas. Asi todos los aparatos le preguntan al NAS, y el NAS filtra anuncios para todos. Si solo lo configuras en un aparato, solo ese queda protegido.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Si polypaw-nas se apaga y tu router apunta a el como unico DNS, <strong>toda la casa se queda sin internet</strong> (nadie puede traducir nombres). Por eso, en el router conviene poner un DNS de respaldo, como <code>1.1.1.1</code> (Cloudflare) o <code>9.9.9.9</code> (Quad9), por si tu NAS descansa. Recuerda que la bateria interna del Acer Nitro hace de UPS natural (una <em>Uninterruptible Power Supply</em>, o fuente de alimentacion ininterrumpida: una bateria que mantiene el equipo vivo durante un corte de luz), asi que un apagon corto no lo tumba, pero un mantenimiento si.</p>
+<p>Si polypaw-nas se apaga y tu router lo tiene puesto como unico DNS, <strong>toda la casa se queda sin internet</strong> (nadie puede traducir nombres). Por eso, en el router conviene poner un DNS de respaldo, como <code>1.1.1.1</code> (Cloudflare) o <code>9.9.9.9</code> (Quad9), por si tu NAS descansa. Recuerda que la bateria interna del Acer Nitro hace de UPS natural (una <em>Uninterruptible Power Supply</em>, o fuente de alimentacion ininterrumpida: una bateria que mantiene el equipo vivo durante un corte de luz), asi que un apagon corto no lo tumba, pero un mantenimiento si.</p>
 </blockquote>
 <p>Para comprobar que DNS usa tu polypaw-nas ahora mismo:</p>
 <pre><code class="language-bash">resolvectl status
@@ -150,10 +150,10 @@
 <p>Si te devuelve una IP, tu DNS esta vivo y trabajando.</p>
 <hr />
 <h2 id="6-puertos-las-puertas-numeradas-de-cada-servicio">6. Puertos: las puertas numeradas de cada servicio</h2>
-<p>Tu polypaw-nas hace muchas cosas a la vez: comparte archivos por Samba, muestra el panel Cockpit, resuelve DNS con AdGuard. Todo eso en una sola IP. Como sabe el NAS a cual servicio va cada peticion? Con los <strong>puertos</strong>.</p>
+<p>Tu polypaw-nas hace muchas cosas a la vez: comparte archivos por Samba, muestra el panel Cockpit, resuelve DNS con AdGuard. Y todo eso en una sola IP. Como sabe el NAS a que servicio va cada peticion? Con los <strong>puertos</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
-<p>Es un numero (del 1 al 65535) que identifica a un servicio concreto dentro de un aparato. Si la IP es la direccion del edificio, el puerto es el numero de la oficina adentro.
+<p>Es un numero (del 1 al 65535) que identifica a un servicio concreto dentro de un aparato. Si la IP es la direccion del edificio, el puerto es el numero de la oficina de adentro.
 <strong>Para que sirve:</strong> que un mismo aparato ofrezca varios servicios sin confundirlos. La peticion llega a "IP : puerto", y el sistema sabe a quien entregarla.
 <strong>Donde aparece en tu NAS:</strong> cada servicio de polypaw-nas escucha en su propio puerto. Cockpit en el 9090, Samba en el 445, AdGuard en el 53.</p>
 </blockquote>
@@ -168,39 +168,39 @@
 <strong>Para que sirve:</strong> administrar polypaw-nas desde el navegador, sin memorizar comandos.
 <strong>Donde aparece en tu NAS:</strong> cuando abres <code>http://192.168.1.42:9090</code>, hablas con Cockpit en el puerto 9090. Ahi vigilas, por ejemplo, que los 8 GB de RAM no se queden cortos.</p>
 <h3 id="que-significa-puerto-53-dns">🟦 ¿Que significa? — <em>Puerto 53 (DNS)</em></h3>
-<p>Es el puerto estandar del servicio DNS. AdGuard Home escucha aqui las preguntas "que IP tiene este nombre?".
+<p>Es el puerto estandar del servicio DNS. AdGuard Home escucha aqui las preguntas del tipo "que IP tiene este nombre?".
 <strong>Para que sirve:</strong> recibir y responder las consultas de nombres de toda tu casa.
 <strong>Donde aparece en tu NAS:</strong> AdGuard Home en polypaw-nas escucha en el puerto 53. Cada vez que un aparato traduce un nombre, toca esta puerta.</p>
 </blockquote>
 <p>Para ver con tus propios ojos que puertos estan escuchando en tu polypaw-nas:</p>
 <pre><code class="language-bash">sudo ss -tulpn
 </code></pre>
-<p>Veras una tabla. Busca en la columna de direcciones los numeros <code>:445</code>, <code>:9090</code> y <code>:53</code>. A su lado aparece el programa que escucha (smbd, cockpit, AdGuardHome). Es como pasar lista de las puertas abiertas adentro de tu NAS.</p>
+<p>Veras una tabla. Busca en la columna de direcciones los numeros <code>:445</code>, <code>:9090</code> y <code>:53</code>. A su lado aparece el programa que escucha (smbd, cockpit, AdGuardHome). Es como pasar lista de las puertas abiertas dentro de tu NAS.</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>La columna "State" mostrara <code>LISTEN</code> para los servicios que estan esperando conexiones. Si un servicio que esperabas no aparece, quiza no esta arrancado. Con Cockpit o con <code>systemctl status</code> puedes revisar y reiniciarlo.</p>
+<p>La columna "State" mostrara <code>LISTEN</code> para los servicios que estan esperando conexiones. Si un servicio que esperabas no aparece, quiza no esta arrancado. Con Cockpit o con <code>systemctl status</code> puedes revisarlo y reiniciarlo.</p>
 </blockquote>
 <hr />
 <h2 id="7-reservar-una-ip-fija-para-tu-nas-dhcp-reservation">7. Reservar una IP fija para tu NAS (DHCP reservation)</h2>
-<p>Tenemos un problema practico que resolver. Hasta ahora tu router reparte IP automaticamente con un sistema llamado DHCP. Eso es comodo, pero tiene un riesgo: la IP de polypaw-nas <strong>podria cambiar</strong> al reiniciar.</p>
+<p>Tenemos un problema practico por resolver. Hasta ahora tu router reparte las IP automaticamente con un sistema llamado DHCP. Eso es comodo, pero trae un riesgo: la IP de polypaw-nas <strong>podria cambiar</strong> al reiniciar.</p>
 <blockquote class="def">
 <h3 id="que-significa-dhcp">🟦 ¿Que significa? — <em>DHCP</em></h3>
 <p>DHCP viene de <em>Dynamic Host Configuration Protocol</em>. Es el sistema por el cual el router reparte automaticamente una IP a cada aparato que se conecta, sin que tu hagas nada.
-<strong>Para que sirve:</strong> que conectes aparatos sin configurar IP a mano. Genial para el telefono y la tele.
-<strong>Donde aparece en tu NAS:</strong> cuando polypaw-nas arranca, pide una IP al router por DHCP. El problema: el router podria darle hoy <code>.42</code> y manana <code>.57</code>.</p>
+<strong>Para que sirve:</strong> que conectes aparatos sin configurar la IP a mano. Genial para el telefono y la tele.
+<strong>Donde aparece en tu NAS:</strong> cuando polypaw-nas arranca, le pide una IP al router por DHCP. El problema: el router podria darle hoy la <code>.42</code> y manana la <code>.57</code>.</p>
 </blockquote>
 <p>Si la IP cambia, tus accesos guardados (<code>\\192.168.1.42\PolyPawNAS</code>, <code>http://192.168.1.42:9090</code>) dejan de funcionar de golpe. Un NAS necesita una direccion <strong>estable</strong>. La solucion mas limpia es la <strong>reserva DHCP</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-reserva-dhcp-dhcp-reservation">🟦 ¿Que significa? — <em>Reserva DHCP (DHCP reservation)</em></h3>
 <p>Es decirle al router: "este aparato concreto siempre debe recibir esta misma IP". El router sigue repartiendo IP automaticamente al resto, pero a tu NAS le reserva siempre la misma.
 <strong>Para que sirve:</strong> que polypaw-nas tenga IP fija sin configurar nada en el propio NAS, y sin riesgo de choques con otros aparatos.
-<strong>Donde aparece en tu NAS:</strong> lo configuras en el panel del router, no en el NAS. Una vez hecho, la IP de polypaw-nas no vuelve a cambiar.</p>
+<strong>Donde aparece en tu NAS:</strong> esto lo configuras en el panel del router, no en el NAS. Una vez hecho, la IP de polypaw-nas no vuelve a cambiar.</p>
 </blockquote>
 <p>Para reservar la IP necesitas la <strong>direccion MAC</strong> de tu NAS, que es como su huella digital fisica.</p>
 <blockquote class="def">
 <h3 id="que-significa-direccion-mac">🟦 ¿Que significa? — <em>Direccion MAC</em></h3>
 <p>Es un identificador unico de la tarjeta de red de un aparato, como <code>a4:b1:c2:d3:e4:f5</code>. Viene de fabrica y no cambia.
-<strong>Para que sirve:</strong> que el router reconozca a polypaw-nas sin importar que IP tenga, para asignarle siempre la reservada.
+<strong>Para que sirve:</strong> que el router reconozca a polypaw-nas sin importar que IP tenga en ese momento, para asignarle siempre la reservada.
 <strong>Donde aparece en tu NAS:</strong> la ves con <code>ip addr</code>, en la linea <code>link/ether</code>. Ese es el "nombre fisico" de la tarjeta de red de tu Acer Nitro.</p>
 </blockquote>
 <p>Pasos:</p>
@@ -209,42 +209,42 @@
 <p>Apunta la MAC (linea <code>link/ether</code>) y la IP actual. Luego entra al router (<code>http://192.168.1.1</code>), busca una seccion llamada "DHCP reservation", "Address reservation" o "IP estatica por MAC", y enlaza la MAC de polypaw-nas con la IP que quieras fijarle (idealmente la que ya tiene, para no romper nada).</p>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Existe otra forma, dar IP fija dentro del propio Ubuntu (con Netplan, la herramienta de Ubuntu Server 26.04 para configurar la red mediante archivos de texto). Funciona, pero es mas facil equivocarse y dejar el NAS sin red. <strong>Para principiantes, la reserva DHCP en el router es mas segura:</strong> si algo sale mal, lo deshaces desde el router sin tocar el servidor. Bit recomienda empezar por ahi.</p>
+<p>Existe otra forma: dar la IP fija dentro del propio Ubuntu (con Netplan, la herramienta de Ubuntu Server 26.04 para configurar la red mediante archivos de texto). Funciona, pero es mas facil equivocarse y dejar el NAS sin red. <strong>Para principiantes, la reserva DHCP en el router es mas segura:</strong> si algo sale mal, lo deshaces desde el router sin tocar el servidor. Bit recomienda empezar por ahi.</p>
 <h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
-<p>Con la IP fija reservada, todo tu mundo se vuelve estable: los accesos de Samba a <code>PolyPawNAS</code>, la URL de Cockpit, y el router apuntando a polypaw-nas como DNS de AdGuard. Una sola direccion, siempre la misma, sosteniendo todo.</p>
+<p>Con la IP fija reservada, todo tu mundo se vuelve estable: los accesos de Samba a <code>PolyPawNAS</code>, la URL de Cockpit y el router apuntando a polypaw-nas como DNS de AdGuard. Una sola direccion, siempre la misma, sosteniendo todo.</p>
 </blockquote>
 <hr />
-<h2 id="8-por-que-no-abrir-puertos-al-internet-a-la-ligera">8. Por que NO abrir puertos al internet a la ligera</h2>
+<h2 id="8-por-que-no-abrir-puertos-a-internet-a-la-ligera">8. Por que NO abrir puertos a internet a la ligera</h2>
 <p>Llegamos a la seccion mas importante del capitulo. Leela dos veces. Bit se pone serio un momento (lo cual en un ajolote es muy tierno, pero hablamos en serio).</p>
 <p>Hasta aqui, todos esos puertos (445, 9090, 53) solo escuchan dentro de tu LAN. Desde internet <strong>nadie</strong> los ve, porque tu NAS no tiene IP publica. Eso es seguridad por defecto, y es excelente.</p>
-<p>Para acceder a polypaw-nas desde fuera de casa, existe una tentacion peligrosa: <strong>abrir un puerto</strong> en el router (lo llaman "port forwarding" o redireccion de puertos) para que internet pueda entrar.</p>
+<p>Para acceder a polypaw-nas desde fuera de casa existe una tentacion peligrosa: <strong>abrir un puerto</strong> en el router (lo llaman "port forwarding" o redireccion de puertos) para que internet pueda entrar.</p>
 <blockquote class="def">
 <h3 id="que-significa-abrir-un-puerto-port-forwarding">🟦 ¿Que significa? — <em>Abrir un puerto (port forwarding)</em></h3>
-<p>Es configurar el router para que las peticiones que lleguen de internet a un puerto se reenvien a un aparato concreto de tu LAN. En la practica, abres una puerta de tu casa hacia el mundo entero.
+<p>Es configurar el router para que las peticiones que llegan de internet a un puerto se reenvien a un aparato concreto de tu LAN. En la practica, abres una puerta de tu casa hacia el mundo entero.
 <strong>Para que sirve:</strong> acceder a un servicio desde fuera de casa. Pero tiene un costo enorme en seguridad.
 <strong>Donde aparece en tu NAS:</strong> ojala <strong>no</strong> aparezca. Si abres el 445 o el 9090, los expones a todo internet, incluidos los robots que escanean dia y noche buscando puertas abiertas para atacar.</p>
 </blockquote>
 <p>Por que es tan peligroso:</p>
 <ul>
-<li>En cuanto abres un puerto, <strong>bots automaticos</strong> lo encuentran en minutos. No hace falta que alguien te conozca; rastrean todo internet sin parar.</li>
-<li>Samba (445) expuesto al internet es una de las puertas mas atacadas de la historia. Por ahi entraron ataques famosos de secuestro de datos.</li>
-<li>Cockpit (9090) expuesto da acceso a <strong>administrar tu servidor entero</strong>. Si alguien adivina la contrasena, controla todo.</li>
-<li>DNS (53) abierto puede ser usado para amplificar ataques contra terceros, y meterte en problemas sin saberlo.</li>
+<li>En cuanto abres un puerto, <strong>bots automaticos</strong> lo encuentran en minutos. No hace falta que alguien te conozca; rastrean internet entero sin parar.</li>
+<li>Samba (445) expuesto a internet es una de las puertas mas atacadas de la historia. Por ahi entraron ataques famosos de secuestro de datos.</li>
+<li>Cockpit (9090) expuesto le da a quien sea acceso para <strong>administrar tu servidor entero</strong>. Si alguien adivina la contrasena, lo controla todo.</li>
+<li>DNS (53) abierto puede usarse para amplificar ataques contra terceros, y meterte en problemas sin que te enteres.</li>
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Nunca, jamas, abras los puertos 445, 9090 o 53 de polypaw-nas hacia internet "por probar". No es como dejar una ventana entornada: es como publicar la llave de tu casa en una valla de carretera. Si necesitas acceso remoto, hay una forma segura, y ya la tienes instalada.</p>
+<p>Nunca, jamas, abras los puertos 445, 9090 o 53 de polypaw-nas hacia internet "por probar". No es como dejar una ventana entornada: es como colgar la llave de tu casa en una valla de la carretera. Si necesitas acceso remoto, hay una forma segura, y ya la tienes instalada.</p>
 </blockquote>
 <p>La forma correcta de llegar a tu NAS desde fuera es <strong>Tailscale</strong>, que ya esta en polypaw-nas.</p>
 <blockquote class="def">
 <h3 id="que-significa-tailscale-vpn">🟦 ¿Que significa? — <em>Tailscale (VPN)</em></h3>
 <p>Es una VPN (<em>Virtual Private Network</em>, red privada virtual): crea un tunel cifrado entre tus aparatos, como si todos estuvieran en la misma LAN aunque esten en ciudades distintas.
-<strong>Para que sirve:</strong> acceder a polypaw-nas desde cualquier lugar <strong>sin abrir ningun puerto</strong> al internet. Solo tus propios aparatos, autenticados, pueden entrar al tunel.
+<strong>Para que sirve:</strong> acceder a polypaw-nas desde cualquier lugar <strong>sin abrir ningun puerto</strong> a internet. Solo tus propios aparatos, autenticados, pueden entrar al tunel.
 <strong>Donde aparece en tu NAS:</strong> Tailscale corre en polypaw-nas. Desde tu laptop con Tailscale, ves el NAS con una IP privada de Tailscale (algo como <code>100.x.x.x</code>) y usas Cockpit o Samba como si estuvieras en casa, sin exponer nada.</p>
 <h3 id="tip_3">💡 Tip</h3>
 <p>Con Tailscale puedes hacer todo lo remoto que quieras sin tocar el router: abres Cockpit, montas Samba, administras Docker o Podman. Es la diferencia entre un tunel privado y vigilado, y una puerta abierta a la calle. Siempre el tunel.</p>
 <h3 id="en-tu-servidor_3">🔎 En tu servidor</h3>
-<p>Repasa tu seguridad de red en polypaw-nas: cero puertos abiertos en el router hacia internet; Tailscale para lo remoto; contrasenas fuertes y distintas en Cockpit, Samba y AdGuard; y respaldos de lo importante (tus repos <code>PolyPaw</code>, <code>RachaSimple</code>, <code>tunal-digital</code>, <code>Faro/Organizer</code>) en el HDD de <code>/srv/nas</code>, y si puedes, una copia tambien fuera del NAS. Un NAS sin respaldo externo es un solo disco que puede fallar.</p>
+<p>Repasa tu seguridad de red en polypaw-nas: cero puertos abiertos en el router hacia internet; Tailscale para lo remoto; contrasenas fuertes y distintas en Cockpit, Samba y AdGuard; y respaldos de lo importante (tus repos <code>PolyPaw</code>, <code>RachaSimple</code>, <code>tunal-digital</code>, <code>Faro/Organizer</code>) en el HDD de <code>/srv/nas</code>, y, si puedes, una copia tambien fuera del NAS. Un NAS sin respaldo externo es un solo disco que puede fallar.</p>
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
 <p>Recuerda el limite de los 8 GB de RAM de tu Acer Nitro. Samba, Cockpit, AdGuard, Tailscale y los contenedores de Docker o Podman conviven en esa memoria. Vigila en Cockpit que no se sature: una red bien configurada no sirve de nada si el servidor se queda sin aire. Bit prefiere un NAS holgado a uno ahogado.</p>
 </blockquote>

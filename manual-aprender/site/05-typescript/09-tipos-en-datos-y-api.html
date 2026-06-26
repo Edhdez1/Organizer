@@ -23,32 +23,32 @@
 </p>
 
 <blockquote>
-<p>Hasta aquí tus tipos describían cosas que vivían <strong>dentro</strong> de tu programa: un hábito, un
-proyecto, una función. Pero las apps de verdad respiran datos que vienen de <strong>afuera</strong>: una
-respuesta de Supabase, el JSON que devuelve la API de Claude, el cuerpo de un <code>fetch</code>. Y ahí
-hay una trampa que atrapa a todos los principiantes: <strong>TypeScript no sabe qué forma tiene un
-dato que llega de afuera, y tampoco lo comprueba cuando el programa corre.</strong> Bit (tu ajolote
-de confianza) te va a enseñar a tipar esos datos con cuidado, a usar <code>unknown</code> en vez de <code>any</code>,
-a usar <code>as</code> solo cuando de verdad toca, y —lo más importante— a entender por qué TS te protege
-<em>mientras escribes</em> pero <strong>no</strong> te protege <em>mientras se ejecuta</em>. Ese matiz es la diferencia
-entre un bug tranquilo y un bug que te despierta a las 3 de la mañana.</p>
+<p>Hasta ahora, tus tipos describían cosas que vivían <strong>dentro</strong> de tu programa: un hábito, un
+proyecto, una función. Pero las apps de verdad se alimentan de datos que llegan de <strong>afuera</strong>: la
+respuesta de Supabase, el JSON que devuelve la API de Claude, el cuerpo de un <code>fetch</code>. Y justo ahí
+hay una trampa con la que tropiezan casi todos los principiantes: <strong>TypeScript no sabe qué forma
+tiene un dato que viene de afuera, y tampoco lo comprueba cuando el programa corre.</strong> Bit (tu
+ajolote de confianza) te va a enseñar a tipar esos datos con cuidado, a usar <code>unknown</code> en lugar de
+<code>any</code>, a echar mano de <code>as</code> solo cuando de verdad hace falta, y —sobre todo— a entender por qué TS
+te cuida <em>mientras escribes</em> pero <strong>no</strong> <em>mientras se ejecuta</em>. Ese detalle es la diferencia entre
+un bug tranquilo y uno de esos que te despiertan a las tres de la mañana.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-typescript-desaparece-en-tiempo-de-ejecucion">1. El problema: TypeScript desaparece en tiempo de ejecución</h2>
-<p>Lo primero que tienes que grabarte a fuego: <strong>TypeScript es JavaScript con tipos, y los tipos
-solo existen mientras programas.</strong> Cuando tu código se compila (o se transpila), TS <strong>borra</strong>
-todos los tipos y deja JavaScript puro. El navegador y el servidor ejecutan JavaScript; no saben
-ni les importa qué tipos escribiste.</p>
+<p>Lo primero que conviene grabarse a fuego: <strong>TypeScript es JavaScript con tipos, y los tipos solo
+existen mientras programas.</strong> En el momento en que tu código se compila (o se transpila), TS <strong>borra</strong>
+todos los tipos y deja JavaScript puro. El navegador y el servidor ejecutan ese JavaScript; no saben
+qué tipos escribiste, y francamente no les importa.</p>
 <blockquote class="def">
 <h3 id="que-significa-tiempo-de-compilacion-vs-tiempo-de-ejecucion">🟦 ¿Qué significa? — <em>Tiempo de compilación vs. tiempo de ejecución</em></h3>
-<p><strong>Tiempo de compilación</strong> es el momento en que TypeScript revisa tu código (mientras escribes,
-o cuando corres <code>npm run build</code>). <strong>Tiempo de ejecución</strong> (en inglés <em>runtime</em>) es cuando el
-programa ya está corriendo de verdad, recibiendo datos y respondiendo a usuarios. <strong>Para qué
-sirve la distinción:</strong> los tipos de TS solo trabajan en tiempo de compilación; en tiempo de
-ejecución ya no están. <strong>Dónde se ve:</strong> en Faro (Next.js), <code>npm run build</code> revisa los tipos;
+<p><strong>Tiempo de compilación</strong> es el momento en que TypeScript revisa tu código: mientras escribes, o
+cuando corres <code>npm run build</code>. <strong>Tiempo de ejecución</strong> (en inglés <em>runtime</em>) es cuando el programa
+ya está corriendo de verdad, recibiendo datos y respondiéndole a los usuarios. <strong>Para qué sirve la
+distinción:</strong> los tipos de TS solo trabajan en tiempo de compilación; cuando llega el tiempo de
+ejecución, ya no están. <strong>Dónde se ve:</strong> en Faro (Next.js), <code>npm run build</code> revisa los tipos; pero
 cuando un usuario abre el dashboard, lo que corre es JavaScript sin tipos.</p>
 </blockquote>
-<p>Mira este ejemplo. Le decimos a TypeScript que <code>datos</code> es un objeto con <code>nombre</code>:</p>
+<p>Veamos un ejemplo. Le decimos a TypeScript que <code>datos</code> es un objeto con <code>nombre</code>:</p>
 <pre><code class="language-typescript">interface Usuario {
   nombre: string;
 }
@@ -58,88 +58,87 @@ function saludar(usuario: Usuario) {
   return &quot;Hola, &quot; + usuario.nombre.toUpperCase();
 }
 </code></pre>
-<p>Esto compila sin un solo error. Pero si en tiempo de ejecución llega un objeto que <strong>no</strong> tiene
-<code>nombre</code> (porque la API cambió, porque hubo un error, porque el dato vino vacío), <code>usuario.nombre</code>
-será <code>undefined</code>, y <code>undefined.toUpperCase()</code> revienta con un error de verdad, en producción,
-delante del usuario.</p>
+<p>Esto compila sin un solo error. Pero si en tiempo de ejecución llega un objeto que <strong>no</strong> trae
+<code>nombre</code> —porque la API cambió, porque hubo un fallo, porque el dato vino vacío—, entonces
+<code>usuario.nombre</code> será <code>undefined</code>, y <code>undefined.toUpperCase()</code> revienta con un error real, en
+producción, delante del usuario.</p>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>TypeScript <strong>no genera código que valide</strong> que tus datos cumplen el tipo. Si tú <em>afirmas</em> que
-algo es <code>Usuario</code>, TS te cree. Si mentiste (o si la realidad cambió), el error aparece en runtime,
-donde TS ya no puede ayudarte. Tipar bien reduce muchísimo los bugs, pero <strong>no</strong> los elimina
-cuando los datos vienen de afuera.</p>
+<p>TypeScript <strong>no genera código que valide</strong> que tus datos cumplen el tipo. Si tú <em>afirmas</em> que algo
+es <code>Usuario</code>, TS te cree sin más. Si mentiste (o si la realidad cambió por el camino), el error
+aparece en runtime, justo donde TS ya no puede echarte una mano. Tipar bien reduce muchísimo los
+bugs, pero <strong>no</strong> los elimina cuando los datos vienen de afuera.</p>
 </blockquote>
 <hr />
 <h2 id="2-datos-de-afuera-el-fetch-no-sabe-que-te-devuelve">2. Datos de afuera: el <code>fetch</code> no sabe qué te devuelve</h2>
 <p>Cuando pides datos con <code>fetch</code> (la función de JavaScript para hablar con APIs), el resultado de
-<code>response.json()</code> tiene un tipo muy honesto: <code>any</code>. Es decir, "puede ser cualquier cosa". Y eso
-es peligroso.</p>
+<code>response.json()</code> tiene un tipo de lo más honesto: <code>any</code>. O sea, "puede ser cualquier cosa". Y ahí
+está el peligro.</p>
 <blockquote class="def">
 <h3 id="que-significa-fetch">🟦 ¿Qué significa? — <em><code>fetch</code></em></h3>
-<p><code>fetch</code> es una función nativa de JavaScript (la viste en el módulo 03) que hace una petición de
-red a una URL y devuelve una promesa con la respuesta. <strong>Para qué sirve:</strong> pedir datos a una API
-y mandar datos a una API. <strong>Dónde se usa:</strong> Faro la usa para llamar a GitHub y a sus propias
-rutas internas; tunal-digital (el sitio en HTML/CSS/JS) la usa para hablar con servicios externos.</p>
+<p><code>fetch</code> es una función nativa de JavaScript (la viste en el módulo 03) que hace una petición de red
+a una URL y devuelve una promesa con la respuesta. <strong>Para qué sirve:</strong> pedir datos a una API y
+mandar datos a una API. <strong>Dónde se usa:</strong> Faro la usa para llamar a GitHub y a sus propias rutas
+internas; tunal-digital (el sitio en HTML/CSS/JS) la usa para hablar con servicios externos.</p>
 <h3 id="que-significa-json">🟦 ¿Qué significa? — <em>JSON</em></h3>
-<p>JSON (<em>JavaScript Object Notation</em>) es un formato de texto para representar datos: objetos,
-listas, strings, números y booleanos. <strong>Para qué sirve:</strong> es el idioma común con el que las APIs
-mandan y reciben datos. <strong>Dónde se usa:</strong> la API de Claude responde en JSON; Supabase devuelve
-filas que tu cliente convierte en objetos JSON; PolyPaw (la app de Python) guarda su contenido
-en archivos <code>.json</code>.</p>
+<p>JSON (<em>JavaScript Object Notation</em>) es un formato de texto para representar datos: objetos, listas,
+strings, números y booleanos. <strong>Para qué sirve:</strong> es el idioma común con el que las APIs mandan y
+reciben datos. <strong>Dónde se usa:</strong> la API de Claude responde en JSON; Supabase devuelve filas que tu
+cliente convierte en objetos JSON; PolyPaw (la app de Python) guarda su contenido en archivos
+<code>.json</code>.</p>
 </blockquote>
-<p>Cuando haces <code>await response.json()</code>, JavaScript te da un objeto, pero TypeScript no tiene forma
-de saber <strong>qué forma</strong> tiene ese objeto. Mira:</p>
+<p>Cuando haces <code>await response.json()</code>, JavaScript te entrega un objeto, pero TypeScript no tiene
+manera de saber <strong>qué forma</strong> tiene ese objeto. Fíjate:</p>
 <pre><code class="language-typescript">const response = await fetch(&quot;https://api.ejemplo.com/proyecto&quot;);
 const datos = await response.json();
 // datos es de tipo `any`: TS te deja hacer CUALQUIER cosa con él
 datos.lo_que_sea.que_se_te_ocurra; // ✅ compila... y revienta en runtime
 </code></pre>
-<p>El tipo <code>any</code> apaga por completo el corrector de TypeScript para esa variable. Es como decirle
-"confía en mí, no revises nada". Y ya sabemos cómo termina eso.</p>
+<p>El tipo <code>any</code> apaga por completo el corrector de TypeScript para esa variable. Es como decirle "tú
+confía en mí, no revises nada". Y ya sabes cómo acaba eso.</p>
 <hr />
 <h2 id="3-unknown-el-no-se-que-es-obligame-a-comprobarlo">3. <code>unknown</code>: el "no sé qué es, oblígame a comprobarlo"</h2>
-<p>La alternativa correcta a <code>any</code> es <code>unknown</code>. Significa lo mismo a primera vista ("no sé qué tipo
-es"), pero con una diferencia enorme: <strong>TypeScript no te deja usar un <code>unknown</code> hasta que
-demuestres qué es.</strong></p>
+<p>La alternativa correcta a <code>any</code> es <code>unknown</code>. A primera vista significan lo mismo ("no sé qué tipo
+es"), pero hay una diferencia enorme entre ellos: <strong>TypeScript no te deja usar un <code>unknown</code> hasta que
+le demuestres qué es.</strong></p>
 <blockquote class="def">
 <h3 id="que-significa-unknown">🟦 ¿Qué significa? — <em><code>unknown</code></em></h3>
-<p><code>unknown</code> es un tipo que representa "un valor del que no sé nada todavía". <strong>Para qué sirve:</strong>
-es la puerta de entrada segura para datos externos; te obliga a comprobar la forma del dato
-antes de tocarlo. <strong>Dónde se usa:</strong> en Faro, el tipo <code>SourceSnapshot</code> guarda datos cuya forma
-puede variar como <code>Record&lt;string, unknown&gt;</code> — un objeto del que solo sabemos que sus claves son
-strings, pero no qué valores tienen.</p>
+<p><code>unknown</code> es un tipo que representa "un valor del que todavía no sé nada". <strong>Para qué sirve:</strong> es la
+puerta de entrada segura para los datos externos; te obliga a comprobar la forma del dato antes de
+tocarlo. <strong>Dónde se usa:</strong> en Faro, el tipo <code>SourceSnapshot</code> guarda datos cuya forma puede variar
+como <code>Record&lt;string, unknown&gt;</code> — un objeto del que solo sabemos que sus claves son strings, pero no
+qué hay dentro de cada valor.</p>
 <h3 id="que-significa-any">🟦 ¿Qué significa? — <em><code>any</code></em></h3>
 <p><code>any</code> es un tipo que desactiva todas las comprobaciones de TypeScript para ese valor. <strong>Para qué
-sirve:</strong> para casi nada bueno; es una válvula de escape que te quita la red de seguridad. <strong>Dónde
-se usa:</strong> lo ideal es que aparezca lo menos posible. Cada <code>any</code> es un huequito por donde se cuela
-un bug.</p>
+sirve:</strong> para casi nada bueno; es una válvula de escape que te arranca la red de seguridad. <strong>Dónde
+se usa:</strong> lo ideal es que aparezca lo menos posible. Cada <code>any</code> es un huequito por donde se cuela un
+bug.</p>
 </blockquote>
-<p>La diferencia en código:</p>
+<p>La diferencia, en código:</p>
 <pre><code class="language-typescript">const conAny: any = await response.json();
 conAny.nombre.toUpperCase(); // ✅ compila (peligroso: TS no revisa nada)
 
 const conUnknown: unknown = await response.json();
 conUnknown.nombre; // ❌ ERROR de compilación: &quot;El objeto es de tipo 'unknown'&quot;
 </code></pre>
-<p>Con <code>unknown</code>, TypeScript te frena. Te dice: "antes de tocar <code>.nombre</code>, demuéstrame que esto es
-un objeto con <code>nombre</code>". Y eso te empuja a hacer lo correcto: <strong>validar</strong>.</p>
+<p>Con <code>unknown</code>, TypeScript te frena en seco. Te dice: "antes de tocar <code>.nombre</code>, demuéstrame que esto
+es un objeto que tiene <code>nombre</code>". Y eso te empuja a hacer lo correcto: <strong>validar</strong>.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Regla de oro de Bit: cuando recibas datos de afuera (<code>fetch</code>, <code>JSON.parse</code>, una librería sin
-tipos), escríbelos como <code>unknown</code>, no como <code>any</code>. <code>unknown</code> es el portero estricto; <code>any</code> es la
-puerta sin portero.</p>
+<p>Regla de oro de Bit: cuando recibas datos de afuera (<code>fetch</code>, <code>JSON.parse</code>, una librería sin tipos),
+escríbelos como <code>unknown</code>, nunca como <code>any</code>. <code>unknown</code> es el portero estricto; <code>any</code> es la puerta
+sin portero.</p>
 </blockquote>
 <hr />
 <h2 id="4-aserciones-de-tipo-as-el-yo-se-mas-que-typescript">4. Aserciones de tipo (<code>as</code>): el "yo sé más que TypeScript"</h2>
-<p>A veces tú sí sabes con seguridad qué forma tiene un dato, aunque TS no pueda deducirlo. Para esos
-casos existe la <strong>aserción de tipo</strong> con la palabra <code>as</code>.</p>
+<p>A veces tú sí sabes con certeza qué forma tiene un dato, aunque TS no pueda deducirlo solo. Para esos
+casos existe la <strong>aserción de tipo</strong>, que se escribe con la palabra <code>as</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-asercion-de-tipo-as">🟦 ¿Qué significa? — <em>Aserción de tipo (<code>as</code>)</em></h3>
-<p>Una aserción de tipo es decirle a TypeScript "trata este valor como si fuera de <strong>este</strong> tipo,
-confía en mí". Se escribe con <code>as</code> seguido del tipo. <strong>Para qué sirve:</strong> convencer al corrector
-cuando tú tienes información que él no tiene. <strong>Dónde se usa:</strong> en RachaSimple, los repositorios
-de Supabase usan <code>as Habit[]</code> para decirle a TS que las filas que devolvió la consulta son
-hábitos.</p>
+<p>Una aserción de tipo es decirle a TypeScript "trata este valor como si fuera de <strong>este</strong> tipo, confía
+en mí". Se escribe con <code>as</code> seguido del tipo. <strong>Para qué sirve:</strong> convencer al corrector cuando tú
+tienes información que él no tiene. <strong>Dónde se usa:</strong> en RachaSimple, los repositorios de Supabase
+usan <code>as Habit[]</code> para decirle a TS que las filas que devolvió la consulta son hábitos.</p>
 </blockquote>
 <p>Así se ve en el repositorio real de hábitos de RachaSimple (<code>src/repositories/habits.ts</code>):</p>
 <pre><code class="language-typescript">async listAll(): Promise&lt;Habit[]&gt; {
@@ -151,26 +150,26 @@ hábitos.</p>
   return (data ?? []) as Habit[]; // ← aserción: &quot;esto es un arreglo de Habit&quot;
 }
 </code></pre>
-<p>Supabase devuelve <code>data</code> con un tipo genérico; el <code>as Habit[]</code> le dice a TypeScript "lo que llegó
-son hábitos". Fíjate también en el <code>data ?? []</code>: el operador <code>??</code> (que viste en el módulo 03)
-dice "si <code>data</code> es <code>null</code> o <code>undefined</code>, usa un arreglo vacío en su lugar". Así nunca devuelves
-<code>null</code> cuando prometiste un arreglo.</p>
+<p>Supabase devuelve <code>data</code> con un tipo genérico; el <code>as Habit[]</code> le dice a TypeScript "lo que llegó son
+hábitos". Fíjate también en el <code>data ?? []</code>: el operador <code>??</code> (que viste en el módulo 03) significa
+"si <code>data</code> es <code>null</code> o <code>undefined</code>, usa un arreglo vacío en su lugar". Así nunca devuelves <code>null</code>
+cuando habías prometido un arreglo.</p>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p><code>as</code> <strong>no convierte ni valida nada</strong>. No transforma el dato, no comprueba que de verdad sea un
-<code>Habit</code>. Solo le dice a TypeScript "cállate y créeme". Si te equivocas, TS no te avisa, y el bug
-aparece en runtime. Por eso <code>as</code> se usa <strong>con cuidado</strong> y solo cuando de verdad sabes más que el
-compilador. Si dudas, no uses <code>as</code>: <strong>valida</strong>.</p>
+<p><code>as</code> <strong>no convierte ni valida nada</strong>. No transforma el dato ni comprueba que de verdad sea un
+<code>Habit</code>. Lo único que hace es decirle a TypeScript "cállate y créeme". Si te equivocas, TS no te
+avisa, y el bug aparece en runtime. Por eso <code>as</code> se usa <strong>con cuidado</strong> y solo cuando de verdad sabes
+más que el compilador. Si dudas, no lo uses: <strong>valida</strong>.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Una pista para distinguir: <code>as</code> es una <strong>promesa que tú le haces a TypeScript</strong>. Validar en
+<p>Una pista para distinguirlos: <code>as</code> es una <strong>promesa que tú le haces a TypeScript</strong>. Validar en
 runtime es una <strong>comprobación que tu programa hace de verdad</strong>. La promesa puede ser falsa; la
 comprobación no miente. En código que toca datos externos, prefiere comprobar.</p>
 </blockquote>
 <hr />
 <h2 id="5-tipar-las-filas-de-supabase-rachasimple-y-faro">5. Tipar las filas de Supabase (RachaSimple y Faro)</h2>
-<p>Las dos apps con TypeScript de tu portafolio usan Supabase, y las dos definen tipos para sus
-filas en un archivo aparte. En RachaSimple ese archivo es <code>src/types/database.ts</code>. Empieza
-declarando <strong>uniones de strings literales</strong> para los valores fijos (que viste en el capítulo 06):</p>
+<p>Las dos apps con TypeScript de tu portafolio usan Supabase, y las dos definen los tipos de sus filas
+en un archivo aparte. En RachaSimple ese archivo es <code>src/types/database.ts</code>. Empieza declarando
+<strong>uniones de strings literales</strong> para los valores fijos (las que viste en el capítulo 06):</p>
 <pre><code class="language-typescript">export type SupportTone = 'gentle' | 'practical' | 'encouraging' | 'direct';
 export type HabitCategory =
   | 'reading' | 'exercise' | 'study' | 'wellness'
@@ -193,9 +192,9 @@ export type CheckinStatus = 'completed' | 'minimum' | 'recovery' | 'not_done';
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Mira los <code>| null</code> repartidos por la interface: <code>user_id</code>, <code>emoji</code>. Eso refleja la realidad de la
-base de datos, donde esas columnas <strong>pueden estar vacías</strong>. Tipar el <code>null</code> te obliga a manejar
-el caso "no hay valor" en vez de olvidarlo. Es TypeScript diciéndote "ojo, esto a veces no está".</p>
+<p>Mira los <code>| null</code> repartidos por la interface: <code>user_id</code>, <code>emoji</code>. Eso refleja la realidad de la base
+de datos, donde esas columnas <strong>pueden estar vacías</strong>. Tipar el <code>null</code> te obliga a manejar el caso
+"no hay valor" en lugar de olvidarte de él. Es TypeScript diciéndote "ojo, esto a veces no está".</p>
 </blockquote>
 <p>Faro hace exactamente lo mismo en <code>src/lib/types.ts</code>, pero para proyectos:</p>
 <pre><code class="language-typescript">export type ProjectPhase =
@@ -214,28 +213,28 @@ export interface Project {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-tipo-de-fila-de-base-de-datos">🟦 ¿Qué significa? — <em>Tipo de fila de base de datos</em></h3>
-<p>Es una <code>interface</code> que describe la forma exacta de una fila tal como vive en la base de datos:
-qué columnas tiene, de qué tipo es cada una, y cuáles pueden ser <code>null</code>. <strong>Para qué sirve:</strong> para
-que cuando leas datos de Supabase, TypeScript te avise si tratas una columna como si fuera de un
-tipo que no es. <strong>Dónde se usa:</strong> <code>Habit</code> en RachaSimple, <code>Project</code> en Faro.</p>
+<p>Es una <code>interface</code> que describe la forma exacta de una fila tal como vive en la base de datos: qué
+columnas tiene, de qué tipo es cada una, y cuáles pueden ser <code>null</code>. <strong>Para qué sirve:</strong> para que,
+cuando leas datos de Supabase, TypeScript te avise si tratas una columna como si fuera de un tipo que
+no es. <strong>Dónde se usa:</strong> <code>Habit</code> en RachaSimple, <code>Project</code> en Faro.</p>
 </blockquote>
 <p>Ahora, la parte incómoda y honesta: cuando RachaSimple hace <code>return (data ?? []) as Habit[]</code>, está
-<strong>afirmando</strong> que las filas cumplen <code>Habit</code>, pero <strong>no lo está comprobando</strong>. Supabase normalmente
-devuelve lo correcto (porque la tabla tiene esa forma), así que la aserción es razonable. Pero si
-alguien cambia la tabla y olvida actualizar el tipo, TypeScript no se entera: el <code>as</code> mentiría en
-silencio. Por eso el tipo y la tabla <strong>tienen que mantenerse sincronizados a mano</strong> (o con
-generadores de tipos, tema de capítulos más avanzados).</p>
+<strong>afirmando</strong> que las filas cumplen <code>Habit</code>, pero <strong>no lo comprueba</strong>. Supabase normalmente devuelve
+lo correcto, porque la tabla tiene esa forma, así que la aserción es razonable. Pero si alguien cambia
+la tabla y olvida actualizar el tipo, TypeScript ni se entera: el <code>as</code> mentiría en silencio. Por eso
+el tipo y la tabla <strong>tienen que mantenerse sincronizados a mano</strong> (o con generadores de tipos, tema de
+capítulos más avanzados).</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Supabase puede <strong>generar</strong> estos tipos automáticamente a partir de tu base de datos. Cuando lo
-hace, el <code>as</code> deja de ser una promesa a ciegas y pasa a basarse en la forma real de las tablas.
-Mientras tanto, mantener <code>database.ts</code> al día con la base de datos es responsabilidad tuya.</p>
+<p>Supabase puede <strong>generar</strong> estos tipos automáticamente a partir de tu base de datos. Cuando lo hace,
+el <code>as</code> deja de ser una promesa a ciegas y pasa a apoyarse en la forma real de las tablas. Mientras
+tanto, mantener <code>database.ts</code> al día con la base de datos es responsabilidad tuya.</p>
 </blockquote>
 <hr />
 <h2 id="6-tipar-la-respuesta-de-la-api-de-claude-tunal-digital">6. Tipar la respuesta de la API de Claude (tunal-digital)</h2>
-<p>Pasemos a una API externa de verdad: la de Claude (de Anthropic). Cuando le pides al modelo que
-genere texto, te responde con un JSON que <strong>siempre tiene la misma forma</strong>. Si vas a consumir esa
-respuesta desde tunal-digital, te conviene tiparla para no andar adivinando dónde está el texto.</p>
+<p>Pasemos a una API externa de verdad: la de Claude (de Anthropic). Cuando le pides al modelo que genere
+texto, te responde con un JSON que <strong>siempre tiene la misma forma</strong>. Si vas a consumir esa respuesta
+desde tunal-digital, te conviene tiparla para no andar adivinando dónde quedó el texto.</p>
 <p>La respuesta de la API de Mensajes de Claude trae, entre otras cosas, un arreglo <code>content</code> (donde
 viene lo que el modelo escribió), un campo <code>stop_reason</code> (por qué se detuvo) y un objeto <code>usage</code>
 (cuántos tokens gastó). Una versión simplificada del tipo se ve así:</p>
@@ -259,23 +258,23 @@ interface RespuestaClaude {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-bloque-de-contenido-content">🟦 ¿Qué significa? — <em>Bloque de contenido (<code>content</code>)</em></h3>
-<p>En la API de Claude, <code>content</code> no es un string suelto: es un <strong>arreglo de bloques</strong>. El bloque
-más común tiene <code>type: "text"</code> y un campo <code>text</code> con lo que el modelo escribió. <strong>Para qué
-sirve:</strong> permite que una respuesta mezcle texto, llamadas a herramientas, etc. <strong>Dónde se usa:</strong>
-al consumir Claude desde tunal-digital, lees <code>content[0].text</code> para sacar el texto generado.</p>
+<p>En la API de Claude, <code>content</code> no es un string suelto: es un <strong>arreglo de bloques</strong>. El bloque más
+común tiene <code>type: "text"</code> y un campo <code>text</code> con lo que el modelo escribió. <strong>Para qué sirve:</strong>
+permite que una respuesta mezcle texto, llamadas a herramientas, etc. <strong>Dónde se usa:</strong> al consumir
+Claude desde tunal-digital, lees <code>content[0].text</code> para sacar el texto generado.</p>
 </blockquote>
-<p>Fíjate en <code>stop_reason</code>: lo tipamos como una <strong>unión de literales</strong> (capítulo 06). Eso significa
-que TypeScript sabe que solo puede valer uno de esos cuatro strings, y te ayudará a manejarlos
-todos. Especialmente importante es <code>"refusal"</code>: si el modelo se negó a responder, el <code>content</code>
-puede venir vacío.</p>
+<p>Fíjate en <code>stop_reason</code>: lo tipamos como una <strong>unión de literales</strong> (capítulo 06). Eso significa que
+TypeScript sabe que solo puede valer uno de esos cuatro strings, y te ayudará a manejarlos todos.
+Presta atención sobre todo a <code>"refusal"</code>: si el modelo se negó a responder, el <code>content</code> puede venir
+vacío.</p>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Antes de leer <code>content[0].text</code>, comprueba <code>stop_reason</code>. Si fue <code>"refusal"</code>, <code>content</code> puede
-estar vacío, y <code>content[0]</code> sería <code>undefined</code>. Leer <code>.text</code> de <code>undefined</code> revienta en runtime.
-TypeScript te tipó la forma, pero <strong>no garantiza que el arreglo tenga elementos</strong>: eso lo
-compruebas tú.</p>
+<p>Antes de leer <code>content[0].text</code>, comprueba <code>stop_reason</code>. Si fue <code>"refusal"</code>, <code>content</code> puede estar
+vacío, y entonces <code>content[0]</code> sería <code>undefined</code>. Leer <code>.text</code> de <code>undefined</code> revienta en runtime.
+TypeScript te tipó la forma, pero <strong>no garantiza que el arreglo tenga elementos</strong>: eso lo compruebas
+tú.</p>
 </blockquote>
-<p>Así se consume la respuesta con cuidado, validando antes de tocar:</p>
+<p>Así se consume la respuesta con cuidado, validando antes de tocar nada:</p>
 <pre><code class="language-typescript">const datos = (await response.json()) as RespuestaClaude;
 
 // Comprobamos en runtime, no solo confiamos en el tipo:
@@ -287,25 +286,24 @@ const texto = datos.content[0].text; // ahora sí es seguro
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>Faro hace justo este patrón con la API de OpenAI en <code>src/lib/openai.ts</code>: pide la respuesta,
-intenta <code>JSON.parse</code>, y si algo falla, usa un valor de respaldo en vez de reventar. La idea es la
-misma sea Claude u OpenAI: <strong>tipas la forma esperada, pero validas en runtime antes de confiar.</strong></p>
+<p>Faro hace justo este patrón con la API de OpenAI en <code>src/lib/openai.ts</code>: pide la respuesta, intenta
+<code>JSON.parse</code>, y si algo falla, usa un valor de respaldo en vez de reventar. La idea es la misma sea
+Claude u OpenAI: <strong>tipas la forma esperada, pero validas en runtime antes de confiar.</strong></p>
 </blockquote>
 <hr />
 <h2 id="7-validar-en-runtime-el-cinturon-de-seguridad-de-verdad">7. Validar en runtime: el cinturón de seguridad de verdad</h2>
-<p>Ya lo dijimos varias veces, pero merece su propia sección porque es <strong>la lección más importante
-del capítulo</strong>: el tipo describe lo que <em>esperas</em>; la validación comprueba lo que <em>de verdad
-llegó</em>.</p>
+<p>Ya lo hemos dicho varias veces, pero merece su propia sección porque es <strong>la lección más importante
+del capítulo</strong>: el tipo describe lo que <em>esperas</em>; la validación comprueba lo que <em>de verdad llegó</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-validar-en-runtime">🟦 ¿Qué significa? — <em>Validar en runtime</em></h3>
-<p>Es escribir código que comprueba, mientras el programa corre, que un dato tiene la forma que
-esperas: que existe, que es un objeto, que tiene las propiedades correctas, que el arreglo no
-está vacío. <strong>Para qué sirve:</strong> atrapar datos malformados <em>antes</em> de que provoquen un error feo
-más adelante. <strong>Dónde se usa:</strong> Faro valida la respuesta de la IA antes de guardarla; tu código
-de Claude valida <code>stop_reason</code> y <code>content.length</code> antes de leer el texto.</p>
+<p>Es escribir código que comprueba, mientras el programa corre, que un dato tiene la forma que esperas:
+que existe, que es un objeto, que tiene las propiedades correctas, que el arreglo no está vacío.
+<strong>Para qué sirve:</strong> atrapar datos malformados <em>antes</em> de que provoquen un error feo más adelante.
+<strong>Dónde se usa:</strong> Faro valida la respuesta de la IA antes de guardarla; tu código de Claude valida
+<code>stop_reason</code> y <code>content.length</code> antes de leer el texto.</p>
 </blockquote>
-<p>Mira cómo Faro valida su respuesta de IA en <code>src/lib/openai.ts</code>. El modelo debe devolver un JSON
-con <code>summary</code> y <code>next_action</code>, pero Faro no lo da por sentado:</p>
+<p>Mira cómo Faro valida su respuesta de IA en <code>src/lib/openai.ts</code>. El modelo debería devolver un JSON con
+<code>summary</code> y <code>next_action</code>, pero Faro no lo da por sentado:</p>
 <pre><code class="language-typescript">const raw = completion.choices[0]?.message?.content ?? &quot;{}&quot;;
 let parsed: Partial&lt;SummarizeResult&gt; = {};
 try {
@@ -319,43 +317,43 @@ return {
   next_action: parsed.next_action?.trim() || &quot;&quot;,
 };
 </code></pre>
-<p>Hay tres cinturones de seguridad aquí, y vale la pena nombrarlos:</p>
+<p>Aquí hay tres cinturones de seguridad, y vale la pena ponerles nombre:</p>
 <ol>
 <li><strong><code>?.</code> (encadenamiento opcional):</strong> <code>completion.choices[0]?.message?.content</code> no revienta si
-   <code>choices[0]</code> o <code>message</code> no existen; devuelve <code>undefined</code>.</li>
-<li><strong><code>?? "{}"</code>:</strong> si todo lo anterior fue <code>undefined</code>, usa <code>"{}"</code> (un JSON vacío) en vez de
-   intentar parsear <code>undefined</code>.</li>
-<li><strong><code>try / catch</code>:</strong> si <code>JSON.parse</code> falla (porque el modelo devolvió texto que no es JSON
-   válido), el <code>catch</code> da un valor de respaldo en vez de tumbar el programa.</li>
+   <code>choices[0]</code> o <code>message</code> no existen; en ese caso devuelve <code>undefined</code>.</li>
+<li><strong><code>?? "{}"</code>:</strong> si todo lo anterior dio <code>undefined</code>, usa <code>"{}"</code> (un JSON vacío) en lugar de intentar
+   parsear <code>undefined</code>.</li>
+<li><strong><code>try / catch</code>:</strong> si <code>JSON.parse</code> falla (porque el modelo devolvió texto que no es JSON válido), el
+   <code>catch</code> da un valor de respaldo en vez de tumbar el programa.</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-partialt">🟦 ¿Qué significa? — <em><code>Partial&lt;T&gt;</code></em></h3>
-<p><code>Partial&lt;T&gt;</code> es un tipo que toma otro tipo <code>T</code> y hace <strong>todas</strong> sus propiedades opcionales (lo
-viste en el capítulo 07 de tipos utilitarios). <strong>Para qué sirve:</strong> describir un objeto que
-<em>quizás</em> tenga las propiedades de <code>T</code>, pero quizás no todas. <strong>Dónde se usa:</strong> aquí Faro escribe
-<code>Partial&lt;SummarizeResult&gt;</code> porque, hasta validar, no sabe si <code>parsed</code> trae <code>summary</code> y
+<p><code>Partial&lt;T&gt;</code> es un tipo que toma otro tipo <code>T</code> y hace <strong>todas</strong> sus propiedades opcionales (lo viste
+en el capítulo 07 de tipos utilitarios). <strong>Para qué sirve:</strong> describir un objeto que <em>quizás</em> tenga
+las propiedades de <code>T</code>, pero quizás no todas. <strong>Dónde se usa:</strong> aquí Faro escribe
+<code>Partial&lt;SummarizeResult&gt;</code> porque, hasta que no valide, no sabe si <code>parsed</code> trae <code>summary</code> y
 <code>next_action</code> o si vino incompleto.</p>
 <h3 id="tip_3">💡 Tip</h3>
 <p>El patrón "tipo + validación" se resume así: usa <strong>tipos</strong> para que TypeScript te guíe mientras
-escribes, y usa <strong>validación en runtime</strong> (comprobaciones, <code>try/catch</code>, <code>?.</code>, <code>??</code>) para
-protegerte de la realidad cuando el programa corre. Los tipos son el mapa; la validación es mirar
-por dónde caminas.</p>
+escribes, y usa <strong>validación en runtime</strong> (comprobaciones, <code>try/catch</code>, <code>?.</code>, <code>??</code>) para protegerte
+de la realidad cuando el programa corre. Los tipos son el mapa; la validación es mirar por dónde
+pisas.</p>
 </blockquote>
-<p>Para validaciones más serias (comprobar campo por campo que un objeto cumple un tipo entero),
-existen librerías como Zod, que sí generan comprobaciones reales en runtime. Eso es tema de
-capítulos posteriores; por ahora te basta con entender <strong>por qué</strong> hace falta validar y <strong>qué
-herramientas básicas</strong> (<code>?.</code>, <code>??</code>, <code>try/catch</code>, comprobar <code>.length</code>) ya tienes para hacerlo.</p>
+<p>Para validaciones más serias —comprobar campo por campo que un objeto cumple un tipo entero— existen
+librerías como Zod, que sí generan comprobaciones reales en runtime. Eso lo veremos en capítulos
+posteriores; por ahora te basta con entender <strong>por qué</strong> hace falta validar y <strong>qué herramientas
+básicas</strong> (<code>?.</code>, <code>??</code>, <code>try/catch</code>, comprobar <code>.length</code>) ya tienes a mano para hacerlo.</p>
 <hr />
 <h2 id="8-juntando-todo-el-flujo-seguro-de-datos-externos">8. Juntando todo: el flujo seguro de datos externos</h2>
-<p>Recapitulando el camino correcto para cualquier dato que venga de afuera:</p>
+<p>Recapitulemos el camino correcto para cualquier dato que venga de afuera:</p>
 <ol>
 <li>Recíbelo como <code>unknown</code> (o tipa la forma esperada con una <code>interface</code>).</li>
 <li>Evita <code>any</code>: te quita la red de seguridad.</li>
-<li>Usa <code>as</code> solo cuando de verdad sabes más que TypeScript, y con plena conciencia de que <strong>no
-   valida nada</strong>.</li>
-<li><strong>Valida en runtime</strong> antes de confiar: comprueba existencia, longitud, <code>stop_reason</code>, lo que
-   haga falta.</li>
-<li>Recuerda siempre: TypeScript te protege al <strong>escribir</strong>, no al <strong>ejecutar</strong>.</li>
+<li>Usa <code>as</code> solo cuando de verdad sabes más que TypeScript, y siendo muy consciente de que <strong>no valida
+   nada</strong>.</li>
+<li><strong>Valida en runtime</strong> antes de confiar: comprueba existencia, longitud, <code>stop_reason</code>, lo que haga
+   falta.</li>
+<li>No lo olvides nunca: TypeScript te protege al <strong>escribir</strong>, no al <strong>ejecutar</strong>.</li>
 </ol>
 <pre><code class="language-typescript">async function obtenerResumen(url: string): Promise&lt;string&gt; {
   const response = await fetch(url);
@@ -371,9 +369,9 @@ herramientas básicas</strong> (<code>?.</code>, <code>??</code>, <code>try/catc
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>Este es exactamente el espíritu de los repositorios de RachaSimple (<code>if (error) throw error;</code>
-antes de devolver datos) y de la capa de IA de Faro (validar y dar respaldos). Distintas APIs,
-mismo hábito: <strong>nunca confíes a ciegas en un dato de afuera.</strong></p>
+<p>Este es exactamente el espíritu de los repositorios de RachaSimple (<code>if (error) throw error;</code> antes
+de devolver datos) y de la capa de IA de Faro (validar y dar respaldos). Distintas APIs, mismo
+hábito: <strong>nunca confíes a ciegas en un dato que viene de afuera.</strong></p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

@@ -5,72 +5,72 @@
 </p>
 
 
-> ¡Hola de nuevo! Soy **Bit**, tu ajolote guía. En el capítulo anterior aprendiste a pedirle datos a una API con `fetch`. Pero hay un detalle incómodo: las APIs serias no le abren la puerta a cualquiera. Antes de darte la información (o de gastar tu dinero llamando a una IA), quieren saber **quién eres** y **qué tienes permiso de hacer**. En este capítulo vamos a entender cómo te identificas ante un servidor: con **claves**, con **tokens**, con el famoso header `Authorization` y la palabrita `Bearer`. Y sobre todo, vas a aprender la regla de oro que repetiré hasta cansarte: **las claves secretas viven en el servidor, JAMÁS en el cliente.** Respira hondo, que esto es lo que separa a un proyecto de juguete de uno serio. 🦎
+> ¡Hola de nuevo! Soy **Bit**, tu ajolote guía. En el capítulo anterior aprendiste a pedirle datos a una API con `fetch`. Pero hay un detalle incómodo: las APIs serias no le abren la puerta a cualquiera. Antes de soltarte la información (o de gastar tu dinero llamando a una IA), quieren saber **quién eres** y **qué tienes permiso de hacer**. Hoy vamos a ver cómo te presentas ante un servidor: con **claves**, con **tokens**, con el famoso header `Authorization` y la palabrita `Bearer`. Y, sobre todo, vas a aprender la regla que te voy a repetir hasta que te canses de oírla: **las claves secretas viven en el servidor, JAMÁS en el cliente.** Respira hondo, porque esto es justo lo que separa un proyecto de juguete de uno de verdad. 🦎
 
 ## 1. ¿Por qué un servidor necesita saber quién eres?
 
-Imagina que la API de Claude (la IA de Anthropic) es un restaurante. Tú llegas, pides un plato carísimo (procesar texto con IA cuesta dinero real) y al final alguien tiene que pagar la cuenta. Si el restaurante no supiera quién eres, cualquiera podría pedir mil platos a tu nombre. Por eso, cada vez que llamas a una API que cuesta dinero o que devuelve datos privados, tienes que **demostrar tu identidad**.
+Imagina que la API de Claude (la IA de Anthropic) es un restaurante. Llegas, pides un plato carísimo —procesar texto con IA cuesta dinero real— y al final alguien tiene que pagar la cuenta. Si el restaurante no supiera quién eres, cualquiera podría pedir mil platos a tu nombre. Por eso, cada vez que llamas a una API que cuesta dinero o que devuelve datos privados, tienes que **demostrar quién eres**.
 
-En **tunal-digital** (un sitio web de HTML, CSS y JavaScript puro con un chat de IA) ese chat habla con la API de Claude, y Anthropic necesita saber de qué cuenta descontar el costo. En **Faro** (el organizador de proyectos en Next.js) la app lee tus repositorios de GitHub y tus archivos de Google Drive: información privadísima que solo tú puedes ver. En ambos casos hace falta decir "soy yo, déjame pasar".
+En **tunal-digital** (un sitio web de HTML, CSS y JavaScript puro con un chat de IA) ese chat habla con la API de Claude, y Anthropic necesita saber de qué cuenta descontar el costo. En **Faro** (el organizador de proyectos en Next.js) la app lee tus repositorios de GitHub y tus archivos de Google Drive: información privadísima que solo tú puedes ver. En los dos casos hay que decir lo mismo: "soy yo, déjame pasar".
 
 > ### 🟦 ¿Qué significa? — *API*
 > Una **API** (*Application Programming Interface*, interfaz de programación de aplicaciones) es la "ventanilla" por la que un programa le pide cosas a otro. En vez de hablar con un humano, tu código habla con otro servicio enviándole peticiones.
-> **¿Para qué sirve?** Para reutilizar servicios que ya existen (un modelo de IA, una base de datos, GitHub) sin tener que construirlos tú.
+> **¿Para qué sirve?** Para aprovechar servicios que ya existen (un modelo de IA, una base de datos, GitHub) sin tener que construirlos tú desde cero.
 > **¿Dónde se usa en un repo real?** En **tunal-digital**, el chat usa la API de Claude para responder. En **Faro**, se usan las APIs de GitHub, Google Drive y OpenAI.
 
 ## 2. Autenticación vs. autorización: no son lo mismo
 
 Estas dos palabras se parecen tanto que es facilísimo confundirlas, pero significan cosas distintas. Vamos despacio.
 
-- **Autenticación** responde a la pregunta: *¿quién eres?* Es como mostrar tu cédula o credencial en la entrada.
-- **Autorización** responde a: *¿qué tienes permiso de hacer?* Es como decir "vale, eres tú, pero solo puedes entrar a la sala A, no a la B".
+- **Autenticación** responde a la pregunta: *¿quién eres?* Es como mostrar tu cédula o tu credencial en la entrada.
+- **Autorización** responde a otra: *¿qué tienes permiso de hacer?* Es como decir "vale, eres tú, pero solo puedes entrar a la sala A, no a la B".
 
-Primero te autenticas (demuestras quién eres) y **después** el sistema decide a qué tienes acceso (te autoriza).
+El orden importa: primero te autenticas (demuestras quién eres) y **después** el sistema decide a qué tienes acceso (te autoriza).
 
 > ### 🟦 ¿Qué significa? — *Autenticación*
-> **Autenticar** es probar que eres quien dices ser. Lo logras presentando algo que solo tú tienes: una contraseña, una clave secreta o un token.
+> **Autenticar** es probar que eres quien dices ser. Lo consigues presentando algo que solo tú tienes: una contraseña, una clave secreta o un token.
 > **¿Para qué sirve?** Para que el servidor confíe en que del otro lado estás tú y no un impostor.
-> **¿Dónde se usa en un repo real?** En **RachaSimple** (React + TypeScript + Supabase), cuando inicias sesión con Supabase Auth, te estás autenticando: demuestras que la cuenta es tuya.
+> **¿Dónde se usa en un repo real?** En **RachaSimple** (React + TypeScript + Supabase), cuando inicias sesión con Supabase Auth te estás autenticando: demuestras que la cuenta es tuya.
 
 > ### 🟦 ¿Qué significa? — *Autorización*
-> **Autorizar** es decidir qué acciones puede realizar alguien ya autenticado. Una vez que el servidor sabe quién eres, mira tus permisos.
-> **¿Para qué sirve?** Para que cada usuario solo toque lo suyo: tú ves tus proyectos, no los de otra persona.
+> **Autorizar** es decidir qué acciones puede realizar alguien que ya está autenticado. Una vez que el servidor sabe quién eres, mira tus permisos.
+> **¿Para qué sirve?** Para que cada usuario toque solo lo suyo: tú ves tus proyectos, no los de otra persona.
 > **¿Dónde se usa en un repo real?** En **Faro**, después de autenticarte, OAuth te **autoriza** a leer solo tus repos de GitHub y tus archivos de Drive, nada más.
 
 > ### 💡 Tip
-> Truco para no olvidarlo: **autenticación = identidad** (¿quién?), **autorización = permisos** (¿qué puedes?). Una abre la puerta; la otra reparte las llaves de las habitaciones.
+> Un truco para no olvidarlo: **autenticación = identidad** (¿quién?), **autorización = permisos** (¿qué puedes?). Una abre la puerta; la otra reparte las llaves de cada habitación.
 
 ## 3. La forma más simple: la API key
 
-La manera más sencilla de autenticarte ante una API es con una **API key** (clave de API). Es una cadena larga de letras y números, algo como `sk-ant-api03-AbC123...`, que el servicio te entrega cuando creas tu cuenta. Cada vez que llamas a la API, la incluyes en tu petición. El servidor la lee, la reconoce y dice "ah, eres tú, adelante".
+La manera más sencilla de autenticarte ante una API es con una **API key** (clave de API). Es una cadena larga de letras y números, algo como `sk-ant-api03-AbC123...`, que el servicio te entrega cuando creas tu cuenta. Cada vez que llamas a la API, la incluyes en la petición. El servidor la lee, la reconoce y dice "ah, eres tú, adelante".
 
 > ### 🟦 ¿Qué significa? — *API key*
-> Una **API key** es una cadena secreta que identifica tu cuenta ante una API. Funciona como una combinación de usuario y contraseña en un solo texto.
-> **¿Para qué sirve?** Para autenticarte de forma rápida sin escribir usuario ni contraseña en cada llamada.
-> **¿Dónde se usa en un repo real?** En **tunal-digital**, la clave de la API de Claude (`ANTHROPIC_API_KEY`) es la que autoriza al chat a hablar con la IA. En **Faro**, la clave de OpenAI cumple el mismo papel para generar descripciones y roadmaps.
+> Una **API key** es una cadena secreta que identifica tu cuenta ante una API. Funciona como un usuario y una contraseña metidos en un solo texto.
+> **¿Para qué sirve?** Para autenticarte rápido, sin tener que escribir usuario ni contraseña en cada llamada.
+> **¿Dónde se usa en un repo real?** En **tunal-digital**, la clave de la API de Claude (`ANTHROPIC_API_KEY`) es la que autoriza al chat a hablar con la IA. En **Faro**, la clave de OpenAI hace el mismo papel para generar descripciones y roadmaps.
 
-Una API key es muy poderosa: quien la tenga **puede gastar tu dinero** o **leer tus datos** como si fuera tú. No tiene cara, no pregunta contraseña: la clave *es* la identidad. Por eso protegerla es lo más importante de todo este capítulo.
+Una API key tiene mucho poder: quien la tenga **puede gastar tu dinero** o **leer tus datos** como si fuera tú. No tiene cara, no pregunta contraseña: la clave *es* la identidad. Por eso protegerla es lo más importante de todo el capítulo.
 
 > ### ⚠️ Cuidado
-> Una API key filtrada es como dejar tu tarjeta de crédito con el PIN pegado tirada en la calle. Si alguien encuentra la clave de Claude o de OpenAI de tu proyecto, puede hacer miles de llamadas y **la cuenta te llega a ti**. Nunca, nunca la pongas en un sitio público.
+> Una API key filtrada es como dejar tu tarjeta de crédito con el PIN apuntado al lado, tirada en plena calle. Si alguien encuentra la clave de Claude o de OpenAI de tu proyecto, puede hacer miles de llamadas y **la cuenta te llega a ti**. Nunca, nunca la pongas en un sitio público.
 
 ## 4. El header Authorization y los tokens Bearer
 
-Bien, ya tienes una clave. ¿Dónde la metes dentro de la petición? La respuesta es: en un **header** (encabezado) llamado `Authorization`.
+Bien, ya tienes una clave. ¿Dónde la metes dentro de la petición? Va en un **header** (encabezado) llamado `Authorization`.
 
-Recuerda del capítulo de `fetch` que toda petición HTTP lleva headers: pequeñas etiquetas de información extra (como `Content-Type` que dice qué formato envías). Pues hay un header reservado especialmente para credenciales: `Authorization`.
+Recuerda, del capítulo de `fetch`, que toda petición HTTP lleva headers: pequeñas etiquetas con información extra (como `Content-Type`, que dice qué formato envías). Pues hay uno reservado especialmente para credenciales, y se llama `Authorization`.
 
 > ### 🟦 ¿Qué significa? — *Header HTTP*
-> Un **header** (encabezado) es un par "nombre: valor" que viaja junto a una petición o respuesta HTTP y aporta información extra sobre ella.
+> Un **header** (encabezado) es un par "nombre: valor" que viaja junto a una petición o una respuesta HTTP y aporta información extra sobre ella.
 > **¿Para qué sirve?** Para mandar metadatos: qué formato usas, quién eres, en qué idioma quieres la respuesta, etc.
 > **¿Dónde se usa en un repo real?** En el Worker de **tunal-digital** se arma el header `x-api-key` para hablar con Anthropic; en **Faro**, las llamadas a GitHub y OpenAI usan el header `Authorization`.
 
-El valor de `Authorization` casi nunca es la clave a secas. Suele llevar delante una palabra que indica **el tipo de credencial**. La más común es `Bearer`.
+El valor de `Authorization` casi nunca es la clave a secas. Suele llevar delante una palabra que indica **qué tipo de credencial** estás mandando. La más común es `Bearer`.
 
 > ### 🟦 ¿Qué significa? — *Token Bearer*
-> Un **token Bearer** ("portador") es un tipo de credencial que sigue una regla simple: *quien lo porta, puede usarlo*. Se envía en el header así: `Authorization: Bearer <token>`.
-> **¿Para qué sirve?** Para autenticarte mostrando un token. El servidor lee el token tras la palabra `Bearer` y verifica que sea válido.
-> **¿Dónde se usa en un repo real?** En **Faro**, al llamar a la API de OpenAI se manda `Authorization: Bearer sk-...`. La palabra "Bearer" le dice a OpenAI: "lo que viene después es un token de portador".
+> Un **token Bearer** ("portador") es un tipo de credencial con una regla muy simple: *quien lo porta, puede usarlo*. Se envía en el header así: `Authorization: Bearer <token>`.
+> **¿Para qué sirve?** Para autenticarte mostrando un token. El servidor lee lo que viene tras la palabra `Bearer` y comprueba que sea válido.
+> **¿Dónde se usa en un repo real?** En **Faro**, al llamar a la API de OpenAI se manda `Authorization: Bearer sk-...`. La palabra "Bearer" le avisa a OpenAI: "lo que viene después es un token de portador".
 
 Así se ve una llamada típica desde el **servidor** de Faro a OpenAI (fíjate en el header):
 
@@ -91,18 +91,18 @@ const respuesta = await fetch("https://api.openai.com/v1/chat/completions", {
 ```
 
 > ### 🔎 En tu código
-> "Bearer" significa literalmente "portador". No hace falta una contraseña adicional: el simple hecho de presentar el token basta. Por eso es tan cómodo... y por eso filtrarlo es tan peligroso. Quien porte el token, manda.
+> "Bearer" significa literalmente "portador". No hace falta ninguna contraseña adicional: basta con presentar el token. Por eso es tan cómodo... y por eso filtrarlo es tan peligroso. Quien porte el token, manda.
 
 > ### 💡 Tip
-> No todas las APIs usan `Bearer`. Anthropic (Claude) prefiere un header propio llamado `x-api-key`. Por eso en **tunal-digital** verás `x-api-key` en lugar de `Authorization: Bearer`. La idea de fondo es la misma —mandar tu clave secreta en un header— solo cambia el nombre y el formato. Siempre revisa la documentación de la API que uses.
+> No todas las APIs usan `Bearer`. Anthropic (Claude) prefiere un header propio llamado `x-api-key`. Por eso en **tunal-digital** verás `x-api-key` en lugar de `Authorization: Bearer`. La idea de fondo es la misma —mandar tu clave secreta en un header—, solo cambia el nombre y el formato. Revisa siempre la documentación de la API que estés usando.
 
 ## 5. Tokens de acceso y tokens de refresco (a grandes rasgos)
 
-Las API keys nunca caducan (a menos que las borres tú). Eso es cómodo pero arriesgado: si se filtra una, sirve para siempre. Por eso los sistemas modernos de login, como el de **OAuth** que usa Faro, prefieren tokens **que caducan pronto**. Aquí aparecen dos tipos que conviene distinguir.
+Las API keys no caducan (salvo que las borres tú). Eso es cómodo, pero arriesgado: si una se filtra, sirve para siempre. Por eso los sistemas modernos de login, como el **OAuth** que usa Faro, prefieren tokens **que caducan pronto**. Y ahí entran dos tipos que conviene distinguir.
 
 > ### 🟦 ¿Qué significa? — *Token de acceso*
 > Un **token de acceso** (*access token*) es una credencial de **vida corta** (suele durar minutos u horas) que te da acceso a un recurso protegido.
-> **¿Para qué sirve?** Para hacer peticiones autorizadas durante un rato. Si se filtra, el daño es limitado porque caduca rápido.
+> **¿Para qué sirve?** Para hacer peticiones autorizadas durante un rato. Si se filtra, el daño es limitado porque caduca enseguida.
 > **¿Dónde se usa en un repo real?** En **Faro**, después de conectar tu cuenta de GitHub con OAuth, la app recibe un token de acceso que usa para leer tus repos durante un tiempo limitado.
 
 > ### 🟦 ¿Qué significa? — *Token de refresco*
@@ -110,35 +110,35 @@ Las API keys nunca caducan (a menos que las borres tú). Eso es cómodo pero arr
 > **¿Para qué sirve?** Para mantener tu sesión activa sin pedirte la contraseña a cada rato.
 > **¿Dónde se usa en un repo real?** En **Faro** (y en **RachaSimple** con Supabase Auth), cuando el token de acceso vence, el token de refresco saca uno nuevo por detrás. Tú ni te enteras.
 
-En una frase: el **token de acceso** es un pase de un día para entrar al evento; el **token de refresco** es la membresía anual que te deja recoger un pase nuevo cuando el de hoy expira.
+Dicho en una frase: el **token de acceso** es el pase de un día para entrar al evento; el **token de refresco** es la membresía anual que te deja recoger un pase nuevo cuando el de hoy expira.
 
 > ### ⚠️ Cuidado
-> El token de refresco es **más sensible** que el de acceso, porque dura mucho y puede generar accesos nuevos indefinidamente. Por eso en **Faro** estos tokens se guardan en el servidor, en la tabla `user_connections`, protegida con RLS (las reglas de seguridad de Supabase que viste en el módulo 07). Nunca llegan al navegador.
+> El token de refresco es **más sensible** que el de acceso, porque dura mucho y puede generar accesos nuevos de forma indefinida. Por eso en **Faro** estos tokens se guardan en el servidor, en la tabla `user_connections`, protegida con RLS (las reglas de seguridad de Supabase que viste en el módulo 07). Nunca llegan al navegador.
 
 ## 6. La regla de oro: NUNCA expongas una clave en el cliente
 
-Llegamos al corazón del capítulo. Préstame toda tu atención, porque este es el error más común y más caro de los principiantes.
+Llegamos al corazón del capítulo. Préstame toda tu atención, porque este es el error más común y más caro entre quienes están empezando.
 
 Recuerda la diferencia del módulo anterior:
 
-- El **cliente** es el código que corre en el navegador del usuario (el HTML, CSS y JS que se descarga). **Cualquiera puede leerlo**: basta con abrir las herramientas de desarrollo (F12) y mirar.
+- El **cliente** es el código que corre en el navegador del usuario (el HTML, el CSS y el JS que se descargan). **Cualquiera puede leerlo**: basta abrir las herramientas de desarrollo (F12) y mirar.
 - El **servidor** es el código que corre en una máquina que tú controlas. El usuario **nunca ve** ese código; solo recibe el resultado.
 
 > ### 🟦 ¿Qué significa? — *Cliente y servidor*
-> El **cliente** es el programa del lado del usuario (el navegador). El **servidor** es el programa del lado tuyo, en una máquina remota, que el usuario no puede inspeccionar.
-> **¿Para qué sirve?** Separar lo público (cliente) de lo secreto (servidor). Lo que pongas en el cliente, lo ve el mundo entero.
+> El **cliente** es el programa del lado del usuario (el navegador). El **servidor** es el programa de tu lado, en una máquina remota que el usuario no puede inspeccionar.
+> **¿Para qué sirve?** Para separar lo público (cliente) de lo secreto (servidor). Lo que pongas en el cliente lo ve el mundo entero.
 > **¿Dónde se usa en un repo real?** En **tunal-digital** el cliente es el sitio HTML/JS que ves en el navegador; el servidor es un Cloudflare Worker. En **Faro**, el cliente son los componentes de React y el servidor son las API routes de Next.js.
 
-Ahora la consecuencia, en mayúsculas porque importa de verdad:
+Y ahora la consecuencia, en mayúsculas porque va en serio:
 
-**TODO lo que pongas en el cliente es público.** Si escribes tu API key de Claude dentro de un archivo `.js` del navegador, cualquier visitante puede abrir F12, ir a la pestaña de red o de fuentes, copiar tu clave y empezar a gastar tu dinero. No hay forma de "esconderla" en el cliente: ofuscarla, partirla en pedazos, codificarla en base64... todo eso se puede deshacer en segundos. **La única solución real es que la clave nunca salga del servidor.**
+**TODO lo que pongas en el cliente es público.** Si escribes tu API key de Claude dentro de un archivo `.js` del navegador, cualquier visitante puede abrir F12, ir a la pestaña de red o de fuentes, copiar tu clave y ponerse a gastar tu dinero. No hay forma de "esconderla" en el cliente: ofuscarla, partirla en trozos, codificarla en base64... todo eso se deshace en segundos. **La única solución de verdad es que la clave nunca salga del servidor.**
 
 > ### ⚠️ Cuidado
-> Esta es una regla explícita de seguridad del proyecto **Faro**: *"Tokens y secretos solo en el servidor. Nunca exponer claves en el cliente ni commitearlas."* No es un consejo opcional: es la línea que separa un proyecto seguro de un desastre. Trátalo como ley.
+> Esta es una regla de seguridad explícita del proyecto **Faro**: *"Tokens y secretos solo en el servidor. Nunca exponer claves en el cliente ni commitearlas."* No es un consejo opcional: es la línea que separa un proyecto seguro de un desastre. Trátala como ley.
 
 > ### 🟦 ¿Qué significa? — *Commitear una clave*
-> **Commitear** una clave es, sin querer, guardar el secreto dentro del código que subes a un repositorio (un `git commit`). Aunque luego la borres, queda registrada en el historial de Git.
-> **¿Para qué sirve?** ...para nada bueno: es justo lo que NUNCA debes hacer. Los bots rastrean GitHub buscando claves filtradas y las usan en minutos.
+> **Commitear** una clave es, sin querer, guardar el secreto dentro del código que subes a un repositorio (un `git commit`). Aunque luego la borres, queda registrada en el historial de Git para siempre.
+> **¿Para qué sirve?** Para nada bueno: es justo lo que NUNCA debes hacer. Hay bots rastreando GitHub en busca de claves filtradas, y las usan en cuestión de minutos.
 > **¿Dónde se usa en un repo real?** En ningún repo bien hecho. Por eso **Faro** y **tunal-digital** mantienen sus claves fuera del código, en variables de entorno.
 
 ## 7. Variables de entorno: dónde viven los secretos
@@ -150,7 +150,7 @@ Si la clave no va en el código del cliente ni se commitea, ¿dónde se guarda e
 > **¿Para qué sirve?** Para guardar secretos (claves, contraseñas) y configuraciones sin meterlos en el código que se sube a Git.
 > **¿Dónde se usa en un repo real?** En **Faro**, la clave de OpenAI vive en `process.env.OPENAI_API_KEY`. En **tunal-digital**, la clave de Anthropic vive como un *secret* del Cloudflare Worker.
 
-En desarrollo, las variables suelen ir en un archivo llamado `.env` (o `.env.local` en Next.js) que **se mantiene fuera de Git** (se añade a `.gitignore`). Se ve así:
+En desarrollo, las variables suelen ir en un archivo llamado `.env` (o `.env.local` en Next.js) que **se mantiene fuera de Git** (lo añades a `.gitignore`). Se ve así:
 
 ```bash
 # Archivo .env.local de Faro — este archivo NUNCA se sube a Git
@@ -170,20 +170,20 @@ if (!clave) {
 ```
 
 > ### 💡 Tip
-> En Next.js (el framework de Faro) hay una convención importante: las variables que empiezan con `NEXT_PUBLIC_` **sí** llegan al navegador (son públicas). Las que **no** llevan ese prefijo se quedan en el servidor. Regla simple: una clave secreta JAMÁS debe llamarse `NEXT_PUBLIC_ALGO`. Si lo haces, la estás regalando al cliente.
+> En Next.js (el framework de Faro) hay una convención que conviene tener muy presente: las variables que empiezan con `NEXT_PUBLIC_` **sí** llegan al navegador (son públicas). Las que **no** llevan ese prefijo se quedan en el servidor. La regla es simple: una clave secreta JAMÁS debe llamarse `NEXT_PUBLIC_ALGO`. Si lo haces, se la estás regalando al cliente.
 
 > ### 🔎 En tu código
-> Cuando despliegas Faro en producción (por ejemplo en Vercel), no subes el archivo `.env`. En su lugar, configuras las variables en el panel de la plataforma. Así el secreto vive en la nube del servidor y nunca toca el repositorio ni el navegador.
+> Cuando despliegas Faro en producción (por ejemplo en Vercel), no subes el archivo `.env`. En su lugar, configuras las variables en el panel de la plataforma. Así el secreto vive en la nube del servidor y nunca toca ni el repositorio ni el navegador.
 
 ## 8. El patrón "proxy": cómo tunal-digital esconde la clave de Claude
 
-Aquí viene la parte más bonita, porque resuelve un dilema real. **tunal-digital** es un sitio de puro HTML, CSS y JavaScript: no tiene servidor propio tradicional. Pero su chat necesita la clave de Claude, ¡y esa clave no puede ir en el navegador! ¿Cómo se hace?
+Aquí viene la parte más bonita, porque resuelve un dilema muy real. **tunal-digital** es un sitio de puro HTML, CSS y JavaScript: no tiene un servidor propio tradicional. Pero su chat necesita la clave de Claude, ¡y esa clave no puede ir en el navegador! ¿Cómo se resuelve?
 
-La respuesta es un **proxy**: una pieza pequeña de código que corre en el servidor (un **Cloudflare Worker**) y que se sitúa **en medio** entre el navegador y la API de Claude.
+Con un **proxy**: una pieza pequeña de código que corre en el servidor (un **Cloudflare Worker**) y que se coloca **en medio** entre el navegador y la API de Claude.
 
 > ### 🟦 ¿Qué significa? — *Proxy*
-> Un **proxy** es un intermediario: un programa que recibe tu petición, la reenvía a otro servicio (añadiendo el secreto), y te devuelve la respuesta. El cliente nunca habla directamente con la API final.
-> **¿Para qué sirve?** Para que la clave secreta viva en el intermediario (servidor) y no en el cliente. El navegador solo habla con tu proxy, que sí conoce la clave.
+> Un **proxy** es un intermediario: un programa que recibe tu petición, la reenvía a otro servicio (añadiendo el secreto) y te devuelve la respuesta. El cliente nunca habla directamente con la API final.
+> **¿Para qué sirve?** Para que la clave secreta viva en el intermediario (servidor) y no en el cliente. El navegador solo habla con tu proxy, que es quien conoce la clave.
 > **¿Dónde se usa en un repo real?** En **tunal-digital**, el Cloudflare Worker es el proxy entre el chat del navegador y la API de Claude.
 
 > ### 🟦 ¿Qué significa? — *Cloudflare Worker*
@@ -246,11 +246,11 @@ export default {
 > Fíjate en el detalle clave: en el lado cliente la URL es la de **tu** Worker. En el lado servidor la URL es la de **Anthropic** y aparece `x-api-key`. La clave solo existe en la segunda mitad. Aunque un visitante abra F12 y lea todo el JavaScript del sitio, lo único que verá es la dirección de tu Worker, nunca la clave de Claude.
 
 > ### 💡 Tip
-> **Faro** aplica exactamente la misma filosofía, solo que con otra tecnología. Sus secretos (clave de OpenAI, secretos de OAuth de GitHub y Google) viven en el servidor: en variables de entorno y en la tabla `user_connections` protegida con RLS. Los componentes de React del navegador nunca tocan esos valores; piden los datos a las API routes de Next.js, que son las únicas que conocen los secretos. Mismo principio, dos proyectos: **el secreto nunca cruza al cliente.**
+> **Faro** aplica exactamente la misma idea, solo que con otra tecnología. Sus secretos (la clave de OpenAI, los secretos de OAuth de GitHub y Google) viven en el servidor: en variables de entorno y en la tabla `user_connections` protegida con RLS. Los componentes de React del navegador nunca tocan esos valores; le piden los datos a las API routes de Next.js, que son las únicas que conocen los secretos. Mismo principio, dos proyectos: **el secreto nunca cruza al cliente.**
 
 ## 9. Juntando todo: el viaje de una petición segura
 
-Vamos a recapitular cómo encajan todas las piezas con el ejemplo de tunal-digital:
+Recapitulemos cómo encajan todas las piezas, con el ejemplo de tunal-digital:
 
 1. El usuario escribe en el chat. El **navegador** (cliente) manda el texto a tu **Worker** (servidor). Sin claves.
 2. El Worker se **autentica** ante Anthropic: añade la clave secreta en el header `x-api-key`, que lee de una **variable de entorno**.
@@ -260,7 +260,7 @@ Vamos a recapitular cómo encajan todas las piezas con el ejemplo de tunal-digit
 Toda la cadena respeta la regla de oro: **el secreto nunca sale del servidor.** Esa es la idea que tienes que llevarte de este capítulo.
 
 > ### 💡 Tip
-> Si algún día dudas "¿esto puede ir en el cliente?", hazte una pregunta brutal pero infalible: *¿me importaría que un desconocido lo viera?* Si la respuesta es sí, va en el servidor. Las claves, tokens y secretos siempre responden que sí. 🦎
+> Si algún día dudas "¿esto puede ir en el cliente?", hazte una pregunta brutal pero infalible: *¿me importaría que un desconocido lo viera?* Si la respuesta es sí, va en el servidor. Las claves, los tokens y los secretos siempre responden que sí. 🦎
 
 ## ✅ Checklist — ¿ya domino esto?
 
@@ -289,4 +289,4 @@ Toda la cadena respeta la regla de oro: **el secreto nunca sale del servidor.** 
 
 6. **Refresco en una frase.** Sin mirar el capítulo, explica con tus palabras la diferencia entre un token de acceso y uno de refresco. Luego compáralo con la sección 5.
 
-> ¡Lo lograste! 🦎 Ahora sabes la regla que muchos aprenden por las malas: **los secretos viven en el servidor, nunca en el cliente.** En el próximo capítulo daremos el siguiente paso natural —OAuth— para entender cómo Faro consigue, sin guardar tu contraseña de GitHub, permiso para leer tus repositorios. Te espero ahí. — Bit
+> ¡Lo lograste! 🦎 Ahora sabes la regla que muchos aprenden por las malas: **los secretos viven en el servidor, nunca en el cliente.** En el próximo capítulo daremos el siguiente paso natural —OAuth— para entender cómo Faro consigue permiso para leer tus repositorios sin guardar tu contraseña de GitHub. Te espero ahí. — Bit

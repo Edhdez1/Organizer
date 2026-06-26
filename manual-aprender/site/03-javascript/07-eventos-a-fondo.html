@@ -23,18 +23,18 @@
 </p>
 
 <blockquote>
-<p>Hola de nuevo, soy <strong>Bit</strong>, tu ajolote guia. En el capitulo anterior aprendimos a "escuchar" un clic con <code>addEventListener</code>. Hoy abrimos la caja y miramos que hay dentro de un evento: de donde salio, por que un clic en un boncito tambien "despierta" a su contenedor, y como un solo escucha puede manejar cientos de elementos sin sudar. Vamos a usar el menu y el formulario reales de <strong>tunal-digital</strong>. Respira: esto es de lo mas util que vas a aprender en JavaScript. Mueve la cola, que arrancamos.</p>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guia. En el capitulo pasado aprendimos a "escuchar" un clic con <code>addEventListener</code>. Hoy vamos a abrir esa caja y ver que tiene dentro un evento: de donde salio, por que un clic en un botoncito tambien "despierta" al contenedor que lo rodea, y como un solo escucha puede ocuparse de cientos de elementos sin despeinarse. Lo haremos con el menu y el formulario de verdad de <strong>tunal-digital</strong>. Tranquilo: esto es de lo mas util que vas a sacar de JavaScript. Mueve la cola, que arrancamos.</p>
 </blockquote>
 <h2 id="1-repaso-rapido-que-es-un-evento">1. Repaso rapido: que es un evento</h2>
-<p>Antes de profundizar, recordemos la base. Un <strong>evento</strong> es algo que ocurre en la pagina: el usuario hace clic, mueve el raton, presiona una tecla, envia un formulario o desplaza la pagina. JavaScript puede reaccionar a esas cosas.</p>
+<p>Antes de meternos en lo nuevo, recordemos la base. Un <strong>evento</strong> es algo que pasa en la pagina: el usuario hace clic, mueve el raton, presiona una tecla, envia un formulario o desplaza la pantalla. JavaScript puede reaccionar a cualquiera de esas cosas.</p>
 <blockquote class="def">
 <h3 id="que-significa-evento">🟦 ¿Que significa? — <em>Evento</em></h3>
-<p>Es un aviso de que "algo paso" en el navegador (un clic, una tecla, un envio de formulario). El navegador lo crea solo y tu decides si reaccionas o no.
-<strong>Para que sirve:</strong> hacer paginas interactivas, que respondan a lo que hace la persona.
-<strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, un clic en el boton del menu abre la navegacion, y un envio de formulario manda el mensaje de contacto.</p>
+<p>Es un aviso de que "algo paso" en el navegador: un clic, una tecla, el envio de un formulario. El navegador lo crea por su cuenta y tu decides si reaccionas o lo dejas pasar.
+<strong>Para que sirve:</strong> hacer paginas interactivas que respondan a lo que hace la persona.
+<strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, un clic en el boton del menu abre la navegacion, y el envio de un formulario manda el mensaje de contacto.</p>
 <h3 id="que-significa-listener-escucha">🟦 ¿Que significa? — <em>Listener (escucha)</em></h3>
 <p>Es una funcion que se queda "esperando" a que ocurra cierto evento. Cuando ocurre, el navegador la ejecuta.
-<strong>Para que sirve:</strong> conectar un evento (ej. clic) con el codigo que quieres que corra.
+<strong>Para que sirve:</strong> conectar un evento (por ejemplo un clic) con el codigo que quieres que corra cuando suceda.
 <strong>Donde se usa en un repo real:</strong> <code>boton.addEventListener("click", abrirMenu)</code> en <strong>tunal-digital</strong> registra un escucha sobre el boton hamburguesa.</p>
 </blockquote>
 <pre><code class="language-javascript">// La forma que ya conoces de registrar un escucha
@@ -46,15 +46,15 @@ boton.addEventListener(&quot;click&quot;, function () {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p><code>addEventListener</code> significa literalmente "agregar un escucha de eventos". Si lees el nombre en ingles despacio, te dice exactamente lo que hace.</p>
+<p><code>addEventListener</code> significa literalmente "agregar un escucha de eventos". Si lees el nombre en ingles con calma, te esta diciendo justo lo que hace.</p>
 </blockquote>
 <h2 id="2-el-objeto-event-la-ficha-de-lo-que-paso">2. El objeto <code>event</code>: la "ficha" de lo que paso</h2>
-<p>Cada vez que ocurre un evento, el navegador le pasa a tu funcion un regalo: un objeto lleno de informacion sobre lo que acaba de pasar. Por costumbre lo llamamos <code>event</code> o, mas corto, <code>e</code>.</p>
+<p>Cada vez que ocurre un evento, el navegador le entrega a tu funcion un pequeño regalo: un objeto repleto de informacion sobre lo que acaba de pasar. Por costumbre lo llamamos <code>event</code> o, mas corto, <code>e</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-objeto-event">🟦 ¿Que significa? — <em>Objeto event</em></h3>
-<p>Es un objeto (una "ficha" con datos) que el navegador entrega a tu funcion cuando ocurre un evento. Contiene quien lo disparo, donde paso el raton, que tecla se presiono, etc.
-<strong>Para que sirve:</strong> saber detalles del evento para reaccionar mejor (que elemento, que tecla, posicion del raton...).
-<strong>Donde se usa en un repo real:</strong> en el formulario de contacto de <strong>tunal-digital</strong>, el escucha del <code>submit</code> recibe el <code>event</code> y llama a <code>event.preventDefault()</code> para evitar que la pagina se recargue.</p>
+<p>Es un objeto (una "ficha" con datos) que el navegador entrega a tu funcion cuando ocurre un evento. Adentro viene quien lo disparo, donde estaba el raton, que tecla se presiono, etc.
+<strong>Para que sirve:</strong> conocer los detalles del evento para reaccionar mejor: que elemento, que tecla, posicion del raton...
+<strong>Donde se usa en un repo real:</strong> en el formulario de contacto de <strong>tunal-digital</strong>, el escucha del <code>submit</code> recibe el <code>event</code> y llama a <code>event.preventDefault()</code> para que la pagina no se recargue.</p>
 </blockquote>
 <pre><code class="language-javascript">boton.addEventListener(&quot;click&quot;, function (event) {
   // 'event' es la ficha con todos los datos de este clic
@@ -62,27 +62,27 @@ boton.addEventListener(&quot;click&quot;, function () {
   console.log(event.target);  // el elemento donde se hizo clic
 });
 </code></pre>
-<p>Fijate en <code>function (event)</code>: ese parametro lo rellena el navegador automaticamente. Tu no lo pasas; el navegador te lo da.</p>
+<p>Fijate en <code>function (event)</code>: ese parametro lo rellena el navegador solo. Tu no lo pasas; te lo da el navegador en bandeja.</p>
 <blockquote class="def">
 <h3 id="que-significa-eventtype">🟦 ¿Que significa? — <em>event.type</em></h3>
-<p>Una propiedad del objeto event que te dice el nombre del evento como texto: <code>"click"</code>, <code>"submit"</code>, <code>"keydown"</code>, etc.
+<p>Una propiedad del objeto event que te dice el nombre del evento en texto: <code>"click"</code>, <code>"submit"</code>, <code>"keydown"</code>, etc.
 <strong>Para que sirve:</strong> saber que clase de evento estas manejando, util cuando una misma funcion atiende varios tipos.
-<strong>Donde se usa en un repo real:</strong> en el chat con IA de <strong>tunal-digital</strong> podrias revisar <code>event.type</code> para distinguir un clic del boton "Enviar" de un <code>keydown</code> con Enter.</p>
+<strong>Donde se usa en un repo real:</strong> en el chat con IA de <strong>tunal-digital</strong> podrias mirar <code>event.type</code> para distinguir un clic en el boton "Enviar" de un <code>keydown</code> con Enter.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En <code>main.js</code> de <strong>tunal-digital</strong>, las funciones de atajo (esos helpers cortos para no escribir <code>document.querySelector</code> mil veces) terminan registrando escuchas que reciben este <code>event</code>. Cuando veas <code>e =&gt;</code> o <code>function (e)</code>, ese <code>e</code> es exactamente el objeto event del que hablamos.</p>
+<p>En <code>main.js</code> de <strong>tunal-digital</strong>, las funciones de atajo (esos helpers cortos que evitan escribir <code>document.querySelector</code> mil veces) acaban registrando escuchas que reciben este <code>event</code>. Cuando veas <code>e =&gt;</code> o <code>function (e)</code>, ese <code>e</code> es exactamente el objeto event del que hablamos.</p>
 </blockquote>
 <h3 id="21-propiedades-utiles-del-event">2.1 Propiedades utiles del event</h3>
-<p>Segun el tipo de evento, el <code>event</code> trae datos distintos:</p>
+<p>Segun el tipo de evento, el <code>event</code> trae unos datos u otros:</p>
 <ul>
 <li>En un <strong>clic</strong>: <code>event.clientX</code> y <code>event.clientY</code> (posicion del raton en pixeles).</li>
-<li>En una <strong>tecla</strong>: <code>event.key</code> (la tecla, ej. <code>"Enter"</code>).</li>
+<li>En una <strong>tecla</strong>: <code>event.key</code> (la tecla, por ejemplo <code>"Enter"</code>).</li>
 <li>En un <strong>formulario</strong>: el evento <code>submit</code>, donde brilla <code>preventDefault()</code>.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-preventdefault">🟦 ¿Que significa? — <em>preventDefault()</em></h3>
-<p>Es un metodo del objeto event que cancela la accion "por defecto" que el navegador haria. Por ejemplo, un formulario, por defecto, recarga la pagina al enviarse; <code>preventDefault()</code> lo evita.
-<strong>Para que sirve:</strong> tomar el control tu mismo en vez de dejar que el navegador haga su comportamiento automatico.
-<strong>Donde se usa en un repo real:</strong> clave en el formulario de <strong>tunal-digital</strong>: sin <code>preventDefault()</code>, al enviar el mensaje la pagina se recargaria y nunca llegaria el <code>fetch</code> al Worker.</p>
+<p>Es un metodo del objeto event que cancela la accion "por defecto" que el navegador haria. Por ejemplo: un formulario, por defecto, recarga la pagina al enviarse; <code>preventDefault()</code> lo impide.
+<strong>Para que sirve:</strong> tomar tu el control en lugar de dejar que el navegador haga su comportamiento automatico.
+<strong>Donde se usa en un repo real:</strong> es clave en el formulario de <strong>tunal-digital</strong>: sin <code>preventDefault()</code>, al enviar el mensaje la pagina se recargaria y el <code>fetch</code> al Worker nunca llegaria a salir.</p>
 </blockquote>
 <pre><code class="language-javascript">const form = document.querySelector(&quot;#contacto&quot;);
 
@@ -93,22 +93,22 @@ form.addEventListener(&quot;submit&quot;, function (event) {
 });
 </code></pre>
 <h2 id="3-target-vs-currenttarget-dos-preguntas-distintas">3. <code>target</code> vs <code>currentTarget</code>: dos preguntas distintas</h2>
-<p>Esta es una de las confusiones mas comunes para principiantes, asi que ve despacio. Imagina un boton que tiene un icono y un texto dentro:</p>
+<p>Esta es una de las confusiones mas tipicas cuando uno empieza, asi que ve sin prisa. Imagina un boton que lleva un icono y un texto dentro:</p>
 <pre><code class="language-html">&lt;button class=&quot;menu-toggle&quot;&gt;
   &lt;span class=&quot;icono&quot;&gt;☰&lt;/span&gt;
   &lt;span class=&quot;texto&quot;&gt;Menu&lt;/span&gt;
 &lt;/button&gt;
 </code></pre>
-<p>Si haces clic justo encima del icono <code>☰</code>, ¿en que elemento hiciste clic exactamente? En el <code>&lt;span class="icono"&gt;</code>, no en el <code>&lt;button&gt;</code>. Pero tu escucha esta puesto en el <code>&lt;button&gt;</code>. Aqui entran dos propiedades:</p>
+<p>Si haces clic justo encima del icono <code>☰</code>, ¿sobre que elemento hiciste clic en realidad? Sobre el <code>&lt;span class="icono"&gt;</code>, no sobre el <code>&lt;button&gt;</code>. Pero tu escucha esta colocado en el <code>&lt;button&gt;</code>. Ahi entran dos propiedades:</p>
 <blockquote class="def">
 <h3 id="que-significa-eventtarget">🟦 ¿Que significa? — <em>event.target</em></h3>
 <p>Es el elemento exacto donde nacio el evento, el mas profundo que recibio el clic (en el ejemplo, el <code>&lt;span class="icono"&gt;</code>).
-<strong>Para que sirve:</strong> saber con precision sobre que cosa hizo clic la persona.
+<strong>Para que sirve:</strong> saber con precision sobre que cosa concreta hizo clic la persona.
 <strong>Donde se usa en un repo real:</strong> en el menu de <strong>tunal-digital</strong>, si pones un solo escucha en la lista <code>&lt;ul&gt;</code> y haces clic en un enlace, <code>event.target</code> te dice exactamente cual enlace tocaste.</p>
 <h3 id="que-significa-eventcurrenttarget">🟦 ¿Que significa? — <em>event.currentTarget</em></h3>
 <p>Es el elemento que tiene puesto el escucha, es decir, donde llamaste a <code>addEventListener</code> (en el ejemplo, el <code>&lt;button&gt;</code>).
 <strong>Para que sirve:</strong> referirte siempre al elemento "dueño" del escucha, sin importar donde nacio el clic.
-<strong>Donde se usa en un repo real:</strong> util en <strong>tunal-digital</strong> cuando el escucha vive en un contenedor pero el clic puede caer en cualquier hijo; <code>currentTarget</code> siempre es el contenedor.</p>
+<strong>Donde se usa en un repo real:</strong> util en <strong>tunal-digital</strong> cuando el escucha vive en un contenedor pero el clic puede caer en cualquier hijo; <code>currentTarget</code> sigue siendo siempre el contenedor.</p>
 </blockquote>
 <pre><code class="language-javascript">const boton = document.querySelector(&quot;.menu-toggle&quot;);
 
@@ -119,23 +119,23 @@ boton.addEventListener(&quot;click&quot;, function (event) {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Regla mnemotecnica de Bit: <strong>target = el objetivo del dedo</strong> (donde aterrizo el clic). <strong>currentTarget = el current(actual) dueño del escucha</strong>. Si no recuerdas cual usar, casi siempre quieres <code>currentTarget</code> cuando trabajas con el elemento al que pusiste el escucha.</p>
+<p>Regla mnemotecnica de Bit: <strong>target = el objetivo del dedo</strong> (donde aterrizo el clic). <strong>currentTarget = el current(actual) dueño del escucha</strong>. Si dudas cual usar, casi siempre quieres <code>currentTarget</code> cuando trabajas con el elemento al que le pusiste el escucha.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Si guardas el evento y lo lees mas tarde (por ejemplo en un <code>setTimeout</code>), <code>currentTarget</code> puede aparecer como <code>null</code>. El navegador "limpia" <code>currentTarget</code> cuando termina el evento. Si necesitas ese elemento despues, guardalo en una variable mientras el evento sigue vivo.</p>
+<p>Si guardas el evento y lo lees mas tarde (por ejemplo dentro de un <code>setTimeout</code>), <code>currentTarget</code> puede aparecerte como <code>null</code>. El navegador "limpia" <code>currentTarget</code> cuando el evento termina. Si vas a necesitar ese elemento despues, guardalo en una variable mientras el evento sigue vivo.</p>
 </blockquote>
 <h2 id="4-propagacion-y-burbujeo-bubbling">4. Propagacion y burbujeo (bubbling)</h2>
-<p>Ahora la parte que parece magia pero tiene logica. Cuando haces clic en un elemento que esta dentro de otro, el evento no se queda solo en ese elemento: "sube" por todos sus contenedores, como una burbuja en un vaso de agua que sube a la superficie.</p>
+<p>Llega la parte que parece magia pero tiene toda su logica. Cuando haces clic en un elemento que esta dentro de otro, el evento no se queda quieto ahi: "sube" por todos sus contenedores, igual que una burbuja en un vaso de agua que asciende hasta la superficie.</p>
 <blockquote class="def">
 <h3 id="que-significa-propagacion-de-eventos">🟦 ¿Que significa? — <em>Propagacion de eventos</em></h3>
-<p>Es el viaje que hace un evento por el arbol de elementos HTML. No afecta solo al elemento tocado, sino que recorre tambien a sus ancestros.
+<p>Es el viaje que hace un evento por el arbol de elementos HTML. No toca solo al elemento clicado, sino que recorre tambien a sus ancestros.
 <strong>Para que sirve:</strong> entender por que un clic en un hijo tambien "despierta" escuchas puestos en sus padres.
-<strong>Donde se usa en un repo real:</strong> en el menu de <strong>tunal-digital</strong>, un clic en un <code>&lt;a&gt;</code> dentro de un <code>&lt;li&gt;</code> dentro de un <code>&lt;ul&gt;</code> toca, en orden, a los tres.</p>
+<strong>Donde se usa en un repo real:</strong> en el menu de <strong>tunal-digital</strong>, un clic en un <code>&lt;a&gt;</code> dentro de un <code>&lt;li&gt;</code> dentro de un <code>&lt;ul&gt;</code> toca, por orden, a los tres.</p>
 <h3 id="que-significa-bubbling-burbujeo">🟦 ¿Que significa? — <em>Bubbling (burbujeo)</em></h3>
-<p>Es la fase de la propagacion en la que el evento sube desde el elemento tocado hacia sus padres, abuelos, etc., hasta el <code>document</code>. Es como una burbuja que sube.
-<strong>Para que sirve:</strong> permite poner un solo escucha "arriba" y atender clics de muchos hijos (la base de la delegacion, seccion 6).
-<strong>Donde se usa en un repo real:</strong> <strong>tunal-digital</strong> puede poner un escucha en el <code>&lt;ul&gt;</code> del menu y atender clics de todos los <code>&lt;a&gt;</code> gracias al burbujeo.</p>
+<p>Es la fase de la propagacion en la que el evento sube desde el elemento tocado hacia sus padres, sus abuelos y asi hasta el <code>document</code>. Como una burbuja que asciende.
+<strong>Para que sirve:</strong> permite poner un solo escucha "arriba" y atender clics de muchos hijos (es la base de la delegacion, seccion 6).
+<strong>Donde se usa en un repo real:</strong> <strong>tunal-digital</strong> puede poner un escucha en el <code>&lt;ul&gt;</code> del menu y atender los clics de todos los <code>&lt;a&gt;</code> gracias al burbujeo.</p>
 </blockquote>
-<p>Visualicemoslo. Con esta estructura:</p>
+<p>Veamoslo. Con esta estructura:</p>
 <pre><code class="language-html">&lt;ul id=&quot;menu&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#inicio&quot;&gt;Inicio&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#servicios&quot;&gt;Servicios&lt;/a&gt;&lt;/li&gt;
@@ -150,7 +150,7 @@ enlace.addEventListener(&quot;click&quot;, () =&gt; console.log(&quot;1) enlace&
 item.addEventListener(&quot;click&quot;,   () =&gt; console.log(&quot;2) li&quot;));
 menu.addEventListener(&quot;click&quot;,   () =&gt; console.log(&quot;3) ul&quot;));
 </code></pre>
-<p>Al hacer clic en el enlace veras en la consola, en este orden:</p>
+<p>Al hacer clic en el enlace, la consola te mostrara, en este orden:</p>
 <pre><code>1) enlace
 2) li
 3) ul
@@ -158,19 +158,19 @@ menu.addEventListener(&quot;click&quot;,   () =&gt; console.log(&quot;3) ul&quot
 <p>El evento nacio en el <code>&lt;a&gt;</code> y fue burbujeando hacia arriba. Eso es el bubbling en accion.</p>
 <blockquote class="def">
 <h3 id="que-significa-capturing-fase-de-captura">🟦 ¿Que significa? — <em>Capturing (fase de captura)</em></h3>
-<p>Es la fase contraria al burbujeo: antes de bajar al elemento tocado, el evento desciende desde el <code>document</code> hacia el. Casi nunca la usaras, pero existe.
+<p>Es la fase contraria al burbujeo: antes de bajar al elemento tocado, el evento desciende desde el <code>document</code> hacia el. Casi nunca la vas a usar, pero ahi esta.
 <strong>Para que sirve:</strong> interceptar un evento "antes" de que llegue al elemento; util en casos avanzados.
 <strong>Donde se usa en un repo real:</strong> raro en <strong>tunal-digital</strong>; se activa pasando <code>true</code> como tercer argumento: <code>addEventListener("click", fn, true)</code>. Por defecto es <code>false</code> (burbujeo).</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>El orden completo real es: captura (de arriba hacia abajo) → llega al objetivo → burbujeo (de abajo hacia arriba). El 99% del tiempo solo te importa el burbujeo. Si nunca pasas <code>true</code>, ya estas usando burbujeo.</p>
+<p>El recorrido completo de verdad es: captura (de arriba hacia abajo) → llega al objetivo → burbujeo (de abajo hacia arriba). El 99% del tiempo solo te importa el burbujeo. Si nunca pasas <code>true</code>, ya lo estas usando.</p>
 </blockquote>
 <h2 id="5-stoppropagation-cortar-el-viaje">5. <code>stopPropagation</code>: cortar el viaje</h2>
-<p>A veces NO quieres que el evento siga subiendo. Por ejemplo: tienes un escucha en el <code>document</code> que cierra el menu cuando clicas "fuera", pero un clic dentro del menu no deberia cerrarlo. Para eso cortas la propagacion.</p>
+<p>A veces NO te interesa que el evento siga subiendo. Pongamos un caso: tienes un escucha en el <code>document</code> que cierra el menu cuando clicas "fuera", pero un clic dentro del menu no deberia cerrarlo. Para eso cortas la propagacion.</p>
 <blockquote class="def">
 <h3 id="que-significa-stoppropagation">🟦 ¿Que significa? — <em>stopPropagation()</em></h3>
-<p>Es un metodo del objeto event que detiene el viaje del evento: los escuchas de los ancestros ya no se enteraran de este evento.
+<p>Es un metodo del objeto event que detiene el viaje del evento: los escuchas de los ancestros ya no se van a enterar de este evento.
 <strong>Para que sirve:</strong> evitar que un clic "se escape" hacia contenedores que reaccionarian de forma no deseada.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, util si hay un escucha global que cierra menus al hacer clic fuera; dentro del menu se llama <code>stopPropagation()</code> para que ese clic no cuente como "fuera".</p>
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, util si hay un escucha global que cierra menus al hacer clic fuera; dentro del menu se llama a <code>stopPropagation()</code> para que ese clic no cuente como "fuera".</p>
 </blockquote>
 <pre><code class="language-javascript">const menu = document.querySelector(&quot;#menu&quot;);
 
@@ -186,21 +186,21 @@ menu.addEventListener(&quot;click&quot;, function (event) {
 <p>Con <code>stopPropagation()</code>, un clic dentro de <code>#menu</code> ya no dispara el escucha del <code>document</code>.</p>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>No abuses de <code>stopPropagation()</code>. Si cortas la propagacion en muchos sitios, mas tarde te costara entender por que ciertos escuchas globales "no se enteran" de nada. Usalo solo cuando tengas una razon clara.</p>
+<p>No abuses de <code>stopPropagation()</code>. Si cortas la propagacion en demasiados sitios, mas adelante te costara entender por que ciertos escuchas globales "no se enteran" de nada. Usalo solo cuando tengas un motivo claro.</p>
 <h3 id="que-significa-stopimmediatepropagation">🟦 ¿Que significa? — <em>stopImmediatePropagation()</em></h3>
-<p>Hermano mayor del anterior: ademas de detener el viaje a los ancestros, evita que se ejecuten OTROS escuchas del mismo evento en el mismo elemento.
-<strong>Para que sirve:</strong> cuando un elemento tiene varios escuchas y quieres que ninguno mas corra.
-<strong>Donde se usa en un repo real:</strong> muy raro; en <strong>tunal-digital</strong> normalmente basta con <code>stopPropagation()</code>.</p>
+<p>El hermano mayor del anterior: ademas de frenar el viaje hacia los ancestros, impide que se ejecuten OTROS escuchas del mismo evento en el mismo elemento.
+<strong>Para que sirve:</strong> cuando un elemento tiene varios escuchas y quieres que no corra ninguno mas.
+<strong>Donde se usa en un repo real:</strong> muy raro; en <strong>tunal-digital</strong> casi siempre basta con <code>stopPropagation()</code>.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>No confundas <code>stopPropagation()</code> con <code>preventDefault()</code>. <code>preventDefault()</code> cancela la accion del navegador (recargar, seguir un enlace). <code>stopPropagation()</code> corta el viaje del evento entre elementos. Son cosas distintas y a veces se usan juntas.</p>
+<p>No mezcles <code>stopPropagation()</code> con <code>preventDefault()</code>. <code>preventDefault()</code> cancela la accion del navegador (recargar, seguir un enlace). <code>stopPropagation()</code> corta el viaje del evento entre elementos. Son cosas distintas, aunque a veces se usen juntas.</p>
 </blockquote>
 <h2 id="6-delegacion-de-eventos-un-escucha-para-muchos">6. Delegacion de eventos: un escucha para muchos</h2>
-<p>Aqui esta la joya del capitulo. Imagina que el menu de <strong>tunal-digital</strong> tiene 8 enlaces y quieres reaccionar al clic de cada uno. La idea ingenua seria poner 8 escuchas, uno por enlace. Pero gracias al burbujeo hay algo mucho mejor: pones UN solo escucha en el <code>&lt;ul&gt;</code> padre y dejas que los clics suban hasta el.</p>
+<p>Aqui esta la joya del capitulo. Imagina que el menu de <strong>tunal-digital</strong> tiene 8 enlaces y quieres reaccionar al clic de cada uno. Lo ingenuo seria poner 8 escuchas, uno por enlace. Pero gracias al burbujeo hay algo mucho mejor: pones UN solo escucha en el <code>&lt;ul&gt;</code> padre y dejas que los clics suban hasta el.</p>
 <blockquote class="def">
 <h3 id="que-significa-delegacion-de-eventos">🟦 ¿Que significa? — <em>Delegacion de eventos</em></h3>
-<p>Es la tecnica de poner un solo escucha en un elemento padre y usar <code>event.target</code> para saber cual hijo recibio el evento. Aprovecha el burbujeo.
-<strong>Para que sirve:</strong> manejar muchos elementos con un solo escucha; tambien funciona con elementos que aun no existen (se crean despues).
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, un solo escucha en el <code>&lt;ul&gt;</code> del menu atiende los clics de todos los enlaces sin poner uno por enlace.</p>
+<p>Es la tecnica de poner un solo escucha en un elemento padre y usar <code>event.target</code> para averiguar cual hijo recibio el evento. Se apoya en el burbujeo.
+<strong>Para que sirve:</strong> manejar muchos elementos con un solo escucha; ademas funciona con elementos que aun no existen (que se crean despues).
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, un solo escucha en el <code>&lt;ul&gt;</code> del menu atiende los clics de todos los enlaces sin tener que poner uno por enlace.</p>
 </blockquote>
 <pre><code class="language-javascript">const menu = document.querySelector(&quot;#menu&quot;);
 
@@ -215,29 +215,29 @@ menu.addEventListener(&quot;click&quot;, function (event) {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-closest">🟦 ¿Que significa? — <em>closest()</em></h3>
-<p>Es un metodo de los elementos que busca, empezando por el propio elemento y subiendo por sus padres, el primero que coincida con un selector CSS. Devuelve ese elemento o <code>null</code>.
-<strong>Para que sirve:</strong> en delegacion, encontrar el "enlace" o "boton" real aunque el clic cayera en un icono dentro de el.
-<strong>Donde se usa en un repo real:</strong> en el menu de <strong>tunal-digital</strong>, <code>event.target.closest("a")</code> asegura que aunque cliques un icono dentro del enlace, obtengas el <code>&lt;a&gt;</code> completo.</p>
+<p>Es un metodo de los elementos que busca, empezando por el propio elemento y subiendo por sus padres, el primero que encaje con un selector CSS. Devuelve ese elemento o <code>null</code>.
+<strong>Para que sirve:</strong> en delegacion, dar con el "enlace" o "boton" real aunque el clic cayera sobre un icono que esta dentro de el.
+<strong>Donde se usa en un repo real:</strong> en el menu de <strong>tunal-digital</strong>, <code>event.target.closest("a")</code> se asegura de que, aunque cliques un icono dentro del enlace, te quedes con el <code>&lt;a&gt;</code> completo.</p>
 <h3 id="tip_4">💡 Tip</h3>
-<p>La delegacion brilla con listas dinamicas. En <strong>RachaSimple</strong> (React + TanStack Query) las listas se vuelven a renderizar cuando llegan datos nuevos del servidor; con delegacion, un escucha en el contenedor sigue funcionando aunque los hijos cambien. (En React, eso si, normalmente usas <code>onClick</code> directamente y el framework hace la delegacion por ti debajo.)</p>
+<p>La delegacion luce de verdad con listas dinamicas. En <strong>RachaSimple</strong> (React + TanStack Query) las listas se vuelven a renderizar cuando llegan datos nuevos del servidor; con delegacion, un escucha en el contenedor sigue funcionando aunque los hijos cambien. (En React, eso si, lo normal es usar <code>onClick</code> directamente y el framework hace la delegacion por ti por debajo.)</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En el JavaScript vanilla de <strong>tunal-digital</strong> la delegacion es ideal porque no hay framework que te ayude: tu pones el escucha en el contenedor y resuelves con <code>event.target</code>. En <strong>Faro/Organizer</strong> (Next.js + React), en cambio, declaras <code>onClick</code> en el JSX y React gestiona la delegacion internamente; entender este capitulo te ayuda a saber que pasa por debajo.</p>
+<p>En el JavaScript vanilla de <strong>tunal-digital</strong> la delegacion encaja perfecto porque no hay framework que te eche una mano: tu pones el escucha en el contenedor y resuelves con <code>event.target</code>. En <strong>Faro/Organizer</strong> (Next.js + React), en cambio, declaras <code>onClick</code> en el JSX y React gestiona la delegacion por dentro; entender este capitulo te ayuda a saber que esta pasando bajo el capo.</p>
 </blockquote>
 <h3 id="61-por-que-la-delegacion-es-genial">6.1 Por que la delegacion es genial</h3>
 <ul>
-<li><strong>Menos memoria:</strong> un escucha en vez de cien.</li>
-<li><strong>Funciona con elementos nuevos:</strong> si agregas un <code>&lt;li&gt;</code> despues con JavaScript, el escucha del padre ya lo cubre, sin registrar nada nuevo.</li>
-<li><strong>Codigo mas limpio:</strong> toda la logica del menu vive en un solo lugar.</li>
+<li><strong>Menos memoria:</strong> un escucha en lugar de cien.</li>
+<li><strong>Funciona con elementos nuevos:</strong> si despues agregas un <code>&lt;li&gt;</code> con JavaScript, el escucha del padre ya lo cubre, sin registrar nada nuevo.</li>
+<li><strong>Codigo mas limpio:</strong> toda la logica del menu vive en un solo sitio.</li>
 </ul>
 <h2 id="7-eventos-de-teclado">7. Eventos de teclado</h2>
-<p>No todo es clic. El teclado tiene sus propios eventos, muy usados en buscadores y chats.</p>
+<p>No todo es clic. El teclado tiene sus propios eventos, muy presentes en buscadores y chats.</p>
 <blockquote class="def">
 <h3 id="que-significa-keydown">🟦 ¿Que significa? — <em>keydown</em></h3>
-<p>Es el evento que se dispara en el momento en que se presiona una tecla (antes de soltarla).
-<strong>Para que sirve:</strong> reaccionar a teclas: enviar con Enter, cerrar con Escape, navegar con flechas.
-<strong>Donde se usa en un repo real:</strong> en el chat con IA de <strong>tunal-digital</strong>, detectar Enter en el <code>keydown</code> permite enviar el mensaje sin tener que clicar el boton.</p>
+<p>Es el evento que se dispara en el instante en que se presiona una tecla (antes de soltarla).
+<strong>Para que sirve:</strong> reaccionar a teclas: enviar con Enter, cerrar con Escape, navegar con las flechas.
+<strong>Donde se usa en un repo real:</strong> en el chat con IA de <strong>tunal-digital</strong>, detectar Enter en el <code>keydown</code> deja enviar el mensaje sin tener que clicar el boton.</p>
 <h3 id="que-significa-eventkey">🟦 ¿Que significa? — <em>event.key</em></h3>
-<p>Es la propiedad que te dice, como texto, que tecla se presiono: <code>"Enter"</code>, <code>"Escape"</code>, <code>"a"</code>, <code>"ArrowUp"</code>, etc.
+<p>Es la propiedad que te dice, en texto, que tecla se presiono: <code>"Enter"</code>, <code>"Escape"</code>, <code>"a"</code>, <code>"ArrowUp"</code>, etc.
 <strong>Para que sirve:</strong> identificar la tecla exacta para decidir que hacer.
 <strong>Donde se usa en un repo real:</strong> en el chat de <strong>tunal-digital</strong>, <code>if (event.key === "Enter")</code> decide enviar el mensaje al Worker.</p>
 </blockquote>
@@ -253,12 +253,12 @@ input.addEventListener(&quot;keydown&quot;, function (event) {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_5">💡 Tip</h3>
-<p><code>event.shiftKey</code> (y tambien <code>event.ctrlKey</code>, <code>event.altKey</code>) te dicen si esas teclas estaban presionadas a la vez. El truco "Enter envia, Shift+Enter hace salto de linea" se logra justo asi, como en el ejemplo.</p>
+<p><code>event.shiftKey</code> (y tambien <code>event.ctrlKey</code>, <code>event.altKey</code>) te dicen si esas teclas estaban pulsadas a la vez. El truco de "Enter envia, Shift+Enter hace salto de linea" se consigue justo asi, como en el ejemplo.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Existe un viejo <code>event.keyCode</code> (un numero por tecla). Esta <strong>obsoleto</strong>: usa siempre <code>event.key</code>, que es texto legible y no depende de codigos numericos misteriosos.</p>
+<p>Existe un viejo <code>event.keyCode</code> (un numero por tecla). Esta <strong>obsoleto</strong>: usa siempre <code>event.key</code>, que es texto legible y no depende de codigos numericos imposibles de recordar.</p>
 </blockquote>
 <h2 id="8-eventos-de-formulario">8. Eventos de formulario</h2>
-<p>Los formularios tienen eventos propios mas alla del clic en el boton. <strong>tunal-digital</strong> tiene un formulario de contacto, asi que esto te toca de cerca.</p>
+<p>Los formularios tienen sus propios eventos, mas alla del clic en el boton. <strong>tunal-digital</strong> tiene un formulario de contacto, asi que esto te pilla de cerca.</p>
 <blockquote class="def">
 <h3 id="que-significa-submit">🟦 ¿Que significa? — <em>submit</em></h3>
 <p>Es el evento que se dispara cuando se envia un formulario (al clicar un boton de tipo submit o al presionar Enter en un campo). Se escucha sobre el <code>&lt;form&gt;</code>, no sobre el boton.
@@ -266,11 +266,11 @@ input.addEventListener(&quot;keydown&quot;, function (event) {
 <strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, el <code>submit</code> del formulario de contacto se intercepta para enviar el mensaje al Worker via <code>fetch</code>.</p>
 <h3 id="que-significa-input-evento">🟦 ¿Que significa? — <em>input (evento)</em></h3>
 <p>Es el evento que se dispara cada vez que cambia el valor de un campo mientras la persona escribe.
-<strong>Para que sirve:</strong> validar o reaccionar en vivo (contar caracteres, habilitar el boton, mostrar errores al instante).
+<strong>Para que sirve:</strong> validar o reaccionar en vivo: contar caracteres, habilitar el boton, mostrar errores al instante.
 <strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> podrias usar <code>input</code> para activar el boton "Enviar" solo cuando el campo de email tenga algo escrito.</p>
 <h3 id="que-significa-change">🟦 ¿Que significa? — <em>change</em></h3>
 <p>Es el evento que se dispara cuando un campo cambia y la persona "termina" (por ejemplo, sale del campo o elige una opcion de un <code>&lt;select&gt;</code>).
-<strong>Para que sirve:</strong> reaccionar a cambios completados, no a cada tecla.
+<strong>Para que sirve:</strong> reaccionar a cambios ya completados, no a cada tecla.
 <strong>Donde se usa en un repo real:</strong> util en <strong>Faro/Organizer</strong> para un <code>&lt;select&gt;</code> que filtra proyectos: el <code>change</code> dispara la nueva consulta.</p>
 </blockquote>
 <pre><code class="language-javascript">const form = document.querySelector(&quot;#contacto&quot;);
@@ -295,16 +295,16 @@ form.addEventListener(&quot;submit&quot;, function (event) {
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>En <code>main.js</code> de <strong>tunal-digital</strong>, el envio del formulario combina dos cosas de este capitulo: <code>event.preventDefault()</code> para no recargar, y luego un <code>fetch</code> al Worker para mandar el mensaje. Sin el <code>preventDefault</code>, el navegador recargaria y tu <code>fetch</code> nunca terminaria.</p>
+<p>En <code>main.js</code> de <strong>tunal-digital</strong>, el envio del formulario junta dos cosas de este capitulo: <code>event.preventDefault()</code> para no recargar, y despues un <code>fetch</code> al Worker para mandar el mensaje. Sin el <code>preventDefault</code>, el navegador recargaria y tu <code>fetch</code> nunca llegaria a terminar.</p>
 <h3 id="tip_6">💡 Tip</h3>
-<p>Para leer todos los campos de un formulario de golpe existe <code>new FormData(form)</code>. Es comodisimo cuando el formulario tiene muchos campos, porque no tienes que leer uno por uno.</p>
+<p>Para leer todos los campos de un formulario de un tiron existe <code>new FormData(form)</code>. Es comodisimo cuando el formulario tiene muchos campos, porque te ahorra ir leyendolos uno por uno.</p>
 </blockquote>
 <h2 id="9-evento-de-scroll-desplazamiento">9. Evento de scroll (desplazamiento)</h2>
 <blockquote class="def">
 <h3 id="que-significa-scroll">🟦 ¿Que significa? — <em>scroll</em></h3>
 <p>Es el evento que se dispara cuando se desplaza (sube o baja) una pagina o un contenedor.
 <strong>Para que sirve:</strong> efectos como una barra que se encoge al bajar, un boton "subir arriba" que aparece, o animaciones al desplazar.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> podria usarse para que el header cambie de estilo cuando el usuario baja un poco la pagina.</p>
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> podria servir para que el header cambie de estilo cuando el usuario baja un poco la pagina.</p>
 </blockquote>
 <pre><code class="language-javascript">window.addEventListener(&quot;scroll&quot;, function () {
   const bajamos = window.scrollY &gt; 80;
@@ -313,21 +313,21 @@ form.addEventListener(&quot;submit&quot;, function (event) {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>El evento <code>scroll</code> se dispara MUCHISIMAS veces por segundo. Si dentro haces algo pesado, la pagina se sentira lenta. La solucion (que veras mas adelante) es "limitar" la frecuencia con tecnicas como <em>throttle</em> o <em>debounce</em>, o usar el moderno <code>IntersectionObserver</code>. Por ahora, manten el codigo del scroll muy ligero.</p>
+<p>El evento <code>scroll</code> se dispara MUCHISIMAS veces por segundo. Si dentro haces algo pesado, la pagina se va a sentir lenta. La solucion (que veras mas adelante) es "limitar" la frecuencia con tecnicas como <em>throttle</em> o <em>debounce</em>, o usar el moderno <code>IntersectionObserver</code>. Por ahora, manten el codigo del scroll bien ligero.</p>
 <h3 id="que-significa-windowscrolly">🟦 ¿Que significa? — <em>window.scrollY</em></h3>
-<p>Es una propiedad que te dice cuantos pixeles se ha desplazado la pagina verticalmente desde arriba.
-<strong>Para que sirve:</strong> decidir acciones segun cuanto bajo la persona (ej. mostrar un boton tras 300px).
+<p>Es una propiedad que te dice cuantos pixeles se ha desplazado la pagina en vertical desde lo mas arriba.
+<strong>Para que sirve:</strong> decidir acciones segun cuanto bajo la persona (por ejemplo, mostrar un boton tras 300px).
 <strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, comparar <code>window.scrollY</code> con un numero para activar el header compacto.</p>
 </blockquote>
 <h2 id="10-removeeventlistener-dejar-de-escuchar">10. <code>removeEventListener</code>: dejar de escuchar</h2>
-<p>Registrar escuchas esta bien, pero a veces hay que quitarlos: para evitar duplicados, liberar memoria o desactivar algo temporalmente.</p>
+<p>Registrar escuchas esta muy bien, pero a veces toca quitarlos: para evitar duplicados, liberar memoria o desactivar algo de forma temporal.</p>
 <blockquote class="def">
 <h3 id="que-significa-removeeventlistener">🟦 ¿Que significa? — <em>removeEventListener()</em></h3>
-<p>Es el metodo que quita un escucha previamente registrado, para que ese evento ya no ejecute esa funcion.
+<p>Es el metodo que quita un escucha que ya habias registrado, para que ese evento deje de ejecutar esa funcion.
 <strong>Para que sirve:</strong> dejar de reaccionar a un evento; evita fugas de memoria y comportamientos duplicados.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, util para que un escucha temporal (ej. cerrar un modal con Escape) deje de existir cuando el modal se cierra.</p>
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, util para que un escucha temporal (por ejemplo, cerrar un modal con Escape) deje de existir cuando el modal se cierra.</p>
 </blockquote>
-<p>La regla de oro: para quitar un escucha necesitas <strong>la misma funcion con nombre</strong> que usaste para agregarlo. Una funcion anonima no se puede quitar porque no tienes como referirte a ella.</p>
+<p>La regla de oro: para quitar un escucha necesitas <strong>la misma funcion con nombre</strong> que usaste al agregarlo. Una funcion anonima no hay forma de quitarla, porque no tienes manera de referirte a ella.</p>
 <pre><code class="language-javascript">function alPresionarEscape(event) {
   if (event.key === &quot;Escape&quot;) {
     console.log(&quot;Cerrar modal&quot;);
@@ -341,15 +341,15 @@ document.addEventListener(&quot;keydown&quot;, alPresionarEscape);
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>Esto NO funciona para quitar un escucha:
+<p>Esto NO sirve para quitar un escucha:
 <code>javascript
 elemento.addEventListener("click", () =&gt; hola());
 elemento.removeEventListener("click", () =&gt; hola()); // ¡otra funcion distinta!</code>
-Aunque el codigo "se vea igual", son dos funciones diferentes en memoria. <code>removeEventListener</code> no encuentra nada que quitar. Por eso, si vas a quitar un escucha, usa una funcion con nombre.</p>
+Aunque el codigo "se vea igual", son dos funciones diferentes en memoria. <code>removeEventListener</code> no encuentra nada que quitar. Por eso, si piensas quitar un escucha, usa una funcion con nombre.</p>
 <h3 id="que-significa-opcion-once">🟦 ¿Que significa? — <em>opcion <code>once</code></em></h3>
 <p>Es una opcion de <code>addEventListener</code> (<code>{ once: true }</code>) que hace que el escucha se ejecute UNA sola vez y se quite solo.
-<strong>Para que sirve:</strong> evitar tener que llamar a <code>removeEventListener</code> a mano cuando solo quieres reaccionar la primera vez.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, ideal para una animacion de bienvenida que solo debe ocurrir el primer clic.</p>
+<strong>Para que sirve:</strong> ahorrarte el <code>removeEventListener</code> a mano cuando solo te interesa reaccionar la primera vez.
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, ideal para una animacion de bienvenida que solo debe ocurrir en el primer clic.</p>
 </blockquote>
 <pre><code class="language-javascript">boton.addEventListener(&quot;click&quot;, function () {
   console.log(&quot;Esto solo corre una vez&quot;);
@@ -357,10 +357,10 @@ Aunque el codigo "se vea igual", son dos funciones diferentes en memoria. <code>
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_7">💡 Tip</h3>
-<p>En frameworks como <strong>RachaSimple</strong> (React) o <strong>Faro/Organizer</strong> (Next.js), cuando agregas escuchas "a mano" dentro de un <code>useEffect</code>, debes quitarlos en la funcion de limpieza del efecto. Es exactamente este <code>removeEventListener</code>, y es la causa numero uno de bugs raros cuando se olvida. Anota esto: lo veras de nuevo en el modulo de React.</p>
+<p>En frameworks como <strong>RachaSimple</strong> (React) o <strong>Faro/Organizer</strong> (Next.js), cuando agregas escuchas "a mano" dentro de un <code>useEffect</code>, tienes que quitarlos en la funcion de limpieza del efecto. Es exactamente este <code>removeEventListener</code>, y olvidarlo es la causa numero uno de bugs raros. Apunta esto: lo veras de nuevo en el modulo de React.</p>
 </blockquote>
 <h2 id="11-juntando-todo-el-menu-de-tunal-digital">11. Juntando todo: el menu de tunal-digital</h2>
-<p>Cerremos con un ejemplo que une varias piezas del capitulo: abrir/cerrar el menu, cerrarlo al clicar fuera (propagacion), y delegar los clics de los enlaces.</p>
+<p>Cerremos con un ejemplo que une varias piezas del capitulo: abrir y cerrar el menu, cerrarlo al clicar fuera (propagacion), y delegar los clics de los enlaces.</p>
 <pre><code class="language-javascript">const toggle = document.querySelector(&quot;.menu-toggle&quot;);
 const menu = document.querySelector(&quot;#menu&quot;);
 
@@ -383,10 +383,10 @@ menu.addEventListener(&quot;click&quot;, function (event) {
   console.log(&quot;Navegar a:&quot;, enlace.getAttribute(&quot;href&quot;));
 });
 </code></pre>
-<p>Lee este bloque dos veces: usa <code>stopPropagation</code> (seccion 5), delegacion con <code>closest</code> (seccion 6) y <code>classList.toggle</code>. Es codigo realista del tipo que vive en <code>main.js</code> de <strong>tunal-digital</strong>.</p>
+<p>Lee este bloque dos veces: usa <code>stopPropagation</code> (seccion 5), delegacion con <code>closest</code> (seccion 6) y <code>classList.toggle</code>. Es codigo realista, del tipo que vive en <code>main.js</code> de <strong>tunal-digital</strong>.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>Compara mentalmente: en <strong>tunal-digital</strong> (vanilla) escribes tu mismo toda esta orquestacion de escuchas. En <strong>PolyPaw</strong> (Python/Flet) no hay DOM ni eventos del navegador: Flet maneja la interaccion con sus propios callbacks. Y en <strong>polypaw-nas</strong> (Ubuntu/Samba/Cockpit) directamente no hay frontend: son servicios de servidor. Cada repo vive en un mundo distinto; este capitulo es del mundo del navegador.</p>
+<p>Compara mentalmente: en <strong>tunal-digital</strong> (vanilla) escribes tu mismo toda esta orquestacion de escuchas. En <strong>PolyPaw</strong> (Python/Flet) no hay DOM ni eventos del navegador: Flet maneja la interaccion con sus propios callbacks. Y en <strong>polypaw-nas</strong> (Ubuntu/Samba/Cockpit) directamente no hay frontend: son servicios de servidor. Cada repo vive en un mundo distinto; este capitulo es el del mundo del navegador.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -424,7 +424,7 @@ menu.addEventListener(&quot;click&quot;, function (event) {
 </li>
 </ol>
 <blockquote>
-<p>Lo lograste. Hoy desarmaste el objeto <code>event</code>, viste como las burbujas suben por el DOM y aprendiste el truco mas elegante de todos: la delegacion. Con esto, el menu y el formulario de <strong>tunal-digital</strong> ya no tienen secretos para ti. Guarda tu codigo, estira las patitas y nos vemos en el siguiente capitulo. — Bit 🪸</p>
+<p>Lo lograste. Hoy desarmaste el objeto <code>event</code>, viste como las burbujas suben por el DOM y aprendiste el truco mas elegante de todos: la delegacion. Con esto, el menu y el formulario de <strong>tunal-digital</strong> ya no guardan secretos para ti. Guarda tu codigo, estira las patitas y nos vemos en el siguiente capitulo. — Bit 🪸</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

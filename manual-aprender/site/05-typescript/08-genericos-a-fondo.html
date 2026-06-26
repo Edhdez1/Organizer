@@ -24,80 +24,81 @@
 
 <blockquote>
 <p>Llegamos al tema que más asusta de TypeScript: los <strong>genéricos</strong>, esos <code>&lt;T&gt;</code> con
-picos que aparecen por todos lados. Bit, nuestro ajolote, los miraba de reojo como
-quien mira una araña en la pared. Pero respira: un genérico es solo una <strong>forma de
-escribir un tipo que todavía no conoces</strong>, y dejar que TypeScript lo descubra cuando
-usas la función. Nada de magia negra. En este capítulo los desarmamos con calma:
-funciones genéricas, interfaces y tipos genéricos, restricciones con <code>extends</code>,
-valores por defecto, arrays y promesas. Y al final entenderás por qué <code>useState&lt;T&gt;</code>
-y <code>useQuery&lt;T&gt;</code> de RachaSimple <strong>necesitan</strong> un genérico para hacer su trabajo.
-Recuerda siempre: TypeScript es JavaScript con tipos. Aquí solo añadimos un hueco
-con nombre.</p>
+picos que aparecen por todas partes. Bit, nuestro ajolote, los miraba de reojo, como
+quien vigila una araña en la pared. Pero tranquilo: un genérico no es más que una
+<strong>forma de escribir un tipo que todavía no conoces</strong> y dejar que TypeScript lo
+averigüe cuando usas la función. No hay magia negra en ningún rincón. Aquí los vamos
+a desarmar con calma, pieza por pieza: funciones genéricas, interfaces y tipos
+genéricos, restricciones con <code>extends</code>, valores por defecto, arrays y promesas. Y al
+final entenderás por qué <code>useState&lt;T&gt;</code> y <code>useQuery&lt;T&gt;</code> de RachaSimple <strong>necesitan</strong> un
+genérico para hacer su trabajo. Quédate con una idea de fondo: TypeScript es
+JavaScript con tipos. Lo único que sumamos aquí es un hueco con nombre.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-que-resuelven-los-genericos">1. El problema que resuelven los genéricos</h2>
-<p>Imagina una función sencilla en JavaScript que devuelve el primer elemento de una lista:</p>
+<p>Arranquemos con una función bien sencilla en JavaScript, una que devuelve el primer elemento de una lista:</p>
 <pre><code class="language-typescript">function primero(lista) {
   return lista[0];
 }
 </code></pre>
-<p>En JavaScript funciona con cualquier cosa: números, textos, proyectos de Faro. Pero al
-tiparla en TypeScript aparece la duda: ¿de qué tipo es la lista? ¿Y qué devuelve?</p>
-<p>Un primer intento torpe sería usar <code>any</code> (el "tipo comodín que apaga las revisiones"):</p>
+<p>En JavaScript esto traga lo que sea: números, textos, proyectos de Faro. Pero en cuanto
+intentas tiparla en TypeScript aparece la duda: ¿de qué tipo es la lista? ¿Y qué
+devuelve?</p>
+<p>El primer intento, un poco torpe, sería tirar de <code>any</code> (el "tipo comodín que apaga las revisiones"):</p>
 <pre><code class="language-typescript">function primero(lista: any[]): any {
   return lista[0];
 }
 </code></pre>
-<p>Funciona, pero <strong>tira a la basura</strong> todo lo que TypeScript sabía. Si pasas una lista de
-<code>Project</code> y guardas el resultado, TypeScript ya no sabe que es un <code>Project</code>: te deja
-escribir <code>proyecto.cualquierTonteria</code> sin chistar. Perdiste la red de seguridad.</p>
-<p>Otro intento sería escribir una función por cada tipo: <code>primeroProyecto</code>,
-<code>primeroFuente</code>, <code>primeroNumero</code>... Aburrido, repetitivo y propenso a errores.</p>
-<p>Los genéricos son la salida elegante: una <strong>sola</strong> función que conserva el tipo, sea
-cual sea.</p>
+<p>Funciona, sí, pero a cambio <strong>tira a la basura</strong> todo lo que TypeScript sabía. Si le pasas
+una lista de <code>Project</code> y guardas el resultado, TypeScript ya no recuerda que es un
+<code>Project</code>: te deja escribir <code>proyecto.cualquierTonteria</code> sin rechistar. Adiós a la red de
+seguridad.</p>
+<p>El otro camino sería escribir una función distinta para cada tipo: <code>primeroProyecto</code>,
+<code>primeroFuente</code>, <code>primeroNumero</code>... Aburrido, repetitivo y un imán para los errores.</p>
+<p>Los genéricos son la salida elegante: una <strong>sola</strong> función que conserva el tipo, sea cual sea.</p>
 <blockquote class="def">
 <h3 id="que-significa-generico">🟦 ¿Qué significa? — <em>Genérico</em></h3>
 <p>Un genérico es un <strong>tipo con un hueco etiquetado</strong> que se rellena en el momento de
 usar la función, interfaz o tipo. Ese hueco se escribe entre picos <code>&lt;...&gt;</code> y, por
 convención, se llama <code>T</code> (de <em>Type</em>, tipo). Sirve para escribir código que funciona
 con <strong>muchos tipos a la vez sin perder la información</strong> de cuál es. En RachaSimple
-aparece cada vez que se escribe <code>useState&lt;Habito[]&gt;</code> o <code>useQuery&lt;Habito[]&gt;</code>: el <code>&lt;T&gt;</code>
+aparece cada vez que escribes <code>useState&lt;Habito[]&gt;</code> o <code>useQuery&lt;Habito[]&gt;</code>: ese <code>&lt;T&gt;</code>
 le dice al hook con qué tipo de dato va a trabajar.</p>
 </blockquote>
 <hr />
 <h2 id="2-tu-primera-funcion-generica">2. Tu primera función genérica</h2>
-<p>Reescribamos <code>primero</code> como genérica:</p>
+<p>Reescribamos <code>primero</code>, ahora como genérica:</p>
 <pre><code class="language-typescript">function primero&lt;T&gt;(lista: T[]): T {
   return lista[0];
 }
 </code></pre>
-<p>Léelo por partes, despacio:</p>
+<p>Leámoslo por partes, sin prisa:</p>
 <ul>
 <li><code>&lt;T&gt;</code> justo después del nombre → "voy a usar un tipo al que llamo <code>T</code>, todavía sin
   decidir cuál".</li>
 <li><code>lista: T[]</code> → "el parámetro es un <strong>array de ese tipo <code>T</code></strong>".</li>
 <li><code>: T</code> después de los paréntesis → "y <strong>devuelvo un valor de ese mismo tipo <code>T</code></strong>".</li>
 </ul>
-<p>Lo bonito: TypeScript <strong>rellena <code>T</code> solo</strong> según lo que le pases.</p>
+<p>Y aquí está lo bonito: TypeScript <strong>rellena <code>T</code> por su cuenta</strong> según lo que le pases.</p>
 <pre><code class="language-typescript">const numeros = [10, 20, 30];
 const n = primero(numeros);   // T se vuelve number → n es number
 
 const nombres = [&quot;Ana&quot;, &quot;Luis&quot;];
 const s = primero(nombres);   // T se vuelve string → s es string
 </code></pre>
-<p>No tuviste que escribir <code>primero&lt;number&gt;(...)</code>. TypeScript lo <strong>dedujo</strong> mirando el
-argumento. A esto se le llama <em>inferencia</em>.</p>
+<p>Fíjate en que no tuviste que escribir <code>primero&lt;number&gt;(...)</code>. TypeScript lo <strong>dedujo</strong>
+mirando el argumento. A eso se le llama <em>inferencia</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-parametro-de-tipo-t">🟦 ¿Qué significa? — <em>Parámetro de tipo (<code>T</code>)</em></h3>
 <p>Es el nombre del hueco que pones entre los picos. <code>T</code> es solo una <strong>variable, pero de
 tipos en vez de valores</strong>: igual que <code>precio</code> guarda un número, <code>T</code> guarda un tipo.
-Puedes nombrarlo como quieras (<code>T</code>, <code>U</code>, <code>Item</code>, <code>Dato</code>), pero <code>T</code> es la costumbre.
-Para qué sirve: te deja referirte al mismo tipo varias veces dentro de la función
-(en el parámetro y en el retorno) y mantenerlos sincronizados.</p>
+Puedes llamarlo como quieras (<code>T</code>, <code>U</code>, <code>Item</code>, <code>Dato</code>), aunque <code>T</code> es lo habitual.
+¿Para qué sirve? Para referirte al mismo tipo varias veces dentro de la función (en el
+parámetro y en el retorno) y mantenerlos sincronizados.</p>
 <h3 id="tip-generico-dejame-que-typescript-lo-adivine">💡 Tip — Genérico = "déjame que TypeScript lo adivine"</h3>
 <p>En el 90 % de los casos <strong>no escribes</strong> el tipo entre picos al llamar la función; lo
 infiere por ti. Solo lo escribes a mano cuando TypeScript no puede adivinarlo (lo
-veremos con <code>useState</code> más abajo). Si te sale solo, no lo fuerces.</p>
+veremos con <code>useState</code> más abajo). Si sale solo, no lo fuerces.</p>
 <h3 id="cuidado-t-no-es-una-cadena-de-texto">⚠️ Cuidado — <code>T</code> no es una cadena de texto</h3>
 <p><code>T</code> nunca aparece en tiempo de ejecución. Es una etiqueta que vive <strong>solo durante la
 revisión de tipos</strong> y desaparece al compilar a JavaScript. No puedes hacer
@@ -105,56 +106,56 @@ revisión de tipos</strong> y desaparece al compilar a JavaScript. No puedes hac
 </blockquote>
 <hr />
 <h2 id="3-por-que-usestatet-necesita-un-generico">3. Por qué <code>useState&lt;T&gt;</code> necesita un genérico</h2>
-<p>Vamos al corazón del capítulo. En RachaSimple, un componente de React guarda estado con
-el hook <code>useState</code>. Mira esta línea típica:</p>
+<p>Vamos al corazón del capítulo. En RachaSimple, un componente de React guarda su estado
+con el hook <code>useState</code>. Mira esta línea, de las que ves a diario:</p>
 <pre><code class="language-typescript">const [habitos, setHabitos] = useState&lt;Habito[]&gt;([]);
 </code></pre>
-<p>¿Por qué el <code>&lt;Habito[]&gt;</code>? Piensa en el problema desde dentro de <code>useState</code>. El hook
-recibe un <strong>valor inicial</strong> y te devuelve el valor actual más una función para
-cambiarlo. Pero aquí el valor inicial es <code>[]</code>: un <strong>array vacío</strong>.</p>
-<p>Un array vacío no le dice a TypeScript nada sobre lo que vendrá dentro. ¿Será un array
-de hábitos? ¿De números? ¿De textos? TypeScript, mirando solo <code>[]</code>, no puede adivinarlo:
-lo más que deduce es <code>never[]</code> (un array que no admite nada útil). Entonces más adelante
-esto fallaría:</p>
+<p>¿Por qué el <code>&lt;Habito[]&gt;</code>? Para entenderlo, asómate dentro de <code>useState</code>. El hook recibe
+un <strong>valor inicial</strong> y te devuelve dos cosas: el valor actual y una función para
+cambiarlo. El detalle es que aquí el valor inicial es <code>[]</code>, un <strong>array vacío</strong>.</p>
+<p>Un array vacío no le cuenta a TypeScript nada sobre lo que vendrá dentro. ¿Será un array
+de hábitos? ¿De números? ¿De textos? Mirando solo <code>[]</code>, TypeScript no tiene de dónde
+agarrarse: lo más que deduce es <code>never[]</code> (un array que no admite nada útil). Y entonces
+esto, más adelante, reventaría:</p>
 <pre><code class="language-typescript">const [habitos, setHabitos] = useState([]);     // TypeScript cree: never[]
 setHabitos([{ id: &quot;1&quot;, nombre: &quot;Leer&quot; }]);       // ❌ no encaja con never[]
 </code></pre>
-<p>Al escribir <code>useState&lt;Habito[]&gt;([])</code> le das tú el dato que le falta: "este estado es un
-<strong>array de <code>Habito</code></strong>, aunque ahora mismo esté vacío". A partir de ahí todo encaja:
+<p>Al escribir <code>useState&lt;Habito[]&gt;([])</code> le das tú el dato que le faltaba: "este estado es un
+<strong>array de <code>Habito</code></strong>, aunque ahora mismo esté vacío". A partir de ahí todo cuadra:
 <code>habitos</code> es <code>Habito[]</code> y <code>setHabitos</code> solo acepta arrays de <code>Habito</code>.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo-la-firma-de-usestate-por-dentro">🔎 En tu código — La firma de <code>useState</code> por dentro</h3>
 <p>React define <code>useState</code> (muy simplificado) así:
 <code>typescript
 function useState&lt;T&gt;(inicial: T): [T, (nuevo: T) =&gt; void];</code>
-Es una función genérica como las del punto 2. El <code>&lt;T&gt;</code> es lo que conecta el valor
-inicial con el valor que devuelve y con la función <code>set</code>. Por eso, cuando el inicial
-es ambiguo (<code>[]</code>, <code>null</code>), <strong>tú</strong> rellenas el <code>&lt;T&gt;</code> a mano. Cuando el inicial es claro
+Es una función genérica, igual que las del punto 2. El <code>&lt;T&gt;</code> es lo que conecta el valor
+inicial con el valor que devuelve y con la función <code>set</code>. Por eso, cuando el inicial es
+ambiguo (<code>[]</code>, <code>null</code>), <strong>tú</strong> rellenas el <code>&lt;T&gt;</code> a mano. Y cuando el inicial es claro
 (<code>useState(0)</code> o <code>useState("")</code>), React lo infiere y no necesitas escribir nada.</p>
 <h3 id="tip-la-regla-practica-del-usestate">💡 Tip — La regla práctica del <code>useState</code></h3>
 <p>Si el valor inicial <strong>ya dice su tipo</strong> (<code>useState(0)</code>, <code>useState("")</code>,
 <code>useState(false)</code>), no escribas genérico. Si el inicial es <strong>vacío o nulo</strong>
 (<code>useState&lt;Habito[]&gt;([])</code>, <code>useState&lt;string | null&gt;(null)</code>), pon el <code>&lt;T&gt;</code> para que
-TypeScript sepa qué guardarás luego.</p>
+TypeScript sepa qué vas a guardar luego.</p>
 </blockquote>
 <hr />
 <h2 id="4-interfaces-y-tipos-genericos">4. Interfaces y tipos genéricos</h2>
-<p>Los genéricos no son solo para funciones. También una <strong>interface</strong> o un <strong>type</strong> pueden
-tener su hueco <code>&lt;T&gt;</code>. Esto sirve para describir "una caja que envuelve algún tipo".</p>
-<p>Un caso clásico: una respuesta de API que siempre tiene la misma forma por fuera, pero
-distintos datos por dentro.</p>
+<p>Los genéricos no son cosa solo de funciones. Una <strong>interface</strong> o un <strong>type</strong> también
+pueden tener su hueco <code>&lt;T&gt;</code>. Esto viene de perlas para describir "una caja que envuelve
+algún tipo".</p>
+<p>El caso clásico: una respuesta de API que por fuera siempre tiene la misma forma, pero por dentro lleva datos distintos.</p>
 <pre><code class="language-typescript">interface Respuesta&lt;T&gt; {
   ok: boolean;
   data: T;
   error: string | null;
 }
 </code></pre>
-<p>Aquí <code>Respuesta</code> es una <strong>plantilla</strong>: el <code>data</code> será del tipo que indiques al usarla.</p>
+<p>Aquí <code>Respuesta</code> es una <strong>plantilla</strong>: el <code>data</code> será del tipo que tú indiques al usarla.</p>
 <pre><code class="language-typescript">type RespuestaProyectos = Respuesta&lt;Project[]&gt;;   // data es Project[]
 type RespuestaUsuario  = Respuesta&lt;UserPrefs&gt;;     // data es UserPrefs
 </code></pre>
 <p>Una misma estructura, rellenada con dos contenidos distintos. Sin genéricos tendrías que
-duplicar la interface entera para cada tipo de <code>data</code>.</p>
+duplicar la interface entera por cada tipo de <code>data</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-interface-generica">🟦 ¿Qué significa? — <em>Interface genérica</em></h3>
 <p>Es una <code>interface</code> que recibe uno o más parámetros de tipo entre picos
@@ -163,42 +164,42 @@ forma pero envuelven distintos contenidos</strong>: respuestas de API, listas, r
 consultas. Cuando la usas, rellenas el <code>&lt;T&gt;</code> con un tipo concreto, como
 <code>Respuesta&lt;Project[]&gt;</code>.</p>
 <h3 id="en-tu-codigo-los-genericos-que-ya-usas-sin-saberlo">🔎 En tu código — Los genéricos que ya usas sin saberlo</h3>
-<p>En <code>src/lib/types.ts</code> de Faro hay un genérico que viene incluido en TypeScript:
+<p>En <code>src/lib/types.ts</code> de Faro hay un genérico que viene de fábrica con TypeScript:
 <code>typescript
 data: GithubSnapshot | Record&lt;string, unknown&gt;;</code>
 <code>Record&lt;K, V&gt;</code> es un <strong>tipo genérico de la librería estándar</strong>: describe un objeto
 cuyas claves son del tipo <code>K</code> y sus valores del tipo <code>V</code>. Aquí <code>Record&lt;string,
-unknown&gt;</code> es "un objeto con claves de texto y valores de tipo desconocido". Lleva
-<strong>dos</strong> parámetros de tipo, separados por coma. Más abajo, en <code>UserPrefs</code>, aparece
-<code>Record&lt;Weekday, DayConfig&gt;</code>: un objeto cuyas claves son los días de la semana y cuyos
-valores son configuraciones de día.</p>
+unknown&gt;</code> significa "un objeto con claves de texto y valores de tipo desconocido".
+Lleva <strong>dos</strong> parámetros de tipo, separados por coma. Y más abajo, en <code>UserPrefs</code>,
+aparece <code>Record&lt;Weekday, DayConfig&gt;</code>: un objeto cuyas claves son los días de la semana
+y cuyos valores son configuraciones de día.</p>
 </blockquote>
 <hr />
 <h2 id="5-restricciones-con-extends">5. Restricciones con <code>extends</code></h2>
-<p>A veces <code>T</code> no puede ser <em>cualquier</em> cosa. Quieres aceptar muchos tipos, pero todos
-deben <strong>tener algo en común</strong>. Para eso está <code>extends</code> dentro de los picos.</p>
-<p>Supón una función que ordena cualquier lista de objetos que tengan <code>sort_order</code>, como los
-proyectos de Faro:</p>
+<p>A veces <code>T</code> no puede ser <em>cualquier</em> cosa. Quieres aceptar muchos tipos, de acuerdo, pero
+todos deben <strong>tener algo en común</strong>. Para eso está <code>extends</code> dentro de los picos.</p>
+<p>Imagina una función que ordena cualquier lista de objetos que tengan <code>sort_order</code>, como
+los proyectos de Faro:</p>
 <pre><code class="language-typescript">function ordenar&lt;T extends { sort_order: number }&gt;(items: T[]): T[] {
   return [...items].sort((a, b) =&gt; a.sort_order - b.sort_order);
 }
 </code></pre>
-<p>Lee <code>T extends { sort_order: number }</code> como: "<code>T</code> puede ser cualquier tipo <strong>siempre que
-tenga al menos</strong> una propiedad <code>sort_order</code> de tipo número". Eso te permite escribir
-<code>a.sort_order</code> dentro con confianza, porque la restricción lo garantiza.</p>
+<p>Lee <code>T extends { sort_order: number }</code> así: "<code>T</code> puede ser cualquier tipo <strong>siempre que
+tenga al menos</strong> una propiedad <code>sort_order</code> de tipo número". Eso es justo lo que te deja
+escribir <code>a.sort_order</code> ahí dentro con tranquilidad, porque la restricción lo garantiza.</p>
 <pre><code class="language-typescript">ordenar(proyectos);                       // ✅ Project tiene sort_order
 ordenar([{ sort_order: 1 }, { sort_order: 0 }]);  // ✅
 ordenar([1, 2, 3]);                       // ❌ los números no tienen sort_order
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-restriccion-de-tipo-extends">🟦 ¿Qué significa? — <em>Restricción de tipo (<code>extends</code>)</em></h3>
-<p>Es la condición que pones a un genérico para limitar qué tipos admite:
+<p>Es la condición que le pones a un genérico para limitar qué tipos admite:
 <code>T extends Algo</code>. Significa "<code>T</code> debe ser compatible con <code>Algo</code>" (tener sus
 propiedades). Sirve para poder <strong>usar dentro</strong> de la función propiedades que sabes que
-existirán. Sin la restricción, TypeScript no te dejaría leer <code>a.sort_order</code>, porque un
-<code>T</code> libre podría no tenerla.</p>
+van a existir. Sin la restricción, TypeScript no te dejaría leer <code>a.sort_order</code>, porque
+un <code>T</code> libre podría no tenerla.</p>
 <h3 id="cuidado-extends-aqui-no-es-herencia">⚠️ Cuidado — <code>extends</code> aquí no es herencia</h3>
-<p>En clases, <code>extends</code> significa "hereda de". Dentro de los picos de un genérico
+<p>En las clases, <code>extends</code> significa "hereda de". Dentro de los picos de un genérico
 significa otra cosa: "<strong>está restringido a</strong> / debe encajar con". No estás creando una
 subclase, solo poniéndole una condición al hueco. Misma palabra, idea distinta.</p>
 <h3 id="en-tu-codigo-una-restriccion-real-disfrazada">🔎 En tu código — Una restricción real disfrazada</h3>
@@ -208,14 +209,14 @@ subclase, solo poniéndole una condición al hueco. Misma palabra, idea distinta
 export interface ProjectWithSources extends Project {
   sources: (ProjectSource &amp; { snapshot: SourceSnapshot | null })[];
 }</code>
-Ese <code>extends Project</code> es herencia de interfaces (hereda todos los campos de
-<code>Project</code>), no un genérico. Lo incluimos aquí justo para que veas el contraste: la
-<strong>misma palabra</strong> <code>extends</code>, dos usos. Cuando está dentro de <code>&lt;...&gt;</code> es restricción;
-cuando está entre dos nombres de interface, es herencia.</p>
+Ese <code>extends Project</code> es herencia de interfaces (hereda todos los campos de <code>Project</code>),
+no un genérico. Lo traemos aquí justo para que veas el contraste: la <strong>misma palabra</strong>
+<code>extends</code>, dos usos. Cuando está dentro de <code>&lt;...&gt;</code> es restricción; cuando está entre dos
+nombres de interface, es herencia.</p>
 </blockquote>
 <hr />
 <h2 id="6-valores-por-defecto-de-tipo">6. Valores por defecto de tipo</h2>
-<p>Igual que un parámetro de función puede tener valor por defecto (<code>saludo = "Hola"</code>), un
+<p>Igual que un parámetro de función puede tener un valor por defecto (<code>saludo = "Hola"</code>), un
 parámetro de tipo puede tener un <strong>tipo por defecto</strong>. Se escribe con <code>=</code> dentro de los
 picos.</p>
 <pre><code class="language-typescript">interface Respuesta&lt;T = unknown&gt; {
@@ -224,22 +225,22 @@ picos.</p>
   error: string | null;
 }
 </code></pre>
-<p>Ahora, si usas <code>Respuesta</code> <strong>sin</strong> decir el tipo, <code>T</code> cae a <code>unknown</code>:</p>
+<p>Ahora, si usas <code>Respuesta</code> <strong>sin</strong> indicar el tipo, <code>T</code> cae a <code>unknown</code>:</p>
 <pre><code class="language-typescript">type R1 = Respuesta;            // data es unknown (usó el valor por defecto)
 type R2 = Respuesta&lt;Project[]&gt;; // data es Project[] (lo especificaste)
 </code></pre>
-<p>Esto es comodísimo cuando la mayoría de las veces sirve un tipo, pero quieres dejar la
-puerta abierta a afinarlo.</p>
+<p>Esto resulta comodísimo cuando la mayoría de las veces te sirve un tipo, pero quieres
+dejar la puerta abierta a afinarlo.</p>
 <blockquote class="def">
 <h3 id="que-significa-valor-por-defecto-de-tipo">🟦 ¿Qué significa? — <em>Valor por defecto de tipo</em></h3>
 <p>Es el tipo que toma un parámetro genérico <strong>cuando no se lo das tú</strong>, escrito con
 <code>&lt;T = TipoPorDefecto&gt;</code>. Sirve para que un genérico sea <strong>cómodo de usar sin
 argumentos</strong> pero siga permitiendo personalizarlo. Es la misma idea que un parámetro
-con valor por defecto en una función, pero a nivel de tipos.</p>
+con valor por defecto en una función, solo que a nivel de tipos.</p>
 <h3 id="tip-lo-veras-mucho-en-librerias-poco-en-tu-codigo">💡 Tip — Lo verás mucho en librerías, poco en tu código</h3>
-<p>Los valores por defecto de tipo son habituales en librerías como React o TanStack
-Query (sus tipos internos los usan a montones), pero en el código de RachaSimple y
-Faro casi siempre <strong>pasas el tipo explícito</strong> porque lo conoces. Reconócelos al
+<p>Los valores por defecto de tipo abundan en librerías como React o TanStack Query (sus
+tipos internos los usan a montones), pero en el código de RachaSimple y Faro casi
+siempre <strong>pasas el tipo explícito</strong> porque lo conoces. Tu meta es reconocerlos al
 leerlos; no te obsesiones con escribirlos.</p>
 </blockquote>
 <hr />
@@ -247,19 +248,19 @@ leerlos; no te obsesiones con escribirlos.</p>
 <p>Aquí viene una revelación que tranquiliza: <strong>ya llevas capítulos usando genéricos sin
 darte cuenta</strong>. Los arrays y las promesas son genéricos por dentro.</p>
 <h3 id="arrays">Arrays</h3>
-<p>Escribir <code>Project[]</code> es en realidad un atajo de <code>Array&lt;Project&gt;</code>:</p>
+<p>Escribir <code>Project[]</code> es, en realidad, un atajo de <code>Array&lt;Project&gt;</code>:</p>
 <pre><code class="language-typescript">const a: Project[] = [];        // forma corta
 const b: Array&lt;Project&gt; = [];   // forma larga, idéntica
 </code></pre>
-<p><code>Array&lt;T&gt;</code> es un tipo genérico de la librería estándar. El <code>[]</code> que ponías desde el
-capítulo de tipos básicos <strong>ya rellenaba un <code>&lt;T&gt;</code></strong>. En <code>types.ts</code> de Faro lo ves a cada
-paso: <code>tags: string[]</code>, <code>roadmap: RoadmapStep[]</code>, <code>blocks: AgendaBlock[]</code>. Todos son
-<code>Array&lt;algo&gt;</code> disfrazados.</p>
+<p><code>Array&lt;T&gt;</code> es un tipo genérico de la librería estándar. Aquel <code>[]</code> que ponías desde el
+capítulo de tipos básicos <strong>ya estaba rellenando un <code>&lt;T&gt;</code></strong>. En <code>types.ts</code> de Faro lo ves
+a cada paso: <code>tags: string[]</code>, <code>roadmap: RoadmapStep[]</code>, <code>blocks: AgendaBlock[]</code>. Todos
+son <code>Array&lt;algo&gt;</code> disfrazados.</p>
 <blockquote class="def">
 <h3 id="que-significa-arrayt">🟦 ¿Qué significa? — <em><code>Array&lt;T&gt;</code></em></h3>
-<p>Es el tipo genérico que describe una <strong>lista de elementos del tipo <code>T</code></strong>. <code>Project[]</code>
-y <code>Array&lt;Project&gt;</code> son exactamente lo mismo; la sintaxis con corchetes es solo más
-corta y popular. Sirve para que TypeScript sepa qué hay dentro de cada lista y te
+<p>Es el tipo genérico que describe una <strong>lista de elementos del tipo <code>T</code></strong>. <code>Project[]</code> y
+<code>Array&lt;Project&gt;</code> son exactamente lo mismo; la sintaxis con corchetes es solo más corta
+y más popular. Sirve para que TypeScript sepa qué hay dentro de cada lista y te
 autocomplete, por ejemplo, <code>proyecto.name</code> al recorrerla.</p>
 </blockquote>
 <h3 id="promesas">Promesas</h3>
@@ -270,9 +271,9 @@ genérico: <code>Promise&lt;T&gt;</code>, donde <code>T</code> es lo que tendrá
   return projects.map(/* ... */);
 }
 </code></pre>
-<p>Esa firma real de Faro se lee: "esta función es asíncrona y, cuando resuelva, entregará
-un <strong>array de <code>ProjectWithSources</code></strong>". Por eso, al llamarla, el <code>await</code> te devuelve
-justo ese tipo:</p>
+<p>Esa firma real de Faro se lee así: "esta función es asíncrona y, cuando resuelva,
+entregará un <strong>array de <code>ProjectWithSources</code></strong>". Por eso, al llamarla, el <code>await</code> te
+devuelve justo ese tipo:</p>
 <pre><code class="language-typescript">const proyectos = await getProjectsWithSources();
 // proyectos es ProjectWithSources[], totalmente tipado
 </code></pre>
@@ -280,36 +281,37 @@ justo ese tipo:</p>
 <h3 id="que-significa-promiset">🟦 ¿Qué significa? — <em><code>Promise&lt;T&gt;</code></em></h3>
 <p>Es el tipo genérico de un valor que <strong>todavía no está listo pero llegará</strong> (el
 resultado de una operación asíncrona, como una consulta a Supabase). El <code>&lt;T&gt;</code> dice de
-qué tipo será ese resultado final. Al hacer <code>await unaPromise</code>, recuperas un valor de
-tipo <code>T</code>. En Faro casi toda función que habla con la base de datos devuelve
+qué tipo será ese resultado final. Cuando haces <code>await unaPromise</code>, recuperas un valor
+de tipo <code>T</code>. En Faro, casi toda función que habla con la base de datos devuelve
 <code>Promise&lt;algo&gt;</code>.</p>
 <h3 id="en-tu-codigo-mapk-v-otro-generico-de-la-estandar">🔎 En tu código — <code>Map&lt;K, V&gt;</code>, otro genérico de la estándar</h3>
-<p>En la misma <code>queries.ts</code> de Faro aparece:
+<p>En esa misma <code>queries.ts</code> de Faro aparece:
 <code>typescript
 const latestBySource = new Map&lt;string, SourceSnapshot&gt;();</code>
 <code>Map&lt;K, V&gt;</code> es un genérico con <strong>dos</strong> huecos: el tipo de las <strong>claves</strong> (<code>K</code>, aquí
 <code>string</code>) y el de los <strong>valores</strong> (<code>V</code>, aquí <code>SourceSnapshot</code>). Gracias a eso,
 <code>latestBySource.get(id)</code> devuelve <code>SourceSnapshot | undefined</code>, perfectamente tipado,
-sin que tengas que recordarlo tú.</p>
+sin que tengas que acordarte tú.</p>
 </blockquote>
 <hr />
 <h2 id="8-por-que-usequeryt-de-rachasimple-necesita-un-generico">8. Por qué <code>useQuery&lt;T&gt;</code> de RachaSimple necesita un genérico</h2>
-<p>Ya tienes todas las piezas. RachaSimple usa <strong>TanStack Query</strong> para traer datos de
-Supabase. Su hook estrella es <code>useQuery</code>, y se usa así:</p>
+<p>Ya tienes todas las piezas en la mano. RachaSimple usa <strong>TanStack Query</strong> para traer
+datos de Supabase. Su hook estrella es <code>useQuery</code>, y se usa así:</p>
 <pre><code class="language-typescript">const { data, isLoading, error } = useQuery&lt;Habito[]&gt;({
   queryKey: [&quot;habitos&quot;],
   queryFn: cargarHabitos,
 });
 </code></pre>
-<p>¿Por qué el <code>&lt;Habito[]&gt;</code>? Por la misma razón que <code>useState</code>, pero un nivel más arriba.
-<code>useQuery</code> no sabe qué va a devolver tu <code>queryFn</code> con solo mirar la clave <code>["habitos"]</code>.
-El genérico le dice: "lo que esta consulta traerá es un <strong>array de <code>Habito</code></strong>".</p>
-<p>Con eso, <code>data</code> queda tipado como <code>Habito[] | undefined</code> (es <code>undefined</code> mientras carga,
-y <code>Habito[]</code> cuando llega). Entonces, al pintar la lista en pantalla, TypeScript te
+<p>¿Por qué el <code>&lt;Habito[]&gt;</code>? Por la misma razón que en <code>useState</code>, pero un nivel más arriba.
+<code>useQuery</code> no tiene manera de saber qué va a devolver tu <code>queryFn</code> con solo mirar la clave
+<code>["habitos"]</code>. El genérico se lo aclara: "lo que esta consulta traerá es un <strong>array de
+<code>Habito</code></strong>".</p>
+<p>Con eso, <code>data</code> queda tipado como <code>Habito[] | undefined</code> (es <code>undefined</code> mientras carga, y
+<code>Habito[]</code> cuando llega). Entonces, al pintar la lista en pantalla, TypeScript te
 autocompleta cada campo:</p>
 <pre><code class="language-typescript">{data?.map((h) =&gt; &lt;Racha key={h.id} nombre={h.nombre} racha={h.racha_actual} /&gt;)}
 </code></pre>
-<p>Si te equivocas y escribes <code>h.rachaActual</code> (mal nombre), salta el error <strong>antes</strong> de
+<p>Si te equivocas y escribes <code>h.rachaActual</code> (mal el nombre), el error salta <strong>antes</strong> de
 ejecutar. Ese es todo el premio: el genérico convierte una respuesta "desconocida" de la
 red en datos con forma conocida y vigilada.</p>
 <blockquote class="def">
@@ -317,21 +319,21 @@ red en datos con forma conocida y vigilada.</p>
 <p>Es un hook de React que recibe un parámetro de tipo entre picos para saber <strong>con qué
 tipo de dato trabaja</strong>. <code>useState&lt;T&gt;</code> lo necesita cuando el valor inicial es ambiguo;
 <code>useQuery&lt;T&gt;</code> lo necesita porque el dato viene de fuera (la red) y no se puede inferir.
-Sirve para que el estado y los datos remotos de RachaSimple estén <strong>tan tipados como
-el resto del código</strong>, con autocompletado y errores tempranos.</p>
+Sirve para que el estado y los datos remotos de RachaSimple estén <strong>tan tipados como el
+resto del código</strong>, con autocompletado y errores tempranos.</p>
 <h3 id="tip-tanstack-query-a-veces-lo-infiere-por-ti">💡 Tip — TanStack Query a veces lo infiere por ti</h3>
 <p>Si tu <code>queryFn</code> ya está bien tipada (devuelve <code>Promise&lt;Habito[]&gt;</code>), las versiones
 modernas de TanStack Query pueden <strong>inferir</strong> el tipo de <code>data</code> sin que escribas
-<code>&lt;Habito[]&gt;</code>. Aun así, mucha gente lo escribe explícito por claridad. Ambas formas son
-correctas; lo importante es que <code>data</code> termine tipado.</p>
+<code>&lt;Habito[]&gt;</code>. Aun así, mucha gente lo escribe explícito por claridad. Las dos formas son
+correctas; lo que importa es que <code>data</code> termine tipado.</p>
 <h3 id="cuidado-no-confundas-la-clave-con-el-tipo">⚠️ Cuidado — No confundas la clave con el tipo</h3>
 <p>En <code>useQuery({ queryKey: ["habitos"] })</code>, el <code>["habitos"]</code> es un <strong>texto identificador</strong>
 para la caché, no el tipo de dato. El tipo va <strong>entre los picos</strong>: <code>useQuery&lt;Habito[]&gt;</code>.
-Son dos cosas distintas que viven en la misma llamada.</p>
+Son dos cosas distintas que conviven en la misma llamada.</p>
 </blockquote>
 <hr />
 <h2 id="9-juntandolo-todo-una-funcion-generica-de-verdad">9. Juntándolo todo: una función genérica de verdad</h2>
-<p>Para cerrar, una funcioncita que combina restricción y array, del estilo que podrías
+<p>Para cerrar, una funcioncita que combina restricción y array, del estilo que bien podrías
 escribir en Faro para encontrar un proyecto por su <code>id</code>:</p>
 <pre><code class="language-typescript">function buscarPorId&lt;T extends { id: string }&gt;(
   items: T[],
@@ -351,8 +353,8 @@ escribir en Faro para encontrar un proyecto por su <code>id</code>:</p>
 <pre><code class="language-typescript">const proyecto = buscarPorId(proyectos, &quot;abc&quot;); // proyecto es Project | null
 </code></pre>
 <p>Una sola función, segura, reutilizable con cualquier tipo que tenga <code>id</code>. Eso es un
-genérico bien usado: menos repetición, cero pérdida de tipos. Bit, que empezó el
-capítulo escondido tras una piedra, ahora asoma la cabeza y aplaude con sus branquias.</p>
+genérico bien usado: menos repetición, cero pérdida de tipos. Bit, que empezó el capítulo
+escondido tras una piedra, ahora asoma la cabeza y aplaude con sus branquias.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

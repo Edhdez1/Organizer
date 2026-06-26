@@ -23,22 +23,22 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez. Soy <strong>Bit</strong>, tu ajolote de bolsillo. Hasta ahora hemos hecho que React funcione: componentes que pintan cosas, estado que cambia, props que viajan. En este capitulo vamos a hablar de algo distinto: que React funcione <strong>rapido</strong> y, sobre todo, que tu sepas <em>cuando</em> preocuparte por eso y cuando NO. Spoiler de ajolote: la mayoria de las veces React ya es lo bastante rapido y meterte a "optimizar" sin medir solo ensucia el codigo. Aprenderemos <code>React.memo</code>, <code>useMemo</code> y <code>useCallback</code> con ejemplos de <strong>RachaSimple</strong> (app de habitos) y <strong>Faro</strong> (organizador de proyectos). Respira: esto es mas facil de lo que suena.</p>
+<p>Hola otra vez. Soy <strong>Bit</strong>, tu ajolote de bolsillo. Hasta ahora nos hemos dedicado a que React funcione: componentes que pintan cosas, estado que cambia, props que viajan de un lado a otro. Este capitulo va de otra cosa: que React funcione <strong>rapido</strong> y, mas importante todavia, que sepas <em>cuando</em> preocuparte por eso y cuando no. Te lo adelanto desde ya: casi siempre React es lo bastante rapido por su cuenta, y ponerte a "optimizar" sin haber medido antes solo ensucia el codigo. Vamos a ver <code>React.memo</code>, <code>useMemo</code> y <code>useCallback</code> con ejemplos de <strong>RachaSimple</strong> (la app de habitos) y <strong>Faro</strong> (el organizador de proyectos). Respira tranquilo: esto suena mas dificil de lo que es.</p>
 </blockquote>
 <hr />
 <h2 id="1-primero-que-es-re-renderizar-y-por-que-pasa">1. Primero: ¿que es "re-renderizar" y por que pasa?</h2>
-<p>Antes de optimizar nada, hay que entender el "problema". Y empieza por una palabra que vas a oir mil veces.</p>
+<p>Antes de optimizar nada conviene entender cual es el "problema". Y todo arranca con una palabra que vas a escuchar un monton de veces.</p>
 <blockquote class="def">
 <h3 id="que-significa-render-renderizado">🟦 ¿Que significa? — <em>Render (renderizado)</em></h3>
-<p>Un <strong>render</strong> es cuando React <strong>ejecuta tu funcion de componente</strong> para averiguar que debe mostrar en pantalla. Tu componente es literalmente una funcion que devuelve JSX; "renderizar" = llamar a esa funcion. Sirve para que React calcule el aspecto actual de la interfaz. En <strong>RachaSimple</strong>, cada vez que se renderiza <code>HabitCard</code>, React vuelve a ejecutar el cuerpo de esa funcion <code>.tsx</code> para saber que pintar.</p>
+<p>Un <strong>render</strong> ocurre cuando React <strong>ejecuta tu funcion de componente</strong> para saber que tiene que mostrar en pantalla. Tu componente es, al fin y al cabo, una funcion que devuelve JSX; "renderizar" no es mas que llamar a esa funcion. Asi React calcula como debe verse la interfaz en este momento. En <strong>RachaSimple</strong>, cada vez que se renderiza <code>HabitCard</code>, React vuelve a ejecutar el cuerpo de esa funcion <code>.tsx</code> para decidir que pintar.</p>
 <h3 id="que-significa-re-render-re-renderizado">🟦 ¿Que significa? — <em>Re-render (re-renderizado)</em></h3>
-<p>Un <strong>re-render</strong> es renderizar <strong>otra vez</strong> un componente que ya estaba en pantalla, porque algo pudo haber cambiado. No significa "borrar y volver a dibujar todo" de cero: React solo aplica al navegador las diferencias. Sirve para mantener la pantalla sincronizada con el estado. En <strong>Faro</strong>, cuando marcas una fase de un proyecto como hecha, el componente que muestra el progreso se re-renderiza para mostrar el nuevo porcentaje.</p>
+<p>Un <strong>re-render</strong> es volver a renderizar un componente que ya estaba en pantalla, porque puede que algo haya cambiado. Ojo: no significa "borrar todo y dibujarlo otra vez desde cero". React solo lleva al navegador las diferencias. Sirve para que la pantalla siga al dia con el estado. En <strong>Faro</strong>, cuando marcas una fase de un proyecto como hecha, el componente que muestra el progreso se re-renderiza para ensenar el porcentaje nuevo.</p>
 </blockquote>
 <p>React decide re-renderizar un componente por <strong>tres razones</strong> principales:</p>
 <ol>
 <li><strong>Cambia su estado</strong> (<code>useState</code> / <code>useReducer</code>).</li>
 <li><strong>Cambian sus props</strong> (lo que le pasa el componente padre).</li>
-<li><strong>Se re-renderiza su padre</strong> — y esto es la clave del capitulo: cuando un componente se re-renderiza, <strong>por defecto</strong> React tambien re-renderiza a <em>todos sus hijos</em>, aunque sus props no hayan cambiado.</li>
+<li><strong>Se re-renderiza su padre</strong> — y aqui esta el meollo del capitulo: cuando un componente se re-renderiza, <strong>por defecto</strong> React re-renderiza tambien a <em>todos sus hijos</em>, aunque sus props no hayan cambiado.</li>
 </ol>
 <pre><code class="language-tsx">// RachaSimple — version simplificada
 function Dashboard() {
@@ -52,34 +52,34 @@ function Dashboard() {
   );
 }
 </code></pre>
-<p>Cuando cambias <code>filtro</code>, <code>Dashboard</code> se re-renderiza. Y como <code>Dashboard</code> es el padre, <strong><code>ListaHabitos</code> tambien se re-renderiza</strong>, aunque <code>ListaHabitos</code> no reciba <code>filtro</code> ni le importe. Asi funciona React por diseno.</p>
+<p>Al cambiar <code>filtro</code>, <code>Dashboard</code> se re-renderiza. Y como <code>Dashboard</code> es el padre, <strong><code>ListaHabitos</code> se re-renderiza con el</strong>, aunque <code>ListaHabitos</code> ni reciba <code>filtro</code> ni le interese para nada. Asi esta disenado React.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Re-renderizar <strong>no es malo por defecto</strong>. React es muy rapido ejecutando funciones de componentes. Un re-render de mas no se nota. El problema aparece solo cuando re-renderizas <em>muchas veces</em> algo que hace <em>mucho trabajo</em>. Recuerda esa frase: <strong>muchas veces × mucho trabajo</strong>.</p>
+<p>Re-renderizar <strong>no es malo de por si</strong>. React es velocisimo ejecutando funciones de componentes, y un re-render de sobra ni se nota. El problema aparece unicamente cuando re-renderizas <em>muchas veces</em> algo que hace <em>mucho trabajo</em>. Quedate con esa frase: <strong>muchas veces × mucho trabajo</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="2-cuando-es-un-problema-de-verdad">2. ¿Cuando es un problema de verdad?</h2>
-<p>Bit te lo dice claro: la mayoria de tus componentes <strong>no necesitan</strong> optimizacion. Vas a saber que tienes un problema real cuando se cumpla una de estas:</p>
+<p>Te lo digo sin rodeos: la mayoria de tus componentes <strong>no necesitan</strong> optimizacion. Sabras que tienes un problema real cuando se cumpla alguna de estas cosas:</p>
 <ul>
-<li>La interfaz <strong>se siente lenta</strong> al escribir, hacer scroll o arrastrar (hay un retraso visible).</li>
-<li>Renderizas <strong>listas largas</strong> (cientos de elementos) que se re-pintan en cada tecla.</li>
-<li>Un componente hace un <strong>calculo pesado</strong> (ordenar, filtrar, recorrer mucho dato) en cada render.</li>
+<li>La interfaz <strong>se siente lenta</strong> al escribir, al hacer scroll o al arrastrar (notas un retraso a ojo).</li>
+<li>Renderizas <strong>listas largas</strong> (cientos de elementos) que se vuelven a pintar con cada tecla.</li>
+<li>Un componente hace un <strong>calculo pesado</strong> (ordenar, filtrar, recorrer un monton de datos) en cada render.</li>
 </ul>
-<p>En <strong>RachaSimple</strong>, una app de habitos de uso personal, normalmente tienes pocas tarjetas en pantalla: no hay problema de rendimiento real. En <strong>Faro</strong>, si listaras decenas de proyectos y cada uno recalculara su progreso con logica pesada en cada render, <em>ahi</em> empezaria a tener sentido medir.</p>
+<p>En <strong>RachaSimple</strong>, que es una app de habitos de uso personal, lo normal es tener pocas tarjetas en pantalla: ahi no hay problema de rendimiento que valga. En <strong>Faro</strong>, en cambio, si listaras decenas de proyectos y cada uno recalculara su progreso con logica pesada en cada render, <em>ahi</em> si empezaria a tener sentido medir.</p>
 <blockquote class="def">
 <h3 id="que-significa-optimizacion-prematura">🟦 ¿Que significa? — <em>Optimizacion prematura</em></h3>
-<p><strong>Optimizar prematuramente</strong> es agregar trucos de rendimiento <em>antes</em> de comprobar que existe un problema. Es un anti-patron: complica el codigo, esconde bugs y casi nunca mejora nada perceptible. La regla sana es <strong>primero medir, despues optimizar</strong>. En <strong>RachaSimple</strong>, envolver cada componentito en <code>memo</code> "por si acaso" seria optimizacion prematura.</p>
+<p><strong>Optimizar prematuramente</strong> es meter trucos de rendimiento <em>antes</em> de comprobar que hay un problema. Es un anti-patron de manual: complica el codigo, esconde bugs y casi nunca mejora nada que se note. La regla sana es bien simple: <strong>primero medir, despues optimizar</strong>. En <strong>RachaSimple</strong>, envolver cada componentito en <code>memo</code> "por si las moscas" seria justo eso, optimizacion prematura.</p>
 <h3 id="que-significa-profiler-de-react-devtools">🟦 ¿Que significa? — <em>Profiler (de React DevTools)</em></h3>
-<p>El <strong>Profiler</strong> es una pestana de la extension <strong>React Developer Tools</strong> del navegador que <strong>graba</strong> lo que se renderiza y te dice <em>que componentes</em> se renderizaron y <em>cuanto tardo</em> cada uno. Sirve para medir antes de optimizar, en vez de adivinar. Lo usarias abriendo <strong>RachaSimple</strong> o <strong>Faro</strong> en <code>localhost</code>, grabando mientras interactuas, y mirando que tarjeta aparece costosa.</p>
+<p>El <strong>Profiler</strong> es una pestana de la extension <strong>React Developer Tools</strong> del navegador que <strong>graba</strong> lo que se renderiza y te cuenta <em>que componentes</em> se renderizaron y <em>cuanto tardo</em> cada uno. Sirve para medir antes de optimizar, en lugar de adivinar a ciegas. Lo usarias abriendo <strong>RachaSimple</strong> o <strong>Faro</strong> en <code>localhost</code>, grabando mientras interactuas y mirando que tarjeta sale cara.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>No optimices "a ojo". Si no has abierto el Profiler y visto un componente lento de verdad, probablemente no tienes un problema de rendimiento — tienes un problema imaginario. Bit ha visto codigo lleno de <code>useMemo</code> que no aceleraba nada y solo hacia el archivo mas dificil de leer.</p>
+<p>No optimices "a ojo". Si no has abierto el Profiler y visto un componente lento de verdad, lo mas seguro es que no tengas un problema de rendimiento, sino uno imaginario. Bit ha visto codigo plagado de <code>useMemo</code> que no aceleraba absolutamente nada y solo conseguia volver el archivo mas dificil de leer.</p>
 </blockquote>
 <hr />
 <h2 id="3-una-pieza-que-falta-igualdad-por-referencia">3. Una pieza que falta: igualdad por referencia</h2>
-<p>Para entender <code>memo</code>, <code>useMemo</code> y <code>useCallback</code> necesitas una idea de JavaScript (la viste en el modulo 03) que ahora cobra todo su sentido.</p>
+<p>Para entender <code>memo</code>, <code>useMemo</code> y <code>useCallback</code> te hace falta una idea de JavaScript (la viste en el modulo 03) que aqui cobra todo su sentido.</p>
 <blockquote class="def">
 <h3 id="que-significa-igualdad-por-referencia">🟦 ¿Que significa? — <em>Igualdad por referencia</em></h3>
-<p>En JavaScript, los <strong>objetos</strong>, <strong>arrays</strong> y <strong>funciones</strong> se comparan por <strong>referencia</strong> (su "direccion en memoria"), no por su contenido. Dos objetos con los mismos datos NO son iguales si son objetos distintos. Sirve para entender por que React cree que "algo cambio" aunque a tus ojos sea lo mismo. Esto es la causa de casi todos los re-renders "raros" en <strong>Faro</strong> y <strong>RachaSimple</strong>.</p>
+<p>En JavaScript, los <strong>objetos</strong>, <strong>arrays</strong> y <strong>funciones</strong> se comparan por <strong>referencia</strong> (su "direccion en memoria"), no por su contenido. Dos objetos con exactamente los mismos datos NO son iguales si son objetos distintos. Entender esto explica por que React cree que "algo cambio" aunque a tus ojos sea lo mismisimo de antes. Esta es la causa de casi todos los re-renders "raros" en <strong>Faro</strong> y <strong>RachaSimple</strong>.</p>
 </blockquote>
 <pre><code class="language-ts">// Numeros y textos: se comparan por valor
 5 === 5            // true
@@ -90,7 +90,7 @@ function Dashboard() {
 [1, 2] === [1, 2]         // false!
 (() =&gt; {}) === (() =&gt; {}) // false!
 </code></pre>
-<p>¿Por que importa? Porque <strong>cada vez que tu componente se renderiza</strong>, las funciones y objetos que escribes <em>dentro</em> de el se <strong>crean de nuevo</strong>. Son nuevas referencias en cada render:</p>
+<p>¿Y por que importa esto? Porque <strong>cada vez que tu componente se renderiza</strong>, las funciones y objetos que escribes <em>dentro</em> de el se <strong>crean de nuevo</strong>. Son referencias nuevas en cada render:</p>
 <pre><code class="language-tsx">function ListaHabitos({ habitos }) {
   // 'onToggle' es una funcion NUEVA en cada render
   const onToggle = (id: string) =&gt; marcarHecho(id);
@@ -103,14 +103,14 @@ function Dashboard() {
   ));
 }
 </code></pre>
-<p>Para <em>ti</em>, <code>onToggle</code> "es la misma funcion". Para React, es una referencia distinta en cada render. Y eso, como veras, anula los trucos de memorizacion si no tienes cuidado. Guarda esta idea: vamos a volver a ella.</p>
+<p>Para <em>ti</em>, <code>onToggle</code> "es la misma funcion de siempre". Para React, es una referencia distinta en cada render. Y eso, como veras enseguida, echa por tierra los trucos de memorizacion si no andas con ojo. Guarda esta idea en el bolsillo: vamos a volver a ella.</p>
 <hr />
 <h2 id="4-reactmemo-memorizar-un-componente">4. <code>React.memo</code> — memorizar un componente</h2>
 <blockquote class="def">
 <h3 id="que-significa-memorizar-memoization">🟦 ¿Que significa? — <em>Memorizar (memoization)</em></h3>
-<p><strong>Memorizar</strong> es <strong>guardar un resultado</strong> para reutilizarlo cuando las entradas no cambian, en vez de calcularlo otra vez. Es como cuando anotas el resultado de una suma dificil en un papel para no repetirla. En React, las tres herramientas de este capitulo son formas de memorizar: un componente, un calculo o una funcion.</p>
+<p><strong>Memorizar</strong> es <strong>guardar un resultado</strong> para reutilizarlo cuando las entradas no cambian, en vez de calcularlo otra vez. Es como cuando apuntas en un papel el resultado de una suma dificil para no tener que rehacerla. En React, las tres herramientas de este capitulo son maneras de memorizar: un componente, un calculo o una funcion.</p>
 <h3 id="que-significa-reactmemo">🟦 ¿Que significa? — <em><code>React.memo</code></em></h3>
-<p><strong><code>React.memo</code></strong> envuelve un componente y le dice a React: "si las <strong>props</strong> de este componente no cambiaron, <strong>no lo re-renderices</strong> aunque su padre si se haya re-renderizado". Sirve para evitar re-renders inutiles de hijos. Lo aplicarias en <strong>RachaSimple</strong> a una <code>HabitCard</code> que aparece muchas veces en una lista y cuyas props casi nunca cambian.</p>
+<p><strong><code>React.memo</code></strong> envuelve un componente y le da a React esta orden: "si las <strong>props</strong> de este componente no cambiaron, <strong>no lo re-renderices</strong> aunque su padre si se haya re-renderizado". Sirve para ahorrarte re-renders inutiles de los hijos. Lo aplicarias en <strong>RachaSimple</strong> a una <code>HabitCard</code> que aparece muchas veces en una lista y cuyas props casi nunca cambian.</p>
 </blockquote>
 <pre><code class="language-tsx">// RachaSimple — components/HabitCard.tsx
 import { memo } from &quot;react&quot;;
@@ -133,19 +133,19 @@ function HabitCard({ habito, onToggle }: HabitCardProps) {
 // La envolvemos: ahora solo se re-renderiza si 'habito' u 'onToggle' cambian
 export default memo(HabitCard);
 </code></pre>
-<p>Sin <code>memo</code>, cada vez que <code>Dashboard</code> se re-renderiza (por ejemplo al cambiar un filtro), <strong>todas</strong> las <code>HabitCard</code> se re-renderizan. Con <code>memo</code>, React compara las props nuevas con las anteriores; si son iguales, <strong>se salta</strong> el render de esa tarjeta.</p>
+<p>Sin <code>memo</code>, cada vez que <code>Dashboard</code> se re-renderiza (al cambiar un filtro, por ejemplo) se re-renderizan <strong>todas</strong> las <code>HabitCard</code>. Con <code>memo</code>, React compara las props nuevas con las anteriores; si son iguales, <strong>se salta</strong> el render de esa tarjeta.</p>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p><code>React.memo</code> compara las props <strong>por referencia</strong> (lo que vimos en la seccion 3). Si le pasas a la tarjeta una funcion <code>onToggle</code> que se crea nueva en cada render del padre, <code>memo</code> vera "una prop distinta" cada vez y <strong>no servira de nada</strong>. Por eso <code>memo</code> casi siempre necesita la ayuda de <code>useCallback</code> y <code>useMemo</code> para las props que sean funciones u objetos. Esto es lo que mas confunde a la gente — y la razon de las siguientes secciones.</p>
+<p><code>React.memo</code> compara las props <strong>por referencia</strong> (justo lo que vimos en la seccion 3). Si le pasas a la tarjeta una funcion <code>onToggle</code> que se crea nueva en cada render del padre, <code>memo</code> vera "una prop distinta" cada vez y <strong>no servira de nada</strong>. Por eso <code>memo</code> casi siempre va de la mano de <code>useCallback</code> y <code>useMemo</code> para las props que sean funciones u objetos. Esto es lo que mas lia a la gente, y es el motivo de las dos secciones que vienen.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En <strong>RachaSimple</strong>, una <code>HabitCard</code> dentro de una lista es buena candidata a <code>memo</code> <em>si</em> la lista es larga y el padre se re-renderiza seguido. Si solo tienes 4 habitos, <code>memo</code> no aporta nada notable: dejalo simple.</p>
+<p>En <strong>RachaSimple</strong>, una <code>HabitCard</code> dentro de una lista es buena candidata a <code>memo</code> <em>si</em> la lista es larga y el padre se re-renderiza a menudo. Si solo tienes 4 habitos, <code>memo</code> no te aporta nada que se note: dejalo simple.</p>
 </blockquote>
 <hr />
 <h2 id="5-usecallback-memorizar-una-funcion">5. <code>useCallback</code> — memorizar una funcion</h2>
-<p>Ahora resolvamos el problema que dejo <code>memo</code>: las funciones que se crean nuevas en cada render.</p>
+<p>Vamos ahora a resolver el lio que dejo abierto <code>memo</code>: esas funciones que se crean nuevas en cada render.</p>
 <blockquote class="def">
 <h3 id="que-significa-usecallback">🟦 ¿Que significa? — <em><code>useCallback</code></em></h3>
-<p><strong><code>useCallback</code></strong> es un Hook que <strong>guarda la misma referencia de una funcion</strong> entre renders, mientras sus dependencias no cambien. Asi, en vez de crear una funcion nueva cada vez, React te devuelve la <em>misma</em> de antes. Sirve para que las funciones que pasas como props a un hijo con <code>memo</code> no rompan la memorizacion. En <strong>RachaSimple</strong> lo usarias para el <code>onToggle</code> que pasas a cada <code>HabitCard</code>.</p>
+<p><strong><code>useCallback</code></strong> es un Hook que <strong>conserva la misma referencia de una funcion</strong> entre renders, mientras sus dependencias no cambien. Asi, en vez de fabricar una funcion nueva cada vez, React te devuelve la <em>misma</em> de antes. Sirve para que las funciones que pasas como props a un hijo con <code>memo</code> no rompan la memorizacion. En <strong>RachaSimple</strong> lo usarias para el <code>onToggle</code> que le pasas a cada <code>HabitCard</code>.</p>
 </blockquote>
 <pre><code class="language-tsx">// RachaSimple — Dashboard.tsx
 import { useCallback, useState } from &quot;react&quot;;
@@ -171,17 +171,17 @@ function Dashboard() {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-array-de-dependencias">🟦 ¿Que significa? — <em>Array de dependencias</em></h3>
-<p>El <strong>array de dependencias</strong> es el segundo argumento de <code>useCallback</code> (y de <code>useMemo</code> y <code>useEffect</code>): la lista de valores que, si cambian, hacen que React <strong>vuelva a crear</strong> la funcion/calculo. Si pones <code>[]</code>, nunca se recrea. Si pones <code>[filtro]</code>, se recrea cuando <code>filtro</code> cambie. Sirve para decirle a React <em>de que depende</em> tu funcion. En <strong>Faro</strong>, una funcion que filtra proyectos por estado tendria <code>[estado]</code> en su array.</p>
+<p>El <strong>array de dependencias</strong> es el segundo argumento de <code>useCallback</code> (y tambien de <code>useMemo</code> y <code>useEffect</code>): la lista de valores que, si cambian, hacen que React <strong>vuelva a crear</strong> la funcion o el calculo. Si pones <code>[]</code>, no se recrea nunca. Si pones <code>[filtro]</code>, se recrea cuando <code>filtro</code> cambie. Sirve para decirle a React <em>de que depende</em> tu funcion. En <strong>Faro</strong>, una funcion que filtra proyectos por estado llevaria <code>[estado]</code> en su array.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>El array de dependencias debe incluir <strong>todo</strong> lo que la funcion use de fuera (props, estado, otras variables). Si lo dejas incompleto, tu funcion puede quedarse usando un valor <strong>viejo</strong> (un bug llamado <em>stale closure</em>, "cierre rancio"). El plugin de ESLint <code>react-hooks</code> te avisa de dependencias faltantes — hazle caso. En <strong>Faro</strong> esto importa porque un filtro con dependencias mal puestas mostraria proyectos equivocados.</p>
+<p>El array de dependencias tiene que incluir <strong>todo</strong> lo que la funcion use de fuera (props, estado, otras variables). Si lo dejas a medias, tu funcion puede quedarse usando un valor <strong>viejo</strong> (un bug que se llama <em>stale closure</em>, o "cierre rancio"). El plugin de ESLint <code>react-hooks</code> te avisa cuando faltan dependencias, asi que hazle caso. En <strong>Faro</strong> esto pesa de verdad, porque un filtro con las dependencias mal puestas te mostraria proyectos que no son.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p><code>useCallback</code> <strong>solo vale la pena</strong> cuando esa funcion se pasa como prop a un componente memorizado (<code>memo</code>) o es dependencia de otro Hook. Envolver en <code>useCallback</code> una funcion que solo usa un <code>onClick</code> normal de un boton no aporta nada — es ruido. Recuerda: <code>useCallback</code> existe <em>para no romper</em> a <code>memo</code>.</p>
+<p><code>useCallback</code> <strong>solo merece la pena</strong> cuando esa funcion se pasa como prop a un componente memorizado (<code>memo</code>) o es dependencia de otro Hook. Envolver en <code>useCallback</code> una funcion que solo alimenta un <code>onClick</code> normalito de un boton no aporta nada: es ruido. No lo olvides: <code>useCallback</code> existe <em>para no romper</em> a <code>memo</code>.</p>
 </blockquote>
 <hr />
 <h2 id="6-usememo-memorizar-un-calculo">6. <code>useMemo</code> — memorizar un calculo</h2>
 <blockquote class="def">
 <h3 id="que-significa-usememo">🟦 ¿Que significa? — <em><code>useMemo</code></em></h3>
-<p><strong><code>useMemo</code></strong> es un Hook que <strong>guarda el resultado de un calculo</strong> entre renders, y solo lo vuelve a calcular si sus dependencias cambian. Sirve para dos cosas: (1) evitar repetir un calculo <strong>pesado</strong> en cada render, y (2) mantener <strong>estable la referencia</strong> de un objeto o array que pasas como prop. En <strong>Faro</strong> lo usarias para no recalcular en cada render la lista ordenada de proyectos o un porcentaje de progreso costoso.</p>
+<p><strong><code>useMemo</code></strong> es un Hook que <strong>guarda el resultado de un calculo</strong> entre renders, y solo lo vuelve a calcular cuando sus dependencias cambian. Sirve para dos cosas: (1) no repetir un calculo <strong>pesado</strong> en cada render, y (2) mantener <strong>estable la referencia</strong> de un objeto o array que pasas como prop. En <strong>Faro</strong> lo usarias para no recalcular en cada render la lista ordenada de proyectos o un porcentaje de progreso costoso.</p>
 </blockquote>
 <pre><code class="language-tsx">// Faro — components/ListaProyectos.tsx (Next.js + React 19)
 import { useMemo } from &quot;react&quot;;
@@ -203,8 +203,8 @@ function ListaProyectos({ proyectos, busqueda }: Props) {
   );
 }
 </code></pre>
-<p>Sin <code>useMemo</code>, ese <code>filter</code> + <code>sort</code> se ejecutaria en <strong>cada</strong> render de <code>ListaProyectos</code>, aunque solo hubiera cambiado algo sin relacion. Con <code>useMemo</code>, si <code>proyectos</code> y <code>busqueda</code> siguen igual, React <strong>reutiliza</strong> la lista calculada antes.</p>
-<p>El segundo uso de <code>useMemo</code> es sutil pero util: <strong>estabilizar referencias de objetos/arrays</strong> que pasas a un hijo con <code>memo</code>.</p>
+<p>Sin <code>useMemo</code>, ese <code>filter</code> + <code>sort</code> se ejecutaria en <strong>cada</strong> render de <code>ListaProyectos</code>, aunque lo que hubiera cambiado fuese algo sin la menor relacion. Con <code>useMemo</code>, si <code>proyectos</code> y <code>busqueda</code> siguen igual, React <strong>reutiliza</strong> la lista que ya calculo antes.</p>
+<p>El segundo uso de <code>useMemo</code> es mas sutil, pero util de tener a mano: <strong>estabilizar referencias de objetos y arrays</strong> que pasas a un hijo con <code>memo</code>.</p>
 <pre><code class="language-tsx">// Faro — sin useMemo, 'config' es un objeto nuevo cada render
 const config = { tema: &quot;claro&quot;, compacto: true }; // ❌ nueva referencia
 
@@ -213,22 +213,22 @@ const config = useMemo(() =&gt; ({ tema: &quot;claro&quot;, compacto: true }), [
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Diferencia rapida para no confundirte: <strong><code>useMemo</code> memoriza un VALOR</strong> (lo que devuelve la funcion) y <strong><code>useCallback</code> memoriza la FUNCION en si</strong>. De hecho, <code>useCallback(fn, deps)</code> es lo mismo que <code>useMemo(() =&gt; fn, deps)</code>. Si lo recuerdas asi, nunca los mezclas.</p>
+<p>Una forma rapida de no confundirlos: <strong><code>useMemo</code> memoriza un VALOR</strong> (lo que devuelve la funcion) y <strong><code>useCallback</code> memoriza la FUNCION en si misma</strong>. De hecho, <code>useCallback(fn, deps)</code> es lo mismo que <code>useMemo(() =&gt; fn, deps)</code>. Si lo recuerdas asi, no los mezclas mas.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En <strong>Faro</strong>, el progreso de un proyecto es "hibrido" (milestones + IA). Si calcularlo implica recorrer milestones y combinar con datos del analisis, ese calculo dentro del componente de la tarjeta es un candidato natural a <code>useMemo</code> con dependencias <code>[milestones, analisisIA]</code>. Si solo es una resta de dos numeros, <strong>no</strong> lo memorices: no vale el costo.</p>
+<p>En <strong>Faro</strong>, el progreso de un proyecto es "hibrido" (milestones + IA). Si calcularlo supone recorrer milestones y combinarlos con datos del analisis, ese calculo dentro del componente de la tarjeta es un candidato natural a <code>useMemo</code> con dependencias <code>[milestones, analisisIA]</code>. Si en cambio es una simple resta de dos numeros, <strong>no</strong> lo memorices: no compensa el coste.</p>
 </blockquote>
 <hr />
 <h2 id="7-tanstack-query-y-server-components-ya-optimizan-por-ti">7. TanStack Query y Server Components: ya optimizan por ti</h2>
-<p>Bit quiere que ahorres trabajo. Tus dos repos ya tienen herramientas que reducen muchos renders sin que toques <code>memo</code>.</p>
+<p>Bit quiere que te ahorres trabajo. Tus dos repos ya traen herramientas que reducen un monton de renders sin que tu toques <code>memo</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-cache-de-datos">🟦 ¿Que significa? — <em>Cache (de datos)</em></h3>
-<p>Una <strong>cache</strong> es un almacen temporal de resultados ya obtenidos para no volver a pedirlos. En <strong>RachaSimple</strong>, <strong>TanStack Query</strong> mantiene en cache los habitos que trajo de Supabase: si vuelves a la pantalla, te los da de su memoria en vez de re-consultar, y solo re-renderiza cuando los datos <em>de verdad</em> cambian. Eso ya te evita renders innecesarios sin que escribas <code>useMemo</code>.</p>
+<p>Una <strong>cache</strong> es un almacen temporal de resultados ya obtenidos para no tener que volver a pedirlos. En <strong>RachaSimple</strong>, <strong>TanStack Query</strong> guarda en cache los habitos que trajo de Supabase: si vuelves a esa pantalla, te los da de su memoria en lugar de re-consultar, y solo re-renderiza cuando los datos cambian <em>de verdad</em>. Eso ya te ahorra renders innecesarios sin escribir ni un <code>useMemo</code>.</p>
 <h3 id="que-significa-server-component">🟦 ¿Que significa? — <em>Server Component</em></h3>
-<p>Un <strong>Server Component</strong> es un componente de React que se ejecuta <strong>en el servidor</strong> y nunca se re-renderiza en el navegador del usuario. <strong>Faro</strong> (Next.js 15 + React 19) los usa por defecto. Como no viven en el cliente, no tienen el "problema" de re-renders que trata este capitulo: <code>memo</code>/<code>useMemo</code>/<code>useCallback</code> solo aplican a los componentes de cliente (los que llevan <code>"use client"</code>). Sirve para mover trabajo fuera del navegador.</p>
+<p>Un <strong>Server Component</strong> es un componente de React que corre <strong>en el servidor</strong> y nunca se re-renderiza en el navegador del usuario. <strong>Faro</strong> (Next.js 15 + React 19) los usa por defecto. Como no viven en el cliente, no sufren el "problema" de re-renders del que trata este capitulo: <code>memo</code>/<code>useMemo</code>/<code>useCallback</code> solo aplican a los componentes de cliente (los que llevan <code>"use client"</code>). Sirven para mover trabajo fuera del navegador.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Antes de alcanzar <code>useMemo</code> en <strong>Faro</strong>, pregunta: ¿este componente necesita ser de cliente? Mucho codigo que parece "necesitar optimizacion" simplemente no deberia ejecutarse en el navegador. En <strong>RachaSimple</strong>, antes de memorizar, confia en que TanStack Query ya esta evitando consultas y renders de mas.</p>
+<p>Antes de echar mano de <code>useMemo</code> en <strong>Faro</strong>, preguntate: ¿este componente necesita de verdad ser de cliente? Mucho codigo que parece "pedir optimizacion" sencillamente no deberia estar corriendo en el navegador. Y en <strong>RachaSimple</strong>, antes de memorizar nada, confia en que TanStack Query ya esta evitando consultas y renders de sobra.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p><code>useMemo</code>, <code>useCallback</code> y los Hooks en general <strong>solo funcionan en componentes de cliente</strong>. Si intentas usarlos en un Server Component de <strong>Faro</strong> sin <code>"use client"</code> arriba del archivo, tendras un error. No es un detalle de rendimiento: es una regla de donde corre el codigo.</p>
+<p><code>useMemo</code>, <code>useCallback</code> y los Hooks en general <strong>solo funcionan en componentes de cliente</strong>. Si intentas usarlos en un Server Component de <strong>Faro</strong> sin el <code>"use client"</code> arriba del archivo, te saltara un error. Y no es un detalle de rendimiento: es una regla sobre donde corre el codigo.</p>
 </blockquote>
 <hr />
 <h2 id="8-reglas-practicas-el-resumen-que-bit-pegaria-en-la-pared">8. Reglas practicas (el resumen que Bit pegaria en la pared)</h2>
@@ -243,9 +243,9 @@ const config = useMemo(() =&gt; ({ tema: &quot;claro&quot;, compacto: true }), [
 </ol>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>Un truco mental: las tres herramientas tienen un <strong>costo</strong> (memoria + comparaciones). Solo valen la pena cuando lo que evitan cuesta <strong>mas</strong> que ese costo. Para trabajo barato, memorizar es como pagar por guardar algo que no te importaba perder.</p>
+<p>Un truco mental: las tres herramientas tienen un <strong>coste</strong> (memoria + comparaciones). Solo merecen la pena cuando lo que evitan cuesta <strong>mas</strong> que ese coste. Para trabajo barato, memorizar es como pagar por guardar algo que no te importaba perder.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>Revisa <strong>RachaSimple</strong> y <strong>Faro</strong> con esta pregunta honesta: "¿hay algo que se sienta lento <em>de verdad</em>?". Si la respuesta es no, el mejor uso de este capitulo es <strong>entender</strong> los conceptos y <em>no</em> tocar nada. Saber cuando NO optimizar es tan valioso como saber optimizar.</p>
+<p>Repasa <strong>RachaSimple</strong> y <strong>Faro</strong> con esta pregunta honesta: "¿hay algo que se sienta lento <em>de verdad</em>?". Si la respuesta es no, el mejor uso que le puedes dar a este capitulo es <strong>entender</strong> los conceptos y <em>no</em> tocar nada. Saber cuando NO optimizar vale tanto como saber optimizar.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -290,7 +290,7 @@ const config = useMemo(() =&gt; ({ tema: &quot;claro&quot;, compacto: true }), [
 </ol>
 <hr />
 <blockquote>
-<p>Lo lograste. Lo mas importante que te llevas no es como escribir <code>memo</code>, sino <strong>cuando</strong> hacerlo: muchas veces × mucho trabajo, y siempre despues de medir. Un buen desarrollador de React escribe codigo simple primero y optimiza solo donde el Profiler le pide. Nos vemos en el siguiente capitulo. — Bit 🐾</p>
+<p>Lo lograste. Lo mas valioso que te llevas no es como escribir <code>memo</code>, sino <strong>cuando</strong> hacerlo: muchas veces × mucho trabajo, y siempre despues de medir. Un buen desarrollador de React escribe codigo simple primero y optimiza solo donde el Profiler se lo pide. Nos vemos en el siguiente capitulo. — Bit 🐾</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

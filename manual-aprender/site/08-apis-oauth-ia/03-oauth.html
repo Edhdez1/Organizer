@@ -18,43 +18,51 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-03-oauth-login-con-terceros">Capítulo 03 — OAuth: login con terceros</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>¿Has visto el botón "Iniciar sesión con Google"? Eso es <strong>OAuth</strong>. Permite que una app (como
-Faro) actúe en tu nombre en otro servicio (como tu Google Drive o tu GitHub) <strong>sin que le des
-tu contraseña</strong>. Suena mágico; es ingenioso, y aquí lo desmontamos en pasos simples.</p>
+<p>¿Te suena el botón "Iniciar sesión con Google"? Detrás de ese botón hay <strong>OAuth</strong>. Es lo que
+permite que una app (como Faro) actúe en tu nombre en otro servicio (tu Google Drive, tu GitHub)
+<strong>sin que le entregues tu contraseña</strong>. La primera vez parece cosa de magia, pero en realidad es
+bastante ingenioso, y en este capítulo lo vamos a ir desarmando pieza por pieza.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-que-resuelve-oauth">1. El problema que resuelve OAuth</h2>
-<p>Faro necesita leer tus repos de GitHub y tus carpetas de Drive. Opción mala: que le des tu
-usuario y contraseña de Google a Faro. <strong>Pésima idea</strong>: le darías acceso TOTAL y para siempre, y
-tendrías que confiar en que Faro guarde bien tu contraseña. OAuth resuelve esto.</p>
+<p>Faro necesita leer tus repos de GitHub y tus carpetas de Drive. La salida fácil sería que le
+dieras directamente tu usuario y contraseña de Google. Y sería <strong>una pésima idea</strong>: le estarías
+dando acceso total, para siempre, y tendrías que cruzar los dedos para que Faro guarde tu
+contraseña con cuidado. OAuth nació justo para evitar ese escenario.</p>
 <blockquote class="def">
 <h3 id="que-significa-oauth">🟦 ¿Qué significa? — <em>OAuth</em></h3>
 <p><strong>OAuth</strong> (<em>Open Authorization</em>) es un estándar que permite que una app obtenga <strong>permiso
-limitado</strong> para actuar en tu nombre en otro servicio, <strong>sin conocer tu contraseña</strong>. Tú te
-autenticas <strong>directamente con el servicio</strong> (Google, GitHub), y este le entrega a la app un
-<strong>permiso acotado</strong> y revocable.
-Analogía: la <strong>llave de hotel</strong>. No le das la llave maestra de tu casa al hotel; recibes una
-tarjeta que <strong>solo</strong> abre tu habitación, <strong>solo</strong> durante tu estancia, y se puede desactivar.
-OAuth es esa tarjeta para tus datos.</p>
+limitado</strong> para actuar en tu nombre en otro servicio, <strong>sin conocer tu contraseña</strong>. La gracia
+está en que tú te autenticas <strong>directamente con el servicio</strong> (Google, GitHub), y es ese
+servicio quien le entrega a la app un <strong>permiso acotado</strong> y que se puede revocar cuando quieras.
+Piénsalo como la <strong>llave de un hotel</strong>. No le entregas la llave maestra de tu casa al hotel;
+recibes una tarjeta que abre <strong>solo</strong> tu habitación, <strong>solo</strong> mientras dura tu estancia, y que
+se puede desactivar en cualquier momento. OAuth es exactamente esa tarjeta, pero para tus datos.</p>
 </blockquote>
 <hr />
 <h2 id="2-los-actores-y-el-permiso-acotado">2. Los actores y el "permiso acotado"</h2>
 <blockquote class="def">
 <h3 id="que-significa-los-tres-participantes">🟦 ¿Qué significa? — <em>Los tres participantes</em></h3>
 <ul>
-<li><strong>Tú</strong> (el usuario / dueño de los datos).</li>
+<li><strong>Tú</strong> (el usuario, el dueño de los datos).</li>
 <li><strong>La app</strong> que quiere acceso (Faro).</li>
-<li><strong>El proveedor</strong> que tiene tus datos y verifica tu identidad (Google, GitHub).</li>
+<li><strong>El proveedor</strong> que guarda tus datos y verifica tu identidad (Google, GitHub).</li>
 </ul>
 <h3 id="que-significa-scope-alcance-del-permiso">🟦 ¿Qué significa? — <em>Scope (alcance del permiso)</em></h3>
-<p>El <strong>scope</strong> es <strong>qué exactamente</strong> puede hacer la app. Por eso, al pulsar "Conectar GitHub",
-ves una pantalla que dice "Faro quiere: leer tus repositorios". Eso es el scope: un permiso
-<strong>limitado</strong> (leer repos, no borrar; ver Drive, no tu Gmail). Tú lo apruebas conscientemente.</p>
+<p>El <strong>scope</strong> es el detalle de <strong>qué puede hacer exactamente</strong> la app. Por eso, cuando pulsas
+"Conectar GitHub", aparece una pantalla que dice algo como "Faro quiere: leer tus
+repositorios". Eso es el scope en acción: un permiso <strong>limitado</strong> (leer repos, no borrarlos;
+ver Drive, no husmear tu Gmail). Y eres tú quien lo aprueba a conciencia.</p>
 </blockquote>
 <hr />
 <h2 id="3-el-flujo-de-oauth-paso-a-paso">3. El flujo de OAuth, paso a paso</h2>
-<p>Parece complejo, pero es una coreografía de redirecciones. Síguelo despacio:</p>
+<p>A primera vista parece enrevesado, pero en el fondo es una coreografía de redirecciones. Léelo con
+calma y sigue cada paso:</p>
 <pre><code>1. Clic en &quot;Conectar GitHub&quot; en Faro.
 2. Faro te REDIRIGE a GitHub (al sitio real de GitHub, no a Faro).
 3. En GITHUB inicias sesión (si no lo estabas) y ves: &quot;Faro quiere leer tus repos. ¿Permitir?&quot;.
@@ -65,41 +73,43 @@ ves una pantalla que dice "Faro quiere: leer tus repositorios". Eso es el scope:
 <blockquote class="def">
 <h3 id="que-significa-token-de-acceso-y-codigo-de-autorizacion">🟦 ¿Qué significa? — <em>Token de acceso y código de autorización</em></h3>
 <ul>
-<li>El <strong>código de autorización</strong> es un vale temporal y de un solo uso que GitHub te da tras
-  aceptar; viaja en la URL de vuelta.</li>
-<li>Faro cambia ese código (desde su <strong>servidor</strong>, en secreto) por un <strong>token de acceso</strong>: la
-  credencial real con la que llamará a la API en tu nombre. El token nunca pasa por tu
-  navegador a la vista; se maneja en el servidor.
-¿Por qué dos pasos (código → token)? Por seguridad: el token, lo valioso, solo se entrega
-servidor-a-servidor, no expuesto en la URL.</li>
+<li>El <strong>código de autorización</strong> es un vale temporal y de un solo uso que GitHub te entrega
+  cuando aceptas; viaja en la URL de vuelta.</li>
+<li>Faro toma ese código (desde su <strong>servidor</strong>, sin que lo veas) y lo cambia por un <strong>token de
+  acceso</strong>: la credencial de verdad, con la que llamará a la API en tu nombre. El token no anda
+  paseándose a la vista por tu navegador; todo el manejo ocurre en el servidor.
+¿Y por qué dar ese rodeo de dos pasos, código y luego token? Por seguridad: lo realmente
+valioso, el token, solo se entrega de servidor a servidor, nunca queda expuesto en la URL.</li>
 </ul>
 <h3 id="que-significa-redireccion-redirect">🟦 ¿Qué significa? — <em>Redirección (redirect)</em></h3>
-<p><strong>Redirigir</strong> es que una web te <strong>envíe automáticamente</strong> a otra dirección. OAuth se basa en
-redirecciones: de la app al proveedor (para que te autentiques <strong>allí</strong>, no en la app) y de
-vuelta. Esto es clave: <strong>tu contraseña la escribes solo en Google/GitHub</strong>, nunca en Faro.</p>
+<p><strong>Redirigir</strong> es que una web te <strong>mande automáticamente</strong> a otra dirección. OAuth se sostiene
+sobre redirecciones: de la app al proveedor (para que te autentiques <strong>allí</strong>, no en la app) y
+luego de vuelta. Y esto es lo importante: <strong>tu contraseña la escribes solo en Google o en
+GitHub</strong>, nunca en Faro.</p>
 </blockquote>
 <hr />
 <h2 id="4-autenticacion-vs-login-social">4. Autenticación vs. "login social"</h2>
 <blockquote class="def">
 <h3 id="que-significa-login-social">🟦 ¿Qué significa? — <em>Login social</em></h3>
 <p>OAuth también sirve para <strong>iniciar sesión</strong> en una app usando tu cuenta de otro servicio
-("Entrar con Google"). En vez de crear otra contraseña, Google le confirma a la app "sí, es
-esta persona". Es cómodo (una contraseña menos) y seguro (Google cuida la autenticación). Es lo
-que viste en el Módulo 07: <strong>Supabase Auth</strong> ofrece login con Google/GitHub usando OAuth por
-debajo.</p>
+("Entrar con Google"). En lugar de inventarte otra contraseña, Google le confirma a la app "sí,
+es esta persona". Te quitas una contraseña de encima (cómodo) y dejas la autenticación en manos
+de Google (seguro). Es justo lo que viste en el Módulo 07: <strong>Supabase Auth</strong> ofrece login con
+Google y GitHub apoyándose en OAuth por debajo.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
 <ul>
-<li><strong>Faro</strong> usa OAuth para dos cosas: que inicies sesión (login social con Google) <strong>y</strong> para
-  obtener permiso de leer tu GitHub y tu Drive. El intercambio ocurre en
-  <code>src/app/auth/callback/</code> (el paso 4-5 del flujo), y los tokens se guardan de forma segura del
-  lado servidor (en <code>user_connections</code> con RLS, como recalca su <code>CLAUDE.md</code>).</li>
-<li>Los documentos <code>docs/OAUTH-SETUP.md</code> y <code>docs/TOKEN-MANAGEMENT.md</code> de Faro explican cómo se
-  configuró y cómo se <strong>refrescan</strong> los tokens cuando caducan.</li>
+<li><strong>Faro</strong> usa OAuth para dos cosas: para que inicies sesión (login social con Google) <strong>y</strong>
+  para conseguir permiso de leer tu GitHub y tu Drive. El intercambio sucede en
+  <code>src/app/auth/callback/</code> (los pasos 4 y 5 del flujo), y los tokens se guardan de forma segura
+  del lado del servidor (en <code>user_connections</code> con RLS, tal como insiste su <code>CLAUDE.md</code>).</li>
+<li>Los documentos <code>docs/OAUTH-SETUP.md</code> y <code>docs/TOKEN-MANAGEMENT.md</code> de Faro cuentan cómo se
+  configuró todo y cómo se <strong>refrescan</strong> los tokens cuando caducan.</li>
 </ul>
 <h3 id="que-significa-refrescar-un-token-refresh-token">🟦 ¿Qué significa? — <em>Refrescar un token (refresh token)</em></h3>
-<p>Los tokens de acceso <strong>caducan</strong> (por seguridad). Un <strong>refresh token</strong> es una credencial extra
-que permite obtener un token nuevo <strong>sin</strong> molestarte a ti otra vez. Por eso Faro puede seguir
-leyendo tu Drive días después sin pedirte login de nuevo: refresca el token solo, por detrás.</p>
+<p>Los tokens de acceso <strong>caducan</strong> a propósito, por seguridad. Un <strong>refresh token</strong> es una
+credencial extra que sirve para conseguir un token nuevo <strong>sin</strong> tener que molestarte a ti otra
+vez. Por eso Faro puede seguir leyendo tu Drive días después sin pedirte que vuelvas a iniciar
+sesión: refresca el token por su cuenta, en segundo plano.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

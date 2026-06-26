@@ -18,31 +18,37 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-01-que-es-html">Capítulo 01 — ¿Qué es HTML?</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Tu primera línea de código de verdad está a unos minutos. Pero antes, entendamos qué es
-HTML y, sobre todo, qué <strong>no</strong> es, porque eso evita confusiones que arrastra mucha gente.</p>
+<p>Tu primera línea de código de verdad está a unos minutos. Pero antes vale la pena entender
+qué es HTML y, sobre todo, qué <strong>no</strong> es. Aclarar eso desde el principio te ahorra confusiones
+que mucha gente arrastra durante años.</p>
 </blockquote>
 <hr />
 <h2 id="1-html-describe-la-estructura-no-da-ordenes">1. HTML describe la estructura, no da órdenes</h2>
 <blockquote class="def">
 <h3 id="que-significa-html">🟦 ¿Qué significa? — <em>HTML</em></h3>
 <p><strong>HTML</strong> significa <em>HyperText Markup Language</em> ("lenguaje de marcado de hipertexto"). Es el
-lenguaje con el que se describe <strong>la estructura y el contenido</strong> de una página web: esto es
-un título, esto un párrafo, esto una imagen, esto un enlace.
+lenguaje con el que describes <strong>la estructura y el contenido</strong> de una página web: esto es un
+título, esto un párrafo, esto una imagen, esto un enlace.
 <strong>¿Para qué sirve?</strong> Para decirle al navegador <em>qué</em> hay en la página y <em>qué papel</em> cumple
 cada parte. Es el <strong>esqueleto</strong> de toda web.</p>
 </blockquote>
-<p>Fíjate en las dos palabras clave:</p>
+<p>Hay dos palabras dentro de ese nombre que conviene mirar de cerca:</p>
 <blockquote class="def">
 <h3 id="que-significa-marcado-markup">🟦 ¿Qué significa? — <em>Marcado (markup)</em></h3>
 <p>"Marcado" quiere decir que <strong>etiquetas</strong> el contenido para indicar qué es cada cosa, igual
-que un editor marca un manuscrito ("esto va en negrita", "esto es un título"). No le das
-órdenes paso a paso (eso es programar, como en JavaScript): solo <strong>describes</strong> la estructura.
-Por eso, técnicamente, HTML es un <strong>lenguaje de marcado</strong>, no un "lenguaje de programación".</p>
+que un editor marca un manuscrito a mano ("esto va en negrita", "esto es un título"). No le
+das órdenes paso a paso (eso es programar, como en JavaScript): solo <strong>describes</strong> la
+estructura. Por eso, técnicamente, HTML es un <strong>lenguaje de marcado</strong> y no un "lenguaje de
+programación".</p>
 <h3 id="que-significa-hipertexto">🟦 ¿Qué significa? — <em>Hipertexto</em></h3>
-<p>"Hipertexto" es texto que contiene <strong>enlaces</strong> a otros textos o páginas. Es la idea que hace
-que la web sea una "telaraña" (<em>web</em>): puedes saltar de una página a otra haciendo clic. Esos
-saltos son los <strong>enlaces</strong> (los verás en el capítulo 02).</p>
+<p>"Hipertexto" es texto que contiene <strong>enlaces</strong> hacia otros textos o páginas. Esa es justo la
+idea que convierte a la web en una "telaraña" (<em>web</em>): puedes saltar de una página a otra con
+un clic. Esos saltos son los <strong>enlaces</strong>, y los verás en el capítulo 02.</p>
 <h3 id="tip-la-analogia-de-la-casa-te-servira-todo-el-modulo">💡 Tip — La analogía de la casa (te servirá todo el módulo)</h3>
 <ul>
 <li><strong>HTML</strong> = la <strong>estructura</strong> de la casa: paredes, habitaciones, puertas. <em>Qué hay y dónde.</em></li>
@@ -54,12 +60,12 @@ Una casa puede existir solo con estructura (HTML solo): se ve sosa, pero funcion
 </blockquote>
 <hr />
 <h2 id="2-la-pieza-basica-la-etiqueta">2. La pieza básica: la etiqueta</h2>
-<p>HTML se escribe con <strong>etiquetas</strong>. Veamos su anatomía con calma.</p>
+<p>HTML se escribe con <strong>etiquetas</strong>. Vamos a ver su anatomía sin prisa.</p>
 <blockquote class="def">
 <h3 id="que-significa-etiqueta-tag-y-elemento">🟦 ¿Qué significa? — <em>Etiqueta (tag) y elemento</em></h3>
-<p>Una <strong>etiqueta</strong> es una palabra entre signos <code>&lt;</code> y <code>&gt;</code> que marca el inicio o el fin de algo.
-Casi siempre van en pareja: una de <strong>apertura</strong> y una de <strong>cierre</strong> (con <code>/</code>). Lo que envuelven,
-junto con las etiquetas, forma un <strong>elemento</strong>.</p>
+<p>Una <strong>etiqueta</strong> es una palabra entre los signos <code>&lt;</code> y <code>&gt;</code> que marca dónde empieza o dónde
+termina algo. Casi siempre van en pareja: una de <strong>apertura</strong> y una de <strong>cierre</strong> (esta lleva
+<code>/</code>). Lo que envuelven, junto con las propias etiquetas, forma un <strong>elemento</strong>.</p>
 <p><code>html
 &lt;p&gt;Hola, mundo&lt;/p&gt;</code>
 Aquí:
@@ -68,7 +74,7 @@ Aquí:
 - <code>&lt;/p&gt;</code> es la etiqueta de <strong>cierre</strong> (la barra <code>/</code> indica "aquí termina").
 - Todo junto —<code>&lt;p&gt;Hola, mundo&lt;/p&gt;</code>— es un <strong>elemento</strong> párrafo.</p>
 </blockquote>
-<p>Visto como dibujo:</p>
+<p>Y dibujado, se ve así:</p>
 <pre><code>   apertura        cierre
      │                │
     &lt;p&gt;  Hola, mundo  &lt;/p&gt;
@@ -77,32 +83,32 @@ Aquí:
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-atributo">🟦 ¿Qué significa? — <em>Atributo</em></h3>
-<p>Un <strong>atributo</strong> es información <strong>extra</strong> que se le da a una etiqueta, escrita dentro de la
+<p>Un <strong>atributo</strong> es información <strong>extra</strong> que le das a una etiqueta. Se escribe dentro de la
 etiqueta de apertura, con la forma <code>nombre="valor"</code>. Por ejemplo, un enlace necesita saber
 <em>a dónde</em> lleva:
 <code>html
 &lt;a href="https://tunaldigital.com"&gt;Visita Tunal Digital&lt;/a&gt;</code>
 Aquí <code>href</code> es el atributo (de <em>hypertext reference</em>, "referencia de hipertexto") y
-<code>"https://tunaldigital.com"</code> es su valor (el destino). <code>&lt;a&gt;</code> es la etiqueta de "ancla"
-(<em>anchor</em>), que crea enlaces.</p>
+<code>"https://tunaldigital.com"</code> es su valor, es decir, el destino. La etiqueta <code>&lt;a&gt;</code> es la del
+"ancla" (<em>anchor</em>), la que crea enlaces.</p>
 <h3 id="cuidado-casi-todas-las-etiquetas-se-cierran-pero-no-todas">⚠️ Cuidado — Casi todas las etiquetas se cierran (pero no todas)</h3>
 <p>La mayoría van en pareja (<code>&lt;p&gt;…&lt;/p&gt;</code>). Unas pocas <strong>no envuelven nada</strong> y por eso no se
-cierran, como la imagen <code>&lt;img&gt;</code> o el salto de línea <code>&lt;br&gt;</code>. Se llaman elementos "vacíos".
-No te preocupes por memorizarlas: el editor te avisa.</p>
+cierran, como la imagen <code>&lt;img&gt;</code> o el salto de línea <code>&lt;br&gt;</code>. A esas se les llama elementos
+"vacíos". No hace falta que las memorices: el editor te las irá señalando.</p>
 </blockquote>
 <hr />
 <h2 id="3-tu-primera-pagina-web-paso-a-paso">3. Tu primera página web (paso a paso)</h2>
-<p>Vamos a crear una página real. Cuando tengas tu computadora, sigue esto; por ahora, <strong>léelo y
-entiéndelo</strong>.</p>
+<p>Vamos a crear una página de verdad. Cuando ya tengas tu computadora, sigue estos pasos; por
+ahora, <strong>léelos y entiéndelos</strong>.</p>
 <p><strong>Paso 1.</strong> Abre VS Code y crea un archivo nuevo llamado <code>index.html</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-indexhtml-y-por-que-ese-nombre">🟦 ¿Qué significa? — <em><code>index.html</code> y por qué ese nombre</em></h3>
 <p>Por convención, la página <strong>principal</strong> de un sitio se llama <code>index.html</code>. Cuando entras a
-<code>tunaldigital.com</code> sin especificar una página, el servidor te entrega su <code>index.html</code>. "Index"
-= índice, la portada/entrada. Tu sitio real tiene su <code>index.html</code> en
-<code>tunal-digital/sitio-web/index.html</code>.</p>
+<code>tunaldigital.com</code> sin pedir una página concreta, el servidor te entrega su <code>index.html</code>.
+"Index" significa índice: es la portada, la entrada al sitio. Tu sitio real tiene su
+<code>index.html</code> en <code>tunal-digital/sitio-web/index.html</code>.</p>
 </blockquote>
-<p><strong>Paso 2.</strong> Escribe esto exactamente:</p>
+<p><strong>Paso 2.</strong> Escribe esto tal cual:</p>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;es&quot;&gt;
   &lt;head&gt;
@@ -116,39 +122,40 @@ entiéndelo</strong>.</p>
 &lt;/html&gt;
 </code></pre>
 <p><strong>Paso 3.</strong> Guarda el archivo (Ctrl+S / Cmd+S) y <strong>ábrelo con doble clic</strong>: se abrirá en tu
-navegador y verás tu título y tu párrafo. ¡Acabas de crear una página web!</p>
+navegador y verás ahí tu título y tu párrafo. ¡Acabas de crear una página web!</p>
 <p>Ahora desarmemos lo que escribiste, línea por línea:</p>
 <blockquote class="code">
 <h3 id="linea-por-linea">🔎 Línea por línea</h3>
 <ul>
-<li><code>&lt;!DOCTYPE html&gt;</code> → le dice al navegador "esto es una página HTML moderna". Siempre va
-  primero. No es exactamente una etiqueta, es una <em>declaración</em>.</li>
+<li><code>&lt;!DOCTYPE html&gt;</code> → le avisa al navegador "esto es una página HTML moderna". Siempre va
+  primero. No es exactamente una etiqueta, sino una <em>declaración</em>.</li>
 <li><code>&lt;html lang="es"&gt;</code> → la etiqueta que <strong>envuelve toda la página</strong>. El atributo <code>lang="es"</code>
-  indica que el idioma es español (ayuda a buscadores y lectores de pantalla).</li>
+  indica que el idioma es español (algo que agradecen los buscadores y los lectores de pantalla).</li>
 <li><code>&lt;head&gt;</code> → la <strong>cabecera</strong>: información <em>sobre</em> la página que <strong>no se ve</strong> en el cuerpo
-  (título, idioma, enlaces a estilos). Lo verás a fondo en el capítulo 03.</li>
-<li><code>&lt;meta charset="UTF-8"&gt;</code> → fija la <strong>codificación de caracteres</strong> a UTF-8, que permite
-  acentos y la ñ. Sin esto, "programación" podría verse como "programaci??n".</li>
+  (título, idioma, enlaces a estilos). La verás a fondo en el capítulo 03.</li>
+<li><code>&lt;meta charset="UTF-8"&gt;</code> → fija la <strong>codificación de caracteres</strong> en UTF-8, que es la que
+  permite acentos y la ñ. Sin esto, "programación" podría aparecer como "programaci??n".</li>
 <li><code>&lt;title&gt;</code> → el texto que aparece en la <strong>pestaña</strong> del navegador.</li>
 <li><code>&lt;body&gt;</code> → el <strong>cuerpo</strong>: aquí va <strong>todo lo que se ve</strong> en la página.</li>
 <li><code>&lt;h1&gt;</code> → un <strong>título de nivel 1</strong> (<em>heading 1</em>), el más grande e importante.</li>
 <li><code>&lt;p&gt;</code> → un <strong>párrafo</strong>.</li>
 </ul>
 <h3 id="que-significa-anidar-anidamiento">🟦 ¿Qué significa? — <em>Anidar (anidamiento)</em></h3>
-<p>Fíjate que unas etiquetas van <strong>dentro</strong> de otras: <code>&lt;h1&gt;</code> está dentro de <code>&lt;body&gt;</code>, que está
-dentro de <code>&lt;html&gt;</code>. A esto se le llama <strong>anidar</strong>, como muñecas rusas. La regla de oro: lo
-que se abre dentro de algo, <strong>debe cerrarse dentro de eso mismo</strong> (no se cruzan). La sangría
-(los espacios al inicio de cada línea) es solo para que <em>tú</em> lo leas mejor; al navegador le
-da igual, pero a ti te salva de errores.</p>
+<p>Habrás notado que unas etiquetas van <strong>dentro</strong> de otras: <code>&lt;h1&gt;</code> está dentro de <code>&lt;body&gt;</code>, que
+a su vez está dentro de <code>&lt;html&gt;</code>. A eso se le llama <strong>anidar</strong>, como las muñecas rusas. La
+regla de oro: lo que se abre dentro de algo <strong>debe cerrarse dentro de eso mismo</strong>; las
+etiquetas nunca se cruzan. La sangría (esos espacios al inicio de cada línea) existe solo para
+que <em>tú</em> lo leas mejor; al navegador le da igual, pero a ti te ahorra muchos errores.</p>
 </blockquote>
 <hr />
 <h2 id="4-como-ve-el-navegador-tu-html-el-dom">4. Cómo "ve" el navegador tu HTML: el DOM</h2>
-<p>Cuando el navegador lee tu HTML, no se queda con el texto: construye un <strong>árbol</strong> en su memoria.</p>
+<p>Cuando el navegador lee tu HTML, no se queda con el texto a secas: arma un <strong>árbol</strong> en su
+memoria.</p>
 <blockquote class="def">
 <h3 id="que-significa-dom-modelo-de-objetos-del-documento">🟦 ¿Qué significa? — <em>DOM (modelo de objetos del documento)</em></h3>
 <p>El <strong>DOM</strong> (<em>Document Object Model</em>) es la <strong>representación en forma de árbol</strong> que el
-navegador crea a partir de tu HTML: cada etiqueta se vuelve un "nodo" (una rama) con sus
-hijos dentro. Tu página de ejemplo se vuelve este árbol:
+navegador construye a partir de tu HTML: cada etiqueta se convierte en un "nodo" (una rama)
+con sus hijos dentro. Tu página de ejemplo se vuelve este árbol:
 <code>html
 ├── head
 │   ├── meta
@@ -156,20 +163,21 @@ hijos dentro. Tu página de ejemplo se vuelve este árbol:
 └── body
     ├── h1
     └── p</code>
-<strong>¿Por qué importa?</strong> Porque en el módulo 03, JavaScript modifica <strong>ese árbol</strong> para cambiar
-la página en vivo (mostrar/ocultar, cambiar textos). Por eso "DOM" es una de las palabras que
-más oirás. De momento, basta con que sepas: <strong>tu HTML se convierte en un árbol llamado DOM</strong>.</p>
+<strong>¿Por qué importa?</strong> Porque en el módulo 03 JavaScript modifica <strong>ese árbol</strong> para cambiar la
+página en vivo: mostrar u ocultar cosas, cambiar textos. De ahí que "DOM" sea una de las
+palabras que más vas a oír. Por ahora basta con que te quedes con la idea: <strong>tu HTML se
+convierte en un árbol llamado DOM</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="5-las-herramientas-de-desarrollador-tu-rayos-x">5. Las herramientas de desarrollador (tu rayos X)</h2>
 <p>Todo navegador trae una herramienta para <em>ver el HTML por dentro</em> de cualquier página.</p>
 <blockquote class="tip">
 <h3 id="tip-inspecciona-paginas-reales">💡 Tip — Inspecciona páginas reales</h3>
-<p>En tu computadora, sobre cualquier web, pulsa <code>F12</code> (o clic derecho → "Inspeccionar"). Se
-abre el panel de <strong>Herramientas de desarrollador</strong>; en la pestaña <strong>Elements</strong> (Elementos)
-verás el HTML —el DOM— de esa página. Es la mejor forma de aprender: mira cómo están hechas
-las páginas que te gustan. Cuando llegues al módulo 02, podrás incluso cambiar colores ahí
-mismo (temporalmente) para experimentar.</p>
+<p>En tu computadora, párate sobre cualquier web y pulsa <code>F12</code> (o clic derecho → "Inspeccionar").
+Se abre el panel de <strong>Herramientas de desarrollador</strong>; en la pestaña <strong>Elements</strong> (Elementos)
+verás el HTML —el DOM— de esa página. Es de las mejores formas de aprender: fíjate en cómo
+están hechas las páginas que te gustan. Y cuando llegues al módulo 02, incluso podrás cambiar
+colores ahí mismo (de forma temporal) para experimentar.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

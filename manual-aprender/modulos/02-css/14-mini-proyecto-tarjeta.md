@@ -5,23 +5,23 @@
 </p>
 
 
-> ¡Llegó el día! Durante trece capítulos fuiste juntando piezas: selectores, colores, el modelo de caja, tipografía, sombras, transiciones. Hoy las usamos todas juntas para construir algo de verdad: una **tarjeta** bonita, de esas que ves en mil sitios web (un producto, un perfil, una publicación). Lo haremos paso a paso, en tu computadora 💻, y al final tendrás una pieza que podrías pegar tal cual en tu proyecto **tunal-digital**. Bit, el ajolote, ya tiene puestas las gafas de obra y trae su casquito rosa. Vamos a construir.
+> ¡Llegó el día! Durante trece capítulos fuiste juntando piezas sueltas: selectores, colores, el modelo de caja, tipografía, sombras, transiciones. Hoy las juntamos todas para construir algo de verdad: una **tarjeta** bonita, de esas que ves en mil sitios web (un producto, un perfil, una publicación). Lo haremos paso a paso, en tu computadora 💻, y al final tendrás una pieza que podrías pegar tal cual en tu proyecto **tunal-digital**. Bit, el ajolote, ya tiene puestas las gafas de obra y trae su casquito rosa. A construir.
 
 ---
 
 ## 1. ¿Qué vamos a construir y por qué una tarjeta?
 
-Una **tarjeta** (en inglés *card*) es un bloque rectangular que agrupa información relacionada: una imagen, un título, un texto corto y, casi siempre, un botón. Es uno de los patrones de diseño más comunes de la web. Si abres una tienda online, cada producto es una tarjeta. Si abres una red social, cada publicación es una tarjeta.
+Una **tarjeta** (en inglés *card*) es un bloque rectangular que agrupa información relacionada: una imagen, un título, un texto corto y, casi siempre, un botón. Es uno de los patrones de diseño más comunes de la web. Abre una tienda online: cada producto es una tarjeta. Abre una red social: cada publicación es una tarjeta.
 
 > ### 🟦 ¿Qué significa? — *Tarjeta (card)*
 > Es un patrón visual: un contenedor con bordes redondeados, algo de relleno por dentro y normalmente una sombra suave que la separa del fondo. No es una etiqueta de HTML especial; la construimos con un `<div>` (o mejor, una etiqueta semántica como `<article>`) y la vestimos con CSS.
 > **Para qué sirve:** ordenar información en piezas reutilizables y fáciles de leer.
 > **Dónde se usa en un repo real:** en **tunal-digital**, la sección de servicios o de portafolio podría mostrarse como una rejilla de tarjetas; en **RachaSimple** (React + Tailwind), cada racha del usuario probablemente se pinta como una tarjeta con clases de Tailwind.
 
-La gracia de hacerla "a mano" con CSS puro es que entiendes qué hace cada propiedad. Más adelante, cuando uses **Tailwind** en RachaSimple o Faro, vas a reconocer que `rounded-xl`, `shadow-md` o `p-6` son exactamente las mismas ideas que hoy escribiremos con nombres largos.
+Lo bueno de hacerla "a mano" con CSS puro es que entiendes qué hace cada propiedad. Más adelante, cuando uses **Tailwind** en RachaSimple o Faro, vas a reconocer que `rounded-xl`, `shadow-md` o `p-6` son exactamente las mismas ideas que hoy escribiremos con nombres largos.
 
 > ### 💡 Tip
-> No copies y pegues el código de golpe. Escríbelo tú, línea por línea, mirando cómo cambia la tarjeta en el navegador cada vez que guardas. Aprender CSS es como aprender a cocinar: hay que probar la sopa mientras la haces.
+> No copies y pegues el código de golpe. Escríbelo tú, línea por línea, mirando cómo cambia la tarjeta en el navegador cada vez que guardas. Aprender CSS se parece a aprender a cocinar: hay que probar la sopa mientras la haces.
 
 ---
 
@@ -63,7 +63,7 @@ Empecemos por el HTML. Pega esto en `index.html`:
 </html>
 ```
 
-Mira que envolví todo en `<article class="tarjeta">`. Usé `<article>` en lugar de `<div>` porque es **HTML semántico**: le dice al navegador (y a los lectores de pantalla) "esto es una pieza de contenido independiente".
+Fíjate en que envolví todo en `<article class="tarjeta">`. Usé `<article>` en lugar de `<div>` porque es **HTML semántico**: le dice al navegador (y a los lectores de pantalla) "esto es una pieza de contenido independiente".
 
 > ### 🟦 ¿Qué significa? — *Etiqueta semántica*
 > Es una etiqueta de HTML cuyo nombre describe **qué tipo de contenido** contiene, no cómo se ve. `<article>`, `<header>`, `<nav>` y `<footer>` son semánticas; `<div>` y `<span>` son neutras (no significan nada en particular).
@@ -75,14 +75,14 @@ Mira que envolví todo en `<article class="tarjeta">`. Usé `<article>` en lugar
 > **Para qué sirve:** accesibilidad. Una imagen sin `alt` es invisible para quien no puede verla.
 > **Dónde se usa:** en TODO proyecto serio. Acostúmbrate desde ya.
 
-Fíjate también en los nombres de clase tipo `tarjeta__cuerpo`. Ese doble guion bajo es una convención llamada **BEM** que ayuda a no perderte. No es obligatorio, pero ordena mucho.
+Mira también los nombres de clase tipo `tarjeta__cuerpo`. Ese doble guion bajo viene de una convención llamada **BEM** que ayuda a no perderte. No es obligatorio, pero ordena mucho.
 
 > ### 🟦 ¿Qué significa? — *BEM (Block, Element, Modifier)*
 > Es una forma de nombrar clases CSS. `bloque__elemento--modificador`. El bloque es la tarjeta, los elementos son sus partes (`__titulo`, `__boton`) y los modificadores son variantes (`--destacada`).
 > **Para qué sirve:** que el nombre de una clase te diga a qué pertenece y evites colisiones.
 > **Dónde se usa en un repo real:** muchos `styles.css` vanilla como el de **tunal-digital** lo usan; con Tailwind (RachaSimple, Faro) no hace falta porque las clases ya son utilitarias.
 
-Si abres `index.html` en el navegador ahora, verás un desastre sin estilo: una imagen enorme, texto pegado a la izquierda y un botón gris feo. Perfecto. Ese es nuestro punto de partida. Bit dice que toda escultura empieza siendo un bloque de piedra.
+Si abres `index.html` en el navegador ahora mismo, verás un desastre sin estilo: una imagen enorme, texto pegado a la izquierda y un botón gris feo. Perfecto. Ese es nuestro punto de partida. Bit dice que toda escultura empieza siendo un bloque de piedra.
 
 ---
 
@@ -156,7 +156,7 @@ Guarda y mira el navegador. ¡Ya parece una tarjeta! Vamos propiedad por propied
 
 ## 4. La imagen: que llene su espacio sin deformarse
 
-La imagen del HTML mide originalmente 400x250 (la pedimos así a `picsum.photos`), pero nuestra tarjeta mide 320px de ancho. Hay que ajustarla:
+La imagen del HTML mide originalmente 400x250 (la pedimos así a `picsum.photos`), pero nuestra tarjeta mide 320px de ancho. Toca ajustarla:
 
 ```css
 .tarjeta__imagen {
@@ -365,7 +365,7 @@ Una mejora pequeñita que se ve muy profesional: que la tarjeta entera se eleve 
 > Mueve el elemento en el eje vertical sin afectar a los vecinos. `translateY(-4px)` lo sube 4 píxeles (negativo = arriba).
 > **Para qué sirve:** aquí, el efecto de "levitar" al pasar el ratón. Combinado con una sombra más grande, parece que la tarjeta se acerca a ti.
 
-Mira el resultado: la tarjeta sube suavemente y su sombra crece, como si se despegara del fondo. Con `transition` ya declarada, el movimiento es fluido. Estos detalles pequeños son los que separan una página que "funciona" de una que se siente cuidada.
+Mira el resultado: la tarjeta sube suavemente y su sombra crece, como si se despegara del fondo. Con la `transition` ya declarada, el movimiento es fluido. Estos detalles pequeños son los que separan una página que "funciona" de una que se siente cuidada.
 
 > ### ⚠️ Cuidado
 > No abuses de los efectos. Una tarjeta que se mueve está bien; una página donde TODO salta, gira y parpadea marea. El buen diseño es como la sal: justo la necesaria.

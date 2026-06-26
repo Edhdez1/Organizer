@@ -1,111 +1,125 @@
 # Capítulo 03 — Modificar y relacionar
 
-> Ya sabes **leer** datos. Ahora aprendes a **crear, cambiar y borrar** filas, y a **combinar
-> tablas relacionadas** con `JOIN`. Con esto cierras las cuatro operaciones básicas de cualquier
-> base de datos, conocidas como **CRUD**.
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
+> Ya sabes **leer** datos. Toca el otro lado: **crear, cambiar y borrar** filas, y también
+> **combinar tablas relacionadas** con `JOIN`. Cuando termines este capítulo habrás visto las
+> cuatro operaciones básicas que hace cualquier base de datos, las que se conocen como **CRUD**.
 
 ---
 
 ## 1. CRUD: las cuatro operaciones
 
 > ### 🟦 ¿Qué significa? — *CRUD*
-> **CRUD** son las iniciales de las cuatro cosas que se hacen con datos:
+> **CRUD** son las iniciales de las cuatro cosas que puedes hacer con datos:
 > - **C**reate (crear) → `INSERT`
-> - **R**ead (leer) → `SELECT` (capítulo anterior)
+> - **R**ead (leer) → `SELECT` (lo viste en el capítulo anterior)
 > - **U**pdate (actualizar) → `UPDATE`
 > - **D**elete (borrar) → `DELETE`
-> Toda app de datos, en el fondo, hace CRUD. RachaSimple crea hábitos, los lee, los actualiza y
-> los borra: CRUD puro.
+> Rasca cualquier app que maneje datos y, debajo, solo encontrarás CRUD. RachaSimple crea hábitos,
+> los lee, los actualiza y los borra. No hay más misterio: CRUD puro.
 
 ---
 
 ## 2. `INSERT`: crear filas
 
 > ### 🟦 ¿Qué significa? — *`INSERT INTO`*
-> Agrega una fila nueva a una tabla:
+> Mete una fila nueva en una tabla:
 > ```sql
 > INSERT INTO habitos (nombre, meta, color, usuario_id)
 > VALUES ('Caminar', 25, '#2BB673', 7);
 > ```
-> Primero las **columnas**, luego los **valores** en el mismo orden. El `id` normalmente **no** se
-> pone: la base de datos lo asigna sola (clave primaria autoincremental).
+> Primero nombras las **columnas** y después pasas los **valores** en ese mismo orden. El `id`
+> casi nunca lo escribes tú: la base de datos lo asigna sola, porque es una clave primaria que se
+> autoincrementa.
 
 ---
 
 ## 3. `UPDATE`: cambiar filas
 
 > ### 🟦 ¿Qué significa? — *`UPDATE ... SET ... WHERE`*
-> Cambia datos de filas existentes. `SET` indica qué columnas cambiar; `WHERE` **a cuáles filas**:
+> Modifica datos de filas que ya existen. Con `SET` dices qué columnas cambiar; con `WHERE`, **en
+> qué filas**:
 > ```sql
 > UPDATE habitos SET meta = 30 WHERE id = 1;
 > ```
-> "En la tabla habitos, pon meta = 30, en la fila cuyo id sea 1."
+> Léelo tal cual suena: "en la tabla habitos, pon meta = 30 en la fila cuyo id sea 1."
 
 > ### ⚠️ Cuidado — ¡NUNCA olvides el `WHERE` en UPDATE/DELETE!
-> Esto es **crítico**. Si escribes `UPDATE habitos SET meta = 30;` **sin `WHERE`**, cambias la
-> meta de **TODAS** las filas de la tabla. Lo mismo con `DELETE`. Es un error famoso que ha
-> borrado bases de datos enteras en empresas reales. Regla de oro: **antes de un UPDATE/DELETE,
-> escribe primero el `WHERE`**, y si dudas, pruébalo como `SELECT` para ver a qué filas afectará.
+> Esto es de lo más serio del capítulo. Si escribes `UPDATE habitos SET meta = 30;` **sin `WHERE`**,
+> le cambias la meta a **TODAS** las filas de la tabla, no solo a la que querías. Con `DELETE` pasa
+> igual, pero peor: borras todo. Es un error famoso, de los que han vaciado bases de datos enteras
+> en empresas de verdad. Quédate con la regla de oro: **antes de un UPDATE o un DELETE, escribe
+> primero el `WHERE`**. Y si tienes la menor duda de a qué filas vas a afectar, pruébalo como
+> `SELECT` y míralo con tus propios ojos antes de tocar nada.
 
 ---
 
 ## 4. `DELETE`: borrar filas
 
 > ### 🟦 ¿Qué significa? — *`DELETE FROM ... WHERE`*
-> Borra filas que cumplen una condición:
+> Borra las filas que cumplen una condición:
 > ```sql
 > DELETE FROM habitos WHERE id = 3;
 > ```
-> "Borra de habitos la fila cuyo id sea 3." (Recuerda el aviso de arriba: sin `WHERE`, borra todo.)
+> "Borra de habitos la fila cuyo id sea 3." Y recuerda el aviso de arriba: sin `WHERE`, se va todo.
 
 > ### 💡 Tip — Borrado "suave" (soft delete)
-> Muchas apps **no borran de verdad**: marcan la fila como inactiva (una columna `archivado = true`)
-> para poder recuperarla. Es lo que hace RachaSimple para "no perder" tu progreso al pausar un
-> hábito. Un `UPDATE` disfrazado de borrado, más seguro que un `DELETE`.
+> Muchas apps **no borran nada de verdad**. En vez de eso, marcan la fila como inactiva (una columna
+> `archivado = true`) para poder recuperarla más adelante. Es justo lo que hace RachaSimple cuando
+> pausas un hábito: así no pierdes el progreso. En el fondo es un `UPDATE` disfrazado de borrado, y
+> resulta mucho más seguro que un `DELETE` de verdad.
 
 ---
 
 ## 5. Relacionar tablas: `JOIN`
 
-Aquí brilla lo "relacional". Recuerda: la tabla `habitos` guarda `usuario_id`, no el nombre del
-usuario. Para mostrar "Leer — de Edwar", hay que **combinar** las dos tablas.
+Aquí es donde lo "relacional" cobra sentido. Acuérdate de que la tabla `habitos` guarda el
+`usuario_id`, no el nombre del usuario. Así que para mostrar algo como "Leer — de Edwar" no te
+queda otra que **combinar** las dos tablas.
 
 > ### 🟦 ¿Qué significa? — *`JOIN` (combinar tablas)*
-> `JOIN` une filas de dos tablas **emparejándolas por una columna en común** (la clave foránea
-> con la primaria). 
+> `JOIN` une filas de dos tablas **emparejándolas por una columna que tienen en común** (la clave
+> foránea de una con la primaria de la otra).
 > ```sql
 > SELECT habitos.nombre, usuarios.nombre
 > FROM habitos
 > JOIN usuarios ON habitos.usuario_id = usuarios.id;
 > ```
 > "Dame el nombre del hábito y el nombre del usuario, combinando habitos con usuarios donde el
-> `usuario_id` del hábito coincida con el `id` del usuario." El resultado mezcla datos de ambas
-> tablas en una sola respuesta.
+> `usuario_id` del hábito coincida con el `id` del usuario." En una sola respuesta te llegan datos
+> mezclados de las dos tablas.
 
 > ### 🟦 ¿Qué significa? — *La cláusula `ON`*
-> El `ON` dice **cómo emparejar** las filas: la condición de coincidencia (normalmente
-> `tablaA.clave_foranea = tablaB.clave_primaria`). Es el "pegamento" del JOIN.
+> El `ON` es donde explicas **cómo emparejar** las filas: la condición de coincidencia, que casi
+> siempre tiene la forma `tablaA.clave_foranea = tablaB.clave_primaria`. Piensa en él como el
+> pegamento que mantiene unido al JOIN.
 
 > ### 💡 Tip — Por qué no se duplican los datos
-> Sin relaciones, tendrías que escribir el nombre del usuario en **cada** hábito; si cambia su
-> nombre, tendrías que actualizarlo en mil sitios. Con relaciones + JOIN, el nombre vive **en un
-> solo lugar** (la tabla usuarios) y lo "traes" cuando lo necesitas. Eso es **normalización**:
-> guardar cada dato una sola vez. Una de las grandes ventajas de las bases de datos relacionales.
+> Si no hubiera relaciones, tendrías que copiar el nombre del usuario en **cada** hábito. Y el día
+> que esa persona cambie de nombre, te tocaría corregirlo en mil sitios a la vez. Con relaciones más
+> JOIN, el nombre vive **en un único lugar** (la tabla usuarios) y lo "traes" solo cuando lo
+> necesitas. A eso se le llama **normalización**: guardar cada dato una sola vez. Es una de las
+> grandes razones por las que existen las bases de datos relacionales.
 
 ---
 
 ## 6. CRUD en tus apps
 
 > ### 🔎 En tu código
-> El cliente de Supabase de RachaSimple expone el CRUD así (y por debajo es SQL):
+> El cliente de Supabase de RachaSimple te ofrece el CRUD con esta pinta (y por debajo no es más
+> que SQL):
 > | Acción | Cliente Supabase | SQL equivalente |
 > |---|---|---|
 > | Crear | `.insert({...})` | `INSERT INTO ...` |
 > | Leer | `.select('*')` | `SELECT * FROM ...` |
 > | Actualizar | `.update({...}).eq('id', 1)` | `UPDATE ... WHERE id = 1` |
 > | Borrar | `.delete().eq('id', 3)` | `DELETE ... WHERE id = 3` |
-> En la carpeta `RachaSimple/src/repositories/` cada archivo (`habits.ts`, `checkins.ts`)
-> encapsula el CRUD de una tabla. Ahora entiendes qué hace cada uno por dentro.
+> En la carpeta `RachaSimple/src/repositories/`, cada archivo (`habits.ts`, `checkins.ts`)
+> se encarga del CRUD de una tabla. Ahora que sabes SQL, entiendes qué hace cada uno por dentro.
 
 ---
 

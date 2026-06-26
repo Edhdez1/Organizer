@@ -5,11 +5,11 @@
 </p>
 
 
-> ¡Hola de nuevo! Soy Bit, tu ajolote acompañante. 🦎 En los capítulos anteriores aprendiste a apuntar a los elementos por su etiqueta, su clase y su `id`. Eso ya te da mucho poder, pero a veces te pasa algo frustrante: escribes una regla de CSS, recargas el navegador… ¡y no cambia nada! O peor: cambia algo que tú no querías tocar. Tranquilo, no estás roto. Lo que ocurre es que el navegador tiene reglas muy concretas para decidir **quién manda** cuando dos estilos chocan. Eso se llama *especificidad*, y hoy la vamos a domesticar. También vas a aprender a apuntar con muchísima más precisión usando *selectores avanzados*. Al terminar, vas a entender por qué tu CSS hace lo que hace, en vez de adivinar a ciegas. Vamos despacio y con ejemplos de tus propios proyectos.
+> ¡Hola de nuevo! Soy Bit, tu ajolote acompañante. 🦎 En los capítulos anteriores aprendiste a apuntar a los elementos por su etiqueta, su clase y su `id`. Con eso ya haces bastante, pero seguro te ha pasado algo que saca de quicio: escribes una regla de CSS, recargas el navegador… y no cambia nada. O al revés: cambia algo que no querías ni tocar. Tranquilo, no se te rompió nada. Lo que pasa es que el navegador sigue unas reglas muy concretas para decidir **quién manda** cuando dos estilos chocan. A eso se le llama *especificidad*, y hoy le vamos a perder el miedo. De paso, vas a aprender a apuntar con mucha más puntería usando *selectores avanzados*. Cuando terminemos, vas a entender por qué tu CSS hace lo que hace, en lugar de ir probando a ciegas. Iremos sin prisa y con ejemplos sacados de tus propios proyectos.
 
 ## 1. Recordatorio rápido: ¿qué es un selector?
 
-Antes de meternos en lo nuevo, refresquemos la base. Cuando escribes CSS, cada regla tiene dos partes: el **selector** (a quién apunto) y el **bloque de declaraciones** (qué le hago).
+Antes de entrar en lo nuevo, repasemos la base. Cada regla de CSS tiene dos partes: el **selector** (a quién apunto) y el **bloque de declaraciones** (qué le hago).
 
 ```css
 /* "h1" es el selector; lo de las llaves son las declaraciones */
@@ -28,11 +28,11 @@ Hasta ahora seguramente usaste tres tipos básicos:
 - Por **clase**: `.boton`, `.tarjeta` (apunta a los que tengan ese `class`).
 - Por **id**: `#menu`, `#hero` (apunta al único elemento con ese `id`).
 
-Hoy sumamos formas nuevas de combinarlos para apuntar con precisión de cirujano. Y, sobre todo, vamos a entender qué pasa cuando varios selectores apuntan al mismo elemento.
+Hoy le sumamos maneras nuevas de combinarlos para apuntar con precisión de cirujano. Y, sobre todo, vamos a entender qué pasa cuando varios selectores apuntan al mismo elemento.
 
 ## 2. Combinadores: relaciones entre elementos
 
-Los **combinadores** son símbolos que ponemos *entre* dos selectores para decir: "no quiero cualquier elemento, quiero uno que esté en cierta **relación** con otro". Para entenderlos, piensa en tu HTML como un árbol familiar: hay elementos padres, hijos, nietos y hermanos.
+Los **combinadores** son símbolos que ponemos *entre* dos selectores para decir algo como: "no quiero cualquier elemento, quiero uno que tenga cierta **relación** con otro". Para que se vea claro, piensa en tu HTML como un árbol familiar: hay elementos padres, hijos, nietos y hermanos.
 
 > ### 🟦 ¿Qué significa? — *Combinador*
 > Un combinador es un símbolo (un espacio, `>`, `+` o `~`) que se coloca entre dos selectores para describir cómo deben estar **relacionados** los elementos en el HTML. Sirve para apuntar a algo según su posición respecto a otro elemento, sin necesidad de ponerle una clase a cada cosa. En el `styles.css` de `tunal-digital` lo usas cada vez que escribes algo como `nav a` (los enlaces *dentro* de la navegación).
@@ -51,7 +51,7 @@ Imagina este HTML de ejemplo, parecido al menú de `tunal-digital`:
 
 ### 2.1 Combinador descendiente (un espacio)
 
-El más común. Un **espacio** entre dos selectores significa "el segundo está en cualquier nivel *dentro* del primero, no importa qué tan profundo".
+Es el más común. Un **espacio** entre dos selectores significa "el segundo está en cualquier nivel *dentro* del primero, no importa qué tan hondo".
 
 ```css
 /* Cualquier <a> que esté dentro de .menu, a cualquier profundidad */
@@ -64,11 +64,11 @@ El más común. Un **espacio** entre dos selectores significa "el segundo está 
 > ### 🟦 ¿Qué significa? — *Descendiente*
 > Un descendiente es un elemento que está contenido dentro de otro, sin importar cuántos niveles haya en medio (hijo, nieto, bisnieto…). Sirve para aplicar estilos a todo lo que vive "dentro de" una sección. En `tunal-digital` lo usas para, por ejemplo, dar estilo a todos los enlaces dentro del `<footer>` con `footer a { ... }`.
 
-En el HTML de arriba, `.menu a` apunta a **los tres** enlaces: los dos dentro del `<ul><li>` y también el de "Contáctanos", porque todos están en algún punto dentro de `.menu`.
+En el HTML de arriba, `.menu a` apunta a **los tres** enlaces: los dos que están dentro del `<ul><li>` y también el de "Contáctanos", porque todos viven en algún punto dentro de `.menu`.
 
 ### 2.2 Combinador de hijo directo (`>`)
 
-El símbolo `>` es más estricto: solo apunta al **hijo directo**, es decir, el que está exactamente un nivel adentro, no los nietos.
+El símbolo `>` es más estricto: solo apunta al **hijo directo**, o sea, al que está exactamente un nivel adentro, sin contar a los nietos.
 
 ```css
 /* Solo los <a> que sean hijos DIRECTOS de .menu */
@@ -80,7 +80,7 @@ El símbolo `>` es más estricto: solo apunta al **hijo directo**, es decir, el 
 > ### 🟦 ¿Qué significa? — *Hijo directo*
 > Un hijo directo es un elemento que está exactamente un nivel dentro de otro, sin nada en medio. Sirve cuando quieres afectar solo el primer nivel y dejar en paz lo que esté más adentro. Útil en menús anidados, listas dentro de listas, o componentes con varios niveles.
 
-Con `.menu > a`, en nuestro ejemplo solo se afecta el enlace "Contáctanos", porque es hijo directo de `.menu`. Los otros dos enlaces están dentro de `<li>`, que está dentro de `<ul>`: son nietos, no hijos directos.
+Con `.menu > a`, en nuestro ejemplo solo cambia el enlace "Contáctanos", porque es hijo directo de `.menu`. Los otros dos están dentro de un `<li>`, que a su vez está dentro de un `<ul>`: son nietos, no hijos directos.
 
 > ### 💡 Tip
 > ¿Cómo distinguir el espacio del `>`? Lee el espacio como "en algún lugar dentro de" y el `>` como "justo dentro de, sin escalones intermedios". El `>` es tu amigo cuando un descendiente normal afecta de más.
@@ -102,7 +102,7 @@ h2 + p {
 
 ### 2.4 Combinador de hermanos generales (`~`)
 
-El `~` es como el `+`, pero apunta a **todos** los hermanos que vengan después, no solo al de al lado.
+El `~` se parece al `+`, pero apunta a **todos** los hermanos que vengan después, no solo al que tiene al lado.
 
 ```css
 /* TODOS los <p> que vengan después de un <h2> (mismo padre) */
@@ -122,7 +122,7 @@ h2 ~ p {
 
 ## 3. Selectores por atributo
 
-A veces no quieres apuntar por clase ni etiqueta, sino por un **atributo** que tenga el elemento. Para eso usamos corchetes `[ ]`.
+A veces no quieres apuntar por clase ni por etiqueta, sino por un **atributo** que tenga el elemento. Para eso usamos corchetes `[ ]`.
 
 > ### 🟦 ¿Qué significa? — *Selector por atributo*
 > Un selector por atributo apunta a los elementos que tengan cierto atributo HTML (y, opcionalmente, cierto valor). Sirve para estilizar cosas sin ponerles una clase, especialmente formularios y enlaces. En `tunal-digital`, un formulario de contacto tiene muchos `<input>` con distintos `type`, y por atributo puedes estilizarlos sin tocar el HTML.
@@ -156,7 +156,7 @@ img[src$=".png"] {
 }
 ```
 
-Los pequeños símbolos antes del `=` cambian el significado:
+Esos pequeños símbolos antes del `=` le cambian el significado al selector:
 
 - `[attr="x"]` → el valor es **exactamente** `x`.
 - `[attr^="x"]` → el valor **empieza** por `x` (la `^` recuerda al inicio).
@@ -164,11 +164,11 @@ Los pequeños símbolos antes del `=` cambian el significado:
 - `[attr*="x"]` → el valor **contiene** `x` en cualquier parte.
 
 > ### 💡 Tip
-> El selector `a[href^="http"]` es un truco clásico para marcar enlaces externos de forma distinta, ya que los enlaces internos suelen empezar por `#` o `/`. Así, sin esfuerzo manual, todos tus enlaces que van "afuera" del sitio se ven diferentes.
+> El selector `a[href^="http"]` es un truco clásico para marcar los enlaces externos de otra manera, ya que los enlaces internos suelen empezar por `#` o `/`. Así, sin tener que ir uno por uno a mano, todos tus enlaces que apuntan "afuera" del sitio se ven distintos.
 
 ## 4. Agrupar selectores con coma
 
-Cuando varias reglas comparten exactamente los mismos estilos, no hace falta repetirlas. Las **agrupas** con una coma.
+Cuando varias reglas comparten exactamente los mismos estilos, no tiene sentido repetirlas. Las **agrupas** con una coma.
 
 > ### 🟦 ¿Qué significa? — *Agrupar selectores*
 > Agrupar es escribir varios selectores separados por comas para aplicarles el mismo bloque de estilos de una sola vez. Sirve para no repetirte (principio "DRY": *Don't Repeat Yourself*) y mantener el CSS más corto. Muy útil al inicio de un `styles.css` para dar una base común a todos los títulos.
@@ -190,7 +190,7 @@ h1, h2, h3 {
 
 ## 5. La cascada: el apellido de "CSS"
 
-La sigla CSS significa *Cascading Style Sheets*: "hojas de estilo **en cascada**". Esa palabra, cascada, es el corazón de todo lo de hoy.
+La sigla CSS significa *Cascading Style Sheets*: "hojas de estilo **en cascada**". Esa palabra, cascada, es el corazón de todo lo que vemos hoy.
 
 > ### 🟦 ¿Qué significa? — *Cascada*
 > La cascada es el conjunto de reglas que usa el navegador para decidir qué estilo gana cuando **varias reglas distintas apuntan al mismo elemento y se contradicen**. Sirve para que siempre haya una respuesta clara y predecible. Cada vez que en `tunal-digital` un color "no cambia" aunque escribiste la regla, la causa casi siempre es la cascada eligiendo otra regla por encima de la tuya.
@@ -201,7 +201,7 @@ El navegador resuelve los conflictos en **tres pasos**, en este orden:
 2. **Especificidad**: ¿qué selector es más "específico"? (la estrella del capítulo).
 3. **Orden de aparición**: si todo lo demás empata, **gana la última regla escrita**.
 
-Empecemos por el más fácil de entender: el orden.
+Empecemos por el paso más sencillo: el orden.
 
 ### 5.1 El orden: gana el último
 
@@ -224,7 +224,7 @@ El botón será verde. Por eso, si copias una regla y la pegas más abajo para "
 
 ## 6. Especificidad: quién manda de verdad
 
-Aquí está la parte que confunde a casi todo principiante, así que vamos con mucha calma. La **especificidad** es una "puntuación" que el navegador le da a cada selector. Cuando dos reglas chocan, **gana la de mayor puntuación**, sin importar el orden.
+Aquí llega la parte que confunde a casi todo el mundo cuando empieza, así que vamos con calma. La **especificidad** es una especie de "puntuación" que el navegador le da a cada selector. Cuando dos reglas chocan, **gana la de mayor puntuación**, sin importar el orden.
 
 > ### 🟦 ¿Qué significa? — *Especificidad*
 > La especificidad es un valor numérico que el navegador calcula para cada selector según qué tan "preciso" es. A mayor especificidad, más fuerza tiene esa regla para imponerse sobre otras que apunten al mismo elemento. Sirve para resolver conflictos de estilo de forma consistente. Cuando en `tunal-digital` `.boton` no logra cambiar un color, casi siempre es porque otra regla más específica (por ejemplo `#hero .boton`) le está ganando.
@@ -243,9 +243,9 @@ Imagina que cada selector recibe una puntuación de **tres casillas**, que escri
 > ### 🟦 ¿Qué significa? — *Pseudoelemento*
 > Un pseudoelemento es una palabra que se añade a un selector con dos puntos dobles (`::`) para apuntar a una **parte** de un elemento que no existe como etiqueta propia en el HTML, o para crear contenido nuevo desde el CSS. Los más usados son `::before` y `::after` (que insertan algo antes o después del contenido) y `::first-line` (la primera línea de un párrafo). Sirve para decorar sin ensuciar el HTML, por ejemplo añadiendo un icono antes de un enlace. A efectos de especificidad, un pseudoelemento cuenta como una etiqueta (suma en la casilla **C**).
 
-Se comparan de izquierda a derecha, como si fueran números: primero los id; si empatan, las clases; si empatan, las etiquetas.
+Se comparan de izquierda a derecha, como si fueran números: primero los id; si empatan, las clases; si vuelven a empatar, las etiquetas.
 
-Veamos ejemplos calculando la puntuación:
+Veamos algunos ejemplos calculando la puntuación:
 
 ```css
 p                 { } /* (0,0,1) → 1 etiqueta */
@@ -257,7 +257,7 @@ input[type="text"]{ } /* (0,1,1) → 1 etiqueta + 1 atributo */
 #hero .boton      { } /* (1,1,0) → 1 id + 1 clase */
 ```
 
-¿Quién gana entre `.boton` (0,1,0) y `#hero .boton` (1,1,0)? El segundo, porque tiene un `1` en la casilla de los id, que pesa más que cualquier cantidad de clases.
+¿Quién gana entre `.boton` (0,1,0) y `#hero .boton` (1,1,0)? El segundo, porque tiene un `1` en la casilla de los id, y eso pesa más que cualquier cantidad de clases.
 
 > ### ⚠️ Cuidado
 > Un solo **id** vence a **cualquier** cantidad de clases. Aunque escribas `.a.b.c.d.e` (cinco clases, puntuación (0,5,0)), un simple `#x` (1,0,0) le gana. Por eso muchos equipos evitan estilizar por `id` y prefieren clases: así la "guerra de especificidad" se mantiene tranquila y fácil de predecir.
@@ -278,7 +278,7 @@ button          { color: black; }  /* (0,0,1) */
 #hero .boton    { color: red;   }  /* (1,1,0) ✅ gana */
 ```
 
-El texto será **rojo**. Aunque `button` y `.boton` están ahí, `#hero .boton` tiene un id y eso lo coloca por encima. Si quitaras esa última regla, ganaría `.boton` (azul), porque una clase (0,1,0) le gana a una etiqueta (0,0,1).
+El texto será **rojo**. Aunque `button` y `.boton` también están ahí, `#hero .boton` tiene un id, y eso lo deja por encima. Si quitaras esa última regla, ganaría `.boton` (azul), porque una clase (0,1,0) le gana a una etiqueta (0,0,1).
 
 > ### 🟦 ¿Qué significa? — *DevTools*
 > Las DevTools (herramientas de desarrollador) son un panel que todo navegador moderno trae incorporado y que abres con clic derecho → "Inspeccionar" (o con la tecla F12). Sirven para ver el HTML y el CSS reales de una página, probar cambios al vuelo y, sobre todo, entender qué regla ganó en un conflicto: el panel de estilos **tacha** las reglas perdedoras. Es tu mejor aliada para investigar la especificidad en vivo, por ejemplo en cualquier pantalla de `tunal-digital`.
@@ -288,7 +288,7 @@ El texto será **rojo**. Aunque `button` y `.boton` están ahí, `#hero .boton` 
 
 ### 6.3 ¿Y los estilos en línea (`style=""`)?
 
-Si pones estilos directamente en el HTML con el atributo `style`, esos ganan a casi todo lo que venga de tu hoja de CSS. En la cuenta de especificidad equivalen a una casilla aún más fuerte, por delante de los id.
+Si pones estilos directamente en el HTML con el atributo `style`, esos le ganan a casi todo lo que venga de tu hoja de CSS. En la cuenta de especificidad equivalen a una casilla todavía más fuerte, por delante de los id.
 
 > ### 🟦 ¿Qué significa? — *Estilos en línea*
 > Los estilos en línea son los que se escriben dentro del propio HTML usando el atributo `style="..."` en una etiqueta concreta, en vez de en una hoja `.css` aparte. Afectan solo a ese elemento y tienen una fuerza muy alta en la cascada (por encima de los id). Sirven, en casos puntuales, para valores que cambian sobre la marcha. En `RachaSimple` y `Faro` aparecen cuando React calcula un valor dinámico (como el ancho de una barra de progreso), pero como estilo fijo conviene evitarlos porque son difíciles de sobrescribir y no se reutilizan.
@@ -303,7 +303,7 @@ Si pones estilos directamente en el HTML con el atributo `style`, esos ganan a c
 
 ## 7. `!important`: el botón de pánico (que casi nunca debes pulsar)
 
-Existe una palabra mágica que rompe todas las reglas anteriores: `!important`. Si la pones al final de una declaración, esa declaración gana **sin importar la especificidad ni el orden**.
+Hay una palabra mágica que rompe todas las reglas anteriores: `!important`. Si la pones al final de una declaración, esa declaración gana **sin importar la especificidad ni el orden**.
 
 > ### 🟦 ¿Qué significa? — *!important*
 > `!important` es una marca que se añade al final de una declaración CSS para forzar que ese valor gane por encima de cualquier otra regla normal, ignorando especificidad y orden. Sirve, en teoría, para casos de emergencia. En la práctica suele crear más problemas de los que resuelve, porque luego no puedes sobrescribirlo fácilmente.
@@ -317,19 +317,19 @@ Existe una palabra mágica que rompe todas las reglas anteriores: `!important`. 
 > ### ⚠️ Cuidado
 > Usar `!important` es como gritar para ganar una discusión: funciona la primera vez, pero cuando **otra** regla también necesite gritar, tendrás dos `!important` peleando y nadie sabrá qué pasa. Cada `!important` que añades hace tu CSS más difícil de mantener. Trátalo como un extintor: solo en emergencias reales.
 
-¿Cuándo se justifica de verdad? Pocas veces. Por ejemplo, para sobrescribir estilos de una librería externa que no puedes editar y que ya viene con su propio `!important`. Antes de llegar ahí, **casi siempre** hay una solución mejor: subir un poquito tu especificidad de forma controlada (por ejemplo, añadir una clase extra) o reordenar tus reglas.
+¿Cuándo se justifica de verdad? Pocas veces. Por ejemplo, para sobrescribir estilos de una librería externa que no puedes editar y que ya viene con su propio `!important`. Pero antes de llegar ahí, **casi siempre** hay una salida mejor: subir un poquito tu especificidad de forma controlada (añadiendo una clase extra, por ejemplo) o reordenar tus reglas.
 
 > ### 🔎 En tu código
 > En `RachaSimple` y `Faro` con Tailwind, si necesitas pisar una clase de utilidad puedes usar la variante `!` de Tailwind (por ejemplo `!bg-red-500`), que genera el `!important` por ti. Úsala con la misma prudencia: si te ves usándola seguido, probablemente haya un conflicto de orden o de configuración que conviene arreglar de raíz en vez de tapar.
 
 ## 8. Estrategia: cómo evitar peleas de especificidad
 
-Ahora que entiendes el mecanismo, aquí va la filosofía sana para que tu CSS no se vuelva un campo de batalla:
+Ahora que entiendes el mecanismo, aquí va la filosofía sana para que tu CSS no se convierta en un campo de batalla:
 
-- **Prefiere clases** a los `id` para dar estilo. Las clases tienen una especificidad media y fácil de manejar; los id son demasiado fuertes y se vuelven un dolor de cabeza.
-- **Mantén los selectores cortos**. `.tarjeta-titulo` es más fácil de mantener que `.contenedor .tarjeta .cabecera h2 span`. Cuanto más largo el selector, más alto subes la especificidad sin querer.
+- **Prefiere clases** a los `id` para dar estilo. Las clases tienen una especificidad media y manejable; los id son demasiado fuertes y terminan dando dolores de cabeza.
+- **Mantén los selectores cortos**. `.tarjeta-titulo` es más fácil de mantener que `.contenedor .tarjeta .cabecera h2 span`. Cuanto más largo el selector, más alto subes la especificidad sin darte cuenta.
 - **Evita `!important`** salvo emergencias documentadas.
-- **Usa el orden a tu favor**: pon tus estilos personalizados después de los de librerías, para poder ajustarlos sin trucos.
+- **Usa el orden a tu favor**: pon tus estilos personalizados después de los de las librerías, para poder ajustarlos sin trucos.
 - **Nombra bien tus clases**: una clase clara como `.boton--primario` te evita tener que usar combinadores y anidamientos profundos.
 
 > ### 💡 Tip
@@ -406,4 +406,4 @@ Fíjate en el último truco: `.boton.boton--grande` (dos clases en el mismo elem
 
 6. 💻 Toma una regla que use `!important` (créala tú si no tienes) y reescríbela **sin** `!important`, ganando el conflicto solo con especificidad (por ejemplo, duplicando la clase: `.boton.boton`). Comprueba que el resultado visual es el mismo y reflexiona por qué esta versión es más mantenible.
 
-> ¡Lo lograste! 🦎 Hoy pasaste de "el CSS hace cosas raras" a "yo entiendo por qué el CSS hace lo que hace". La especificidad deja de ser magia y se vuelve una cuenta sencilla de tres casillas. La próxima vez que un estilo no se aplique, ya no vas a adivinar: vas a abrir las DevTools, mirar quién ganó y arreglarlo con calma. Nos vemos en el siguiente capítulo. — Bit
+> ¡Lo lograste! 🦎 Hoy pasaste de "el CSS hace cosas raras" a "ya entiendo por qué el CSS hace lo que hace". La especificidad deja de ser magia y se vuelve una cuenta sencilla de tres casillas. La próxima vez que un estilo no se aplique, ya no vas a adivinar: vas a abrir las DevTools, mirar quién ganó y arreglarlo con calma. Nos vemos en el siguiente capítulo. — Bit

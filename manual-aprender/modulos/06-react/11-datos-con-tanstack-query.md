@@ -6,50 +6,49 @@
 
 
 > Hasta ahora tus datos vivían dentro del navegador: un `useState` con un contador, una lista
-> de tareas que tú escribías a mano. En este capítulo das un salto importante: aprender a
-> traer datos que viven **en otro sitio** (un servidor, una base de datos) y mostrarlos en
-> pantalla sin volverte loco. Para eso usarás una herramienta llamada **TanStack Query**, que
-> es justo la que usa RachaSimple con Supabase. Vamos un término a la vez, sin prisa. Bit,
-> nuestro ajolote, ya tiene su red lista para pescar datos del río del servidor.
+> de tareas que escribías a mano. En este capítulo das un paso más: vas a aprender a traer
+> datos que viven **en otro sitio** (un servidor, una base de datos) y a mostrarlos en pantalla
+> sin perder la cabeza por el camino. La herramienta para eso se llama **TanStack Query**, y es
+> exactamente la que usa RachaSimple con Supabase. Lo veremos término a término, con calma. Bit,
+> nuestro ajolote, ya tiene la red lista para pescar datos en el río del servidor.
 
 ---
 
 ## 1. El problema: el estado del servidor no es como el estado local
 
-En el Capítulo 04 aprendiste `useState`. Ahí el dato es **tuyo**: lo creas, lo cambias, lo
-borras. Si pones el contador en `5`, vale `5` hasta que tú lo cambies. Nadie más lo toca.
+En el Capítulo 04 aprendiste `useState`. Allí el dato es **tuyo**: lo creas, lo cambias, lo
+borras. Si pones el contador en `5`, vale `5` hasta que tú decidas otra cosa. Nadie más lo toca.
 
-Pero los datos de RachaSimple no son así. La lista de hábitos del usuario vive en **Supabase**,
+Los datos de RachaSimple no funcionan así. La lista de hábitos del usuario vive en **Supabase**,
 una base de datos que está en internet. Ese dato no es solo tuyo: puede cambiar desde otro
-dispositivo, puede tardar en llegar, puede fallar la conexión, puede quedar **viejo** mientras
-lo miras. Eso es un tipo de estado distinto, y tiene su propio nombre.
+dispositivo, puede tardar en llegar, puede caerse la conexión, puede quedar **viejo** mientras lo
+miras. Es un tipo de estado distinto, y tiene su propio nombre.
 
 > ### 🟦 ¿Qué significa? — *Estado del servidor (server state)*
-> Es la información que **no vive en tu navegador**, sino en un servidor o base de datos
-> remota (como Supabase). Sirve para guardar datos que deben sobrevivir aunque cierres la
-> página y que pueden compartirse entre dispositivos. En RachaSimple, los hábitos y los
-> registros diarios (check-ins) son estado del servidor: están en Supabase, no en la memoria
-> del navegador.
+> Es la información que **no vive en tu navegador**, sino en un servidor o base de datos remota
+> (como Supabase). Sirve para guardar datos que deben sobrevivir aunque cierres la página y que
+> pueden compartirse entre dispositivos. En RachaSimple, los hábitos y los registros diarios
+> (check-ins) son estado del servidor: están en Supabase, no en la memoria del navegador.
 
 Compáralo con lo que ya conoces.
 
 > ### 🟦 ¿Qué significa? — *Estado local (local state)*
 > Es la información que vive **dentro de tu componente**, en la memoria del navegador, y
-> desaparece al recargar la página. Sirve para cosas pasajeras de la interfaz: si un menú
-> está abierto, qué texto hay en un input, qué pestaña está activa. Lo manejas con `useState`.
-> En RachaSimple, "¿está abierto el modal para crear un hábito?" es estado local.
+> desaparece al recargar la página. Sirve para cosas pasajeras de la interfaz: si un menú está
+> abierto, qué texto hay en un input, qué pestaña está activa. Lo manejas con `useState`. En
+> RachaSimple, "¿está abierto el modal para crear un hábito?" es estado local.
 
-La diferencia clave es esta: el estado local **lo controlas tú**; el estado del servidor solo
-lo **copias** para mirarlo, y esa copia puede quedar desactualizada. Manejar eso a mano (pedir,
-esperar, guardar, refrescar, manejar errores) es muchísimo trabajo repetido. Por eso existe una
-herramienta dedicada.
+La diferencia clave está aquí: el estado local **lo controlas tú**; el del servidor solo lo
+**copias** para mirarlo, y esa copia se te puede quedar atrás. Manejar todo eso a mano —pedir,
+esperar, guardar, refrescar, atender los errores— es un montón de trabajo que se repite una y otra
+vez. De ahí que exista una herramienta dedicada a ello.
 
 > ### 🟦 ¿Qué significa? — *TanStack Query*
 > Es una **librería** (código que instalas y reutilizas) especializada en manejar estado del
-> servidor en React. Sirve para pedir datos, guardarlos en una caché, saber si están cargando
-> o fallaron, y refrescarlos cuando hace falta, todo sin que escribas esa fontanería a mano.
-> Antes se llamaba "React Query"; hoy su nombre oficial es TanStack Query. RachaSimple la usa
-> para hablar con Supabase, y Faro también la incluye en su stack.
+> servidor en React. Sirve para pedir datos, guardarlos en una caché, saber si están cargando o si
+> fallaron, y refrescarlos cuando hace falta, todo sin que escribas esa fontanería a mano. Antes se
+> llamaba "React Query"; hoy su nombre oficial es TanStack Query. RachaSimple la usa para hablar con
+> Supabase, y Faro también la incluye en su stack.
 
 > ### 💡 Tip
 > No mezcles los dos mundos. Un error de principiante es guardar la lista de hábitos en un
@@ -60,32 +59,32 @@ herramienta dedicada.
 
 ## 2. La caché: la libreta donde se guardan los datos
 
-Antes de escribir código hay que entender una palabra que aparecerá todo el capítulo.
+Antes de escribir código conviene entender una palabra que va a aparecer durante todo el capítulo.
 
 > ### 🟦 ¿Qué significa? — *Caché (cache)*
-> Es una **memoria temporal** donde TanStack Query guarda los datos que ya pidió, para no
-> tener que pedirlos otra vez si los necesitas pronto. Sirve para que la app vaya rápida: si
-> dos pantallas de RachaSimple necesitan la lista de hábitos, se pide **una vez** y ambas leen
-> la misma copia guardada. Piensa en la caché como una libreta donde apuntas lo que ya
-> averiguaste para no volver a preguntar.
+> Es una **memoria temporal** donde TanStack Query guarda los datos que ya pidió, para no tener que
+> pedirlos otra vez si los necesitas pronto. Sirve para que la app vaya rápida: si dos pantallas de
+> RachaSimple necesitan la lista de hábitos, se pide **una vez** y ambas leen la misma copia
+> guardada. Piensa en la caché como una libreta donde apuntas lo que ya averiguaste para no volver
+> a preguntar.
 
-Para que esta libreta funcione, hace falta una pieza que la administre y esté disponible en
-toda la app.
+Para que esa libreta funcione hace falta una pieza que la administre y que esté disponible en toda
+la app.
 
 > ### 🟦 ¿Qué significa? — *QueryClient*
-> Es el **objeto central** de TanStack Query: la libreta de la caché en persona. Guarda todos
-> los datos, sabe cuáles están viejos y coordina las peticiones. Sirve como cerebro único para
-> toda la app. Se crea **una sola vez** al arrancar el programa.
+> Es el **objeto central** de TanStack Query: la libreta de la caché en persona. Guarda todos los
+> datos, sabe cuáles están viejos y coordina las peticiones. Sirve como cerebro único para toda la
+> app. Se crea **una sola vez** al arrancar el programa.
 
 ¿Y cómo hacen todos los componentes para usar esa misma libreta? Con un envoltorio.
 
 > ### 🟦 ¿Qué significa? — *QueryClientProvider*
 > Es un **componente envoltorio** que pones lo más arriba posible de tu app y que reparte el
-> `QueryClient` a todos los componentes de dentro. Sirve para que cualquier componente, por
-> hondo que esté, pueda usar la misma caché. Es el mismo patrón "provider" que viste con el
-> contexto: envuelve la app una vez y todo lo de dentro queda conectado.
+> `QueryClient` a todos los componentes de dentro. Sirve para que cualquier componente, por hondo
+> que esté, pueda usar la misma caché. Es el mismo patrón "provider" que viste con el contexto:
+> envuelves la app una vez y todo lo de dentro queda conectado.
 
-Así se ve la configuración en la raíz de una app como RachaSimple:
+Así se ve esta configuración en la raíz de una app como RachaSimple:
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -105,8 +104,8 @@ function App() {
 
 > ### 🔎 En tu código
 > En RachaSimple este montaje suele estar en `src/App.tsx` o en `src/main.tsx`. Búscalo: es la
-> primera vez en toda la app que aparece `QueryClientProvider`, y casi siempre envuelve también
-> al provider del router y al de la sesión de Supabase. Si no existiera, ningún `useQuery`
+> primera vez en toda la app que aparece `QueryClientProvider`, y casi siempre envuelve también al
+> provider del router y al de la sesión de Supabase. Si no existiera, ningún `useQuery`
 > funcionaría: daría un error diciendo que no encuentra un `QueryClient`.
 
 ---
@@ -116,27 +115,28 @@ function App() {
 Ahora sí, el hook estrella para **traer** datos.
 
 > ### 🟦 ¿Qué significa? — *useQuery*
-> Es el **hook** de TanStack Query que sirve para **leer** (traer) datos del servidor. Tú le
-> dices qué datos quieres y cómo pedirlos, y él se encarga de pedirlos, guardarlos en la caché
-> y avisarte mientras carga o si falla. En RachaSimple, el hook que trae la lista de hábitos
-> usa `useQuery` por dentro.
+> Es el **hook** de TanStack Query que sirve para **leer** (traer) datos del servidor. Tú le dices
+> qué datos quieres y cómo pedirlos, y él se encarga de pedirlos, guardarlos en la caché y avisarte
+> mientras carga o si falla. En RachaSimple, el hook que trae la lista de hábitos usa `useQuery` por
+> dentro.
 
-`useQuery` necesita que le des dos cosas con nombre propio. La primera es la etiqueta del dato.
+A `useQuery` tienes que darle dos cosas, y cada una tiene nombre propio. La primera es la etiqueta
+del dato.
 
 > ### 🟦 ¿Qué significa? — *queryKey*
-> Es la **etiqueta única** que le pones a un dato en la caché, escrita como un arreglo (por
-> ejemplo `["habits"]`). Sirve para que TanStack Query sepa **quién es quién** en su libreta:
-> dos componentes que usen la misma `queryKey` comparten el mismo dato guardado. En RachaSimple,
-> la lista de hábitos podría tener la `queryKey` `["habits"]` y los check-ins de un día
+> Es la **etiqueta única** que le pones a un dato en la caché, escrita como un arreglo (por ejemplo
+> `["habits"]`). Sirve para que TanStack Query sepa **quién es quién** en su libreta: dos
+> componentes que usen la misma `queryKey` comparten el mismo dato guardado. En RachaSimple, la
+> lista de hábitos podría tener la `queryKey` `["habits"]` y los check-ins de un día
 > `["checkins", fecha]`.
 
 La segunda es la función que de verdad va a buscar los datos.
 
 > ### 🟦 ¿Qué significa? — *queryFn (query function)*
-> Es la **función que trae los datos**. TanStack Query la ejecuta cuando hace falta refrescar.
-> Debe devolver una promesa (algo que tarda y luego se resuelve, como aprendiste en el módulo
-> de JavaScript). Sirve para encerrar la llamada real al servidor. En RachaSimple, la `queryFn`
-> es la que llama a Supabase para pedir las filas de la tabla de hábitos.
+> Es la **función que trae los datos**. TanStack Query la ejecuta cuando hace falta refrescar. Debe
+> devolver una promesa (algo que tarda y luego se resuelve, como aprendiste en el módulo de
+> JavaScript). Sirve para encerrar la llamada real al servidor. En RachaSimple, la `queryFn` es la
+> que llama a Supabase para pedir las filas de la tabla de hábitos.
 
 Juntemos las dos piezas en un hook real de RachaSimple:
 
@@ -161,45 +161,45 @@ export function useHabits() {
 }
 ```
 
-Fíjate en el patrón con Supabase: la respuesta trae `data` y `error` juntos. Si hay `error`,
-lo **lanzamos** con `throw` para que TanStack Query lo trate como fallo; si no, devolvemos
-`data` y eso es lo que llegará a tu componente.
+Fíjate en cómo responde Supabase: te entrega `data` y `error` en el mismo objeto. Si hay `error`, lo
+**lanzamos** con `throw` para que TanStack Query lo trate como un fallo; si no, devolvemos `data`, y
+eso es lo que acabará llegando a tu componente.
 
 > ### ⚠️ Cuidado — La `queryFn` debe lanzar el error
-> Supabase no "explota" solo: te devuelve el error dentro de un objeto. Si olvidas el
-> `if (error) throw error`, TanStack Query creerá que todo salió bien y `data` valdrá `null`.
-> El `throw` es lo que conecta el fallo de Supabase con el manejo de errores de TanStack Query.
+> Supabase no "explota" por su cuenta: te devuelve el error metido dentro de un objeto. Si olvidas el
+> `if (error) throw error`, TanStack Query creerá que todo salió bien y `data` valdrá `null`. El
+> `throw` es justo lo que conecta el fallo de Supabase con el manejo de errores de TanStack Query.
 
 > ### 💡 Tip
-> La `queryFn` es `async` porque hablar con un servidor **tarda**. El `await` espera a que
-> Supabase responda. Si esto te suena borroso, repasa promesas y `async/await` en el módulo 03;
-> aquí son la base de todo.
+> La `queryFn` es `async` porque hablar con un servidor **tarda**. El `await` espera a que Supabase
+> responda. Si esto te suena borroso, repasa promesas y `async/await` en el módulo 03; aquí son la
+> base de todo.
 
 ---
 
 ## 4. Lo que devuelve `useQuery`: `data`, `loading` y `error`
 
-`useQuery` no devuelve solo los datos. Devuelve un objeto con varias piezas que describen **en
-qué punto** va la petición. Estas tres son las que usarás siempre.
+`useQuery` no te devuelve solo los datos. Devuelve un objeto con varias piezas que describen **en
+qué punto** va la petición. Estas tres son las que vas a usar siempre.
 
 > ### 🟦 ¿Qué significa? — *data*
-> Es la propiedad donde llegan **los datos ya cargados**. Empieza valiendo `undefined` (todavía
-> no hay nada) y, cuando la `queryFn` termina bien, pasa a contener lo que devolviste. En
-> RachaSimple, `data` sería el arreglo de hábitos listo para pintar en pantalla.
+> Es la propiedad donde llegan **los datos ya cargados**. Empieza valiendo `undefined` (todavía no
+> hay nada) y, cuando la `queryFn` termina bien, pasa a contener lo que devolviste. En RachaSimple,
+> `data` sería el arreglo de hábitos listo para pintar en pantalla.
 
 > ### 🟦 ¿Qué significa? — *isLoading (estado de carga)*
-> Es un valor `true`/`false` que vale `true` mientras la **primera** petición está en camino y
-> aún no hay datos. Sirve para mostrar un mensaje de "Cargando..." o un esqueleto gris en lo
-> que llegan los datos. En RachaSimple, mientras `isLoading` es `true`, la pantalla de hábitos
-> muestra un spinner en vez de la lista vacía.
+> Es un valor `true`/`false` que vale `true` mientras la **primera** petición está en camino y aún
+> no hay datos. Sirve para mostrar un mensaje de "Cargando..." o un esqueleto gris mientras llegan
+> los datos. En RachaSimple, mientras `isLoading` es `true`, la pantalla de hábitos muestra un
+> spinner en vez de la lista vacía.
 
 > ### 🟦 ¿Qué significa? — *isError y error*
 > `isError` es un `true`/`false` que vale `true` si la `queryFn` lanzó un fallo; `error` es el
-> objeto con el detalle de ese fallo. Sirven para mostrarle al usuario un mensaje claro cuando
-> algo sale mal (sin conexión, permiso denegado, etc.) en lugar de dejar la pantalla en blanco.
+> objeto con el detalle de ese fallo. Sirven para mostrarle al usuario un mensaje claro cuando algo
+> sale mal (sin conexión, permiso denegado, etc.) en lugar de dejar la pantalla en blanco.
 
-Estos tres estados son **excluyentes en el tiempo**: primero cargando, luego o bien datos o
-bien error. Tu componente los lee y decide qué pintar. A esto se le llama manejar los estados
+Estos tres estados se van turnando: primero cargando, y luego o bien datos o bien error, nunca a la
+vez. Tu componente los lee y decide qué pintar en cada caso. A esto se le llama manejar los estados
 de la petición:
 
 ```tsx
@@ -227,47 +227,44 @@ function ListaHabitos() {
 }
 ```
 
-Ese orden —`isLoading` primero, `isError` después, y al final los datos— es un patrón que
-verás repetido en RachaSimple y en Faro. Se llama **renderizado por estados** y te ahorra
-errores.
+Ese orden —`isLoading` primero, `isError` después y los datos al final— es un patrón que verás
+repetido en RachaSimple y en Faro. Se llama **renderizado por estados**, y te ahorra disgustos.
 
 > ### ⚠️ Cuidado — No leas `data` antes de comprobar la carga
-> Si intentas hacer `data.map(...)` mientras la petición aún carga, `data` será `undefined` y
-> la app reventará con "cannot read map of undefined". Por eso los `if (isLoading)` e
-> `if (isError)` van **antes**: cuando llegas al `return` final, ya tienes la garantía de que
-> `data` existe.
+> Si intentas hacer `data.map(...)` mientras la petición aún carga, `data` será `undefined` y la app
+> reventará con "cannot read map of undefined". Por eso los `if (isLoading)` e `if (isError)` van
+> **antes**: cuando llegas al `return` final, ya tienes la garantía de que `data` existe.
 
 > ### 🔎 En tu código
-> En RachaSimple, un componente como `HabitsList.tsx` casi nunca toca Supabase directamente.
-> Llama a `useHabits()` (que por dentro usa `useQuery`) y se limita a leer `data`, `isLoading`
-> e `isError`. Esa separación —el hook trae, el componente pinta— es exactamente lo que viste
-> con los hooks personalizados en el Capítulo 09.
+> En RachaSimple, un componente como `HabitsList.tsx` casi nunca toca Supabase directamente. Llama a
+> `useHabits()` (que por dentro usa `useQuery`) y se limita a leer `data`, `isLoading` e `isError`.
+> Esa separación —el hook trae, el componente pinta— es exactamente lo que viste con los hooks
+> personalizados en el Capítulo 09.
 
 > ### 💡 Tip — `isLoading` vs `isPending` vs `isFetching`
 > En versiones recientes de TanStack Query verás también `isPending` (no hay datos todavía) e
-> `isFetching` (hay una petición en marcha, aunque ya tengas datos viejos en pantalla). Para
-> empezar, quédate con `isLoading` para la primera carga; los otros los entenderás solos cuando
-> los necesites.
+> `isFetching` (hay una petición en marcha, aunque ya tengas datos viejos en pantalla). Para empezar,
+> quédate con `isLoading` para la primera carga; los otros los entenderás solos cuando los necesites.
 
 ---
 
 ## 5. Datos viejos: `staleTime` y por qué TanStack refresca solo
 
-Recuerda: la copia que tienes en la caché puede quedar **vieja**. TanStack Query lo sabe y, por
-defecto, vuelve a pedir los datos en ciertos momentos (por ejemplo, cuando vuelves a la pestaña
-del navegador). Para hablar de esto hace falta un término.
+Recuerda lo que decíamos: la copia que tienes en la caché se puede quedar **vieja**. TanStack Query
+lo sabe y, por defecto, vuelve a pedir los datos en ciertos momentos (por ejemplo, cuando regresas a
+la pestaña del navegador). Para hablar de esto necesitamos un término más.
 
 > ### 🟦 ¿Qué significa? — *Dato obsoleto (stale)*
-> Un dato es **stale** ("rancio", "viejo") cuando ya pasó suficiente tiempo desde que se pidió
-> como para sospechar que en el servidor pudo cambiar. No es que esté mal: es que conviene
-> volver a comprobarlo. TanStack Query refresca en segundo plano los datos stale para mantener
-> la pantalla al día.
+> Un dato es **stale** ("rancio", "viejo") cuando ya pasó suficiente tiempo desde que se pidió como
+> para sospechar que en el servidor pudo cambiar. No es que esté mal: es que conviene volver a
+> comprobarlo. TanStack Query refresca en segundo plano los datos stale para mantener la pantalla al
+> día.
 
 > ### 🟦 ¿Qué significa? — *staleTime*
-> Es el **tiempo que un dato se considera fresco** antes de volverse stale, medido en
-> milisegundos. Sirve para controlar con qué frecuencia se refresca: un `staleTime` alto = menos
-> peticiones (datos que cambian poco); uno bajo o cero = se refresca casi siempre (datos que
-> cambian a cada rato). Se configura en el `useQuery` o en el `QueryClient`.
+> Es el **tiempo que un dato se considera fresco** antes de volverse stale, medido en milisegundos.
+> Sirve para controlar con qué frecuencia se refresca: un `staleTime` alto = menos peticiones (datos
+> que cambian poco); uno bajo o cero = se refresca casi siempre (datos que cambian a cada rato). Se
+> configura en el `useQuery` o en el `QueryClient`.
 
 ```tsx
 useQuery({
@@ -278,28 +275,27 @@ useQuery({
 ```
 
 > ### 💡 Tip
-> No te obsesiones con `staleTime` al principio. El valor por defecto funciona bien para casi
-> todo. Ajústalo solo cuando notes que la app pide datos demasiado seguido (sube el `staleTime`)
-> o que muestra datos viejos demasiado tiempo (bájalo).
+> No te obsesiones con `staleTime` al principio. El valor por defecto funciona bien para casi todo.
+> Ajústalo solo cuando notes que la app pide datos demasiado seguido (sube el `staleTime`) o que
+> muestra datos viejos demasiado tiempo (bájalo).
 
 ---
 
 ## 6. Escribir datos: `useMutation`
 
-`useQuery` solo **lee**. Para **cambiar** datos en el servidor —crear un hábito, marcar un
-check-in, borrar algo— se usa otro hook.
+`useQuery` solo **lee**. Para **cambiar** datos en el servidor —crear un hábito, marcar un check-in,
+borrar algo— hace falta otro hook.
 
 > ### 🟦 ¿Qué significa? — *Mutación (mutation)*
-> Es cualquier acción que **modifica** datos en el servidor: crear, actualizar o borrar. La
-> palabra viene de "mutar", cambiar. A diferencia de una lectura, una mutación tiene efectos:
-> deja el servidor distinto de como estaba.
+> Es cualquier acción que **modifica** datos en el servidor: crear, actualizar o borrar. La palabra
+> viene de "mutar", cambiar. A diferencia de una lectura, una mutación tiene efectos: deja el
+> servidor distinto de como estaba.
 
 > ### 🟦 ¿Qué significa? — *useMutation*
 > Es el **hook** de TanStack Query para hacer mutaciones (crear/editar/borrar). A diferencia de
-> `useQuery`, no se dispara solo: tú lo ejecutas cuando ocurre algo, normalmente al pulsar un
-> botón. Te da una función `mutate` para disparar la acción y sus propios estados de carga y
-> error. En RachaSimple, crear un hábito nuevo o marcar el día como cumplido se hace con
-> `useMutation`.
+> `useQuery`, no se dispara solo: lo ejecutas tú cuando ocurre algo, normalmente al pulsar un botón.
+> Te da una función `mutate` para disparar la acción y sus propios estados de carga y error. En
+> RachaSimple, crear un hábito nuevo o marcar el día como cumplido se hace con `useMutation`.
 
 > ### 🟦 ¿Qué significa? — *mutationFn (mutation function)*
 > Es la **función que ejecuta el cambio** en el servidor. Recibe los datos nuevos y los manda a
@@ -339,14 +335,14 @@ function FormularioNuevoHabito() {
 ```
 
 > ### 🟦 ¿Qué significa? — *mutate*
-> Es la **función que dispara** la mutación. La llamas tú —por ejemplo dentro de un `onClick`—
-> y le pasas los datos que quieres mandar. En el ejemplo, `crearHabito.mutate("Beber agua")`
-> manda ese nombre a la `mutationFn`. Hasta que no llames `mutate`, no pasa nada.
+> Es la **función que dispara** la mutación. La llamas tú —por ejemplo dentro de un `onClick`— y le
+> pasas los datos que quieres mandar. En el ejemplo, `crearHabito.mutate("Beber agua")` manda ese
+> nombre a la `mutationFn`. Hasta que no llames `mutate`, no pasa nada.
 
 > ### ⚠️ Cuidado — `useMutation` no se ejecuta al renderizar
-> `useQuery` pide datos en cuanto el componente aparece. `useMutation`, no: solo prepara la
-> herramienta. El cambio ocurre cuando **tú** llamas `mutate`. Confundir esto es un error muy
-> común: si esperas que el `insert` ocurra solo, nunca sucederá.
+> `useQuery` pide datos en cuanto el componente aparece. `useMutation`, no: solo deja la herramienta
+> preparada. El cambio ocurre cuando **tú** llamas `mutate`. Aquí es fácil tropezar: si esperas que
+> el `insert` ocurra solo, nunca va a suceder.
 
 > ### 💡 Tip — Desactiva el botón mientras guarda
 > `useMutation` también te da `isPending` (mientras el cambio está en camino). Úsalo para poner
@@ -356,32 +352,31 @@ function FormularioNuevoHabito() {
 
 ## 7. El problema después de mutar: la caché quedó vieja
 
-Imagina que acabas de crear "Beber agua" con la mutación. Funcionó: está en Supabase. Pero la
-lista que ves en pantalla la trajo `useQuery` **antes**, y sigue mostrando la lista vieja, sin
-el hábito nuevo. La caché y el servidor ya no coinciden.
+Imagina que acabas de crear "Beber agua" con la mutación. Funcionó: ya está en Supabase. Pero la
+lista que ves en pantalla la trajo `useQuery` **antes**, así que sigue mostrando la versión vieja,
+sin el hábito nuevo. La caché y el servidor ya no coinciden.
 
-Hay dos formas de arreglarlo, y ambas tienen nombre.
+Hay dos formas de arreglarlo, y cada una tiene nombre.
 
 > ### 🟦 ¿Qué significa? — *Invalidar la caché (invalidate)*
-> Es **marcar un dato de la caché como viejo** para obligar a TanStack Query a volver a pedirlo.
-> No borras nada: solo dices "esto ya no es de fiar, tráelo otra vez". Es la forma más segura de
-> mantener la pantalla sincronizada después de una mutación. Se hace con
-> `queryClient.invalidateQueries`.
+> Es **marcar un dato de la caché como viejo** para obligar a TanStack Query a volver a pedirlo. No
+> borras nada: solo dices "esto ya no es de fiar, tráelo otra vez". Es la forma más segura de mantener
+> la pantalla sincronizada después de una mutación. Se hace con `queryClient.invalidateQueries`.
 
 > ### 🟦 ¿Qué significa? — *invalidateQueries*
-> Es el **método del `QueryClient`** que invalida una o varias `queryKey`. Le pasas la etiqueta
-> del dato que cambió y él vuelve a ejecutar su `queryFn`, refrescando la pantalla con los datos
-> nuevos. En RachaSimple, tras crear un hábito se invalida `["habits"]` para que la lista se
-> recargue ya con el hábito nuevo dentro.
+> Es el **método del `QueryClient`** que invalida una o varias `queryKey`. Le pasas la etiqueta del
+> dato que cambió y él vuelve a ejecutar su `queryFn`, refrescando la pantalla con los datos nuevos.
+> En RachaSimple, tras crear un hábito se invalida `["habits"]` para que la lista se recargue ya con
+> el hábito nuevo dentro.
 
-Para usarlo necesitas una manera de alcanzar el `QueryClient` desde dentro de un componente.
+Para usarlo necesitas una forma de alcanzar el `QueryClient` desde dentro de un componente.
 
 > ### 🟦 ¿Qué significa? — *useQueryClient*
-> Es el **hook** que te entrega el `QueryClient` que repartió el `QueryClientProvider`. Sirve
-> para poder invalidar o tocar la caché desde cualquier componente. Lo llamas arriba del
-> componente y guardas el resultado en una variable.
+> Es el **hook** que te entrega el `QueryClient` que repartió el `QueryClientProvider`. Sirve para
+> poder invalidar o tocar la caché desde cualquier componente. Lo llamas arriba del componente y
+> guardas el resultado en una variable.
 
-Juntando todo, así queda el flujo completo "crear y refrescar" en RachaSimple:
+Juntándolo todo, así queda el flujo completo de "crear y refrescar" en RachaSimple:
 
 ```tsx
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -419,30 +414,31 @@ function FormularioNuevoHabito() {
 > cosas "después de": cerrar un modal, mostrar un mensaje de éxito o, lo más típico, invalidar la
 > caché para refrescar la pantalla. Es el lugar natural para poner el `invalidateQueries`.
 
-La segunda forma de refrescar es pedir manualmente los datos otra vez.
+La segunda forma de refrescar es pedir los datos otra vez a mano.
 
 > ### 🟦 ¿Qué significa? — *refetch (refrescar)*
-> Es **volver a ejecutar la `queryFn` a propósito** para traer datos frescos. `useQuery` te da
-> una función `refetch` que puedes llamar, por ejemplo, en un botón de "Actualizar". Mientras
+> Es **volver a ejecutar la `queryFn` a propósito** para traer datos frescos. `useQuery` te da una
+> función `refetch` que puedes llamar, por ejemplo, en un botón de "Actualizar". Mientras
 > `invalidateQueries` dice "esto está viejo, encárgate", `refetch` dice "tráelo ahora mismo".
 
 > ### 🔎 En tu código
 > Faro es un caso interesante: su filosofía es de **refresco bajo demanda**. El usuario pulsa
-> "Analizar proyecto" y ahí se dispara el trabajo, no antes. Ese patrón encaja como anillo al
-> dedo con `useMutation` (la acción que el usuario lanza) seguido de `invalidateQueries` o
-> `refetch` para mostrar el resultado nuevo. Busca en Faro los botones de análisis: detrás casi
-> siempre hay una mutación.
+> "Analizar proyecto" y ahí se dispara el trabajo, no antes. Ese patrón encaja como anillo al dedo
+> con `useMutation` (la acción que el usuario lanza) seguido de `invalidateQueries` o `refetch` para
+> mostrar el resultado nuevo. Busca en Faro los botones de análisis: detrás casi siempre hay una
+> mutación.
 
 > ### 💡 Tip — Invalidar es casi siempre la respuesta correcta
-> Como principiante, después de cualquier mutación que cambie datos, tu reflejo debe ser:
-> "invalida la `queryKey` afectada en `onSuccess`". Con eso, el 90% de las veces la pantalla se
-> queda sincronizada sin que pienses más.
+> Como principiante, después de cualquier mutación que cambie datos, tu reflejo debe ser: "invalida
+> la `queryKey` afectada en `onSuccess`". Con eso, el 90% de las veces la pantalla se queda
+> sincronizada sin que pienses más.
 
 ---
 
 ## 8. Juntando el ciclo completo
 
-Ahora puedes ver el ciclo de vida del estado del servidor en RachaSimple de principio a fin:
+Con todo lo anterior ya puedes seguir el ciclo de vida del estado del servidor en RachaSimple de
+principio a fin:
 
 1. La app arranca y `QueryClientProvider` reparte la caché.
 2. La pantalla de hábitos llama `useHabits()`, que por dentro hace `useQuery` con
@@ -456,8 +452,8 @@ Ahora puedes ver el ciclo de vida del estado del servidor en RachaSimple de prin
 6. TanStack Query vuelve a ejecutar la `queryFn`, trae la lista actualizada y la pantalla se
    refresca con el hábito nuevo. Fin del ciclo.
 
-Ese baile —leer, mostrar estados, mutar, invalidar, refrescar— es el corazón de cualquier app
-React que hable con un servidor. Cuando lo veas con naturalidad, habrás domado el estado del
+Ese baile —leer, mostrar estados, mutar, invalidar, refrescar— es el corazón de cualquier app React
+que hable con un servidor. El día en que lo veas como algo natural, habrás domado el estado del
 servidor. Bit ya recogió su red llena de datos frescos y la pantalla brilla al día.
 
 ---

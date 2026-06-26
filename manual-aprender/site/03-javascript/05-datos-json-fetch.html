@@ -18,61 +18,68 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-datos-json-y-fetch">Capítulo 05 — Datos, JSON y fetch</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Cerramos JavaScript con cómo se manejan <strong>colecciones de datos</strong> (listas y objetos), el
-formato <strong>JSON</strong> (que usan PolyPaw y todas las APIs) y cómo <strong>pedir datos a internet</strong> con
-<code>fetch</code>. Esto último es justo lo que hace el chat con IA de tu sitio.</p>
+<p>Cerramos JavaScript con tres cosas que van de la mano: cómo se manejan <strong>colecciones de
+datos</strong> (listas y objetos), el formato <strong>JSON</strong> (el que usan PolyPaw y prácticamente todas
+las APIs) y cómo <strong>pedirle datos a internet</strong> con <code>fetch</code>. Esto último es, ni más ni menos,
+lo que hace el chat con IA de tu sitio.</p>
 </blockquote>
 <hr />
 <h2 id="1-arrays-listas-de-cosas">1. Arrays: listas de cosas</h2>
 <blockquote class="def">
 <h3 id="que-significa-array-arreglo-lista">🟦 ¿Qué significa? — <em>Array (arreglo / lista)</em></h3>
-<p>Un <strong>array</strong> es una <strong>lista ordenada</strong> de valores, escrita entre corchetes <code>[ ]</code> y separada
-por comas. Sirve para guardar varias cosas en una sola variable:
+<p>Un <strong>array</strong> es una <strong>lista ordenada</strong> de valores. Se escribe entre corchetes <code>[ ]</code> y los
+valores van separados por comas. Te sirve para meter varias cosas dentro de una sola
+variable:
 <code>javascript
 const servicios = ["Diseño web", "IA", "Marketing"];
 const numeros = [10, 25, 4, 99];</code></p>
 <h3 id="que-significa-indice-acceder-a-un-elemento">🟦 ¿Qué significa? — <em>Índice (acceder a un elemento)</em></h3>
-<p>Cada elemento tiene una <strong>posición</strong> numérica llamada <strong>índice</strong>, que <strong>empieza en 0</strong>:
+<p>Cada elemento ocupa una <strong>posición</strong> numérica, su <strong>índice</strong>, y la cuenta <strong>empieza en 0</strong>:
 <code>javascript
 servicios[0]   // "Diseño web"  (el primero)
 servicios[2]   // "Marketing"   (el tercero)
 servicios.length   // 3  (cuántos elementos hay)</code>
-(¿Recuerdas que los bucles empezaban en 0? Es por esto.)</p>
+(¿Te acuerdas de que los bucles arrancaban en 0? Pues es por esto.)</p>
 <h3 id="que-significa-metodos-utiles-de-array">🟦 ¿Qué significa? — <em>Métodos útiles de array</em></h3>
-<p>Los arrays traen "funciones incorporadas" (métodos) muy usadas:
+<p>Los arrays vienen con "funciones incorporadas" (los métodos) que vas a usar todo el rato:
 <code>javascript
 servicios.push("SEO");        // añade al final
 servicios.includes("IA");     // true/false: ¿está en la lista?
 servicios.forEach((s) =&gt; {    // ejecuta algo por cada elemento
   console.log(s);
 });</code>
-<code>forEach</code> es un bucle más legible: "para cada servicio <code>s</code>, haz esto". Recorrer listas así es
-pan de cada día en la web (mostrar productos, hábitos, mensajes…).</p>
+<code>forEach</code> es básicamente un bucle, pero se lee mucho mejor: "para cada servicio <code>s</code>, haz
+esto". Recorrer listas así lo vas a hacer todos los días en la web: mostrar productos,
+hábitos, mensajes y demás.</p>
 </blockquote>
 <hr />
 <h2 id="2-objetos-datos-con-etiquetas">2. Objetos: datos con etiquetas</h2>
 <blockquote class="def">
 <h3 id="que-significa-objeto">🟦 ¿Qué significa? — <em>Objeto</em></h3>
-<p>Un <strong>objeto</strong> agrupa datos relacionados usando <strong>etiquetas</strong> (llamadas <em>propiedades</em> o
-<em>claves</em>) en lugar de posiciones. Se escribe entre llaves <code>{ }</code>:
+<p>Un <strong>objeto</strong> junta datos que están relacionados, pero en vez de posiciones usa <strong>etiquetas</strong>
+(las llamamos <em>propiedades</em> o <em>claves</em>). Va entre llaves <code>{ }</code>:
 <code>javascript
 const usuario = {
   nombre: "Edwar",
   edad: 25,
   activo: true
 };</code>
-Cada par es <code>clave: valor</code>. Mientras un array es "una fila de cosas", un objeto es "una ficha
-con campos".</p>
+Cada par tiene la forma <code>clave: valor</code>. Si un array es "una fila de cosas", un objeto es más
+bien "una ficha con campos".</p>
 <h3 id="que-significa-acceder-a-propiedades">🟦 ¿Qué significa? — <em>Acceder a propiedades</em></h3>
-<p>Se accede con un <strong>punto</strong> y el nombre de la propiedad:
+<p>Para llegar a un dato usas un <strong>punto</strong> seguido del nombre de la propiedad:
 <code>javascript
 usuario.nombre     // "Edwar"
 usuario.edad       // 25
-usuario.edad = 26; // también se puede cambiar</code></p>
+usuario.edad = 26; // y también puedes cambiarlo</code></p>
 <h3 id="tip-arrays-y-objetos-se-combinan">💡 Tip — Arrays y objetos se combinan</h3>
-<p>Lo normal es mezclarlos: una <strong>lista de objetos</strong>. Por ejemplo, los hábitos de RachaSimple o
-las misiones de PolyPaw son arrays de objetos:
+<p>En la práctica casi siempre los vas a mezclar: una <strong>lista de objetos</strong>. Los hábitos de
+RachaSimple o las misiones de PolyPaw, por ejemplo, son arrays de objetos:
 <code>javascript
 const habitos = [
   { nombre: "Leer",      hecho: true },
@@ -85,23 +92,25 @@ habitos[0].nombre   // "Leer"</code></p>
 <blockquote class="def">
 <h3 id="que-significa-json">🟦 ¿Qué significa? — <em>JSON</em></h3>
 <p><strong>JSON</strong> (<em>JavaScript Object Notation</em>) es un <strong>formato de texto</strong> para guardar e intercambiar
-datos, basado en la forma de los objetos y arrays de JavaScript. Es el idioma estándar con el
-que las apps y los servidores se pasan información.
+datos. Toma prestada la forma de los objetos y arrays de JavaScript, y se ha convertido en el
+idioma estándar con el que las apps y los servidores se pasan información.
 <code>json
 {
   "nombre": "Edwar",
   "servicios": ["Diseño web", "IA"],
   "activo": true
 }</code>
-Se parece muchísimo a un objeto de JavaScript. Diferencia clave: en JSON <strong>las claves van
-entre comillas dobles</strong> y solo admite datos (no funciones).
-<strong>¿Dónde se usa en tu proyecto?</strong> <strong>PolyPaw</strong> guarda TODAS sus misiones y la base de datos del
-usuario en archivos <code>.json</code> (<code>missions/*.json</code>, <code>polypaw_db.json</code>). Y cada vez que una web
-habla con una API, los datos viajan en JSON.</p>
+Como ves, se parece muchísimo a un objeto de JavaScript. La diferencia que más conviene
+recordar: en JSON <strong>las claves van entre comillas dobles</strong> y dentro solo caben datos, nunca
+funciones.
+<strong>¿Dónde aparece esto en tu proyecto?</strong> <strong>PolyPaw</strong> guarda TODAS sus misiones y la base de
+datos del usuario en archivos <code>.json</code> (<code>missions/*.json</code>, <code>polypaw_db.json</code>). Y cada vez que
+una web habla con una API, los datos van y vienen en JSON.</p>
 <h3 id="que-significa-convertir-entre-texto-json-y-objetos">🟦 ¿Qué significa? — <em>Convertir entre texto JSON y objetos</em></h3>
-<p>Como JSON es <strong>texto</strong>, para usarlo en JavaScript hay que convertirlo a objeto, y viceversa:
-- <code>JSON.parse(texto)</code> → convierte texto JSON <strong>a</strong> objeto de JavaScript (para usarlo).
-- <code>JSON.stringify(objeto)</code> → convierte un objeto <strong>a</strong> texto JSON (para enviarlo o guardarlo).
+<p>Como JSON es <strong>texto</strong>, para trabajar con él en JavaScript tienes que convertirlo a objeto, y
+al revés:
+- <code>JSON.parse(texto)</code> → pasa de texto JSON <strong>a</strong> objeto de JavaScript (para poder usarlo).
+- <code>JSON.stringify(objeto)</code> → pasa de objeto <strong>a</strong> texto JSON (para enviarlo o guardarlo).
 <code>javascript
 const texto = '{"nombre":"Edwar"}';
 const obj = JSON.parse(texto);      // ahora obj.nombre es "Edwar"
@@ -109,22 +118,24 @@ const otraVez = JSON.stringify(obj); // vuelve a texto</code></p>
 </blockquote>
 <hr />
 <h2 id="4-pedir-datos-a-internet-fetch-y-asyncawait">4. Pedir datos a internet: <code>fetch</code> y <code>async/await</code></h2>
-<p>Aquí conectamos con el Módulo 00: el navegador (cliente) le pide datos a un servidor. En
+<p>Aquí enlazamos con el Módulo 00: el navegador (el cliente) le pide datos a un servidor. En
 JavaScript eso se hace con <code>fetch</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-fetch-pedirtraer">🟦 ¿Qué significa? — <em><code>fetch</code> (pedir/traer)</em></h3>
-<p><code>fetch(url)</code> hace una <strong>petición HTTP</strong> a una dirección y trae la respuesta. Es cómo tu código
-habla con una API (un servidor que entrega datos).</p>
+<p><code>fetch(url)</code> lanza una <strong>petición HTTP</strong> a una dirección y te trae de vuelta la respuesta. Es
+la forma en que tu código habla con una API, es decir, con un servidor que entrega datos.</p>
 <h3 id="que-significa-operacion-asincrona">🟦 ¿Qué significa? — <em>Operación asíncrona</em></h3>
-<p>Pedir algo a internet <strong>toma tiempo</strong> (puede tardar segundos). Una operación <strong>asíncrona</strong> es
-una que no da el resultado al instante: el programa la "encarga" y sigue, y el resultado llega
-después. Es como pedir comida a domicilio: no te quedas congelado en la puerta; haces otras
-cosas y avisan cuando llega.</p>
+<p>Pedir algo a internet <strong>lleva su tiempo</strong>: puede tardar unos segundos. Una operación
+<strong>asíncrona</strong> es justo eso, una que no te da el resultado de inmediato: el programa la
+"encarga", sigue con lo suyo, y el resultado llega más tarde. Piénsalo como pedir comida a
+domicilio: no te quedas plantado en la puerta esperando; haces otras cosas y te avisan cuando
+llega.</p>
 <h3 id="que-significa-async-y-await">🟦 ¿Qué significa? — <em><code>async</code> y <code>await</code></em></h3>
-<p>Para trabajar con operaciones asíncronas de forma legible se usan dos palabras:
-- <code>async</code> marca una función como asíncrona (que hará esperas).
-- <code>await</code> ("espera") pausa <strong>dentro</strong> de esa función hasta que el resultado llegue, sin
-  congelar el resto de la página.
+<p>Para manejar operaciones asíncronas sin que el código se vuelva un lío, hay dos palabras que
+trabajan juntas:
+- <code>async</code> marca una función como asíncrona, o sea, una que va a tener esperas dentro.
+- <code>await</code> ("espera") pone en pausa <strong>lo que hay dentro</strong> de esa función hasta que el resultado
+  llega, pero sin congelar el resto de la página.
 <code>javascript
 async function cargarDatos() {
   const respuesta = await fetch("https://api.ejemplo.com/datos");
@@ -132,15 +143,16 @@ async function cargarDatos() {
   console.log(datos);
 }
 cargarDatos();</code>
-Se lee: "pide los datos (espera a que lleguen), conviértelos de JSON a objeto (espera), y
-muéstralos". El <code>await respuesta.json()</code> es el <code>JSON.parse</code> de las respuestas web.</p>
+Léelo así: "pide los datos (espera a que lleguen), conviértelos de JSON a objeto (espera otra
+vez), y muéstralos". Ese <code>await respuesta.json()</code> es el <code>JSON.parse</code> de las respuestas web.</p>
 <h3 id="que-significa-promesa-promise">🟦 ¿Qué significa? — <em>Promesa (promise)</em></h3>
-<p>Por debajo, <code>fetch</code> devuelve una <strong>promesa</strong>: un "vale" que representa un resultado que
-<strong>llegará en el futuro</strong>. <code>await</code> es, en la práctica, "espera a que la promesa se cumpla y
-dame el valor". No necesitas dominar las promesas a fondo todavía; con <code>async/await</code> te
-alcanza para empezar.</p>
+<p>Por debajo, lo que <code>fetch</code> te devuelve es una <strong>promesa</strong>: una especie de "vale" que
+representa un resultado que <strong>va a llegar en el futuro</strong>. <code>await</code>, en el fondo, significa
+"espera a que esa promesa se cumpla y dame el valor". No hace falta que domines las promesas
+al detalle todavía; con <code>async/await</code> tienes de sobra para empezar.</p>
 <h3 id="cuidado-manejar-errores-con-trycatch">⚠️ Cuidado — Manejar errores con try/catch</h3>
-<p>Una petición puede fallar (sin internet, servidor caído). Se protege con <code>try/catch</code>:
+<p>Una petición puede salir mal: te quedas sin internet, el servidor está caído, lo que sea. Para
+blindarte usas <code>try/catch</code>:
 <code>javascript
 async function cargarDatos() {
   try {
@@ -151,12 +163,13 @@ async function cargarDatos() {
     console.log("Algo falló:", error);
   }
 }</code>
-<code>try</code> intenta el código; si algo revienta, salta al <code>catch</code> en vez de romper toda la página.</p>
+El <code>try</code> intenta ejecutar el código; si algo revienta, en lugar de tumbar la página entera, el
+control salta directo al <code>catch</code>.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>El <strong>chat con IA</strong> de tu sitio (<code>main.js</code>) hace exactamente esto: con <code>fetch</code> envía tu mensaje
-al Cloudflare Worker, <code>await</code> espera la respuesta de Claude, la convierte de JSON y la muestra
-en pantalla manipulando el DOM. Faro hace lo mismo para hablar con GitHub, Drive y OpenAI.
-¡Ya entiendes la pieza central de tus apps!</p>
+<p>El <strong>chat con IA</strong> de tu sitio (<code>main.js</code>) hace exactamente esto: con <code>fetch</code> manda tu mensaje
+al Cloudflare Worker, <code>await</code> se queda esperando la respuesta de Claude, la convierte de JSON
+y la pinta en pantalla manipulando el DOM. Faro funciona igual cuando habla con GitHub, Drive
+y OpenAI. Con esto ya entiendes la pieza central de tus apps.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -190,9 +203,9 @@ en pantalla manipulando el DOM. Faro hace lo mismo para hablar con GitHub, Drive
 </ol>
 <hr />
 <p>🎉 <strong>¡Terminaste el Módulo 03 — JavaScript!</strong> Ya programas de verdad: datos, decisiones, bucles,
-funciones, manipulación del DOM y peticiones a internet. Con esto entiendes el <code>main.js</code> de tu
-sitio <strong>completo</strong>. Y, lo más importante, tienes la base para los dos módulos que vienen
-(TypeScript y React), que son JavaScript llevado más lejos.</p>
+funciones, manipulación del DOM y peticiones a internet. Con todo esto entiendes el <code>main.js</code> de
+tu sitio <strong>de cabo a rabo</strong>. Y, lo más importante, ya tienes la base para los dos módulos que
+vienen (TypeScript y React), que no son otra cosa que JavaScript llevado un paso más allá.</p>
 <p>➡️ Siguiente módulo: <strong><a href="../04-python/README.html">04 — Python</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

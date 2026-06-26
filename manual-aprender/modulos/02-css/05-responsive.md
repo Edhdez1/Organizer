@@ -1,24 +1,29 @@
 # Capítulo 05 — Diseño responsive
 
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tu sitio lo abre gente desde un teléfono pequeño, una tablet, una laptop y un monitor enorme.
-> ¿Cómo logras que se vea bien en **todos**? Con **diseño responsive**. Cerramos el módulo de
-> CSS con la pieza que hace tu web profesional en cualquier pantalla. (Tú mismo estás leyendo
-> esto desde el teléfono: esto es justo lo que lo hace posible.)
+> ¿Cómo haces que se vea bien en **todos**? Con **diseño responsive**. Cerramos el módulo de
+> CSS justo con la pieza que hace que tu web se vea profesional en cualquier pantalla. (De hecho,
+> tú mismo estás leyendo esto desde el teléfono: esto es exactamente lo que lo hace posible.)
 
 ---
 
 ## 1. Qué es el diseño responsive
 
 > ### 🟦 ¿Qué significa? — *Diseño responsive (adaptable)*
-> El **diseño responsive** ("que responde") es construir una página que **se adapta
-> automáticamente** al tamaño de la pantalla: en el teléfono el contenido se apila en una
-> columna; en el escritorio se reparte en varias columnas. No haces una web "para móvil" y otra
-> "para escritorio": haces **una sola** que se reacomoda.
+> El **diseño responsive** ("que responde") consiste en construir una página que **se adapta
+> sola** al tamaño de la pantalla: en el teléfono el contenido se apila en una columna; en el
+> escritorio se reparte en varias. No haces una web "para móvil" y otra distinta "para escritorio":
+> haces **una sola** que se reacomoda según el espacio que tenga.
 
 > ### 💡 Tip — Por qué importa tanto
-> Más de la mitad del tráfico web mundial es desde móvil. Una página que en el teléfono se ve
-> diminuta o descuadrada **pierde clientes**. Google incluso penaliza en sus resultados a los
-> sitios que no son responsive. Para tu negocio, esto es dinero.
+> Más de la mitad del tráfico web del mundo viene del móvil. Una página que en el teléfono se ve
+> diminuta o descuadrada **pierde clientes**, así de simple. Google incluso baja en sus resultados
+> a los sitios que no son responsive. Para tu negocio, esto se traduce en dinero.
 
 ---
 
@@ -26,12 +31,12 @@
 
 > ### 🟦 ¿Qué significa? — *La meta-etiqueta viewport*
 > Sin esta línea en el `<head>`, el móvil "miente" sobre su ancho y muestra la página como una
-> versión diminuta de escritorio. La línea le dice "usa el ancho real del dispositivo":
+> versión encogida de escritorio. La línea le dice "usa el ancho real del dispositivo":
 > ```html
 > <meta name="viewport" content="width=device-width, initial-scale=1.0">
 > ```
 > Es **el requisito número uno** del responsive. Sin ella, nada de lo demás funciona en móvil.
-> Tu sitio la tiene; revísala con `F12`.
+> Tu sitio ya la tiene; compruébalo con `F12`.
 
 ---
 
@@ -39,8 +44,8 @@
 
 > ### 🟦 ¿Qué significa? — *Media query (consulta de medios)*
 > Una **media query** es una regla CSS que **solo se aplica si se cumple una condición** sobre
-> la pantalla, típicamente su ancho. Es como decir "si la pantalla mide menos de 600px, aplica
-> *estos* estilos".
+> la pantalla, normalmente su ancho. Viene a ser como decir "si la pantalla mide menos de 600px,
+> aplica *estos* estilos".
 > ```css
 > /* Estilos normales (para pantallas grandes) */
 > .galeria { display: flex; gap: 16px; }
@@ -50,22 +55,22 @@
 >   .galeria { flex-direction: column; }
 > }
 > ```
-> La parte `@media (max-width: 600px)` es la condición; las reglas dentro de sus llaves solo
-> aplican cuando se cumple.
+> La parte `@media (max-width: 600px)` es la condición; las reglas que van dentro de sus llaves
+> solo se activan cuando esa condición se cumple.
 
 > ### 🟦 ¿Qué significa? — *Breakpoint (punto de quiebre)*
 > Un **breakpoint** es el ancho en el que tu diseño "cambia de forma" (por ejemplo, 600px). No
-> hay valores mágicos universales; se eligen según dónde *tu* diseño empieza a verse mal.
-> Valores comunes de referencia: ~600px (móvil/tablet), ~900px (tablet/escritorio).
+> existen valores mágicos que sirvan para todo; los eliges según dónde *tu* diseño empieza a verse
+> mal. Como referencia, se suelen usar ~600px (móvil/tablet) y ~900px (tablet/escritorio).
 
 ---
 
 ## 4. La estrategia recomendada: mobile-first
 
 > ### 🟦 ¿Qué significa? — *Mobile-first ("primero el móvil")*
-> Es una forma de trabajar: **escribe primero los estilos para móvil** (el caso más simple, una
-> columna) y luego, con media queries de `min-width`, **añade** complejidad para pantallas
-> grandes.
+> Es una forma de trabajar: **escribe primero los estilos para móvil** (el caso más sencillo, todo
+> en una columna) y después, con media queries de `min-width`, **vas añadiendo** complejidad para
+> las pantallas grandes.
 > ```css
 > /* Base: móvil. Todo en una columna. */
 > .galeria { display: flex; flex-direction: column; gap: 16px; }
@@ -75,25 +80,25 @@
 >   .galeria { flex-direction: row; }
 > }
 > ```
-> **¿Por qué mobile-first?** Porque es más fácil *añadir* lujo para pantallas grandes que
-> *quitarlo* para las pequeñas. Además, te obliga a priorizar lo esencial. Es el estándar de la
-> industria; tu sitio y tus apps lo siguen.
+> **¿Por qué mobile-first?** Porque cuesta menos *añadir* lujo para pantallas grandes que
+> *quitarlo* para las pequeñas. De paso, te obliga a decidir qué es lo esencial. Es el estándar de
+> la industria, y tanto tu sitio como tus apps lo siguen.
 
 > ### 🟦 ¿Qué significa? — *`max-width` vs. `min-width`*
-> - `@media (max-width: 600px)` → "de 600px **hacia abajo**" (pantallas pequeñas). Típico del
+> - `@media (max-width: 600px)` → "de 600px **hacia abajo**" (pantallas pequeñas). Es lo típico del
 >   enfoque "escritorio primero".
-> - `@media (min-width: 700px)` → "de 700px **hacia arriba**" (pantallas grandes). Típico del
+> - `@media (min-width: 700px)` → "de 700px **hacia arriba**" (pantallas grandes). Es lo típico del
 >   enfoque "mobile-first".
-> Elige uno y sé consistente. Mobile-first usa principalmente `min-width`.
+> Elige uno y mantente fiel a él. En mobile-first usarás sobre todo `min-width`.
 
 ---
 
 ## 5. Imágenes y medidas flexibles
 
-Dos hábitos que hacen responsive casi cualquier cosa, sin media queries:
+Hay dos hábitos que vuelven responsive casi cualquier cosa, y ni siquiera necesitan media queries:
 
 > ### 💡 Tip — Imágenes que nunca se desbordan
-> Esta regla hace que ninguna imagen sea más ancha que su contenedor (clave en móvil):
+> Esta regla hace que ninguna imagen sea más ancha que su contenedor (algo clave en móvil):
 > ```css
 > img {
 >   max-width: 100%;
@@ -102,13 +107,13 @@ Dos hábitos que hacen responsive casi cualquier cosa, sin media queries:
 > ```
 
 > ### 💡 Tip — Mide en relativo, no en absoluto
-> Si pones `width: 1000px` a un bloque, en un teléfono de 360px se desborda. Mejor usa medidas
-> relativas (`%`, o un `max-width` con `width: 100%`):
+> Si le pones `width: 1000px` a un bloque, en un teléfono de 360px se desborda sin remedio. Mejor
+> usa medidas relativas (`%`, o un `max-width` junto a `width: 100%`):
 > ```css
 > .contenedor { width: 100%; max-width: 1000px; margin: 0 auto; }
 > ```
-> Así ocupa hasta 1000px en pantallas grandes, pero se encoge solo en las pequeñas, y `margin:
-> 0 auto` lo centra. Esta es la base del layout de casi cualquier sitio (incluida la hoja de
+> Así ocupa hasta 1000px en pantallas grandes, pero se encoge solo en las pequeñas, y el `margin:
+> 0 auto` lo deja centrado. Esta es la base del layout de casi cualquier sitio (incluida la hoja de
 > estilos de este manual, con su `.contenedor`).
 
 ---
@@ -117,9 +122,9 @@ Dos hábitos que hacen responsive casi cualquier cosa, sin media queries:
 
 > ### 💡 Tip — El modo dispositivo de las DevTools
 > En tu computadora, abre `F12` y busca el icono de **móvil/tablet** (suele estar arriba a la
-> izquierda del panel). Activa el "modo dispositivo": puedes simular distintos tamaños de
-> pantalla y ver cómo responde tu página, sin necesidad de un teléfono real. Es como tendrás que
-> revisar tus diseños siempre.
+> izquierda del panel). Al activar el "modo dispositivo" puedes simular distintos tamaños de
+> pantalla y ver cómo responde tu página, sin necesidad de un teléfono real. Así es como vas a
+> revisar tus diseños de aquí en adelante.
 
 ---
 

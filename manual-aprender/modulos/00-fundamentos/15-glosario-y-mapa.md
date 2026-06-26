@@ -5,31 +5,31 @@
 </p>
 
 
-> Llegaste al último capítulo del Módulo 00. Aquí no aprendes nada nuevo: aquí *ordenas* todo lo que ya viste. Este capítulo es tu diccionario de bolsillo (un glosario alfabético con cada palabra técnica del módulo explicada en una o dos líneas) y un mapa mental en texto que conecta los temas para que veas cómo encajan unos con otros. Importa porque la programación tiene un vocabulario propio: cuando dominas las palabras, dejas de "adivinar" y empiezas a *entender*. Bit, nuestro ajolote guía, dice que un buen glosario es como una linterna en un cuarto oscuro: no cambia el cuarto, pero ahora ves dónde pisas.
+> Llegaste al último capítulo del Módulo 00. Aquí no hay nada nuevo que aprender: lo que toca es *ordenar* todo lo que ya viste. Piénsalo como tu diccionario de bolsillo —un glosario alfabético donde cada palabra técnica del módulo queda explicada en una o dos líneas— acompañado de un mapa mental en texto que conecta los temas para que veas cómo encajan unos con otros. Sirve porque la programación tiene su propio vocabulario: el día que dominas las palabras, dejas de "adivinar" y empiezas a *entender*. Bit, nuestro ajolote guía, dice que un buen glosario es como una linterna en un cuarto oscuro: no cambia el cuarto, pero al menos ya ves dónde pisas.
 
 ## 1. Cómo usar este capítulo
 
-Este capítulo es distinto a los anteriores. No tiene una historia de principio a fin: es una **referencia**. Eso significa que está pensado para que vuelvas a él cuando una palabra se te olvide.
+Este capítulo no se parece a los anteriores. No cuenta una historia de principio a fin: es una **referencia**. O sea, está pensado para que vuelvas a él cada vez que una palabra se te escape.
 
-Te sugiero tres formas de aprovecharlo:
+Hay tres maneras de sacarle provecho:
 
 1. **Léelo entero una vez**, sin prisa, para refrescar todo el módulo.
-2. **Vuelve cuando dudes.** Si en el Módulo 01 lees "haz un commit en tu rama" y se te fue qué era una rama, abre este capítulo y búscala.
-3. **Tápate las definiciones.** Lee solo el término e intenta explicarlo con tus palabras. Si puedes, lo dominas.
+2. **Vuelve cuando dudes.** Si en el Módulo 01 lees "haz un commit en tu rama" y ya no recuerdas qué era una rama, abre este capítulo y búscala.
+3. **Tápate las definiciones.** Lee solo el término e intenta explicarlo con tus palabras. Si te sale, lo dominas.
 
 > ### 💡 Tip — Explicar es la mejor prueba
-> Si puedes explicarle un término a alguien que no programa (tu mamá, un amigo, hasta a Bit el ajolote), de verdad lo entendiste. Si solo puedes repetir la definición de memoria, todavía no.
+> Si eres capaz de explicarle un término a alguien que no programa (tu mamá, un amigo, hasta a Bit el ajolote), de verdad lo entendiste. Si solo logras repetir la definición de memoria, todavía no.
 
-El glosario está ordenado alfabéticamente para que lo busques rápido. Después del glosario viene el mapa mental, que es lo contrario: ahí los términos están ordenados *por cómo se relacionan*, no por su letra inicial.
+El glosario va ordenado alfabéticamente para que lo encuentres rápido. Después viene el mapa mental, que hace justo lo contrario: ahí los términos están ordenados *por cómo se relacionan*, no por su letra inicial.
 
 ## 2. Glosario alfabético
 
-Cada término viene en su recuadro azul. La definición es corta a propósito: para qué sirve, en palabras simples, y dónde aparece en tus proyectos reales cuando aplica.
+Cada término tiene su recuadro azul. La definición es corta a propósito: para qué sirve, en palabras simples, y dónde aparece en tus proyectos reales cuando viene al caso.
 
 ### A
 
 > ### 🟦 ¿Qué significa? — *Algoritmo*
-> Una lista de pasos ordenados para resolver un problema, como una receta de cocina. Programar es, en el fondo, escribir algoritmos que la computadora pueda seguir.
+> Una lista de pasos ordenados para resolver un problema, igual que una receta de cocina. Programar es, en el fondo, escribir algoritmos que la computadora pueda seguir.
 
 > ### 🟦 ¿Qué significa? — *API*
 > Sigla de *Application Programming Interface* (interfaz de programación). Es la "ventanilla" por la que un programa le pide cosas a otro. **¿Dónde se usa en tu proyecto?** En `tunal-digital`, `backend/worker.js` llama a la **API de Claude** para generar texto; en Faro, `src/app/api` llama a la API de OpenAI.
@@ -86,10 +86,10 @@ Cada término viene en su recuadro azul. La definición es corta a propósito: p
 ### H
 
 > ### 🟦 ¿Qué significa? — *Hardware*
-> Las partes físicas de la computadora: las que puedes tocar (CPU, RAM, disco, pantalla). Lo opuesto al software.
+> Las partes físicas de la computadora, las que puedes tocar: CPU, RAM, disco, pantalla. Lo opuesto al software.
 
 > ### 🟦 ¿Qué significa? — *HTML*
-> Sigla de *HyperText Markup Language*. Es el lenguaje que define la **estructura** de una página web (títulos, párrafos, botones). **¿Dónde se usa en tu proyecto?** En `tunal-digital`, el archivo `sitio-web/index.html`.
+> Sigla de *HyperText Markup Language*. Es el lenguaje que define la **estructura** de una página web: títulos, párrafos, botones. **¿Dónde se usa en tu proyecto?** En `tunal-digital`, el archivo `sitio-web/index.html`.
 
 > ### 🟦 ¿Qué significa? — *HTTP*
 > Sigla de *HyperText Transfer Protocol*. Es el "idioma" con el que el cliente y el servidor se hablan en la web: el cliente pide y el servidor responde. Su versión segura es **HTTPS**.
@@ -110,7 +110,7 @@ Cada término viene en su recuadro azul. La definición es corta a propósito: p
 ### O
 
 > ### 🟦 ¿Qué significa? — *OAuth*
-> Un sistema para iniciar sesión usando otra cuenta (como "Entrar con Google") sin compartir tu contraseña. **¿Dónde se usa en tu proyecto?** Faro usa OAuth (vía Supabase Auth) para conectarse a tu GitHub y Google Drive.
+> Un sistema para iniciar sesión usando otra cuenta (como "Entrar con Google") sin tener que compartir tu contraseña. **¿Dónde se usa en tu proyecto?** Faro usa OAuth (vía Supabase Auth) para conectarse a tu GitHub y Google Drive.
 
 > ### 🟦 ¿Qué significa? — *OpenAI / Claude (modelos de IA)*
 > Servicios de inteligencia artificial a los que tu app les pide texto generado. **¿Dónde se usa en tu proyecto?** `tunal-digital` usa la API de Claude; Faro usa OpenAI para escribir descripciones y roadmaps.
@@ -194,7 +194,7 @@ Tu `polypaw-nas` trajo varias palabras nuevas. Las junto aquí porque pertenecen
 > RachaSimple/src/repositories/...       ← TypeScript que habla con Supabase
 > Organizer/src/app/api/...              ← el backend de Faro (Next.js)
 > ```
-> Leer una ruta ya te dice mucho: lenguaje, parte de la app y para qué sirve.
+> Leer una ruta ya te dice mucho: el lenguaje, qué parte de la app es y para qué sirve.
 
 ## 4. Mapa mental del módulo (en texto)
 
@@ -208,7 +208,7 @@ Todo empieza con una máquina. El **hardware** son las partes que tocas:
 - La **RAM** guarda lo que se usa *ahora* (rápida, se borra al apagar).
 - El **disco** guarda lo que se queda *para siempre* (más lento, no se borra).
 
-> Recuerda con una imagen: la RAM es tu escritorio (lo que tienes a mano), el disco es el archivero (lo que guardas), la CPU eres tú trabajando.
+> Recuérdalo con una imagen: la RAM es tu escritorio (lo que tienes a mano), el disco es el archivero (lo que guardas), la CPU eres tú trabajando.
 
 ### Nivel 2 — El software que manda: el SO
 
@@ -261,11 +261,11 @@ HARDWARE (CPU · RAM · disco)
 ```
 
 > ### 💡 Tip — De abajo hacia arriba
-> Cuando algo falle en el futuro, recorre este mapa de abajo hacia arriba preguntando "¿en qué nivel está el problema?". ¿Es de red (no carga la página)? ¿De código (un error en tu archivo)? ¿De hardware (sin espacio en disco)? Ubicar el nivel es la mitad de la solución.
+> Cuando algo falle en el futuro, recorre este mapa de abajo hacia arriba preguntándote "¿en qué nivel está el problema?". ¿Es de red (no carga la página)? ¿De código (un error en tu archivo)? ¿De hardware (sin espacio en disco)? Ubicar el nivel es la mitad de la solución.
 
 ## 5. Tus cuatro proyectos vistos por el mapa
 
-Para cerrar, mira cómo cada proyecto toca distintas partes del mapa. Esto te muestra que no aprendiste cosas sueltas: aprendiste un sistema.
+Para cerrar, mira cómo cada proyecto toca distintas partes del mapa. Esto te demuestra que no aprendiste cosas sueltas: aprendiste un sistema.
 
 > ### 🔎 En tu código
 > ```text
@@ -285,7 +285,7 @@ Para cerrar, mira cómo cada proyecto toca distintas partes del mapa. Esto te mu
 >                 Toca: hardware, SO, red, servidores, VPN.
 > ```
 
-Faro y tu NAS son los que más conceptos juntan: por eso, si los entiendes a ellos, entiendes el módulo entero.
+Faro y tu NAS son los que más conceptos juntan; por eso, si los entiendes a ellos, entiendes el módulo entero.
 
 > ### ⚠️ Cuidado — Los secretos no se comparten
 > Hay una regla de oro del módulo que nunca debes olvidar: **las claves y contraseñas viven solo en el servidor**, en variables de entorno o protegidas con permisos. Nunca las escribas en el código que ve el cliente ni las subas a Git. En Faro, esto es una regla explícita del proyecto.
@@ -305,7 +305,7 @@ Faro y tu NAS son los que más conceptos juntan: por eso, si los entiendes a ell
 
 ## 🔁 Repaso del módulo
 
-Este capítulo es el cierre del Módulo 00, así que en vez de ejercicios nuevos te dejo un **repaso** que recorre todo lo que viste. No es para "estudiar de memoria": es para comprobar que las piezas encajan. Tómatelo como un paseo final por el mapa, con calma.
+Este capítulo cierra el Módulo 00, así que en lugar de ejercicios nuevos te dejo un **repaso** que recorre todo lo que viste. No es para "estudiar de memoria": es para comprobar que las piezas encajan. Tómatelo como un paseo final por el mapa, con calma.
 
 ### Las diez ideas que no se te pueden olvidar
 
@@ -330,7 +330,7 @@ Si de todo el módulo solo te quedaras con diez frases, que sean estas:
 El módulo no es una lista de palabras sueltas: es un sistema. Estas preguntas de repaso te ayudan a ver los hilos que unen unos temas con otros. Respóndelas mentalmente o en voz alta:
 
 - ¿Por qué el **sistema operativo** tiene que estar *por encima* del hardware y no al revés?
-- Cuando guardas un archivo de PolyPaw, ¿en qué pasa de estar en la **RAM** a quedarse en el **disco**?
+- Cuando guardas un archivo de PolyPaw, ¿en qué momento pasa de estar en la **RAM** a quedarse en el **disco**?
 - ¿Qué relación hay entre un **commit** y una **rama** en Git? ¿Cuál contiene a cuál?
 - Si abres `tunal-digital` en el navegador, ¿quién es el **cliente** y quién el **servidor**?
 - ¿Por qué `tunal-digital` usa JavaScript **vanilla** mientras RachaSimple usa un **framework** (React)? ¿Qué cambia?
@@ -348,6 +348,6 @@ El módulo no es una lista de palabras sueltas: es un sistema. Estas preguntas d
 
 ### Tu mapa, una última vez
 
-Antes de pasar de página, recorre el mapa completo de abajo hacia arriba y comprueba que cada nivel se apoya en el de abajo: **hardware → SO → datos → programar → Git → red → herramientas → tus proyectos**. Si en algún salto sientes un hueco, ese es exactamente el capítulo al que conviene volver. Para eso existe este glosario: es tu linterna para cuando el cuarto vuelva a quedar oscuro.
+Antes de pasar de página, recorre el mapa completo de abajo hacia arriba y comprueba que cada nivel se apoya en el de abajo: **hardware → SO → datos → programar → Git → red → herramientas → tus proyectos**. Si en algún salto sientes un hueco, ese es justo el capítulo al que conviene volver. Para eso existe este glosario: es tu linterna para cuando el cuarto vuelva a quedar oscuro.
 
 > Y con esto cierras el Módulo 00. Bit te choca la patita: ya tienes el mapa y el vocabulario. En el Módulo 01 dejamos de hablar *sobre* programar y empezamos a programar de verdad.

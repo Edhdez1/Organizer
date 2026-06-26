@@ -23,51 +23,51 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote favorito. Hasta ahora tu codigo corria de arriba hacia abajo, una linea tras otra, como cuando lees una receta paso a paso. Pero el mundo real no es tan paciente: pedir datos a internet, esperar la respuesta de una IA o leer un archivo toma tiempo, y mientras eso pasa tu programa <strong>no puede quedarse congelado</strong>. En este capitulo vamos a entender como JavaScript hace varias cosas "a la vez" sin trabarse. Respira: lo veremos despacio, con calma de anfibio, y con ejemplos reales de tu propio <code>main.js</code> de <strong>tunal-digital</strong>. Vamos.</p>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote favorito. Hasta ahora tu codigo iba de arriba hacia abajo, una linea detras de otra, igual que cuando sigues una receta paso a paso. Pero el mundo real no tiene tanta paciencia: pedir datos a internet, esperar la respuesta de una IA o leer un archivo lleva su tiempo, y mientras eso ocurre tu programa <strong>no puede quedarse congelado</strong>. En este capitulo vamos a ver como JavaScript se las arregla para hacer varias cosas "a la vez" sin trabarse. Respira hondo: lo veremos despacio, con calma de anfibio, y con ejemplos sacados de tu propio <code>main.js</code> de <strong>tunal-digital</strong>. Empezamos.</p>
 </blockquote>
 <h2 id="1-por-que-necesitamos-la-asincronia">1. ¿Por que necesitamos la asincronia?</h2>
-<p>Imagina que vas a una cafeteria. Pides un cafe y, en lugar de quedarte parado mirando la maquina hasta que termine, te sientas a revisar tu telefono. Cuando el cafe esta listo, el barista te avisa. Eso es <strong>asincronia</strong>: empezar algo que tarda, seguir con otras cosas, y reaccionar cuando termine.</p>
-<p>En tu sitio <strong>tunal-digital</strong>, cuando un visitante escribe en el chat de IA y envias su pregunta a internet, esa respuesta puede tardar uno o dos segundos. Si el navegador se congelara durante ese tiempo, el usuario no podria ni mover el raton. La asincronia evita ese congelamiento.</p>
+<p>Imagina que entras a una cafeteria. Pides un cafe y, en vez de quedarte plantado mirando la maquina hasta que termine, te sientas y revisas el telefono. Cuando el cafe esta listo, el barista te llama. Eso es <strong>asincronia</strong>: arrancar algo que tarda, seguir a lo tuyo mientras tanto, y reaccionar cuando por fin termine.</p>
+<p>En tu sitio <strong>tunal-digital</strong> pasa lo mismo. Cuando un visitante escribe en el chat de IA y mandas su pregunta a internet, esa respuesta puede tardar uno o dos segundos. Si el navegador se congelara durante esa espera, el usuario no podria ni mover el raton. La asincronia es justo lo que evita ese congelamiento.</p>
 <blockquote class="def">
 <h3 id="que-significa-asincronia">🟦 ¿Que significa? — <em>Asincronia</em></h3>
-<p>Es la capacidad de <strong>iniciar una tarea que tarda</strong> (como pedir datos a internet) y <strong>no detener el resto del programa</strong> mientras esa tarea se completa. Cuando termina, tu codigo se entera y reacciona.
-<strong>Para que sirve:</strong> mantener la pagina fluida mientras se esperan cosas lentas (red, archivos, temporizadores).
+<p>Es la capacidad de <strong>arrancar una tarea que tarda</strong> (como pedir datos a internet) y <strong>dejar que el resto del programa siga corriendo</strong> mientras esa tarea se completa. Cuando termina, tu codigo se entera y reacciona.
+<strong>Para que sirve:</strong> mantener la pagina fluida mientras esperas cosas lentas (red, archivos, temporizadores).
 <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, cada vez que el <code>main.js</code> hace <code>fetch</code> al Worker para responder en el chat de IA, eso es asincronia en accion.</p>
 <h3 id="que-significa-sincrono">🟦 ¿Que significa? — <em>Sincrono</em></h3>
-<p>Lo contrario de asincrono: el codigo se ejecuta <strong>paso a paso, y cada linea espera</strong> a que la anterior termine antes de continuar.
+<p>Lo contrario de asincrono: el codigo se ejecuta <strong>paso a paso, y cada linea espera</strong> a que la anterior termine antes de seguir.
 <strong>Para que sirve:</strong> para logica normal que es instantanea (sumar, comparar, recorrer una lista).
 <strong>Donde se usa en un repo real:</strong> casi todo el codigo de calculo en <code>RachaSimple</code> (React+TS) que no toca la red es sincrono.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>Regla mental: si algo "tarda" (internet, disco, esperar un tiempo), casi seguro es asincrono. Si es puro calculo en memoria, es sincrono.</p>
+<p>Una regla mental que nunca falla: si algo "tarda" (internet, disco, esperar un rato), casi seguro es asincrono. Si es puro calculo en memoria, es sincrono.</p>
 </blockquote>
 <h2 id="2-el-bucle-de-eventos-a-grandes-rasgos">2. El bucle de eventos, a grandes rasgos</h2>
-<p>Aqui viene la pregunta del millon: si JavaScript solo puede hacer <strong>una cosa a la vez</strong>, ¿como logra parecer que hace varias? La respuesta es el <strong>bucle de eventos</strong>.</p>
+<p>Aqui llega la pregunta del millon: si JavaScript solo puede hacer <strong>una cosa a la vez</strong>, ¿como consigue parecer que hace varias? La respuesta tiene nombre: el <strong>bucle de eventos</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-hilo-unico-single-threaded">🟦 ¿Que significa? — <em>Hilo unico (single-threaded)</em></h3>
 <p>JavaScript tiene <strong>un solo "trabajador"</strong> que ejecuta tu codigo. No hay dos lineas corriendo de verdad al mismo tiempo.
 <strong>Para que sirve:</strong> simplifica la programacion (no te peleas con varios trabajadores tocando lo mismo a la vez).
 <strong>Donde se usa en un repo real:</strong> todo el JS del navegador en <code>tunal-digital</code> corre en ese unico hilo.</p>
 <h3 id="que-significa-bucle-de-eventos-event-loop">🟦 ¿Que significa? — <em>Bucle de eventos (event loop)</em></h3>
-<p>Es el <strong>organizador</strong> de JavaScript. Mientras una tarea lenta se cocina "afuera" (la maneja el navegador), el bucle de eventos sigue atendiendo tu codigo. Cuando la tarea lenta termina, el bucle toma su resultado y lo pone en la fila para ejecutarlo.
+<p>Es el <strong>organizador</strong> de JavaScript. Mientras una tarea lenta se cocina "afuera" (la maneja el navegador), el bucle de eventos sigue atendiendo tu codigo. Cuando la tarea lenta termina, el bucle recoge su resultado y lo pone en la fila para ejecutarlo.
 <strong>Para que sirve:</strong> dar la ilusion de hacer muchas cosas a la vez con un solo hilo.
 <strong>Donde se usa en un repo real:</strong> es el motor invisible que permite que el chat de <code>tunal-digital</code> espere la respuesta sin congelar la pagina.</p>
 </blockquote>
-<p>Piensa en un mesero (el hilo unico). No cocina el, solo toma pedidos y entrega platos. La cocina (el navegador) prepara los platos lentos. Cuando un plato esta listo, el mesero lo recoge y lo lleva. El <strong>bucle de eventos</strong> es ese ir y venir del mesero, revisando una y otra vez si hay algo listo para entregar.</p>
+<p>Piensa en un mesero, que seria nuestro hilo unico. El no cocina: solo toma pedidos y entrega platos. La cocina, que vendria a ser el navegador, prepara los platos lentos. Cuando uno esta listo, el mesero lo recoge y lo lleva a la mesa. El <strong>bucle de eventos</strong> es ese ir y venir del mesero, asomandose una y otra vez a ver si hay algo listo para entregar.</p>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>No necesitas entender el bucle de eventos al detalle para programar bien. Te basta con saber que <strong>lo lento se delega y se reanuda despues</strong>. Con eso entiendes el 90% de los bugs de asincronia.</p>
+<p>No hace falta que entiendas el bucle de eventos al milimetro para programar bien. Te basta con quedarte con la idea: <strong>lo lento se delega y se retoma despues</strong>. Con eso solo ya entiendes el 90% de los bugs de asincronia.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Como el hilo es unico, si escribes un calculo enorme y bloqueante (por ejemplo un bucle de millones de vueltas), <strong>congelas la pagina</strong> aunque no haya red de por medio. La asincronia no parte el calculo en pedazos por arte de magia.</p>
+<p>Como el hilo es uno solo, si escribes un calculo enorme y bloqueante (digamos, un bucle de millones de vueltas), <strong>congelas la pagina</strong> aunque no haya nada de red de por medio. La asincronia no parte el calculo en pedacitos por arte de magia.</p>
 </blockquote>
 <h2 id="3-callbacks-la-primera-forma-de-esperar">3. Callbacks: la primera forma de esperar</h2>
-<p>La manera mas antigua de manejar "avisame cuando termines" es pasar una <strong>funcion</strong> que se ejecutara despues.</p>
+<p>La forma mas vieja de manejar el "avisame cuando termines" es pasar una <strong>funcion</strong> que se ejecutara mas tarde.</p>
 <blockquote class="def">
 <h3 id="que-significa-callback">🟦 ¿Que significa? — <em>Callback</em></h3>
 <p>Es una <strong>funcion que le entregas a otra funcion</strong> para que la llame "mas tarde", cuando algo termine.
-<strong>Para que sirve:</strong> reaccionar a eventos o a tareas que tardan, sin saber exactamente cuando ocurriran.
+<strong>Para que sirve:</strong> reaccionar a eventos o a tareas que tardan, sin saber con exactitud cuando van a ocurrir.
 <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <code>tunal-digital</code>, cuando haces que un boton ejecute codigo "al hacer clic", esa funcion del clic es un callback.</p>
 </blockquote>
-<p>Ejemplo sencillo con un temporizador:</p>
+<p>Veamoslo con un temporizador, que es lo mas simple:</p>
 <pre><code class="language-javascript">// setTimeout recibe un callback y un tiempo en milisegundos.
 // &quot;Avisame dentro de 2 segundos&quot; — pero el codigo de abajo no espera.
 console.log(&quot;Pido un cafe...&quot;);
@@ -78,17 +78,17 @@ setTimeout(function () {
 
 console.log(&quot;Mientras tanto, reviso el telefono&quot;);
 </code></pre>
-<p>Si lo corres, veras en la consola: "Pido un cafe...", luego "Mientras tanto, reviso el telefono", y solo despues de 2 segundos "Cafe listo". Eso demuestra que <code>setTimeout</code> <strong>no detuvo</strong> el programa.</p>
+<p>Si lo corres, en la consola veras primero "Pido un cafe...", enseguida "Mientras tanto, reviso el telefono", y solo dos segundos despues "Cafe listo". Esa es la prueba de que <code>setTimeout</code> <strong>no detuvo</strong> el programa.</p>
 <blockquote class="def">
 <h3 id="que-significa-settimeout">🟦 ¿Que significa? — <em>setTimeout</em></h3>
 <p>Una funcion del navegador que ejecuta un callback <strong>despues</strong> de cierto tiempo en milisegundos (1000 ms = 1 segundo).
 <strong>Para que sirve:</strong> retrasar acciones, mostrar mensajes temporales, reintentar algo mas tarde.
 <strong>Donde se usa en un repo real:</strong> util en <code>tunal-digital</code> para ocultar un aviso de "mensaje enviado" tras unos segundos en el formulario de contacto.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En el <code>main.js</code> de <code>tunal-digital</code> ya usas callbacks sin darte cuenta: cada <code>addEventListener("click", ...)</code> y cada <code>addEventListener("submit", ...)</code> recibe un callback que el navegador llamara cuando ocurra ese evento. Los callbacks no son algo nuevo: ya los usabas.</p>
+<p>En el <code>main.js</code> de <code>tunal-digital</code> ya usas callbacks sin haberte dado cuenta: cada <code>addEventListener("click", ...)</code> y cada <code>addEventListener("submit", ...)</code> recibe un callback que el navegador llamara cuando ocurra ese evento. O sea que los callbacks no son nada nuevo para ti: ya los venias usando.</p>
 </blockquote>
 <h2 id="4-el-callback-hell-el-infierno-de-los-callbacks">4. El callback hell (el infierno de los callbacks)</h2>
-<p>Los callbacks funcionan, pero se vuelven feos cuando <strong>una tarea depende de otra que depende de otra</strong>. Imagina: primero pide el usuario, luego con ese usuario pide sus proyectos, luego con cada proyecto pide sus tareas. Si todo eso lo haces con callbacks anidados, te queda una piramide ilegible.</p>
+<p>Los callbacks funcionan, pero se ponen feos cuando <strong>una tarea depende de otra que depende de otra</strong>. Imaginatelo: primero pides el usuario, despues con ese usuario pides sus proyectos, y luego con cada proyecto pides sus tareas. Si todo eso lo armas con callbacks anidados, te queda una piramide imposible de leer.</p>
 <blockquote class="def">
 <h3 id="que-significa-callback-hell-piramide-de-la-perdicion">🟦 ¿Que significa? — <em>Callback hell (piramide de la perdicion)</em></h3>
 <p>Es el lio que aparece cuando <strong>anidas muchos callbacks</strong> uno dentro de otro, formando una escalera de codigo cada vez mas indentado y dificil de leer.
@@ -105,20 +105,20 @@ pedirUsuario(function (usuario) {
   });
 });
 </code></pre>
-<p>¿Ves como el codigo se va "cayendo" hacia la derecha? Ademas, manejar errores en cada nivel se vuelve repetitivo. Para resolver esto nacieron las <strong>promesas</strong>.</p>
+<p>¿Ves como el codigo se va "cayendo" hacia la derecha? Y por si fuera poco, manejar los errores en cada nivel se vuelve un copia y pega interminable. Para salir de este atolladero nacieron las <strong>promesas</strong>.</p>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>El callback hell no solo se ve feo: dificulta encontrar bugs y manejar errores. Si te sorprendes anidando tres o mas callbacks, detente y pasa a promesas o async/await.</p>
+<p>El callback hell no solo se ve feo: dificulta cazar bugs y manejar errores. Si te descubres anidando tres o mas callbacks, frena ahi mismo y pasate a promesas o async/await.</p>
 </blockquote>
 <h2 id="5-promesas-una-caja-con-un-resultado-futuro">5. Promesas: una caja con un resultado futuro</h2>
-<p>Una <strong>promesa</strong> es como un ticket que te dan en la tintoreria: todavia no tienes tu ropa, pero tienes un comprobante que dice "lista mas tarde". Con ese ticket puedes planear que haras cuando este lista, y que haras si algo sale mal.</p>
+<p>Una <strong>promesa</strong> es como el ticket que te dan en la tintoreria: todavia no tienes tu ropa, pero llevas un comprobante que dice "lista mas tarde". Con ese ticket en la mano puedes ir planeando que haras cuando este lista, y tambien que haras si algo sale mal.</p>
 <blockquote class="def">
 <h3 id="que-significa-promesa-promise">🟦 ¿Que significa? — <em>Promesa (Promise)</em></h3>
 <p>Es un <strong>objeto que representa un resultado que aun no esta listo</strong>. Puede terminar de dos formas: cumplida (con un valor) o rechazada (con un error).
 <strong>Para que sirve:</strong> manejar tareas asincronas de forma ordenada y encadenable, sin anidar callbacks.
 <strong>Donde se usa en un repo real:</strong> <code>fetch</code> en <code>tunal-digital</code> <strong>devuelve una promesa</strong>; toda la comunicacion del chat de IA con el Worker se basa en promesas.</p>
 </blockquote>
-<p>Una promesa pasa por <strong>estados</strong>:</p>
+<p>Una promesa va pasando por distintos <strong>estados</strong>:</p>
 <blockquote class="def">
 <h3 id="que-significa-estados-de-una-promesa-pending-fulfilled-rejected">🟦 ¿Que significa? — <em>Estados de una promesa (pending, fulfilled, rejected)</em></h3>
 <ul>
@@ -130,7 +130,7 @@ pedirUsuario(function (usuario) {
 </ul>
 </blockquote>
 <h3 id="51-then-catch-y-finally">5.1 then, catch y finally</h3>
-<p>Para reaccionar a una promesa usas tres metodos:</p>
+<p>Para reaccionar a una promesa tienes tres metodos a mano:</p>
 <blockquote class="def">
 <h3 id="que-significa-then">🟦 ¿Que significa? — <em>.then()</em></h3>
 <p>Metodo de una promesa que registra <strong>que hacer cuando se cumple</strong> (cuando llega el resultado). Recibe un callback con el valor.
@@ -166,12 +166,12 @@ fetch(&quot;https://mi-worker.ejemplo.dev/chat&quot;)
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Fijate en el <code>return</code> dentro del primer <code>.then()</code>. Cuando devuelves algo en un <code>.then()</code>, ese valor llega al <strong>siguiente</strong> <code>.then()</code> de la cadena. Asi se encadena de forma plana, sin piramides. Adios callback hell.</p>
+<p>Fijate en el <code>return</code> dentro del primer <code>.then()</code>. Cuando devuelves algo en un <code>.then()</code>, ese valor cae directo en el <strong>siguiente</strong> <code>.then()</code> de la cadena. Asi se va encadenando de forma plana, sin piramides. Adios callback hell.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>El <code>main.js</code> de <code>tunal-digital</code> usa exactamente este patron para hablar con el Worker: un <code>fetch</code>, luego convertir la respuesta, luego pintar el mensaje de la IA, y un manejo de error por si la red falla. Reconocer esta cadena es reconocer el corazon del chat.</p>
+<p>El <code>main.js</code> de <code>tunal-digital</code> usa exactamente este patron para hablar con el Worker: un <code>fetch</code>, luego convertir la respuesta, luego pintar el mensaje de la IA, y un manejo de error por si la red se cae. Reconocer esta cadena es reconocer el corazon del chat.</p>
 </blockquote>
 <h2 id="6-asyncawait-promesas-que-se-leen-como-cuento">6. async/await: promesas que se leen como cuento</h2>
-<p>Las promesas con <code>.then()</code> ya son mejores que los callbacks, pero todavia hay que pensar en cadenas. La sintaxis <strong>async/await</strong> te deja escribir codigo asincrono que <strong>se lee de arriba hacia abajo</strong>, como si fuera sincrono. Es azucar visual sobre las promesas: por debajo siguen siendo promesas.</p>
+<p>Las promesas con <code>.then()</code> ya son un salto enorme frente a los callbacks, pero todavia te obligan a pensar en cadenas. La sintaxis <strong>async/await</strong> te deja escribir codigo asincrono que <strong>se lee de arriba hacia abajo</strong>, como si fuera sincrono normal y corriente. En el fondo es azucar visual sobre las promesas: por debajo siguen siendo promesas de toda la vida.</p>
 <blockquote class="def">
 <h3 id="que-significa-async">🟦 ¿Que significa? — <em>async</em></h3>
 <p>Una palabra que pones <strong>antes de una funcion</strong> para marcarla como asincrona. Una funcion <code>async</code> siempre devuelve una promesa.
@@ -182,7 +182,7 @@ fetch(&quot;https://mi-worker.ejemplo.dev/chat&quot;)
 <strong>Para que sirve:</strong> escribir tareas asincronas en orden, sin <code>.then()</code> encadenados.
 <strong>Donde se usa en un repo real:</strong> en <code>RachaSimple</code> y <code>Faro/Organizer</code>, para esperar datos de Supabase antes de seguir.</p>
 </blockquote>
-<p>Compara el mismo chat escrito con async/await:</p>
+<p>Mira el mismo chat, ahora escrito con async/await:</p>
 <pre><code class="language-javascript">// La misma logica del fetch, pero leida como un cuento de arriba a abajo.
 async function preguntarIA(mensaje) {
   const respuesta = await fetch(&quot;https://mi-worker.ejemplo.dev/chat&quot;);
@@ -193,15 +193,15 @@ async function preguntarIA(mensaje) {
 
 preguntarIA(&quot;Hola&quot;);
 </code></pre>
-<p>¿No es mucho mas facil de leer? Cada <code>await</code> "pausa" esa funcion hasta tener el resultado, pero <strong>no congela la pagina</strong>: por debajo sigue siendo el bucle de eventos haciendo su magia.</p>
+<p>¿A que se lee muchisimo mejor? Cada <code>await</code> "pausa" esa funcion hasta tener el resultado, pero ojo: <strong>no congela la pagina</strong>. Por debajo sigue trabajando el bucle de eventos, haciendo lo suyo sin que tu lo veas.</p>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p><code>await</code> solo funciona dentro de funciones marcadas con <code>async</code>. Si intentas usar <code>await</code> en codigo suelto, JavaScript te dara error. Recuerda: primero <code>async</code> en la funcion, luego <code>await</code> adentro.</p>
+<p><code>await</code> solo funciona dentro de funciones marcadas con <code>async</code>. Si intentas usarlo en codigo suelto, JavaScript te soltara un error. Acuerdate del orden: primero <code>async</code> en la funcion, despues <code>await</code> adentro.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p><code>await</code> hace que tu funcion espere ese resultado <strong>antes de seguir</strong>. Si pones muchos <code>await</code> en fila para tareas independientes, las haces una tras otra y tardas mas. Para tareas que pueden ir en paralelo, mira la siguiente seccion (<code>Promise.all</code>).</p>
+<p><code>await</code> hace que tu funcion espere ese resultado <strong>antes de seguir</strong>. Si pones un monton de <code>await</code> en fila para tareas que no dependen entre si, las terminas haciendo una detras de otra y tardas de mas. Para las que pueden ir en paralelo, echa un ojo a la siguiente seccion (<code>Promise.all</code>).</p>
 </blockquote>
 <h2 id="7-manejar-errores-con-trycatch">7. Manejar errores con try/catch</h2>
-<p>Con async/await ya no usas <code>.catch()</code>. En su lugar, envuelves el codigo que puede fallar en un bloque <strong>try/catch</strong>.</p>
+<p>Con async/await ya no usas <code>.catch()</code>. En su lugar envuelves el codigo que puede fallar en un bloque <strong>try/catch</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-trycatch">🟦 ¿Que significa? — <em>try/catch</em></h3>
 <p>Una estructura para <strong>intentar</strong> un codigo (<code>try</code>) y, si lanza un error, <strong>atraparlo</strong> (<code>catch</code>) en lugar de que el programa se rompa.
@@ -230,10 +230,10 @@ preguntarIA(&quot;Hola&quot;);
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>El chat de IA de <code>tunal-digital</code> necesita exactamente este escudo: si el Worker no responde o el usuario no tiene internet, el <code>try/catch</code> evita que la pagina muestre un error feo en consola y, en cambio, le da al usuario un mensaje humano.</p>
+<p>El chat de IA de <code>tunal-digital</code> necesita justo este escudo: si el Worker no responde o el usuario se quedo sin internet, el <code>try/catch</code> evita que la pagina escupa un error feo en consola y, en su lugar, le da al usuario un mensaje hecho para humanos.</p>
 </blockquote>
 <h2 id="8-promiseall-esperar-varias-cosas-a-la-vez">8. Promise.all: esperar varias cosas a la vez</h2>
-<p>A veces necesitas varios resultados que <strong>no dependen entre si</strong>. Por ejemplo, en <code>Faro/Organizer</code> quieres datos de GitHub <strong>y</strong> de Google Drive. No tiene sentido esperar uno y luego el otro: ¡lanzalos juntos!</p>
+<p>A veces necesitas varios resultados que <strong>no dependen entre si</strong>. Por ejemplo, en <code>Faro/Organizer</code> quieres datos de GitHub <strong>y</strong> de Google Drive. No tiene sentido esperar a que llegue uno y recien entonces pedir el otro: ¡lanzalos juntos!</p>
 <blockquote class="def">
 <h3 id="que-significa-promiseall">🟦 ¿Que significa? — <em>Promise.all</em></h3>
 <p>Una funcion que recibe <strong>una lista de promesas</strong> y devuelve una sola promesa que se cumple cuando <strong>todas</strong> terminan. Te da un arreglo con todos los resultados, en el mismo orden.
@@ -258,12 +258,12 @@ preguntarIA(&quot;Hola&quot;);
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Con <code>Promise.all</code>, si <strong>una sola</strong> promesa se rechaza, toda la operacion se considera fallida y caes al <code>catch</code>, aunque las demas hayan ido bien. Si quieres que cada una falle por su cuenta sin tumbar al resto, existe <code>Promise.allSettled</code> (mas avanzado, lo veras cuando lo necesites).</p>
+<p>Con <code>Promise.all</code> hay una trampa: si <strong>una sola</strong> promesa se rechaza, toda la operacion se da por fallida y caes al <code>catch</code>, aunque las demas hayan ido perfecto. Si prefieres que cada una falle por su cuenta sin arrastrar al resto, existe <code>Promise.allSettled</code> (mas avanzado, lo veras cuando te haga falta).</p>
 <h3 id="tip_4">💡 Tip</h3>
-<p>Truco mental: usa <code>await</code> simple para pasos que <strong>dependen</strong> uno del otro (necesito el usuario antes de pedir sus proyectos), y <code>Promise.all</code> para pasos <strong>independientes</strong> que pueden correr juntos. Eso ya te hace pensar como un dev senior.</p>
+<p>Truco mental: usa <code>await</code> simple para pasos que <strong>dependen</strong> uno del otro (necesito el usuario antes de pedir sus proyectos), y <code>Promise.all</code> para pasos <strong>independientes</strong> que pueden correr juntos. Pensar asi ya te pone en la cabeza de un dev senior.</p>
 </blockquote>
 <h2 id="9-fetch-completo-headers-body-y-respuesta">9. fetch completo: headers, body y respuesta</h2>
-<p>Ya usamos <code>fetch</code> varias veces. Ahora veamoslo entero, porque es la herramienta que conecta tu sitio con el resto de internet.</p>
+<p>Ya usamos <code>fetch</code> varias veces de pasada. Ahora vamos a verlo entero, porque es la herramienta que conecta tu sitio con el resto de internet.</p>
 <blockquote class="def">
 <h3 id="que-significa-fetch">🟦 ¿Que significa? — <em>fetch</em></h3>
 <p>La funcion del navegador para <strong>hacer peticiones a internet</strong> (a una API, a un Worker). Devuelve una promesa con la respuesta.
@@ -282,15 +282,15 @@ preguntarIA(&quot;Hola&quot;);
 <strong>Para que sirve:</strong> mandar informacion al servidor (el mensaje del usuario, un formulario).
 <strong>Donde se usa en un repo real:</strong> en el chat de <code>tunal-digital</code>, el body lleva el texto que el visitante escribio.</p>
 <h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
-<p>Un formato de texto para representar datos (objetos, listas, numeros) que tanto JavaScript como los servidores entienden facilmente.
+<p>Un formato de texto para representar datos (objetos, listas, numeros) que tanto JavaScript como los servidores entienden sin problema.
 <strong>Para que sirve:</strong> intercambiar datos estructurados entre cliente y servidor.
 <strong>Donde se usa en un repo real:</strong> <code>PolyPaw</code> guarda sus misiones en archivos JSON; <code>tunal-digital</code> envia y recibe JSON en el chat.</p>
 <h3 id="que-significa-jsonstringify-y-json">🟦 ¿Que significa? — <em>JSON.stringify y .json()</em></h3>
-<p><code>JSON.stringify(objeto)</code> convierte un objeto de JavaScript en <strong>texto JSON</strong> para enviarlo. El metodo <code>respuesta.json()</code> hace lo contrario: convierte el <strong>texto JSON recibido</strong> en un objeto de JavaScript.
+<p><code>JSON.stringify(objeto)</code> convierte un objeto de JavaScript en <strong>texto JSON</strong> para poder enviarlo. El metodo <code>respuesta.json()</code> hace el camino inverso: convierte el <strong>texto JSON recibido</strong> en un objeto de JavaScript.
 <strong>Para que sirve:</strong> traducir entre el mundo de objetos de JS y el texto que viaja por internet.
 <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, <code>JSON.stringify</code> arma el body del mensaje y <code>.json()</code> desempaca la respuesta de la IA.</p>
 </blockquote>
-<p>Un <code>fetch</code> completo con todas sus partes:</p>
+<p>Un <code>fetch</code> completo, con todas sus partes a la vista:</p>
 <pre><code class="language-javascript">async function enviarMensajeAlChat(textoUsuario) {
   try {
     const respuesta = await fetch(&quot;https://mi-worker.ejemplo.dev/chat&quot;, {
@@ -317,19 +317,19 @@ preguntarIA(&quot;Hola&quot;);
 <blockquote class="def">
 <h3 id="que-significa-respuestaok-y-respuestastatus">🟦 ¿Que significa? — <em>respuesta.ok y respuesta.status</em></h3>
 <p><code>respuesta.status</code> es el <strong>codigo numerico</strong> que envia el servidor (200 = todo bien, 404 = no encontrado, 500 = error del servidor). <code>respuesta.ok</code> es un atajo: vale <code>true</code> si el codigo esta entre 200 y 299.
-<strong>Para que sirve:</strong> saber si la peticion realmente funciono antes de usar los datos.
+<strong>Para que sirve:</strong> saber si la peticion de verdad funciono antes de usar los datos.
 <strong>Donde se usa en un repo real:</strong> en <code>tunal-digital</code>, conviene revisar <code>respuesta.ok</code> antes de leer la respuesta del Worker, para no procesar una respuesta de error.</p>
 <h3 id="que-significa-throw-lanzar-un-error">🟦 ¿Que significa? — <em>throw (lanzar un error)</em></h3>
 <p>La palabra que usas para <strong>provocar un error a proposito</strong>, que sera atrapado por el <code>catch</code> mas cercano.
 <strong>Para que sirve:</strong> cortar el flujo cuando detectas que algo no esta bien (por ejemplo, una respuesta con error).
 <strong>Donde se usa en un repo real:</strong> en <code>Faro/Organizer</code>, para lanzar un error claro si Supabase o OpenAI devuelven algo invalido.</p>
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>Un detalle que confunde a todos al principio: <code>fetch</code> <strong>no</strong> lanza error si el servidor responde 404 o 500. Solo falla si no hubo conexion. Por eso debes revisar <code>respuesta.ok</code> tu mismo y lanzar el error con <code>throw</code> si hace falta.</p>
+<p>Un detalle que confunde a todo el mundo al principio: <code>fetch</code> <strong>no</strong> lanza error si el servidor responde 404 o 500. Solo falla si no llego a haber conexion. Por eso te toca revisar <code>respuesta.ok</code> por tu cuenta y lanzar el error con <code>throw</code> si hace falta.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>El chat de IA de <code>tunal-digital</code> reune todo lo de este capitulo: un boton con su callback de <code>submit</code>, una funcion <code>async</code>, un <code>fetch</code> POST con headers y body JSON, un <code>await respuesta.json()</code>, un <code>try/catch</code> para los fallos y un <code>finally</code> para reactivar el boton. Si entendiste este capitulo, ya entiendes como late el corazon de tu sitio.</p>
+<p>El chat de IA de <code>tunal-digital</code> junta todo lo de este capitulo en un solo sitio: un boton con su callback de <code>submit</code>, una funcion <code>async</code>, un <code>fetch</code> POST con headers y body JSON, un <code>await respuesta.json()</code>, un <code>try/catch</code> para los fallos y un <code>finally</code> para reactivar el boton. Si entendiste este capitulo, ya entiendes como late el corazon de tu sitio.</p>
 </blockquote>
 <h2 id="10-juntandolo-todo-el-chat-de-ia-paso-a-paso">10. Juntandolo todo: el chat de IA paso a paso</h2>
-<p>Veamos el flujo completo del chat, como ocurre de verdad en <code>tunal-digital</code>:</p>
+<p>Veamos el flujo completo del chat, tal como ocurre de verdad en <code>tunal-digital</code>:</p>
 <pre><code class="language-javascript">const formulario = document.querySelector(&quot;#chat-form&quot;);
 const campo = document.querySelector(&quot;#chat-input&quot;);
 const boton = document.querySelector(&quot;#chat-enviar&quot;);
@@ -354,10 +354,10 @@ formulario.addEventListener(&quot;submit&quot;, async function (evento) {
   }
 });
 </code></pre>
-<p>Lee ese codigo despacio. Cada pieza que ves ya la definimos: el callback del evento, <code>async</code>/<code>await</code>, la llamada con <code>fetch</code>, el <code>try/catch/finally</code>. Todo el capitulo cabe en un solo flujo real. Eso es lo bonito de la asincronia: pocas piezas, bien combinadas.</p>
+<p>Lee ese codigo con calma. Cada pieza que aparece ahi ya la definimos antes: el callback del evento, <code>async</code>/<code>await</code>, la llamada con <code>fetch</code>, el <code>try/catch/finally</code>. Todo el capitulo cabe dentro de un unico flujo real. Y eso es justo lo bonito de la asincronia: pocas piezas que, bien combinadas, lo hacen todo.</p>
 <blockquote class="tip">
 <h3 id="tip_5">💡 Tip</h3>
-<p><code>evento.preventDefault()</code> evita el comportamiento por defecto del formulario (recargar la pagina). En sitios con <code>fetch</code> es casi obligatorio, porque queremos enviar los datos nosotros y quedarnos en la misma pagina.</p>
+<p><code>evento.preventDefault()</code> evita el comportamiento por defecto del formulario, que es recargar la pagina. En sitios con <code>fetch</code> es practicamente obligatorio, porque queremos mandar los datos nosotros y quedarnos en la misma pagina.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -396,7 +396,7 @@ formulario.addEventListener(&quot;submit&quot;, async function (evento) {
 </li>
 </ol>
 <blockquote>
-<p>Lo lograste. Antes de este capitulo, "esperar" en JavaScript te sonaba a magia negra; ahora sabes que detras solo hay promesas, un bucle de eventos paciente y unas cuantas palabras como <code>async</code>, <code>await</code> y <code>try/catch</code>. El chat de IA de tu sitio ya no es un misterio: es codigo que tu entiendes linea por linea. Yo, <strong>Bit</strong>, me voy a flotar un rato en mi pecera mientras tu practicas los ejercicios. Nos vemos en el siguiente capitulo. 🐾</p>
+<p>Lo lograste. Antes de este capitulo, "esperar" en JavaScript te sonaba a magia negra; ahora ya sabes que detras solo hay promesas, un bucle de eventos paciente y un punado de palabras como <code>async</code>, <code>await</code> y <code>try/catch</code>. El chat de IA de tu sitio dejo de ser un misterio: es codigo que entiendes linea por linea. Yo, <strong>Bit</strong>, me voy a flotar un rato en mi pecera mientras tu le das a los ejercicios. Nos vemos en el siguiente capitulo. 🐾</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

@@ -25,9 +25,9 @@
 <blockquote>
 <p>Hasta ahora tus componentes mostraban datos y los cambiaban con botones de juguete. Pero una app
 de verdad <strong>escucha al usuario</strong>: clics, teclas, texto que se escribe, formularios que se envían.
-En este capítulo aprenderás a manejar <strong>eventos</strong> en React (<code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>) y a
-construir <strong>formularios controlados</strong>, donde el <strong>estado</strong> es la única fuente de verdad de lo que
-hay escrito en cada campo. Terminaremos armando, paso a paso, el formulario de <strong>crear hábito</strong> de
+En este capítulo vas a aprender a manejar <strong>eventos</strong> en React (<code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>) y a
+construir <strong>formularios controlados</strong>, esos en los que el <strong>estado</strong> es la única fuente de verdad de lo que
+hay escrito en cada campo. Y al final lo juntaremos todo armando, paso a paso, el formulario de <strong>crear hábito</strong> de
 <strong>RachaSimple</strong>. Bit el ajolote viene contigo, con sus branquias rosadas y muchas ganas de teclear.</p>
 </blockquote>
 <p align="center">
@@ -36,8 +36,8 @@ hay escrito en cada campo. Terminaremos armando, paso a paso, el formulario de <
 
 <hr />
 <h2 id="1-eventos-como-react-escucha-al-usuario">1. Eventos: cómo React escucha al usuario</h2>
-<p>Una <strong>interfaz</strong> está muerta hasta que reacciona. Que reaccione significa que, cuando ocurre algo
-(un clic, una tecla), se ejecuta una función tuya. Esa "cosa que ocurre" es un <strong>evento</strong>.</p>
+<p>Una <strong>interfaz</strong> está muerta hasta que reacciona a algo. Y reaccionar significa que, cuando ocurre algo
+(un clic, una tecla), se ejecuta una función que tú escribiste. Esa "cosa que ocurre" es un <strong>evento</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-evento">🟦 ¿Qué significa? — <em>Evento</em></h3>
 <p>Un <strong>evento</strong> es algo que pasa en la página y que el navegador te avisa: el usuario hizo clic,
@@ -47,11 +47,11 @@ directamente en el JSX y React se encarga del resto.</p>
 <h3 id="que-significa-manejador-de-evento-event-handler">🟦 ¿Qué significa? — <em>Manejador de evento (event handler)</em></h3>
 <p>Un <strong>manejador de evento</strong> es la <strong>función que se ejecuta cuando el evento ocurre</strong>. Tú la
 escribes y se la pasas a React; React la llama en el momento justo. Por costumbre se nombran
-empezando por <code>handle...</code> (<code>handleClick</code>, <code>handleSubmit</code>, <code>handleChange</code>), para que al leerlas
-sepas de inmediato que son respuestas a eventos.</p>
+empezando por <code>handle...</code> (<code>handleClick</code>, <code>handleSubmit</code>, <code>handleChange</code>), así, con solo leerlas,
+ya sabes que son respuestas a eventos.</p>
 </blockquote>
 <p>En JSX, los eventos se escriben como <strong>atributos en camelCase</strong> que empiezan por <code>on</code>: <code>onClick</code>,
-<code>onChange</code>, <code>onSubmit</code>. Les pasas una <strong>función</strong> (no el resultado de llamarla).</p>
+<code>onChange</code>, <code>onSubmit</code>. Les pasas una <strong>función</strong> (ojo, la función en sí, no el resultado de llamarla).</p>
 <pre><code class="language-tsx">function BotonSaludo() {
   function handleClick() {
     alert(&quot;¡Hola desde React!&quot;);
@@ -62,30 +62,30 @@ sepas de inmediato que son respuestas a eventos.</p>
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Fíjate que es <code>onClick={handleClick}</code> y <strong>no</strong> <code>onClick={handleClick()}</code>. Con paréntesis,
+<p>Fíjate bien: es <code>onClick={handleClick}</code> y <strong>no</strong> <code>onClick={handleClick()}</code>. Con paréntesis,
 JavaScript <strong>ejecuta la función al renderizar</strong> y le pasa a <code>onClick</code> lo que esa función devuelva
-(normalmente <code>undefined</code>). Sin paréntesis, le pasas la función <strong>para que React la llame luego</strong>,
-cuando ocurra el clic. Esta confusión es uno de los errores más comunes de quien empieza.</p>
+(que normalmente es <code>undefined</code>). Sin paréntesis, le pasas la función <strong>para que React la llame después</strong>,
+cuando ocurra el clic. Esta confusión es uno de los tropiezos más comunes de quien empieza.</p>
 </blockquote>
-<p>Si necesitas pasarle argumentos al manejador, lo envuelves en una <strong>función flecha</strong>:</p>
+<p>¿Y si necesitas pasarle argumentos al manejador? Entonces lo envuelves en una <strong>función flecha</strong>:</p>
 <pre><code class="language-tsx">&lt;button onClick={() =&gt; borrarHabito(habito.id)}&gt;Borrar&lt;/button&gt;
 </code></pre>
 <p>Aquí <code>() =&gt; borrarHabito(habito.id)</code> es una función que <strong>todavía no se ejecuta</strong>: se ejecutará
-cuando alguien haga clic, y entonces sí llamará a <code>borrarHabito</code> con el <code>id</code> correcto.</p>
+cuando alguien haga clic, y solo entonces llamará a <code>borrarHabito</code> con el <code>id</code> correcto.</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-flecha">🟦 ¿Qué significa? — <em>Función flecha</em></h3>
 <p>Una <strong>función flecha</strong> (<code>() =&gt; { ... }</code>) es una forma corta de escribir una función, que viste en
 el Módulo 03. En React se usan muchísimo como manejadores rápidos: <code>onClick={() =&gt; setAbierto(true)}</code>.
-El <code>() =&gt;</code> es "una función que recibe esto y hace aquello".</p>
+El <code>() =&gt;</code> se lee como "una función que recibe esto y hace aquello".</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <strong>RachaSimple</strong>, los componentes de tarjeta de hábito usan exactamente este patrón: el botón de
+<p>En <strong>RachaSimple</strong>, los componentes de tarjeta de hábito usan justo este patrón: el botón de
 completar lleva algo como <code>onClick={() =&gt; marcarHecho(habito.id)}</code> y el de eliminar
-<code>onClick={() =&gt; eliminar(habito.id)}</code>. La flecha es la que "recuerda" de qué hábito hablamos.</p>
+<code>onClick={() =&gt; eliminar(habito.id)}</code>. La flecha es la que "recuerda" de qué hábito estamos hablando.</p>
 </blockquote>
 <hr />
 <h2 id="2-el-objeto-del-evento">2. El objeto del evento</h2>
-<p>Cuando React llama a tu manejador, le pasa un <strong>objeto del evento</strong> con información sobre lo que
-pasó: qué elemento lo disparó, qué tecla se pulsó, qué texto hay escrito, etc.</p>
+<p>Cuando React llama a tu manejador, no lo llama vacío: le pasa un <strong>objeto del evento</strong> con información sobre lo que
+acaba de pasar: qué elemento lo disparó, qué tecla se pulsó, qué texto hay escrito, etc.</p>
 <blockquote class="def">
 <h3 id="que-significa-objeto-del-evento-event-e">🟦 ¿Qué significa? — <em>Objeto del evento (<code>event</code> / <code>e</code>)</em></h3>
 <p>Es un objeto que React entrega a tu manejador con los <strong>datos del evento</strong>. Por costumbre se llama
@@ -94,9 +94,9 @@ pasó: qué elemento lo disparó, qué tecla se pulsó, qué texto hay escrito, 
 <h3 id="que-significa-etargetvalue">🟦 ¿Qué significa? — <em><code>e.target.value</code></em></h3>
 <p><code>e.target</code> es el <strong>elemento del DOM</strong> que originó el evento (por ejemplo, el <code>&lt;input&gt;</code> donde
 escribiste). <code>e.target.value</code> es <strong>el texto que ese input tiene escrito</strong> en ese instante. Es la
-pieza con la que sabrás "qué acaba de teclear el usuario".</p>
+pieza con la que vas a saber "qué acaba de teclear el usuario".</p>
 </blockquote>
-<p>En TypeScript (Módulo 05) conviene <strong>tipar</strong> el evento para que el editor te ayude. Para un cambio
+<p>En TypeScript (Módulo 05) conviene <strong>tipar</strong> el evento para que el editor te eche una mano. Para un cambio
 en un input, el tipo es <code>React.ChangeEvent&lt;HTMLInputElement&gt;</code>:</p>
 <pre><code class="language-tsx">function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
   console.log(&quot;Lo que hay escrito ahora:&quot;, e.target.value);
@@ -104,14 +104,14 @@ en un input, el tipo es <code>React.ChangeEvent&lt;HTMLInputElement&gt;</code>:<
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>No memorices todos los tipos de evento. Empieza a escribir <code>(e) =&gt;</code> dentro de un <code>onChange</code> y tu
+<p>No hace falta que memorices todos los tipos de evento. Empieza a escribir <code>(e) =&gt;</code> dentro de un <code>onChange</code> y tu
 editor (VS Code) te dirá el tipo correcto. Los tres que usarás casi siempre son
 <code>ChangeEvent&lt;HTMLInputElement&gt;</code> (inputs de texto), <code>ChangeEvent&lt;HTMLTextAreaElement&gt;</code> (áreas de
 texto) y <code>FormEvent&lt;HTMLFormElement&gt;</code> (envío de formulario).</p>
 </blockquote>
 <hr />
 <h2 id="3-inputs-no-controlados-vs-controlados">3. Inputs no controlados vs. controlados</h2>
-<p>Aquí está el concepto central del capítulo. Hay dos formas de manejar un campo de texto en React.</p>
+<p>Llegamos al concepto central del capítulo. Hay dos formas de manejar un campo de texto en React, y conviene tenerlas claras.</p>
 <blockquote class="def">
 <h3 id="que-significa-input-no-controlado">🟦 ¿Qué significa? — <em>Input no controlado</em></h3>
 <p>Un <strong>input no controlado</strong> es un campo donde <strong>el navegador guarda el texto por su cuenta</strong> y React
@@ -126,7 +126,7 @@ que hay en tu variable son siempre lo mismo.</p>
 <h3 id="que-significa-fuente-de-verdad-source-of-truth">🟦 ¿Qué significa? — <em>Fuente de verdad (source of truth)</em></h3>
 <p>La <strong>fuente de verdad</strong> es <strong>el único lugar donde un dato vive de forma oficial</strong>. Si quieres saber
 qué hay escrito en el campo, miras el estado, no el DOM. Tener una sola fuente de verdad evita que
-la pantalla y tus datos se contradigan, que es una fuente clásica de bugs.</p>
+la pantalla y tus datos se contradigan, que es de donde salen un montón de bugs.</p>
 </blockquote>
 <p>La receta de un input controlado tiene <strong>dos cables</strong> conectados al mismo estado:</p>
 <pre><code class="language-tsx">import { useState } from &quot;react&quot;;
@@ -155,23 +155,23 @@ function CampoNombre() {
 <h3 id="que-significa-value-y-onchange-el-bucle-controlado">🟦 ¿Qué significa? — <em><code>value</code> y <code>onChange</code> (el bucle controlado)</em></h3>
 <p>En un input controlado, <code>value</code> y <code>onChange</code> trabajan en pareja. <code>value</code> <strong>lee</strong> del estado y
 <code>onChange</code> <strong>escribe</strong> en el estado. Juntos forman un pequeño bucle: tecleo → <code>onChange</code> →
-<code>setEstado</code> → re-render → nuevo <code>value</code>. Si pones <code>value</code> pero olvidas <code>onChange</code>, el campo queda
+<code>setEstado</code> → re-render → nuevo <code>value</code>. Si pones <code>value</code> pero te olvidas del <code>onChange</code>, el campo queda
 <strong>bloqueado</strong> (no puedes escribir), porque el estado nunca cambia.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
 <p>El error "A component is changing an uncontrolled input to be controlled" en la consola casi siempre
-significa que tu <code>value</code> empezó siendo <code>undefined</code> (no inicializaste el estado) y luego pasó a tener
-texto. Solución: inicializa siempre el estado con un string vacío <code>useState("")</code>, no <code>useState()</code>.</p>
+significa que tu <code>value</code> empezó siendo <code>undefined</code> (porque no inicializaste el estado) y luego pasó a tener
+texto. La solución es simple: inicializa siempre el estado con un string vacío, <code>useState("")</code>, nunca <code>useState()</code>.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>¿Por qué tanto lío para escribir en un campo? Porque cuando el estado es la fuente de verdad puedes
-hacer cosas potentes: validar mientras se escribe, transformar el texto (pasar a mayúsculas, recortar
+<p>¿Y por qué tanto rollo para escribir en un campo? Porque cuando el estado es la fuente de verdad puedes
+hacer cosas que valen la pena: validar mientras se escribe, transformar el texto (pasar a mayúsculas, recortar
 espacios), deshabilitar el botón si el campo está vacío, o rellenar el campo desde código. Todo eso
-sería incómodo con un input no controlado.</p>
+sería bastante incómodo con un input no controlado.</p>
 </blockquote>
 <hr />
 <h2 id="4-onchange-reaccionar-a-cada-tecla">4. <code>onChange</code>: reaccionar a cada tecla</h2>
-<p><code>onChange</code> se dispara <strong>cada vez que cambia el contenido del campo</strong>. En React, eso es prácticamente
+<p><code>onChange</code> se dispara <strong>cada vez que cambia el contenido del campo</strong>. En React, eso ocurre prácticamente
 en cada tecla (a diferencia del HTML clásico, donde <code>change</code> esperaba a que el campo perdiera el
-foco).</p>
+foco para avisarte).</p>
 <pre><code class="language-tsx">function ContadorLetras() {
   const [texto, setTexto] = useState(&quot;&quot;);
 
@@ -184,24 +184,24 @@ foco).</p>
 }
 </code></pre>
 <p>Como el estado cambia con cada tecla y la app se re-renderiza, el contador <code>texto.length</code> se actualiza
-en vivo. Esa es la "reactividad" del Módulo 06-cap.01 en acción.</p>
+en vivo. Esa es la "reactividad" del Módulo 06-cap.01, ahora en acción.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
 <p>En <strong>Faro/Organizer</strong> (Next.js 15 + React 19), las cajas de búsqueda y filtrado de proyectos son
 inputs controlados: lo que escribes vive en estado y la lista de proyectos se filtra en vivo. El
-mismo patrón <code>value</code> + <code>onChange</code> que acabas de ver, a mayor escala.</p>
+mismo patrón <code>value</code> + <code>onChange</code> que acabas de ver, solo que a mayor escala.</p>
 <h3 id="que-significa-textarea-y-select-controlados">🟦 ¿Qué significa? — <em><code>textarea</code> y <code>select</code> controlados</em></h3>
 <p>Un <code>&lt;textarea&gt;</code> (caja de texto multilínea) y un <code>&lt;select&gt;</code> (lista desplegable) se controlan <strong>igual</strong>
-que un <code>&lt;input&gt;</code>: con <code>value</code> y <code>onChange</code>. Ojo: en HTML puro el <code>&lt;textarea&gt;</code> ponía su contenido
-entre etiquetas; en React se usa <code>value={...}</code> como en cualquier input. Más consistente, menos cosas
+que un <code>&lt;input&gt;</code>: con <code>value</code> y <code>onChange</code>. Eso sí, ojo: en HTML puro el <code>&lt;textarea&gt;</code> ponía su contenido
+entre etiquetas, pero en React se usa <code>value={...}</code> como en cualquier input. Más consistente y menos cosas
 que recordar.</p>
 </blockquote>
 <hr />
 <h2 id="5-onsubmit-y-prevenir-el-envio-por-defecto">5. <code>onSubmit</code> y prevenir el envío por defecto</h2>
 <p>Un <code>&lt;form&gt;</code> se envía cuando el usuario pulsa Enter o un botón de tipo <code>submit</code>. Por defecto, el
-navegador <strong>recarga la página entera</strong> y manda los datos a una URL, comportamiento heredado de la web
-de los años 90. En una app React <strong>no queremos eso</strong>: queremos manejar el envío con JavaScript sin
-recargar.</p>
+navegador <strong>recarga la página entera</strong> y manda los datos a una URL: un comportamiento que arrastramos desde la web
+de los años 90. En una app React eso es justo lo que <strong>no queremos</strong>; lo que queremos es manejar el envío con JavaScript, sin
+recargar nada.</p>
 <blockquote class="def">
 <h3 id="que-significa-comportamiento-por-defecto-del-formulario">🟦 ¿Qué significa? — <em>Comportamiento por defecto del formulario</em></h3>
 <p>Es lo que el navegador hace <strong>automáticamente</strong> al enviar un <code>&lt;form&gt;</code>: recargar la página y navegar a
@@ -209,12 +209,12 @@ otra URL. En una <strong>SPA</strong> (aplicación de una sola página, como Rac
 estado y rompería la experiencia. Por eso lo cancelamos.</p>
 <h3 id="que-significa-epreventdefault">🟦 ¿Qué significa? — <em><code>e.preventDefault()</code></em></h3>
 <p><code>e.preventDefault()</code> es un método del objeto del evento que le dice al navegador: <strong>"no hagas tu
-comportamiento automático"</strong>. En un formulario, evita la recarga de la página, dejándote a ti el
+comportamiento automático"</strong>. En un formulario, evita la recarga de la página y te deja a ti el
 control total de qué hacer con los datos.</p>
 <h3 id="que-significa-onsubmit">🟦 ¿Qué significa? — <em><code>onSubmit</code></em></h3>
-<p><code>onSubmit</code> es el manejador del evento de <strong>envío del formulario</strong>. Se pone en el <code>&lt;form&gt;</code>, no en el
+<p><code>onSubmit</code> es el manejador del evento de <strong>envío del formulario</strong>. Va en el <code>&lt;form&gt;</code>, no en el
 botón. Así capturas tanto el clic en el botón "Enviar" como cuando el usuario pulsa Enter dentro de
-un campo. Casi siempre, lo primero que hace su manejador es <code>e.preventDefault()</code>.</p>
+un campo. Y casi siempre, lo primero que hace su manejador es <code>e.preventDefault()</code>.</p>
 </blockquote>
 <pre><code class="language-tsx">function FormularioMini() {
   const [nombre, setNombre] = useState(&quot;&quot;);
@@ -235,23 +235,23 @@ un campo. Casi siempre, lo primero que hace su manejador es <code>e.preventDefau
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
 <p>Pon <code>onSubmit</code> en el <code>&lt;form&gt;</code> y deja el botón como <code>type="submit"</code>. Un error frecuente es poner un
-<code>onClick</code> en el botón en vez de <code>onSubmit</code> en el form: así pierdes el envío con la tecla Enter, que
-muchos usuarios esperan. Y recuerda: si olvidas <code>e.preventDefault()</code>, verás la página parpadear y
+<code>onClick</code> en el botón en lugar de un <code>onSubmit</code> en el form: si lo haces así, pierdes el envío con la tecla Enter, que
+muchos usuarios dan por hecho. Y recuerda: si te olvidas de <code>e.preventDefault()</code>, verás la página parpadear y
 recargarse al enviar.</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>El botón de enviar dentro de un <code>&lt;form&gt;</code> es <code>type="submit"</code> por defecto. Si dentro del mismo form
-tienes <strong>otros</strong> botones que NO deben enviar (por ejemplo "Cancelar"), márcalos explícitamente como
-<code>type="button"</code>. Si no, harán submit sin querer.</p>
+<p>El botón de enviar dentro de un <code>&lt;form&gt;</code> es <code>type="submit"</code> por defecto. Si en ese mismo form
+tienes <strong>otros</strong> botones que NO deben enviar (un "Cancelar", por ejemplo), márcalos a mano como
+<code>type="button"</code>. Si no lo haces, harán submit sin que tú lo quieras.</p>
 </blockquote>
 <hr />
 <h2 id="6-validacion-basica">6. Validación básica</h2>
 <p><strong>Validar</strong> es comprobar que lo que escribió el usuario tiene sentido <strong>antes</strong> de aceptarlo: que el
-nombre no esté vacío, que no sea absurdamente largo, etc.</p>
+nombre no esté vacío, que no sea absurdamente largo, ese tipo de cosas.</p>
 <blockquote class="def">
 <h3 id="que-significa-validacion">🟦 ¿Qué significa? — <em>Validación</em></h3>
 <p><strong>Validar</strong> es revisar que los datos cumplen unas reglas antes de usarlos o guardarlos. Si no las
-cumplen, le avisas al usuario con un mensaje y no envías. Evita guardar basura en la base de datos
-(Supabase, Módulo 07) y mejora la experiencia.</p>
+cumplen, le avisas al usuario con un mensaje y no envías. Te evita guardar basura en la base de datos
+(Supabase, Módulo 07) y, de paso, mejora la experiencia.</p>
 <h3 id="que-significa-trim">🟦 ¿Qué significa? — <em><code>.trim()</code></em></h3>
 <p><code>.trim()</code> es un método de los strings (Módulo 03) que <strong>quita los espacios</strong> sobrantes al principio y
 al final. Sirve para que <code>"   "</code> (solo espacios) no cuente como un nombre válido: tras <code>.trim()</code>
@@ -291,26 +291,26 @@ queda <code>""</code>, y <code>""</code> es vacío.</p>
 <blockquote class="def">
 <h3 id="que-significa-return-temprano-early-return">🟦 ¿Qué significa? — <em><code>return</code> temprano (early return)</em></h3>
 <p>Es usar <code>return</code> para <strong>salir de la función antes de tiempo</strong> cuando algo no cuadra. En el ejemplo,
-si el nombre está vacío, mostramos el error y hacemos <code>return</code>: el código de guardar nunca se
-ejecuta. Es más limpio que anidar muchos <code>if/else</code>.</p>
+si el nombre está vacío, mostramos el error y hacemos <code>return</code>: el código de guardar ni siquiera llega a
+ejecutarse. Queda mucho más limpio que anidar un <code>if/else</code> dentro de otro.</p>
 <h3 id="que-significa-renderizado-condicional-con">🟦 ¿Qué significa? — <em>Renderizado condicional con <code>&amp;&amp;</code></em></h3>
 <p><code>{error &amp;&amp; &lt;p&gt;...&lt;/p&gt;}</code> significa "si <code>error</code> tiene contenido, muestra el <code>&lt;p&gt;</code>; si está vacío, no
-muestres nada". Lo viste en el Módulo 06-cap.02: cuando lo de la izquierda de <code>&amp;&amp;</code> es falso (un
+muestres nada". Lo viste en el Módulo 06-cap.02: cuando lo de la izquierda de <code>&amp;&amp;</code> es falso (y un
 string vacío cuenta como falso), React no dibuja nada. Es el truco para mostrar mensajes solo cuando
 hacen falta.</p>
 <h3 id="tip_3">💡 Tip</h3>
 <p>Además de validar en <code>handleSubmit</code>, puedes <strong>deshabilitar el botón</strong> mientras el campo esté vacío:
 <code>&lt;button type="submit" disabled={nombre.trim() === ""}&gt;</code>. Así el usuario ve de inmediato que aún no
-puede enviar. Las dos cosas se complementan: el <code>disabled</code> guía, la validación protege.</p>
+puede enviar. Las dos cosas se complementan bien: el <code>disabled</code> guía, y la validación protege.</p>
 </blockquote>
 <hr />
 <h2 id="7-formularios-con-varios-campos">7. Formularios con varios campos</h2>
-<p>Un formulario real tiene más de un campo. Tienes dos estrategias:</p>
+<p>Un formulario de verdad tiene más de un campo. Y para eso tienes dos estrategias:</p>
 <p><strong>Opción A — un <code>useState</code> por campo.</strong> Sencilla y clarísima de leer cuando son pocos campos:</p>
 <pre><code class="language-tsx">const [nombre, setNombre] = useState(&quot;&quot;);
 const [meta, setMeta] = useState(&quot;&quot;);
 </code></pre>
-<p><strong>Opción B — un solo <code>useState</code> con un objeto.</strong> Útil cuando hay muchos campos:</p>
+<p><strong>Opción B — un solo <code>useState</code> con un objeto.</strong> Más cómoda cuando hay muchos campos:</p>
 <pre><code class="language-tsx">const [form, setForm] = useState({ nombre: &quot;&quot;, meta: &quot;&quot; });
 
 function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
@@ -320,27 +320,27 @@ function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-el-atributo-name-del-input">🟦 ¿Qué significa? — <em>El atributo <code>name</code> del input</em></h3>
-<p><code>name</code> es un atributo del <code>&lt;input&gt;</code> que le da una <strong>etiqueta</strong> al campo (<code>name="nombre"</code>). Con un
+<p><code>name</code> es un atributo del <code>&lt;input&gt;</code> que le pone una <strong>etiqueta</strong> al campo (<code>name="nombre"</code>). Con un
 solo <code>handleChange</code> puedes leer <code>e.target.name</code> para saber <strong>qué campo</strong> cambió y <code>e.target.value</code>
-para saber su nuevo texto. Así un único manejador sirve para todos los campos.</p>
+para saber su nuevo texto. Así un único manejador te sirve para todos los campos.</p>
 <h3 id="que-significa-el-operador-spread-prev">🟦 ¿Qué significa? — <em>El operador spread <code>...prev</code></em></h3>
 <p><code>{ ...prev, [name]: value }</code> significa "copia <strong>todo</strong> lo que ya había en el objeto <code>prev</code> y, encima,
-cambia solo el campo <code>[name]</code>". El <code>...</code> (spread, Módulo 03) clona el objeto. Es importante porque el
+cambia solo el campo <code>[name]</code>". El <code>...</code> (spread, Módulo 03) clona el objeto. Esto importa porque el
 estado en React <strong>no se debe mutar</strong>: creas un objeto nuevo en vez de modificar el viejo.</p>
 <h3 id="que-significa-clave-dinamica-name">🟦 ¿Qué significa? — <em>Clave dinámica <code>[name]</code></em></h3>
 <p><code>[name]</code> entre corchetes dentro de un objeto significa "usa el <strong>valor</strong> de la variable <code>name</code> como
 nombre de la propiedad". Si <code>name</code> vale <code>"meta"</code>, entonces <code>{ [name]: value }</code> equivale a
-<code>{ meta: value }</code>. Permite escribir un solo manejador que sirva para cualquier campo.</p>
+<code>{ meta: value }</code>. Es lo que te permite escribir un solo manejador que sirva para cualquier campo.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Nunca hagas <code>form.nombre = "x"</code> para cambiar el estado: eso es <strong>mutar</strong> el objeto y React no se
-entera (no re-renderiza). Siempre crea un objeto nuevo con <code>setForm({ ...prev, ... })</code>. La regla de
-oro del estado, ya vista en el cap.04, es: <strong>trata el estado como inmutable</strong>.</p>
+<p>Nunca hagas <code>form.nombre = "x"</code> para cambiar el estado: eso es <strong>mutar</strong> el objeto, y React ni se
+entera (no re-renderiza). Crea siempre un objeto nuevo con <code>setForm({ ...prev, ... })</code>. La regla de
+oro del estado, que ya viste en el cap.04, es esta: <strong>trata el estado como inmutable</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="8-el-formulario-de-crear-habito-en-rachasimple">8. El formulario de crear hábito en RachaSimple</h2>
-<p>Pongamos todo junto en el caso real: el formulario que crea un hábito en <strong>RachaSimple</strong> (React 18 +
+<p>Vamos a juntarlo todo en el caso real: el formulario que crea un hábito en <strong>RachaSimple</strong> (React 18 +
 TypeScript + Vite + Tailwind + shadcn/ui + Supabase + TanStack Query). El usuario escribe el nombre
-del hábito y una pequeña meta, y al enviar se guarda. Aquí una versión didáctica, fiel al patrón del
+del hábito y una pequeña meta, y al enviar se guarda. Aquí tienes una versión didáctica, fiel al patrón del
 proyecto:</p>
 <pre><code class="language-tsx">import { useState } from &quot;react&quot;;
 
@@ -404,41 +404,41 @@ export function FormCrearHabito({ onCrear }: Props) {
   );
 }
 </code></pre>
-<p>Repasa las piezas que ya conoces, ahora juntas:</p>
+<p>Mira las piezas que ya conoces, ahora trabajando juntas:</p>
 <ul>
 <li><strong>Dos inputs controlados</strong> (<code>nombre</code>, <code>meta</code>): cada uno con su <code>value</code> + <code>onChange</code>.</li>
 <li><strong><code>onSubmit</code> con <code>e.preventDefault()</code></strong>: nada de recargar la página.</li>
 <li><strong>Validación</strong>: si falta el nombre, mostramos error y <code>return</code> temprano.</li>
 <li><strong><code>onCrear(...)</code></strong>: en vez de hablar con Supabase aquí dentro, este componente <strong>avisa al padre</strong>
-  pasándole el hábito por una función recibida en props (Módulo 06-cap.03). Separa "el formulario" de
+  pasándole el hábito por una función que recibió en props (Módulo 06-cap.03). Separa "el formulario" de
   "guardar en la base de datos".</li>
 <li><strong>Limpieza</strong> del formulario tras crear, y <strong><code>disabled</code></strong> mientras falte el nombre.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-levantar-el-estado-avisar-al-padre-oncrear">🟦 ¿Qué significa? — <em>Levantar el estado / avisar al padre (<code>onCrear</code>)</em></h3>
 <p>En vez de que el formulario sepa cómo guardar en Supabase, recibe una función <code>onCrear</code> por <strong>props</strong>
-y la llama cuando el usuario envía. El componente padre decide qué hacer (guardar, refrescar la
+y la llama cuando el usuario envía. El componente padre es quien decide qué hacer (guardar, refrescar la
 lista…). Esto se llama <strong>levantar el estado</strong> y mantiene al formulario simple y reutilizable.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
 <p>En <strong>RachaSimple</strong>, ese <code>onCrear</code> del padre normalmente dispara una <strong>mutación de TanStack Query</strong>
 que inserta el hábito en <strong>Supabase</strong> y luego refresca la lista de hábitos en pantalla. TanStack
-Query lo verás más adelante; por ahora quédate con la idea: el formulario <strong>recoge y valida</strong>, el
-padre <strong>persiste</strong>. Cada uno hace una cosa.</p>
+Query lo verás más adelante; por ahora quédate con la idea de fondo: el formulario <strong>recoge y valida</strong>, el
+padre <strong>persiste</strong>. Cada uno hace una sola cosa.</p>
 <h3 id="tip_4">💡 Tip</h3>
 <p>Las <code>className</code> largas (<code>w-full rounded border px-3 py-2</code>) son utilidades de <strong>Tailwind</strong>, el sistema
-de estilos de RachaSimple y de Faro. No te asustes: cada palabra es un pequeño estilo (ancho
-completo, bordes redondeados, padding…). Lo importante de este capítulo es la <strong>lógica</strong> de eventos y
+de estilos de RachaSimple y de Faro. No te agobies: cada palabra es un pequeño estilo (ancho
+completo, bordes redondeados, padding…). Lo que importa de este capítulo es la <strong>lógica</strong> de eventos y
 estado, no las clases de estilo.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
-<p>Compara con tus otros proyectos: en <strong>tunal-digital</strong> (HTML/CSS/JS vanilla) un formulario usaría
+<p>Compáralo con tus otros proyectos: en <strong>tunal-digital</strong> (HTML/CSS/JS vanilla) un formulario usaría
 <code>addEventListener("submit", ...)</code> y <code>e.preventDefault()</code> igual que aquí, pero leyendo el valor del
 DOM directamente; en <strong>PolyPaw</strong> (Python + Flet) los campos se manejan con widgets de Flet y sus
-propios eventos. El patrón "evento → leer dato → validar → guardar" es universal; lo que cambia es
-<strong>dónde vive la fuente de verdad</strong>. En React, vive en el estado.</p>
+propios eventos. El patrón "evento → leer dato → validar → guardar" es universal; lo único que cambia es
+<strong>dónde vive la fuente de verdad</strong>. Y en React, vive en el estado.</p>
 </blockquote>
 <hr />
 <h2 id="9-resumen-del-flujo">9. Resumen del flujo</h2>
-<p>Cada formulario controlado de React sigue el mismo ciclo, sin importar cuántos campos tenga:</p>
+<p>Todo formulario controlado de React sigue el mismo ciclo, da igual cuántos campos tenga:</p>
 <ol>
 <li>El estado guarda lo que hay en cada campo (<code>useState</code>).</li>
 <li><code>value</code> muestra el estado; <code>onChange</code> lo actualiza en cada tecla.</li>
@@ -446,7 +446,7 @@ propios eventos. El patrón "evento → leer dato → validar → guardar" es un
 <li>Validas; si algo falla, muestras error y haces <code>return</code>.</li>
 <li>Si todo va bien, usas los datos (avisas al padre, guardas en Supabase…) y limpias el formulario.</li>
 </ol>
-<p>Domina ese ciclo y habrás dominado el 90% de los formularios que escribirás. Bit ya está aplaudiendo
+<p>Domina ese ciclo y tendrás resuelto el 90% de los formularios que vas a escribir en tu vida. Bit ya está aplaudiendo
 con sus patitas: tu UI por fin escucha.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

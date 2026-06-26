@@ -5,28 +5,28 @@
 </p>
 
 
-> ¡Llegaste al gran momento, aprendiz! Bit, el ajolote, infla las branquias de la emocion: hoy NO vamos a aprender una pieza suelta, vamos a unir TODAS las piezas. Funciones, diccionarios, archivos, clases y Flet se juntan en una sola app que de verdad corre en tu computadora. Vas a construir un quiz de vocabulario, igualito al espiritu de PolyPaw (la app de aprender idiomas hecha enteramente en Python). El usuario vera una pregunta, elegira una respuesta, sumara aciertos y al final guardaremos su puntaje en un archivo JSON. Respira hondo: vas a terminar este capitulo con una app que puedes mostrarle a quien quieras. 🦎
+> Llego el momento, aprendiz. Bit, el ajolote, infla las branquias de pura emocion: hoy no vamos a estudiar una pieza suelta, vamos a juntarlas todas. Funciones, diccionarios, archivos, clases y Flet se encuentran en una sola app que de verdad corre en tu computadora. Vas a construir un quiz de vocabulario, con el mismo espiritu de PolyPaw (esa app de aprender idiomas hecha enteramente en Python). El usuario vera una pregunta, elegira una respuesta, ira sumando aciertos y, al final, guardaremos su puntaje en un archivo JSON. Respira hondo: este capitulo termina con una app que le puedes mostrar a quien quieras. 🦎
 
 ## 1. Que vamos a construir (y por que)
 
-Imagina una mini-version de PolyPaw. PolyPaw es una app real de aprendizaje de idiomas hecha **integramente en Python** con el framework **Flet**, y guarda sus datos (las misiones, el progreso) en archivos JSON, no en una base de datos pesada. Archivos como `main.py`, `database_manager.py` y la carpeta `missions/*.json` forman su corazon.
+Imagina una mini-version de PolyPaw. PolyPaw es una app real de aprendizaje de idiomas hecha **integramente en Python** con el framework **Flet**, y guarda sus datos (las misiones, el progreso) en archivos JSON, sin recurrir a una base de datos pesada. Archivos como `main.py`, `database_manager.py` y la carpeta `missions/*.json` son su corazon.
 
-Nosotros vamos a hacer algo mucho mas pequeno, pero con el mismo ADN:
+Lo nuestro sera mucho mas pequeno, pero con el mismo ADN:
 
-1. **Leeremos preguntas** desde un archivo JSON (como PolyPaw lee sus misiones).
+1. **Leeremos preguntas** desde un archivo JSON (igual que PolyPaw lee sus misiones).
 2. **Mostraremos cada pregunta** con Flet, con botones para responder.
 3. **Contaremos aciertos** mientras el usuario juega.
 4. **Guardaremos el puntaje** en otro archivo JSON al terminar.
 
-Cada parte usa algo que ya viste en capitulos anteriores. Hoy lo amarramos todo.
+Cada parte se apoya en algo que ya viste en capitulos anteriores. Hoy lo amarramos todo.
 
 > ### 🟦 ¿Que significa? — *Mini-proyecto*
-> Un proyecto pequeno pero **completo**: tiene principio, mitad y final, y produce algo que funciona de verdad. No es un ejercicio de una linea; es una app entera en miniatura.
-> **Para que sirve:** para practicar como se combinan los conceptos en la vida real, donde nada vive solo.
-> **Donde se usa en un repo real:** PolyPaw empezo siendo un mini-proyecto en Python antes de crecer; la idea de "una app chiquita que corre" es exactamente esto.
+> Un proyecto pequeno pero **completo**: tiene principio, mitad y final, y produce algo que de verdad funciona. No es un ejercicio de una linea; es una app entera en miniatura.
+> **Para que sirve:** para practicar como se combinan los conceptos en la vida real, donde ningun concepto vive solo.
+> **Donde se usa en un repo real:** PolyPaw empezo siendo un mini-proyecto en Python antes de crecer; esa idea de "una app chiquita que corre" es justo esta.
 
 > ### 💡 Tip
-> No intentes escribir todo el archivo de golpe. Vamos seccion por seccion. Al final juntamos todo. Asi, si algo falla, sabes exactamente que pieza revisar.
+> No trates de escribir todo el archivo de un tiron. Iremos seccion por seccion y al final juntamos las piezas. Asi, si algo falla, sabes exactamente cual revisar.
 
 ## 2. Preparar la carpeta del proyecto 💻
 
@@ -45,12 +45,12 @@ Dentro de esa carpeta tendremos tres archivos:
 - `main.py` — la **interfaz** con Flet (lo que el usuario ve).
 
 > ### 🟦 ¿Que significa? — *Separar datos, logica e interfaz*
-> Es dividir tu app en tres responsabilidades: los **datos** (la informacion), la **logica** (las reglas y operaciones) y la **interfaz** (lo que se ve y se toca).
-> **Para que sirve:** para que cada parte sea facil de leer y cambiar sin romper las demas. Si quieres mas preguntas, tocas solo el JSON. Si quieres cambiar colores, tocas solo la interfaz.
+> Es repartir tu app en tres responsabilidades: los **datos** (la informacion), la **logica** (las reglas y operaciones) y la **interfaz** (lo que se ve y se toca).
+> **Para que sirve:** para que cada parte sea facil de leer y de cambiar sin romper las demas. Si quieres mas preguntas, tocas solo el JSON. Si quieres cambiar colores, tocas solo la interfaz.
 > **Donde se usa en un repo real:** PolyPaw separa sus misiones (`missions/*.json`, datos), su `database_manager.py` (logica de guardado) y `main.py` (interfaz Flet). Nosotros copiamos esa misma idea a escala mini.
 
 > ### 💡 Tip
-> Si ya instalaste Flet en un capitulo anterior, ¡genial! Si no, en tu terminal: `pip install flet`. Solo se hace una vez por computadora.
+> Si ya instalaste Flet en un capitulo anterior, perfecto. Si no, en tu terminal: `pip install flet`. Esto solo se hace una vez por computadora.
 
 ## 3. Las preguntas en JSON
 
@@ -77,17 +77,17 @@ Empecemos por los datos. Crea el archivo `preguntas.json` con este contenido:
 ```
 
 > ### 🟦 ¿Que significa? — *JSON*
-> JSON (JavaScript Object Notation) es un formato de texto para guardar datos organizados con llaves `{}` y corchetes `[]`. Es como una lista de fichas, cada una con sus campos.
-> **Para que sirve:** para guardar informacion de forma que tanto humanos como programas la entiendan facil. Es legible y ligero.
+> JSON (JavaScript Object Notation) es un formato de texto para guardar datos organizados con llaves `{}` y corchetes `[]`. Funciona como una lista de fichas, cada una con sus campos.
+> **Para que sirve:** para guardar informacion de modo que tanto humanos como programas la entiendan facil. Es legible y ligero.
 > **Donde se usa en un repo real:** PolyPaw guarda TODAS sus misiones en archivos JSON dentro de `missions/`. Si abres uno, veras esta misma estructura de llaves y corchetes.
 
 Fijate en la forma: el archivo entero es una **lista** (los corchetes `[]`), y dentro hay tres **objetos** (las llaves `{}`), uno por pregunta. Cada objeto tiene tres campos: `palabra`, `opciones` y `correcta`.
 
 > ### 🔎 En tu codigo
-> Cuando Python lea este JSON, la lista `[]` se convertira en una **lista de Python** y cada `{}` en un **diccionario**. ¡Justo lo que practicaste en los capitulos de listas y diccionarios! No es casualidad: por eso esos temas eran tan importantes.
+> Cuando Python lea este JSON, la lista `[]` se convertira en una **lista de Python** y cada `{}` en un **diccionario**. Justo lo que practicaste en los capitulos de listas y diccionarios. No es casualidad: por eso esos temas importaban tanto.
 
 > ### ⚠️ Cuidado
-> En JSON las comillas SIEMPRE son dobles (`"`), nunca simples (`'`). Y no se permite una coma despues del ultimo elemento. Si Python se queja al leer el archivo, casi siempre es una coma de mas o una comilla mal puesta.
+> En JSON las comillas SIEMPRE son dobles (`"`), nunca simples (`'`). Y no se permite una coma despues del ultimo elemento. Si Python se queja al leer el archivo, casi siempre es por una coma de mas o una comilla mal puesta.
 
 ## 4. Leer el JSON desde Python
 
@@ -112,13 +112,13 @@ Vamos despacio, linea por linea.
 > **Donde se usa en un repo real:** el `database_manager.py` de PolyPaw importa `json` para leer y guardar el progreso del jugador.
 
 > ### 🟦 ¿Que significa? — *Funcion*
-> Una funcion es un bloque de codigo con nombre que hace una tarea y (a veces) devuelve un resultado. Se define con `def` y se ejecuta cuando la "llamas" por su nombre.
-> **Para que sirve:** para reutilizar codigo sin repetirlo y para darle un nombre claro a cada tarea.
+> Una funcion es un bloque de codigo con nombre que hace una tarea y, a veces, devuelve un resultado. Se define con `def` y se ejecuta cuando la "llamas" por su nombre.
+> **Para que sirve:** para reutilizar codigo sin repetirlo y para ponerle un nombre claro a cada tarea.
 > **Donde se usa en un repo real:** todo PolyPaw esta hecho de funciones; cada accion (cargar una mision, marcar un acierto) es una funcion con su nombre.
 
 > ### 🟦 ¿Que significa? — *with open(...)*
-> `open` abre un archivo. La palabra `with` se encarga de **cerrarlo solo** cuando terminas, aunque ocurra un error.
-> **Para que sirve:** para leer o escribir archivos sin olvidarte de cerrarlos (un descuido comun que causa errores).
+> `open` abre un archivo. La palabra `with` se encarga de **cerrarlo solo** cuando terminas, incluso si ocurre un error.
+> **Para que sirve:** para leer o escribir archivos sin olvidarte de cerrarlos, un descuido comun que termina causando errores.
 > **Donde se usa en un repo real:** cada vez que PolyPaw lee una mision desde `missions/`, usa este mismo patron `with open(...)`.
 
 > ### 🟦 ¿Que significa? — *encoding="utf-8"*
@@ -133,7 +133,7 @@ Vamos despacio, linea por linea.
 
 ## 5. Una clase para llevar el juego
 
-Aqui entra algo poderoso: una **clase**. Vamos a crear una clase `Quiz` que recuerde las preguntas, en cual vamos y cuantos aciertos llevamos.
+Aqui aparece algo poderoso: una **clase**. Vamos a crear una clase `Quiz` que recuerde las preguntas, en cual vamos y cuantos aciertos llevamos.
 
 ```python
 class Quiz:
@@ -167,12 +167,12 @@ class Quiz:
 
 > ### 🟦 ¿Que significa? — *Clase*
 > Una clase es un **molde** para crear objetos que guardan datos y saben hacer cosas. Define que recuerda (atributos) y que puede hacer (metodos).
-> **Para que sirve:** para agrupar datos relacionados con las acciones que los manejan. Aqui, el `Quiz` guarda el progreso Y sabe responder preguntas.
+> **Para que sirve:** para juntar datos relacionados con las acciones que los manejan. Aqui, el `Quiz` guarda el progreso Y sabe responder preguntas.
 > **Donde se usa en un repo real:** en apps como PolyPaw, las clases organizan cosas como una mision o el estado del jugador en un solo lugar ordenado.
 
 > ### 🟦 ¿Que significa? — *__init__ y self*
 > `__init__` es el metodo que se ejecuta al **crear** un objeto; sirve para darle sus valores iniciales. `self` es "yo mismo": la forma en que el objeto se refiere a sus propios datos.
-> **Para que sirve:** `__init__` prepara el objeto recien nacido; `self` permite que cada objeto guarde sus propios valores sin mezclarse con otros.
+> **Para que sirve:** `__init__` prepara el objeto recien nacido; `self` permite que cada objeto guarde sus propios valores sin mezclarse con los de otros.
 > **Donde se usa en un repo real:** cualquier clase de cualquier app Python (incluida PolyPaw) usa `__init__` para arrancar con datos limpios.
 
 > ### 🟦 ¿Que significa? — *Metodo*
@@ -185,11 +185,11 @@ class Quiz:
 > **Para que sirve:** para que el objeto recuerde su estado entre una accion y otra (cuantos aciertos llevas, en que pregunta vas).
 > **Donde se usa en un repo real:** el progreso del jugador en PolyPaw vive en atributos antes de guardarse en JSON.
 
-Mira el metodo `responder`: saca la respuesta correcta del **diccionario** de la pregunta actual con `["correcta"]`, la compara con lo que eligio el usuario, y si coincide suma uno a `self.aciertos`. Luego avanza el `self.indice`. ¡Diccionarios, clases y funciones trabajando juntos!
+Mira el metodo `responder`: saca la respuesta correcta del **diccionario** de la pregunta actual con `["correcta"]`, la compara con lo que eligio el usuario y, si coincide, suma uno a `self.aciertos`. Luego avanza el `self.indice`. Diccionarios, clases y funciones trabajando juntos.
 
 > ### 🟦 ¿Que significa? — *len()*
 > `len()` es una funcion de Python que te dice **cuantos** elementos tiene algo (una lista, un texto). `len(self.preguntas)` devuelve cuantas preguntas hay en total.
-> **Para que sirve:** para contar el tamano de una lista sin recorrerla a mano; por ejemplo, saber cuantas preguntas quedan.
+> **Para que sirve:** para contar el tamano de una lista sin recorrerla a mano; por ejemplo, para saber cuantas preguntas quedan.
 > **Donde se usa en un repo real:** PolyPaw usa `len()` para saber cuantas misiones tiene un pack y mostrar el avance ("3 de 10").
 
 > ### 💡 Tip
@@ -246,12 +246,12 @@ Esta funcion hace tres cosas: arma el registro nuevo, lee el historial que ya ex
 > **Donde se usa en un repo real:** toda app que persiste datos en archivos alterna entre estos dos modos.
 
 > ### 🟦 ¿Que significa? — *try / except*
-> Es una forma de "intentar" algo que podria fallar y tener un plan B si falla. `try` intenta; `except` captura el error y reacciona.
+> Es una forma de "intentar" algo que podria fallar y tener un plan B por si falla. `try` intenta; `except` captura el error y reacciona.
 > **Para que sirve:** para que tu programa no se caiga ante problemas previsibles, como un archivo que todavia no existe.
 > **Donde se usa en un repo real:** cualquier codigo serio que lea archivos usa `try/except` por si el archivo no esta.
 
 > ### ⚠️ Cuidado
-> El modo `"w"` **borra** lo que habia en el archivo. Por eso primero LEEMOS el historial, le agregamos el nuevo registro con `append`, y solo entonces escribimos. Si escribieras directo con `"w"` sin leer antes, perderias las partidas anteriores.
+> El modo `"w"` **borra** lo que habia en el archivo. Por eso primero LEEMOS el historial, le agregamos el nuevo registro con `append` y solo entonces escribimos. Si escribieras directo con `"w"` sin leer antes, perderias las partidas anteriores.
 
 > ### 💡 Tip
 > `ensure_ascii=False` hace que las tildes y la ñ se guarden bonitas en lugar de como codigos raros. Y `indent=2` deja el JSON ordenado y legible, con sangrias.
@@ -342,12 +342,12 @@ Vamos a desmenuzarlo, porque aqui se junta TODO.
 > **Donde se usa en un repo real:** PolyPaw arma sus pantallas combinando estos mismos controles de Flet.
 
 > ### 🟦 ¿Que significa? — *f-string*
-> Un f-string es un texto que empieza con `f"..."` y permite meter valores dentro usando llaves `{}`. Por ejemplo `f"Traduce: {actual['palabra']}"` arma el texto pegando la palabra de la pregunta.
+> Un f-string es un texto que empieza con `f"..."` y permite meter valores dentro usando llaves `{}`. Por ejemplo, `f"Traduce: {actual['palabra']}"` arma el texto pegando la palabra de la pregunta.
 > **Para que sirve:** para construir mensajes que mezclan texto fijo con datos que cambian, de forma corta y clara.
 > **Donde se usa en un repo real:** PolyPaw usa f-strings por todas partes para mostrar textos como "Mision 3 de 10" con numeros que cambian.
 
 > ### 🟦 ¿Que significa? — *Evento on_click*
-> `on_click` dice "cuando hagan clic en este boton, ejecuta esta funcion". Es como reaccionar a lo que hace el usuario.
+> `on_click` dice "cuando hagan clic en este boton, ejecuta esta funcion". Es la forma de reaccionar a lo que hace el usuario.
 > **Para que sirve:** para que la app responda a clics, no solo muestre cosas.
 > **Donde se usa en un repo real:** cada boton de respuesta en PolyPaw usa un evento parecido para registrar lo que el jugador toca.
 
@@ -357,10 +357,10 @@ Vamos a desmenuzarlo, porque aqui se junta TODO.
 > **Donde se usa en un repo real:** Flet (y PolyPaw) usa lambdas para conectar cada boton con su accion exacta.
 
 > ### ⚠️ Cuidado
-> Fijate en `lambda e, op=opcion: al_responder(op)`. Ese `op=opcion` es clave: **captura** el valor de la opcion en ese momento del bucle. Si escribieras solo `lambda e: al_responder(opcion)`, todos los botones terminarian usando la ULTIMA opcion del bucle. Es un error clasico; el `op=opcion` lo evita.
+> Fijate en `lambda e, op=opcion: al_responder(op)`. Ese `op=opcion` es clave: **captura** el valor de la opcion en ese momento del bucle. Si escribieras solo `lambda e: al_responder(opcion)`, todos los botones terminarian usando la ULTIMA opcion del bucle. Es un error clasico, y el `op=opcion` lo evita.
 
 > ### 🔎 En tu codigo
-> Mira como todo se conecta: `cargar_preguntas` (archivos + JSON) llena el `Quiz` (clase). `mostrar_pregunta` lee un **diccionario** y crea **controles** de Flet. `al_responder` llama al **metodo** `responder` de la clase. Y al final, `guardar_puntaje` escribe en JSON. ¡Cada concepto del modulo aparece aqui!
+> Mira como todo se conecta: `cargar_preguntas` (archivos + JSON) llena el `Quiz` (clase). `mostrar_pregunta` lee un **diccionario** y crea **controles** de Flet. `al_responder` llama al **metodo** `responder` de la clase. Y al final, `guardar_puntaje` escribe en JSON. Cada concepto del modulo aparece aqui.
 
 ## 8. Probar la app 💻
 
@@ -371,7 +371,7 @@ Con los tres archivos en la misma carpeta, abre la terminal en esa carpeta y cor
 # python main.py
 ```
 
-Deberia abrirse una ventana mostrando "Traduce: Hola" con tres botones. Haz clic en uno y avanzaras a la siguiente pregunta. Al terminar veras tus aciertos, y en la carpeta aparecera un archivo nuevo: `puntajes.json`. ¡Abrelo! Veras tu partida guardada.
+Deberia abrirse una ventana que muestra "Traduce: Hola" con tres botones. Haz clic en uno y pasaras a la siguiente pregunta. Al terminar veras tus aciertos, y en la carpeta aparecera un archivo nuevo: `puntajes.json`. Abrelo: ahi esta tu partida guardada.
 
 > ### 💡 Tip
 > ¿No se abre nada? Revisa que los tres archivos esten en la MISMA carpeta y que `preguntas.json` no tenga errores de comas o comillas. La consola te dira la linea exacta del problema.
@@ -393,26 +393,26 @@ Despues de jugar una vez, tu `puntajes.json` se vera asi:
 ]
 ```
 
-Y si juegas otra vez, se **agregara** un segundo registro a la lista, sin borrar el primero. Eso es gracias al `append` que pusimos antes de escribir. Acabas de construir un historial persistente, ¡como el progreso de un jugador en PolyPaw!
+Y si juegas otra vez, se **agregara** un segundo registro a la lista, sin borrar el primero. Eso lo logra el `append` que pusimos antes de escribir. Acabas de construir un historial persistente, igual que el progreso de un jugador en PolyPaw.
 
 > ### 🔎 En tu codigo
 > Este archivo de puntajes es exactamente la idea de los `missions/*.json` de PolyPaw: una lista de objetos JSON que crece con el tiempo y que tu programa lee y escribe. Lo que hiciste en chiquito es lo mismo que hacen las apps de verdad.
 
 ## 10. Ideas para crecer tu quiz
 
-Tu mini-proyecto ya funciona, pero puede crecer. Algunas direcciones:
+Tu mini-proyecto ya funciona, pero hay espacio para mas. Algunas direcciones:
 
-- Agregar mas preguntas: solo editas `preguntas.json`, ¡sin tocar el codigo!
+- Agregar mas preguntas: solo editas `preguntas.json`, sin tocar el codigo.
 - Mostrar un color verde o rojo segun si acertaste (mas controles de Flet).
 - Barajar las preguntas con el modulo `random` para que cada partida sea distinta.
 - Mostrar el mejor puntaje historico leyendo `puntajes.json` al inicio.
 
 > ### 💡 Tip
-> Cada mejora usa una pieza que ya conoces. Crecer una app es agregar piezas pequenas, una a la vez. Asi crecio PolyPaw: empezo simple y fue sumando.
+> Cada mejora se apoya en una pieza que ya conoces. Crecer una app es agregar piezas pequenas, una a la vez. Asi crecio PolyPaw: empezo simple y fue sumando.
 
 ## 11. Lo que lograste
 
-Para de un momento y mira lo que hiciste, aprendiz. Combinaste:
+Para un momento y mira lo que hiciste, aprendiz. Combinaste:
 
 - **Archivos y JSON** para leer y guardar datos.
 - **Funciones** para organizar cada tarea.
@@ -420,7 +420,7 @@ Para de un momento y mira lo que hiciste, aprendiz. Combinaste:
 - **Clases** para llevar el estado del juego.
 - **Flet** para una interfaz real con la que el usuario interactua.
 
-Eso ya no es "estudiar Python". Eso es **construir software**. Bit mueve la cola con orgullo: pasaste de aprender piezas sueltas a ensamblar una app completa que corre, responde y recuerda. Pocas personas que empiezan a programar llegan a juntar tantas piezas en un solo proyecto que funciona. Tu lo hiciste. 🦎🎉
+Eso ya no es "estudiar Python". Eso es **construir software**. Bit mueve la cola con orgullo: pasaste de aprender piezas sueltas a ensamblar una app completa que corre, responde y recuerda. Poca gente que empieza a programar llega a juntar tantas piezas en un solo proyecto que funciona. Tu lo hiciste. 🦎🎉
 
 ## ✅ Checklist — ¿ya domino esto?
 

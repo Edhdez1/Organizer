@@ -18,88 +18,96 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-05-accesibilidad-y-buenas-practicas">Capítulo 05 — Accesibilidad y buenas prácticas</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Cerramos HTML con lo que separa a un principiante de un profesional: hacer páginas que
-<strong>cualquiera</strong> pueda usar, incluidas personas con discapacidad. No es un "extra bonito": es
-calidad, es ley en muchos países, y Google lo premia. Y casi todo se logra escribiendo el
-HTML correctamente, que es justo lo que ya aprendiste.</p>
+<p>Cerramos HTML con algo que de verdad marca la diferencia entre un principiante y un
+profesional: hacer páginas que <strong>cualquiera</strong> pueda usar, incluidas personas con discapacidad.
+No es un adorno opcional. Es calidad, en muchos países es ley, y Google lo tiene en cuenta para
+posicionarte. Lo mejor: casi todo se consigue escribiendo bien el HTML, que es justo lo que ya
+sabes hacer.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-la-accesibilidad-web">1. Qué es la accesibilidad web</h2>
 <blockquote class="def">
 <h3 id="que-significa-accesibilidad-a11y">🟦 ¿Qué significa? — <em>Accesibilidad (a11y)</em></h3>
-<p>La <strong>accesibilidad web</strong> es diseñar páginas que puedan usar <strong>todas</strong> las personas,
-incluyendo quienes tienen discapacidad visual, auditiva, motriz o cognitiva. Se abrevia
-<strong>a11y</strong> (la "a", 11 letras, y la "y"). No es una función aparte: es una forma de construir.</p>
+<p>La <strong>accesibilidad web</strong> consiste en diseñar páginas que puedan usar <strong>todas</strong> las personas,
+también quienes tienen alguna discapacidad visual, auditiva, motriz o cognitiva. Se abrevia
+<strong>a11y</strong> (la "a", las 11 letras que van en medio, y la "y" final). No es un módulo aparte que se
+añade al final: es una manera de construir desde el principio.</p>
 <h3 id="que-significa-lector-de-pantalla">🟦 ¿Qué significa? — <em>Lector de pantalla</em></h3>
-<p>Un <strong>lector de pantalla</strong> (<em>screen reader</em>) es un programa que <strong>lee en voz alta</strong> lo que hay
-en la pantalla, para personas ciegas o con baja visión. Recorre tu HTML y lo narra: "encabezado
-nivel 1: Mi negocio… enlace: Contacto… campo de texto: Correo". Si tu HTML está bien hecho,
-la experiencia es fluida; si no, es un caos. Por eso todo lo "semántico" del capítulo 03
-importa tanto.</p>
+<p>Un <strong>lector de pantalla</strong> (<em>screen reader</em>) es un programa que <strong>lee en voz alta</strong> lo que aparece
+en la pantalla, pensado para personas ciegas o con baja visión. Va recorriendo tu HTML y lo va
+narrando: "encabezado nivel 1: Mi negocio… enlace: Contacto… campo de texto: Correo". Cuando el
+HTML está bien hecho, la experiencia fluye sin esfuerzo; cuando no, todo se vuelve un lío. Por eso
+lo "semántico" que viste en el capítulo 03 pesa tanto.</p>
 </blockquote>
 <hr />
 <h2 id="2-las-reglas-de-oro-que-ya-casi-dominas">2. Las reglas de oro (que ya casi dominas)</h2>
-<p>La buena noticia: la mayoría de la accesibilidad <strong>sale gratis</strong> si escribes HTML correcto.
-Repaso de lo que ya viste, ahora con nombre y propósito:</p>
+<p>La buena noticia es que la mayor parte de la accesibilidad <strong>sale gratis</strong> con solo escribir HTML
+correcto. Vamos a repasar lo que ya conoces, esta vez poniéndole nombre y explicando para qué sirve:</p>
 <ol>
 <li><strong>Usa HTML semántico</strong> (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>): el lector de pantalla
-   anuncia cada zona y permite saltar entre ellas.</li>
-<li><strong>Encabezados en orden</strong> (<code>&lt;h1&gt;</code> → <code>&lt;h2&gt;</code> → <code>&lt;h3&gt;</code>, sin saltarse): forman un índice por el
-   que el usuario navega.</li>
-<li><strong>Todas las imágenes con <code>alt</code></strong> descriptivo (o <code>alt=""</code> si son decorativas).</li>
-<li><strong>Todo campo de formulario con su <code>&lt;label&gt;</code></strong>.</li>
-<li><strong>Enlaces con texto claro</strong>: "Ver precios", no "haz clic aquí". El lector de pantalla a
-   veces lista solo los enlaces; "clic aquí" fuera de contexto no dice nada.</li>
-<li><strong>El idioma declarado</strong> (<code>&lt;html lang="es"&gt;</code>): así el lector usa la pronunciación correcta.</li>
+   anuncia cada zona y deja saltar de una a otra.</li>
+<li><strong>Encabezados en orden</strong> (<code>&lt;h1&gt;</code> → <code>&lt;h2&gt;</code> → <code>&lt;h3&gt;</code>, sin saltarse ninguno): funcionan como un
+   índice por el que el usuario se mueve.</li>
+<li><strong>Todas las imágenes con <code>alt</code></strong> descriptivo (o <code>alt=""</code> cuando son solo decorativas).</li>
+<li><strong>Cada campo de formulario con su <code>&lt;label&gt;</code></strong>.</li>
+<li><strong>Enlaces con texto claro</strong>: "Ver precios" en lugar de "haz clic aquí". A veces el lector de
+   pantalla lista solo los enlaces, y un "clic aquí" suelto, fuera de contexto, no dice absolutamente
+   nada.</li>
+<li><strong>El idioma declarado</strong> (<code>&lt;html lang="es"&gt;</code>): así el lector aplica la pronunciación correcta.</li>
 </ol>
 <blockquote class="tip">
 <h3 id="tip-la-prueba-del-teclado">💡 Tip — La prueba del teclado</h3>
-<p>Muchas personas navegan <strong>sin ratón</strong>, solo con el teclado (por discapacidad motriz o
-preferencia). Prueba tu página pulsando la tecla <strong>Tab</strong> repetidamente: el foco debe ir
-saltando por enlaces, campos y botones en un orden lógico, y debe <strong>verse</strong> dónde está. Si
-puedes usar todo con el teclado, vas muy bien.</p>
+<p>Mucha gente navega <strong>sin ratón</strong>, solo con el teclado, ya sea por una discapacidad motriz o por
+simple preferencia. Haz una prueba en tu página: pulsa la tecla <strong>Tab</strong> varias veces. El foco
+debería ir saltando por enlaces, campos y botones en un orden lógico, y siempre tienes que <strong>ver</strong>
+dónde está parado. Si logras usar toda la página solo con el teclado, vas por muy buen camino.</p>
 </blockquote>
 <hr />
 <h2 id="3-cuando-el-html-semantico-no-alcanza-aria">3. Cuando el HTML semántico no alcanza: ARIA</h2>
-<p>A veces construyes algo interactivo que el HTML normal no describe bien (un menú desplegable
-complejo, una ventana emergente). Ahí entran los atributos ARIA.</p>
+<p>A veces armas algo interactivo que el HTML de toda la vida no describe bien: un menú desplegable
+complicado, una ventana emergente. Para esos casos aparecen los atributos ARIA.</p>
 <blockquote class="def">
 <h3 id="que-significa-aria">🟦 ¿Qué significa? — <em>ARIA</em></h3>
 <p><strong>ARIA</strong> (<em>Accessible Rich Internet Applications</em>) es un conjunto de <strong>atributos extra</strong> que
-le dan información de accesibilidad al navegador y a los lectores de pantalla cuando el HTML
-por sí solo no basta. Ejemplos:
-- <code>aria-label="Cerrar"</code> → le da un nombre a un botón que solo tiene un icono "✕".
-- <code>aria-hidden="true"</code> → le dice al lector de pantalla que ignore algo puramente decorativo.
-- <code>role="navigation"</code> → describe el papel de un elemento (aunque con <code>&lt;nav&gt;</code> ya no hace falta).</p>
+aportan información de accesibilidad al navegador y a los lectores de pantalla cuando el HTML por
+sí solo se queda corto. Algunos ejemplos:
+- <code>aria-label="Cerrar"</code> → le pone nombre a un botón que solo muestra un icono "✕".
+- <code>aria-hidden="true"</code> → le indica al lector de pantalla que ignore algo puramente decorativo.
+- <code>role="navigation"</code> → describe el papel de un elemento (aunque si usas <code>&lt;nav&gt;</code> ya no te hace falta).</p>
 <h3 id="cuidado-la-primera-regla-de-aria-es-no-uses-aria">⚠️ Cuidado — La primera regla de ARIA es: no uses ARIA</h3>
-<p>Suena raro, pero es la recomendación oficial: <strong>si una etiqueta HTML normal ya hace el
-trabajo, úsala en vez de ARIA.</strong> Un <code>&lt;button&gt;</code> real es mejor que un <code>&lt;div role="button"&gt;</code> con
-cinco atributos ARIA. ARIA es un parche para casos especiales, no un sustituto del HTML
-semántico. Por eso lo vemos al final: primero domina lo semántico; ARIA es la excepción.</p>
+<p>Suena contradictorio, pero es la recomendación oficial: <strong>si una etiqueta HTML normal ya hace el
+trabajo, úsala en lugar de ARIA.</strong> Un <code>&lt;button&gt;</code> de verdad es mejor que un <code>&lt;div role="button"&gt;</code>
+cargado de cinco atributos ARIA. ARIA es un parche para situaciones especiales, no un reemplazo del
+HTML semántico. Por eso lo dejamos para el final: primero dominas lo semántico, y ARIA queda como
+la excepción.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <code>tunal-digital/sitio-web/index.html</code>, el botón del menú móvil y el chat usan algún
-<code>aria-label</code> para que su función quede clara aunque solo muestren un icono. Cuando lo
-inspecciones con <code>F12</code>, busca atributos que empiecen con <code>aria-</code>.</p>
+<p>En <code>tunal-digital/sitio-web/index.html</code>, el botón del menú móvil y el del chat usan algún
+<code>aria-label</code> para que su función quede clara aunque por fuera solo se vea un icono. Cuando lo
+inspecciones con <code>F12</code>, fíjate en los atributos que empiezan con <code>aria-</code>.</p>
 </blockquote>
 <hr />
 <h2 id="4-contraste-y-color-un-puente-al-modulo-de-css">4. Contraste y color (un puente al módulo de CSS)</h2>
 <blockquote class="def">
 <h3 id="que-significa-contraste">🟦 ¿Qué significa? — <em>Contraste</em></h3>
-<p>El <strong>contraste</strong> es la diferencia de luminosidad entre el texto y su fondo. Texto gris claro
-sobre blanco es difícil de leer para mucha gente. Existe un estándar, <strong>WCAG</strong>, que define un
-contraste mínimo (la relación recomendada para texto normal es <strong>4.5:1</strong>).
-<strong>¿Dónde se usa en tu proyecto?</strong> Tanto tu sitio como Faro mencionan cumplir "WCAG AA": es
-justo este criterio de contraste. El color se controla con <strong>CSS</strong> (módulo 02), pero la
-<em>decisión</em> de que sea legible es de accesibilidad.</p>
+<p>El <strong>contraste</strong> es la diferencia de luminosidad entre el texto y su fondo. Un texto gris clarito
+sobre blanco le cuesta a mucha gente. Hay un estándar, <strong>WCAG</strong>, que fija un contraste mínimo (para
+texto normal recomienda una relación de <strong>4.5:1</strong>).
+<strong>¿Dónde aparece esto en tu proyecto?</strong> Tanto tu sitio como Faro hablan de cumplir "WCAG AA", que
+es precisamente este criterio de contraste. El color se controla desde <strong>CSS</strong> (módulo 02), pero
+<em>decidir</em> que el texto sea legible es cosa de accesibilidad.</p>
 <h3 id="tip-no-comuniques-solo-con-color">💡 Tip — No comuniques solo con color</h3>
-<p>Nunca digas únicamente "los campos en rojo son obligatorios": una persona daltónica no lo
-distingue. Acompaña el color con un texto o un icono ("Obligatorio <em>"). El color </em><em>refuerza</em>*,
-no comunica solo.</p>
+<p>Nunca te quedes en "los campos en rojo son obligatorios": una persona daltónica no va a notar la
+diferencia. Acompaña siempre el color con un texto o un icono ("Obligatorio <em>"). El color
+</em><em>refuerza</em>* el mensaje, no lo carga él solo.</p>
 </blockquote>
 <hr />
 <h2 id="5-cierre-del-modulo-tu-mapa-de-html">5. Cierre del módulo: tu mapa de HTML</h2>
-<p>Repasa todo lo que ahora sabes hacer:</p>
+<p>Mira todo lo que ya eres capaz de hacer:</p>
 <pre><code>HTML
 ├── Etiquetas, elementos, atributos        (cap. 01)
 ├── El DOM: tu HTML como árbol             (cap. 01)
@@ -110,8 +118,8 @@ no comunica solo.</p>
 ├── Formularios: form, input, label, button(cap. 04)
 └── Accesibilidad: alt, label, ARIA, WCAG  (cap. 05)
 </code></pre>
-<p>Con esto puedes leer y escribir el <strong>esqueleto</strong> de cualquier página, incluido tu propio sitio.
-Lo que aún se ve "sin pintar" lo resolverás en el módulo siguiente.</p>
+<p>Con esto ya puedes leer y escribir el <strong>esqueleto</strong> de cualquier página, el de tu propio sitio
+incluido. Eso que todavía se ve "sin pintar" lo arreglarás en el módulo que viene.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

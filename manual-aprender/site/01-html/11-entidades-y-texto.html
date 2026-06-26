@@ -23,29 +23,29 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora has escrito texto normal en HTML y todo ha funcionado. Pero ¿qué pasa si quieres mostrar el símbolo <code>&lt;</code> en pantalla, o el signo de copyright ©, o un emoji 🐾? Algunos caracteres tienen un significado especial para el navegador y no puedes escribirlos directamente. En este capítulo aprenderás las <strong>entidades HTML</strong> (los "códigos de escape" del texto), cómo poner símbolos y emojis, y un puñado de etiquetas de texto poco conocidas pero muy útiles para escribir páginas más claras y honestas. Bit, nuestro ajolote pixelado, traerá su mochila de símbolos raros.</p>
+<p>Hasta ahora has escrito texto normal en HTML y todo ha ido sobre ruedas. Pero llega el momento en que quieres mostrar el símbolo <code>&lt;</code> en pantalla, o el signo de copyright ©, o un emoji 🐾, y la cosa se complica. Resulta que algunos caracteres tienen un significado especial para el navegador y no puedes escribirlos a secas. En este capítulo vas a ver las <strong>entidades HTML</strong> (esos "códigos de escape" del texto), cómo colocar símbolos y emojis, y un puñado de etiquetas de texto poco conocidas pero la mar de útiles para escribir páginas más claras y honestas. Bit, nuestro ajolote pixelado, viene con su mochila de símbolos raros.</p>
 </blockquote>
 <hr />
 <h2 id="1-por-que-algunos-caracteres-dan-problemas">1. ¿Por qué algunos caracteres dan problemas?</h2>
-<p>Imagina que en tu sitio <strong>tunal-digital</strong> quieres escribir un texto que diga literalmente:</p>
+<p>Imagina que en tu sitio <strong>tunal-digital</strong> quieres escribir un texto que diga, literalmente:</p>
 <blockquote>
 <p>Para crear un párrafo se usa la etiqueta <code>&lt;p&gt;</code>.</p>
 </blockquote>
 <p>Si lo escribes así de directo dentro de tu <code>index.html</code>:</p>
 <pre><code class="language-html">&lt;p&gt;Para crear un párrafo se usa la etiqueta &lt;p&gt;.&lt;/p&gt;
 </code></pre>
-<p>El navegador se confunde. Ve <code>&lt;p&gt;</code> y piensa: "¡Ah, el programador quiere abrir otro párrafo!". No entiende que tú solo querías <strong>mostrar</strong> esas letras en la pantalla. El símbolo <code>&lt;</code> es como una palabra mágica reservada: en cuanto el navegador lo ve, cree que empieza una etiqueta.</p>
-<p>Lo mismo pasa con el símbolo <code>&amp;</code> (ampersand, el "y comercial"). El navegador lo trata como el inicio de un código especial. Para mostrar estos caracteres <strong>tal cual</strong>, sin que el navegador los interprete, usamos las <strong>entidades HTML</strong>.</p>
+<p>El navegador se lía. Ve <code>&lt;p&gt;</code> y piensa: "¡Ajá, aquí se abre otro párrafo!". No tiene forma de saber que tú solo querías <strong>mostrar</strong> esas letras en la pantalla. El símbolo <code>&lt;</code> funciona como una palabra reservada: en cuanto el navegador lo encuentra, da por hecho que empieza una etiqueta.</p>
+<p>Con el símbolo <code>&amp;</code> (ampersand, el "y comercial") pasa exactamente lo mismo: el navegador lo entiende como el arranque de un código especial. Para mostrar estos caracteres <strong>tal cual</strong>, sin que el navegador se ponga a interpretarlos, echamos mano de las <strong>entidades HTML</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-entidad-html">🟦 ¿Qué significa? — <em>Entidad HTML</em></h3>
-<p>Una <strong>entidad HTML</strong> es un código corto que escribes en lugar de un carácter especial, para que el navegador lo muestre como texto normal en vez de interpretarlo. Empieza siempre con <code>&amp;</code> (ampersand) y termina con <code>;</code> (punto y coma). Por ejemplo, en lugar de escribir <code>&lt;</code> escribes <code>&amp;lt;</code>.
-<strong>¿Para qué sirve?</strong> Para mostrar en pantalla símbolos que, si los escribieras directamente, el navegador entendería como parte del código HTML (o que el teclado no tiene fácil).</p>
+<p>Una <strong>entidad HTML</strong> es un código corto que escribes en lugar de un carácter especial, para que el navegador lo muestre como texto normal en vez de interpretarlo. Siempre empieza con <code>&amp;</code> (ampersand) y termina con <code>;</code> (punto y coma). Por ejemplo, en lugar de escribir <code>&lt;</code> escribes <code>&amp;lt;</code>.
+<strong>¿Para qué sirve?</strong> Para mostrar en pantalla símbolos que, escritos directamente, el navegador entendería como parte del código HTML (o que el teclado no tiene a mano).</p>
 <h3 id="tip-la-formula-de-toda-entidad">💡 Tip — La fórmula de toda entidad</h3>
-<p>Toda entidad sigue el mismo molde: <strong><code>&amp;</code> + un nombre o número + <code>;</code></strong>. Si se te olvida el punto y coma del final, la entidad no funciona y verás el código crudo en pantalla. El <code>;</code> es como el punto final de la frase mágica.</p>
+<p>Toda entidad sigue el mismo molde: <strong><code>&amp;</code> + un nombre o número + <code>;</code></strong>. Si se te escapa el punto y coma del final, la entidad no funciona y verás el código crudo en pantalla. El <code>;</code> es como el punto final de la frase mágica: sin él, no hay hechizo.</p>
 </blockquote>
 <hr />
 <h2 id="2-las-cinco-entidades-que-si-o-si-debes-conocer">2. Las cinco entidades que sí o sí debes conocer</h2>
-<p>Hay cientos de entidades, pero en el día a día se repiten unas pocas. Estas son las imprescindibles:</p>
+<p>Existen cientos de entidades, pero en el día a día siempre se repiten las mismas cuatro o cinco. Estas son las imprescindibles:</p>
 <table>
 <thead>
 <tr>
@@ -82,41 +82,41 @@
 </tr>
 </tbody>
 </table>
-<p>Fíjate en los nombres en inglés, porque te ayudan a recordarlos: <code>lt</code> = <em>less than</em> (menor que), <code>gt</code> = <em>greater than</em> (mayor que), <code>amp</code> = <em>ampersand</em>, <code>copy</code> = <em>copyright</em>.</p>
+<p>Mira los nombres en inglés, que son la mejor pista para recordarlos: <code>lt</code> = <em>less than</em> (menor que), <code>gt</code> = <em>greater than</em> (mayor que), <code>amp</code> = <em>ampersand</em>, <code>copy</code> = <em>copyright</em>.</p>
 <h3 id="amp-para-el-simbolo"><code>&amp;amp;</code> — para el símbolo &amp;</h3>
 <pre><code class="language-html">&lt;p&gt;HTML &amp;amp; CSS son la base de la web.&lt;/p&gt;
 </code></pre>
 <p>En la pantalla se lee: <em>HTML &amp; CSS son la base de la web.</em></p>
 <h3 id="lt-y-gt-para-mostrar-etiquetas-como-texto"><code>&amp;lt;</code> y <code>&amp;gt;</code> — para mostrar etiquetas como texto</h3>
-<p>Volvamos a nuestro ejemplo del principio. Así sí funciona:</p>
+<p>Volvamos al ejemplo del principio. Escrito así, ahora sí funciona:</p>
 <pre><code class="language-html">&lt;p&gt;Para crear un párrafo se usa la etiqueta &amp;lt;p&amp;gt;.&lt;/p&gt;
 </code></pre>
-<p>En pantalla se lee correctamente: <em>Para crear un párrafo se usa la etiqueta <code>&lt;p&gt;</code>.</em> El navegador muestra los símbolos <code>&lt;</code> y <code>&gt;</code> como texto, sin confundirse.</p>
+<p>En pantalla se lee tal cual lo querías: <em>Para crear un párrafo se usa la etiqueta <code>&lt;p&gt;</code>.</em> El navegador pinta los símbolos <code>&lt;</code> y <code>&gt;</code> como texto y no se confunde.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En el pie de página (footer) de <strong>tunal-digital</strong> seguramente tienes algo como un aviso de derechos. Es el lugar perfecto para <code>&amp;copy;</code>:
+<p>En el pie de página (footer) de <strong>tunal-digital</strong> seguramente tienes un aviso de derechos. Es el sitio ideal para <code>&amp;copy;</code>:
 <code>html
 &lt;footer&gt;
   &lt;p&gt;&amp;copy; 2026 Tunal Digital. Todos los derechos reservados.&lt;/p&gt;
 &lt;/footer&gt;</code>
-En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em> Si pones el año a mano, recuerda actualizarlo cada enero (o más adelante, en el módulo de JavaScript, aprenderás a ponerlo automático).</p>
+En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em> Si pones el año a mano, acuérdate de actualizarlo cada enero (más adelante, en el módulo de JavaScript, aprenderás a ponerlo de forma automática).</p>
 </blockquote>
 <h3 id="nbsp-el-espacio-que-no-se-rompe"><code>&amp;nbsp;</code> — el espacio que no se rompe</h3>
 <blockquote class="def">
 <h3 id="que-significa-nbsp-espacio-de-no-separacion">🟦 ¿Qué significa? — <em><code>&amp;nbsp;</code> (espacio de no separación)</em></h3>
-<p><code>&amp;nbsp;</code> significa <em>non-breaking space</em>, "espacio que no se rompe". Es un espacio normal a la vista, pero con una regla especial: el navegador <strong>nunca</strong> parte la línea justo en ese espacio.
-<strong>¿Para qué sirve?</strong> Para mantener juntas dos palabras (o una cifra y su unidad) que quedarían feas separadas en líneas distintas. Por ejemplo, evitar que "10 km" se quede con el "10" al final de una línea y "km" al principio de la siguiente.</p>
+<p><code>&amp;nbsp;</code> viene de <em>non-breaking space</em>, "espacio que no se rompe". A la vista es un espacio de lo más normal, pero esconde una regla especial: el navegador <strong>nunca</strong> parte la línea justo ahí.
+<strong>¿Para qué sirve?</strong> Para mantener pegadas dos palabras (o una cifra y su unidad) que quedarían feas separadas en líneas distintas. Por ejemplo, evitar que "10 km" se quede con el "10" al final de una línea y "km" al principio de la siguiente.</p>
 </blockquote>
 <pre><code class="language-html">&lt;p&gt;El plan cuesta 50&amp;nbsp;USD al mes.&lt;/p&gt;
 </code></pre>
-<p>Así "50" y "USD" siempre viajan juntos.</p>
+<p>Así "50" y "USD" viajan siempre juntos, sin que la línea los separe.</p>
 <blockquote class="warn">
 <h3 id="cuidado-no-abuses-de-nbsp-para-empujar-texto">⚠️ Cuidado — No abuses de <code>&amp;nbsp;</code> para "empujar" texto</h3>
-<p>Es tentador escribir varios <code>&amp;nbsp;&amp;nbsp;&amp;nbsp;</code> seguidos para mover algo a la derecha o dejar espacio. <strong>No lo hagas.</strong> Para separar, alinear y dar aire a los elementos existe CSS (lo verás en el Módulo 02). Usar muchos espacios duros es como apilar libros para nivelar una mesa coja: funciona a medias y se ve desordenado.</p>
+<p>Es tentador encadenar varios <code>&amp;nbsp;&amp;nbsp;&amp;nbsp;</code> para mover algo a la derecha o dejar un hueco. <strong>No caigas en eso.</strong> Para separar, alinear y dar aire a los elementos está CSS (lo verás en el Módulo 02). Llenar todo de espacios duros es como apilar libros para nivelar una mesa coja: tira un rato, pero se nota el apaño.</p>
 </blockquote>
 <hr />
 <h2 id="3-caracteres-especiales-y-emojis">3. Caracteres especiales y emojis</h2>
-<p>Más allá de las cinco básicas, hay entidades para acentos, símbolos de moneda, flechas y mucho más. Algunos ejemplos útiles:</p>
+<p>Más allá de las cinco básicas, hay entidades para acentos, símbolos de moneda, flechas y un largo etcétera. Algunos ejemplos que te sacarán de apuros:</p>
 <table>
 <thead>
 <tr>
@@ -153,30 +153,30 @@ En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em
 </tr>
 </tbody>
 </table>
-<p>También existen las entidades <strong>numéricas</strong>, que en vez de un nombre usan un número precedido de <code>#</code>. Por ejemplo, <code>&amp;#169;</code> es lo mismo que <code>&amp;copy;</code> (el © otra vez). Sirven para cualquier carácter, incluso los que no tienen nombre propio.</p>
+<p>También están las entidades <strong>numéricas</strong>, que en lugar de un nombre usan un número precedido de <code>#</code>. Por ejemplo, <code>&amp;#169;</code> es exactamente lo mismo que <code>&amp;copy;</code> (el © otra vez). Sirven para cualquier carácter, incluidos los que no tienen un nombre propio.</p>
 <blockquote class="def">
 <h3 id="que-significa-entidad-numerica">🟦 ¿Qué significa? — <em>Entidad numérica</em></h3>
-<p>Una <strong>entidad numérica</strong> es una entidad que, en lugar de un nombre fácil de recordar (como <code>copy</code> o <code>lt</code>), usa el <strong>número</strong> que identifica a ese carácter dentro del estándar de texto. Se escribe <code>&amp;#</code> + el número + <code>;</code>. Por ejemplo, <code>&amp;#169;</code> es el copyright ©.
-<strong>¿Para qué sirve?</strong> Para escribir cualquier símbolo, incluso los muy raros que no tienen un nombre con letras. Si encuentras el número de un carácter, puedes mostrarlo aunque no exista una entidad con nombre para él. En el día a día casi siempre usarás las de nombre, que son más fáciles de leer.</p>
+<p>Una <strong>entidad numérica</strong> es una entidad que, en vez de un nombre fácil de recordar (como <code>copy</code> o <code>lt</code>), usa el <strong>número</strong> que identifica a ese carácter dentro del estándar de texto. Se escribe <code>&amp;#</code> + el número + <code>;</code>. Por ejemplo, <code>&amp;#169;</code> es el copyright ©.
+<strong>¿Para qué sirve?</strong> Para escribir cualquier símbolo, hasta los más raros que no tienen un nombre con letras. Si das con el número de un carácter, puedes mostrarlo aunque no exista una entidad con nombre para él. En el día a día casi siempre tirarás de las de nombre, que se leen mucho mejor.</p>
 <h3 id="tip-si-tu-archivo-es-utf-8-los-acentos-van-directos">💡 Tip — Si tu archivo es UTF-8, los acentos van directos</h3>
-<p>En el Capítulo 02 viste la etiqueta <code>&lt;meta charset="UTF-8"&gt;</code>. Mientras esté presente en tu <code>&lt;head&gt;</code> y guardes el archivo como UTF-8 (lo normal hoy), puedes escribir acentos y la <strong>ñ</strong> directamente: <em>programación</em>, <em>niño</em>, <em>café</em>. No necesitas entidades para eso. Las entidades quedan para los caracteres verdaderamente reservados (<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>) o símbolos raros que no tienes en el teclado.</p>
+<p>En el Capítulo 02 viste la etiqueta <code>&lt;meta charset="UTF-8"&gt;</code>. Mientras la tengas en tu <code>&lt;head&gt;</code> y guardes el archivo como UTF-8 (lo habitual hoy), puedes escribir acentos y la <strong>ñ</strong> sin más rodeos: <em>programación</em>, <em>niño</em>, <em>café</em>. Para eso no necesitas entidades. Las entidades te las guardas para los caracteres de verdad reservados (<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>) o para símbolos raros que no tienes en el teclado.</p>
 </blockquote>
 <h3 id="y-los-emojis">¿Y los emojis?</h3>
-<p>Buena noticia: los emojis son simplemente caracteres de texto. Si tu archivo es UTF-8, los pegas directamente y ya está:</p>
+<p>Buena noticia: los emojis no son más que caracteres de texto. Si tu archivo es UTF-8, los pegas directamente y listo:</p>
 <pre><code class="language-html">&lt;p&gt;¡Bienvenido a Tunal Digital! 🚀&lt;/p&gt;
 &lt;p&gt;Sígueme en redes 📸 y escríbeme ✉️&lt;/p&gt;
 </code></pre>
-<p>No hace falta ninguna entidad para los emojis. Cópialos de tu teclado de emojis (en Windows, tecla Windows + punto; en Mac, Control + Comando + Espacio) y pégalos.</p>
+<p>Aquí no hace falta ninguna entidad. Cópialos del teclado de emojis (en Windows, tecla Windows + punto; en Mac, Control + Comando + Espacio) y pégalos donde quieras.</p>
 <blockquote class="warn">
 <h3 id="cuidado-un-emoji-no-reemplaza-al-texto-para-todos">⚠️ Cuidado — Un emoji no reemplaza al texto para todos</h3>
-<p>Una persona ciega navega con un <strong>lector de pantalla</strong> (un programa que lee la página en voz alta). Un emoji 📞 se lee como "teléfono", lo cual puede estar bien, pero un emoji decorativo suelto puede sonar raro o confuso. Úsalos para acompañar el texto, no para sustituirlo. Un botón que solo diga 🗑️ es menos claro que uno que diga 🗑️ Eliminar.</p>
+<p>Una persona ciega navega con un <strong>lector de pantalla</strong> (un programa que lee la página en voz alta). Un emoji 📞 se lee como "teléfono", lo cual puede venir bien, pero un emoji decorativo suelto puede sonar raro o despistar. Úsalos para acompañar el texto, nunca para sustituirlo. Un botón que solo diga 🗑️ es menos claro que uno que diga 🗑️ Eliminar.</p>
 <h3 id="que-significa-lector-de-pantalla">🟦 ¿Qué significa? — <em>Lector de pantalla</em></h3>
-<p>Un <strong>lector de pantalla</strong> es un programa que lee en voz alta el contenido de la pantalla para personas con poca o ninguna visión. Recorre tu HTML y va narrando los textos, enlaces y botones.
-<strong>¿Para qué sirve?</strong> Es la razón por la que escribimos HTML claro y con buen significado (texto en los enlaces, <code>alt</code> en las imágenes, etiquetas correctas): para que tu página sea usable por todo el mundo, no solo por quien ve la pantalla.</p>
+<p>Un <strong>lector de pantalla</strong> es un programa que lee en voz alta lo que hay en pantalla para personas con poca o ninguna visión. Recorre tu HTML y va narrando los textos, los enlaces y los botones.
+<strong>¿Para qué sirve?</strong> Es la razón por la que escribimos HTML claro y con buen significado (texto en los enlaces, <code>alt</code> en las imágenes, etiquetas correctas): para que tu página la pueda usar todo el mundo, no solo quien ve la pantalla.</p>
 </blockquote>
 <hr />
 <h2 id="4-etiquetas-de-texto-menos-comunes-pero-muy-utiles">4. Etiquetas de texto menos comunes (pero muy útiles)</h2>
-<p>Ya conoces <code>&lt;p&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, los títulos <code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>. Ahora vamos con un grupo de etiquetas más especializadas. Cada una le da un <strong>significado</strong> preciso a un trozo de texto. Eso ayuda al navegador, a los buscadores y a los lectores de pantalla a entender mejor tu contenido.</p>
+<p>Ya conoces <code>&lt;p&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code> y los títulos <code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>. Ahora vamos con un grupo de etiquetas más especializadas. Cada una le da un <strong>significado</strong> preciso a un trozo de texto, y eso ayuda al navegador, a los buscadores y a los lectores de pantalla a entender mejor tu contenido.</p>
 <blockquote class="def">
 <h3 id="que-significa-significado-semantico">🟦 ¿Qué significa? — <em>Significado semántico</em></h3>
 <p>Que una etiqueta tenga <strong>significado semántico</strong> quiere decir que no solo cambia cómo se ve el texto, sino que explica <strong>qué es</strong> ese texto. Por ejemplo, <code>&lt;time&gt;</code> no solo muestra una fecha: le dice a la máquina "esto es una fecha".
@@ -185,23 +185,23 @@ En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em
 <h3 id="abbr-abreviaturas-con-su-explicacion"><code>&lt;abbr&gt;</code> — abreviaturas con su explicación</h3>
 <pre><code class="language-html">&lt;p&gt;Mi sitio usa la &lt;abbr title=&quot;Application Programming Interface&quot;&gt;API&lt;/abbr&gt; de Claude.&lt;/p&gt;
 </code></pre>
-<p>La etiqueta <code>&lt;abbr&gt;</code> marca una abreviatura o sigla. El atributo <code>title</code> guarda el significado completo; cuando el usuario pasa el ratón por encima, aparece un globito con la explicación.</p>
+<p>La etiqueta <code>&lt;abbr&gt;</code> marca una abreviatura o sigla. El atributo <code>title</code> guarda el significado completo, y cuando el usuario pasa el ratón por encima aparece un globito con la explicación.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <strong>tunal-digital</strong> trabajas con siglas como <strong>API</strong>, <strong>HTML</strong>, <strong>CSS</strong> o <strong>JS</strong>. Marcarlas con <code>&lt;abbr title="..."&gt;</code> la primera vez que aparecen en un texto hace tu página más profesional y comprensible para quien no conoce el término.</p>
+<p>En <strong>tunal-digital</strong> manejas siglas como <strong>API</strong>, <strong>HTML</strong>, <strong>CSS</strong> o <strong>JS</strong>. Marcarlas con <code>&lt;abbr title="..."&gt;</code> la primera vez que aparecen en un texto hace tu página más profesional y más fácil de seguir para quien no conoce el término.</p>
 </blockquote>
 <h3 id="time-fechas-y-horas-que-la-maquina-entiende"><code>&lt;time&gt;</code> — fechas y horas que la máquina entiende</h3>
 <pre><code class="language-html">&lt;p&gt;Publicado el &lt;time datetime=&quot;2026-06-25&quot;&gt;25 de junio de 2026&lt;/time&gt;.&lt;/p&gt;
 </code></pre>
-<p>El texto visible puede estar escrito como tú quieras ("25 de junio de 2026"), pero el atributo <code>datetime</code> guarda la fecha en un formato estándar (<code>AAAA-MM-DD</code>) que las máquinas leen perfecto. Útil para artículos de blog, eventos o avisos.</p>
+<p>El texto visible lo escribes como te dé la gana ("25 de junio de 2026"), pero el atributo <code>datetime</code> guarda la fecha en un formato estándar (<code>AAAA-MM-DD</code>) que las máquinas leen sin pestañear. Viene de perlas para artículos de blog, eventos o avisos.</p>
 <h3 id="mark-resaltar-como-con-marcador-fluorescente"><code>&lt;mark&gt;</code> — resaltar como con marcador fluorescente</h3>
 <pre><code class="language-html">&lt;p&gt;Recuerda: &lt;mark&gt;nunca subas tus claves secretas a GitHub&lt;/mark&gt;.&lt;/p&gt;
 </code></pre>
-<p><code>&lt;mark&gt;</code> resalta texto, como si pasaras un marcador amarillo por encima. Sirve para destacar lo importante de un fragmento, por ejemplo una palabra que el usuario buscó.</p>
+<p><code>&lt;mark&gt;</code> resalta texto, como si pasaras un marcador amarillo por encima. Sirve para destacar lo importante de un fragmento, por ejemplo una palabra que el usuario acaba de buscar.</p>
 <h3 id="code-texto-que-es-codigo"><code>&lt;code&gt;</code> — texto que es código</h3>
 <pre><code class="language-html">&lt;p&gt;Para un párrafo se usa la etiqueta &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 </code></pre>
-<p><code>&lt;code&gt;</code> indica que un trozo de texto es <strong>código de programación</strong>. El navegador suele mostrarlo con una tipografía monoespaciada (todas las letras del mismo ancho, como las máquinas de escribir). Fíjate cómo combinamos <code>&lt;code&gt;</code> con las entidades <code>&amp;lt;</code> y <code>&amp;gt;</code> para mostrar la etiqueta sin que se interprete.</p>
+<p><code>&lt;code&gt;</code> indica que un trozo de texto es <strong>código de programación</strong>. El navegador suele mostrarlo con una tipografía monoespaciada (todas las letras del mismo ancho, como las máquinas de escribir de antes). Fíjate en cómo combinamos <code>&lt;code&gt;</code> con las entidades <code>&amp;lt;</code> y <code>&amp;gt;</code> para enseñar la etiqueta sin que se interprete.</p>
 <blockquote class="tip">
 <h3 id="tip-en-este-manual-usas-code-todo-el-tiempo">💡 Tip — En este manual usas <code>&lt;code&gt;</code> todo el tiempo</h3>
 <p>Cada vez que en estos capítulos ves una palabra como <code>&lt;p&gt;</code> o <code>&amp;amp;</code> con fondo gris y letra de "máquina de escribir", por debajo hay un <code>&lt;code&gt;</code>. Es la forma estándar de decir "esto es código, no prosa normal".</p>
@@ -209,12 +209,12 @@ En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em
 <h3 id="kbd-teclas-que-el-usuario-debe-pulsar"><code>&lt;kbd&gt;</code> — teclas que el usuario debe pulsar</h3>
 <pre><code class="language-html">&lt;p&gt;Para guardar, pulsa &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;S&lt;/kbd&gt;.&lt;/p&gt;
 </code></pre>
-<p><code>&lt;kbd&gt;</code> (de <em>keyboard</em>, teclado) marca teclas o atajos que el usuario debe presionar. Muy útil en manuales y tutoriales.</p>
+<p><code>&lt;kbd&gt;</code> (de <em>keyboard</em>, teclado) marca teclas o atajos que el usuario tiene que presionar. Es un imprescindible en manuales y tutoriales.</p>
 <h3 id="blockquote-y-cite-citas-largas-con-su-fuente"><code>&lt;blockquote&gt;</code> y <code>&lt;cite&gt;</code> — citas largas con su fuente</h3>
 <blockquote class="def">
 <h3 id="que-significa-blockquote-cita-en-bloque">🟦 ¿Qué significa? — <em><code>&lt;blockquote&gt;</code> (cita en bloque)</em></h3>
 <p>`
-<blockquote>` envuelve una **cita larga**: un párrafo o varios que tomas de otra fuente. El navegador suele mostrarlo separado y con sangría (un poco más adentro). Para indicar de dónde viene la cita, usas `<cite>`, que marca el **título de la obra o el nombre de la fuente**.
+<blockquote>` envuelve una **cita larga**: un párrafo o varios que tomas de otra fuente. El navegador suele mostrarlo separado y con sangría (un poco más adentro). Para indicar de dónde sale la cita, usas `<cite>`, que marca el **título de la obra o el nombre de la fuente**.
 > **¿Para qué sirve?** Para citar a alguien o algo de forma clara y honesta, dejando ver que esas palabras no son tuyas sino de la fuente que indicas.
 
 
@@ -226,7 +226,7 @@ En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em
 
 
 > ### ⚠️ Cuidado — No confundas `<blockquote>` con `<q>`
-> `<blockquote>` es para citas **largas**, en bloque, separadas del texto. Para una cita **corta dentro de una frase** existe `<q>`, que añade comillas automáticamente: `Bit dijo <q>¡el código es poesía!</q>`. Una es de bloque, la otra va en línea.
+> `<blockquote>` es para citas **largas**, en bloque, separadas del texto. Para una cita **corta dentro de una frase** existe `<q>`, que añade las comillas solo: `Bit dijo <q>¡el código es poesía!</q>`. Una va en bloque, la otra va en línea.
 
 ### `<sup>` y `<sub>` — texto encima y debajo
 
@@ -236,19 +236,19 @@ En pantalla se ve: <em>© 2026 Tunal Digital. Todos los derechos reservados.</em
 </code></pre>
 
 
-`<sup>` (de *superscript*, superíndice) sube el texto, ideal para potencias o el "º" de números ordinales. `<sub>` (de *subscript*, subíndice) lo baja, útil en fórmulas químicas. En pantalla verás *20 m²* y *H₂O*.
+`<sup>` (de *superscript*, superíndice) sube el texto, ideal para potencias o para el "º" de los ordinales. `<sub>` (de *subscript*, subíndice) lo baja, perfecto para fórmulas químicas. En pantalla verás *20 m²* y *H₂O*.
 
 ---
 
 ## 5. Idioma y dirección del texto: `lang` y `dir`
 
-Estos dos atributos no se ven, pero le dicen al navegador cosas muy importantes sobre **en qué idioma** y **en qué dirección** está tu texto.
+Estos dos atributos no se ven, pero le cuentan al navegador cosas muy importantes: **en qué idioma** y **en qué dirección** está tu texto.
 
 ### El atributo `lang` — en qué idioma está la página
 
 > ### 🟦 ¿Qué significa? — *Atributo `lang`*
-> `lang` (de *language*, idioma) declara el idioma del contenido. Se pone normalmente en la etiqueta `<html>`, al principio del documento, con un código corto: `es` para español, `en` para inglés, `fr` para francés.
-> **¿Para qué sirve?** Para que los lectores de pantalla pronuncien bien (con acento español, no inglés), para que el navegador ofrezca traducir correctamente, y para que los buscadores sepan a quién mostrar tu página.
+> `lang` (de *language*, idioma) declara el idioma del contenido. Normalmente se pone en la etiqueta `<html>`, al principio del documento, con un código corto: `es` para español, `en` para inglés, `fr` para francés.
+> **¿Para qué sirve?** Para que los lectores de pantalla pronuncien bien (con acento español, no inglés), para que el navegador ofrezca traducir como toca, y para que los buscadores sepan a quién mostrar tu página.
 
 
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
@@ -265,15 +265,15 @@ Estos dos atributos no se ven, pero le dicen al navegador cosas muy importantes 
 
 
 > ### 🔎 En tu código
-> Como Tunal Digital es un proyecto en **español**, la etiqueta de apertura en `sitio-web/index.html` debe ser `<html lang="es">`. Es una línea pequeña pero importante: revisa que la tengas. Si tuvieras una sección suelta en inglés, podrías marcar solo ese trozo: `<span lang="en">free trial</span>`, y el lector de pantalla cambiaría el acento solo ahí.
+> Como Tunal Digital es un proyecto en **español**, la etiqueta de apertura en `sitio-web/index.html` tiene que ser `<html lang="es">`. Es una línea pequeñita, pero importa: comprueba que la tienes. Y si algún día metes una sección suelta en inglés, puedes marcar solo ese trozo: `<span lang="en">free trial</span>`, y el lector de pantalla cambiará el acento únicamente ahí.
 
 ### El atributo `dir` — la dirección de la escritura
 
 > ### 🟦 ¿Qué significa? — *Atributo `dir`*
 > `dir` (de *direction*, dirección) indica hacia qué lado se escribe el texto. El valor `ltr` significa *left to right* (de izquierda a derecha, como el español o el inglés). El valor `rtl` significa *right to left* (de derecha a izquierda, como el árabe o el hebreo).
-> **¿Para qué sirve?** Para que el texto en idiomas que se leen al revés se muestre y se alinee correctamente.
+> **¿Para qué sirve?** Para que el texto en idiomas que se leen al revés se muestre y se alinee como debe.
 
-La mayoría de las veces no necesitas escribir `dir`, porque los navegadores asumen `ltr` por defecto. Solo lo usas si incluyes contenido en árabe, hebreo u otro idioma de derecha a izquierda:
+Casi nunca tendrás que escribir `dir`, porque los navegadores dan por hecho `ltr`. Solo lo usas si incluyes contenido en árabe, hebreo u otro idioma de derecha a izquierda:
 
 
 <pre><code class="language-html">&lt;p dir=&quot;rtl&quot; lang=&quot;ar&quot;&gt;مرحبا بكم في تونال&lt;/p&gt;
@@ -281,7 +281,7 @@ La mayoría de las veces no necesitas escribir `dir`, porque los navegadores asu
 
 
 > ### 💡 Tip — `lang` y `dir` viajan juntos
-> Cuando incluyas un texto en otro idioma con dirección distinta, pon ambos atributos a la vez: el `lang` para que se pronuncie bien y el `dir` para que se alinee bien. Son un buen equipo.
+> Cuando metas un texto en otro idioma con dirección distinta, pon los dos atributos a la vez: el `lang` para que se pronuncie bien y el `dir` para que se alinee bien. Hacen buena pareja.
 
 ---
 
@@ -329,7 +329,7 @@ Veamos cómo quedaría un fragmento real combinando lo de este capítulo:
 </code></pre>
 
 
-Fíjate en un detalle curioso del bloque: para mostrar `&lt;` como texto literal (la entidad misma, no el resultado), tuvimos que escribir `&amp;lt;`. Es como un eco: para mostrar el `&` de una entidad, escapamos ese `&` con `&amp;`. No te agobies si te marea; es un caso raro que solo aparece cuando explicas entidades... como aquí.
+Hay un detalle curioso en ese bloque. Para mostrar `&lt;` como texto literal (la entidad misma, no su resultado), tuvimos que escribir `&amp;lt;`. Es como un eco: para enseñar el `&` de una entidad, escapamos ese `&` con `&amp;`. No te agobies si te marea un poco; es un caso rarísimo que solo asoma cuando explicas entidades... justo como aquí.
 
 ---
 

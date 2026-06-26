@@ -18,55 +18,61 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-04-integrar-ia">Capítulo 04 — Integrar IA</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Integrar inteligencia artificial en una app suena a ciencia ficción, pero —ya lo intuyes— es
-<strong>consumir una API</strong> (capítulo 02) cuyo servicio es un modelo de IA. Tu sitio ya lo hace con
-Claude; Faro, con OpenAI. Aquí entiendes cómo, y cómo pedirle bien las cosas a un modelo.</p>
+<p>Meter inteligencia artificial en una app suena a película futurista, pero a estas alturas ya lo
+hueles: en el fondo es <strong>consumir una API</strong> (capítulo 02), solo que el servicio del otro lado es
+un modelo de IA. Tu sitio ya lo hace con Claude; Faro, con OpenAI. En este capítulo verás cómo
+funciona por dentro y, sobre todo, cómo pedirle bien las cosas a un modelo.</p>
 </blockquote>
 <hr />
 <h2 id="1-un-modelo-de-ia-es-una-api-mas-con-un-detalle">1. Un modelo de IA es una API más (con un detalle)</h2>
 <blockquote class="def">
 <h3 id="que-significa-modelo-de-lenguaje-llm">🟦 ¿Qué significa? — <em>Modelo de lenguaje (LLM)</em></h3>
-<p>Un <strong>modelo de lenguaje grande</strong> (<em>Large Language Model</em>, LLM) es un programa de IA, entrenado
-con enormes cantidades de texto, capaz de <strong>entender y generar lenguaje</strong>: responder preguntas,
-resumir, redactar, clasificar. <strong>Claude</strong> (de Anthropic) y los modelos <strong>GPT</strong> (de OpenAI) son
-LLMs. No "saben" como una base de datos: <strong>predicen</strong> texto coherente a partir de lo que les
-das.</p>
+<p>Un <strong>modelo de lenguaje grande</strong> (<em>Large Language Model</em>, LLM) es un programa de IA entrenado con
+cantidades enormes de texto, capaz de <strong>entender y generar lenguaje</strong>: responde preguntas, resume,
+redacta, clasifica. <strong>Claude</strong> (de Anthropic) y los modelos <strong>GPT</strong> (de OpenAI) son LLMs. Ojo con
+una idea clave: no "saben" cosas como una base de datos. Lo que hacen es <strong>predecir</strong> el texto que
+tiene sentido a partir de lo que tú les das.</p>
 <h3 id="que-significa-consumir-un-llm-por-su-api">🟦 ¿Qué significa? — <em>Consumir un LLM por su API</em></h3>
-<p>Usas un LLM igual que cualquier API (capítulo 02): haces un <strong>POST</strong> a su endpoint, con tu
-<strong>clave de API</strong> en los headers y, en el <strong>body</strong>, el <strong>prompt</strong> (lo que le pides) más opciones
-(qué modelo, cuánto puede responder). Te devuelve la respuesta en JSON. Eso es todo: tu chat es,
-en esencia, un <code>fetch</code> POST a Claude.</p>
+<p>Un LLM se usa igual que cualquier otra API (capítulo 02): le haces un <strong>POST</strong> a su endpoint, con
+tu <strong>clave de API</strong> en los headers y, en el <strong>body</strong>, el <strong>prompt</strong> (lo que le pides) junto a algunas
+opciones (qué modelo quieres, cuánto puede responder). Él te devuelve la respuesta en JSON. Y ya
+está: tu chat, en el fondo, no es más que un <code>fetch</code> POST a Claude.</p>
 <h3 id="que-significa-modelo-model">🟦 ¿Qué significa? — <em>Modelo (model)</em></h3>
-<p>Al llamar a la API eliges <strong>qué modelo</strong> usar. Suele haber varios, equilibrando capacidad,
-velocidad y costo: por ejemplo Claude tiene modelos más potentes (tipo "Opus") y otros más
-rápidos y económicos (tipo "Haiku"). <strong>Tu sitio usa <code>claude-haiku-4-5</code></strong>: un modelo rápido y
-barato, suficiente para un chat de bienvenida, y que te ayuda a <strong>controlar el gasto</strong>.</p>
+<p>Cuando llamas a la API decides <strong>qué modelo</strong> usar. Casi siempre hay varios, cada uno con su
+equilibrio entre capacidad, velocidad y costo: Claude, por ejemplo, tiene modelos más potentes (de
+la familia "Opus") y otros más rápidos y baratos (tipo "Haiku"). <strong>Tu sitio usa <code>claude-haiku-4-5</code></strong>,
+un modelo ágil y económico, de sobra para un chat de bienvenida, y que además te ayuda a <strong>tener el
+gasto bajo control</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="2-el-prompt-como-se-le-pide-a-un-llm">2. El prompt: cómo se le pide a un LLM</h2>
 <blockquote class="def">
 <h3 id="que-significa-prompt">🟦 ¿Qué significa? — <em>Prompt</em></h3>
-<p>El <strong>prompt</strong> es <strong>el texto con el que le pides algo</strong> a un modelo: tu instrucción + el
-contexto. La calidad de la respuesta depende muchísimo de la calidad del prompt. A escribir
-buenos prompts se le llama <strong>"ingeniería de prompts"</strong> (prompt engineering), y es una habilidad
-en sí misma.</p>
+<p>El <strong>prompt</strong> es <strong>el texto con el que le pides algo</strong> al modelo: tu instrucción más el contexto.
+La calidad de la respuesta depende muchísimo de la calidad del prompt; ahí se juega casi todo.
+Escribir buenos prompts tiene hasta nombre propio, <strong>"ingeniería de prompts"</strong> (prompt engineering),
+y es una habilidad que se entrena.</p>
 <h3 id="que-significa-prompt-de-sistema-system-prompt">🟦 ¿Qué significa? — <em>Prompt de sistema (system prompt)</em></h3>
 <p>Muchas APIs separan dos cosas:
-- El <strong>system prompt</strong>: instrucciones de fondo que definen <strong>el papel y las reglas</strong> del
+- El <strong>system prompt</strong>: las instrucciones de fondo que definen <strong>el papel y las reglas</strong> del
   asistente ("Eres el asistente de Tunal Digital. Responde breve, en español, sobre nuestros
   servicios. No inventes precios.").
 - El <strong>mensaje del usuario</strong>: lo que la persona escribe en el chat.
-Tu Worker arma ambos: pone un system prompt fijo (la personalidad de tu bot) y le añade el
-mensaje del visitante. Por eso tu chat "sabe" de qué hablar y mantiene el tono.</p>
+Tu Worker arma las dos partes: fija un system prompt (la personalidad de tu bot) y le pega encima
+el mensaje del visitante. Por eso tu chat "sabe" de qué hablar y no se sale del tono.</p>
 <h3 id="tip-como-escribir-un-buen-prompt-lo-que-este-manual-te-dio">💡 Tip — Cómo escribir un buen prompt (lo que este manual te dio)</h3>
-<p>Un buen prompt es <strong>específico</strong> y <strong>da contexto</strong>, justo la habilidad que perseguías:
-- Di <strong>el rol</strong> ("actúa como…"), <strong>el formato</strong> ("responde en una lista de 3 puntos"), <strong>el
+<p>Un buen prompt es <strong>específico</strong> y <strong>da contexto</strong>, justo la habilidad que venías persiguiendo:
+- Dile <strong>el rol</strong> ("actúa como…"), <strong>el formato</strong> ("responde en una lista de 3 puntos"), <strong>el
   tono</strong> y <strong>los límites</strong> ("máximo 50 palabras", "no inventes datos").
-- Da <strong>ejemplos</strong> si puedes (mostrarle uno o dos ejemplos de lo que quieres se llama
+- Dale <strong>ejemplos</strong> cuando puedas (enseñarle uno o dos ejemplos de lo que quieres se llama
   <em>few-shot</em>; tu Worker usa esta técnica).
-Vago: "háblame de marketing". Preciso: "En 3 viñetas y tono cercano, explica a un dueño de
-tienda por qué necesita un sitio web. Máximo 60 palabras. No menciones precios."</p>
+Vago: "háblame de marketing". Preciso: "En 3 viñetas y tono cercano, explica a un dueño de tienda
+por qué necesita un sitio web. Máximo 60 palabras. No menciones precios."</p>
 </blockquote>
 <hr />
 <h2 id="3-como-viaja-una-pregunta-del-chat-uniendo-todo">3. Cómo viaja una pregunta del chat (uniendo todo)</h2>
@@ -77,20 +83,20 @@ tienda por qué necesita un sitio web. Máximo 60 palabras. No menciones precios
 4. Claude responde; el Worker te devuelve el texto.
 5. main.js muestra la respuesta en pantalla (manipulando el DOM, Módulo 03).
 </code></pre>
-<p>Cada flecha es algo que ya sabes: <code>fetch</code>, JSON, async/await, headers, claves de API, DOM. La IA
-no era magia: era una API bien orquestada y protegida.</p>
+<p>Fíjate en que cada flecha es algo que ya conoces: <code>fetch</code>, JSON, async/await, headers, claves de API,
+DOM. La IA nunca fue magia: es una API bien orquestada y bien protegida.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Faro usa la API de <strong>OpenAI</strong> (<code>src/lib/openai.ts</code>) de la misma forma, pero para otra tarea:
-le manda el README y los datos de un proyecto y le pide que <strong>resuma</strong> su estado, progreso y
-roadmap, devolviendo <strong>JSON estructurado</strong>. Es el mismo patrón (prompt → respuesta), aplicado a
-analizar en vez de chatear.</p>
+<p>Faro usa la API de <strong>OpenAI</strong> (<code>src/lib/openai.ts</code>) exactamente igual, pero para otra tarea: le
+manda el README y los datos de un proyecto y le pide que <strong>resuma</strong> su estado, progreso y roadmap,
+devolviéndolo como <strong>JSON estructurado</strong>. Es el mismo patrón de siempre (prompt → respuesta), solo
+que aplicado a analizar en lugar de chatear.</p>
 <h3 id="que-significa-token-en-el-contexto-de-ia-y-por-que-importa-el-costo">🟦 ¿Qué significa? — <em>Token (en el contexto de IA) y por qué importa el costo</em></h3>
-<p>En IA, un <strong>token</strong> es un trocito de texto (más o menos una palabra o parte de ella). Las APIs
-de LLM <strong>cobran por tokens</strong> (los que envías + los que genera). Por eso importan los límites: tu
-Worker corta el largo de los mensajes y limita el uso, para que el chat sea útil <strong>sin
-dispararte la factura</strong> (tu sitio tiene un tope de gasto mensual). Controlar tokens = controlar
-costo.</p>
+<p>En IA, un <strong>token</strong> es un trocito de texto: más o menos una palabra, o un pedazo de una. Las APIs
+de LLM <strong>cobran por tokens</strong>, tanto los que envías como los que genera. De ahí que los límites
+importen tanto: tu Worker recorta el largo de los mensajes y acota el uso para que el chat siga
+siendo útil <strong>sin que se te dispare la factura</strong> (tu sitio tiene un tope de gasto mensual). Dicho
+corto: controlar tokens es controlar el costo.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

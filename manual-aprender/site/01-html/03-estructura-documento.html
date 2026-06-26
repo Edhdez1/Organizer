@@ -18,33 +18,38 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-03-la-estructura-de-un-documento">Capítulo 03 — La estructura de un documento</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Hasta ahora pusimos contenido suelto en el <code>&lt;body&gt;</code>. En este capítulo aprenderás a darle a
-una página su <strong>estructura profesional</strong>: la cabecera invisible (<code>&lt;head&gt;</code>) con sus
-metadatos, y un cuerpo <strong>semántico</strong> que cualquier máquina y persona entienda. Esto es lo que
-separa una página de juguete de una página real como la tuya.</p>
+<p>Hasta ahora hemos ido soltando contenido dentro del <code>&lt;body&gt;</code> sin más. En este capítulo le
+vamos a dar a la página una <strong>estructura de verdad</strong>: por un lado la cabecera invisible
+(<code>&lt;head&gt;</code>), donde viven los metadatos; por otro, un cuerpo <strong>semántico</strong> que tanto las máquinas
+como las personas puedan entender. Esto es justo lo que diferencia una página de práctica de
+una página real como la tuya.</p>
 </blockquote>
 <hr />
 <h2 id="1-las-dos-mitades-head-y-body">1. Las dos mitades: <code>&lt;head&gt;</code> y <code>&lt;body&gt;</code></h2>
-<p>Toda página HTML se divide en dos partes dentro de <code>&lt;html&gt;</code>:</p>
+<p>Dentro de <code>&lt;html&gt;</code>, toda página se parte en dos:</p>
 <pre><code>&lt;html&gt;
 ├── &lt;head&gt;   →  información SOBRE la página (no se ve en pantalla)
 └── &lt;body&gt;   →  el contenido que SÍ se ve
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-head-la-cabecera">🟦 ¿Qué significa? — <em><code>&lt;head&gt;</code> (la cabecera)</em></h3>
-<p>El <code>&lt;head&gt;</code> es una zona de <strong>metadatos</strong>: datos <em>sobre</em> la página, no contenido visible. Ahí
-van el título de la pestaña, el idioma, la descripción para Google, los enlaces a los
-archivos de estilo (CSS) y de JavaScript, el ícono, etc. El usuario no "ve" el <code>&lt;head&gt;</code>, pero
-es vital.</p>
+<p>El <code>&lt;head&gt;</code> es la zona de los <strong>metadatos</strong>: datos <em>sobre</em> la página, no contenido que se vea.
+Ahí van el título de la pestaña, el idioma, la descripción para Google, los enlaces a los
+archivos de estilo (CSS) y de JavaScript, el ícono… El usuario nunca "ve" el <code>&lt;head&gt;</code>, pero sin
+él la página cojea.</p>
 <h3 id="que-significa-metadato">🟦 ¿Qué significa? — <em>Metadato</em></h3>
-<p>Un <strong>metadato</strong> es "un dato sobre un dato". Aquí: información que describe la página (su
-título, su autor, su idioma) en lugar de ser el contenido de la página. La palabra aparecerá
-mucho; quédate con "datos <em>acerca de</em>".</p>
+<p>Un <strong>metadato</strong> es "un dato sobre un dato". Aquí, información que describe a la página —su
+título, su autor, su idioma— en lugar de ser el contenido en sí. Es una palabra que vas a leer
+mucho; quédate con la idea de "datos <em>acerca de</em>".</p>
 </blockquote>
 <hr />
 <h2 id="2-los-metadatos-esenciales-del-head">2. Los metadatos esenciales del <code>&lt;head&gt;</code></h2>
-<p>Veamos un <code>&lt;head&gt;</code> completo y realista, línea por línea:</p>
+<p>Mira un <code>&lt;head&gt;</code> completo y realista, y vamos línea por línea:</p>
 <pre><code class="language-html">&lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
@@ -57,40 +62,42 @@ mucho; quédate con "datos <em>acerca de</em>".</p>
 <blockquote class="code">
 <h3 id="linea-por-linea">🔎 Línea por línea</h3>
 <ul>
-<li><code>&lt;meta charset="UTF-8"&gt;</code> → codificación de caracteres (acentos, ñ, emojis). Ya lo viste.</li>
-<li><code>&lt;meta name="viewport" ...&gt;</code> → <strong>clave para móviles</strong>. Le dice al navegador que adapte el
-  ancho a la pantalla del dispositivo. Sin esta línea, tu sitio se vería diminuto en el
-  teléfono. La estudiarás a fondo en el módulo 02 (responsive).</li>
-<li><code>&lt;title&gt;</code> → el texto de la pestaña y el que muestra Google como titular del resultado.</li>
-<li><code>&lt;meta name="description"&gt;</code> → el resumen que Google muestra <strong>bajo</strong> el titular en los
-  resultados de búsqueda. Influye en cuánta gente hace clic.</li>
-<li><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code> → <strong>conecta</strong> tu archivo de estilos CSS. Así
-  es como el HTML y el CSS se unen. Lo verás en el módulo 02.</li>
+<li><code>&lt;meta charset="UTF-8"&gt;</code> → la codificación de caracteres (acentos, ñ, emojis). Esto ya lo
+  viste antes.</li>
+<li><code>&lt;meta name="viewport" ...&gt;</code> → <strong>la línea clave para móviles</strong>. Le dice al navegador que
+  ajuste el ancho al de la pantalla del dispositivo. Si la quitas, tu sitio se ve diminuto en el
+  teléfono. La verás con calma en el módulo 02 (responsive).</li>
+<li><code>&lt;title&gt;</code> → el texto que aparece en la pestaña y que Google usa como titular del resultado.</li>
+<li><code>&lt;meta name="description"&gt;</code> → el resumen que Google muestra <strong>bajo</strong> el titular en sus
+  resultados. De él depende, en buena parte, cuánta gente hace clic.</li>
+<li><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code> → el que <strong>conecta</strong> tu archivo de estilos CSS.
+  Así es como el HTML y el CSS se dan la mano. Lo verás en el módulo 02.</li>
 <li><code>&lt;link rel="icon" href="favicon.ico"&gt;</code> → el iconito de la pestaña (<em>favicon</em>).</li>
 </ul>
 <h3 id="que-significa-la-etiqueta-meta">🟦 ¿Qué significa? — <em>La etiqueta <code>&lt;meta&gt;</code></em></h3>
-<p><code>&lt;meta&gt;</code> es una etiqueta "vacía" (no se cierra) que aporta un metadato. Cambia su
-comportamiento según sus atributos: <code>charset</code> para codificación, <code>name</code>+<code>content</code> para
-describir la página. Hay muchos tipos de <code>&lt;meta&gt;</code>; con conocer <code>charset</code>, <code>viewport</code> y
-<code>description</code> vas muy bien para empezar.</p>
+<p><code>&lt;meta&gt;</code> es una etiqueta "vacía" (no lleva cierre) cuya misión es aportar un metadato. Su
+comportamiento cambia según los atributos que le pongas: <code>charset</code> para la codificación,
+<code>name</code>+<code>content</code> para describir la página. Existen muchos tipos de <code>&lt;meta&gt;</code>, pero con manejar
+<code>charset</code>, <code>viewport</code> y <code>description</code> vas de sobra para empezar.</p>
 <h3 id="tip-open-graph-como-se-ve-tu-enlace-al-compartirlo">💡 Tip — Open Graph: cómo se ve tu enlace al compartirlo</h3>
-<p>¿Has notado que al pegar un enlace en WhatsApp aparece una imagen y un título bonitos? Eso
-lo controlan unas etiquetas <code>&lt;meta property="og:..."&gt;</code> (Open Graph) en el <code>&lt;head&gt;</code>. Tu sitio
-tiene una imagen <code>og-image.png</code> justo para eso. No te preocupes por dominarlas ahora; solo
-reconoce que viven en el <code>&lt;head&gt;</code>.</p>
+<p>¿Te has fijado en que, al pegar un enlace en WhatsApp, salen una imagen y un título bonitos? De
+eso se encargan unas etiquetas <code>&lt;meta property="og:..."&gt;</code> (Open Graph) que van en el <code>&lt;head&gt;</code>.
+Tu sitio tiene una imagen <code>og-image.png</code> justamente para esto. No hace falta que las domines
+ahora; basta con que sepas que viven en el <code>&lt;head&gt;</code>.</p>
 </blockquote>
 <hr />
 <h2 id="3-el-cuerpo-semantico-darle-sentido-al-body">3. El cuerpo semántico: darle sentido al <code>&lt;body&gt;</code></h2>
-<p>Durante años, las páginas se construían llenando todo de <code>&lt;div&gt;</code> (cajas genéricas). Funciona,
-pero no comunica <em>qué es cada parte</em>. HTML moderno tiene etiquetas que <strong>describen el papel</strong>
-de cada sección. A eso se le llama <strong>HTML semántico</strong>.</p>
+<p>Durante años, las páginas se armaban metiéndolo todo en <code>&lt;div&gt;</code> (cajas genéricas). Funciona, sí,
+pero no cuenta <em>qué es cada parte</em>. El HTML moderno trae etiquetas que <strong>describen el papel</strong> de
+cada zona, y a eso lo llamamos <strong>HTML semántico</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-div-caja-generica">🟦 ¿Qué significa? — <em><code>&lt;div&gt;</code> (caja genérica)</em></h3>
-<p>Un <code>&lt;div&gt;</code> (<em>division</em>) es un <strong>contenedor sin significado</strong>: una caja para agrupar cosas. Es
-útil, pero por sí solo no dice si es un menú, un artículo o un pie de página. Es "neutro".</p>
+<p>Un <code>&lt;div&gt;</code> (<em>division</em>) es un <strong>contenedor sin significado</strong>: una caja para agrupar cosas. Sirve,
+pero por sí solo no aclara si lo de dentro es un menú, un artículo o un pie de página. Es
+"neutro".</p>
 <h3 id="que-significa-html-semantico">🟦 ¿Qué significa? — <em>HTML semántico</em></h3>
-<p><strong>Semántico</strong> significa "que tiene significado". El HTML semántico usa etiquetas que
-<strong>nombran el rol</strong> de cada zona, en vez de cajas genéricas. Las principales:
+<p><strong>Semántico</strong> quiere decir "que tiene significado". El HTML semántico usa etiquetas que
+<strong>nombran el rol</strong> de cada zona, en vez de cajas todas iguales. Estas son las principales:
 | Etiqueta | Qué representa |
 |---|---|
 | <code>&lt;header&gt;</code> | La cabecera visible (logo, menú superior) |
@@ -101,7 +108,7 @@ de cada sección. A eso se le llama <strong>HTML semántico</strong>.</p>
 | <code>&lt;aside&gt;</code> | Contenido lateral o secundario |
 | <code>&lt;footer&gt;</code> | El pie de página (contacto, derechos, redes) |</p>
 </blockquote>
-<p>Comparación directa del mismo esqueleto:</p>
+<p>El mismo esqueleto, comparado lado a lado:</p>
 <pre><code class="language-html">&lt;!-- ❌ Sin semántica: todo son cajas iguales --&gt;
 &lt;div class=&quot;header&quot;&gt;…&lt;/div&gt;
 &lt;div class=&quot;content&quot;&gt;…&lt;/div&gt;
@@ -114,15 +121,16 @@ de cada sección. A eso se le llama <strong>HTML semántico</strong>.</p>
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-por-que-molestarse-en-ser-semantico">💡 Tip — ¿Por qué molestarse en ser semántico?</h3>
-<p>Tres razones concretas:
-1. <strong>Accesibilidad:</strong> un lector de pantalla puede decir "estás en la navegación" o "saltando
-   al contenido principal" porque las etiquetas se lo dicen.
-2. <strong>SEO:</strong> Google entiende mejor tu página y la posiciona mejor.
-3. <strong>Mantenimiento:</strong> tú (y la IA) leen el código y entienden la estructura de un vistazo.</p>
+<p>Por tres razones bien concretas:
+1. <strong>Accesibilidad:</strong> un lector de pantalla puede avisar "estás en la navegación" o "saltando al
+   contenido principal", porque las etiquetas se lo dicen.
+2. <strong>SEO:</strong> Google entiende mejor tu página y la posiciona más arriba.
+3. <strong>Mantenimiento:</strong> tú (y la IA) leéis el código y captáis la estructura de un solo vistazo.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Tu <code>tunal-digital/sitio-web/index.html</code> usa esta estructura semántica: un <code>&lt;header&gt;</code> con el
-menú, un <code>&lt;main&gt;</code> con las secciones de servicios y precios (cada una un <code>&lt;section&gt;</code>), y un
-<code>&lt;footer&gt;</code> con el contacto. Cuando lo abras con <code>F12</code>, reconocerás estas etiquetas.</p>
+<p>Tu <code>tunal-digital/sitio-web/index.html</code> usa precisamente esta estructura semántica: un
+<code>&lt;header&gt;</code> con el menú, un <code>&lt;main&gt;</code> con las secciones de servicios y precios (cada una en su
+<code>&lt;section&gt;</code>), y un <code>&lt;footer&gt;</code> con el contacto. Cuando lo abras con <code>F12</code>, vas a reconocer estas
+etiquetas al instante.</p>
 </blockquote>
 <hr />
 <h2 id="4-un-esqueleto-completo-y-semantico">4. Un esqueleto completo y semántico</h2>
@@ -164,13 +172,15 @@ menú, un <code>&lt;main&gt;</code> con las secciones de servicios y precios (ca
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>Fíjate cómo el <code>id="servicios"</code> del <code>&lt;section&gt;</code> conecta con el enlace de ancla
-<code>href="#servicios"</code> del menú: al hacer clic, la página salta a esa sección. Todo encaja.</p>
+<p>Fíjate en cómo el <code>id="servicios"</code> del <code>&lt;section&gt;</code> se enlaza con el ancla <code>href="#servicios"</code> del
+menú: al hacer clic, la página salta justo a esa sección. Todo encaja como las piezas de un
+rompecabezas.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-atributo-id">🟦 ¿Qué significa? — <em>El atributo <code>id</code></em></h3>
-<p>Un <code>id</code> es un <strong>identificador único</strong> que le pones a un elemento para poder referirte a él:
-desde un enlace de ancla (<code>#servicios</code>), desde CSS para darle estilo, o desde JavaScript para
-manipularlo. <strong>Regla:</strong> un <code>id</code> no se repite en la misma página (es único, como una cédula).</p>
+<p>Un <code>id</code> es un <strong>identificador único</strong> que le pones a un elemento para poder señalarlo después:
+desde un enlace de ancla (<code>#servicios</code>), desde el CSS para darle estilo, o desde JavaScript para
+manipularlo. <strong>Una regla de oro:</strong> un <code>id</code> no se repite dentro de la misma página; es único, como
+el número de tu cédula.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

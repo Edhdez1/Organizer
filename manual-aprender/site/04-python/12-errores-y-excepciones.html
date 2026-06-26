@@ -23,32 +23,32 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez. Soy <strong>Bit</strong>, tu ajolote guia. Hoy vamos a hablar de algo que asusta a casi todos los principiantes: los errores. Esas letras rojas que salen cuando algo sale mal. Pero te tengo una buena noticia: un error no es un castigo, es un <strong>mensaje</strong>. Python te esta hablando. Te dice "oye, aqui hay un problema, y este es justo el problema". Cuando aprendas a leer esos mensajes, vas a dejar de tenerles miedo y vas a empezar a tratarlos como pistas de un detective. Vamos paso a paso, con calma, usando nuestra app <strong>PolyPaw</strong> como ejemplo.</p>
+<p>Hola otra vez. Soy <strong>Bit</strong>, tu ajolote guia. Hoy toca un tema que pone nerviosos a casi todos cuando empiezan: los errores. Esas letras rojas que aparecen justo cuando algo se rompe. Pero quiero contarte algo que cambia todo: un error no es un castigo, es un <strong>mensaje</strong>. Es Python hablandote. Te dice "oye, aqui hay un problema, y mira, es exactamente este". El dia que aprendas a leer esos mensajes vas a dejar de temerles y vas a empezar a tratarlos como las pistas de un detective. Lo haremos despacio, con calma, y usando nuestra app <strong>PolyPaw</strong> como ejemplo de principio a fin.</p>
 </blockquote>
 <h2 id="1-un-error-no-es-el-fin-del-mundo">1. Un error no es el fin del mundo</h2>
-<p>Cuando programas, los errores van a aparecer. Siempre. Le pasan al que empieza y le pasan al que lleva veinte anios. La diferencia es que el experto <strong>lee el error</strong> y lo resuelve en segundos, mientras que el principiante se asusta y cierra todo. Mi objetivo en este capitulo es que tu pases del segundo grupo al primero.</p>
-<p>En PolyPaw, nuestra app de aprendizaje de idiomas hecha <strong>enteramente en Python</strong> con el framework Flet, los datos viven en archivos JSON dentro de la carpeta <code>missions/</code>. Imagina que un dia el archivo <code>missions/saludos.json</code> no existe (alguien lo borro, o se escribio mal el nombre). Si no manejamos ese caso, la app <strong>se cae</strong> y el usuario ve una pantalla rota. Manejar errores es lo que separa una app fragil de una app que aguanta los golpes.</p>
-<p>Primero, definamos el termino mas importante del capitulo.</p>
+<p>Programa lo que programes, los errores van a aparecer. Siempre. Le pasa al que abre Python por primera vez y le pasa al que lleva veinte anios viviendo de esto. La diferencia esta en otra parte: el experto <strong>lee el error</strong> y lo arregla en segundos, mientras que el principiante se asusta y cierra todo de golpe. Lo que busco en este capitulo es justamente eso, llevarte del segundo grupo al primero.</p>
+<p>PolyPaw, nuestra app de aprendizaje de idiomas hecha <strong>enteramente en Python</strong> con el framework Flet, guarda sus datos en archivos JSON dentro de la carpeta <code>missions/</code>. Piensa en este escenario: un dia el archivo <code>missions/saludos.json</code> no aparece. Alguien lo borro, o el nombre quedo mal escrito. Si no preparamos la app para ese caso, se <strong>cae</strong> y el usuario se queda mirando una pantalla rota. Justo ahi esta la diferencia entre una app fragil y una que encaja los golpes y sigue de pie.</p>
+<p>Antes de seguir, conviene dejar claro el termino mas importante del capitulo.</p>
 <blockquote class="def">
 <h3 id="que-significa-excepcion">🟦 ¿Que significa? — <em>Excepcion</em></h3>
-<p>Una <strong>excepcion</strong> es un evento que interrumpe el flujo normal de tu programa porque algo salio mal. La palabra viene de "situacion excepcional", es decir, algo que no esperabas. Cuando Python encuentra un problema (dividir entre cero, abrir un archivo que no existe, sumar un numero con un texto), <strong>lanza</strong> una excepcion.
+<p>Una <strong>excepcion</strong> es un evento que interrumpe el flujo normal de tu programa porque algo salio mal. El nombre viene de "situacion excepcional", es decir, algo con lo que no contabas. Cuando Python se topa con un problema (dividir entre cero, abrir un archivo que no existe, sumar un numero con un texto), <strong>lanza</strong> una excepcion.
 <strong>Para que sirve:</strong> te avisa exactamente que paso y donde, para que puedas reaccionar.
 <strong>Donde se usa en un repo real:</strong> en PolyPaw, cuando <code>database_manager.py</code> intenta leer una mision que no esta, Python lanza una excepcion del tipo <code>FileNotFoundError</code>. Si la atrapamos, podemos mostrar un mensaje amable en vez de que la app explote.</p>
 <h3 id="tip">💡 Tip</h3>
 <p>En JavaScript (que viste en el Modulo 03) a esto se le llama "throw / try / catch". En Python el concepto es identico, solo cambian las palabras: en vez de <code>catch</code> se usa <code>except</code>. Si ya entendiste el manejo de errores en JS, aqui solo cambias el vocabulario.</p>
 </blockquote>
 <h2 id="2-los-tipos-de-error-mas-comunes">2. Los tipos de error mas comunes</h2>
-<p>Python tiene muchos tipos de error, pero como principiante te vas a topar una y otra vez con los mismos seis. Vamos a conocerlos uno por uno. Cada uno tiene un <strong>nombre</strong> y ese nombre te dice de que se trata.</p>
+<p>Python tiene un monton de tipos de error, pero como principiante te vas a cruzar una y otra vez con los mismos seis. Vamos a verlos de uno en uno. Cada uno tiene un <strong>nombre</strong>, y ese nombre ya te adelanta de que va la cosa.</p>
 <blockquote class="def">
 <h3 id="que-significa-syntaxerror">🟦 ¿Que significa? — <em>SyntaxError</em></h3>
-<p>Un <strong>SyntaxError</strong> (error de sintaxis) significa que escribiste algo que Python no puede ni siquiera entender, porque rompe las reglas de gramatica del lenguaje. La "sintaxis" son las reglas de como se escribe el codigo.
+<p>Un <strong>SyntaxError</strong> (error de sintaxis) significa que escribiste algo que Python ni siquiera puede entender, porque rompe las reglas de gramatica del lenguaje. La "sintaxis" son las reglas de como se escribe el codigo.
 <strong>Para que sirve:</strong> te avisa que el codigo esta mal <strong>escrito</strong> antes incluso de ejecutarse.
 <strong>Donde se usa en un repo real:</strong> si en <code>main.py</code> de PolyPaw olvidas un parentesis o los dos puntos de un <code>if</code>, Python ni arranca y te muestra un SyntaxError.</p>
 </blockquote>
 <p>Ejemplo de SyntaxError (falta el cierre del parentesis):</p>
 <pre><code class="language-python">print(&quot;Bienvenido a PolyPaw&quot;
 </code></pre>
-<p>Python responde algo asi como <code>SyntaxError: '(' was never closed</code>. Te esta diciendo "abriste un parentesis y nunca lo cerraste".</p>
+<p>Python te responde algo parecido a <code>SyntaxError: '(' was never closed</code>. En cristiano: "abriste un parentesis y nunca lo cerraste".</p>
 <blockquote class="def">
 <h3 id="que-significa-nameerror">🟦 ¿Que significa? — <em>NameError</em></h3>
 <p>Un <strong>NameError</strong> (error de nombre) ocurre cuando usas un nombre (una variable o funcion) que Python no conoce, porque nunca lo creaste o lo escribiste mal.
@@ -100,10 +100,10 @@ print(ejercicios[5])   # solo hay posiciones 0, 1 y 2
 <p>Resultado: <code>ValueError: invalid literal for int() with base 10: 'doce'</code>.</p>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>No memorices los seis de golpe. Lo que importa es entender que <strong>cada error tiene un nombre que describe el problema</strong>. Cuando veas uno nuevo, lee el nombre en voz alta: "Key... Error... error de clave... ah, pedi una clave que no existe". Con la practica los reconoceras al instante.</p>
+<p>No intentes memorizar los seis de un tiron. Lo que de verdad importa es captar que <strong>cada error lleva un nombre que describe el problema</strong>. Cuando te aparezca uno nuevo, leelo en voz alta y separalo: "Key... Error... error de clave... ah, pedi una clave que no existe". Con la practica los vas a reconocer al vuelo.</p>
 </blockquote>
 <h2 id="3-leer-el-traceback-la-pila-de-error">3. Leer el traceback (la pila de error)</h2>
-<p>Cuando algo falla, Python no te da una sola linea: te da un bloque entero de texto rojo. Eso es el <strong>traceback</strong>, y aprender a leerlo es tu superpoder.</p>
+<p>Cuando algo falla, Python no se conforma con una linea: te suelta un bloque entero de texto rojo. Eso es el <strong>traceback</strong>, y leerlo bien es tu superpoder secreto.</p>
 <blockquote class="def">
 <h3 id="que-significa-traceback">🟦 ¿Que significa? — <em>Traceback</em></h3>
 <p>El <strong>traceback</strong> (en espanol, "rastreo" o "pila de error") es el reporte completo que Python imprime cuando ocurre una excepcion. Muestra el camino que recorrio el programa hasta llegar al error, archivo por archivo y linea por linea.
@@ -123,19 +123,19 @@ FileNotFoundError: [Errno 2] No such file or directory: 'missions/saludos.json'
 <h3 id="tip_2">💡 Tip</h3>
 <p><strong>Lee el traceback de ABAJO hacia ARRIBA.</strong> La ultima linea te dice <strong>que</strong> error fue (<code>FileNotFoundError</code>) y el mensaje (<code>No such file or directory: 'missions/saludos.json'</code>). Justo encima te dice <strong>donde</strong> paso (archivo <code>database_manager.py</code>, linea 18, en la funcion <code>cargar_mision</code>). Lo de mas arriba es el camino que llevo hasta alli.</p>
 </blockquote>
-<p>Entonces, de ese traceback aprendemos tres cosas en segundos:
+<p>Asi, en cuestion de segundos, ese traceback nos cuenta tres cosas:
 1. <strong>El tipo:</strong> <code>FileNotFoundError</code> (no se encontro un archivo).
 2. <strong>El mensaje:</strong> falta el archivo <code>missions/saludos.json</code>.
 3. <strong>El lugar:</strong> linea 18 de <code>database_manager.py</code>, dentro de <code>cargar_mision</code>.</p>
-<p>Con eso ya sabemos exactamente que arreglar: o el archivo no existe, o el nombre esta mal escrito.</p>
+<p>Con eso en la mano ya sabemos que tocar: o el archivo no existe, o el nombre quedo mal escrito.</p>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>No te asustes por la cantidad de texto. El traceback parece largo y aterrador, pero el 90% de la informacion util esta en la <strong>ultima linea</strong>. Empieza siempre por ahi.</p>
+<p>Que no te asuste la cantidad de texto. El traceback se ve largo y aterrador, pero el 90% de lo util esta en la <strong>ultima linea</strong>. Empieza siempre por ahi.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
 <p>Abre la terminal donde corre PolyPaw, provoca un error a proposito (por ejemplo, pide una mision que no existe) y practica leer el traceback de abajo hacia arriba. Identifica el tipo, el mensaje y la linea. Hazlo tres veces y veras que ya no te intimida.</p>
 </blockquote>
 <h2 id="4-atrapar-errores-con-try-except">4. Atrapar errores con try / except</h2>
-<p>Hasta ahora dejamos que el error tumbe el programa. Pero podemos hacer algo mejor: <strong>atraparlo</strong> y reaccionar con calma. Para eso usamos <code>try</code> y <code>except</code>.</p>
+<p>Hasta aqui hemos dejado que el error tumbe el programa. Pero podemos hacer algo mucho mejor: <strong>atraparlo</strong> y reaccionar con calma. Para eso estan <code>try</code> y <code>except</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-try-except">🟦 ¿Que significa? — <em>try / except</em></h3>
 <p>El bloque <strong>try</strong> ("intentar") contiene el codigo que <strong>podria</strong> fallar. El bloque <strong>except</strong> ("excepto") contiene lo que haremos <strong>si</strong> falla. Python intenta correr el <code>try</code>; si todo va bien, ignora el <code>except</code>; si hay una excepcion, salta al <code>except</code> y la maneja.
@@ -153,14 +153,14 @@ def cargar_mision(nombre):
         print(f&quot;No encontre la mision '{nombre}'. Usare una vacia.&quot;)
         return {}
 </code></pre>
-<p>Aqui le decimos a Python: "intenta abrir y leer el JSON; <strong>si</strong> no existe el archivo (<code>FileNotFoundError</code>), no te caigas: avisa y devuelve un diccionario vacio".</p>
+<p>Lo que le estamos diciendo a Python es: "intenta abrir y leer el JSON; <strong>si</strong> resulta que el archivo no existe (<code>FileNotFoundError</code>), no te caigas: avisa y devuelve un diccionario vacio".</p>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
 <p>Compara con JavaScript: en JS escribirias <code>try { ... } catch (e) { ... }</code>. En Python es <code>try: ... except ...: ...</code>. Mismo concepto, solo cambia <code>catch</code> por <code>except</code> y se usan dos puntos e indentacion en lugar de llaves.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Evita el <code>except</code> "pelado", es decir, un <code>except:</code> sin decir que error atrapas. Eso captura <strong>cualquier</strong> cosa, incluso errores que ni imaginabas, y te esconde problemas reales. Siempre que puedas, di <strong>que</strong> error esperas, como <code>except FileNotFoundError:</code>.</p>
+<p>Huye del <code>except</code> "pelado", es decir, un <code>except:</code> que no dice que error atrapa. Ese captura <strong>cualquier</strong> cosa, hasta errores que ni sospechabas, y te tapa los problemas de verdad. Siempre que puedas, di <strong>que</strong> error esperas, como <code>except FileNotFoundError:</code>.</p>
 </blockquote>
-<p>Otro error muy comun que vale la pena atrapar es el de dividir entre cero:</p>
+<p>Otro tropiezo muy comun que vale la pena atrapar es dividir entre cero:</p>
 <blockquote class="def">
 <h3 id="que-significa-zerodivisionerror">🟦 ¿Que significa? — <em>ZeroDivisionError</em></h3>
 <p>Un <strong>ZeroDivisionError</strong> (error de division por cero) ocurre cuando intentas dividir un numero entre <code>0</code>. En matematicas dividir entre cero no tiene sentido, asi que Python se detiene y lanza esta excepcion.
@@ -170,9 +170,9 @@ def cargar_mision(nombre):
 <pre><code class="language-python">ejercicios = 0
 promedio = 100 / ejercicios   # no se puede dividir entre cero
 </code></pre>
-<p>Resultado: <code>ZeroDivisionError: division by zero</code>. Lo manejas igual que cualquier otro: <code>except ZeroDivisionError:</code>.</p>
+<p>Resultado: <code>ZeroDivisionError: division by zero</code>. Se maneja igual que cualquier otro: <code>except ZeroDivisionError:</code>.</p>
 <h3 id="atrapar-varios-tipos-de-error">Atrapar varios tipos de error</h3>
-<p>Puedes tener varios <code>except</code> para distintos errores:</p>
+<p>Nada te impide poner varios <code>except</code>, uno por cada error distinto:</p>
 <pre><code class="language-python">def cargar_mision(nombre):
     ruta = f&quot;missions/{nombre}.json&quot;
     try:
@@ -184,7 +184,7 @@ promedio = 100 / ejercicios   # no se puede dividir entre cero
     except KeyError:
         return &quot;Esta mision no tiene titulo&quot;
 </code></pre>
-<p>Si el archivo no esta, entra el primer <code>except</code>. Si el archivo existe pero le falta la clave <code>"titulo"</code>, entra el segundo. Cada problema, su respuesta.</p>
+<p>Si el archivo no esta, entra el primer <code>except</code>. Si el archivo existe pero le falta la clave <code>"titulo"</code>, entra el segundo. A cada problema, su respuesta.</p>
 <blockquote class="def">
 <h3 id="que-significa-jsonload-jsondecodeerror">🟦 ¿Que significa? — <em>json.load / JSONDecodeError</em></h3>
 <p><code>json.load()</code> lee un archivo JSON y lo convierte en un diccionario de Python. Si el archivo existe pero esta <strong>mal escrito</strong> (le falta una coma, una llave), Python lanza un <strong>JSONDecodeError</strong>.
@@ -192,7 +192,7 @@ promedio = 100 / ejercicios   # no se puede dividir entre cero
 <strong>Donde se usa en un repo real:</strong> en PolyPaw, si alguien edita a mano <code>missions/saludos.json</code> y deja una coma de mas, <code>json.load</code> lanza JSONDecodeError al cargar la mision.</p>
 </blockquote>
 <h2 id="5-else-y-finally-los-otros-dos-bloques">5. else y finally: los otros dos bloques</h2>
-<p><code>try/except</code> tiene dos companeros opcionales: <code>else</code> y <code>finally</code>.</p>
+<p><code>try/except</code> viene con dos companeros opcionales: <code>else</code> y <code>finally</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-else-en-try">🟦 ¿Que significa? — <em>else (en try)</em></h3>
 <p>El bloque <strong>else</strong> dentro de un <code>try</code> se ejecuta <strong>solo si NO hubo error</strong>. Es decir, "si todo salio bien, haz esto tambien".
@@ -218,13 +218,13 @@ promedio = 100 / ejercicios   # no se puede dividir entre cero
     finally:
         print(&quot;Intento de carga finalizado&quot;)
 </code></pre>
-<p>Orden de lectura: Python <strong>intenta</strong> (<code>try</code>); si falla, va al <code>except</code>; si NO falla, va al <code>else</code>; y <strong>siempre</strong>, al final, corre el <code>finally</code>.</p>
+<p>El orden en que lo lee Python es asi: primero <strong>intenta</strong> (<code>try</code>); si falla, va al <code>except</code>; si NO falla, va al <code>else</code>; y <strong>siempre</strong>, para cerrar, corre el <code>finally</code>.</p>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>Al principio te bastara con <code>try</code> y <code>except</code>. <code>else</code> y <code>finally</code> son herramientas que usaras mas adelante cuando tu codigo crezca. No te sientas obligado a usarlos todos siempre.</p>
+<p>Al principio con <code>try</code> y <code>except</code> te alcanza de sobra. <code>else</code> y <code>finally</code> son herramientas que iras sacando mas adelante, cuando tu codigo crezca. No te sientas obligado a usarlos todos siempre.</p>
 </blockquote>
 <h2 id="6-lanzar-tus-propios-errores-con-raise">6. Lanzar tus propios errores con raise</h2>
-<p>A veces <strong>tu</strong> quieres provocar un error a proposito, porque detectas que algo no tiene sentido. Para eso esta <code>raise</code>.</p>
+<p>Hay veces en que eres <strong>tu</strong> quien quiere provocar un error a proposito, porque te das cuenta de que algo no cuadra. Para eso esta <code>raise</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-raise">🟦 ¿Que significa? — <em>raise</em></h3>
 <p><strong>raise</strong> ("lanzar" o "levantar") es la instruccion para que <strong>tu</strong> dispares una excepcion manualmente. Le dices a Python "esto esta mal, detente y avisa".
@@ -238,24 +238,24 @@ promedio = 100 / ejercicios   # no se puede dividir entre cero
         raise ValueError(&quot;La lista de ejercicios esta vacia&quot;)
     return True
 </code></pre>
-<p>Aqui, si la mision no cumple las reglas, <strong>nosotros</strong> lanzamos el error. Quien llame a esta funcion lo podra atrapar con <code>try/except</code>.</p>
+<p>Aqui, si la mision no cumple las reglas, el error lo lanzamos <strong>nosotros</strong>. Y quien llame a esta funcion podra atraparlo con <code>try/except</code>.</p>
 <blockquote class="tip">
 <h3 id="tip_5">💡 Tip</h3>
 <p>En JavaScript esto se hace con <code>throw new Error("mensaje")</code>. En Python es <code>raise ValueError("mensaje")</code>. La idea es la misma: interrumpir y avisar.</p>
 </blockquote>
 <h2 id="7-validar-entradas-antes-de-que-truenen">7. Validar entradas antes de que truenen</h2>
-<p>Una de las mejores costumbres es <strong>validar</strong> los datos antes de usarlos. Asi previenes errores en vez de atraparlos despues.</p>
+<p>Una de las mejores manias que puedes adoptar es <strong>validar</strong> los datos antes de tocarlos. Asi previenes el error de raiz en lugar de atraparlo cuando ya estallo.</p>
 <blockquote class="def">
 <h3 id="que-significa-validar-entradas">🟦 ¿Que significa? — <em>Validar entradas</em></h3>
 <p><strong>Validar entradas</strong> significa revisar que los datos que recibes (de un archivo, del usuario, de internet) cumplan lo que esperas <strong>antes</strong> de trabajar con ellos. "Entrada" es cualquier dato que entra a tu programa desde afuera.
 <strong>Para que sirve:</strong> evita errores y datos basura; tu app se vuelve mas robusta y confiable.
 <strong>Donde se usa en un repo real:</strong> en PolyPaw, antes de mostrar una mision validamos que tenga <code>titulo</code>, <code>idioma</code> y al menos un ejercicio. Si falta algo, avisamos en vez de romper la pantalla.</p>
 </blockquote>
-<p>Mira la diferencia. En vez de pedir directo una clave que podria no existir:</p>
+<p>Fijate en la diferencia. En lugar de pedir directo una clave que quiza no exista:</p>
 <pre><code class="language-python"># Arriesgado: si no existe &quot;titulo&quot;, truena con KeyError
 titulo = mision[&quot;titulo&quot;]
 </code></pre>
-<p>Validamos primero o usamos <code>.get()</code>, que devuelve un valor por defecto si la clave falta:</p>
+<p>Validamos primero, o usamos <code>.get()</code>, que devuelve un valor por defecto cuando la clave no esta:</p>
 <pre><code class="language-python"># Seguro: si no existe &quot;titulo&quot;, usamos un texto por defecto
 titulo = mision.get(&quot;titulo&quot;, &quot;Sin titulo&quot;)
 </code></pre>
@@ -263,7 +263,7 @@ titulo = mision.get(&quot;titulo&quot;, &quot;Sin titulo&quot;)
 <h3 id="tip_6">💡 Tip</h3>
 <p>El metodo <code>.get()</code> de los diccionarios es tu mejor amigo contra el KeyError. <code>mision.get("titulo")</code> devuelve <code>None</code> si la clave no esta, y <code>mision.get("titulo", "Sin titulo")</code> devuelve el segundo valor como respaldo. Nada de errores.</p>
 </blockquote>
-<p>Validar entradas tambien aplica a lo que escribe el usuario. Por ejemplo, pedir un numero:</p>
+<p>Validar entradas tambien vale para lo que teclea el usuario. Piensa en pedir un numero:</p>
 <pre><code class="language-python">respuesta = input(&quot;Cuantos puntos? &quot;)
 try:
     puntos = int(respuesta)
@@ -271,7 +271,7 @@ except ValueError:
     print(&quot;Eso no es un numero valido. Usare 0.&quot;)
     puntos = 0
 </code></pre>
-<p>Asi, si el usuario escribe "diez" en vez de "10", no se cae nada: avisamos y seguimos.</p>
+<p>De esta forma, si el usuario escribe "diez" en vez de "10", no se rompe nada: avisamos y seguimos adelante.</p>
 <h2 id="8-errores-tipicos-de-principiante-y-como-resolverlos">8. Errores tipicos de principiante (y como resolverlos)</h2>
 <p>Hay dos errores que TODO principiante de Python comete una y otra vez. Te los presento para que los reconozcas al instante.</p>
 <h3 id="81-error-de-sangria-indentacion">8.1 Error de sangria (indentacion)</h3>
@@ -294,7 +294,7 @@ print(&quot;Hola&quot;)   # ERROR: deberia estar indentada
 <p>No mezcles espacios y tabuladores (la tecla Tab). Python se confunde y lanza <code>TabError</code>. Configura tu editor para que la tecla Tab inserte <strong>4 espacios</strong>. La mayoria lo hace por defecto.</p>
 </blockquote>
 <h3 id="82-dos-puntos-faltantes">8.2 Dos puntos faltantes</h3>
-<p>En Python, las lineas que abren un bloque (<code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>, <code>else</code>) <strong>terminan en dos puntos</strong> <code>:</code>. Olvidarlos es clasico.</p>
+<p>En Python, las lineas que abren un bloque (<code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>, <code>else</code>) <strong>terminan en dos puntos</strong> <code>:</code>. Olvidarlos es un clasico de clasicos.</p>
 <pre><code class="language-python">def cargar()      # ERROR: falta el : al final
     print(&quot;listo&quot;)
 </code></pre>
@@ -309,7 +309,7 @@ print(&quot;Hola&quot;)   # ERROR: deberia estar indentada
 <p>A veces el SyntaxError aparece en una linea que <strong>se ve perfecta</strong>. Eso suele significar que el error real esta en la linea <strong>anterior</strong> (por ejemplo, un parentesis sin cerrar arriba). Cuando la linea senalada parezca correcta, mira siempre la de arriba.</p>
 </blockquote>
 <h2 id="9-todo-junto-manejar-un-json-que-no-existe-en-polypaw">9. Todo junto: manejar un JSON que no existe en PolyPaw</h2>
-<p>Juntemos todo en un caso real de PolyPaw: cargar una mision desde <code>missions/</code> cubriendo todos los casos que pueden salir mal. Este es el tipo de funcion que vivira en <code>database_manager.py</code>.</p>
+<p>Vamos a juntar todo en un caso real de PolyPaw: cargar una mision desde <code>missions/</code> cubriendo cada cosa que podria salir mal. Este es exactamente el tipo de funcion que vivira en <code>database_manager.py</code>.</p>
 <pre><code class="language-python">import json
 
 def cargar_mision(nombre):
@@ -333,12 +333,12 @@ def cargar_mision(nombre):
 
     return datos
 </code></pre>
-<p>Esta funcion cubre cuatro escenarios:
+<p>Esta funcion contempla cuatro escenarios:
 1. <strong>El archivo no existe</strong> → atrapamos <code>FileNotFoundError</code>, avisamos y devolvemos <code>None</code>.
 2. <strong>El JSON esta corrupto</strong> → atrapamos <code>json.JSONDecodeError</code>, avisamos y devolvemos <code>None</code>.
 3. <strong>Falta el titulo o los ejercicios</strong> → lanzamos nosotros un <code>ValueError</code> claro.
 4. <strong>Todo bien</strong> → devolvemos los datos de la mision.</p>
-<p>Y asi se usa, sin que la app jamas se caiga:</p>
+<p>Y asi se usa, sin que la app se caiga nunca:</p>
 <pre><code class="language-python">mision = cargar_mision(&quot;saludos&quot;)
 if mision is None:
     print(&quot;Mostrando pantalla: 'Mision no disponible'&quot;)
@@ -349,7 +349,7 @@ else:
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
 <p>En PolyPaw, prueba esta funcion con tres casos: (1) un nombre que existe, como <code>"saludos"</code> si ese JSON esta; (2) un nombre inventado como <code>"xyz123"</code>; y (3) un JSON al que le quites el titulo a proposito. Observa como cada caso se maneja sin tumbar la app. Eso es codigo robusto.</p>
 <h3 id="tip_8">💡 Tip</h3>
-<p>Fijate que devolvemos <code>None</code> cuando el problema es "esperable" (archivo que falta) pero usamos <code>raise</code> cuando es un error de <strong>datos</strong> que alguien debe arreglar (una mision sin titulo nunca deberia existir). Esa distincion es de programador avanzado, y ya la entiendes.</p>
+<p>Fijate en el detalle: devolvemos <code>None</code> cuando el problema es "esperable" (un archivo que falta) pero usamos <code>raise</code> cuando es un error de <strong>datos</strong> que alguien tiene que arreglar (una mision sin titulo no deberia existir jamas). Saber distinguir esos dos casos es cosa de programador con experiencia, y ya lo entiendes.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

@@ -18,9 +18,13 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-02-tipos-basicos-y-anotaciones">Capítulo 02 — Tipos básicos y anotaciones</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>Ahora la práctica: cómo se escriben los tipos. Verás que es poca sintaxis y muy lógica. La
-regla de oro ya la conoces: <strong>nombre <code>:</code> tipo</strong>.</p>
+<p>Pasemos a la práctica: cómo se escriben los tipos en el día a día. Vas a ver que es muy
+poca sintaxis y que casi todo cuadra solo. La regla de oro ya la tienes: <strong>nombre <code>:</code> tipo</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="1-los-tipos-basicos">1. Los tipos básicos</h2>
@@ -61,7 +65,12 @@ regla de oro ya la conoces: <strong>nombre <code>:</code> tipo</strong>.</p>
 <td><code>let y: undefined;</code></td>
 </tr>
 <tr>
-<td>A diferencia de Python, TypeScript no separa <code>int</code> de <code>float</code>: todo número es <code>number</code>.</td>
+<td>Un detalle que sorprende a quien viene de Python: aquí no hay <code>int</code> ni <code>float</code> por separado.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Sea entero o decimal, todo número es <code>number</code>.</td>
 <td></td>
 <td></td>
 </tr>
@@ -72,70 +81,75 @@ regla de oro ya la conoces: <strong>nombre <code>:</code> tipo</strong>.</p>
 <h2 id="2-la-inferencia-typescript-adivina-el-tipo">2. La inferencia: TypeScript adivina el tipo</h2>
 <blockquote class="def">
 <h3 id="que-significa-inferencia-de-tipos">🟦 ¿Qué significa? — <em>Inferencia de tipos</em></h3>
-<p><strong>Inferir</strong> es deducir. Si le das un valor inicial a una variable, TypeScript <strong>deduce solo</strong>
-su tipo; no hace falta que lo escribas:
+<p><strong>Inferir</strong> es deducir. Cuando le das un valor inicial a una variable, TypeScript <strong>deduce
+solo</strong> de qué tipo es; no hace falta que se lo escribas:
 <code>typescript
 let nombre = "Edwar";   // TypeScript infiere que es string
 nombre = 42;            // ❌ Error: ya sabe que 'nombre' es string</code>
-<strong>Consecuencia práctica:</strong> no tienes que anotar todo. Anota lo que aporte claridad (sobre todo
-funciones); deja que la inferencia haga el resto. Menos ruido, misma seguridad.</p>
+¿Qué sacas de esto en la práctica? Que no tienes que anotar todo. Anota lo que aclare las
+cosas (sobre todo las funciones) y deja que la inferencia se encargue del resto. Menos ruido
+y la misma seguridad.</p>
 <h3 id="tip-cuando-anotar-y-cuando-no">💡 Tip — ¿Cuándo anotar y cuándo no?</h3>
 <ul>
-<li><strong>Anota</strong> los parámetros de funciones y, a veces, lo que devuelven (no se infieren solos al
-  llamarlas).</li>
-<li><strong>Deja inferir</strong> las variables simples con valor inicial (<code>const total = 0</code>).
-Regla: anota en las "fronteras" (entradas/salidas); confía en la inferencia adentro.</li>
+<li><strong>Anota</strong> los parámetros de funciones y, a veces, lo que devuelven (eso no se infiere solo
+  al llamarlas).</li>
+<li><strong>Deja inferir</strong> las variables simples que ya nacen con un valor (<code>const total = 0</code>).
+La idea es sencilla: anota en las "fronteras" (lo que entra y lo que sale) y confía en la
+inferencia hacia adentro.</li>
 </ul>
 </blockquote>
 <hr />
 <h2 id="3-arrays-tipados">3. Arrays tipados</h2>
 <blockquote class="def">
 <h3 id="que-significa-tipar-una-lista">🟦 ¿Qué significa? — <em>Tipar una lista</em></h3>
-<p>Para decir "una lista de textos" o "una lista de números", se pone el tipo seguido de <code>[]</code>:
+<p>Para decir "una lista de textos" o "una lista de números", pones el tipo y le pegas <code>[]</code>:
 <code>typescript
 let servicios: string[] = ["Diseño web", "IA"];
 let precios: number[] = [100, 250, 99];</code>
-<code>string[]</code> se lee "arreglo de strings". Si intentas meter un número en <code>servicios</code>, error.</p>
+<code>string[]</code> se lee "arreglo de strings". Si intentas colar un número dentro de <code>servicios</code>,
+TypeScript salta con un error.</p>
 </blockquote>
 <hr />
 <h2 id="4-el-tipo-any-y-por-que-evitarlo">4. El tipo <code>any</code> (y por qué evitarlo)</h2>
 <blockquote class="def">
 <h3 id="que-significa-any-cualquiera">🟦 ¿Qué significa? — <em><code>any</code> (cualquiera)</em></h3>
-<p><code>any</code> significa "cualquier tipo, sin revisar". Apaga la seguridad de TypeScript para esa
-variable:
+<p><code>any</code> quiere decir "cualquier tipo, y no lo reviso". En la práctica apaga toda la seguridad
+de TypeScript para esa variable:
 <code>typescript
 let cosa: any = "hola";
 cosa = 42;          // permitido
 cosa.metodoRaro();  // TypeScript NO se queja (y eso es peligroso)</code>
-⚠️ <strong>Úsalo lo menos posible.</strong> Si usas <code>any</code> en todos lados, vuelves a tener JavaScript sin
-red. Existe para casos puntuales (código viejo, datos de forma desconocida), pero es una
-"puerta trasera" que conviene mantener cerrada. Por eso los proyectos serios (como los tuyos)
-activan reglas que avisan cuando aparece <code>any</code>.</p>
+⚠️ <strong>Úsalo lo menos posible.</strong> Si llenas todo de <code>any</code>, vuelves a programar en JavaScript a
+pelo, sin red. Tiene su lugar para casos muy concretos (código viejo, datos que llegan con
+forma desconocida), pero es una "puerta trasera" que conviene tener cerrada. Por eso los
+proyectos serios (como los tuyos) activan reglas que te avisan en cuanto aparece un <code>any</code>.</p>
 <h3 id="que-significa-unknown-la-alternativa-segura-a-any">🟦 ¿Qué significa? — <em><code>unknown</code> (la alternativa segura a <code>any</code>)</em></h3>
-<p><code>unknown</code> también acepta cualquier valor, pero <strong>te obliga a comprobar el tipo antes de
-usarlo</strong>. Es el "any responsable". Por ahora solo reconócelo; lo importante es: <strong>prefiere
-tipos concretos; si no sabes el tipo, <code>unknown</code> antes que <code>any</code>.</strong></p>
+<p><code>unknown</code> también acepta cualquier valor, pero con una diferencia clave: <strong>te obliga a
+comprobar el tipo antes de usarlo</strong>. Es el "any responsable". Por ahora basta con que lo
+reconozcas; quédate con esto: <strong>mejor tipos concretos; y si de verdad no sabes el tipo, usa
+<code>unknown</code> antes que <code>any</code>.</strong></p>
 </blockquote>
 <hr />
 <h2 id="5-tipos-union-esto-o-aquello">5. Tipos unión: "esto o aquello"</h2>
 <blockquote class="def">
 <h3 id="que-significa-tipo-union">🟦 ¿Qué significa? — <em>Tipo unión (<code>|</code>)</em></h3>
-<p>A veces un valor puede ser de <strong>uno de varios</strong> tipos. Se expresa con la barra <code>|</code>:
+<p>A veces un valor puede ser de <strong>uno entre varios</strong> tipos. Eso se escribe con la barra <code>|</code>:
 <code>typescript
 let id: string | number;   // puede ser texto O número
 id = "abc123";   // ✅
 id = 42;         // ✅
 id = true;       // ❌ no es ni string ni number</code>
-Una variante muy usada son los <strong>valores literales</strong> como unión, para limitar las opciones:
+Hay una variante muy usada: poner <strong>valores literales</strong> como unión para limitar las opciones
+a unas pocas:
 <code>typescript
 let estado: "completado" | "minimo" | "no_hecho";
 estado = "completado";   // ✅
 estado = "otro";         // ❌ solo se permiten esos tres textos</code></p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>RachaSimple usa exactamente esto: el tipo de un check-in diario es algo como
-<code>"completed" | "minimum" | "recovery" | "no_done"</code>. Así, es <strong>imposible</strong> guardar un estado
-inválido por error: TypeScript lo impediría al escribir. Esa es la seguridad de tipos
-trabajando para ti.</p>
+<p>RachaSimple hace justo esto: el tipo de un check-in diario es algo parecido a
+<code>"completed" | "minimum" | "recovery" | "no_done"</code>. Gracias a eso es <strong>imposible</strong> guardar
+por error un estado inválido: TypeScript te lo cortaría mientras escribes, antes de ejecutar
+nada. Esa es la seguridad de tipos trabajando a tu favor.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

@@ -23,31 +23,31 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora tu <strong>polypaw-nas</strong> (el laptop Acer Nitro AN515-54, con procesador Intel Core i5-9300H, 8 GB de RAM y Ubuntu Server 26.04) ya hace cosas serias: comparte archivos con Samba (el recurso compartido <strong>PolyPawNAS</strong>), se administra desde Cockpit en el puerto 9090, viaja por internet de forma segura con Tailscale y bloquea anuncios con AdGuard Home. En este capitulo damos el salto que convierte a un NAS en un pequeno centro de servicios: aprender a <strong>alojar tus propias aplicaciones</strong> dentro de tu casa, usando contenedores con Docker (y su primo Podman). Bit, el ajolote, se frota las manitas: "esto es como tener un edificio de apartamentos para programas, y tu eres el portero". Vamos con calma, sin prisa y sin que se nos llene la memoria.</p>
+<p>A estas alturas tu <strong>polypaw-nas</strong> (el laptop Acer Nitro AN515-54, con procesador Intel Core i5-9300H, 8 GB de RAM y Ubuntu Server 26.04) ya hace cosas de verdad: comparte archivos con Samba (el recurso compartido <strong>PolyPawNAS</strong>), se administra desde Cockpit en el puerto 9090, viaja por internet de forma segura con Tailscale y bloquea anuncios con AdGuard Home. En este capitulo damos el paso que convierte un NAS en un pequeno centro de servicios: vas a aprender a <strong>alojar tus propias aplicaciones</strong> dentro de tu casa, usando contenedores con Docker (y su primo Podman). Bit, el ajolote, se frota las manitas: "esto es como tener un edificio de apartamentos para programas, y tu eres el portero". Vamos despacio, sin agobios y sin que se nos llene la memoria.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-que-resuelven-los-contenedores">1. El problema que resuelven los contenedores</h2>
-<p>Imagina que quieres instalar tres aplicaciones en polypaw-nas: una para ver fotos, otra para tomar notas y otra para guardar contrasenas. Cada una necesita su propia version de unas piezas internas (una version de Python, otra de una base de datos, otra de no-se-que libreria). Si las instalas todas "sueltas" en el mismo Ubuntu, terminan peleandose entre ellas: una rompe a la otra, y desinstalar una limpia mal y deja basura. Es el clasico "en mi maquina funcionaba".</p>
-<p>Los contenedores resuelven esto metiendo cada aplicacion en su propia cajita sellada, con todo lo que necesita dentro. Si una cajita se rompe, la tiras y pones otra; las demas ni se enteran.</p>
+<p>Imagina que quieres instalar tres aplicaciones en polypaw-nas: una para ver fotos, otra para tomar notas y otra para guardar contrasenas. Cada una necesita su propia version de unas piezas internas: una version de Python, otra de cierta base de datos, otra de no-se-que libreria. Si las instalas todas "sueltas" sobre el mismo Ubuntu, acaban peleandose entre ellas: una rompe a la otra, y al desinstalar cualquiera la limpieza queda a medias y deja basura. Es el clasico "en mi maquina funcionaba".</p>
+<p>Los contenedores resuelven esto metiendo cada aplicacion en su propia cajita sellada, con todo lo que necesita dentro. Si una cajita falla, la tiras y pones otra; las demas ni se enteran.</p>
 <blockquote class="def">
 <h3 id="que-significa-contenedor-container">🟦 ¿Que significa? — <em>Contenedor (container)</em></h3>
-<p>Un contenedor es un paquete que lleva dentro una aplicacion <strong>y todo lo que esa aplicacion necesita</strong> para funcionar (sus librerias, su configuracion), aislado del resto del sistema. Es como un tupper sellado: lo que esta dentro no se mezcla con lo de afuera.
+<p>Un contenedor es un paquete que lleva dentro una aplicacion <strong>y todo lo que esa aplicacion necesita</strong> para funcionar (sus librerias, su configuracion), aislado del resto del sistema. Piensa en un tupper sellado: lo que esta dentro no se mezcla con lo de afuera.
 <strong>Para que sirve:</strong> correr programas sin que se estorben entre si y sin ensuciar tu Ubuntu base.
 <strong>Donde aparece en tu NAS real:</strong> en polypaw-nas cada servicio que alojes (un visor de fotos, un panel, lo que sea) vivira en su propio contenedor, separado de Samba, Cockpit y AdGuard.</p>
 <h3 id="que-significa-docker">🟦 ¿Que significa? — <em>Docker</em></h3>
 <p>Docker es el programa (el "motor") que crea, arranca, para y borra contenedores. Tu le das ordenes y el se encarga de las cajitas.
-<strong>Para que sirve:</strong> es la herramienta estandar para manejar contenedores; casi todas las guias de internet hablan de Docker.
+<strong>Para que sirve:</strong> es la forma estandar de manejar contenedores; casi todas las guias de internet hablan de Docker.
 <strong>Donde aparece en tu NAS real:</strong> ya esta instalado en polypaw-nas. Lo usaras con el comando <code>docker</code> desde la terminal (por SSH o desde la consola).</p>
 <h3 id="que-significa-podman">🟦 ¿Que significa? — <em>Podman</em></h3>
-<p>Podman es una alternativa a Docker que hace casi exactamente lo mismo y entiende casi los mismos comandos. Su gracia es que puede correr sin un <strong>demonio</strong> (un programa de fondo que vive siempre encendido esperando ordenes; el de Docker corre con permisos de administrador), lo que algunos consideran mas seguro.
+<p>Podman es una alternativa a Docker que hace casi exactamente lo mismo y entiende casi los mismos comandos. Su gracia es que puede correr sin un <strong>demonio</strong> (un programa de fondo que vive siempre encendido esperando ordenes; el de Docker corre con permisos de administrador), algo que muchos consideran mas seguro.
 <strong>Para que sirve:</strong> lo mismo que Docker; puedes elegir el que prefieras.
 <strong>Donde aparece en tu NAS real:</strong> tambien esta instalado en polypaw-nas. En la mayoria de comandos de este capitulo puedes escribir <code>podman</code> donde dice <code>docker</code> y funcionara igual.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>No te agobies con la pelea "Docker vs Podman". Para empezar, elige uno y quedate con el. En este capitulo usaremos <code>docker</code> en los ejemplos porque es lo que veras en el 99% de los tutoriales, pero si tu prefieres Podman, casi todo se traduce cambiando la palabra.</p>
+<p>No te agobies con la pelea "Docker vs Podman". Para empezar, elige uno y quedate con el. En este capitulo usaremos <code>docker</code> en los ejemplos porque es lo que veras en el 99% de los tutoriales, pero si prefieres Podman, casi todo se traduce cambiando la palabra.</p>
 </blockquote>
 <hr />
 <h2 id="2-imagenes-vs-contenedores-la-receta-vs-el-plato">2. Imagenes vs contenedores (la receta vs el plato)</h2>
-<p>Esta es la distincion que mas confunde al principio, asi que la explicamos con cocina.</p>
+<p>Esta es la distincion que mas confunde al principio, asi que la vamos a explicar con cocina.</p>
 <p>Una <strong>imagen</strong> es como una receta congelada: trae las instrucciones y los ingredientes listos para preparar un plato. No te la comes; la usas para cocinar.</p>
 <p>Un <strong>contenedor</strong> es el plato ya servido: lo que sale cuando "cocinas" una imagen y la pones a correr. De una misma receta (imagen) puedes servir muchos platos (contenedores) iguales.</p>
 <blockquote class="def">
@@ -56,11 +56,11 @@
 <strong>Para que sirve:</strong> es el molde del que nacen los contenedores. La descargas una vez y la reutilizas.
 <strong>Donde aparece en tu NAS real:</strong> cuando instales un servicio en polypaw-nas, primero Docker descargara su imagen (por ejemplo <code>adguard/adguardhome</code>) y luego creara un contenedor a partir de ella.</p>
 <h3 id="que-significa-registro-de-imagenes-registry-docker-hub">🟦 ¿Que significa? — <em>Registro de imagenes (registry / Docker Hub)</em></h3>
-<p>Es una tienda online gratuita de donde se descargan las imagenes. La mas famosa se llama Docker Hub.
+<p>Es una tienda online gratuita de donde se descargan las imagenes. La mas conocida se llama Docker Hub.
 <strong>Para que sirve:</strong> encontrar y bajar imagenes oficiales de miles de aplicaciones sin tener que construirlas tu.
 <strong>Donde aparece en tu NAS real:</strong> cada vez que polypaw-nas baje una imagen por primera vez, la trae de un registro a traves de internet.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>En Docker Hub cualquiera puede subir imagenes, incluidas algunas maliciosas o abandonadas. Prefiere <strong>imagenes oficiales</strong> o de proyectos con muchos usuarios y mantenimiento reciente. Bit lo resume: "no te comas la receta del primer puesto callejero que veas; mira que tenga buena fama".</p>
+<p>En Docker Hub cualquiera puede subir imagenes, incluidas algunas maliciosas o abandonadas. Tira siempre de <strong>imagenes oficiales</strong> o de proyectos con muchos usuarios y mantenimiento reciente. Bit lo resume: "no te comas la receta del primer puesto callejero que veas; mira que tenga buena fama".</p>
 </blockquote>
 <p>Para ver las imagenes que ya tienes descargadas en polypaw-nas y los contenedores que existen:</p>
 <pre><code class="language-bash"># Listar las imagenes descargadas
@@ -74,20 +74,20 @@ docker ps -a
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-servidor">🔎 En tu servidor</h3>
-<p>Si acabas de instalar Docker en polypaw-nas y aun no has corrido nada, <code>docker ps</code> te saldra con la lista vacia (solo los titulos de las columnas). Eso es normal y correcto: aun no has cocinado ningun plato.</p>
+<p>Si acabas de instalar Docker en polypaw-nas y aun no has corrido nada, <code>docker ps</code> te saldra con la lista vacia (solo los titulos de las columnas). Eso es normal y esta bien: aun no has cocinado ningun plato.</p>
 </blockquote>
 <hr />
 <h2 id="3-docker-run-arrancar-tu-primer-contenedor">3. <code>docker run</code>: arrancar tu primer contenedor</h2>
-<p>El comando estrella para crear y arrancar un contenedor es <code>docker run</code>. Hagamos la prueba clasica, que no consume casi nada de memoria y se borra sola:</p>
+<p>El comando estrella para crear y arrancar un contenedor es <code>docker run</code>. Hagamos la prueba clasica, que casi no consume memoria y se borra sola:</p>
 <pre><code class="language-bash"># Descarga la imagen &quot;hello-world&quot; y la ejecuta una vez
 docker run hello-world
 </code></pre>
-<p>Si todo va bien, veras un mensaje que dice "Hello from Docker!". Eso significa que el motor funciona. Detras de escena ocurrieron tres cosas: Docker no encontro la imagen localmente, la bajo del registro, y creo un contenedor que imprimio el mensaje y termino.</p>
+<p>Si todo va bien, veras un mensaje que dice "Hello from Docker!". Eso significa que el motor funciona. Por detras pasaron tres cosas: Docker no encontro la imagen en el equipo, la bajo del registro y creo un contenedor que imprimio el mensaje y termino.</p>
 <p>Un ejemplo mas util es un servidor web de prueba:</p>
 <pre><code class="language-bash"># Arranca un servidor web Nginx en segundo plano
 docker run -d --name prueba-web -p 8080:80 nginx
 </code></pre>
-<p>Vamos a desmenuzar ese comando, porque cada pedacito importa:</p>
+<p>Vamos a desmenuzar ese comando, porque cada pedacito cuenta:</p>
 <ul>
 <li><code>docker run</code> → crea y arranca un contenedor.</li>
 <li><code>-d</code> → "detached", o sea en segundo plano, para que no se quede ocupando tu terminal.</li>
@@ -98,10 +98,10 @@ docker run -d --name prueba-web -p 8080:80 nginx
 <blockquote class="def">
 <h3 id="que-significa-docker-run">🟦 ¿Que significa? — <em><code>docker run</code></em></h3>
 <p>Es la orden que crea un contenedor nuevo a partir de una imagen y lo pone a funcionar de inmediato.
-<strong>Para que sirve:</strong> lanzar un servicio. Es el comando que mas usaras al experimentar.
-<strong>Donde aparece en tu NAS real:</strong> cada prueba rapida que hagas en polypaw-nas empezara con un <code>docker run</code>. Para servicios serios, sin embargo, preferiras Compose (seccion 4).</p>
+<strong>Para que sirve:</strong> lanzar un servicio. Es el comando que mas usaras mientras experimentas.
+<strong>Donde aparece en tu NAS real:</strong> cada prueba rapida que hagas en polypaw-nas empezara con un <code>docker run</code>. Para servicios serios, en cambio, preferiras Compose (seccion 4).</p>
 <h3 id="que-significa-segundo-plano-detached-d">🟦 ¿Que significa? — <em>Segundo plano (detached, <code>-d</code>)</em></h3>
-<p>Correr algo en segundo plano significa que sigue funcionando solo, sin ocupar tu pantalla, y tu puedes cerrar la terminal sin que se apague.
+<p>Correr algo en segundo plano significa que sigue funcionando solo, sin ocupar tu pantalla, y que puedes cerrar la terminal sin que se apague.
 <strong>Para que sirve:</strong> un servidor debe seguir vivo aunque te desconectes; por eso casi siempre se usa <code>-d</code>.
 <strong>Donde aparece en tu NAS real:</strong> todos los servicios permanentes de polypaw-nas (los que quieres que esten siempre disponibles) corren en segundo plano.</p>
 </blockquote>
@@ -114,12 +114,12 @@ docker rm prueba-web
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Mientras experimentas, ponle siempre <code>--name</code> a tus contenedores. Es muchisimo mas comodo escribir <code>docker stop prueba-web</code> que buscar un identificador de doce caracteres aleatorios.</p>
+<p>Mientras experimentas, ponle siempre <code>--name</code> a tus contenedores. Es muchisimo mas comodo escribir <code>docker stop prueba-web</code> que andar buscando un identificador de doce caracteres al azar.</p>
 </blockquote>
 <hr />
 <h2 id="4-docker-compose-la-forma-ordenada-de-alojar-servicios">4. <code>docker compose</code>: la forma ordenada de alojar servicios</h2>
-<p>Escribir comandos <code>docker run</code> larguisimos a mano funciona para probar, pero es fragil: si reinicias polypaw-nas o se te olvida un parametro, lo pasas mal. La solucion profesional y, a la vez, la mas comoda para principiantes, es <strong>Docker Compose</strong>.</p>
-<p>Compose te deja describir tu servicio en un archivo de texto (un archivo <code>docker-compose.yml</code>) y luego levantarlo todo con un solo comando. El archivo queda guardado, asi que siempre puedes repetir, leer o respaldar tu configuracion.</p>
+<p>Escribir comandos <code>docker run</code> larguisimos a mano sirve para probar, pero es fragil: si reinicias polypaw-nas o se te olvida un parametro, lo pasas mal. La solucion profesional, y a la vez la mas comoda para principiantes, es <strong>Docker Compose</strong>.</p>
+<p>Compose te deja describir tu servicio en un archivo de texto (un <code>docker-compose.yml</code>) y luego levantarlo todo con un solo comando. El archivo queda guardado, asi que siempre puedes repetir, leer o respaldar tu configuracion.</p>
 <blockquote class="def">
 <h3 id="que-significa-docker-compose">🟦 ¿Que significa? — <em>Docker Compose</em></h3>
 <p>Es una herramienta que lee un archivo de texto donde tu describes uno o varios contenedores (que imagen, que puertos, que datos) y los levanta todos juntos con una sola orden.
@@ -160,20 +160,20 @@ docker compose down
 <h3 id="que-significa-restart-unless-stopped">🟦 ¿Que significa? — <em><code>restart: unless-stopped</code></em></h3>
 <p>Es una regla que le dice a Docker: "si este contenedor se cae o si reinicio el servidor, vuelve a arrancarlo solo, salvo que yo lo haya apagado a mano".
 <strong>Para que sirve:</strong> que tus servicios revivan solos despues de un corte o un reinicio, sin que tengas que estar pendiente.
-<strong>Donde aparece en tu NAS real:</strong> es muy recomendable ponerlo en cada servicio de polypaw-nas, asi si se va la luz y la bateria del laptop (tu UPS natural) aguanta lo justo, al volver todo se recupera solo.</p>
+<strong>Donde aparece en tu NAS real:</strong> conviene ponerlo en cada servicio de polypaw-nas; asi, si se va la luz y la bateria del laptop (tu UPS natural) aguanta lo justo, al volver todo se recupera solo.</p>
 <h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
-<p>Guarda las carpetas de tus servicios dentro del HDD de datos (954 GB, montado en <code>/srv/nas</code>), en <code>/srv/nas/servicios/</code>, no en el SSD del sistema (238 GB). Asi tus configuraciones viajan con tus datos cuando hagas respaldos y no llenas el disco del sistema operativo, que es el mas pequeno.</p>
+<p>Guarda las carpetas de tus servicios dentro del HDD de datos (954 GB, montado en <code>/srv/nas</code>), en <code>/srv/nas/servicios/</code>, y no en el SSD del sistema (238 GB). Asi tus configuraciones viajan con tus datos cuando hagas respaldos y no llenas el disco del sistema operativo, que es el mas pequeno.</p>
 </blockquote>
 <hr />
 <h2 id="5-puertos-la-puerta-de-entrada-a-cada-contenedor">5. Puertos: la puerta de entrada a cada contenedor</h2>
-<p>Un contenedor es una cajita cerrada. Si dentro corre una aplicacion web, necesitas abrir una "ventanilla" para hablar con ella desde fuera. Eso son los puertos.</p>
+<p>Un contenedor es una cajita cerrada. Si dentro corre una aplicacion web, necesitas abrir una "ventanilla" para hablar con ella desde fuera. Esas ventanillas son los puertos.</p>
 <blockquote class="def">
 <h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
 <p>Un puerto es un numero que identifica una "ventanilla" de comunicacion en un equipo. Una misma maquina puede tener muchas ventanillas abiertas, cada una atendida por un programa distinto.
 <strong>Para que sirve:</strong> dirigir cada conexion al programa correcto. Por ejemplo, las paginas web suelen usar el puerto 80 o el 443.
 <strong>Donde aparece en tu NAS real:</strong> Cockpit ya usa el puerto <strong>9090</strong> en polypaw-nas. Cuando alojes servicios nuevos, cada uno necesitara su propio puerto libre.</p>
 </blockquote>
-<p>Cuando escribes <code>-p 8080:80</code> (o <code>"8080:80"</code> en Compose), el numero de la <strong>izquierda</strong> es el puerto que abres en polypaw-nas, y el de la <strong>derecha</strong> es el puerto que la aplicacion usa <strong>dentro</strong> de su cajita. O sea: "lo que llegue al 8080 del NAS, mandalo al 80 de adentro del contenedor".</p>
+<p>Cuando escribes <code>-p 8080:80</code> (o <code>"8080:80"</code> en Compose), el numero de la <strong>izquierda</strong> es el puerto que abres en polypaw-nas, y el de la <strong>derecha</strong> es el puerto que la aplicacion usa <strong>dentro</strong> de su cajita. Dicho de otro modo: "lo que llegue al 8080 del NAS, mandalo al 80 de adentro del contenedor".</p>
 <blockquote class="def">
 <h3 id="que-significa-mapeo-de-puertos-port-mapping">🟦 ¿Que significa? — <em>Mapeo de puertos (port mapping)</em></h3>
 <p>Es la conexion entre un puerto de tu NAS y un puerto interno del contenedor, para que el trafico de afuera llegue a la aplicacion de adentro.
@@ -201,7 +201,7 @@ Si responde algo, el contenedor esta vivo y atendiendo.</p>
 </blockquote>
 <hr />
 <h2 id="6-volumenes-para-no-perder-tus-datos">6. Volumenes: para no perder tus datos</h2>
-<p>Aqui viene una sorpresa desagradable si no la conoces: cuando borras un contenedor con <code>docker rm</code>, <strong>todo lo que la aplicacion guardo dentro desaparece con el</strong>. Si tu servicio de notas guardo las notas dentro del contenedor y lo borras, adios notas.</p>
+<p>Aqui viene una sorpresa desagradable si no la conoces de antemano: cuando borras un contenedor con <code>docker rm</code>, <strong>todo lo que la aplicacion guardo dentro desaparece con el</strong>. Si tu servicio de notas guardo las notas dentro del contenedor y lo borras, adios notas.</p>
 <p>La solucion son los volumenes: una forma de decirle al contenedor "guarda estos datos <strong>afuera</strong>, en una carpeta del HDD de polypaw-nas, no dentro de tu cajita".</p>
 <blockquote class="def">
 <h3 id="que-significa-volumen-volume">🟦 ¿Que significa? — <em>Volumen (volume)</em></h3>
@@ -226,7 +226,7 @@ Si responde algo, el contenedor esta vivo y atendiendo.</p>
 </blockquote>
 <hr />
 <h2 id="7-que-es-self-hosting-y-por-que-querrias-hacerlo">7. Que es self-hosting y por que querrias hacerlo</h2>
-<p>Ya tienes todas las piezas. Ahora el concepto que les da sentido.</p>
+<p>Ya tienes todas las piezas. Vamos ahora con el concepto que les da sentido.</p>
 <blockquote class="def">
 <h3 id="que-significa-self-hosting-autoalojamiento">🟦 ¿Que significa? — <em>Self-hosting (autoalojamiento)</em></h3>
 <p>Self-hosting es alojar tus propias aplicaciones en tu propio equipo, en vez de pagar y depender de un servicio en la nube de otra empresa. Tus datos viven en tu casa, en tu hardware.
@@ -240,14 +240,14 @@ Si responde algo, el contenedor esta vivo y atendiendo.</p>
 <li><strong>Aprendizaje:</strong> se aprende muchisimo de Linux y redes haciendolo.</li>
 <li><strong>Ahorro:</strong> un servicio que pagarias cada mes lo corres gratis en hardware que ya tienes.</li>
 </ul>
-<p>Lo bonito es que ya estabas haciendo self-hosting sin etiquetarlo: <strong>AdGuard Home</strong> corriendo en polypaw-nas para bloquear anuncios en toda tu casa es, en esencia, un servicio autoalojado.</p>
+<p>Lo bonito es que ya estabas haciendo self-hosting sin ponerle nombre: <strong>AdGuard Home</strong> corriendo en polypaw-nas para bloquear anuncios en toda tu casa es, en el fondo, un servicio autoalojado.</p>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
 <p>Empieza por UN solo servicio. Levantalo, usalo una semana, vigila la memoria, y solo entonces anade el siguiente. El error tipico del principiante entusiasta es instalar diez cosas el primer dia y ahogar el NAS.</p>
 </blockquote>
 <hr />
 <h2 id="8-ideas-de-servicios-para-polypaw-nas-y-el-limite-de-8-gb">8. Ideas de servicios para polypaw-nas (y el limite de 8 GB)</h2>
-<p>Hay cientos de aplicaciones autoalojables. Algunas categorias que encajan bien con un NAS casero:</p>
+<p>Hay cientos de aplicaciones autoalojables. Estas son algunas categorias que encajan bien con un NAS casero:</p>
 <ul>
 <li><strong>Servidor de fotos:</strong> organiza y muestra tus fotos como una galeria privada.</li>
 <li><strong>Servidor multimedia:</strong> ver tus peliculas y musica guardadas en <code>/srv/nas</code> desde la tele o el celular.</li>
@@ -263,10 +263,10 @@ Si responde algo, el contenedor esta vivo y atendiendo.</p>
 <strong>Para que sirve:</strong> correr aplicaciones de forma fluida; cada contenedor encendido ocupa un pedazo de ella.
 <strong>Donde aparece en tu NAS real:</strong> polypaw-nas tiene <strong>8 GB de RAM</strong>, y es un limite fijo (en un laptop Acer Nitro como ese, ampliarla implica abrirlo y cambiar modulos). Es tu recurso mas escaso.</p>
 </blockquote>
-<p>Tus servicios actuales (Samba, Cockpit, Tailscale, AdGuard Home) ya consumen una parte de esos 8 GB, mas lo que gasta Ubuntu Server por su cuenta. Lo que quede es lo que puedes repartir entre tus contenedores.</p>
+<p>Tus servicios actuales (Samba, Cockpit, Tailscale, AdGuard Home) ya consumen una parte de esos 8 GB, mas lo que gasta Ubuntu Server por su cuenta. Lo que sobre es lo que puedes repartir entre tus contenedores.</p>
 <blockquote class="warn">
 <h3 id="cuidado_5">⚠️ Cuidado</h3>
-<p>Con 8 GB tienes que ser selectivo. Servicios livianos (un panel, un gestor de notas, AdGuard) caben de sobra. Pero servicios pesados, sobre todo los que hacen <strong>reconocimiento de imagenes con IA</strong> o <strong>transcodifican</strong> video en vivo (transcodificar = convertir un video al vuelo a un formato que el dispositivo que mira pueda reproducir; es un trabajo que exige mucha CPU) para varias personas a la vez, pueden devorar la RAM y dejar a polypaw-nas de rodillas. Antes de instalar algo, busca cuanta memoria pide.</p>
+<p>Con 8 GB toca ser selectivo. Los servicios livianos (un panel, un gestor de notas, AdGuard) caben de sobra. Pero los servicios pesados, sobre todo los que hacen <strong>reconocimiento de imagenes con IA</strong> o <strong>transcodifican</strong> video en vivo (transcodificar = convertir un video al vuelo a un formato que el dispositivo que mira pueda reproducir; es un trabajo que exige mucha CPU) para varias personas a la vez, pueden devorar la RAM y dejar a polypaw-nas de rodillas. Antes de instalar algo, busca cuanta memoria pide.</p>
 </blockquote>
 <p>Para vigilar la memoria en cualquier momento:</p>
 <pre><code class="language-bash"># Ver memoria total, usada y libre en formato legible
@@ -288,11 +288,11 @@ docker stats
 <code>``
 En Compose, lo mismo se logra con la opcion</code>mem_limit: 512m`. Bit lo aprueba: "ponle bozal al comelon antes de que se coma el plato de todos".</p>
 <h3 id="en-tu-servidor_3">🔎 En tu servidor</h3>
-<p>La bateria del laptop Acer Nitro actua como una UPS natural: si se va la luz, polypaw-nas sigue encendido un rato en vez de apagarse de golpe. Eso protege tus datos de cortes bruscos, pero NO sustituye los respaldos ni te da memoria extra. Sigue vigilando esos 8 GB.</p>
+<p>La bateria del laptop Acer Nitro hace de UPS natural: si se va la luz, polypaw-nas sigue encendido un rato en vez de apagarse de golpe. Eso protege tus datos de cortes bruscos, pero NO sustituye los respaldos ni te da memoria extra. Sigue vigilando esos 8 GB.</p>
 </blockquote>
 <hr />
 <h2 id="9-mantenimiento-basico-y-limpieza">9. Mantenimiento basico y limpieza</h2>
-<p>Con el tiempo, las imagenes descargadas y los contenedores apagados se acumulan y ocupan espacio en disco. Un par de comandos de limpieza, usados con cabeza:</p>
+<p>Con el tiempo, las imagenes descargadas y los contenedores apagados se van acumulando y ocupan espacio en disco. Un par de comandos de limpieza, usados con cabeza:</p>
 <pre><code class="language-bash"># Ver cuanto espacio usan imagenes, contenedores y volumenes
 docker system df
 

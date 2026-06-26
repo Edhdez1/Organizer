@@ -18,69 +18,76 @@
 </nav>
 <main class="contenedor">
 <h1 id="capitulo-01-que-es-programar">Capítulo 01 — ¿Qué es programar?</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
 <blockquote>
-<p>En este capítulo no escribirás código todavía. Vamos a construir la idea correcta de qué
-es programar, porque mucha gente arranca con una idea equivocada y por eso se frustra.</p>
+<p>En este capítulo todavía no vas a escribir código. Primero quiero que te quede clara una
+idea: qué es programar de verdad. Mucha gente arranca creyendo otra cosa, choca con la
+realidad y abandona. Vamos a evitarte ese tropiezo.</p>
 </blockquote>
 <hr />
 <h2 id="1-una-computadora-es-obediente-pero-literal">1. Una computadora es obediente, pero literal</h2>
-<p>Imagina que tienes un ayudante extremadamente rápido, capaz de hacer millones de cosas por
-segundo, que <strong>nunca se cansa</strong> y <strong>nunca se aburre</strong>… pero que es <strong>absolutamente literal</strong>:
-solo hace <em>exactamente</em> lo que le dices, ni más ni menos, y no "adivina" lo que quisiste decir.</p>
-<p>Si le dices a una persona "prepárame un café", entiende todo el contexto: ir a la cocina,
-buscar la taza, calentar el agua, etc. A una computadora tienes que decírselo <strong>paso a paso</strong>,
-sin saltarte nada. <strong>Programar es escribir esos pasos</strong>, en un idioma que la computadora pueda
-seguir, para que haga algo útil.</p>
+<p>Imagina que tienes un ayudante rapidísimo, capaz de hacer millones de cosas por segundo, que
+<strong>nunca se cansa</strong> y <strong>nunca se aburre</strong>. Suena perfecto, pero tiene un detalle: es
+<strong>absolutamente literal</strong>. Hace <em>exactamente</em> lo que le dices, ni un paso de más ni uno de
+menos, y jamás "adivina" lo que tú querías decir.</p>
+<p>Si a una persona le pides "prepárame un café", capta todo el contexto sola: va a la cocina,
+busca la taza, calienta el agua y demás. A una computadora hay que dictárselo <strong>paso a paso</strong>,
+sin saltarte nada por obvio que parezca. <strong>Programar es justamente escribir esos pasos</strong>, en un
+idioma que la máquina pueda seguir, para que termine haciendo algo útil.</p>
 <blockquote class="def">
 <h3 id="que-significa-programar">🟦 ¿Qué significa? — <em>Programar</em></h3>
-<p><strong>Programar</strong> (o "codear", del inglés <em>to code</em>) es <strong>escribir instrucciones precisas</strong>
-para que una computadora las ejecute y resuelva una tarea. Esas instrucciones, escritas,
-son el <strong>código</strong>.
-<strong>¿Para qué sirve?</strong> Para crear páginas web, aplicaciones, juegos, automatizaciones,
-análisis de datos… cualquier cosa que haga una computadora la hizo alguien programándola.
+<p><strong>Programar</strong> (o "codear", del inglés <em>to code</em>) es <strong>escribir instrucciones precisas</strong> para
+que una computadora las ejecute y resuelva una tarea. Esas instrucciones, ya escritas, son el
+<strong>código</strong>.
+<strong>¿Para qué sirve?</strong> Para crear páginas web, aplicaciones, juegos, automatizaciones, análisis
+de datos… Cualquier cosa que haga una computadora la hizo alguien programándola.
 <strong>¿Dónde se usa en tu proyecto?</strong> Todo lo que tienes —tunal-digital, PolyPaw, RachaSimple,
 Faro— es código que alguien (o una IA) escribió siguiendo estas reglas.</p>
 </blockquote>
 <hr />
 <h2 id="2-lenguaje-codigo-y-algoritmo-las-tres-palabras-clave">2. Lenguaje, código y algoritmo (las tres palabras clave)</h2>
-<p>Vamos a separar tres palabras que a veces se confunden.</p>
+<p>Hay tres palabras que conviene separar bien desde el principio, porque se confunden todo el rato.</p>
 <blockquote class="def">
 <h3 id="que-significa-lenguaje-de-programacion">🟦 ¿Qué significa? — <em>Lenguaje de programación</em></h3>
-<p>Un <strong>lenguaje de programación</strong> es un conjunto de palabras y reglas (una "gramática") que
-tanto tú como la computadora entienden, y que sirve para escribir instrucciones. Igual que
-el español y el inglés son idiomas para comunicarte con personas, <strong>HTML, JavaScript,
-Python o SQL</strong> son idiomas para comunicarte con la computadora.
-<strong>¿Por qué hay tantos?</strong> Porque cada uno está pensado para tareas distintas. Verás:
+<p>Un <strong>lenguaje de programación</strong> es un conjunto de palabras y reglas (una "gramática") que tú y
+la computadora entienden, y que sirve para escribir instrucciones. Así como el español y el
+inglés son idiomas para entenderte con personas, <strong>HTML, JavaScript, Python o SQL</strong> son
+idiomas para entenderte con la máquina.
+<strong>¿Por qué hay tantos?</strong> Porque cada uno nació pensando en tareas distintas. Te irás
+encontrando con estos:
 - <strong>HTML</strong> → describir la <em>estructura</em> de una página web.
 - <strong>CSS</strong> → describir el <em>aspecto</em> (colores, tamaños).
 - <strong>JavaScript / TypeScript</strong> → la <em>lógica</em> e interactividad.
 - <strong>Python</strong> → lógica de aplicaciones, automatización, datos.
 - <strong>SQL</strong> → hablar con bases de datos.</p>
 <h3 id="que-significa-codigo-codigo-fuente">🟦 ¿Qué significa? — <em>Código (código fuente)</em></h3>
-<p>El <strong>código</strong> o <strong>código fuente</strong> es el texto que escribes en un lenguaje de programación.
-Es solo texto, guardado en archivos. Por ejemplo, el archivo
+<p>El <strong>código</strong> o <strong>código fuente</strong> es el texto que escribes en un lenguaje de programación. Al
+final es solo texto guardado en archivos. Por ejemplo, el archivo
 <code>tunal-digital/sitio-web/main.js</code> contiene código en lenguaje JavaScript.</p>
 <h3 id="que-significa-algoritmo">🟦 ¿Qué significa? — <em>Algoritmo</em></h3>
 <p>Un <strong>algoritmo</strong> es <strong>la receta</strong>: la secuencia de pasos lógicos para resolver un problema,
-<em>independiente del idioma</em> en que la escribas. "Para hacer café: 1) calienta agua, 2) pon
-el café, 3) vierte el agua" es un algoritmo. El <strong>código</strong> es ese algoritmo ya escrito en
-un lenguaje concreto.
-<strong>La diferencia importa:</strong> primero piensas el algoritmo (la lógica), luego lo traduces a
+<em>al margen del idioma</em> en que la escribas. "Para hacer café: 1) calienta agua, 2) pon el café,
+3) vierte el agua" es un algoritmo. El <strong>código</strong> es ese mismo algoritmo, pero ya escrito en un
+lenguaje concreto.
+<strong>La diferencia importa:</strong> primero piensas el algoritmo (la lógica) y luego lo traduces a
 código. Programar bien es, sobre todo, <strong>pensar bien el algoritmo</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="3-un-primer-programa-en-espanol">3. Un primer "programa" en español</h2>
-<p>Antes de cualquier lenguaje real, escribamos un algoritmo en español puro. Problema: <em>decidir
-si una persona puede entrar a un evento solo para mayores de 18</em>.</p>
+<p>Antes de tocar cualquier lenguaje real, escribamos un algoritmo en español puro. El problema:
+<em>decidir si una persona puede entrar a un evento solo para mayores de 18</em>.</p>
 <pre><code>1. Preguntar la edad de la persona.
 2. Si la edad es 18 o más:
       decir &quot;Puede entrar&quot;.
    Si no:
       decir &quot;No puede entrar&quot;.
 </code></pre>
-<p>Eso es <strong>pensamiento de programador</strong>: pasos claros y una <strong>decisión</strong> ("si… si no…"). Casi
-todos los lenguajes tienen esa estructura. En JavaScript se vería así (no te preocupes por
-entenderlo aún, solo nota el parecido):</p>
+<p>Eso es <strong>pensamiento de programador</strong>: pasos claros y una <strong>decisión</strong> ("si… si no…"). Esa
+estructura aparece en casi todos los lenguajes. En JavaScript se vería así (no te preocupes por
+entenderlo todavía, solo fíjate en el parecido):</p>
 <pre><code class="language-javascript">let edad = 20;
 if (edad &gt;= 18) {
   console.log(&quot;Puede entrar&quot;);
@@ -96,42 +103,42 @@ partitura; ejecutarlo es tocar la música.</p>
 </blockquote>
 <hr />
 <h2 id="4-los-tres-ingredientes-de-casi-todo-programa">4. Los tres ingredientes de casi todo programa</h2>
-<p>Aunque existan miles de lenguajes, casi toda la programación se construye con tres ideas que
-verás una y otra vez. Quédate con sus nombres:</p>
+<p>Existen miles de lenguajes, pero casi toda la programación se apoya en tres ideas que vas a ver
+una y otra vez. Quédate con sus nombres:</p>
 <ol>
 <li>
-<p><strong>Datos (variables):</strong> la información que el programa guarda y usa. Ej.: una edad, un
+<p><strong>Datos (variables):</strong> la información que el programa guarda y usa. Por ejemplo: una edad, un
    nombre, un color, una lista de hábitos.</p>
 <blockquote class="def">
-<p>🟦 <strong>Variable:</strong> una "cajita" con un nombre donde guardas un dato para usarlo después.
-En el ejemplo, <code>edad</code> es una variable que guarda el número 20.</p>
+<p>🟦 <strong>Variable:</strong> una "cajita" con un nombre donde guardas un dato para usarlo después. En el
+ejemplo, <code>edad</code> es una variable que guarda el número 20.</p>
 </blockquote>
 </li>
 <li>
-<p><strong>Decisiones (condicionales):</strong> el programa elige qué hacer según una condición. Es el
-   "si… si no…" (<code>if … else</code>).</p>
+<p><strong>Decisiones (condicionales):</strong> el programa elige qué hacer según una condición. Es el "si…
+   si no…" (<code>if … else</code>).</p>
 </li>
 <li>
-<p><strong>Repeticiones (bucles):</strong> hacer algo muchas veces sin escribirlo muchas veces. Ej.:
-   "para cada hábito en la lista, muéstralo en pantalla".</p>
+<p><strong>Repeticiones (bucles):</strong> hacer algo muchas veces sin tener que escribirlo muchas veces. Por
+   ejemplo: "para cada hábito en la lista, muéstralo en pantalla".</p>
 <blockquote class="def">
 <p>🟦 <strong>Bucle (loop):</strong> una instrucción que repite un bloque de código varias veces.</p>
 </blockquote>
 </li>
 </ol>
-<p>Con solo estos tres ingredientes —guardar datos, decidir y repetir— se construye una
-cantidad enorme de programas. Todo lo demás son variaciones y herramientas encima de esto.</p>
+<p>Con esos tres ingredientes —guardar datos, decidir y repetir— se arma una cantidad enorme de
+programas. Lo demás son variaciones y herramientas montadas encima de esto.</p>
 <hr />
 <h2 id="5-por-que-vibe-coding-te-deja-a-medias-y-este-manual-no">5. Por qué "vibe coding" te deja a medias (y este manual no)</h2>
 <blockquote class="def">
 <h3 id="que-significa-vibe-coding">🟦 ¿Qué significa? — <em>"Vibe coding"</em></h3>
 <p>Es pedirle a una IA que escriba el código por ti <strong>describiendo el resultado</strong> que quieres
-("hazme una página bonita con un formulario"), sin entender el código que produce. Funciona
-para empezar y para prototipos, pero tiene un techo: cuando algo falla, o quieres un cambio
-<em>fino y específico</em>, no sabes qué pedir ni cómo revisar lo que te dieron.</p>
+("hazme una página bonita con un formulario"), sin entender lo que produce. Sirve para empezar
+y para prototipos, pero tiene un techo: cuando algo falla, o cuando quieres un cambio <em>fino y
+específico</em>, no sabes qué pedir ni cómo revisar lo que te dieron.</p>
 </blockquote>
-<p>El objetivo de este manual es subir ese techo. Cuando entiendas los fundamentos, podrás pasar
-de órdenes vagas a órdenes <strong>precisas</strong>:</p>
+<p>La idea de este manual es subirte ese techo. Cuando manejes los fundamentos, podrás pasar de
+órdenes vagas a órdenes <strong>precisas</strong>:</p>
 <table>
 <thead>
 <tr>
@@ -154,10 +161,10 @@ de órdenes vagas a órdenes <strong>precisas</strong>:</p>
 </tr>
 </tbody>
 </table>
-<p>Esa precisión es <strong>poder</strong>: trabajas más rápido, gastas menos, y controlas el resultado.</p>
+<p>Esa precisión es <strong>poder</strong>: trabajas más rápido, gastas menos y mandas tú sobre el resultado.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
-<p>Marca mentalmente. Si dudas en alguno, relee esa parte.</p>
+<p>Repásalo de memoria. Si dudas en alguno, vuelve a esa parte.</p>
 <ul>
 <li>[ ] Puedo explicar qué es programar con la analogía del "ayudante literal".</li>
 <li>[ ] Sé la diferencia entre <strong>lenguaje</strong>, <strong>código</strong> y <strong>algoritmo</strong>.</li>
@@ -172,13 +179,13 @@ respuestas sugeridas están en <a href="soluciones/01-soluciones.html"><code>sol
 <ol>
 <li><strong>Algoritmo cotidiano.</strong> Escribe, en español y paso a paso, el algoritmo para <em>lavarte los
    dientes</em>. Incluye al menos una <strong>decisión</strong> ("si…").</li>
-<li><strong>Encuentra los ingredientes.</strong> En el ejemplo del evento (mayores de 18), señala: ¿cuál es
-   el <strong>dato/variable</strong>? ¿Dónde está la <strong>decisión</strong>?</li>
-<li><strong>Bucle a mano.</strong> Escribe en español un algoritmo que diga "Hola" a cada nombre de esta
-   lista: Ana, Beto, Carla. Usa la idea de <strong>repetición</strong> ("para cada…").</li>
+<li><strong>Encuentra los ingredientes.</strong> En el ejemplo del evento (mayores de 18), señala: ¿cuál es el
+   <strong>dato/variable</strong>? ¿Dónde está la <strong>decisión</strong>?</li>
+<li><strong>Bucle a mano.</strong> Escribe en español un algoritmo que diga "Hola" a cada nombre de esta lista:
+   Ana, Beto, Carla. Usa la idea de <strong>repetición</strong> ("para cada…").</li>
 <li><strong>Traduce una orden vaga a una precisa.</strong> Toma esta petición vaga: <em>"hazme el botón más
-   llamativo"</em>. Reescríbela como una orden precisa (inventa un color en hexadecimal, un
-   tamaño, etc.). No tiene que ser "correcta", solo <strong>específica</strong>.</li>
+   llamativo"</em>. Reescríbela como una orden precisa (inventa un color en hexadecimal, un tamaño,
+   etc.). No tiene que ser "correcta", solo <strong>específica</strong>.</li>
 </ol>
 <p>➡️ Siguiente: <strong><a href="02-como-funciona-la-computadora.html">Capítulo 02 — Cómo funciona una computadora</a></strong>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>

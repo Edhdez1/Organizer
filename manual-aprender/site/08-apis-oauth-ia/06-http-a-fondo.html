@@ -23,26 +23,26 @@
 </p>
 
 <blockquote>
-<p>¡Hola de nuevo! Soy <strong>Bit</strong>, tu ajolote guía. 🐾 En el capítulo anterior viste qué es una API y cómo <code>fetch</code> pide datos. Hoy abrimos el capó del coche: vamos a entender el <strong>protocolo HTTP</strong>, el idioma que hablan tu navegador, los servidores y las APIs cuando se mandan mensajes. Cada vez que el chat de <strong>tunal-digital</strong> pregunta algo a la IA, o que <strong>Faro</strong> lee tus proyectos de GitHub, por debajo viajan peticiones HTTP. Al terminar vas a poder abrir la pestaña <em>Network</em> del navegador y leer lo que pasa como si fuera un libro. Y, muy importante: vamos a insistir en una regla de oro: <strong>las claves secretas viven en el servidor, NUNCA en el cliente</strong>. ¡Vamos!</p>
+<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote guía. 🐾 En el capítulo pasado viste qué es una API y cómo <code>fetch</code> pide datos. Hoy levantamos el capó: vamos a entender el <strong>protocolo HTTP</strong>, ese idioma que hablan tu navegador, los servidores y las APIs cada vez que se mandan mensajes. Cuando el chat de <strong>tunal-digital</strong> le pregunta algo a la IA, o cuando <strong>Faro</strong> lee tus proyectos de GitHub, por debajo viajan peticiones HTTP que tú no ves. Para el final del capítulo vas a poder abrir la pestaña <em>Network</em> del navegador y leer todo eso como quien lee una carta. Y hay una idea que voy a repetir hasta el cansancio, porque importa de verdad: <strong>las claves secretas viven en el servidor, NUNCA en el cliente</strong>. Empecemos.</p>
 </blockquote>
 <h2 id="1-que-es-http-y-por-que-nos-importa">1. ¿Qué es HTTP y por qué nos importa?</h2>
-<p>Cuando tu navegador pide una página o tu código llama a una API, no se manda un texto suelto al azar. Se manda un <strong>mensaje con una estructura muy precisa</strong>. Esa estructura la define HTTP.</p>
+<p>Cuando tu navegador pide una página o tu código llama a una API, no se manda cualquier cosa al azar. Lo que viaja es un <strong>mensaje con una estructura muy precisa</strong>, y esa estructura la define HTTP.</p>
 <blockquote class="def">
 <h3 id="que-significa-http">🟦 ¿Que significa? — <em>HTTP</em></h3>
-<p><strong>HTTP</strong> (HyperText Transfer Protocol, "protocolo de transferencia de hipertexto") es el conjunto de reglas que define cómo un <strong>cliente</strong> (tu navegador o tu código) le pide algo a un <strong>servidor</strong> y cómo el servidor le responde. Sirve para que ambos se entiendan: el cliente manda una <strong>petición</strong> (request) y el servidor devuelve una <strong>respuesta</strong> (response).
-<strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, cuando el visitante escribe en el chat, el JavaScript del sitio hace una petición HTTP a un Cloudflare Worker, que a su vez habla por HTTP con la API de Claude (Anthropic). Todo es HTTP de punta a punta.</p>
+<p><strong>HTTP</strong> (HyperText Transfer Protocol, "protocolo de transferencia de hipertexto") es el conjunto de reglas que define cómo un <strong>cliente</strong> (tu navegador o tu código) le pide algo a un <strong>servidor</strong> y cómo el servidor le responde. Su razón de ser es que ambos se entiendan: el cliente manda una <strong>petición</strong> (request) y el servidor devuelve una <strong>respuesta</strong> (response).
+<strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, cuando el visitante escribe en el chat, el JavaScript del sitio hace una petición HTTP a un Cloudflare Worker, que a su vez habla por HTTP con la API de Claude (Anthropic). Es HTTP de punta a punta.</p>
 <h3 id="que-significa-cliente-y-servidor">🟦 ¿Que significa? — <em>Cliente y servidor</em></h3>
-<p>El <strong>cliente</strong> es quien pide (el navegador, una app, tu código con <code>fetch</code>). El <strong>servidor</strong> es quien responde (una computadora remota con los datos o la lógica). El cliente muestra cosas al usuario; el servidor guarda secretos y datos.
-<strong>Dónde se usa:</strong> en <strong>Faro</strong> (Next.js), el navegador es el cliente y las <em>rutas de API</em> de Next (que corren en el servidor) son el servidor; ahí viven los tokens de OpenAI y de GitHub.</p>
+<p>El <strong>cliente</strong> es quien pide: el navegador, una app, tu código con <code>fetch</code>. El <strong>servidor</strong> es quien responde: una computadora remota que tiene los datos o la lógica. El cliente le muestra cosas al usuario; el servidor guarda los secretos y los datos.
+<strong>Dónde se usa:</strong> en <strong>Faro</strong> (Next.js), el navegador es el cliente y las <em>rutas de API</em> de Next (que corren en el servidor) hacen de servidor; ahí viven los tokens de OpenAI y de GitHub.</p>
 </blockquote>
-<p>Una petición HTTP siempre tiene cuatro piezas que estudiaremos una por una:</p>
+<p>Una petición HTTP siempre lleva cuatro piezas, y vamos a verlas una por una:</p>
 <ol>
 <li>Un <strong>método</strong> (qué quiero hacer: leer, crear, borrar...).</li>
 <li>Una <strong>URL</strong> (a qué recurso).</li>
 <li>Unas <strong>cabeceras</strong> (headers: datos sobre el mensaje).</li>
 <li>Opcionalmente, un <strong>cuerpo</strong> (body: el contenido que mando).</li>
 </ol>
-<p>Y la respuesta trae:</p>
+<p>La respuesta, por su parte, trae:</p>
 <ol>
 <li>Un <strong>código de estado</strong> (¿salió bien o mal?).</li>
 <li>Sus propias <strong>cabeceras</strong>.</li>
@@ -50,38 +50,38 @@
 </ol>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Piensa en HTTP como pedir comida a domicilio. El <strong>método</strong> es lo que quieres hacer (¿pedir un plato nuevo, cancelar, cambiar la dirección?). La <strong>URL</strong> es la dirección del restaurante. Las <strong>cabeceras</strong> son notas en el sobre ("soy cliente VIP", "pago con tarjeta"). El <strong>cuerpo</strong> es el pedido detallado. El <strong>código de estado</strong> es la respuesta del repartidor: "aquí está" (200) o "esa calle no existe" (404).</p>
+<p>Piensa en HTTP como pedir comida a domicilio. El <strong>método</strong> es lo que quieres hacer (¿pedir un plato nuevo, cancelar, cambiar la dirección?). La <strong>URL</strong> es la dirección del restaurante. Las <strong>cabeceras</strong> son notas en el sobre ("soy cliente VIP", "pago con tarjeta"). El <strong>cuerpo</strong> es el pedido detallado. Y el <strong>código de estado</strong> es lo que te dice el repartidor: "aquí está" (200) o "esa calle no existe" (404).</p>
 <h3 id="que-significa-url">🟦 ¿Que significa? — <em>URL</em></h3>
-<p>Una <strong>URL</strong> (Uniform Resource Locator, "localizador uniforme de recursos") es la <strong>dirección</strong> que indica a qué recurso quieres llegar: el sitio, la ruta y, a veces, parámetros. Por ejemplo, en <code>https://api.github.com/user/repos</code>, el trozo <code>api.github.com</code> dice <strong>a qué servidor</strong> vas y <code>/user/repos</code> dice <strong>qué recurso</strong> pides dentro de ese servidor. Sirve para que la petición sepa exactamente su destino.
-<strong>Dónde se usa:</strong> <strong>Faro</strong> apunta sus GET a URLs como <code>https://api.github.com/user/repos</code>; el chat de <strong>tunal-digital</strong> manda su POST a la URL del Cloudflare Worker. Cada llamada <code>fetch</code> empieza siempre por una URL.</p>
+<p>Una <strong>URL</strong> (Uniform Resource Locator, "localizador uniforme de recursos") es la <strong>dirección</strong> que indica a qué recurso quieres llegar: el sitio, la ruta y, a veces, unos parámetros. Por ejemplo, en <code>https://api.github.com/user/repos</code>, el trozo <code>api.github.com</code> dice <strong>a qué servidor</strong> vas y <code>/user/repos</code> dice <strong>qué recurso</strong> pides dentro de ese servidor. Gracias a ella la petición sabe exactamente su destino.
+<strong>Dónde se usa:</strong> <strong>Faro</strong> apunta sus GET a URLs como <code>https://api.github.com/user/repos</code>; el chat de <strong>tunal-digital</strong> manda su POST a la URL del Cloudflare Worker. Toda llamada <code>fetch</code> arranca siempre con una URL.</p>
 </blockquote>
 <h2 id="2-los-metodos-http-el-verbo-de-la-peticion">2. Los métodos HTTP: el verbo de la petición</h2>
 <blockquote class="def">
 <h3 id="que-significa-metodo-http">🟦 ¿Que significa? — <em>Método HTTP</em></h3>
-<p>El <strong>método</strong> (también llamado <em>verbo</em>) es la palabra que dice <strong>qué acción</strong> quieres hacer sobre un recurso. Sirve para que el servidor sepa tu intención sin tener que adivinarla. Los más comunes son GET, POST, PUT, PATCH y DELETE.
+<p>El <strong>método</strong> (también llamado <em>verbo</em>) es la palabra que dice <strong>qué acción</strong> quieres hacer sobre un recurso. Existe para que el servidor sepa tu intención sin adivinarla. Los más comunes son GET, POST, PUT, PATCH y DELETE.
 <strong>Dónde se usa:</strong> el chat de <strong>tunal-digital</strong> usa <code>POST</code> para mandar tu mensaje a la IA; <strong>RachaSimple</strong> usa peticiones a Supabase que por debajo son GET (leer rachas) y POST (crear una nueva).</p>
 </blockquote>
-<p>Vamos uno por uno con una analogía de una libreta de contactos:</p>
+<p>Vamos uno por uno, con la imagen de una libreta de contactos a mano:</p>
 <blockquote class="def">
 <h3 id="que-significa-get">🟦 ¿Que significa? — <em>GET</em></h3>
-<p><strong>GET</strong> sirve para <strong>leer</strong> o <strong>traer</strong> datos sin modificar nada. Es como mirar un contacto en la libreta: lo lees, no lo cambias. No lleva cuerpo (body).
+<p><strong>GET</strong> sirve para <strong>leer</strong> o <strong>traer</strong> datos sin tocar nada. Es como mirar un contacto en la libreta: lo lees, no lo cambias. No lleva cuerpo (body).
 <strong>Dónde se usa:</strong> <strong>Faro</strong> hace GET a la API de GitHub para leer la lista de tus repositorios.</p>
 <h3 id="que-significa-post">🟦 ¿Que significa? — <em>POST</em></h3>
-<p><strong>POST</strong> sirve para <strong>crear</strong> algo nuevo o <strong>enviar</strong> datos para que el servidor los procese. Es como añadir un contacto nuevo. Lleva cuerpo (body) con la información.
+<p><strong>POST</strong> sirve para <strong>crear</strong> algo nuevo o <strong>enviar</strong> datos para que el servidor los procese. Es como añadir un contacto nuevo a la libreta. Lleva cuerpo (body) con la información.
 <strong>Dónde se usa:</strong> el chat de <strong>tunal-digital</strong> hace <code>POST</code> al Cloudflare Worker enviando el texto del usuario; <strong>Faro</strong> hace POST a OpenAI enviando el contexto del proyecto para que la IA genere la descripción.</p>
 <h3 id="que-significa-put">🟦 ¿Que significa? — <em>PUT</em></h3>
-<p><strong>PUT</strong> sirve para <strong>reemplazar por completo</strong> un recurso que ya existe. Es como borrar un contacto y volver a escribirlo entero, con todos los campos.
-<strong>Dónde se usa:</strong> una API que guarde la configuración completa de un proyecto en <strong>Faro</strong> podría usar PUT para sobrescribir todo el registro de una vez.</p>
+<p><strong>PUT</strong> sirve para <strong>reemplazar por completo</strong> un recurso que ya existe. Es como borrar un contacto y volver a escribirlo entero, con todos sus campos.
+<strong>Dónde se usa:</strong> una API que guarde la configuración completa de un proyecto en <strong>Faro</strong> podría usar PUT para sobrescribir todo el registro de una sola vez.</p>
 <h3 id="que-significa-patch">🟦 ¿Que significa? — <em>PATCH</em></h3>
-<p><strong>PATCH</strong> sirve para <strong>modificar solo una parte</strong> de un recurso existente. Es como cambiar únicamente el teléfono de un contacto, dejando el resto igual.
+<p><strong>PATCH</strong> sirve para <strong>cambiar solo una parte</strong> de un recurso que ya existe. Es como corregir únicamente el teléfono de un contacto y dejar el resto intacto.
 <strong>Dónde se usa:</strong> en <strong>Faro</strong>, marcar una fase del roadmap como completada (cambiar un solo campo) encaja con PATCH; en Supabase, un <code>update</code> de una columna se traduce a PATCH.</p>
 <h3 id="que-significa-delete">🟦 ¿Que significa? — <em>DELETE</em></h3>
 <p><strong>DELETE</strong> sirve para <strong>borrar</strong> un recurso. Es como eliminar un contacto de la libreta.
 <strong>Dónde se usa:</strong> desconectar una fuente (por ejemplo, una cuenta de Google Drive) en <strong>Faro</strong> podría disparar un DELETE sobre el registro de esa conexión.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Para recordarlos: <strong>GET</strong> = traer, <strong>POST</strong> = crear, <strong>PUT</strong> = reemplazar todo, <strong>PATCH</strong> = parchear (cambiar un poco), <strong>DELETE</strong> = borrar. Si solo recuerdas GET y POST estás bien para empezar: son los dos que más vas a ver.</p>
+<p>Una forma de fijarlos: <strong>GET</strong> = traer, <strong>POST</strong> = crear, <strong>PUT</strong> = reemplazar todo, <strong>PATCH</strong> = parchear (cambiar un poco), <strong>DELETE</strong> = borrar. Si por ahora solo te quedas con GET y POST, vas bien: son los dos que más vas a ver.</p>
 </blockquote>
-<p>Así se ve un GET y un POST con <code>fetch</code>, que ya conoces del módulo 03:</p>
+<p>Así se ven un GET y un POST con <code>fetch</code>, que ya conoces del módulo 03:</p>
 <pre><code class="language-javascript">// GET: leer la lista de repos del usuario (no lleva body)
 const repos = await fetch(&quot;https://api.github.com/user/repos&quot;);
 
@@ -94,55 +94,55 @@ const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev/api/c
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>Si en <code>fetch</code> no escribes <code>method</code>, el navegador asume <code>GET</code>. Por eso el primer ejemplo no necesita la opción <code>method</code>. En cuanto quieras mandar datos (un <code>body</code>), casi siempre será <code>POST</code> y tendrás que escribirlo explícitamente.</p>
+<p>Si en <code>fetch</code> no escribes <code>method</code>, el navegador da por hecho que es <code>GET</code>. Por eso el primer ejemplo no necesita esa opción. En cambio, en cuanto quieras mandar datos (un <code>body</code>), casi siempre será <code>POST</code> y tendrás que escribirlo a mano.</p>
 </blockquote>
 <h2 id="3-idempotencia-que-pasa-si-repito-la-peticion">3. Idempotencia: ¿qué pasa si repito la petición?</h2>
-<p>Esta palabra suena rara, pero la idea es sencilla y muy útil.</p>
+<p>La palabra suena rara, pero la idea detrás es sencilla y bastante útil.</p>
 <blockquote class="def">
 <h3 id="que-significa-idempotencia">🟦 ¿Que significa? — <em>Idempotencia</em></h3>
-<p>Una petición es <strong>idempotente</strong> si <strong>repetirla varias veces da el mismo resultado</strong> que hacerla una sola vez. Sirve para saber qué es seguro reintentar cuando la red falla.
-<strong>Dónde se usa:</strong> si en <strong>Faro</strong> un GET de tus repos se pierde por mala conexión, puedes reintentarlo sin miedo: leer dos veces no rompe nada. Es idempotente.</p>
+<p>Una petición es <strong>idempotente</strong> si <strong>repetirla varias veces da el mismo resultado</strong> que hacerla una sola. Sirve para saber qué es seguro reintentar cuando la red se cae a la mitad.
+<strong>Dónde se usa:</strong> si en <strong>Faro</strong> un GET de tus repos se pierde por una mala conexión, puedes reintentarlo tranquilo: leer dos veces no rompe nada. Es idempotente.</p>
 </blockquote>
 <p>Veámoslo método por método:</p>
 <ul>
 <li><strong>GET</strong> es idempotente: leer mil veces no cambia nada.</li>
 <li><strong>PUT</strong> es idempotente: reemplazar el registro entero con los mismos datos deja todo igual la segunda vez.</li>
-<li><strong>DELETE</strong> es idempotente: borrar algo ya borrado sigue dejándolo borrado.</li>
-<li><strong>POST</strong> <strong>NO</strong> es idempotente: cada POST suele crear algo nuevo. Si mandas dos veces "crear pedido", ¡tendrás dos pedidos!</li>
-<li><strong>PATCH</strong> depende de cómo esté hecho; a menudo no es idempotente.</li>
+<li><strong>DELETE</strong> es idempotente: borrar algo que ya estaba borrado lo sigue dejando borrado.</li>
+<li><strong>POST</strong> <strong>NO</strong> es idempotente: cada POST suele crear algo nuevo. Si mandas dos veces "crear pedido", ¡acabas con dos pedidos!</li>
+<li><strong>PATCH</strong> depende de cómo esté hecho; muchas veces no es idempotente.</li>
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Por esto los botones de "Enviar" o "Pagar" (que hacen POST) a veces se deshabilitan tras el primer clic: si el usuario hace doble clic, podría crear dos cosas. En el chat de <strong>tunal-digital</strong>, mandar el mismo mensaje dos veces generaría dos respuestas (y gastaría el doble de tokens de IA). No es un error técnico, pero sí algo a cuidar.</p>
+<p>Por esto los botones de "Enviar" o "Pagar" (que hacen POST) a veces se desactivan tras el primer clic: si el usuario hace doble clic, podría crear dos cosas. En el chat de <strong>tunal-digital</strong>, mandar el mismo mensaje dos veces generaría dos respuestas (y gastaría el doble de tokens de IA). No es un fallo técnico, pero sí algo que conviene cuidar.</p>
 </blockquote>
 <h2 id="4-codigos-de-estado-salio-bien-o-mal">4. Códigos de estado: ¿salió bien o mal?</h2>
-<p>Cuando el servidor responde, lo primero que manda es un número de tres cifras: el <strong>código de estado</strong>. Es la forma más rápida de saber qué pasó.</p>
+<p>Cuando el servidor responde, lo primero que envía es un número de tres cifras: el <strong>código de estado</strong>. Es la manera más rápida de saber qué pasó.</p>
 <blockquote class="def">
 <h3 id="que-significa-codigo-de-estado-status-code">🟦 ¿Que significa? — <em>Código de estado (status code)</em></h3>
-<p>Un <strong>código de estado</strong> es un número de tres dígitos que el servidor pone en su respuesta para decir cómo le fue a la petición. Sirve para que tu código reaccione: mostrar los datos, reintentar, o avisar de un error. La primera cifra indica la "familia".
+<p>Un <strong>código de estado</strong> es un número de tres dígitos que el servidor mete en su respuesta para decir cómo le fue a la petición. Le sirve a tu código para reaccionar: mostrar los datos, reintentar o avisar de un error. La primera cifra indica la "familia" a la que pertenece.
 <strong>Dónde se usa:</strong> cuando <strong>Faro</strong> llama a OpenAI, revisa el código: si es <code>200</code> usa la respuesta de la IA; si es <code>401</code> sabe que el token está mal; si es <code>429</code> sabe que pidió demasiado rápido.</p>
 </blockquote>
-<p>Las cinco familias:</p>
+<p>Hay cinco familias:</p>
 <blockquote class="def">
 <h3 id="que-significa-2xx-exito">🟦 ¿Que significa? — <em>2xx (éxito)</em></h3>
-<p>Los códigos que empiezan por <strong>2</strong> significan <strong>todo salió bien</strong>. El más común es <strong>200 OK</strong> (petición correcta) y <strong>201 Created</strong> (se creó algo nuevo, típico tras un POST).
-<strong>Dónde se usa:</strong> cuando GitHub te devuelve tus repos a <strong>Faro</strong>, responde <code>200 OK</code>.</p>
+<p>Los códigos que empiezan por <strong>2</strong> significan que <strong>todo salió bien</strong>. El más común es <strong>200 OK</strong> (petición correcta), y también verás <strong>201 Created</strong> (se creó algo nuevo, típico tras un POST).
+<strong>Dónde se usa:</strong> cuando GitHub le devuelve sus repos a <strong>Faro</strong>, responde <code>200 OK</code>.</p>
 <h3 id="que-significa-3xx-redireccion">🟦 ¿Que significa? — <em>3xx (redirección)</em></h3>
-<p>Los códigos que empiezan por <strong>3</strong> significan <strong>lo que buscas está en otro sitio</strong>. Por ejemplo <strong>301 Moved Permanently</strong> (se mudó para siempre) o <strong>302 Found</strong> (redirección temporal). El navegador suele seguir la nueva dirección solo.
+<p>Los códigos que empiezan por <strong>3</strong> significan que <strong>lo que buscas está en otro sitio</strong>. Por ejemplo <strong>301 Moved Permanently</strong> (se mudó para siempre) o <strong>302 Found</strong> (redirección temporal). El navegador suele seguir la nueva dirección por su cuenta.
 <strong>Dónde se usa:</strong> en el flujo de <strong>OAuth</strong> de <strong>Faro</strong>, al iniciar sesión con GitHub o Google, el navegador es <strong>redirigido</strong> (3xx) varias veces entre páginas hasta volver a la app con la sesión lista.</p>
 <h3 id="que-significa-4xx-error-del-cliente">🟦 ¿Que significa? — <em>4xx (error del cliente)</em></h3>
-<p>Los códigos que empiezan por <strong>4</strong> significan <strong>tú (el cliente) hiciste algo mal</strong>. Los más comunes:
+<p>Los códigos que empiezan por <strong>4</strong> significan que <strong>tú (el cliente) hiciste algo mal</strong>. Los más habituales:
 - <strong>400 Bad Request:</strong> mandaste datos mal formados.
 - <strong>401 Unauthorized:</strong> no te identificaste (falta o falla el token/login).
 - <strong>403 Forbidden:</strong> te identificaste, pero no tienes permiso.
 - <strong>404 Not Found:</strong> lo que pides no existe.
 - <strong>429 Too Many Requests:</strong> estás pidiendo demasiado rápido.
-<strong>Dónde se usa:</strong> si en <strong>RachaSimple</strong> intentas leer datos sin haber iniciado sesión con Supabase Auth, la API responde <code>401</code>. Si el token de OpenAI de <strong>Faro</strong> está vencido, llega <code>401</code>.</p>
+<strong>Dónde se usa:</strong> si en <strong>RachaSimple</strong> intentas leer datos sin haber iniciado sesión con Supabase Auth, la API responde <code>401</code>. Y si el token de OpenAI de <strong>Faro</strong> está vencido, también llega un <code>401</code>.</p>
 <h3 id="que-significa-5xx-error-del-servidor">🟦 ¿Que significa? — <em>5xx (error del servidor)</em></h3>
-<p>Los códigos que empiezan por <strong>5</strong> significan <strong>el servidor falló</strong>, no tú. Los más comunes: <strong>500 Internal Server Error</strong> (algo se rompió dentro) y <strong>503 Service Unavailable</strong> (el servicio está caído o saturado).
-<strong>Dónde se usa:</strong> si la API de Claude tuviera un problema interno, el Worker de <strong>tunal-digital</strong> podría recibir un <code>500</code> o <code>503</code> y debería mostrar al visitante un mensaje amable de "inténtalo de nuevo".</p>
+<p>Los códigos que empiezan por <strong>5</strong> significan que <strong>el servidor falló</strong>, no tú. Los más comunes: <strong>500 Internal Server Error</strong> (algo se rompió dentro) y <strong>503 Service Unavailable</strong> (el servicio está caído o saturado).
+<strong>Dónde se usa:</strong> si la API de Claude tuviera un problema interno, el Worker de <strong>tunal-digital</strong> podría recibir un <code>500</code> o <code>503</code>, y entonces debería mostrarle al visitante un mensaje amable de "inténtalo de nuevo".</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>Regla mental rápida: <strong>4xx = es culpa mía</strong> (revisa lo que mandé), <strong>5xx = es culpa del servidor</strong> (puedo reintentar más tarde). Y el famoso <strong>404</strong> que ves en webs rotas significa simplemente "esa página no existe".</p>
+<p>Una regla mental rápida: <strong>4xx = es culpa mía</strong> (revisa lo que mandé), <strong>5xx = es culpa del servidor</strong> (puedo reintentar más tarde). Y ese famoso <strong>404</strong> que aparece en webs rotas no significa otra cosa que "esa página no existe".</p>
 </blockquote>
 <p>Así se revisa el código de estado con <code>fetch</code>:</p>
 <pre><code class="language-javascript">const res = await fetch(&quot;https://api.github.com/user/repos&quot;);
@@ -161,24 +161,24 @@ if (res.ok) {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Con <code>fetch</code>, un código <code>404</code> o <code>500</code> <strong>NO lanza un error</strong> de JavaScript: la promesa se cumple igual. Por eso SIEMPRE debes revisar <code>res.ok</code> o <code>res.status</code> tú mismo. Mucha gente nueva cree que <code>fetch</code> "fallaría" con un 404 y se confunde cuando su código sigue como si nada.</p>
+<p>Ojo con esto: con <code>fetch</code>, un código <code>404</code> o <code>500</code> <strong>NO lanza un error</strong> de JavaScript; la promesa se cumple igual. Por eso SIEMPRE tienes que revisar <code>res.ok</code> o <code>res.status</code> por tu cuenta. A mucha gente que empieza le pasa: cree que <code>fetch</code> "fallaría" con un 404 y se queda confundida cuando su código sigue tan campante.</p>
 </blockquote>
 <h2 id="5-cabeceras-headers-los-datos-sobre-el-mensaje">5. Cabeceras (headers): los datos sobre el mensaje</h2>
 <blockquote class="def">
 <h3 id="que-significa-cabeceras-headers">🟦 ¿Que significa? — <em>Cabeceras (headers)</em></h3>
-<p>Las <strong>cabeceras</strong> son pares de "nombre: valor" que viajan junto a la petición y la respuesta, dando <strong>información sobre el mensaje</strong> (no es el contenido en sí, sino datos <em>acerca</em> del contenido). Sirven para indicar el formato, la autenticación, el idioma, etc.
+<p>Las <strong>cabeceras</strong> son pares de "nombre: valor" que viajan junto a la petición y a la respuesta y dan <strong>información sobre el mensaje</strong>: no son el contenido en sí, sino datos <em>acerca</em> de ese contenido. Sirven para indicar el formato, la autenticación, el idioma y cosas por el estilo.
 <strong>Dónde se usa:</strong> <strong>Faro</strong> manda una cabecera de autorización con el token de OpenAI en cada llamada a la IA; sin ella, OpenAI respondería <code>401</code>.</p>
 </blockquote>
-<p>Hay cabeceras de <strong>petición</strong> (las que mandas tú) y de <strong>respuesta</strong> (las que devuelve el servidor). Algunas muy frecuentes:</p>
+<p>Hay cabeceras de <strong>petición</strong> (las que mandas tú) y de <strong>respuesta</strong> (las que devuelve el servidor). Estas son algunas de las que más se ven:</p>
 <blockquote class="def">
 <h3 id="que-significa-content-type">🟦 ¿Que significa? — <em>Content-Type</em></h3>
-<p>La cabecera <strong>Content-Type</strong> dice <strong>en qué formato</strong> está el cuerpo del mensaje. El valor más común en APIs es <code>application/json</code> (datos en formato JSON). Sirve para que quien recibe sepa cómo interpretar el cuerpo.
-<strong>Dónde se usa:</strong> el chat de <strong>tunal-digital</strong> envía <code>Content-Type: application/json</code> para que el Worker entienda que el body es JSON.</p>
+<p>La cabecera <strong>Content-Type</strong> dice <strong>en qué formato</strong> está el cuerpo del mensaje. En las APIs, el valor más común es <code>application/json</code> (datos en formato JSON). Sirve para que quien recibe sepa cómo interpretar el cuerpo.
+<strong>Dónde se usa:</strong> el chat de <strong>tunal-digital</strong> envía <code>Content-Type: application/json</code> para que el Worker entienda que el body viene en JSON.</p>
 <h3 id="que-significa-authorization">🟦 ¿Que significa? — <em>Authorization</em></h3>
-<p>La cabecera <strong>Authorization</strong> lleva la <strong>credencial</strong> que demuestra quién eres, normalmente un token. Un formato común es <code>Bearer &lt;token&gt;</code> ("portador de este token"). Sirve para que el servidor te deje pasar.
+<p>La cabecera <strong>Authorization</strong> lleva la <strong>credencial</strong> que demuestra quién eres, normalmente un token. Un formato habitual es <code>Bearer &lt;token&gt;</code> ("portador de este token"). Sirve para que el servidor te deje pasar.
 <strong>Dónde se usa:</strong> <strong>Faro</strong> usa <code>Authorization: Bearer ...</code> con el token de OpenAI y con el de GitHub para que esas APIs sepan que la petición está autorizada.</p>
 <h3 id="que-significa-accept">🟦 ¿Que significa? — <em>Accept</em></h3>
-<p>La cabecera <strong>Accept</strong> dice <strong>qué formato esperas recibir</strong> en la respuesta. Por ejemplo <code>Accept: application/json</code> significa "respóndeme en JSON, por favor".
+<p>La cabecera <strong>Accept</strong> dice <strong>qué formato esperas recibir</strong> en la respuesta. Por ejemplo, <code>Accept: application/json</code> viene a ser "respóndeme en JSON, por favor".
 <strong>Dónde se usa:</strong> al hablar con la API de GitHub, <strong>Faro</strong> manda <code>Accept</code> para pedir la versión correcta del formato de respuesta.</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -189,24 +189,24 @@ if (res.ok) {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado-seguridad">⚠️ Cuidado — ¡SEGURIDAD!</h3>
-<p>Esa cabecera <code>Authorization</code> con el token <strong>JAMÁS</strong> debe ponerse en el código que corre en el navegador (el cliente). Si lo hicieras, cualquier visitante podría abrir la pestaña Network, copiar tu clave de OpenAI o de Anthropic y gastarte el dinero. Por eso <strong>tunal-digital</strong> no llama a la API de Claude directamente desde el JavaScript del sitio: la llamada pasa por un <strong>Cloudflare Worker</strong> (que es código de servidor), y la clave de Anthropic vive como variable de entorno <strong>dentro del Worker</strong>, fuera del alcance del visitante. Es exactamente la regla de seguridad de <strong>Faro</strong>: <em>tokens y secretos solo en el servidor, nunca en el cliente ni en el repositorio</em>.</p>
+<p>Esa cabecera <code>Authorization</code> con el token <strong>JAMÁS</strong> debe ir en el código que corre en el navegador (el cliente). Si lo hicieras, cualquier visitante podría abrir la pestaña Network, copiar tu clave de OpenAI o de Anthropic y gastarte el dinero. Por eso <strong>tunal-digital</strong> no llama a la API de Claude directamente desde el JavaScript del sitio: la llamada pasa por un <strong>Cloudflare Worker</strong> (que es código de servidor), y la clave de Anthropic vive como variable de entorno <strong>dentro del Worker</strong>, fuera del alcance del visitante. Es justo la regla de seguridad de <strong>Faro</strong>: <em>tokens y secretos solo en el servidor, nunca en el cliente ni en el repositorio</em>.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En <strong>Faro</strong> (Next.js) ocurre lo mismo: el navegador llama a una <em>ruta de API</em> propia de Faro (por ejemplo <code>/api/analizar</code>), y es esa ruta —que corre en el servidor— la que añade el header <code>Authorization</code> con el token de OpenAI antes de llamar a la API real. El navegador nunca toca la clave. Si alguna vez ves una clave secreta en el código del cliente, eso es un bug de seguridad que hay que arreglar de inmediato.</p>
+<p>En <strong>Faro</strong> (Next.js) pasa lo mismo: el navegador llama a una <em>ruta de API</em> propia de Faro (por ejemplo <code>/api/analizar</code>), y es esa ruta —que corre en el servidor— la que añade el header <code>Authorization</code> con el token de OpenAI antes de llamar a la API real. El navegador nunca llega a tocar la clave. Si algún día ves una clave secreta en el código del cliente, eso es un bug de seguridad y hay que arreglarlo enseguida.</p>
 <h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
 <p>Una <strong>variable de entorno</strong> es un valor de configuración (como una clave secreta) que se guarda <strong>fuera del código</strong>, en el entorno donde corre el servidor. Sirve para no escribir secretos dentro de los archivos del proyecto y no subirlos por error a GitHub.
-<strong>Dónde se usa:</strong> la clave de Anthropic en el Worker de <strong>tunal-digital</strong> y las claves de OpenAI y de OAuth en <strong>Faro</strong> se guardan como variables de entorno del servidor.</p>
+<strong>Dónde se usa:</strong> la clave de Anthropic en el Worker de <strong>tunal-digital</strong>, y las claves de OpenAI y de OAuth en <strong>Faro</strong>, se guardan como variables de entorno del servidor.</p>
 </blockquote>
 <h2 id="6-el-cuerpo-body-el-contenido-del-mensaje">6. El cuerpo (body): el contenido del mensaje</h2>
 <blockquote class="def">
 <h3 id="que-significa-cuerpo-body">🟦 ¿Que significa? — <em>Cuerpo (body)</em></h3>
 <p>El <strong>cuerpo</strong> es el <strong>contenido principal</strong> que viaja en la petición o en la respuesta: los datos de verdad. En las peticiones, el body lo llevan métodos como POST, PUT y PATCH. En las respuestas, el body es lo que el servidor te devuelve.
-<strong>Dónde se usa:</strong> cuando <strong>Faro</strong> pide a OpenAI generar el roadmap, en el body de la petición van el contexto del proyecto y las instrucciones; en el body de la respuesta vuelve el texto generado por la IA.</p>
+<strong>Dónde se usa:</strong> cuando <strong>Faro</strong> le pide a OpenAI que genere el roadmap, en el body de la petición van el contexto del proyecto y las instrucciones; en el body de la respuesta vuelve el texto generado por la IA.</p>
 </blockquote>
-<p>Casi siempre el body va en formato <strong>JSON</strong> (que ya viste en el módulo de bases de datos). Recuerda estas dos funciones clave:</p>
+<p>Casi siempre el body va en formato <strong>JSON</strong> (el que ya viste en el módulo de bases de datos). Conviene tener presentes estas dos funciones:</p>
 <blockquote class="def">
 <h3 id="que-significa-jsonstringify-y-jsonparse">🟦 ¿Que significa? — <em>JSON.stringify y JSON.parse</em></h3>
-<p><strong><code>JSON.stringify(objeto)</code></strong> convierte un objeto de JavaScript en una cadena de texto JSON, lista para mandarse en el body. <strong><code>JSON.parse(texto)</code></strong> hace lo contrario: convierte el texto JSON de la respuesta en un objeto de JavaScript usable. Con <code>fetch</code>, el método <code>res.json()</code> hace el parse por ti.
-<strong>Dónde se usa:</strong> <strong>tunal-digital</strong> y <strong>Faro</strong> hacen <code>JSON.stringify</code> para mandar datos y <code>res.json()</code> para leer la respuesta.</p>
+<p><strong><code>JSON.stringify(objeto)</code></strong> convierte un objeto de JavaScript en una cadena de texto JSON, lista para mandarse en el body. <strong><code>JSON.parse(texto)</code></strong> hace justo lo contrario: convierte el texto JSON de la respuesta en un objeto de JavaScript que ya puedes usar. Con <code>fetch</code>, el método <code>res.json()</code> se encarga del parse por ti.
+<strong>Dónde se usa:</strong> <strong>tunal-digital</strong> y <strong>Faro</strong> usan <code>JSON.stringify</code> para mandar datos y <code>res.json()</code> para leer la respuesta.</p>
 </blockquote>
 <pre><code class="language-javascript">// Petición POST con body JSON (chat de tunal-digital, simplificado)
 const res = await fetch(&quot;https://chat.tunal-digital.workers.dev/api/chat&quot;, {
@@ -223,14 +223,14 @@ console.log(datos.respuesta); // el texto que generó la IA
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Fíjate en la pareja: si declaras <code>Content-Type: application/json</code>, el body debe ser JSON de verdad (<code>JSON.stringify(...)</code>). Si dices "esto es JSON" pero mandas otra cosa, el servidor se confunde y suele responder <code>400 Bad Request</code>. ¡El header y el body deben ir de acuerdo!</p>
+<p>Fíjate en la pareja: si declaras <code>Content-Type: application/json</code>, el body tiene que ser JSON de verdad (<code>JSON.stringify(...)</code>). Si dices "esto es JSON" pero mandas otra cosa, el servidor se lía y normalmente responde <code>400 Bad Request</code>. El header y el body tienen que ir de la mano.</p>
 </blockquote>
 <h2 id="7-la-pestana-network-ver-el-http-con-tus-propios-ojos">7. La pestaña Network: ver el HTTP con tus propios ojos</h2>
-<p>Aquí viene lo divertido. El navegador tiene una herramienta que te deja <strong>espiar todas las peticiones HTTP</strong> que ocurren. Se llama pestaña <strong>Network</strong>.</p>
+<p>Aquí viene la parte divertida. El navegador trae una herramienta que te deja <strong>espiar todas las peticiones HTTP</strong> que ocurren. Se llama pestaña <strong>Network</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-pestana-network-red">🟦 ¿Que significa? — <em>Pestaña Network (Red)</em></h3>
-<p>La <strong>pestaña Network</strong> es una sección de las herramientas de desarrollador del navegador que <strong>lista cada petición HTTP</strong> que la página hace, con su método, su URL, su código de estado, sus cabeceras y sus cuerpos. Sirve para depurar: ver qué se mandó, qué volvió y por qué algo falla.
-<strong>Dónde se usa:</strong> abriendo Network en el sitio de <strong>tunal-digital</strong> mientras usas el chat, verás aparecer la petición <code>POST</code> al Worker; en <strong>Faro</strong>, verás las llamadas a sus rutas de API cuando disparas un análisis.</p>
+<p>La <strong>pestaña Network</strong> es una sección de las herramientas de desarrollador del navegador que <strong>lista cada petición HTTP</strong> que hace la página, con su método, su URL, su código de estado, sus cabeceras y sus cuerpos. Es de lo más útil para depurar: ves qué se mandó, qué volvió y por qué algo falla.
+<strong>Dónde se usa:</strong> si abres Network en el sitio de <strong>tunal-digital</strong> mientras usas el chat, verás aparecer la petición <code>POST</code> al Worker; en <strong>Faro</strong>, verás las llamadas a sus rutas de API cuando disparas un análisis.</p>
 </blockquote>
 <p>Cómo abrirla y leerla, paso a paso:</p>
 <ol>
@@ -245,14 +245,14 @@ console.log(datos.respuesta); // el texto que generó la IA
 </ol>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>En la lista de Network, la columna "Status" te muestra el código de estado de cada petición. Si ves algo en rojo o un <code>4xx</code>/<code>5xx</code>, ahí está tu pista para depurar. ¡Es lo primero que mira un desarrollador cuando algo no carga!</p>
+<p>En la lista de Network, la columna "Status" te muestra el código de estado de cada petición. Si ves algo en rojo o un <code>4xx</code>/<code>5xx</code>, ahí tienes tu pista para depurar. Es lo primero que mira un desarrollador cuando algo no carga.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>Abre Network mientras usas el chat de <strong>tunal-digital</strong> y comprueba algo importante para la seguridad: en la petición al Worker <strong>NO</strong> debe aparecer ninguna clave de Anthropic. El visitante solo ve su mensaje y la URL del Worker; la clave secreta se queda escondida en el servidor. Si la vieras ahí, sería una fuga grave. Esa es la prueba visual de que la arquitectura "secretos en el servidor" funciona.</p>
+<p>Abre Network mientras usas el chat de <strong>tunal-digital</strong> y comprueba algo clave para la seguridad: en la petición al Worker <strong>NO</strong> debe aparecer ninguna clave de Anthropic. El visitante solo ve su mensaje y la URL del Worker; la clave secreta se queda escondida en el servidor. Si llegaras a verla ahí, sería una fuga grave. Esa es la prueba visual de que la arquitectura "secretos en el servidor" funciona.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>En Network puedes ver TUS propios tokens de sesión (por ejemplo, el de Supabase en <strong>RachaSimple</strong> o <strong>Faro</strong>). Eso es normal: son <em>tus</em> credenciales en <em>tu</em> navegador. El problema sería ver claves <strong>compartidas</strong> del servicio (como la de OpenAI o Anthropic): esas nunca deben llegar al navegador de nadie.</p>
+<p>En Network puedes ver TUS propios tokens de sesión (por ejemplo, el de Supabase en <strong>RachaSimple</strong> o <strong>Faro</strong>). Eso es normal: son <em>tus</em> credenciales en <em>tu</em> navegador. El problema sería ver claves <strong>compartidas</strong> del servicio (como la de OpenAI o Anthropic): esas no deben llegar nunca al navegador de nadie.</p>
 </blockquote>
 <h2 id="8-juntandolo-todo-una-peticion-real-de-faro-comentada">8. Juntándolo todo: una petición real de Faro, comentada</h2>
-<p>Veamos cómo se conectan todas las piezas en la llamada que el <strong>servidor</strong> de Faro hace a OpenAI para generar la descripción de un proyecto:</p>
+<p>Veamos cómo encajan todas las piezas en la llamada que el <strong>servidor</strong> de Faro le hace a OpenAI para generar la descripción de un proyecto:</p>
 <pre><code class="language-javascript">// Esto corre en el SERVIDOR de Faro (una ruta de API de Next.js),
 // nunca en el navegador. Por eso aquí sí puede ir el token.
 const res = await fetch(&quot;https://api.openai.com/v1/chat/completions&quot;, {
@@ -280,9 +280,9 @@ const descripcion = datos.choices[0].message.content;
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>Repasa las cuatro piezas: <strong>método</strong> (<code>POST</code>), <strong>URL</strong> (<code>.../chat/completions</code>), <strong>cabeceras</strong> (<code>Content-Type</code> y <code>Authorization</code>) y <strong>cuerpo</strong> (<code>body</code> con el modelo y los mensajes). Y la respuesta con su <strong>código de estado</strong> (<code>res.ok</code>) y su <strong>cuerpo</strong> (<code>res.json()</code>). ¡Ya sabes leer y escribir cualquier petición HTTP!</p>
+<p>Repasa las cuatro piezas: <strong>método</strong> (<code>POST</code>), <strong>URL</strong> (<code>.../chat/completions</code>), <strong>cabeceras</strong> (<code>Content-Type</code> y <code>Authorization</code>) y <strong>cuerpo</strong> (<code>body</code> con el modelo y los mensajes). Y la respuesta, con su <strong>código de estado</strong> (<code>res.ok</code>) y su <strong>cuerpo</strong> (<code>res.json()</code>). Con esto ya sabes leer y escribir cualquier petición HTTP.</p>
 <h3 id="tip_5">💡 Tip</h3>
-<p><code>process.env.OPENAI_API_KEY</code> es la forma en Node/Next de leer una variable de entorno. Como este archivo corre en el servidor, la clave nunca se manda al navegador. Si copiaras este mismo <code>fetch</code> a un componente del cliente, ¡estarías filtrando la clave a todo el mundo! Por eso Faro coloca estas llamadas en rutas de API del servidor.</p>
+<p><code>process.env.OPENAI_API_KEY</code> es la forma que tiene Node/Next de leer una variable de entorno. Como este archivo corre en el servidor, la clave nunca se manda al navegador. Si copiaras este mismo <code>fetch</code> a un componente del cliente, ¡estarías filtrando la clave a todo el mundo! Por eso Faro pone estas llamadas en rutas de API del servidor.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
