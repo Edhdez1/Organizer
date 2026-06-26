@@ -1,5 +1,10 @@
 # Capítulo 05 — TypeScript en la práctica
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Cerramos el módulo viendo cómo TypeScript vive en un proyecto real: su archivo de
 > configuración, el modo "estricto" que usan tus apps, y cómo todo lo aprendido se junta en
 > `RachaSimple` y `Faro`. Menos sintaxis nueva, más "ver el bosque".

@@ -1,5 +1,10 @@
 # Capítulo 03 — Bucles y funciones
 
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Llegamos al tercer ingrediente del Módulo 00 (**repeticiones**) y a la herramienta que
 > ordena todo el código: las **funciones**. Con variables, decisiones, bucles y funciones ya
 > tienes las cuatro piezas con las que se arma casi cualquier programa.

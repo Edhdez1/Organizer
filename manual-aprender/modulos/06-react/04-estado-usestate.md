@@ -1,5 +1,10 @@
 # Capítulo 04 — Estado con useState
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Las props son datos que **llegan de afuera** y se quedan quietos. Pero una app viva necesita
 > datos que **cambian con el tiempo**: un contador que sube, un campo que el usuario va llenando,
 > un menú que se abre y se cierra. A eso lo llamamos **estado**, y se maneja con tu primer

@@ -1,5 +1,10 @@
 # Capítulo 04 — Archivos y JSON
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Un programa que no guarda nada empieza de cero cada vez que lo abres. Aquí vas a aprender a
 > **guardar** datos en el disco para que sobrevivan al cierre y a **leerlos** de vuelta cuando
 > arranca otra vez. Y lo harás con **JSON**, que es justo el formato con el que PolyPaw guarda

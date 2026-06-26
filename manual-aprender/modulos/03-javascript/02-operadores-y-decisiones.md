@@ -1,5 +1,10 @@
 # Capítulo 02 — Operadores y decisiones
 
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Ya sabes guardar datos en variables. El siguiente paso es **operar** con ellos (sumarlos,
 > compararlos) y hacer que tu programa **tome decisiones** según lo que salga. Aquí entra en
 > juego el segundo ingrediente del Módulo 00: las decisiones (`if/else`).

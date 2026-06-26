@@ -1,5 +1,10 @@
 # Capítulo 03 — Funciones, listas y diccionarios
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tres herramientas que vas a usar en prácticamente todos tus programas en Python: **funciones**
 > (para organizar el código), **listas** (colecciones ordenadas) y **diccionarios** (datos con
 > etiquetas). Sobre estas tres piezas se apoya la forma en que PolyPaw guarda sus misiones y el

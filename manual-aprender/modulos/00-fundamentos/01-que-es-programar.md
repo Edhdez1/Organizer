@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es programar?
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En este capítulo todavía no vas a escribir código. Primero quiero que te quede clara una
 > idea: qué es programar de verdad. Mucha gente arranca creyendo otra cosa, choca con la
 > realidad y abandona. Vamos a evitarte ese tropiezo.

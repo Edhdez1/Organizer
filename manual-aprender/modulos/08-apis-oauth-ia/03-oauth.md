@@ -1,5 +1,10 @@
 # Capítulo 03 — OAuth: login con terceros
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > ¿Te suena el botón "Iniciar sesión con Google"? Detrás de ese botón hay **OAuth**. Es lo que
 > permite que una app (como Faro) actúe en tu nombre en otro servicio (tu Google Drive, tu GitHub)
 > **sin que le entregues tu contraseña**. La primera vez parece cosa de magia, pero en realidad es

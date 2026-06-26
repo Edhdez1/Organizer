@@ -1,5 +1,10 @@
 # Capítulo 04 — La terminal
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > La terminal intimida al principio (es esa pantalla negra que sale en las películas de
 > "hackers"), pero la verdad es que resulta mucho **más simple** de lo que parece, y a la vez
 > es de las herramientas que más rinden. La vas a usar para Git, para Python, para tu NAS y para

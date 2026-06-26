@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es HTML?
 
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tu primera línea de código de verdad está a unos minutos. Pero antes vale la pena entender
 > qué es HTML y, sobre todo, qué **no** es. Aclarar eso desde el principio te ahorra confusiones
 > que mucha gente arrastra durante años.

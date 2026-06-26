@@ -1,5 +1,10 @@
 # Capítulo 03 — La estructura de un documento
 
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora hemos ido soltando contenido dentro del `<body>` sin más. En este capítulo le
 > vamos a dar a la página una **estructura de verdad**: por un lado la cabecera invisible
 > (`<head>`), donde viven los metadatos; por otro, un cuerpo **semántico** que tanto las máquinas

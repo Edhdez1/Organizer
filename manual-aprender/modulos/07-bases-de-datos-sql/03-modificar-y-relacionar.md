@@ -1,5 +1,10 @@
 # Capítulo 03 — Modificar y relacionar
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Ya sabes **leer** datos. Toca el otro lado: **crear, cambiar y borrar** filas, y también
 > **combinar tablas relacionadas** con `JOIN`. Cuando termines este capítulo habrás visto las
 > cuatro operaciones básicas que hace cualquier base de datos, las que se conocen como **CRUD**.

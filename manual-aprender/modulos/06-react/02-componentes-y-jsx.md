@@ -1,5 +1,10 @@
 # Capítulo 02 — Componentes y JSX
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Ya sabes que un componente es "una función que devuelve interfaz". Toca aprender a
 > escribirlos en serio y a entender **JSX**: ese "HTML dentro de JavaScript" que al principio
 > echa un poco para atrás y, en cuanto le coges el truco, se vuelve de lo más natural.

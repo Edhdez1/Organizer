@@ -1,5 +1,10 @@
 # Capítulo 04 — Integrar IA
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Meter inteligencia artificial en una app suena a película futurista, pero a estas alturas ya lo
 > hueles: en el fondo es **consumir una API** (capítulo 02), solo que el servicio del otro lado es
 > un modelo de IA. Tu sitio ya lo hace con Claude; Faro, con OpenAI. En este capítulo verás cómo

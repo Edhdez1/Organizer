@@ -1,5 +1,10 @@
 # Capítulo 03 — El modelo de cajas
 
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Esta es **la idea más importante de todo CSS**. Cuando de verdad entiendes el modelo de cajas,
 > entiendes el 80% de por qué las cosas se ven y se espacian como se ven. Y si no lo entiendes,
 > CSS se siente como magia caótica que a veces obedece y a veces no. Así que vamos despacio,

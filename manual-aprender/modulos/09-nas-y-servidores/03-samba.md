@@ -1,5 +1,10 @@
 # Capítulo 03 — Compartir archivos con Samba
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Lo que hace de verdad útil a un NAS es poder **compartir archivos** por la red y abrirlos
 > desde el teléfono, la laptop o la tele sin tener que copiarlos de un lado a otro. En tu NAS,
 > de eso se encarga **Samba**, que pone a disposición el recurso compartido **`PolyPawNAS`**.

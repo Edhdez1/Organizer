@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es CSS?
 
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > En HTML aprendiste a colocar el contenido. El problema es que se veía bastante soso: texto negro,
 > fondo blanco y todo apilado uno tras otro. CSS es justo lo que arregla eso. En este capítulo vas a
 > entender qué es, cómo se engancha a tu HTML y cómo se escribe, que es más fácil y lógico de lo que parece.

@@ -1,5 +1,10 @@
 # Capítulo 05 — Hooks y efectos
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Llegamos al último tramo de React: los **hooks**. Ya trabajaste con `useState`, así que la
 > mitad del camino la tienes andada. Ahora toca `useEffect` (el que usas para "efectos" como
 > cargar datos) y la idea de los **hooks personalizados**, que es justo la forma en que están

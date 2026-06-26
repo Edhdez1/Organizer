@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es TypeScript?
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Este módulo es corto y muy rentable: TypeScript es JavaScript que ya conoces, más una "red de
 > seguridad". Entender el *porqué* es la mitad del trabajo; la otra mitad es sintaxis sencilla.
 

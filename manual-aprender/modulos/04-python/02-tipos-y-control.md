@@ -1,5 +1,10 @@
 # Capítulo 02 — Tipos y control de flujo
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Vamos a ver los tipos de dato de Python y cómo tomar decisiones y repetir cosas. Como ya
 > pasaste por esto en JavaScript, el capítulo irá ligero: lo que de verdad nos interesa son
 > **las diferencias** a la hora de escribirlo. Quédate con una idea de fondo: *mismos

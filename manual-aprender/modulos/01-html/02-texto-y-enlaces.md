@@ -1,5 +1,10 @@
 # Capítulo 02 — Etiquetas de texto y enlaces
 
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Ya sabes qué es una etiqueta. Toca conocer las que vas a usar el 90% del tiempo: las de
 > texto, listas, enlaces e imágenes. Con esto ya armas páginas con contenido de verdad.
 

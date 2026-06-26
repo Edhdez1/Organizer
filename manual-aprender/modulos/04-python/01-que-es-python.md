@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es Python?
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Buenas noticias: ya sabes programar. En el Módulo 03 aprendiste los conceptos (variables,
 > decisiones, bucles, funciones). Python usa **los mismos conceptos**, solo que escritos de
 > forma distinta —y, para muchos, más clara—. Este módulo te va a costar menos porque ya tienes

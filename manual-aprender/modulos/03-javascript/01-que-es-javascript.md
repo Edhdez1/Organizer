@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es JavaScript?
 
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Aquí empieza la programación de verdad. En el Módulo 00 viste que casi cualquier programa
 > se arma con tres ingredientes: **datos, decisiones y repeticiones**. JavaScript es donde por
 > fin los escribes con tus propias manos. Arranquemos por lo básico: qué es y cómo se guardan

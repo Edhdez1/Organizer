@@ -1,5 +1,10 @@
 # Capítulo 05 — Datos, JSON y fetch
 
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Cerramos JavaScript con tres cosas que van de la mano: cómo se manejan **colecciones de
 > datos** (listas y objetos), el formato **JSON** (el que usan PolyPaw y prácticamente todas
 > las APIs) y cómo **pedirle datos a internet** con `fetch`. Esto último es, ni más ni menos,

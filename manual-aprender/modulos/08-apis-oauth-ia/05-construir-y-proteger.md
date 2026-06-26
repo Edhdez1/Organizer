@@ -1,5 +1,10 @@
 # Capítulo 05 — Construir y proteger una API
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta aquí estuviste del lado del que **consume** APIs de otros. Ahora le damos la vuelta: vas a
 > ver cómo tus propias apps **ofrecen** su API (su backend) y, lo más importante, cómo
 > **protegerla**. Cerramos el módulo entendiendo el backend de Faro y los Workers de tu sitio.

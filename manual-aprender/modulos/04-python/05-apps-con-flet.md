@@ -1,5 +1,10 @@
 # Capítulo 05 — Apps con Flet
 
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > A estas alturas ya manejas Python: variables, decisiones, bucles, funciones, listas,
 > diccionarios y archivos JSON. Para cerrar el módulo vamos a ver cómo todo eso termina
 > convirtiéndose en una **app con interfaz** usando **Flet**, el framework con el que está hecho

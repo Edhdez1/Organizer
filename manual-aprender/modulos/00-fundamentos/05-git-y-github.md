@@ -1,5 +1,10 @@
 # Capítulo 05 — Git y GitHub
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tus cuatro proyectos viven en GitHub. Cada vez que la IA "subió cambios", por debajo estaba
 > usando Git. Entender Git es entender cómo se guarda, se versiona y se comparte el código en el
 > trabajo real. Y de paso te da una red de seguridad: puedes experimentar tranquilo, porque

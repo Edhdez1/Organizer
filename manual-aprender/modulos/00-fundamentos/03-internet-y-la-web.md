@@ -1,5 +1,10 @@
 # Capítulo 03 — Internet y la web
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tus cuatro proyectos viven en internet o se conectan a él. Aquí vas a entender, sin nada de
 > magia, qué ocurre exactamente desde que escribes una dirección hasta que aparece una página
 > en pantalla. Este capítulo es la base del módulo de NAS y redes (09) y de casi todo lo "web".

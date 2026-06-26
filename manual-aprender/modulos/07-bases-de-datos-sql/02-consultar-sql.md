@@ -1,5 +1,10 @@
 # Capítulo 02 — Consultar con SQL
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > SQL tiene una ventaja: se lee casi como una frase en inglés, así que se aprende deprisa. En
 > este capítulo te centras en lo que más vas a hacer con una base de datos: **pedirle datos**.
 > Con `SELECT`, `WHERE` y `ORDER BY` ya puedes sacar exactamente lo que necesitas, ni más ni menos.

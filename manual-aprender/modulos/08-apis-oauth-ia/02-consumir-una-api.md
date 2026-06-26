@@ -1,5 +1,10 @@
 # Capítulo 02 — Consumir una API
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > "Consumir" una API es usarla desde tu código: hacerle peticiones y leer lo que te responde.
 > Lo bueno es que la herramienta ya la conoces (`fetch`, del Módulo 03). Aquí la combinamos con
 > headers, métodos y **claves de API**, que es la parte nueva.

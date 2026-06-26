@@ -1,5 +1,10 @@
 # Capítulo 04 — Supabase: Postgres en la nube
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Ya sabes SQL y qué es Postgres. Pero queda una pregunta práctica: ¿quién aloja esa base de datos
 > para que tu app la use desde internet, con login de usuarios y todo listo para funcionar? En tus
 > proyectos, la respuesta es **Supabase**. En este capítulo verás qué es y cómo tus apps se

@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es un servidor y un NAS?
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Cambiamos de tema: pasamos de escribir apps a las **máquinas que las hacen funcionar**. Y aquí
 > tienes una ventaja: ya posees un servidor de verdad (tu `polypaw-nas`), así que nada de esto va a
 > quedarse en teoría abstracta. Vas a entender exactamente qué tienes en casa y por qué te sirve

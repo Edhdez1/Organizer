@@ -1,5 +1,10 @@
 # Capítulo 04 — Formularios
 
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Un formulario es la forma en que tu página **recibe datos** del usuario: su nombre, su correo,
 > un mensaje. Tu sitio ya tiene uno, el de contacto, que termina enviando la info a tu WhatsApp.
 > En este capítulo vamos pieza por pieza y, de paso, verás ideas que volverán a aparecer cuando

@@ -1,5 +1,10 @@
 # Capítulo 04 — Funciones tipadas y genéricos
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Las funciones son donde los tipos más brillan: declaras qué **reciben** y qué **devuelven**, y
 > TypeScript vigila los dos extremos. Al final le echamos un vistazo a los **genéricos**, que
 > suenan intimidantes pero esconden una idea bastante sencilla.

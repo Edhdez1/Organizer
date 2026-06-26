@@ -1,5 +1,10 @@
 # Capítulo 05 — Accesibilidad y buenas prácticas
 
+<p align="center">
+  <img src="../../recursos/imagenes/01-html/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Cerramos HTML con algo que de verdad marca la diferencia entre un principiante y un
 > profesional: hacer páginas que **cualquiera** pueda usar, incluidas personas con discapacidad.
 > No es un adorno opcional. Es calidad, en muchos países es ley, y Google lo tiene en cuenta para

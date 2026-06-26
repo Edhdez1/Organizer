@@ -1,5 +1,10 @@
 # Capítulo 03 — Props
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Un componente reutilizable tiene que poder mostrar **datos distintos** cada vez: la misma
 > `HabitCard` te sirve para "Leer", para "Ejercicio" o para "Meditar". Eso se consigue con las **props**,
 > que son los datos que un componente recibe de quien lo usa. Es el segundo concepto más importante de React.

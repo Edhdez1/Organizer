@@ -1,5 +1,10 @@
 # Capítulo 02 — Tipos básicos y anotaciones
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Pasemos a la práctica: cómo se escriben los tipos en el día a día. Vas a ver que es muy
 > poca sintaxis y que casi todo cuadra solo. La regla de oro ya la tienes: **nombre `:` tipo**.
 

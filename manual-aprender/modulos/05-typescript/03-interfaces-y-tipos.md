@@ -1,5 +1,10 @@
 # Capítulo 03 — Interfaces y tipos propios
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap03.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Los tipos básicos te sacan del apuro cuando tienes una variable suelta. Pero los datos de verdad
 > casi nunca vienen sueltos: son **objetos con forma**. Un usuario tiene nombre, edad y correo; un
 > hábito tiene nombre, meta y color. En este capítulo vas a aprender a **describir esa forma** con

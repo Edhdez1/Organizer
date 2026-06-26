@@ -1,5 +1,10 @@
 # Capítulo 04 — El DOM y los eventos
 
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora JavaScript solo conversaba con la consola. A partir de aquí empieza a hacer lo que
 > de verdad cuenta en una web: **cambiar la página mientras la miras** y **responder a lo que hace
 > quien la usa** (clics, escritura). Este es el punto donde HTML, CSS y JavaScript dejan de ir cada

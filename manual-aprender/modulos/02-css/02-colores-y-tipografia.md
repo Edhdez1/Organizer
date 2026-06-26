@@ -1,5 +1,10 @@
 # Capítulo 02 — Colores, unidades y tipografía
 
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Este es **el** capítulo que te da el superpoder que pediste: elegir colores con un código
 > exacto y controlar tamaños con precisión. Cuando lo termines, podrás decir *"el fondo en
 > `#1B6B6B`, el texto a `1.125rem`, el botón con `0.5rem` de espaciado"* y saber exactamente qué

@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es una base de datos?
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Cualquier app que se tome en serio tiene que **recordar** cosas de una sesión a otra: tus
 > hábitos, tus proyectos, tu perfil. Ese "recuerdo permanente" es la base de datos. Y antes de
 > que te asuste la palabra, te adelanto algo: la idea de fondo es bastante simple. En el fondo,

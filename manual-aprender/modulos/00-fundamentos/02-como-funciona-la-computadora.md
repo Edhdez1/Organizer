@@ -1,5 +1,10 @@
 # Capítulo 02 — Cómo funciona una computadora
 
+<p align="center">
+  <img src="../../recursos/imagenes/00-fundamentos/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Programar se vuelve más fácil cuando tienes en la cabeza una imagen simple de qué hay
 > "dentro" de una computadora. No hace falta que seas ingeniero de hardware; sí te conviene
 > conocer estas piezas básicas, porque van a salir una y otra vez (sobre todo cuando lleguemos

@@ -1,5 +1,10 @@
 # Capítulo 05 — Usarlo y montar uno desde cero
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Cerramos el módulo (y el manual) con la parte más práctica: **qué hacer con tu NAS**
 > aparte de guardar archivos, y una **guía para montar uno desde cero** entendiendo cada
 > decisión en lugar de copiar comandos a ciegas. Es el paso final para dejar atrás el "vibe

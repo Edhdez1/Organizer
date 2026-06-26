@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es una API?
 
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > La palabra "API" suena a término de ingeniero, pero detrás hay una idea de lo más
 > cotidiana. Una vez que la captas, empiezas a verlas por todas partes: son la forma en que
 > los programas se piden cosas unos a otros. Y como ya entendiste el modelo cliente–servidor

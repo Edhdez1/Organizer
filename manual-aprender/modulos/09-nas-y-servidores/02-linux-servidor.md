@@ -1,5 +1,10 @@
 # Capítulo 02 — Linux y la terminal del servidor
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap02.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tu NAS corre **Ubuntu Server**, una versión de Linux **sin escritorio**: todo se hace
 > escribiendo comandos. La terminal ya la conociste en el Módulo 00; aquí la usas para algo
 > real, administrar un servidor de verdad: usuarios, permisos, discos y servicios. Esta es la

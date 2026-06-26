@@ -1,5 +1,10 @@
 # Capítulo 05 — Seguridad: RLS y autenticación
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Si la clave pública de Supabase la puede ver cualquiera, ¿qué impide que un usuario lea
 > los hábitos de otro? La respuesta tiene nombre: **RLS**. Es una de las ideas de seguridad
 > que más te van a servir, así que cerramos el módulo viendo con calma cómo tus datos se

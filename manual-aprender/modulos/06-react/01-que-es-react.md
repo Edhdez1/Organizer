@@ -1,5 +1,10 @@
 # Capítulo 01 — ¿Qué es React?
 
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap01.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > React es la pieza que conecta todo lo aprendido: usa JavaScript (Módulo 03) y TypeScript
 > (Módulo 05) para construir interfaces como las del Módulo 01 (HTML) y 02 (CSS), pero de forma
 > **organizada y reactiva**. Empecemos por la idea grande antes de tocar código.

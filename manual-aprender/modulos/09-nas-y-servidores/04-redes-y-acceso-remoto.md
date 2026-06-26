@@ -1,5 +1,10 @@
 # Capítulo 04 — Redes desde cero y acceso remoto
 
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Para sacarle partido a tu NAS hace falta entender algo de **redes**: cómo se encuentran los
 > dispositivos entre sí, qué es una IP, qué es un puerto y, lo más divertido, cómo entrar a tu NAS
 > de forma **segura cuando estás fuera de casa**. Tu equipo ya tiene esto resuelto: usa **Tailscale**

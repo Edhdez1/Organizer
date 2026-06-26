@@ -1,5 +1,10 @@
 # Capítulo 04 — Layout con Flexbox
 
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap04.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora las cajas se apilaban una sobre otra. Pero ¿cómo pones tres tarjetas **en fila**?
 > ¿Cómo centras algo perfectamente? ¿Cómo haces una barra de menú con el logo a la izquierda y
 > los enlaces a la derecha? La respuesta moderna es **Flexbox**, y es más fácil de lo que temes.

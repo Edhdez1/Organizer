@@ -1,5 +1,10 @@
 # Capítulo 05 — Diseño responsive
 
+<p align="center">
+  <img src="../../recursos/imagenes/02-css/cap05.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Tu sitio lo abre gente desde un teléfono pequeño, una tablet, una laptop y un monitor enorme.
 > ¿Cómo haces que se vea bien en **todos**? Con **diseño responsive**. Cerramos el módulo de
 > CSS justo con la pieza que hace que tu web se vea profesional en cualquier pantalla. (De hecho,
