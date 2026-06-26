@@ -43,7 +43,17 @@ diferencia entre "guardar en un archivo" y "guardar en una base de datos de verd
 | 03 | [Modificar y relacionar](03-modificar-y-relacionar.md) | `INSERT`/`UPDATE`/`DELETE`, claves, `JOIN` |
 | 04 | [Supabase: Postgres en la nube](04-supabase.md) | Qué es, tablas, cómo la app se conecta |
 | 05 | [Seguridad: RLS y autenticación](05-rls-y-auth.md) | Row-Level Security, login, por qué importa |
+| 06 | [Diseñar tablas: tipos y esquema](06-disenar-tablas-y-tipos.md) | Tipos de Postgres, `NOT NULL`, `DEFAULT`, esquema |
+| 07 | [Claves y relaciones](07-claves-y-relaciones.md) | Primary/foreign key, uno-a-muchos, `CASCADE` |
+| 08 | [Consultas avanzadas y JOIN](08-consultas-avanzadas.md) | `INNER`/`LEFT JOIN`, subconsultas, paginación |
+| 09 | [Agregaciones y GROUP BY](09-agregaciones-y-grupos.md) | `COUNT`/`SUM`/`AVG`, `GROUP BY`, `HAVING`, `CASE` |
+| 10 | [Índices y rendimiento](10-indices-y-rendimiento.md) | Qué es un índice, cuándo crearlo, `EXPLAIN` |
+| 11 | [Supabase a fondo](11-supabase-a-fondo.md) | `supabase-js`, `.from().select()`, filtros, claves |
+| 12 | [Row-Level Security (RLS) a fondo](12-rls-a-fondo.md) | Políticas, `auth.uid()`, proteger datos por usuario |
+| 13 | [Migraciones y cambios de esquema](13-migraciones-y-cambios.md) | `ALTER TABLE`, versionar el esquema, seeds |
+| 14 | [Mini-proyecto: diseña una base de datos](14-mini-proyecto-bd.md) | La BD de una app de hábitos desde cero |
+| 15 | [Glosario de bases de datos](15-glosario-sql.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 07 — versión ampliada (capítulos 01–15, ~100 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es una base de datos?](01-que-es-base-de-datos.md)**.
