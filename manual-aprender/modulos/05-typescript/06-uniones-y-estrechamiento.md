@@ -1,5 +1,10 @@
 # Capitulo 06 — Uniones, literales y estrechamiento
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hola otra vez, soy **Bit**, tu ajolote guia. En el capitulo anterior aprendiste a ponerle "etiquetas" a tus datos con tipos. Hoy vamos a dar un paso enorme: aprender a decir cosas como *"esto es texto **o** numero"* y *"este estado solo puede ser `activo` o `pausado`, nada mas"*. Y lo mejor: TypeScript te ayudara a **descubrir cual de las dos cosas es** justo en el momento en que lo necesitas. A eso se le llama *estrechamiento*, y es una de las magias mas utiles del lenguaje. Respira, mueve las branquias, y vamos.
 
 Recuerda la idea base de todo este modulo: **TypeScript es JavaScript con tipos**. Todo lo que veras hoy se ejecuta como JavaScript normal; los tipos solo viven mientras escribes el codigo y desaparecen al compilar. Asi que apoyate en lo que ya sabes de JavaScript (modulo 03): condicionales, `typeof`, comparaciones con `===`, valores "verdaderos" y "falsos".

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 11 — TypeScript con React — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-11-typescript-con-react">Capítulo 11 — TypeScript con React</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap11.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Llevas diez capítulos tipando funciones, objetos y datos que llegan de afuera. Ahora viene
+el momento que estabas esperando sin saberlo: <strong>¿cómo se juntan TypeScript y React?</strong> React
+es la librería con la que están construidas RachaSimple (la app de hábitos) y Faro (tu
+organizador de proyectos). Y resulta que React + TypeScript es una de las parejas más felices
+de la programación moderna: cada <strong>componente</strong>, cada <strong>prop</strong>, cada <strong>estado</strong> puede llevar su
+tipo, y el editor te avisa al instante si le pasas algo equivocado. Este capítulo es el
+<strong>puente al Módulo 06</strong> (donde aprenderás React de verdad): aquí no vamos a enseñarte React
+entero, sino a <strong>leer y tipar</strong> los pedazos de React que ya viven en tus repos reales. Bit, tu
+ajolote, te recuerda algo que ya sabes: <strong>TypeScript es JavaScript con tipos.</strong> React con TS es
+el mismo React de siempre, solo que con etiquetas que dicen qué forma tiene cada cosa. Vamos.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-un-componente-y-por-que-tiparlo">1. ¿Qué es un componente y por qué tiparlo?</h2>
+<p>En React, la interfaz se arma con <strong>componentes</strong>: funciones que devuelven un pedazo de pantalla.
+Mira el componente más pequeño de Faro, <code>PhaseBadge</code> (la etiqueta de color que muestra la fase de
+un proyecto):</p>
+<pre><code class="language-typescript">import { Badge } from &quot;@/components/ui&quot;;
+import { phaseConfig } from &quot;@/lib/phases&quot;;
+import type { ProjectPhase } from &quot;@/lib/types&quot;;
+
+export function PhaseBadge({ phase }: { phase: ProjectPhase }) {
+  const cfg = phaseConfig(phase);
+  return &lt;Badge className={cfg.className}&gt;{cfg.label}&lt;/Badge&gt;;
+}
+</code></pre>
+<p>Eso es todo: una función que recibe un dato (<code>phase</code>) y devuelve algo que se ve en pantalla
+(<code>&lt;Badge&gt;...&lt;/Badge&gt;</code>). Ese «algo que se ve» es <strong>JSX</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-componente">🟦 ¿Qué significa? — <em>Componente</em></h3>
+<p>Un <strong>componente</strong> es una función de JavaScript que devuelve interfaz (un trozo de pantalla).
+<strong>Para qué sirve:</strong> dividir la app en piezas reutilizables, como ladrillos. <strong>Dónde se usa:</strong> en
+RachaSimple, <code>HabitCard</code> dibuja una tarjeta de hábito; en Faro, <code>PhaseBadge</code> dibuja la etiqueta
+de fase. Cada pantalla es muchos componentes anidados.</p>
+<h3 id="que-significa-jsx-tsx">🟦 ¿Qué significa? — <em>JSX / TSX</em></h3>
+<p><strong>JSX</strong> es una sintaxis que deja escribir «HTML dentro de JavaScript» (como <code>&lt;Badge&gt;...&lt;/Badge&gt;</code>).
+Cuando ese archivo lleva tipos de TypeScript, la extensión es <strong><code>.tsx</code></strong> en vez de <code>.ts</code>. <strong>Para
+qué sirve:</strong> describir cómo se ve un componente sin separar el HTML del código. <strong>Dónde se ve:</strong>
+todos los archivos de pantalla en tus repos terminan en <code>.tsx</code> — <code>HabitCard.tsx</code>, <code>project-card.tsx</code>.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>¿Por qué <code>{ phase }</code> entre llaves? Es <strong>desestructuración</strong> (la viste en el Módulo 03). React le
+pasa al componente un solo objeto con todas sus props, y tú sacas las que necesitas por nombre.
+<code>{ phase }</code> significa «dame la propiedad <code>phase</code> de ese objeto».</p>
+</blockquote>
+<hr />
+<h2 id="2-tipar-las-props-con-una-interface">2. Tipar las props con una <code>interface</code></h2>
+<p>Las <strong>props</strong> son los datos que un componente recibe de quien lo usa, como los argumentos de una
+función. Cuando son una o dos, puedes escribir el tipo en línea (como <code>{ phase }: { phase: ProjectPhase }</code>).
+Pero cuando son varias, lo limpio es declarar una <code>interface</code> (recuerda el Capítulo 03).</p>
+<p>Mira <code>MetricCard</code> de RachaSimple, la tarjeta que muestra una métrica (por ejemplo «Racha actual: 7»):</p>
+<pre><code class="language-typescript">import type { LucideIcon } from 'lucide-react';
+import { SoftCard } from './SoftCard';
+
+interface MetricCardProps {
+  label: string;
+  value: string | number;
+  caption?: string;
+  icon?: LucideIcon;
+}
+
+export function MetricCard({ label, value, caption, icon: Icon }: MetricCardProps) {
+  return (
+    &lt;SoftCard className=&quot;space-y-2&quot;&gt;
+      &lt;div className=&quot;flex items-center justify-between&quot;&gt;
+        &lt;p className=&quot;text-xs ...&quot;&gt;{label}&lt;/p&gt;
+        {Icon &amp;&amp; &lt;Icon size={16} className=&quot;text-muted-foreground&quot; /&gt;}
+      &lt;/div&gt;
+      &lt;p className=&quot;font-display text-4xl ...&quot;&gt;{value}&lt;/p&gt;
+      {caption &amp;&amp; &lt;p className=&quot;text-sm text-muted-foreground&quot;&gt;{caption}&lt;/p&gt;}
+    &lt;/SoftCard&gt;
+  );
+}
+</code></pre>
+<p>Lee la <code>interface</code> como una lista de requisitos: «quien use <code>MetricCard</code> <strong>tiene que</strong> darme un
+<code>label</code> (texto) y un <code>value</code> (texto o número), y <strong>puede</strong> darme un <code>caption</code> y un <code>icon</code>».</p>
+<blockquote class="def">
+<h3 id="que-significa-props">🟦 ¿Qué significa? — <em>Props</em></h3>
+<p><strong>Props</strong> (de <em>properties</em>) son los datos de entrada de un componente. Quien usa el componente
+se los pasa como atributos: <code>&lt;MetricCard label="Racha" value={7} /&gt;</code>. <strong>Para qué sirven:</strong> que el
+mismo componente sirva para muchos casos cambiando solo los datos. <strong>Dónde se ve:</strong> en RachaSimple
+la pantalla de inicio usa varios <code>MetricCard</code> con distintos <code>label</code> y <code>value</code>.</p>
+<h3 id="que-significa-interface-de-props">🟦 ¿Qué significa? — <em>Interface de props</em></h3>
+<p>Es una <code>interface</code> que describe <strong>la forma exacta</strong> de las props que un componente acepta. Por
+convención se llama <code>NombreDelComponente</code> + <code>Props</code> (<code>MetricCardProps</code>, <code>PageHeaderProps</code>). <strong>Para
+qué sirve:</strong> que TypeScript revise que le pasas las props correctas y que el editor te las
+autocomplete. <strong>Dónde se ve:</strong> en casi todos los componentes de RachaSimple y Faro.</p>
+</blockquote>
+<p>Lo bonito: si por error escribes <code>&lt;MetricCard value={7} /&gt;</code> (olvidaste <code>label</code>), TypeScript te
+subraya en rojo <strong>antes de abrir el navegador</strong>: «falta la propiedad <code>label</code>». Es el mismo poder
+que ya conoces, ahora cuidando tu interfaz.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Abre <code>RachaSimple/src/components/racha/MetricCard.tsx</code>. Fíjate en <code>icon?: LucideIcon</code>. <code>LucideIcon</code>
+es un <strong>tipo importado</strong> de la librería de íconos <code>lucide-react</code>: el componente exige que, si le
+pasas un ícono, sea uno de verdad de esa librería, no cualquier cosa.</p>
+</blockquote>
+<hr />
+<h2 id="3-props-opcionales-y-valores-por-defecto">3. Props opcionales y valores por defecto</h2>
+<p>¿Viste el <code>?</code> en <code>caption?: string</code> y <code>icon?: LucideIcon</code>? Ese signo de pregunta lo aprendiste en
+el Capítulo 03: marca una propiedad como <strong>opcional</strong>. Quien use <code>MetricCard</code> puede dárselas o no.</p>
+<blockquote class="def">
+<h3 id="que-significa-prop-opcional">🟦 ¿Qué significa? — <em>Prop opcional</em></h3>
+<p>Una <strong>prop opcional</strong> lleva <code>?</code> después de su nombre en la <code>interface</code> (<code>caption?: string</code>).
+Significa que se puede omitir; su valor será <code>undefined</code> si no la pasan. <strong>Para qué sirve:</strong>
+componentes flexibles que no obligan a llenar todo. <strong>Dónde se ve:</strong> en <code>MetricCard</code>, <code>caption</code>
+e <code>icon</code> son opcionales; <code>label</code> y <code>value</code> son obligatorias.</p>
+</blockquote>
+<p>Cuando una prop es opcional, el componente debe protegerse por si llega <code>undefined</code>. Por eso
+<code>MetricCard</code> escribe <code>{caption &amp;&amp; &lt;p&gt;...&lt;/p&gt;}</code>: «si hay <code>caption</code>, dibújalo; si no, nada». Es el
+mismo <strong>estrechamiento</strong> del Capítulo 06.</p>
+<p>A veces quieres que una prop opcional tenga un <strong>valor por defecto</strong> en lugar de quedar <code>undefined</code>.
+Eso se hace al desestructurar, igual que con argumentos de función. Mira el <code>Logo</code> de Faro:</p>
+<pre><code class="language-typescript">export function Logo({
+  showText = true,
+  size = 28,
+}: {
+  showText?: boolean;
+  size?: number;
+}) {
+  return (
+    &lt;span className=&quot;inline-flex items-center gap-2&quot;&gt;
+      &lt;svg width={size} height={size} viewBox=&quot;0 0 48 48&quot;&gt;{/* ...dibujo del faro... */}&lt;/svg&gt;
+      {showText &amp;&amp; &lt;span className=&quot;font-display ...&quot;&gt;Faro&lt;/span&gt;}
+    &lt;/span&gt;
+  );
+}
+</code></pre>
+<p><code>showText = true</code> significa: «si no me pasan <code>showText</code>, vale <code>true</code>». Así <code>&lt;Logo /&gt;</code> muestra el
+texto, y <code>&lt;Logo showText={false} /&gt;</code> muestra solo el dibujo. Lo mismo con <code>size = 28</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-valor-por-defecto">🟦 ¿Qué significa? — <em>Valor por defecto</em></h3>
+<p>Un <strong>valor por defecto</strong> es el que toma una prop cuando no se la pasan, escrito con <code>=</code> en la
+desestructuración (<code>size = 28</code>). <strong>Para qué sirve:</strong> que el componente funcione «de fábrica» sin
+obligar a configurarlo. <strong>Dónde se ve:</strong> en el <code>Logo</code> de Faro, <code>showText</code> y <code>size</code> vienen con
+valores listos.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>El <code>?</code> en la <code>interface</code> y el <code>= valor</code> en la desestructuración son <strong>dos cosas distintas pero
+complementarias.</strong> El <code>?</code> le dice a TS «esta prop se puede omitir». El <code>= 28</code> decide <strong>qué pasa</strong>
+cuando la omiten. Si pones valor por defecto, casi siempre marcas la prop opcional con <code>?</code> también,
+para que TS no la exija al usarla.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>¿Notaste el truco <code>icon: Icon</code> en <code>MetricCard</code>? Eso <strong>renombra</strong> al desestructurar: la prop se
+llama <code>icon</code>, pero dentro del componente la usamos como <code>Icon</code> (con mayúscula). React exige que
+los componentes empiecen con mayúscula para distinguirlos de las etiquetas HTML normales.</p>
+</blockquote>
+<hr />
+<h2 id="4-tipar-children-con-reactnode">4. Tipar <code>children</code> con <code>ReactNode</code></h2>
+<p>Muchos componentes envuelven a otros. En <code>&lt;SoftCard&gt;contenido&lt;/SoftCard&gt;</code>, ese «contenido» que va
+entre la apertura y el cierre es una prop especial llamada <strong><code>children</code></strong> (hijos). ¿De qué tipo es?
+De <code>ReactNode</code>.</p>
+<p>Mira <code>PageHeader</code> de RachaSimple, que recibe un <code>action</code> (por ejemplo, un botón) para ponerlo a la
+derecha del título:</p>
+<pre><code class="language-typescript">import type { ReactNode } from 'react';
+
+interface PageHeaderProps {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  action?: ReactNode;
+}
+
+export function PageHeader({ eyebrow, title, description, action }: PageHeaderProps) {
+  return (
+    &lt;header className=&quot;mb-7 space-y-4&quot;&gt;
+      {eyebrow &amp;&amp; &lt;p className=&quot;...&quot;&gt;{eyebrow}&lt;/p&gt;}
+      &lt;div className=&quot;flex items-start justify-between gap-4&quot;&gt;
+        &lt;div className=&quot;space-y-2&quot;&gt;
+          &lt;h1 className=&quot;...&quot;&gt;{title}&lt;/h1&gt;
+          {description &amp;&amp; &lt;p className=&quot;...&quot;&gt;{description}&lt;/p&gt;}
+        &lt;/div&gt;
+        {action}
+      &lt;/div&gt;
+    &lt;/header&gt;
+  );
+}
+</code></pre>
+<p><code>action?: ReactNode</code> significa: «opcionalmente recíbeme <strong>cualquier cosa que React pueda dibujar</strong>».
+Un botón, un texto, un ícono, varios elementos juntos… todo eso es <code>ReactNode</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-children">🟦 ¿Qué significa? — <em><code>children</code></em></h3>
+<p><strong><code>children</code></strong> es la prop automática que contiene lo que escribes <strong>entre</strong> la etiqueta de apertura
+y la de cierre de un componente: en <code>&lt;SoftCard&gt;hola&lt;/SoftCard&gt;</code>, <code>children</code> es <code>"hola"</code>. <strong>Para qué
+sirve:</strong> hacer componentes «contenedores» que envuelven a otros. <strong>Dónde se ve:</strong> <code>SoftCard</code> de
+RachaSimple envuelve el contenido de muchas tarjetas.</p>
+<h3 id="que-significa-reactnode">🟦 ¿Qué significa? — <em><code>ReactNode</code></em></h3>
+<p><strong><code>ReactNode</code></strong> es el tipo de «cualquier cosa que React puede mostrar en pantalla»: texto, números,
+un elemento JSX, una lista de elementos, <code>null</code>, etc. Se importa de <code>react</code>. <strong>Para qué sirve:</strong>
+tipar <code>children</code> o cualquier prop que reciba contenido renderizable. <strong>Dónde se ve:</strong> en <code>PageHeader</code>
+de RachaSimple la prop <code>action</code> es <code>ReactNode</code>.</p>
+</blockquote>
+<p>Cuando un componente recibe <code>children</code> directamente (no con otro nombre como <code>action</code>), su tipo
+también es <code>ReactNode</code>. Una forma típica de tiparlo:</p>
+<pre><code class="language-typescript">interface SeccionProps {
+  titulo: string;
+  children: ReactNode;
+}
+
+function Seccion({ titulo, children }: SeccionProps) {
+  return (
+    &lt;section&gt;
+      &lt;h2&gt;{titulo}&lt;/h2&gt;
+      {children}
+    &lt;/section&gt;
+  );
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <code>SoftCard.tsx</code> de RachaSimple no aparece la palabra <code>children</code> en una <code>interface</code> propia: el
+componente extiende <code>HTMLAttributes&lt;HTMLDivElement&gt;</code>, un tipo de React que <strong>ya incluye</strong> <code>children</code>
+y todos los atributos de un <code>&lt;div&gt;</code> (como <code>className</code> y <code>style</code>). Es un truco avanzado que verás a
+fondo en el Módulo 06; por ahora basta con saber que <code>children</code> siempre es del tipo <code>ReactNode</code>.</p>
+</blockquote>
+<hr />
+<h2 id="5-tipar-eventos-onclick-onchange">5. Tipar eventos: <code>onClick</code>, <code>onChange</code></h2>
+<p>Los componentes responden a lo que hace el usuario: clics, teclas, texto que escribe. Eso son
+<strong>eventos</strong>, y React los maneja con props que empiezan por <code>on</code>: <code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>.</p>
+<p>El caso más simple aparece en <code>ColorPicker</code> de RachaSimple (el selector de color de un hábito):</p>
+<pre><code class="language-typescript">interface ColorPickerProps {
+  value: string | null;
+  onChange: (color: string | null) =&gt; void;
+}
+
+export function ColorPicker({ value, onChange }: ColorPickerProps) {
+  return (
+    &lt;div className=&quot;flex flex-wrap gap-3&quot;&gt;
+      &lt;button type=&quot;button&quot; onClick={() =&gt; onChange(null)} aria-label=&quot;Sin color&quot;&gt;—&lt;/button&gt;
+      {HABIT_COLORS.map((c) =&gt; (
+        &lt;button key={c.id} type=&quot;button&quot; onClick={() =&gt; onChange(c.id)} title={c.label} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<p>Fíjate en dos cosas. Primero, <code>onChange</code> es una prop <strong>función</strong>: su tipo es
+<code>(color: string | null) =&gt; void</code> (el <code>=&gt; void</code> lo viste en el Capítulo 04: «no devuelve nada útil»).
+Segundo, <code>onClick={() =&gt; onChange(c.id)}</code> es lo que se ejecuta al hacer clic en ese botón.</p>
+<blockquote class="def">
+<h3 id="que-significa-evento">🟦 ¿Qué significa? — <em>Evento</em></h3>
+<p>Un <strong>evento</strong> es algo que ocurre en la interfaz: un clic, una tecla, un cambio de texto. <strong>Para
+qué sirve:</strong> reaccionar a lo que hace la persona. <strong>Dónde se ve:</strong> en <code>ColorPicker</code> cada botón
+tiene un <code>onClick</code> que avisa qué color se eligió.</p>
+<h3 id="que-significa-manejador-de-evento-event-handler">🟦 ¿Qué significa? — <em>Manejador de evento (event handler)</em></h3>
+<p>Es la función que se ejecuta cuando ocurre un evento, como <code>() =&gt; onChange(c.id)</code>. <strong>Para qué
+sirve:</strong> decir «cuando pase esto, haz aquello». <strong>Dónde se ve:</strong> en todos los <code>onClick</code> y <code>onChange</code>
+de tus apps.</p>
+</blockquote>
+<p>Cuando necesitas leer <strong>lo que el usuario escribió</strong> en un input, el manejador recibe un objeto
+<strong>evento</strong> que también lleva tipo. Mira el input de hora en <code>ReminderCard</code> de RachaSimple:</p>
+<pre><code class="language-typescript">&lt;input
+  type=&quot;time&quot;
+  value={time}
+  onChange={(e) =&gt; setTime(e.target.value)}
+/&gt;
+</code></pre>
+<p>Aquí <code>e</code> es el evento. <code>e.target.value</code> es el texto que el usuario tiene en el input. ¿De qué tipo
+es <code>e</code>? En este caso React lo <strong>deduce solo</strong>, porque el <code>&lt;input&gt;</code> es un elemento HTML que React ya
+conoce: <code>e</code> es del tipo <code>ChangeEvent&lt;HTMLInputElement&gt;</code>. No tienes que escribirlo.</p>
+<blockquote class="def">
+<h3 id="que-significa-changeevent">🟦 ¿Qué significa? — <em><code>ChangeEvent</code></em></h3>
+<p><strong><code>ChangeEvent&lt;HTMLInputElement&gt;</code></strong> es el tipo del evento que dispara un input al cambiar su valor.
+Lleva entre <code>&lt;&gt;</code> el tipo del elemento (un input, un textarea…). <strong>Para qué sirve:</strong> que
+<code>e.target.value</code> esté tipado como texto y el editor sepa qué propiedades tiene <code>e</code>. <strong>Dónde se
+usa:</strong> en <code>ReminderCard</code> y en la pantalla de login de RachaSimple, al leer lo que se escribe.</p>
+</blockquote>
+<p>A veces sí necesitas escribir el tipo del evento tú mismo: cuando defines el manejador <strong>aparte</strong>
+del JSX. Ahí React no puede deducirlo y se lo dices a mano:</p>
+<pre><code class="language-typescript">import type { ChangeEvent } from 'react';
+
+function manejarTexto(e: ChangeEvent&lt;HTMLInputElement&gt;) {
+  setNombre(e.target.value);
+}
+
+// ...y en el JSX:
+&lt;input value={nombre} onChange={manejarTexto} /&gt;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Regla práctica: si escribes el manejador <strong>en línea</strong> (<code>onChange={(e) =&gt; ...}</code>), normalmente React
+deduce el tipo de <code>e</code> y no escribes nada. Si lo defines como <strong>función separada</strong>, tendrás que
+ponerle el tipo (<code>ChangeEvent&lt;...&gt;</code>, <code>MouseEvent&lt;...&gt;</code>, etc.). El editor te dirá cuál falta.</p>
+</blockquote>
+<hr />
+<h2 id="6-tipar-usestate">6. Tipar <code>useState</code></h2>
+<p>Un componente recuerda cosas mientras está en pantalla: el texto a medio escribir, qué color se
+eligió, si un menú está abierto. Eso es el <strong>estado</strong>, y se guarda con el hook <code>useState</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-hook">🟦 ¿Qué significa? — <em>Hook</em></h3>
+<p>Un <strong>hook</strong> es una función especial de React cuyo nombre empieza por <code>use</code> (<code>useState</code>, <code>useRef</code>,
+<code>useEffect</code>). Da «superpoderes» a un componente: memoria, acceso al DOM, efectos. <strong>Para qué sirve:</strong>
+manejar estado y comportamiento. <strong>Dónde se ve:</strong> RachaSimple los usa en todas partes; los verás a
+fondo en el Módulo 06.</p>
+<h3 id="que-significa-estado-state">🟦 ¿Qué significa? — <em>Estado (state)</em></h3>
+<p>El <strong>estado</strong> es un dato que un componente guarda y que, al cambiar, hace que React vuelva a dibujar
+la pantalla. <strong>Para qué sirve:</strong> recordar y reaccionar (un contador, un campo de texto). <strong>Dónde se
+ve:</strong> en <code>ReminderCard</code> el estado guarda la hora del recordatorio.</p>
+</blockquote>
+<p><code>useState</code> devuelve dos cosas en un array: el valor actual y una función para cambiarlo. Mira un
+caso real de <code>ReferralCard</code> de RachaSimple:</p>
+<pre><code class="language-typescript">const [count, setCount] = useState&lt;number | null&gt;(null);
+</code></pre>
+<p>Lee la línea así: «<code>count</code> es el valor (un número o <code>null</code>), <code>setCount</code> lo cambia, y empieza valiendo
+<code>null</code>». El <code>&lt;number | null&gt;</code> entre ángulos es <strong>el tipo del estado</strong>, que ya conoces de los genéricos
+(Capítulo 04): le dice a <code>useState</code> qué clase de dato va a guardar.</p>
+<blockquote class="def">
+<h3 id="que-significa-usestate">🟦 ¿Qué significa? — <em><code>useState</code></em></h3>
+<p><strong><code>useState&lt;T&gt;(inicial)</code></strong> crea un estado del tipo <code>T</code> con un valor inicial, y devuelve
+<code>[valor, funciónParaCambiarlo]</code>. <strong>Para qué sirve:</strong> guardar datos que cambian con el tiempo.
+<strong>Dónde se usa:</strong> en <code>ReferralCard</code> guarda un contador (<code>number | null</code>) y en <code>ReminderCard</code> guarda
+la hora escrita (<code>string</code>).</p>
+</blockquote>
+<p>Más ejemplos reales de <code>ReminderCard</code>:</p>
+<pre><code class="language-typescript">const [time, setTime] = useState&lt;string&gt;('');
+const [permission, setPermission] = useState&lt;ReminderPermission&gt;('default');
+</code></pre>
+<p><code>time</code> es texto y arranca vacío; <code>permission</code> es de un tipo propio (<code>ReminderPermission</code>, una unión
+como las del Capítulo 06) y arranca en <code>'default'</code>.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Cuando das un valor inicial claro, <strong>TypeScript deduce el tipo solo</strong> y no necesitas el <code>&lt;...&gt;</code>.
+<code>useState(0)</code> ya sabe que es un número; <code>useState('')</code> sabe que es texto. Pero si el estado puede
+ser de más de un tipo —como <code>number | null</code>, que empieza en <code>null</code> pero luego será número— <strong>sí
+tienes que escribirlo</strong>: <code>useState&lt;number | null&gt;(null)</code>. Si no, TS pensaría que <code>count</code> siempre
+es <code>null</code> y te impediría guardarle un número. Por eso <code>ReferralCard</code> lo escribe explícito.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>El nombre del cambiador es por convención <code>set</code> + el nombre del estado: <code>count</code> → <code>setCount</code>,
+<code>time</code> → <code>setTime</code>. No es obligatorio, pero todo el ecosistema lo hace y se lee solo.</p>
+</blockquote>
+<p>Y así se conecta todo lo de este capítulo. En el login de RachaSimple, el estado y el evento bailan
+juntos:</p>
+<pre><code class="language-typescript">const [email, setEmail] = useState&lt;string&gt;('');
+// ...
+&lt;input value={email} onChange={(e) =&gt; setEmail(e.target.value)} /&gt;
+</code></pre>
+<p>El input muestra <code>email</code>; cuando escribes, el evento <code>e</code> trae el nuevo texto y <code>setEmail</code> lo guarda;
+React redibuja. Estado tipado + evento tipado, trabajando en equipo.</p>
+<hr />
+<h2 id="7-tipar-useref">7. Tipar <code>useRef</code></h2>
+<p>A veces no quieres «memoria que redibuja la pantalla», sino una referencia a un <strong>elemento del DOM</strong>
+real (para enfocar un input, medir su tamaño, hacer scroll). Eso es <code>useRef</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-useref">🟦 ¿Qué significa? — <em><code>useRef</code></em></h3>
+<p><strong><code>useRef&lt;T&gt;(inicial)</code></strong> crea una «caja» que guarda un valor entre redibujos <strong>sin</strong> provocar
+redibujos cuando cambia. Su uso más común es apuntar a un elemento del DOM. <strong>Para qué sirve:</strong>
+acceder directamente a un elemento (enfocarlo, leerlo). <strong>Dónde se usará:</strong> lo verás en formularios
+del Módulo 06; tus repos actuales casi no lo necesitan porque React maneja el DOM por ti.</p>
+</blockquote>
+<p>Cuando apunta a un elemento del DOM, su tipo es el del elemento o <code>null</code> (porque al principio el
+elemento todavía no existe):</p>
+<pre><code class="language-typescript">import { useRef } from 'react';
+
+function CampoNombre() {
+  const inputRef = useRef&lt;HTMLInputElement&gt;(null);
+
+  function enfocar() {
+    inputRef.current?.focus();   // current puede ser null al inicio
+  }
+
+  return (
+    &lt;&gt;
+      &lt;input ref={inputRef} type=&quot;text&quot; /&gt;
+      &lt;button type=&quot;button&quot; onClick={enfocar}&gt;Enfocar&lt;/button&gt;
+    &lt;/&gt;
+  );
+}
+</code></pre>
+<p><code>useRef&lt;HTMLInputElement&gt;(null)</code> dice: «esta caja apuntará a un <code>&lt;input&gt;</code>, y por ahora es <code>null</code>».
+El valor real se lee en <code>inputRef.current</code>. Como puede ser <code>null</code>, usamos <code>?.</code> (el encadenamiento
+opcional del Capítulo 06) antes de <code>.focus()</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-current">🟦 ¿Qué significa? — <em><code>.current</code></em></h3>
+<p>Toda ref guarda su valor en la propiedad <strong><code>.current</code></strong>. Si la ref apunta a un input, <code>inputRef.current</code>
+es ese input (o <code>null</code> si aún no está montado). <strong>Para qué sirve:</strong> llegar al elemento real. <strong>Dónde
+se ve:</strong> en cualquier <code>useRef</code>, siempre lees y escribes <code>.current</code>.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No confundas <code>useState</code> con <code>useRef</code>. <strong>Cambiar el estado</strong> (<code>setCount</code>) redibuja la pantalla;
+<strong>cambiar una ref</strong> (<code>inputRef.current = ...</code>) <strong>no</strong> redibuja. Usa estado para datos que se ven;
+usa ref para «agarrar» un elemento o guardar algo entre bambalinas.</p>
+</blockquote>
+<hr />
+<h2 id="8-juntandolo-todo-leer-un-componente-real">8. Juntándolo todo: leer un componente real</h2>
+<p>Ya tienes las piezas. Mira de nuevo <code>ColorPicker</code> con ojos nuevos y nómbralas tú:</p>
+<pre><code class="language-typescript">interface ColorPickerProps {           // 1. interface de props
+  value: string | null;                // 2. prop obligatoria, unión de tipos
+  onChange: (color: string | null) =&gt; void;  // 3. prop función para un evento
+}
+
+export function ColorPicker({ value, onChange }: ColorPickerProps) {  // 4. desestructuración tipada
+  return (
+    &lt;div className=&quot;flex flex-wrap gap-3&quot;&gt;
+      &lt;button type=&quot;button&quot; onClick={() =&gt; onChange(null)}&gt;—&lt;/button&gt;  {/* 5. manejador de evento */}
+      {HABIT_COLORS.map((c) =&gt; (
+        &lt;button
+          key={c.id}                    // 6. key, obligatoria al recorrer listas
+          onClick={() =&gt; onChange(c.id)}
+          style={{ backgroundColor: c.hex }}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<p>Esto es React + TypeScript de verdad, el mismo que escribirás en el Módulo 06. Nada mágico: una
+función, props tipadas con <code>interface</code>, eventos manejados con funciones tipadas. TypeScript es
+JavaScript con tipos, y React con TypeScript es React con etiquetas. Bit te aplaude con sus
+branquias: ya puedes <strong>leer</strong> la interfaz de tus apps, y eso es el 80% del camino para escribirla.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Abre tres archivos seguidos: <code>RachaSimple/src/components/racha/MetricCard.tsx</code>,
+<code>PageHeader.tsx</code> y <code>ColorPicker.tsx</code>. En cada uno, busca primero la <code>interface ...Props</code>, luego la
+función, luego el JSX. Si reconoces ese patrón —interface, función, JSX— ya sabes leer cualquier
+componente de tus repos.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que un <strong>componente</strong> es una función que devuelve JSX, y que los archivos con tipos terminan en <code>.tsx</code>.</li>
+<li>[ ] Puedo declarar una <strong>interface de props</strong> (<code>NombreProps</code>) y desestructurarla en el componente.</li>
+<li>[ ] Distingo una <strong>prop obligatoria</strong> de una <strong>opcional</strong> (la opcional lleva <code>?</code>).</li>
+<li>[ ] Sé poner un <strong>valor por defecto</strong> a una prop opcional al desestructurar (<code>size = 28</code>).</li>
+<li>[ ] Entiendo qué es <strong><code>children</code></strong> y que su tipo es <strong><code>ReactNode</code></strong>.</li>
+<li>[ ] Sé tipar un <strong>evento</strong>: en línea React lo deduce; aparte uso <code>ChangeEvent&lt;HTMLInputElement&gt;</code>.</li>
+<li>[ ] Puedo escribir <strong><code>useState&lt;T&gt;(inicial)</code></strong> y sé cuándo necesito el <code>&lt;T&gt;</code> y cuándo TS lo deduce.</li>
+<li>[ ] Distingo <strong><code>useState</code></strong> (redibuja) de <strong><code>useRef</code></strong> (no redibuja), y sé leer <code>.current</code>.</li>
+<li>[ ] Puedo abrir un componente real de RachaSimple o Faro y nombrar sus partes.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Lee y etiqueta (sin computadora).</strong> Copia en papel la <code>interface MetricCardProps</code> de RachaSimple.
+   Marca cuáles props son obligatorias y cuáles opcionales, y di de qué tipo es cada una. Explica por
+   qué <code>value</code> es <code>string | number</code> y no solo <code>number</code>.</p>
+</li>
+<li>
+<p><strong>Diseña la interface (sin computadora).</strong> Imagina un componente <code>HabitCard</code> que muestra un hábito.
+   Debe recibir: el nombre del hábito (texto, obligatorio), la racha actual (número, obligatorio), un
+   emoji (texto, opcional) y una función <code>onComplete</code> que no recibe nada y no devuelve nada. Escribe la
+   <code>interface HabitCardProps</code> completa.</p>
+</li>
+<li>
+<p>💻 <strong>Tipa el estado.</strong> En un archivo <code>.tsx</code>, crea un componente <code>Contador</code> con
+   <code>const [n, setN] = useState(0)</code> y un botón cuyo <code>onClick</code> haga <code>setN(n + 1)</code>. Luego añade un segundo
+   estado <code>const [nota, setNota] = useState&lt;string | null&gt;(null)</code>. Pregúntate: ¿por qué el primero <strong>no</strong>
+   necesita <code>&lt;...&gt;</code> y el segundo <strong>sí</strong>?</p>
+</li>
+<li>
+<p>💻 <strong>Input controlado.</strong> Crea un componente con <code>const [texto, setTexto] = useState('')</code> y un
+   <code>&lt;input value={texto} onChange={(e) =&gt; setTexto(e.target.value)} /&gt;</code>. Muestra debajo <code>&lt;p&gt;{texto}&lt;/p&gt;</code>.
+   Comprueba que al escribir, el párrafo se actualiza. Pasa el ratón sobre <code>e</code> en tu editor: ¿qué tipo
+   muestra?</p>
+</li>
+<li>
+<p>💻 <strong>Props opcionales con defecto.</strong> Copia el componente <code>Logo</code> de Faro a un archivo nuevo. Úsalo tres
+   veces: <code>&lt;Logo /&gt;</code>, <code>&lt;Logo showText={false} /&gt;</code> y <code>&lt;Logo size={48} /&gt;</code>. Observa qué cambia en cada caso
+   y por qué el valor por defecto evita errores.</p>
+</li>
+<li>
+<p>💻 <strong>Caza el error.</strong> Escribe <code>&lt;MetricCard value={7} /&gt;</code> (olvidando <code>label</code>) y mira el subrayado rojo
+   que pone TypeScript. Lee el mensaje. Luego escribe <code>&lt;MetricCard label="Racha" value={true} /&gt;</code> y
+   observa el nuevo error: ¿por qué <code>true</code> no es válido como <code>value</code>? Conecta esto con lo que el editor
+   te avisa <strong>antes</strong> de abrir el navegador.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

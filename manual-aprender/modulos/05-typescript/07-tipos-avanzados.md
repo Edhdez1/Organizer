@@ -1,5 +1,10 @@
 # Capítulo 07 — Tipos avanzados y utilitarios
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora creaste tus propios tipos con `interface` y `type`. En este capítulo Bit te enseña
 > a **derivar** tipos nuevos a partir de los que ya tienes, sin copiar y pegar. Es la diferencia
 > entre escribir un tipo "a mano" diez veces y decir "este tipo es como aquel, pero **sin** el

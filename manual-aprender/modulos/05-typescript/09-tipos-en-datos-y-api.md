@@ -1,5 +1,10 @@
 # Capítulo 09 — Tipar datos y respuestas de API
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta aquí tus tipos describían cosas que vivían **dentro** de tu programa: un hábito, un
 > proyecto, una función. Pero las apps de verdad respiran datos que vienen de **afuera**: una
 > respuesta de Supabase, el JSON que devuelve la API de Claude, el cuerpo de un `fetch`. Y ahí

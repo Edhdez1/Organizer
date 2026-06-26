@@ -1,5 +1,10 @@
 # Capítulo 08 — Genéricos a fondo
 
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Llegamos al tema que más asusta de TypeScript: los **genéricos**, esos `<T>` con
 > picos que aparecen por todos lados. Bit, nuestro ajolote, los miraba de reojo como
 > quien mira una araña en la pared. Pero respira: un genérico es solo una **forma de
