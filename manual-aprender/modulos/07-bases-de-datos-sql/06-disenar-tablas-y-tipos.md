@@ -1,5 +1,10 @@
 # Capitulo 06 — Diseñar tablas: tipos y esquema
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > Hasta ahora aprendiste a leer una base de datos. Ahora vas a *diseñarla*: decidir qué tablas existen, qué columnas tienen y qué tipo de dato guarda cada una. Es como dibujar los planos de una casa antes de poner ladrillos. Bit, nuestro ajolote, dice que diseñar bien una tabla es el 80% de un buen proyecto: si las cajitas están bien hechas, todo lo demás encaja solo. En este capítulo usaremos las tablas reales de **RachaSimple** (la app de hábitos) y **Faro** (el organizador de proyectos), porque ambas viven en Postgres dentro de Supabase.
 
 ## 1. ¿Qué es diseñar una tabla?
@@ -69,6 +74,9 @@ Veamos los tipos que de verdad aparecen en RachaSimple y Faro, uno por uno.
 
 > ### 🟦 ¿Que significa? — *uuid*
 > Un identificador universal único: un código largo como `a1b2c3d4-...-9f8e` que casi con seguridad jamás se repite en el mundo. **Para qué sirve:** dar a cada fila una identidad única e imposible de adivinar. **Dónde se usa:** en Supabase, la tabla de usuarios usa `uuid` como identificador, y RachaSimple guarda en `habitos.user_id` el `uuid` del dueño de cada hábito para saber de quién es.
+
+> ### 🟦 ¿Que significa? — *RLS (Row Level Security, seguridad a nivel de fila)*
+> Una regla de Postgres que decide, fila por fila, quién puede ver o modificar cada una. **Para qué sirve:** que cada usuario acceda solo a *sus* datos aunque todos vivan en la misma tabla. **Dónde se usa:** en RachaSimple, RLS sobre `habitos` usa la columna `user_id` para mostrarte únicamente tus hábitos; en Faro, la tabla `user_connections` protege con RLS los tokens de cada usuario.
 
 > ### 🔎 En tu codigo
 > En RachaSimple, la conexión entre un hábito y su usuario funciona así: cada fila de `habitos` tiene una columna `user_id uuid` que apunta al `id` del usuario autenticado. Sobre esa columna se construye la seguridad por filas (RLS), que hace que cada quien vea solo *sus* hábitos. Sin un `uuid` por usuario, esa protección no podría existir.
@@ -173,8 +181,11 @@ Y el de Faro:
 - `fases`: las etapas del roadmap de cada proyecto, con su `orden` y si están completas.
 - `user_connections`: los tokens de GitHub y Google Drive de cada usuario, protegidos con RLS.
 
+> ### 🟦 ¿Que significa? — *foreign key (clave foránea)*
+> Una columna que apunta a la clave primaria de otra tabla para enlazar dos filas. **Para qué sirve:** representar relaciones (esta fase *pertenece* a este proyecto) y dejar que Postgres vigile que el enlace sea válido. **Dónde se usa:** en Faro, `fases.proyecto_id` es una clave foránea hacia `proyectos.id`; en RachaSimple, `registros.habito_id` apunta a `habitos.id`.
+
 > ### 🔎 En tu codigo
-> En Faro, una `fase` pertenece a un `proyecto`. Esa relación se hace con una columna `proyecto_id uuid` en la tabla `fases` que apunta al `id` de `proyectos`. Así, cuando borras un proyecto, puedes hacer que sus fases se borren con él. Diseñar el esquema es, en buena parte, decidir estas conexiones entre tablas.
+> En Faro, una `fase` pertenece a un `proyecto`. Esa relación se hace con una columna `proyecto_id uuid` en la tabla `fases` que apunta al `id` de `proyectos`: es una *clave foránea* (foreign key). Así, cuando borras un proyecto, puedes hacer que sus fases se borren con él. Diseñar el esquema es, en buena parte, decidir estas conexiones entre tablas.
 
 ## 6. Convenciones de nombres
 

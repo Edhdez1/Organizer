@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 06 — Diseñar tablas: tipos y esquema — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-06-disenar-tablas-tipos-y-esquema">Capitulo 06 — Diseñar tablas: tipos y esquema</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora aprendiste a leer una base de datos. Ahora vas a <em>diseñarla</em>: decidir qué tablas existen, qué columnas tienen y qué tipo de dato guarda cada una. Es como dibujar los planos de una casa antes de poner ladrillos. Bit, nuestro ajolote, dice que diseñar bien una tabla es el 80% de un buen proyecto: si las cajitas están bien hechas, todo lo demás encaja solo. En este capítulo usaremos las tablas reales de <strong>RachaSimple</strong> (la app de hábitos) y <strong>Faro</strong> (el organizador de proyectos), porque ambas viven en Postgres dentro de Supabase.</p>
+</blockquote>
+<h2 id="1-que-es-disenar-una-tabla">1. ¿Qué es diseñar una tabla?</h2>
+<p>Una tabla es una cuadrícula: filas y columnas. Diseñarla es responder tres preguntas antes de guardar nada:</p>
+<ol>
+<li>¿De qué cosa habla esta tabla? (un hábito, un registro, un proyecto, una fase…)</li>
+<li>¿Qué datos necesito de cada una? (su nombre, su fecha, si está activo…)</li>
+<li>¿De qué <em>tipo</em> es cada dato? (texto, número, fecha, verdadero/falso…)</li>
+</ol>
+<blockquote class="def">
+<h3 id="que-significa-tabla">🟦 ¿Que significa? — <em>Tabla</em></h3>
+<p>Una colección de filas que describen cosas del mismo tipo. Cada fila es una cosa (un hábito), cada columna es un dato de esa cosa (su nombre). <strong>Para qué sirve:</strong> guardar muchos elementos parecidos de forma ordenada. <strong>Dónde se usa:</strong> en RachaSimple existe la tabla <code>habitos</code>, donde cada fila es un hábito que el usuario quiere construir, como "tomar agua" o "leer 10 minutos".</p>
+<h3 id="que-significa-columna">🟦 ¿Que significa? — <em>Columna</em></h3>
+<p>Un dato concreto que toda fila de la tabla tiene. <strong>Para qué sirve:</strong> definir qué información describe a cada elemento. <strong>Dónde se usa:</strong> la tabla <code>proyectos</code> de Faro tiene columnas como <code>nombre</code>, <code>descripcion</code>, <code>estado</code> y <code>progreso</code>. Cada proyecto que analizas rellena esas mismas columnas.</p>
+</blockquote>
+<p>Comparemos con un repo que <strong>no</strong> usa base de datos relacional: <strong>PolyPaw</strong>, hecho en Python con Flet, guarda sus datos en archivos JSON. Ahí no hay tablas ni tipos estrictos: un campo puede ser texto hoy y número mañana sin que nada se queje. Eso es cómodo para empezar, pero peligroso cuando creces. En Postgres, en cambio, cada columna tiene un tipo fijo y la base de datos te protege. Bit lo resume así: "JSON es una mochila donde tiras todo; una tabla es un cajón con compartimentos etiquetados".</p>
+<h2 id="2-los-tipos-de-columna-de-postgres">2. Los tipos de columna de Postgres</h2>
+<p>El <strong>tipo</strong> de una columna define qué clase de valor puede guardar y qué reglas se le aplican. Si una columna es de tipo número, Postgres no te dejará meter la palabra "hola" ahí. Esa rigidez es justo lo que te ahorra errores.</p>
+<blockquote class="def">
+<h3 id="que-significa-tipo-de-dato">🟦 ¿Que significa? — <em>Tipo de dato</em></h3>
+<p>La categoría de valor que una columna acepta: texto, número entero, fecha, etc. <strong>Para qué sirve:</strong> garantizar que los datos sean coherentes y que Postgres pueda operar con ellos (sumar números, ordenar fechas). <strong>Dónde se usa:</strong> en RachaSimple, la columna <code>nombre</code> de <code>habitos</code> es de tipo texto, y <code>created_at</code> es de tipo fecha-hora.</p>
+</blockquote>
+<p>Veamos los tipos que de verdad aparecen en RachaSimple y Faro, uno por uno.</p>
+<h3 id="21-texto-text-y-varchar">2.1 Texto: <code>text</code> y <code>varchar</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-text">🟦 ¿Que significa? — <em>text</em></h3>
+<p>Tipo para cadenas de caracteres de cualquier longitud (palabras, frases, párrafos). <strong>Para qué sirve:</strong> guardar nombres, descripciones, notas. <strong>Dónde se usa:</strong> la descripción que la IA genera para cada proyecto en Faro se guarda en una columna <code>descripcion</code> de tipo <code>text</code>, porque puede ser larga.</p>
+<h3 id="que-significa-varcharn">🟦 ¿Que significa? — <em>varchar(n)</em></h3>
+<p>Texto con un límite máximo de <code>n</code> caracteres (por ejemplo <code>varchar(100)</code>). <strong>Para qué sirve:</strong> poner un tope cuando sabes que algo no debería pasar de cierto tamaño, como un nombre corto. <strong>Dónde se usa:</strong> podrías declarar <code>nombre varchar(120)</code> en <code>habitos</code> para que nadie escriba un hábito de mil letras.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>En Postgres, <code>text</code> y <code>varchar</code> rinden prácticamente igual. La comunidad suele recomendar <code>text</code> por defecto y validar la longitud en la aplicación. Usa <code>varchar(n)</code> solo cuando el límite sea una regla real del negocio.</p>
+</blockquote>
+<h3 id="22-numeros-int-y-bigint">2.2 Números: <code>int</code> y <code>bigint</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-int-integer">🟦 ¿Que significa? — <em>int (integer)</em></h3>
+<p>Número entero (sin decimales), aproximadamente entre -2 mil millones y +2 mil millones. <strong>Para qué sirve:</strong> contar cosas, guardar porcentajes, posiciones. <strong>Dónde se usa:</strong> la columna <code>progreso</code> de un proyecto en Faro guarda un porcentaje (0 a 100) como <code>int</code>. También el <code>orden</code> de una fase para saber cuál va primero.</p>
+<h3 id="que-significa-bigint">🟦 ¿Que significa? — <em>bigint</em></h3>
+<p>Número entero gigante, para valores que pueden crecer muchísimo (hasta unos 9 trillones). <strong>Para qué sirve:</strong> identificadores o contadores que un día podrían superar el límite de <code>int</code>. <strong>Dónde se usa:</strong> una tabla de eventos o logs que registra millones de filas usaría <code>bigint</code> para su contador autoincremental.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>No uses <code>int</code> para un identificador que va a crecer sin freno si esperas miles de millones de filas: se te puede acabar el rango. Para porcentajes o cantidades pequeñas, <code>int</code> sobra. Bit recuerda: "elige el tipo más pequeño que cubra el peor caso, no más".</p>
+</blockquote>
+<h3 id="23-verdadero-o-falso-boolean">2.3 Verdadero o falso: <code>boolean</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-boolean">🟦 ¿Que significa? — <em>boolean</em></h3>
+<p>Tipo que solo guarda dos valores: <code>true</code> (verdadero) o <code>false</code> (falso). <strong>Para qué sirve:</strong> representar un sí/no, encendido/apagado, activo/inactivo. <strong>Dónde se usa:</strong> en RachaSimple, un hábito puede tener <code>activo boolean</code> para saber si el usuario lo sigue practicando o lo archivó.</p>
+</blockquote>
+<h3 id="24-fechas-y-horas-timestamp">2.4 Fechas y horas: <code>timestamp</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-timestamp">🟦 ¿Que significa? — <em>timestamp</em></h3>
+<p>Tipo que guarda un instante: fecha y hora juntas (año, mes, día, hora, minuto, segundo). En Supabase se usa casi siempre la variante <code>timestamptz</code>, que incluye la zona horaria. <strong>Para qué sirve:</strong> saber <em>cuándo</em> pasó algo. <strong>Dónde se usa:</strong> la columna <code>created_at</code> aparece en casi todas las tablas de RachaSimple y Faro: marca el momento exacto en que se creó la fila.</p>
+<h3 id="que-significa-timestamptz-timestamp-with-time-zone">🟦 ¿Que significa? — <em>timestamptz (timestamp with time zone)</em></h3>
+<p>Igual que <code>timestamp</code> pero guarda también la zona horaria, así un instante significa lo mismo para un usuario en Bogotá que en Madrid. <strong>Para qué sirve:</strong> evitar confusiones de horario entre usuarios de distintos países. <strong>Dónde se usa:</strong> es el tipo recomendado por Supabase para columnas de fecha; los <code>created_at</code> de Faro lo usan.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Para registrar solo el día sin hora (por ejemplo, "el usuario cumplió su hábito el 26 de junio"), existe el tipo <code>date</code>. En RachaSimple, la tabla de <code>registros</code> puede usar <code>date</code> para la columna <code>fecha</code>, porque importa el día, no el segundo exacto.</p>
+</blockquote>
+<h3 id="25-identificadores-unicos-uuid">2.5 Identificadores únicos: <code>uuid</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-uuid">🟦 ¿Que significa? — <em>uuid</em></h3>
+<p>Un identificador universal único: un código largo como <code>a1b2c3d4-...-9f8e</code> que casi con seguridad jamás se repite en el mundo. <strong>Para qué sirve:</strong> dar a cada fila una identidad única e imposible de adivinar. <strong>Dónde se usa:</strong> en Supabase, la tabla de usuarios usa <code>uuid</code> como identificador, y RachaSimple guarda en <code>habitos.user_id</code> el <code>uuid</code> del dueño de cada hábito para saber de quién es.</p>
+<h3 id="que-significa-rls-row-level-security-seguridad-a-nivel-de-fila">🟦 ¿Que significa? — <em>RLS (Row Level Security, seguridad a nivel de fila)</em></h3>
+<p>Una regla de Postgres que decide, fila por fila, quién puede ver o modificar cada una. <strong>Para qué sirve:</strong> que cada usuario acceda solo a <em>sus</em> datos aunque todos vivan en la misma tabla. <strong>Dónde se usa:</strong> en RachaSimple, RLS sobre <code>habitos</code> usa la columna <code>user_id</code> para mostrarte únicamente tus hábitos; en Faro, la tabla <code>user_connections</code> protege con RLS los tokens de cada usuario.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En RachaSimple, la conexión entre un hábito y su usuario funciona así: cada fila de <code>habitos</code> tiene una columna <code>user_id uuid</code> que apunta al <code>id</code> del usuario autenticado. Sobre esa columna se construye la seguridad por filas (RLS), que hace que cada quien vea solo <em>sus</em> hábitos. Sin un <code>uuid</code> por usuario, esa protección no podría existir.</p>
+</blockquote>
+<h3 id="26-datos-flexibles-jsonb">2.6 Datos flexibles: <code>jsonb</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-jsonb">🟦 ¿Que significa? — <em>jsonb</em></h3>
+<p>Tipo que guarda un documento JSON (texto estructurado con llaves y valores) de forma optimizada para consultarlo. <strong>Para qué sirve:</strong> guardar datos cuya forma varía o no quieres modelar con columnas fijas. <strong>Dónde se usa:</strong> en Faro, el roadmap o las sugerencias que devuelve OpenAI por proyecto pueden guardarse como <code>jsonb</code>, porque su estructura (lista de pasos, etiquetas) cambia según el análisis.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>jsonb</code> es tentador para <em>todo</em>, pero abusar de él te lleva de vuelta al estilo "mochila JSON" de PolyPaw: pierdes las validaciones de tipo. Úsalo solo para datos genuinamente variables. Si un campo siempre existe y siempre tiene la misma forma, dale su propia columna con su tipo.</p>
+</blockquote>
+<h2 id="3-reglas-sobre-las-columnas-not-null-y-default">3. Reglas sobre las columnas: NOT NULL y DEFAULT</h2>
+<p>Elegir el tipo es la mitad. La otra mitad es poner reglas sobre qué valores se permiten.</p>
+<blockquote class="def">
+<h3 id="que-significa-null">🟦 ¿Que significa? — <em>NULL</em></h3>
+<p>Un valor especial que significa "aquí no hay dato / desconocido". No es cero ni texto vacío: es <em>ausencia</em>. <strong>Para qué sirve:</strong> representar información que todavía no tienes. <strong>Dónde se usa:</strong> un proyecto recién creado en Faro puede tener <code>descripcion</code> en NULL hasta que la IA la genere.</p>
+<h3 id="que-significa-not-null">🟦 ¿Que significa? — <em>NOT NULL</em></h3>
+<p>Regla que obliga a que una columna <em>siempre</em> tenga un valor; prohíbe NULL. <strong>Para qué sirve:</strong> garantizar que datos esenciales nunca falten. <strong>Dónde se usa:</strong> en <code>habitos</code>, la columna <code>nombre</code> es <code>NOT NULL</code>: un hábito sin nombre no tiene sentido, así que Postgres rechaza la fila.</p>
+<h3 id="que-significa-default">🟦 ¿Que significa? — <em>DEFAULT</em></h3>
+<p>Un valor que Postgres pone automáticamente cuando no le das uno. <strong>Para qué sirve:</strong> ahorrarte escribir lo obvio y asegurar coherencia. <strong>Dónde se usa:</strong> <code>created_at timestamptz DEFAULT now()</code> hace que Postgres ponga la fecha y hora actual sola cada vez que insertas una fila, tanto en RachaSimple como en Faro.</p>
+</blockquote>
+<p>Veamos cómo se combinan al crear una tabla de verdad. Esta es, simplificada, la tabla <code>habitos</code> de RachaSimple:</p>
+<pre><code class="language-sql">create table habitos (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null,
+  nombre text not null,
+  descripcion text,
+  activo boolean not null default true,
+  created_at timestamptz not null default now()
+);
+</code></pre>
+<p>Léelo despacio con Bit:</p>
+<ul>
+<li><code>id</code>: identificador de la fila, un <code>uuid</code> que se genera solo con <code>gen_random_uuid()</code>. Es la <em>clave primaria</em> (primary key), el dato que identifica esa fila de forma única.</li>
+<li><code>user_id</code>: a quién pertenece el hábito. <code>not null</code> porque un hábito huérfano no debe existir.</li>
+<li><code>nombre</code>: obligatorio (<code>not null</code>), puede ser cualquier texto.</li>
+<li><code>descripcion</code>: opcional; si no la das, queda en NULL.</li>
+<li><code>activo</code>: verdadero/falso, y por defecto <code>true</code> (un hábito nace activo).</li>
+<li><code>created_at</code>: se rellena solo con el momento de creación.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-primary-key-clave-primaria">🟦 ¿Que significa? — <em>primary key (clave primaria)</em></h3>
+<p>La columna que identifica de forma única a cada fila; no se repite y no puede ser NULL. <strong>Para qué sirve:</strong> poder señalar una fila exacta sin ambigüedad. <strong>Dónde se usa:</strong> en todas las tablas de RachaSimple y Faro la clave primaria es <code>id</code> de tipo <code>uuid</code>.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Fíjate en el patrón que se repite en <em>cada</em> tabla de ambos proyectos: <code>id uuid primary key default gen_random_uuid()</code> y <code>created_at timestamptz not null default now()</code>. Cuando veas una tabla nueva en Supabase, busca primero esas dos líneas: son la "firma" de una tabla bien hecha.</p>
+</blockquote>
+<h2 id="4-columnas-generadas">4. Columnas generadas</h2>
+<p>A veces una columna no se escribe a mano: se <em>calcula</em> a partir de otras.</p>
+<blockquote class="def">
+<h3 id="que-significa-columna-generada-generated-column">🟦 ¿Que significa? — <em>columna generada (generated column)</em></h3>
+<p>Una columna cuyo valor lo calcula Postgres automáticamente con una fórmula sobre otras columnas de la misma fila. <strong>Para qué sirve:</strong> evitar guardar datos que se pueden derivar, y mantenerlos siempre coherentes. <strong>Dónde se usa:</strong> en RachaSimple podrías querer una columna <code>racha_completa</code> que sea verdadera solo si la racha llegó a la meta, calculada a partir de <code>dias_seguidos</code> y <code>meta</code>.</p>
+</blockquote>
+<p>Un ejemplo concreto. Imagina que en <code>registros</code> quieres una columna que diga el año del registro sin tener que escribirlo:</p>
+<pre><code class="language-sql">create table registros (
+  id uuid primary key default gen_random_uuid(),
+  habito_id uuid not null,
+  fecha date not null,
+  anio int generated always as (extract(year from fecha)) stored
+);
+</code></pre>
+<p>Aquí <code>anio</code> nunca se escribe: Postgres lo deduce de <code>fecha</code>. Si la fecha es 2026-06-26, <code>anio</code> será 2026, automáticamente y siempre correcto.</p>
+<blockquote class="def">
+<h3 id="que-significa-stored-almacenada">🟦 ¿Que significa? — <em>stored (almacenada)</em></h3>
+<p>Palabra que indica que la columna generada se calcula al insertar/actualizar y se guarda físicamente en disco. <strong>Para qué sirve:</strong> que el valor esté listo y no se recalcule en cada lectura. <strong>Dónde se usa:</strong> es la única modalidad de columna generada que Postgres soporta hoy; por eso siempre verás <code>stored</code> al final.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No puedes escribir a mano en una columna generada: Postgres lo prohíbe. Y la fórmula solo puede usar columnas de la <em>misma</em> fila, no datos de otras tablas. Si necesitas algo más complejo, eso es trabajo de una <em>vista</em> o de la aplicación, no de una columna generada.</p>
+</blockquote>
+<h2 id="5-el-esquema-schema-de-la-base-de-datos">5. El esquema (schema) de la base de datos</h2>
+<p>Hasta ahora hablamos de tablas sueltas. El conjunto de <em>todas</em> las tablas, sus columnas, tipos y relaciones tiene un nombre.</p>
+<blockquote class="def">
+<h3 id="que-significa-esquema-schema">🟦 ¿Que significa? — <em>esquema (schema)</em></h3>
+<p>Tiene dos sentidos. (1) El <strong>diseño general</strong>: la lista de tablas y cómo se conectan, como el plano de la base de datos. (2) En Postgres, un <strong>contenedor con nombre</strong> que agrupa tablas (parecido a una carpeta). <strong>Para qué sirve:</strong> organizar y dar estructura. <strong>Dónde se usa:</strong> en Supabase, tus tablas viven en el esquema <code>public</code> por defecto; la información de usuarios vive en un esquema aparte llamado <code>auth</code>.</p>
+<h3 id="que-significa-public-esquema-publico">🟦 ¿Que significa? — <em>public (esquema público)</em></h3>
+<p>El esquema por defecto de Postgres donde se crean las tablas si no dices otra cosa. <strong>Para qué sirve:</strong> tener un lugar predeterminado para tus tablas. <strong>Dónde se usa:</strong> las tablas <code>habitos</code>, <code>registros</code> y <code>perfiles</code> de RachaSimple y <code>proyectos</code>, <code>fases</code> de Faro viven todas en <code>public</code>.</p>
+<h3 id="que-significa-auth-esquema-de-autenticacion">🟦 ¿Que significa? — <em>auth (esquema de autenticación)</em></h3>
+<p>Un esquema especial que Supabase reserva para gestionar usuarios y sesiones. <strong>Para qué sirve:</strong> separar la maquinaria de login de tus datos. <strong>Dónde se usa:</strong> la tabla <code>auth.users</code> guarda a los usuarios; tu columna <code>user_id uuid</code> de <code>habitos</code> apunta a un <code>id</code> que vive ahí.</p>
+</blockquote>
+<p>Así se ve el esquema completo (en sentido de diseño) de RachaSimple, contado en palabras:</p>
+<ul>
+<li><code>perfiles</code>: datos extra de cada usuario (nombre visible, preferencias).</li>
+<li><code>habitos</code>: cada hábito que el usuario quiere construir.</li>
+<li><code>registros</code>: cada día que el usuario marcó un hábito como hecho; aquí vive la racha.</li>
+</ul>
+<p>Y el de Faro:</p>
+<ul>
+<li><code>proyectos</code>: cada proyecto analizado, con su descripción, estado y progreso generados por IA.</li>
+<li><code>fases</code>: las etapas del roadmap de cada proyecto, con su <code>orden</code> y si están completas.</li>
+<li><code>user_connections</code>: los tokens de GitHub y Google Drive de cada usuario, protegidos con RLS.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-foreign-key-clave-foranea">🟦 ¿Que significa? — <em>foreign key (clave foránea)</em></h3>
+<p>Una columna que apunta a la clave primaria de otra tabla para enlazar dos filas. <strong>Para qué sirve:</strong> representar relaciones (esta fase <em>pertenece</em> a este proyecto) y dejar que Postgres vigile que el enlace sea válido. <strong>Dónde se usa:</strong> en Faro, <code>fases.proyecto_id</code> es una clave foránea hacia <code>proyectos.id</code>; en RachaSimple, <code>registros.habito_id</code> apunta a <code>habitos.id</code>.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En Faro, una <code>fase</code> pertenece a un <code>proyecto</code>. Esa relación se hace con una columna <code>proyecto_id uuid</code> en la tabla <code>fases</code> que apunta al <code>id</code> de <code>proyectos</code>: es una <em>clave foránea</em> (foreign key). Así, cuando borras un proyecto, puedes hacer que sus fases se borren con él. Diseñar el esquema es, en buena parte, decidir estas conexiones entre tablas.</p>
+</blockquote>
+<h2 id="6-convenciones-de-nombres">6. Convenciones de nombres</h2>
+<p>Postgres te deja nombrar tablas y columnas casi como quieras, pero seguir convenciones te ahorra dolores de cabeza. Bit insiste: "el yo del futuro te lo agradecerá".</p>
+<blockquote class="def">
+<h3 id="que-significa-convencion-de-nombres">🟦 ¿Que significa? — <em>convención de nombres</em></h3>
+<p>Un conjunto de reglas acordadas para nombrar tablas y columnas de forma consistente. <strong>Para qué sirve:</strong> que cualquiera (incluido tú dentro de seis meses) entienda la base de datos de un vistazo. <strong>Dónde se usa:</strong> RachaSimple y Faro usan nombres en minúscula y con guion bajo, como <code>user_id</code> o <code>created_at</code>.</p>
+</blockquote>
+<p>Las reglas prácticas que usan ambos proyectos:</p>
+<ul>
+<li><strong>Minúsculas y guion bajo</strong> (<code>snake_case</code>): <code>created_at</code>, no <code>CreatedAt</code> ni <code>created at</code>. Postgres trata mal las mayúsculas y los espacios.</li>
+<li><strong>Tablas en plural</strong>: <code>habitos</code>, <code>proyectos</code>, <code>fases</code>. Cada tabla contiene <em>muchas</em> cosas.</li>
+<li><strong>Columna de relación = singular + <code>_id</code></strong>: <code>user_id</code>, <code>proyecto_id</code>, <code>habito_id</code>. Se lee solo a quién apunta.</li>
+<li><strong>Tiempos con <code>_at</code></strong>: <code>created_at</code>, <code>updated_at</code>. Indica que es un instante.</li>
+<li><strong>Booleanos que se leen como pregunta</strong>: <code>activo</code>, <code>completada</code>. Se entiende que es sí/no.</li>
+</ul>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Si nombras una columna con mayúsculas o espacios, Postgres te obligará a rodearla de comillas dobles <em>siempre</em> (<code>"Created At"</code>). Es incómodo y propenso a errores. Quédate en <code>snake_case</code> minúsculas y nunca tendrás ese problema.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Sé consistente con el idioma. RachaSimple y Faro mezclan español en los nombres de negocio (<code>habitos</code>, <code>fases</code>, <code>progreso</code>) con convenciones técnicas en inglés (<code>id</code>, <code>created_at</code>, <code>user_id</code>) que ya son estándar universal. Lo importante no es el idioma perfecto, sino no cambiar de criterio a mitad del proyecto.</p>
+</blockquote>
+<h2 id="7-como-se-ve-desde-el-cliente-de-supabase">7. Cómo se ve desde el cliente de Supabase</h2>
+<p>Diseñas la tabla en SQL, pero la <em>usas</em> desde tu app. Así inserta RachaSimple un hábito nuevo con el cliente de Supabase en TypeScript:</p>
+<pre><code class="language-ts">const { data, error } = await supabase
+  .from(&quot;habitos&quot;)
+  .insert({
+    nombre: &quot;Tomar agua&quot;,
+    descripcion: &quot;8 vasos al día&quot;,
+    user_id: usuario.id, // un uuid
+    // activo y created_at NO los mandamos:
+    // Postgres pone sus DEFAULT (true y now())
+  })
+  .select()
+  .single();
+</code></pre>
+<p>Mira la magia del diseño: no enviamos <code>id</code>, ni <code>activo</code>, ni <code>created_at</code>. Postgres los rellena solos gracias a los <code>DEFAULT</code> que pusimos al crear la tabla. Un buen diseño hace que el código de la app sea más corto y más difícil de equivocar.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>Las columnas <code>NOT NULL</code> <em>sin</em> <code>DEFAULT</code> son las que tu app <em>debe</em> enviar siempre: aquí <code>nombre</code> y <code>user_id</code>. Si te olvidas de una, Postgres rechaza el insert con un error. Esa es justamente la protección que PolyPaw no tiene con sus archivos JSON: ahí podrías guardar un hábito sin nombre y nadie te avisaría hasta que algo se rompiera en pantalla.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar qué es una tabla, una fila y una columna con un ejemplo de RachaSimple.</li>
+<li>[ ] Sé elegir entre <code>text</code>, <code>int</code>, <code>bigint</code>, <code>boolean</code>, <code>timestamptz</code>, <code>uuid</code> y <code>jsonb</code> según el dato.</li>
+<li>[ ] Entiendo la diferencia entre NULL, <code>NOT NULL</code> y <code>DEFAULT</code>.</li>
+<li>[ ] Reconozco el patrón <code>id uuid primary key default gen_random_uuid()</code> y <code>created_at timestamptz default now()</code>.</li>
+<li>[ ] Sé qué es una columna generada y por qué no se escribe a mano.</li>
+<li>[ ] Entiendo qué es un esquema y por qué las tablas de Supabase viven en <code>public</code> y los usuarios en <code>auth</code>.</li>
+<li>[ ] Sigo convenciones de nombres: <code>snake_case</code>, tablas en plural, <code>_id</code> para relaciones, <code>_at</code> para tiempos.</li>
+<li>[ ] Sé por qué un buen diseño deja menos trabajo (y menos errores) al código de la app.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>En papel.</strong> Dibuja la tabla <code>registros</code> de RachaSimple. ¿Qué columnas necesita para saber qué hábito se completó y qué día? Anota el tipo de cada una y cuáles serían <code>NOT NULL</code>.</p>
+</li>
+<li>
+<p><strong>En papel.</strong> Para la tabla <code>fases</code> de Faro, decide el tipo de estas columnas: <code>nombre</code>, <code>orden</code>, <code>completada</code>, <code>proyecto_id</code>, <code>created_at</code>. Justifica cada elección en una frase.</p>
+</li>
+<li>
+<p>💻 <strong>En el editor SQL de Supabase.</strong> Crea una tabla de práctica llamada <code>notas</code> con: <code>id uuid</code> clave primaria con default, <code>titulo text not null</code>, <code>cuerpo text</code>, <code>archivada boolean default false</code> y <code>created_at timestamptz default now()</code>. Insértale una fila enviando solo <code>titulo</code> y comprueba que las demás columnas se rellenaron solas.</p>
+</li>
+<li>
+<p>💻 <strong>En el editor SQL de Supabase.</strong> A tu tabla <code>notas</code>, añade una columna generada <code>largo_titulo int generated always as (length(titulo)) stored</code>. Inserta una nota y verifica que <code>largo_titulo</code> aparece calculado sin que tú lo escribieras. Luego intenta escribir un valor a mano en esa columna y observa el error.</p>
+</li>
+<li>
+<p>💻 <strong>En el editor SQL de Supabase.</strong> Crea a propósito una columna mal nombrada (<code>"Fecha Creacion" timestamptz</code>) y luego intenta consultarla sin comillas. Observa el error y reescríbela como <code>fecha_creacion</code>. Acabas de comprobar por qué existen las convenciones de nombres.</p>
+</li>
+<li>
+<p><strong>De contraste.</strong> Abre cualquier archivo JSON de PolyPaw y elige tres campos. Para cada uno, escribe qué tipo de columna de Postgres usarías si esos datos vivieran en una tabla, y qué validación (<code>NOT NULL</code>, <code>DEFAULT</code>) le pondrías. Esto te entrena el ojo para "ver tablas" donde otros ven texto suelto.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Glosario de bases de datos y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-bases-de-datos-y-mapa">Capitulo 15 — Glosario de bases de datos y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez. Soy <strong>Bit</strong>, tu ajolote guia. Llegaste al final del Modulo 07 y eso merece un aplauso con mis cuatro patitas. Este capitulo es distinto: no hay teoria nueva pesada. Es un <strong>glosario</strong> ordenado de la A a la Z con todos los terminos que vimos, cada uno explicado en una o dos lineas, mas un <strong>mapa mental</strong> para ver como encaja todo. Piensa en este capitulo como el mapa que dejas pegado en la pared: cuando se te olvide que era un <code>JOIN</code> o que rayos es la RLS, vuelves aqui, lo lees en diez segundos y sigues. Vamos despacito y al final te digo como sigue la aventura en el Modulo 08.</p>
+</blockquote>
+<hr />
+<h2 id="1-como-usar-este-glosario">1. Como usar este glosario</h2>
+<p>Cada termino viene en un recuadro con tres cosas: <strong>que significa</strong> (en palabras de cocina, sin tecnicismos), <strong>para que sirve</strong> y <strong>donde se usa en un repo real</strong> de los tuyos. Los repos que vamos a citar son siempre estos cinco, ni uno mas:</p>
+<ul>
+<li><strong>tunal-digital</strong> — un sitio web hecho con HTML, CSS y JavaScript a mano (vanilla). No tiene base de datos.</li>
+<li><strong>PolyPaw</strong> — app en Python con Flet que guarda sus datos en <strong>archivos JSON</strong>. Tampoco usa base de datos relacional. Nos sirve para <strong>contrastar</strong>.</li>
+<li><strong>RachaSimple</strong> — app de habitos con <strong>Supabase/Postgres</strong>: tablas de habitos, registros de racha y perfiles, con RLS y TanStack Query.</li>
+<li><strong>Faro/Organizer</strong> — app en <strong>Next.js + Supabase/Postgres</strong>: proyectos, fases y conexiones de usuario, con RLS, y usa OpenAI para analizar.</li>
+<li><strong>polypaw-nas</strong> — un servidor casero con Ubuntu, Samba, Cockpit y Tailscale. Guarda archivos, no es base de datos.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Casi todos los ejemplos de SQL los puedes pegar tal cual en el <strong>editor SQL de Supabase</strong> (panel web). Es como tener una libreta donde pruebas frases y la base de datos te responde al instante.</p>
+</blockquote>
+<hr />
+<h2 id="2-glosario-alfabetico">2. Glosario alfabetico</h2>
+<h3 id="a">A</h3>
+<blockquote class="def">
+<h3 id="que-significa-agregacion">🟦 ¿Que significa? — <em>Agregacion</em></h3>
+<p>Tomar muchas filas y resumirlas en <strong>un solo numero</strong>: contar, sumar, promediar. Sirve para responder preguntas tipo "¿cuantos?" o "¿cuanto en total?". En <strong>RachaSimple</strong> la usamos para contar cuantos registros de racha tiene un habito.</p>
+<h3 id="que-significa-alias">🟦 ¿Que significa? — <em>Alias</em></h3>
+<p>Un <strong>apodo</strong> corto que le pones a una tabla o columna en la consulta con <code>as</code>. Sirve para escribir menos y leer mejor. En <strong>Faro</strong> un <code>select</code> largo de proyectos puede usar <code>p</code> como alias de la tabla <code>proyectos</code>.</p>
+</blockquote>
+<h3 id="b">B</h3>
+<blockquote class="def">
+<h3 id="que-significa-base-de-datos">🟦 ¿Que significa? — <em>Base de datos</em></h3>
+<p>Un lugar organizado donde se guardan datos para buscarlos y cambiarlos rapido y sin perderlos. Sirve para que la app recuerde cosas entre sesiones. <strong>RachaSimple</strong> y <strong>Faro</strong> tienen una base de datos Postgres en Supabase; <strong>PolyPaw</strong> NO (guarda todo en archivos JSON).</p>
+<h3 id="que-significa-backup-respaldo">🟦 ¿Que significa? — <em>Backup (respaldo)</em></h3>
+<p>Una copia de seguridad de los datos por si algo se rompe. Sirve para dormir tranquilo. En <strong>polypaw-nas</strong> los respaldos son copias de archivos por Samba; en <strong>Supabase</strong> la plataforma respalda la base Postgres por ti.</p>
+</blockquote>
+<h3 id="c">C</h3>
+<blockquote class="def">
+<h3 id="que-significa-clave-primaria-primary-key">🟦 ¿Que significa? — <em>Clave primaria (primary key)</em></h3>
+<p>Una columna cuyo valor es <strong>unico</strong> para cada fila e identifica esa fila sin confusion (normalmente un <code>id</code>). Sirve para senalar "esta fila y no otra". En <strong>RachaSimple</strong>, cada fila de la tabla <code>habitos</code> tiene su <code>id</code> como clave primaria.</p>
+<h3 id="que-significa-clave-foranea-foreign-key">🟦 ¿Que significa? — <em>Clave foranea (foreign key)</em></h3>
+<p>Una columna que <strong>apunta</strong> a la clave primaria de otra tabla, creando un vinculo entre ambas. Sirve para conectar datos relacionados sin repetirlos. En <strong>Faro</strong>, la tabla <code>fases</code> tiene un <code>proyecto_id</code> que apunta al <code>id</code> de la tabla <code>proyectos</code>.</p>
+<h3 id="que-significa-columna-campo">🟦 ¿Que significa? — <em>Columna (campo)</em></h3>
+<p>Cada uno de los datos que describe una fila; es una "casilla" con nombre y tipo. Sirve para guardar un dato concreto. En <strong>RachaSimple</strong>, la tabla <code>perfiles</code> tiene columnas como <code>nombre</code> y <code>creado_en</code>.</p>
+<h3 id="que-significa-consulta-query">🟦 ¿Que significa? — <em>Consulta (query)</em></h3>
+<p>Una pregunta que le haces a la base de datos en lenguaje SQL. Sirve para leer, filtrar o cambiar datos. En <strong>Faro</strong> cada vez que abres tu lista de proyectos se dispara una consulta a Postgres.</p>
+</blockquote>
+<pre><code class="language-sql">-- Una consulta simple en RachaSimple: traer todos los habitos
+select * from habitos;
+</code></pre>
+<h3 id="d">D</h3>
+<blockquote class="def">
+<h3 id="que-significa-dato">🟦 ¿Que significa? — <em>Dato</em></h3>
+<p>La pieza minima de informacion: un nombre, una fecha, un numero. Sirve para describir algo del mundo real. En <strong>PolyPaw</strong> un dato puede ser el nombre de una mascota guardado en un JSON; en <strong>RachaSimple</strong> ese mismo tipo de dato vive en una columna de Postgres.</p>
+<h3 id="que-significa-delete">🟦 ¿Que significa? — <em>DELETE</em></h3>
+<p>La orden SQL para <strong>borrar</strong> filas. Sirve para eliminar datos que ya no quieres. En <strong>RachaSimple</strong>, borrar un habito que abandonaste usa <code>delete</code>.</p>
+</blockquote>
+<pre><code class="language-sql">-- Borrar el habito con id 7 (¡siempre con WHERE!)
+delete from habitos where id = 7;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p><code>delete</code> <strong>sin</strong> <code>where</code> borra <strong>toda</strong> la tabla. Bit ha visto a humanos sudar frio por esto. Antes de borrar, prueba con un <code>select</code> que tenga el mismo <code>where</code> para ver que filas van a desaparecer.</p>
+</blockquote>
+<h3 id="e">E</h3>
+<blockquote class="def">
+<h3 id="que-significa-editor-sql-de-supabase">🟦 ¿Que significa? — <em>Editor SQL (de Supabase)</em></h3>
+<p>Una pantalla web donde escribes SQL y ves la respuesta al instante, sin instalar nada. Sirve para probar y aprender. Tanto <strong>RachaSimple</strong> como <strong>Faro</strong> comparten que su Postgres vive en Supabase, asi que su editor SQL es donde practicas.</p>
+<h3 id="que-significa-esquema-schema">🟦 ¿Que significa? — <em>Esquema (schema)</em></h3>
+<p>El "plano" de la base de datos: que tablas existen, sus columnas y sus tipos. Sirve para saber como esta organizado todo. En <strong>Faro</strong> el esquema incluye <code>proyectos</code>, <code>fases</code> y <code>conexiones_usuario</code>.</p>
+</blockquote>
+<h3 id="f">F</h3>
+<blockquote class="def">
+<h3 id="que-significa-fila-registro-row">🟦 ¿Que significa? — <em>Fila (registro / row)</em></h3>
+<p>Una linea completa de una tabla; representa <strong>una cosa</strong> (un habito, un proyecto). Sirve para guardar un elemento entero con todos sus datos. En <strong>RachaSimple</strong>, cada fila de <code>registros_racha</code> es un dia marcado como cumplido.</p>
+<h3 id="que-significa-filtro">🟦 ¿Que significa? — <em>Filtro</em></h3>
+<p>Quedarte solo con las filas que cumplen una condicion, usando <code>where</code>. Sirve para no traer todo, solo lo que te importa. En <strong>Faro</strong>, filtrar proyectos por usuario es lo que evita que veas los proyectos de otros.</p>
+</blockquote>
+<h3 id="g">G</h3>
+<blockquote class="def">
+<h3 id="que-significa-group-by">🟦 ¿Que significa? — <em>GROUP BY</em></h3>
+<p>Agrupar filas que comparten un valor para resumirlas juntas (casi siempre con una agregacion). Sirve para responder "¿cuanto por cada categoria?". En <strong>RachaSimple</strong>, agrupar <code>registros_racha</code> por <code>habito_id</code> te dice cuantas marcas tiene cada habito.</p>
+</blockquote>
+<pre><code class="language-sql">-- Cuantos registros de racha tiene cada habito
+select habito_id, count(*) as total
+from registros_racha
+group by habito_id;
+</code></pre>
+<h3 id="h">H</h3>
+<blockquote class="def">
+<h3 id="que-significa-having">🟦 ¿Que significa? — <em>HAVING</em></h3>
+<p>Como un <code>where</code>, pero para filtrar <strong>despues</strong> de agrupar con <code>group by</code>. Sirve para quedarte solo con grupos que cumplen algo. En <strong>RachaSimple</strong>, mostrar solo habitos con mas de 10 registros usa <code>having</code>.</p>
+</blockquote>
+<pre><code class="language-sql">select habito_id, count(*) as total
+from registros_racha
+group by habito_id
+having count(*) &gt; 10;
+</code></pre>
+<h3 id="i">I</h3>
+<blockquote class="def">
+<h3 id="que-significa-indice-index">🟦 ¿Que significa? — <em>Indice (index)</em></h3>
+<p>Una estructura extra que la base crea para <strong>encontrar filas rapido</strong>, como el indice al final de un libro. Sirve para que las busquedas no tarden. En <strong>Faro</strong>, una columna como <code>proyecto_id</code> que se busca mucho se beneficia de un indice.</p>
+<h3 id="que-significa-insert">🟦 ¿Que significa? — <em>INSERT</em></h3>
+<p>La orden SQL para <strong>agregar</strong> filas nuevas. Sirve para meter datos. En <strong>RachaSimple</strong>, marcar el habito de hoy hace un <code>insert</code> en <code>registros_racha</code>.</p>
+</blockquote>
+<pre><code class="language-sql">insert into registros_racha (habito_id, fecha)
+values (3, '2026-06-26');
+</code></pre>
+<h3 id="j">J</h3>
+<blockquote class="def">
+<h3 id="que-significa-join">🟦 ¿Que significa? — <em>JOIN</em></h3>
+<p>Unir dos tablas en una sola respuesta combinando sus filas por una columna en comun (normalmente clave primaria con clave foranea). Sirve para juntar datos que viven separados. En <strong>Faro</strong>, un <code>join</code> une <code>proyectos</code> con sus <code>fases</code> para mostrarlas en la misma pantalla.</p>
+</blockquote>
+<pre><code class="language-sql">-- Cada proyecto con el nombre de sus fases (Faro)
+select proyectos.nombre, fases.titulo
+from proyectos
+join fases on fases.proyecto_id = proyectos.id;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>El <code>join</code> se lee asi: "pegame las filas de <code>fases</code> donde su <code>proyecto_id</code> coincida con el <code>id</code> del proyecto". Si la condicion del <code>on</code> esta mal, te salen combinaciones que no tienen sentido.</p>
+</blockquote>
+<h3 id="k">K</h3>
+<blockquote class="def">
+<h3 id="que-significa-key-llave">🟦 ¿Que significa? — <em>Key (llave)</em></h3>
+<p>Palabra inglesa para "clave". Cuando leas <code>primary key</code> o <code>foreign key</code> en codigo, es lo mismo que clave primaria y clave foranea. Aparece en las migraciones de <strong>RachaSimple</strong> y <strong>Faro</strong> al definir las tablas.</p>
+</blockquote>
+<h3 id="l">L</h3>
+<blockquote class="def">
+<h3 id="que-significa-limit">🟦 ¿Que significa? — <em>LIMIT</em></h3>
+<p>Recortar la respuesta a un numero maximo de filas. Sirve para no traer miles de filas cuando solo quieres ver unas pocas. En <strong>Faro</strong>, mostrar "los ultimos 5 proyectos" usa <code>limit 5</code>.</p>
+</blockquote>
+<pre><code class="language-sql">select * from proyectos order by creado_en desc limit 5;
+</code></pre>
+<h3 id="m">M</h3>
+<blockquote class="def">
+<h3 id="que-significa-migracion">🟦 ¿Que significa? — <em>Migracion</em></h3>
+<p>Un archivo con instrucciones SQL que <strong>cambia la estructura</strong> de la base (crear tablas, agregar columnas) de forma ordenada y repetible. Sirve para que todos tengan la misma base y haya historial de cambios. En <strong>Faro</strong>, crear la tabla <code>fases</code> fue una migracion.</p>
+<h3 id="que-significa-milestone-hito">🟦 ¿Que significa? — <em>Milestone (hito)</em></h3>
+<p>Un punto importante marcado dentro de un proyecto. Sirve para medir avance. En <strong>Faro</strong>, el progreso de un proyecto se calcula de forma hibrida entre <strong>milestones</strong> cumplidos y lo que sugiere la IA.</p>
+</blockquote>
+<h3 id="n">N</h3>
+<blockquote class="def">
+<h3 id="que-significa-null">🟦 ¿Que significa? — <em>NULL</em></h3>
+<p>Un valor especial que significa "<strong>no hay dato aqui</strong>" (vacio), distinto de cero o de texto vacio. Sirve para representar informacion ausente. En <strong>Faro</strong>, un proyecto recien creado puede tener <code>descripcion</code> en <code>null</code> hasta que la IA la genere.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>null</code> no se compara con <code>=</code>. Para preguntar si algo esta vacio se usa <code>is null</code> o <code>is not null</code>, no <code>= null</code>. Es una trampa clasica de principiante.</p>
+</blockquote>
+<h3 id="o">O</h3>
+<blockquote class="def">
+<h3 id="que-significa-oauth">🟦 ¿Que significa? — <em>OAuth</em></h3>
+<p>Una forma segura de iniciar sesion usando otra cuenta (Google, GitHub) sin darle tu contrasena a la app. Sirve para autenticarte sin manejar passwords. En <strong>Faro</strong>, conectas tu GitHub y Google Drive por <strong>OAuth</strong> a traves de Supabase Auth.</p>
+<h3 id="que-significa-openai">🟦 ¿Que significa? — <em>OpenAI</em></h3>
+<p>Un servicio de inteligencia artificial que recibe texto y genera respuestas. Sirve para automatizar redaccion o analisis. En <strong>Faro</strong>, OpenAI genera la descripcion, el estado y el roadmap de cada proyecto.</p>
+<h3 id="que-significa-order-by">🟦 ¿Que significa? — <em>ORDER BY</em></h3>
+<p>Ordenar las filas de la respuesta por una columna, ascendente (<code>asc</code>) o descendente (<code>desc</code>). Sirve para presentar datos en un orden util. En <strong>RachaSimple</strong>, los registros de racha se ordenan por <code>fecha</code>.</p>
+</blockquote>
+<h3 id="p">P</h3>
+<blockquote class="def">
+<h3 id="que-significa-postgres-postgresql">🟦 ¿Que significa? — <em>Postgres (PostgreSQL)</em></h3>
+<p>Una base de datos relacional gratuita y muy robusta; es la que usa Supabase por debajo. Sirve para guardar datos en tablas con SQL. <strong>RachaSimple</strong> y <strong>Faro</strong> corren sobre Postgres; <strong>PolyPaw</strong> no usa Postgres (usa JSON).</p>
+<h3 id="que-significa-politica-policy-de-rls">🟦 ¿Que significa? — <em>Politica (policy de RLS)</em></h3>
+<p>Una regla escrita en SQL que dice <strong>quien puede ver o tocar que filas</strong>. Sirve para que cada usuario acceda solo a lo suyo. En <strong>RachaSimple</strong>, una politica deja que cada persona vea unicamente sus propios habitos.</p>
+</blockquote>
+<pre><code class="language-sql">-- Politica: cada quien solo ve sus habitos (RachaSimple)
+create policy &quot;ver mis habitos&quot;
+on habitos for select
+using (auth.uid() = usuario_id);
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-primary-key">🟦 ¿Que significa? — <em>Primary key</em></h3>
+<p>Es el termino en ingles de <strong>clave primaria</strong> (ver mas arriba). Lo veras tal cual en las migraciones de <strong>Faro</strong> y <strong>RachaSimple</strong>.</p>
+</blockquote>
+<h3 id="q">Q</h3>
+<blockquote class="def">
+<h3 id="que-significa-query">🟦 ¿Que significa? — <em>Query</em></h3>
+<p>Termino en ingles para <strong>consulta</strong> (ver "C"). En <strong>Faro</strong>, las queries a Postgres pasan por el cliente de Supabase desde Next.js.</p>
+</blockquote>
+<h3 id="r">R</h3>
+<blockquote class="def">
+<h3 id="que-significa-relacion-relacional">🟦 ¿Que significa? — <em>Relacion / relacional</em></h3>
+<p>Que las tablas se conectan entre si por claves (relaciones). Una base "relacional" organiza datos en tablas vinculadas. <strong>RachaSimple</strong> y <strong>Faro</strong> son relacionales; <strong>PolyPaw</strong>, con sus JSON sueltos, no lo es.</p>
+<h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
+<p>Seguridad a <strong>nivel de fila</strong>: Postgres revisa, fila por fila, si tienes permiso, segun las politicas. Sirve para proteger datos privados aunque compartan tabla. En <strong>Faro</strong> y <strong>RachaSimple</strong>, la RLS impide que un usuario lea datos de otro.</p>
+<h3 id="que-significa-roadmap">🟦 ¿Que significa? — <em>Roadmap</em></h3>
+<p>Una lista ordenada de lo que falta por hacer en un proyecto. Sirve para ver el camino. En <strong>Faro</strong>, la IA genera el roadmap de cada proyecto y tu lo vas marcando.</p>
+</blockquote>
+<h3 id="s">S</h3>
+<blockquote class="def">
+<h3 id="que-significa-select">🟦 ¿Que significa? — <em>SELECT</em></h3>
+<p>La orden SQL para <strong>leer</strong> datos: dices que columnas quieres y de que tabla. Sirve para consultar sin cambiar nada. En <strong>RachaSimple</strong>, ver tu lista de habitos es un <code>select</code> sobre la tabla <code>habitos</code>.</p>
+</blockquote>
+<pre><code class="language-sql">select nombre, creado_en from habitos;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-sql">🟦 ¿Que significa? — <em>SQL</em></h3>
+<p>El idioma para hablar con bases de datos relacionales (Structured Query Language). Sirve para leer, agregar, cambiar y borrar datos. Lo usas en <strong>RachaSimple</strong> y <strong>Faro</strong>; en <strong>PolyPaw</strong> no, porque ahi se leen archivos JSON con Python.</p>
+<h3 id="que-significa-supabase">🟦 ¿Que significa? — <em>Supabase</em></h3>
+<p>Una plataforma que te da Postgres, autenticacion (Auth), almacenamiento y APIs listas, todo alrededor de una base de datos. Sirve para tener backend sin montar servidores. <strong>RachaSimple</strong> y <strong>Faro</strong> usan Supabase.</p>
+</blockquote>
+<pre><code class="language-ts">// Cliente de Supabase leyendo habitos (RachaSimple, TypeScript)
+const { data, error } = await supabase
+  .from('habitos')
+  .select('id, nombre');
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <strong>RachaSimple</strong> ese <code>supabase.from('habitos').select(...)</code> por debajo se traduce a un <code>select</code> de SQL contra Postgres. El cliente te ahorra escribir SQL a mano, pero la RLS sigue mandando: solo recibes tus filas.</p>
+</blockquote>
+<h3 id="t">T</h3>
+<blockquote class="def">
+<h3 id="que-significa-tabla">🟦 ¿Que significa? — <em>Tabla</em></h3>
+<p>Una cuadricula con filas y columnas que guarda cosas del mismo tipo (todos los habitos, todos los proyectos). Sirve para organizar datos parecidos juntos. En <strong>RachaSimple</strong> hay tablas <code>habitos</code>, <code>registros_racha</code> y <code>perfiles</code>.</p>
+<h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
+<p>Una libreria del frontend que pide datos al servidor, los guarda en cache y los refresca solito. Sirve para no recargar de mas y mantener la pantalla al dia. En <strong>RachaSimple</strong> maneja las consultas a Supabase desde la interfaz.</p>
+<h3 id="que-significa-tipo-de-dato">🟦 ¿Que significa? — <em>Tipo (de dato)</em></h3>
+<p>La clase de dato que admite una columna: texto, numero, fecha, booleano (verdadero/falso). Sirve para que la base valide y guarde bien. En <strong>Faro</strong>, <code>creado_en</code> es de tipo fecha-hora y <code>nombre</code> es de tipo texto.</p>
+<h3 id="que-significa-transaccion">🟦 ¿Que significa? — <em>Transaccion</em></h3>
+<p>Un grupo de cambios que se aplican <strong>todos o ninguno</strong>: si uno falla, se deshace todo. Sirve para no dejar datos a medias. En <strong>RachaSimple</strong>, crear un habito y su primer registro juntos puede ir en una transaccion para que no quede uno sin el otro.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Piensa en una transaccion como un sobre que cierras: o entregas el sobre completo o no entregas nada. Asi la base nunca queda en un estado raro a la mitad.</p>
+</blockquote>
+<h3 id="u">U</h3>
+<blockquote class="def">
+<h3 id="que-significa-update">🟦 ¿Que significa? — <em>UPDATE</em></h3>
+<p>La orden SQL para <strong>cambiar</strong> datos de filas que ya existen. Sirve para corregir o actualizar. En <strong>Faro</strong>, cuando la IA genera la descripcion de un proyecto, se hace un <code>update</code> de la fila.</p>
+</blockquote>
+<pre><code class="language-sql">update proyectos
+set descripcion = 'App de habitos diarios'
+where id = 12;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-usuario-authuid">🟦 ¿Que significa? — <em>Usuario (auth.uid)</em></h3>
+<p>La persona que inicio sesion; Postgres conoce su identificador con <code>auth.uid()</code>. Sirve para que las politicas sepan de quien son los datos. En <strong>RachaSimple</strong> y <strong>Faro</strong>, las politicas de RLS comparan <code>auth.uid()</code> con la columna del dueno.</p>
+</blockquote>
+<h3 id="v">V</h3>
+<blockquote class="def">
+<h3 id="que-significa-vista-view">🟦 ¿Que significa? — <em>Vista (view)</em></h3>
+<p>Una consulta guardada con nombre que se usa como si fuera una tabla. Sirve para reutilizar consultas largas sin repetirlas. En <strong>Faro</strong>, una vista podria juntar proyectos con su numero de fases para mostrarlo facil.</p>
+<h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
+<p>Un valor secreto o de configuracion que vive fuera del codigo (claves, URLs). Sirve para no commitear secretos. En <strong>Faro</strong>, la clave de OpenAI y las de Supabase van en variables de entorno <strong>solo del servidor</strong>.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Nunca pongas la clave de OpenAI ni los tokens en el codigo del cliente. En <strong>Faro</strong> los secretos viven en el servidor y en <code>user_connections</code> protegida con RLS. Regla del dueno del proyecto: secretos solo en el servidor.</p>
+</blockquote>
+<h3 id="w">W</h3>
+<blockquote class="def">
+<h3 id="que-significa-where">🟦 ¿Que significa? — <em>WHERE</em></h3>
+<p>La parte de la consulta que pone la <strong>condicion</strong> para elegir filas. Sirve para filtrar (ver "Filtro"). En <strong>RachaSimple</strong>, traer solo el habito de id 3 usa <code>where id = 3</code>.</p>
+</blockquote>
+<pre><code class="language-sql">select * from habitos where id = 3;
+</code></pre>
+<h3 id="otros-que-conviene-recordar">Otros que conviene recordar</h3>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p>Un formato de texto para guardar datos como pares "nombre: valor". Sirve para almacenar o intercambiar datos sencillos sin base de datos. En <strong>PolyPaw</strong> los datos viven en archivos JSON; es justo lo contrario a las tablas de Postgres de <strong>RachaSimple</strong>.</p>
+<h3 id="que-significa-count-sum-avg">🟦 ¿Que significa? — <em>COUNT / SUM / AVG</em></h3>
+<p>Funciones de agregacion: <code>count</code> cuenta filas, <code>sum</code> las suma, <code>avg</code> saca promedio. Sirven para resumir. En <strong>RachaSimple</strong>, <code>count(*)</code> cuenta cuantos dias llevas en un habito.</p>
+</blockquote>
+<hr />
+<h2 id="3-mapa-mental-del-modulo">3. Mapa mental del modulo</h2>
+<p>Aqui esta todo el modulo en un solo dibujo de palabras. Leelo de arriba hacia abajo.</p>
+<pre><code class="language-text">                        BASE DE DATOS (Postgres)
+                                 |
+        ┌────────────────────────┼────────────────────────┐
+        |                        |                         |
+    GUARDAR                  CONSULTAR                 PROTEGER
+        |                        |                         |
+   Tablas                    SELECT ... FROM           RLS (seguridad
+   ├─ Filas                  ├─ WHERE  (filtrar)            por fila)
+   ├─ Columnas (tipo)        ├─ ORDER BY (ordenar)      └─ Politicas
+   ├─ Clave primaria         ├─ LIMIT  (recortar)          (auth.uid)
+   └─ Clave foranea ─────┐   ├─ JOIN   (unir tablas)
+                         |   └─ GROUP BY + agregacion
+   Cambiar datos:        |        (COUNT/SUM/AVG)
+   ├─ INSERT             |        └─ HAVING (filtrar grupos)
+   ├─ UPDATE             |
+   └─ DELETE        conecta tablas
+                    relacionadas
+        |
+   Estructura:
+   ├─ Migraciones (crear/cambiar tablas)
+   └─ Indices (buscar rapido)
+
+   TODO ESTO VIVE EN:  Supabase  ──→  Auth (OAuth)  ──→  cliente
+                                                          (TanStack Query
+                                                           en RachaSimple,
+                                                           Next.js en Faro)
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Si memorizas solo una linea de este mapa, que sea esta: <strong>guardas en tablas, consultas con SELECT, proteges con RLS.</strong> Todo lo demas son detalles que cuelgan de esos tres clavos.</p>
+</blockquote>
+<hr />
+<h2 id="4-donde-encaja-cada-repo">4. Donde encaja cada repo</h2>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>No todos tus proyectos usan base de datos, y eso esta bien. Asi se reparten:
+- <strong>RachaSimple</strong> y <strong>Faro</strong>: Postgres en Supabase, con SQL, RLS y politicas. Son tus dos ejemplos "de verdad" de este modulo.
+- <strong>PolyPaw</strong>: datos en archivos <strong>JSON</strong> con Python/Flet. Sirve para ver el contraste: sin tablas, sin SQL, sin RLS. Cuando los datos crecen, un JSON se queda corto y ahi entra Postgres.
+- <strong>tunal-digital</strong>: HTML/CSS/JS a mano, sin datos persistentes. No toca nada de este modulo.
+- <strong>polypaw-nas</strong>: guarda <strong>archivos</strong> (Samba) sobre Ubuntu; es almacenamiento, no base de datos relacional.</p>
+</blockquote>
+<hr />
+<h2 id="5-repaso-final-del-modulo">5. Repaso final del modulo</h2>
+<p>Recordemos el viaje, sin codigo, solo ideas:</p>
+<ol>
+<li>Una <strong>base de datos</strong> guarda datos en <strong>tablas</strong> con <strong>filas</strong> y <strong>columnas</strong>, y cada columna tiene un <strong>tipo</strong>.</li>
+<li>Cada fila se identifica con una <strong>clave primaria</strong>; las tablas se conectan con <strong>claves foraneas</strong>.</li>
+<li>Lees datos con <strong>SELECT</strong>, filtras con <strong>WHERE</strong>, ordenas con <strong>ORDER BY</strong> y recortas con <strong>LIMIT</strong>.</li>
+<li>Unes tablas con <strong>JOIN</strong> y resumes con <strong>GROUP BY</strong> + agregaciones (<strong>COUNT/SUM/AVG</strong>), filtrando grupos con <strong>HAVING</strong>.</li>
+<li>Cambias datos con <strong>INSERT</strong>, <strong>UPDATE</strong> y <strong>DELETE</strong> (siempre con cuidado del <code>where</code>).</li>
+<li>Los <strong>indices</strong> aceleran las busquedas; las <strong>migraciones</strong> cambian la estructura de forma ordenada; las <strong>transacciones</strong> agrupan cambios "todo o nada".</li>
+<li><strong>Postgres</strong> es el motor; <strong>Supabase</strong> lo envuelve con Auth (<strong>OAuth</strong>), y protege filas con <strong>RLS</strong> y <strong>politicas</strong> que comparan <code>auth.uid()</code> con el dueno del dato.</li>
+<li>En el frontend, <strong>TanStack Query</strong> (RachaSimple) o el cliente de Supabase en <strong>Next.js</strong> (Faro) piden esos datos.</li>
+</ol>
+<p>Si lees esos ocho puntos y todos te suenan, dominaste el Modulo 07. Bit esta orgulloso y mueve las branquias de la emocion.</p>
+<hr />
+<h2 id="6-como-sigue-modulo-08-apis-oauth-e-ia">6. Como sigue: Modulo 08 (APIs, OAuth e IA)</h2>
+<p>Ya sabes guardar y consultar datos. El siguiente paso es <strong>hacer que tu app hable con otros servicios</strong>. En el Modulo 08 veras:</p>
+<ul>
+<li><strong>APIs</strong>: como una app le pide datos a otra por internet (por ejemplo, <strong>Faro</strong> pidiendo tus repos a GitHub).</li>
+<li><strong>OAuth a fondo</strong>: el inicio de sesion seguro que ya asomamos, ahora explicado paso a paso (<strong>Faro</strong> conecta GitHub y Google Drive).</li>
+<li><strong>IA con OpenAI</strong>: como <strong>Faro</strong> manda texto a OpenAI y recibe la descripcion, el estado y el roadmap de un proyecto, y como cuidar la clave en variables de entorno del servidor.</li>
+</ul>
+<p>La buena noticia: la base de datos que ya entiendes es justo <strong>donde se guardan</strong> las respuestas de esas APIs y de la IA. El Modulo 07 fue el cimiento; el 08 construye la casa encima.</p>
+<blockquote>
+<p>Nos vemos en el Modulo 08. Lleva tu glosario contigo. — Bit el ajolote.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar con mis palabras que es una <strong>base de datos</strong>, una <strong>tabla</strong>, una <strong>fila</strong> y una <strong>columna</strong>.</li>
+<li>[ ] Distingo entre <strong>clave primaria</strong> y <strong>clave foranea</strong> y se para que sirve cada una.</li>
+<li>[ ] Se leer datos con <strong>SELECT</strong> y filtrar con <strong>WHERE</strong>.</li>
+<li>[ ] Entiendo que hace un <strong>JOIN</strong> y por que necesita una columna en comun.</li>
+<li>[ ] Se que es una <strong>agregacion</strong> y como <strong>GROUP BY</strong> resume filas.</li>
+<li>[ ] Puedo explicar que es <strong>Postgres</strong> y que papel juega <strong>Supabase</strong> encima.</li>
+<li>[ ] Entiendo que la <strong>RLS</strong> y las <strong>politicas</strong> protegen las filas de cada usuario.</li>
+<li>[ ] Se que es una <strong>migracion</strong>, un <strong>indice</strong> y una <strong>transaccion</strong>, aunque sea a grandes rasgos.</li>
+<li>[ ] Puedo decir por que <strong>PolyPaw</strong> (JSON) NO es una base de datos relacional y <strong>RachaSimple</strong>/<strong>Faro</strong> si.</li>
+<li>[ ] Se donde NO deben ir los secretos (nunca en el cliente; solo en el servidor).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 Abre el <strong>editor SQL de Supabase</strong> de <strong>RachaSimple</strong> (o uno de practica) y escribe un <code>select</code> que traiga todas las columnas de la tabla <code>habitos</code>. Despues agrega un <code>where</code> para traer solo el habito con <code>id = 1</code>.</p>
+</li>
+<li>
+<p>💻 Sobre <code>registros_racha</code>, escribe una consulta con <code>group by habito_id</code> y <code>count(*)</code> para contar cuantos registros tiene cada habito. Anade un <code>having count(*) &gt; 5</code> y observa que cambia.</p>
+</li>
+<li>
+<p>💻 Escribe un <code>join</code> que una <code>proyectos</code> con <code>fases</code> (estilo <strong>Faro</strong>) mostrando <code>proyectos.nombre</code> y <code>fases.titulo</code>. Revisa que la condicion del <code>on</code> use la clave foranea correcta (<code>fases.proyecto_id = proyectos.id</code>).</p>
+</li>
+<li>
+<p>Sin computadora: toma este glosario y, tapando las definiciones, intenta explicar en voz alta que es <strong>RLS</strong>, <strong>JOIN</strong> y <strong>clave foranea</strong>. Si te trabas, ese es el termino que toca repasar.</p>
+</li>
+<li>
+<p>Sin computadora: dibuja en una hoja el <strong>mapa mental</strong> de la seccion 3 de memoria. No tiene que quedar bonito; tiene que tener los tres clavos: <strong>guardar</strong>, <strong>consultar</strong>, <strong>proteger</strong>.</p>
+</li>
+<li>
+<p>💻 (Reto) En el editor SQL, escribe un <code>update</code> que cambie la <code>descripcion</code> de un proyecto y luego un <code>select</code> para confirmar el cambio. Asegurate de incluir un <code>where</code> con el <code>id</code> correcto antes de ejecutar el <code>update</code>.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

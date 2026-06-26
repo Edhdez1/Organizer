@@ -1,5 +1,10 @@
 # Capitulo 07 — Claves primarias, foráneas y relaciones
 
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+
 > ¡Hola otra vez! Soy **Bit**, tu ajolote guía. 🦎 Hasta ahora tus tablas vivían solas, como islas. Pero las cosas reales no están solas: un *hábito* pertenece a un *usuario*, un *registro de racha* pertenece a un *hábito*, una *fase* pertenece a un *proyecto*. En este capítulo aprenderás a **conectar** tablas sin que se arme un lío: claves primarias, claves foráneas, integridad referencial y los famosos "uno-a-muchos" y "muchos-a-muchos". Cuando termines, vas a entender por qué las tablas reales de **RachaSimple** y **Faro** están armadas como están. Respira hondo (yo respiro por las branquias 😄) y vamos.
 
 ## 1. El problema: datos que se repiten y se desordenan
@@ -12,6 +17,16 @@ Las bases de datos relacionales (como **Postgres**, que usan **RachaSimple** y *
 > Es un tipo de base de datos que guarda la información en **tablas** (filas y columnas) y permite **relacionar** unas tablas con otras mediante claves. "Relacional" viene justo de esas relaciones entre tablas.
 > **Para que sirve:** evitar repetir datos y mantener la información consistente.
 > **Donde se usa:** RachaSimple y Faro usan Postgres (vía Supabase), que es relacional. En cambio PolyPaw guarda todo en archivos JSON: no es relacional, y por eso para relacionar cosas hay que hacerlo "a mano" en el código.
+
+> ### 🟦 ¿Que significa? — *Postgres (PostgreSQL)*
+> Es un **motor de base de datos relacional** muy popular, libre y robusto. Es el programa que guarda tus tablas, hace cumplir las reglas (como la integridad referencial) y responde a tus consultas SQL.
+> **Para que sirve:** almacenar y consultar datos relacionados de forma segura y consistente, incluso con muchos usuarios a la vez.
+> **Donde se usa:** RachaSimple y Faro guardan toda su información en Postgres. PolyPaw, en cambio, no usa Postgres: guarda sus datos en archivos JSON en disco.
+
+> ### 🟦 ¿Que significa? — *Supabase*
+> Es una **plataforma** que te da un Postgres ya listo en la nube, más herramientas alrededor: autenticación de usuarios (Supabase Auth), un cliente para consultar desde tu código y seguridad por fila (RLS). Piensa en ella como "Postgres con pilas incluidas".
+> **Para que sirve:** montar el backend de una app (base de datos + login + permisos) sin tener que administrar un servidor a mano.
+> **Donde se usa:** RachaSimple y Faro usan Supabase tanto para su base Postgres como para el login de los usuarios.
 
 ## 2. La clave primaria: el documento de identidad de cada fila
 

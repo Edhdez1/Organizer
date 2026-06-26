@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 07 — Claves primarias, foráneas y relaciones — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-07-claves-primarias-foraneas-y-relaciones">Capitulo 07 — Claves primarias, foráneas y relaciones</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote guía. 🦎 Hasta ahora tus tablas vivían solas, como islas. Pero las cosas reales no están solas: un <em>hábito</em> pertenece a un <em>usuario</em>, un <em>registro de racha</em> pertenece a un <em>hábito</em>, una <em>fase</em> pertenece a un <em>proyecto</em>. En este capítulo aprenderás a <strong>conectar</strong> tablas sin que se arme un lío: claves primarias, claves foráneas, integridad referencial y los famosos "uno-a-muchos" y "muchos-a-muchos". Cuando termines, vas a entender por qué las tablas reales de <strong>RachaSimple</strong> y <strong>Faro</strong> están armadas como están. Respira hondo (yo respiro por las branquias 😄) y vamos.</p>
+</blockquote>
+<h2 id="1-el-problema-datos-que-se-repiten-y-se-desordenan">1. El problema: datos que se repiten y se desordenan</h2>
+<p>Imagina que guardas tus hábitos en un solo archivo, como hace <strong>PolyPaw</strong> (que usa archivos <strong>JSON</strong> en disco, sin base de datos relacional). Cada vez que registras que cumpliste un hábito, copias el nombre del usuario, su correo, el nombre del hábito... una y otra vez. Si el usuario cambia su correo, tendrías que corregirlo en cientos de lugares. Y si te equivocas en uno, ya quedó inconsistente.</p>
+<p>Las bases de datos relacionales (como <strong>Postgres</strong>, que usan <strong>RachaSimple</strong> y <strong>Faro</strong> a través de <strong>Supabase</strong>) resuelven esto separando la información en tablas y <strong>enlazándolas</strong> en vez de copiarla. Para enlazar tablas necesitamos dos herramientas: una forma de identificar cada fila sin confusión (clave primaria) y una forma de apuntar desde una tabla a otra (clave foránea).</p>
+<blockquote class="def">
+<h3 id="que-significa-base-de-datos-relacional">🟦 ¿Que significa? — <em>Base de datos relacional</em></h3>
+<p>Es un tipo de base de datos que guarda la información en <strong>tablas</strong> (filas y columnas) y permite <strong>relacionar</strong> unas tablas con otras mediante claves. "Relacional" viene justo de esas relaciones entre tablas.
+<strong>Para que sirve:</strong> evitar repetir datos y mantener la información consistente.
+<strong>Donde se usa:</strong> RachaSimple y Faro usan Postgres (vía Supabase), que es relacional. En cambio PolyPaw guarda todo en archivos JSON: no es relacional, y por eso para relacionar cosas hay que hacerlo "a mano" en el código.</p>
+<h3 id="que-significa-postgres-postgresql">🟦 ¿Que significa? — <em>Postgres (PostgreSQL)</em></h3>
+<p>Es un <strong>motor de base de datos relacional</strong> muy popular, libre y robusto. Es el programa que guarda tus tablas, hace cumplir las reglas (como la integridad referencial) y responde a tus consultas SQL.
+<strong>Para que sirve:</strong> almacenar y consultar datos relacionados de forma segura y consistente, incluso con muchos usuarios a la vez.
+<strong>Donde se usa:</strong> RachaSimple y Faro guardan toda su información en Postgres. PolyPaw, en cambio, no usa Postgres: guarda sus datos en archivos JSON en disco.</p>
+<h3 id="que-significa-supabase">🟦 ¿Que significa? — <em>Supabase</em></h3>
+<p>Es una <strong>plataforma</strong> que te da un Postgres ya listo en la nube, más herramientas alrededor: autenticación de usuarios (Supabase Auth), un cliente para consultar desde tu código y seguridad por fila (RLS). Piensa en ella como "Postgres con pilas incluidas".
+<strong>Para que sirve:</strong> montar el backend de una app (base de datos + login + permisos) sin tener que administrar un servidor a mano.
+<strong>Donde se usa:</strong> RachaSimple y Faro usan Supabase tanto para su base Postgres como para el login de los usuarios.</p>
+</blockquote>
+<h2 id="2-la-clave-primaria-el-documento-de-identidad-de-cada-fila">2. La clave primaria: el documento de identidad de cada fila</h2>
+<p>Cada fila de una tabla necesita algo que la distinga de todas las demás, aunque dos filas se parezcan mucho. Eso es la clave primaria.</p>
+<blockquote class="def">
+<h3 id="que-significa-clave-primaria-primary-key">🟦 ¿Que significa? — <em>Clave primaria (primary key)</em></h3>
+<p>Es una columna (o conjunto de columnas) cuyo valor <strong>identifica de forma única</strong> a cada fila de la tabla. No puede repetirse y no puede estar vacío (NULL).
+<strong>Para que sirve:</strong> señalar "esta fila exacta y ninguna otra". Es la base para que otras tablas puedan apuntar a ella.
+<strong>Donde se usa:</strong> en RachaSimple, la tabla <code>habitos</code> tiene una columna <code>id</code> que es la clave primaria de cada hábito. En Faro, la tabla <code>proyectos</code> tiene su propia <code>id</code>.</p>
+</blockquote>
+<p>En Postgres lo más común hoy es usar un <strong>UUID</strong> como clave primaria.</p>
+<blockquote class="def">
+<h3 id="que-significa-uuid">🟦 ¿Que significa? — <em>UUID</em></h3>
+<p>Es un identificador larguísimo y aleatorio, algo como <code>a1b2c3d4-...-9f8e</code>. UUID significa "identificador único universal". La probabilidad de que dos sean iguales es prácticamente nula.
+<strong>Para que sirve:</strong> dar un id único sin tener que ir contando (1, 2, 3...) ni preocuparte por adivinarlo.
+<strong>Donde se usa:</strong> Supabase, por defecto, usa UUID para los <code>id</code> de las tablas de RachaSimple y Faro, y también para identificar a cada usuario en <code>auth.users</code>.</p>
+</blockquote>
+<p>Así se ve una tabla con clave primaria en SQL (ejemplo basado en <code>habitos</code> de RachaSimple):</p>
+<pre><code class="language-sql">create table habitos (
+  id          uuid primary key default gen_random_uuid(),
+  nombre      text not null,
+  color       text,
+  creado_en   timestamptz default now()
+);
+</code></pre>
+<p>La parte <code>primary key</code> declara que <code>id</code> es la clave primaria. Y <code>default gen_random_uuid()</code> significa "si no me das un id, genero un UUID nuevo automáticamente".</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Casi siempre conviene una clave primaria que <strong>no tenga significado de negocio</strong> (como un UUID o un número), en vez de usar el correo o el nombre. ¿Por qué? Porque los datos de negocio cambian (alguien cambia de correo), y no quieres que cambiar un correo te obligue a actualizar la identidad de la fila en toda la base.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>"Único" y "obligatorio" no son lo mismo. La clave primaria es <strong>ambas cosas a la vez</strong>: única (no se repite) y no nula (siempre tiene valor). Si solo quieres que algo no se repita pero sí pueda faltar, eso es otra restricción (<code>unique</code>), no una clave primaria.</p>
+</blockquote>
+<h2 id="3-la-clave-foranea-apuntar-a-otra-tabla">3. La clave foránea: apuntar a otra tabla</h2>
+<p>Ya tenemos hábitos con su <code>id</code>. Ahora queremos decir "este hábito pertenece a este usuario". Para eso guardamos en la tabla <code>habitos</code> una columna que contenga el <code>id</code> del usuario dueño. Esa columna que apunta a otra tabla es una clave foránea.</p>
+<blockquote class="def">
+<h3 id="que-significa-clave-foranea-foreign-key">🟦 ¿Que significa? — <em>Clave foránea (foreign key)</em></h3>
+<p>Es una columna que <strong>guarda el valor de la clave primaria de otra tabla</strong>, creando un enlace entre ambas. "Foránea" porque su valor viene de afuera, de otra tabla.
+<strong>Para que sirve:</strong> conectar una fila con la fila a la que pertenece en otra tabla, sin copiar todos sus datos.
+<strong>Donde se usa:</strong> en RachaSimple, <code>habitos</code> tiene una columna <code>user_id</code> que apunta al usuario dueño. En Faro, la tabla <code>fases</code> tiene <code>proyecto_id</code> que apunta al proyecto al que pertenece la fase.</p>
+</blockquote>
+<p>Veamos <code>habitos</code> ahora con su clave foránea hacia el usuario:</p>
+<pre><code class="language-sql">create table habitos (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid not null references auth.users (id),
+  nombre      text not null,
+  color       text,
+  creado_en   timestamptz default now()
+);
+</code></pre>
+<p>La línea clave es <code>user_id uuid not null references auth.users (id)</code>. La palabra <code>references</code> declara la clave foránea: "el valor de <code>user_id</code> tiene que existir como <code>id</code> en la tabla <code>auth.users</code>". Así, cada hábito queda amarrado a un usuario real.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En RachaSimple usas Supabase Auth. Cuando alguien inicia sesión, Supabase crea (o ya tiene) una fila en <code>auth.users</code> con un <code>id</code> (UUID). Ese mismo UUID es el que guardas en <code>habitos.user_id</code>. Por eso cada hábito "sabe" de quién es: comparte el <code>id</code> del usuario.</p>
+<h3 id="que-significa-tabla-referenciada-y-tabla-que-referencia">🟦 ¿Que significa? — <em>Tabla referenciada y tabla que referencia</em></h3>
+<p>La tabla <strong>referenciada</strong> es la que tiene la clave primaria a la que se apunta (ej. <code>auth.users</code>). La tabla <strong>que referencia</strong> es la que tiene la clave foránea (ej. <code>habitos</code>).
+<strong>Para que sirve:</strong> entender la dirección del enlace: la clave foránea siempre vive en la tabla "hija" y apunta hacia la "padre".
+<strong>Donde se usa:</strong> en Faro, <code>fases</code> (hija) referencia a <code>proyectos</code> (padre) con <code>proyecto_id</code>.</p>
+</blockquote>
+<h2 id="4-integridad-referencial-la-base-no-te-deja-mentir">4. Integridad referencial: la base no te deja mentir</h2>
+<p>Aquí está la magia. Una vez que declaras una clave foránea, Postgres <strong>vigila</strong> que el enlace siempre tenga sentido. Eso se llama integridad referencial.</p>
+<blockquote class="def">
+<h3 id="que-significa-integridad-referencial">🟦 ¿Que significa? — <em>Integridad referencial</em></h3>
+<p>Es la garantía de que toda clave foránea <strong>apunta a una fila que realmente existe</strong>. La base de datos no te deja crear un hábito con un <code>user_id</code> de un usuario inexistente, ni te deja borrar a un usuario dejando hábitos "huérfanos" apuntando a la nada (a menos que digas qué hacer con ellos).
+<strong>Para que sirve:</strong> evitar datos rotos e incoherentes ("este hábito es del usuario X" cuando X ya no existe).
+<strong>Donde se usa:</strong> en RachaSimple y Faro la activas con cada <code>references</code>. Es Postgres quien hace cumplir la regla por ti.</p>
+<h3 id="que-significa-fila-huerfana">🟦 ¿Que significa? — <em>Fila huérfana</em></h3>
+<p>Es una fila cuya clave foránea apunta a algo que ya no existe (por ejemplo, un registro de racha cuyo hábito fue borrado).
+<strong>Para que sirve (evitarla):</strong> mantener limpios los datos. La integridad referencial existe justamente para impedir huérfanos.
+<strong>Donde se usa:</strong> sin reglas, borrar un hábito en RachaSimple podría dejar registros de racha huérfanos. Con clave foránea bien configurada, eso no pasa.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>En PolyPaw, como los datos están en JSON sin base relacional, <strong>no hay nadie vigilando la integridad</strong>. Si en un archivo borras una mascota pero en otro quedan referencias a ella, el programa puede romperse y nadie te avisa hasta que falle. Esa es una gran ventaja de Postgres frente a "datos en archivos": las reglas se cumplen solas.</p>
+</blockquote>
+<h2 id="5-relaciones-uno-a-muchos-el-caso-mas-comun">5. Relaciones uno-a-muchos: el caso más común</h2>
+<p>La relación más frecuente es "uno-a-muchos": una fila de una tabla se relaciona con muchas filas de otra.</p>
+<blockquote class="def">
+<h3 id="que-significa-relacion-uno-a-muchos">🟦 ¿Que significa? — <em>Relación uno-a-muchos</em></h3>
+<p>Es cuando <strong>una</strong> fila de la tabla A se relaciona con <strong>muchas</strong> filas de la tabla B, pero cada fila de B pertenece a una sola de A.
+<strong>Para que sirve:</strong> modelar "uno tiene varios": un usuario tiene varios hábitos; un hábito tiene varios registros; un proyecto tiene varias fases.
+<strong>Donde se usa:</strong> RachaSimple → un usuario tiene muchos hábitos, y un hábito tiene muchos registros de racha. Faro → un usuario tiene muchos proyectos, y un proyecto tiene muchas fases.</p>
+</blockquote>
+<p>La clave foránea siempre se pone <strong>del lado "muchos"</strong>. Veamos la cadena completa de RachaSimple: usuario → hábitos → registros.</p>
+<pre><code class="language-sql">-- Un usuario (auth.users) tiene muchos habitos
+create table habitos (
+  id        uuid primary key default gen_random_uuid(),
+  user_id   uuid not null references auth.users (id),
+  nombre    text not null
+);
+
+-- Un habito tiene muchos registros de racha
+create table registros (
+  id          uuid primary key default gen_random_uuid(),
+  habito_id   uuid not null references habitos (id),
+  fecha       date not null,
+  completado  boolean default true
+);
+</code></pre>
+<p>Fíjate en la cadena: <code>registros.habito_id</code> apunta a <code>habitos.id</code>, y <code>habitos.user_id</code> apunta a <code>auth.users.id</code>. Así, partiendo de un registro puedes llegar al hábito, y del hábito al usuario. Todo conectado, nada repetido.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En Faro pasa lo mismo con otra cadena: usuario → proyectos → fases.
+```sql
+create table proyectos (
+  id        uuid primary key default gen_random_uuid(),
+  user_id   uuid not null references auth.users (id),
+  nombre    text not null,
+  estado    text
+);</p>
+<p>create table fases (
+  id           uuid primary key default gen_random_uuid(),
+  proyecto_id  uuid not null references proyectos (id),
+  titulo       text not null,
+  completada   boolean default false
+);
+<code>``</code>fases.proyecto_id<code>apunta a</code>proyectos.id`. Un proyecto tiene muchas fases; cada fase pertenece a un solo proyecto.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Truco para saber dónde va la clave foránea: pregunta "¿quién pertenece a quién?". El que <strong>pertenece</strong> lleva la clave foránea. Una fase pertenece a un proyecto, así que <code>proyecto_id</code> va en <code>fases</code>, no al revés.</p>
+</blockquote>
+<h2 id="6-leer-relaciones-desde-el-cliente-de-supabase">6. Leer relaciones desde el cliente de Supabase</h2>
+<p>En RachaSimple y Faro no escribes SQL a mano cada vez: usas el <strong>cliente de Supabase</strong> desde tu código TypeScript (y normalmente lo combinas con <strong>TanStack Query</strong> para manejar la carga de datos). Lo bueno es que el cliente entiende las claves foráneas y puede traer datos relacionados de una vez.</p>
+<blockquote class="def">
+<h3 id="que-significa-cliente-de-supabase">🟦 ¿Que significa? — <em>Cliente de Supabase</em></h3>
+<p>Es una librería de JavaScript/TypeScript que te deja consultar tu base de datos Postgres escribiendo métodos en vez de SQL crudo. Por debajo, igual usa las tablas y relaciones que definiste.
+<strong>Para que sirve:</strong> leer y escribir datos desde tu app web sin armar las consultas SQL manualmente.
+<strong>Donde se usa:</strong> RachaSimple y Faro lo usan en el front (Next.js / React) para hablar con Postgres.</p>
+</blockquote>
+<pre><code class="language-ts">// RachaSimple: traer cada habito junto con sus registros (relacion uno-a-muchos)
+const { data, error } = await supabase
+  .from(&quot;habitos&quot;)
+  .select(&quot;id, nombre, registros ( fecha, completado )&quot;);
+</code></pre>
+<p>Ese <code>registros ( fecha, completado )</code> dentro del <code>select</code> funciona <strong>porque existe la clave foránea</strong> <code>registros.habito_id → habitos.id</code>. Supabase detecta la relación y, por cada hábito, anida sus registros. Sin la clave foránea, esto no sería posible.</p>
+<blockquote class="def">
+<h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
+<p>Es una librería de React que se encarga de <strong>pedir datos del servidor, guardarlos en caché y refrescarlos</strong> cuando hace falta. Le entregas una función que trae datos (por ejemplo la consulta de Supabase de arriba) y ella maneja el resto.
+<strong>Para que sirve:</strong> que tu interfaz muestre datos siempre frescos sin que tú escribas a mano toda la lógica de carga, recarga y errores.
+<strong>Donde se usa:</strong> RachaSimple la usa para cargar hábitos y registros y mantener la pantalla al día.</p>
+</blockquote>
+<h2 id="7-relaciones-muchos-a-muchos-y-tablas-puente">7. Relaciones muchos-a-muchos y tablas puente</h2>
+<p>A veces "uno-a-muchos" no alcanza. Imagina que en Faro quisieras <strong>etiquetas</strong> (tags) en los proyectos: un proyecto puede tener muchas etiquetas, y una etiqueta puede estar en muchos proyectos. Eso es muchos-a-muchos, y no se puede resolver con una sola clave foránea.</p>
+<blockquote class="def">
+<h3 id="que-significa-relacion-muchos-a-muchos">🟦 ¿Que significa? — <em>Relación muchos-a-muchos</em></h3>
+<p>Es cuando muchas filas de la tabla A se relacionan con muchas filas de la tabla B, en ambos sentidos. Un proyecto puede tener varias etiquetas; una etiqueta puede pertenecer a varios proyectos.
+<strong>Para que sirve:</strong> modelar relaciones cruzadas donde ninguno de los dos lados "es dueño" del otro.
+<strong>Donde se usa (ejemplo):</strong> proyectos ↔ etiquetas en Faro, o hábitos ↔ categorías en RachaSimple.</p>
+</blockquote>
+<p>¿Dónde pondrías la clave foránea? Si la pones en <code>proyectos</code>, solo cabe una etiqueta; si la pones en <code>etiquetas</code>, solo cabe un proyecto. La solución es una <strong>tabla puente</strong> en medio.</p>
+<blockquote class="def">
+<h3 id="que-significa-tabla-puente-tabla-de-union">🟦 ¿Que significa? — <em>Tabla puente (tabla de unión)</em></h3>
+<p>Es una tabla intermedia que existe solo para <strong>conectar</strong> dos tablas en una relación muchos-a-muchos. Tiene dos claves foráneas: una hacia cada lado.
+<strong>Para que sirve:</strong> registrar cada par "este proyecto con esta etiqueta" como una fila. Muchos pares = muchas filas.
+<strong>Donde se usa (ejemplo):</strong> una tabla <code>proyecto_etiquetas</code> que une <code>proyectos</code> y <code>etiquetas</code> en Faro.</p>
+</blockquote>
+<pre><code class="language-sql">create table etiquetas (
+  id      uuid primary key default gen_random_uuid(),
+  nombre  text not null
+);
+
+-- Tabla puente: cada fila es &quot;un proyecto con una etiqueta&quot;
+create table proyecto_etiquetas (
+  proyecto_id  uuid not null references proyectos (id),
+  etiqueta_id  uuid not null references etiquetas (id),
+  primary key (proyecto_id, etiqueta_id)
+);
+</code></pre>
+<p>Mira el <code>primary key (proyecto_id, etiqueta_id)</code>: aquí la clave primaria está formada por <strong>dos columnas juntas</strong>. Eso garantiza que el mismo par proyecto+etiqueta no se repita.</p>
+<blockquote class="def">
+<h3 id="que-significa-clave-primaria-compuesta">🟦 ¿Que significa? — <em>Clave primaria compuesta</em></h3>
+<p>Es una clave primaria formada por <strong>más de una columna</strong>. La combinación de todas debe ser única, aunque cada columna por separado sí pueda repetirse.
+<strong>Para que sirve:</strong> identificar filas en tablas puente, donde lo único es la <em>combinación</em> de las dos referencias.
+<strong>Donde se usa:</strong> la tabla puente <code>proyecto_etiquetas</code>: ni <code>proyecto_id</code> ni <code>etiqueta_id</code> son únicos por sí solos, pero su par sí.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Una tabla puente puede tener columnas extra propias. Por ejemplo, en <code>proyecto_etiquetas</code> podrías agregar <code>creado_en</code> para saber cuándo se asignó esa etiqueta. La tabla puente no tiene por qué ser "solo dos columnas".</p>
+</blockquote>
+<h2 id="8-on-delete-cascade-que-pasa-al-borrar">8. ON DELETE CASCADE: ¿qué pasa al borrar?</h2>
+<p>Volvamos a la integridad referencial. Si borras un hábito en RachaSimple, ¿qué pasa con sus registros de racha, que apuntan a él con <code>habito_id</code>? Postgres no te dejará dejarlos huérfanos. Tienes que decirle qué hacer, y la opción más útil aquí es <strong>cascada</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-on-delete-cascade">🟦 ¿Que significa? — <em>ON DELETE CASCADE</em></h3>
+<p>Es una regla en la clave foránea que dice: "si borran la fila padre, <strong>borra también</strong> las filas hijas que la referencian". En cascada, como fichas de dominó.
+<strong>Para que sirve:</strong> limpiar automáticamente los datos dependientes. Borras un hábito y sus registros se van solos, sin quedar huérfanos.
+<strong>Donde se usa:</strong> en RachaSimple, <code>registros.habito_id</code> con <code>on delete cascade</code>: borrar un hábito elimina sus registros. En Faro, <code>fases.proyecto_id</code> igual: borrar un proyecto elimina sus fases.</p>
+</blockquote>
+<pre><code class="language-sql">create table registros (
+  id          uuid primary key default gen_random_uuid(),
+  habito_id   uuid not null references habitos (id) on delete cascade,
+  fecha       date not null,
+  completado  boolean default true
+);
+</code></pre>
+<p>Ahora, borrar un hábito borra en cascada todos sus registros. Lo mismo aplicarías en Faro a <code>fases.proyecto_id ... on delete cascade</code>: si un usuario elimina un proyecto, sus fases desaparecen con él.</p>
+<blockquote class="def">
+<h3 id="que-significa-otras-acciones-de-borrado-restrict-set-null">🟦 ¿Que significa? — <em>Otras acciones de borrado (RESTRICT, SET NULL)</em></h3>
+<p>Además de <code>cascade</code>, existen <code>on delete restrict</code> ("no dejes borrar el padre si tiene hijos") y <code>on delete set null</code> ("deja el hijo, pero pon su clave foránea en NULL").
+<strong>Para que sirve:</strong> elegir el comportamiento según el caso. A veces quieres impedir el borrado; a veces conservar el hijo sin dueño.
+<strong>Donde se usa:</strong> en RachaSimple y Faro lo más natural es <code>cascade</code> para datos que no tienen sentido sin su padre (registros sin hábito, fases sin proyecto).</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p><code>on delete cascade</code> es potente y un poco peligroso: borrar <strong>una</strong> fila puede borrar <strong>miles</strong> en cadena, y no hay "deshacer". Úsalo solo cuando de verdad los hijos no tengan sentido sin el padre. Un registro de racha sin su hábito no sirve de nada → cascade tiene sentido. Pero piénsalo dos veces antes de ponerlo en todos lados.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En RachaSimple, además de estas reglas, cada tabla tiene <strong>RLS</strong> (seguridad a nivel de fila) para que cada usuario solo vea SUS hábitos y registros. RLS y claves foráneas trabajan juntas: la clave foránea conecta los datos, y RLS controla quién puede verlos. En Faro pasa igual con <code>proyectos</code>, <code>fases</code> y <code>user_connections</code>.</p>
+<h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
+<p>Es una función de Postgres que filtra <strong>por fila</strong> quién puede leer o modificar qué, según reglas que tú escribes (por ejemplo: "solo si <code>user_id</code> coincide con el usuario logueado").
+<strong>Para que sirve:</strong> que un usuario nunca acceda a datos de otro, aunque la consulta no lo filtre explícitamente.
+<strong>Donde se usa:</strong> RachaSimple (hábitos, registros, perfiles) y Faro (proyectos, fases, conexiones de usuario) la usan en todas sus tablas con datos privados.</p>
+</blockquote>
+<h2 id="9-normalizacion-a-grandes-rasgos">9. Normalización, a grandes rasgos</h2>
+<p>Todo lo que hicimos —separar usuarios, hábitos y registros en tablas distintas en vez de un solo bloque— tiene un nombre: normalización.</p>
+<blockquote class="def">
+<h3 id="que-significa-normalizacion">🟦 ¿Que significa? — <em>Normalización</em></h3>
+<p>Es el proceso de organizar los datos en varias tablas relacionadas para <strong>evitar repetirlos</strong> y mantenerlos consistentes. La idea central: cada dato vive en <strong>un solo lugar</strong>.
+<strong>Para que sirve:</strong> que no haya información duplicada que se pueda contradecir. Si el nombre de un hábito vive solo en <code>habitos</code>, cambiarlo una vez lo cambia para todos sus registros.
+<strong>Donde se usa:</strong> RachaSimple y Faro están normalizadas: el correo del usuario vive en <code>auth.users</code>, no copiado en cada hábito o proyecto.</p>
+</blockquote>
+<p>La regla práctica para principiantes: <strong>si te encuentras copiando el mismo dato en muchas filas, probablemente ese dato debería estar en su propia tabla</strong>, referenciada por clave foránea.</p>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>No te obsesiones con la teoría de "formas normales" todavía. Para empezar, basta con: (1) cada cosa importante tiene su tabla, (2) cada tabla tiene clave primaria, (3) las relaciones se hacen con claves foráneas, no copiando datos. Con eso ya estás haciendo lo esencial bien.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Normalizar demasiado tampoco es ideal: partir todo en mil tablas puede complicar las consultas. En PolyPaw, por ejemplo, tener los datos juntos en JSON es perfectamente razonable para su tamaño y su forma de funcionar (archivos locales, sin servidor de base de datos). La normalización brilla cuando tienes muchos datos relacionados y varios usuarios, como en RachaSimple y Faro.</p>
+</blockquote>
+<h2 id="10-juntando-todo-el-mapa-de-rachasimple-y-faro">10. Juntando todo: el mapa de RachaSimple y Faro</h2>
+<p>Pongamos las dos historias lado a lado, porque siguen el mismo patrón:</p>
+<p><strong>RachaSimple:</strong>
+- <code>auth.users</code> (un usuario) → muchos <code>habitos</code> (vía <code>habitos.user_id</code>)
+- <code>habitos</code> (un hábito) → muchos <code>registros</code> (vía <code>registros.habito_id</code>, con <code>on delete cascade</code>)
+- <code>perfiles</code>: datos extra del usuario, también ligados a <code>auth.users</code></p>
+<p><strong>Faro:</strong>
+- <code>auth.users</code> (un usuario) → muchos <code>proyectos</code> (vía <code>proyectos.user_id</code>)
+- <code>proyectos</code> (un proyecto) → muchas <code>fases</code> (vía <code>fases.proyecto_id</code>, con <code>on delete cascade</code>)
+- <code>user_connections</code>: las conexiones OAuth del usuario (GitHub, Drive), ligadas a <code>auth.users</code> y protegidas con RLS</p>
+<p>¿Notas el patrón? <strong>Usuario → cosa principal → detalles</strong>. Una cadena de relaciones uno-a-muchos, cada eslabón conectado con una clave foránea, todo protegido con integridad referencial y RLS. Cuando entiendes este patrón, entiendes el 80% de cómo está armada cualquier app con Supabase.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>Faro usa OpenAI para generar descripción, estado y roadmap de cada proyecto. Esos resultados se guardan ligados al <code>proyecto_id</code> correspondiente. Sin claves foráneas bien puestas, no sabrías a qué proyecto pertenece cada análisis generado por la IA. Las relaciones no son un lujo académico: sostienen funciones reales del producto.</p>
+</blockquote>
+<p>Y eso es todo por ahora. Tómate un momento, que yo me voy a flotar un rato. 🦎💤 En el próximo capítulo veremos cómo consultar varias tablas a la vez con <code>JOIN</code>, que es justo donde estas relaciones cobran toda su fuerza.</p>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé explicar qué es una clave primaria y por qué cada fila necesita una.</li>
+<li>[ ] Entiendo por qué se suele usar UUID como clave primaria en Supabase.</li>
+<li>[ ] Sé qué es una clave foránea y en qué lado de la relación se coloca.</li>
+<li>[ ] Puedo explicar la integridad referencial y qué es una fila huérfana.</li>
+<li>[ ] Distingo una relación uno-a-muchos de una muchos-a-muchos.</li>
+<li>[ ] Entiendo para qué sirve una tabla puente y por qué lleva clave primaria compuesta.</li>
+<li>[ ] Sé qué hace <code>on delete cascade</code> y cuándo conviene (y cuándo no).</li>
+<li>[ ] Puedo explicar, a grandes rasgos, qué es normalizar y por qué evita datos repetidos.</li>
+<li>[ ] Sé trazar la cadena usuario → hábitos → registros (RachaSimple) y usuario → proyectos → fases (Faro).</li>
+<li>[ ] Entiendo por qué PolyPaw (JSON) no tiene integridad referencial automática y Postgres sí.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>En papel.</strong> Dibuja tres cajas: <code>auth.users</code>, <code>habitos</code>, <code>registros</code>. Traza flechas que representen las claves foráneas e indica de qué columna a qué columna va cada una. Marca dónde pondrías <code>on delete cascade</code>.</p>
+</li>
+<li>
+<p><strong>En papel.</strong> Explica con tus palabras, como si se lo contaras a un amigo, por qué guardar el correo del usuario dentro de cada fila de <code>registros</code> sería una mala idea. Usa la palabra "normalización".</p>
+</li>
+<li>
+<p>💻 <strong>En el editor SQL de Supabase.</strong> Crea una tabla <code>notas</code> con: <code>id</code> (UUID, clave primaria), <code>habito_id</code> (clave foránea a <code>habitos</code>, con <code>on delete cascade</code>) y <code>texto</code> (text). Inserta una fila usando el <code>id</code> de un hábito existente. Luego borra ese hábito y comprueba que la nota desapareció en cascada.</p>
+</li>
+<li>
+<p>💻 <strong>En el editor SQL de Supabase.</strong> Intenta insertar en <code>registros</code> una fila con un <code>habito_id</code> que NO exista (inventa un UUID). Observa el error que devuelve Postgres y escribe qué concepto de este capítulo lo provocó.</p>
+</li>
+<li>
+<p>💻 <strong>En el editor SQL (diseño).</strong> Escribe el SQL de una tabla puente <code>proyecto_etiquetas</code> para Faro, con dos claves foráneas y una clave primaria compuesta. Añade una columna extra <code>creado_en</code> con valor por defecto <code>now()</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Con el cliente de Supabase (TypeScript).</strong> Escribe una consulta <code>supabase.from("proyectos").select(...)</code> que traiga cada proyecto junto con sus fases anidadas. Explica en un comentario por qué esa consulta funciona (pista: la clave foránea <code>fases.proyecto_id</code>).</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
