@@ -5,33 +5,33 @@
 </p>
 
 
-> Hola de nuevo. Soy **Bit**, tu ajolote guia. Hasta ahora tus programas en JavaScript han tenido mala memoria: en cuanto el usuario recarga la pagina, todo lo que escribio o eligio desaparece como si nunca hubiera pasado. En este capitulo vamos a darle memoria al navegador con `localStorage` y `sessionStorage`, y aprenderemos a guardar datos complicados convirtiendolos a texto con **JSON**. Despues partiremos nuestro codigo en varios archivos ordenados usando **modulos** (`import`/`export`), igual que cuando ordenas tus juguetes en cajas en lugar de tenerlos todos en un monton. Respira: vamos despacio y todo lo voy a explicar palabra por palabra. *(Hago burbujas de emocion.)*
+> Hola de nuevo. Soy **Bit**, tu ajolote guia. Te habras dado cuenta de algo: tus programas en JavaScript tienen muy mala memoria. El usuario escribe su nombre, elige una opcion, recarga la pagina... y puf, todo se borra como si nunca hubiera pasado. En este capitulo le vamos a dar memoria al navegador con `localStorage` y `sessionStorage`, y veremos como guardar datos complicados convirtiendolos a texto con **JSON**. Despues partiremos el codigo en varios archivos ordenados con **modulos** (`import`/`export`), igual que cuando guardas tus juguetes en cajas en vez de tenerlos todos amontonados en el suelo. Tranquilo: vamos despacio y lo explico todo palabra por palabra. *(Hago burbujas de emocion.)*
 
 ---
 
 ## 1. El problema: la pagina se olvida de todo
 
-Imagina que en **tunal-digital** (un sitio web hecho con HTML, CSS y JavaScript puro, sin frameworks) el usuario escribe su nombre en un formulario, o activa el modo oscuro. Si cierra la pestana y vuelve, el sitio no recuerda nada. Eso pasa porque las **variables** de JavaScript viven en la memoria temporal del navegador, y esa memoria se borra al recargar.
+Pongamos un ejemplo. En **tunal-digital** (un sitio web hecho con HTML, CSS y JavaScript puro, sin frameworks) el usuario escribe su nombre en un formulario, o activa el modo oscuro. Cierra la pestana, vuelve mas tarde... y el sitio no recuerda absolutamente nada. ¿Por que? Porque las **variables** de JavaScript viven en la memoria temporal del navegador, y esa memoria se vacia en cuanto recargas.
 
-Para que algo **sobreviva** a la recarga, necesitamos guardarlo en un lugar mas permanente. El navegador nos ofrece dos cajones para eso: `localStorage` y `sessionStorage`.
+Si queremos que un dato **sobreviva** a la recarga, hay que guardarlo en un sitio mas permanente. El navegador nos da dos cajones justo para eso: `localStorage` y `sessionStorage`.
 
 > ### 🟦 ¿Que significa? — *Persistencia*
 > **Definicion simple:** que un dato siga existiendo aunque cierres la pagina o apagues el computador.
 > **Para que sirve:** para que tu app recuerde preferencias, sesiones, datos a medio escribir, etc.
-> **Donde se usa en un repo real:** en **RachaSimple** (app de habitos hecha con React, TypeScript y Supabase) la persistencia "de verdad" vive en una base de datos en la nube; pero un sitio sencillo como **tunal-digital** puede lograr persistencia ligera usando el almacenamiento del navegador, sin servidor.
+> **Donde se usa en un repo real:** en **RachaSimple** (app de habitos hecha con React, TypeScript y Supabase) la persistencia "de verdad" vive en una base de datos en la nube; pero un sitio sencillo como **tunal-digital** puede conseguir una persistencia ligera usando el almacenamiento del navegador, sin necesidad de servidor.
 
 ---
 
 ## 2. `localStorage`: el cajon que no se vacia
 
-`localStorage` es como una pequena libreta que el navegador guarda en el disco de la computadora. Lo que escribas ahi **se queda** aunque cierres todo y vuelvas manana.
+Piensa en `localStorage` como una pequena libreta que el navegador guarda en el disco de la computadora. Lo que escribas ahi se queda, aunque cierres todo y vuelvas manana.
 
 > ### 🟦 ¿Que significa? — *localStorage*
 > **Definicion simple:** un almacen del navegador donde guardas pares de "nombre y valor" (texto) que persisten indefinidamente.
 > **Para que sirve:** recordar preferencias del usuario (tema claro/oscuro, idioma), datos no sensibles, borradores.
-> **Donde se usa en un repo real:** en **tunal-digital**, el archivo `main.js` maneja interacciones del lado del cliente; ahi seria natural usar `localStorage` para recordar, por ejemplo, si el usuario ya cerro un aviso o que tema prefiere.
+> **Donde se usa en un repo real:** en **tunal-digital**, el archivo `main.js` maneja las interacciones del lado del cliente; ahi seria de lo mas natural usar `localStorage` para recordar, por ejemplo, si el usuario ya cerro un aviso o que tema prefiere.
 
-Se usa con cuatro operaciones basicas:
+Se maneja con cuatro operaciones basicas:
 
 ```javascript
 // Guardar un valor (siempre como texto)
@@ -54,16 +54,16 @@ localStorage.clear();
 > **Donde se usa en un repo real:** en **PolyPaw** (app educativa en Python con Flet que guarda su contenido en archivos JSON), cada mision tiene claves como `titulo` o `edad` con sus valores; es la misma idea que usa `localStorage`.
 
 > ### 💡 Tip
-> La **clave** la eliges tu y conviene que sea descriptiva: `"tema"`, `"usuario_nombre"`, `"carrito"`. Si dos partes de tu codigo usan la misma clave para cosas distintas, se pisaran los datos. Un truco: ponles un prefijo, como `"tunal_tema"`.
+> La **clave** la eliges tu, y conviene que sea descriptiva: `"tema"`, `"usuario_nombre"`, `"carrito"`. Cuidado con una cosa: si dos partes de tu codigo usan la misma clave para cosas distintas, se pisaran los datos. Un truco sencillo es ponerles un prefijo, como `"tunal_tema"`.
 
 > ### ⚠️ Cuidado
-> `localStorage` **solo guarda texto** (cadenas de caracteres). Si intentas guardar un numero, lo convierte a texto sin avisar: `localStorage.setItem("edad", 5)` guarda `"5"` (texto), no `5` (numero). Y si guardas un objeto sin convertirlo, obtienes la inutil cadena `"[object Object]"`. Por eso, en la seccion 4, aprenderemos JSON.
+> `localStorage` **solo guarda texto** (cadenas de caracteres). Si intentas guardar un numero, lo convierte a texto sin avisarte: `localStorage.setItem("edad", 5)` guarda `"5"` (texto), no `5` (numero). Y si guardas un objeto sin convertirlo antes, te llevas la inutil cadena `"[object Object]"`. Por eso en la seccion 4 aprenderemos JSON.
 
 ---
 
 ## 3. `sessionStorage`: el cajon que se vacia al cerrar
 
-`sessionStorage` funciona **exactamente igual** que `localStorage` (mismos metodos: `setItem`, `getItem`, `removeItem`, `clear`), pero con una diferencia clave: lo que guardas dura **solo mientras la pestana esta abierta**. Cuando el usuario cierra la pestana, se borra.
+`sessionStorage` funciona **exactamente igual** que `localStorage` (los mismos metodos: `setItem`, `getItem`, `removeItem`, `clear`), con una diferencia importante: lo que guardas dura **solo mientras la pestana esta abierta**. En cuanto el usuario la cierra, se borra.
 
 > ### 🟦 ¿Que significa? — *sessionStorage*
 > **Definicion simple:** un almacen del navegador identico a `localStorage`, pero que se borra al cerrar la pestana o ventana.
@@ -81,7 +81,7 @@ const paso = sessionStorage.getItem("paso_formulario");
 > ### 🟦 ¿Que significa? — *Sesion (en el navegador)*
 > **Definicion simple:** el periodo de tiempo desde que abres una pestana de un sitio hasta que la cierras.
 > **Para que sirve:** delimitar cuanto vive un dato temporal.
-> **Donde se usa en un repo real:** ojo, la "sesion" de `sessionStorage` no es lo mismo que la sesion de login de **RachaSimple** o **Faro** (donde la sesion de autenticacion la maneja Supabase Auth con tokens en el servidor). Son conceptos distintos con el mismo nombre.
+> **Donde se usa en un repo real:** ojo aqui, porque la "sesion" de `sessionStorage` no es lo mismo que la sesion de login de **RachaSimple** o **Faro** (donde la sesion de autenticacion la maneja Supabase Auth con tokens en el servidor). Son dos conceptos distintos que comparten nombre, nada mas.
 
 ### ¿Cual elijo?
 
@@ -92,20 +92,20 @@ const paso = sessionStorage.getItem("paso_formulario");
 | ¿Es un dato sensible (contrasena, token)? | Si | **Ninguno** (ver Cuidado abajo) |
 
 > ### ⚠️ Cuidado
-> **Nunca** guardes contrasenas, tokens de acceso ni secretos en `localStorage` o `sessionStorage`. Cualquier script en la pagina puede leerlos, y no estan cifrados. En **Faro** y **RachaSimple**, los tokens viven **en el servidor** (variables de entorno y la tabla `user_connections` con RLS —Row Level Security, reglas de seguridad por fila que deciden quien puede ver cada dato— en Supabase), nunca en el navegador. Esa es una regla de seguridad del proyecto, no un capricho.
+> **Nunca** guardes contrasenas, tokens de acceso ni secretos en `localStorage` o `sessionStorage`. Cualquier script de la pagina puede leerlos, y ahi no van cifrados. En **Faro** y **RachaSimple**, los tokens viven **en el servidor** (variables de entorno y la tabla `user_connections` con RLS —Row Level Security, reglas de seguridad por fila que deciden quien puede ver cada dato— en Supabase), jamas en el navegador. Esto es una regla de seguridad del proyecto, no un capricho.
 
 ---
 
 ## 4. JSON: convertir objetos en texto y viceversa
 
-Recuerda el problema: el almacenamiento del navegador solo guarda texto. Pero los datos interesantes casi siempre son **objetos** o **listas** (un usuario con varios campos, un carrito con varios productos). ¿Como guardamos algo asi? Lo convertimos a texto con **JSON**.
+Volvamos al problema de antes: el almacenamiento del navegador solo guarda texto. Pero los datos que de verdad nos interesan casi siempre son **objetos** o **listas** (un usuario con varios campos, un carrito con varios productos). ¿Como guardamos algo asi? Lo convertimos a texto con **JSON**.
 
 > ### 🟦 ¿Que significa? — *JSON*
-> **Definicion simple:** JSON (JavaScript Object Notation) es un formato de texto para representar datos estructurados: objetos, listas, numeros y textos, escritos de una forma que tanto las personas como las maquinas entienden.
+> **Definicion simple:** JSON (JavaScript Object Notation) es un formato de texto para representar datos estructurados: objetos, listas, numeros y textos, escritos de una forma que entienden tanto las personas como las maquinas.
 > **Para que sirve:** guardar y transportar datos como texto plano.
-> **Donde se usa en un repo real:** **PolyPaw** guarda TODO su contenido (misiones, niveles) en archivos JSON. Cada vez que la app lee una mision, lee un archivo JSON. Es el corazon de los datos de PolyPaw.
+> **Donde se usa en un repo real:** **PolyPaw** guarda TODO su contenido (misiones, niveles) en archivos JSON. Cada vez que la app lee una mision, esta leyendo un archivo JSON. Es el corazon de los datos de PolyPaw.
 
-Un objeto JavaScript y su version JSON se parecen mucho:
+Un objeto JavaScript y su version en JSON se parecen muchisimo:
 
 ```javascript
 // Objeto JavaScript (vive en memoria)
@@ -125,7 +125,7 @@ const objetoDeNuevo = JSON.parse(textoJson);
 console.log(objetoDeNuevo.nombre); // "Bit"
 ```
 
-Hay dos funciones magicas que debes memorizar:
+Hay dos funciones que conviene grabarse en la memoria:
 
 > ### 🟦 ¿Que significa? — *JSON.stringify()*
 > **Definicion simple:** funcion que toma un objeto o lista de JavaScript y devuelve su representacion como **texto** JSON.
@@ -133,11 +133,11 @@ Hay dos funciones magicas que debes memorizar:
 > **Donde se usa en un repo real:** cuando **tunal-digital** envia el contenido del formulario a su Worker (un pequeno servidor en la nube) mediante `fetch` (la funcion del navegador para pedir o enviar datos por internet, que veras a fondo en un capitulo proximo), el cuerpo del mensaje viaja como texto JSON producido con `JSON.stringify`.
 
 > ### 🟦 ¿Que significa? — *JSON.parse()*
-> **Definicion simple:** funcion que toma un texto JSON y lo convierte de vuelta en un objeto o lista de JavaScript usable.
-> **Para que sirve:** "desempaquetar" datos que llegaron como texto para volver a trabajar con ellos.
-> **Donde se usa en un repo real:** la respuesta del chat IA en **tunal-digital** llega como texto desde el Worker; `JSON.parse` (o el helper `response.json()` de `fetch`, que hace lo mismo por dentro) la convierte en un objeto con el mensaje.
+> **Definicion simple:** funcion que toma un texto JSON y lo convierte de vuelta en un objeto o lista de JavaScript con los que puedes trabajar.
+> **Para que sirve:** "desempaquetar" datos que llegaron como texto para volver a usarlos.
+> **Donde se usa en un repo real:** la respuesta del chat IA en **tunal-digital** llega como texto desde el Worker; `JSON.parse` (o el helper `response.json()` de `fetch`, que por dentro hace lo mismo) la convierte en un objeto con el mensaje.
 
-Ahora si, guardar un objeto en `localStorage` es la combinacion de las dos ideas:
+Y ahora si, guardar un objeto en `localStorage` no es mas que juntar las dos ideas:
 
 ```javascript
 // GUARDAR un objeto: objeto -> texto -> localStorage
@@ -154,25 +154,25 @@ console.log(carritoRecuperado[0].producto); // "Plan basico"
 ```
 
 > ### ⚠️ Cuidado
-> Si la clave no existe, `getItem` devuelve `null`, y `JSON.parse(null)`... curiosamente no falla (devuelve `null`), pero `JSON.parse` de un texto vacio o invalido **si lanza un error** y rompe tu programa. Protegete asi:
+> Si la clave no existe, `getItem` devuelve `null`. Curiosamente, `JSON.parse(null)` no falla (te devuelve `null`), pero `JSON.parse` de un texto vacio o invalido **si lanza un error** y te rompe el programa. Protegete asi:
 >
 > ```javascript
 > const texto = localStorage.getItem("carrito");
 > const carrito = texto ? JSON.parse(texto) : [];
 > ```
-> Asi, si no hay nada guardado, empiezas con una lista vacia en lugar de un error.
+> De este modo, si no hay nada guardado, arrancas con una lista vacia en lugar de un error.
 
 > ### 🔎 En tu codigo
-> En **PolyPaw**, los archivos JSON los lee Python, no JavaScript. Pero el formato es identico: un objeto `{ }` con claves y valores, listas `[ ]`, textos entre comillas. Cuando abras un archivo `.json` de PolyPaw veras exactamente la misma estructura que produce `JSON.stringify`. JSON es un idioma comun entre lenguajes: lo entienden Python, JavaScript, TypeScript y casi todos. Por eso **Faro** (Next.js + TypeScript) tambien intercambia datos con OpenAI en formato JSON.
+> En **PolyPaw**, los archivos JSON los lee Python, no JavaScript. Pero el formato es identico: un objeto `{ }` con claves y valores, listas `[ ]`, textos entre comillas. Cuando abras un archivo `.json` de PolyPaw veras exactamente la misma estructura que produce `JSON.stringify`. Y es que JSON es como un idioma comun entre lenguajes: lo entienden Python, JavaScript, TypeScript y casi todos. Por eso **Faro** (Next.js + TypeScript) tambien intercambia datos con OpenAI en formato JSON.
 
 > ### 💡 Tip
-> Para inspeccionar tu JSON con sangrias bonitas mientras depuras, pasa un tercer argumento a `stringify`: `JSON.stringify(mascota, null, 2)`. El `2` significa "indenta con 2 espacios". Util para leerlo en la consola.
+> Para inspeccionar tu JSON con sangrias bonitas mientras depuras, pasale un tercer argumento a `stringify`: `JSON.stringify(mascota, null, 2)`. El `2` significa "indenta con 2 espacios". Va muy bien para leerlo comodo en la consola.
 
 ---
 
 ## 5. Un mini-proyecto: recordar el tema en tunal-digital
 
-Juntemos `localStorage` + JSON en algo util. Vamos a recordar las preferencias del usuario en un objeto guardado:
+Juntemos `localStorage` y JSON en algo que sirva de verdad. Vamos a recordar las preferencias del usuario guardandolas en un objeto:
 
 ```javascript
 // Leer preferencias guardadas (o usar valores por defecto)
@@ -199,39 +199,39 @@ function cambiarTema(nuevoTema) {
 ```
 
 > ### 🟦 ¿Que significa? — *Funcion de atajo (helper)*
-> **Definicion simple:** una funcion pequena que envuelve una tarea repetitiva para no escribirla muchas veces.
+> **Definicion simple:** una funcion pequena que envuelve una tarea repetitiva para no tener que escribirla una y otra vez.
 > **Para que sirve:** evitar repetir codigo y darle un nombre claro a lo que hace.
-> **Donde se usa en un repo real:** el `main.js` de **tunal-digital** tiene varias **funciones de atajo** justamente con esta idea: agrupar pasos comunes (seleccionar un elemento, hacer un `fetch`) en una sola funcion reutilizable.
+> **Donde se usa en un repo real:** el `main.js` de **tunal-digital** tiene varias **funciones de atajo** con esta misma idea: agrupar pasos comunes (seleccionar un elemento, hacer un `fetch`) en una sola funcion reutilizable.
 
-Fijate que `leerPreferencias` y `guardarPreferencias` empiezan a sentirse como piezas independientes que podrias reutilizar en otras paginas. Eso nos lleva directo al segundo gran tema del capitulo: separar el codigo en archivos.
+Fijate en una cosa: `leerPreferencias` y `guardarPreferencias` empiezan a sentirse como piezas independientes, de esas que podrias reutilizar en otras paginas. Y eso nos lleva de cabeza al segundo gran tema del capitulo: separar el codigo en archivos.
 
 ---
 
 ## 6. Modulos: por que dividir el codigo en archivos
 
-Cuando un programa crece, meter TODO en un solo archivo `main.js` se vuelve un caos: cientos de lineas, funciones mezcladas, dificil de encontrar nada. La solucion es partir el codigo en varios archivos pequenos y bien nombrados. A cada archivo asi lo llamamos **modulo**.
+Cuando un programa crece, meterlo TODO en un solo `main.js` se vuelve un caos: cientos de lineas, funciones mezcladas, imposible encontrar nada. La solucion es partir el codigo en varios archivos pequenos y bien nombrados. A cada uno de esos archivos lo llamamos **modulo**.
 
 > ### 🟦 ¿Que significa? — *Modulo*
 > **Definicion simple:** un archivo de JavaScript que agrupa codigo relacionado (funciones, datos) y decide que parte comparte con los demas.
 > **Para que sirve:** organizar el proyecto, reutilizar codigo y evitar que todo dependa de todo.
-> **Donde se usa en un repo real:** **Faro** (Next.js + React + TypeScript) y **RachaSimple** estan hechos casi enteros de modulos: cada componente, cada utilidad vive en su propio archivo y se importa donde hace falta. Es la forma normal de trabajar en proyectos modernos.
+> **Donde se usa en un repo real:** **Faro** (Next.js + React + TypeScript) y **RachaSimple** estan hechos casi enteros de modulos: cada componente, cada utilidad vive en su propio archivo y se importa donde haga falta. Es la forma normal de trabajar en proyectos modernos.
 
-Las ventajas de usar modulos:
+Las ventajas de trabajar con modulos:
 
 - **Orden:** cada archivo tiene un proposito claro (`almacenamiento.js`, `tema.js`, `formulario.js`).
-- **Reutilizacion:** escribes `guardarPreferencias` una vez y la usas desde varios sitios.
+- **Reutilizacion:** escribes `guardarPreferencias` una vez y la usas desde donde quieras.
 - **Menos errores:** lo que no compartes a proposito queda "privado" en su archivo y no choca con otro codigo.
 
 > ### 🟦 ¿Que significa? — *Ambito (scope) de un modulo*
-> **Definicion simple:** las variables y funciones de un modulo son privadas por defecto; solo se ven dentro de su archivo a menos que las exportes.
+> **Definicion simple:** las variables y funciones de un modulo son privadas por defecto; solo se ven dentro de su archivo, a menos que las exportes.
 > **Para que sirve:** evitar que dos archivos definan algo con el mismo nombre y se rompan entre si.
-> **Donde se usa en un repo real:** en **RachaSimple**, cada archivo puede tener su propia variable `data` sin pisar la de otro archivo, justamente porque cada modulo tiene su ambito privado.
+> **Donde se usa en un repo real:** en **RachaSimple**, cada archivo puede tener su propia variable `data` sin pisar la de otro archivo, precisamente porque cada modulo tiene su ambito privado.
 
 ---
 
 ## 7. `export` e `import`: compartir entre archivos
 
-Para que un modulo comparta algo, usa `export`. Para que otro modulo lo reciba, usa `import`.
+Para que un modulo comparta algo, usa `export`. Para que otro modulo lo reciba, usa `import`. Asi de directo.
 
 > ### 🟦 ¿Que significa? — *export*
 > **Definicion simple:** palabra clave que marca una funcion, variable o valor como "disponible para otros archivos".
@@ -240,10 +240,10 @@ Para que un modulo comparta algo, usa `export`. Para que otro modulo lo reciba, 
 
 > ### 🟦 ¿Que significa? — *import*
 > **Definicion simple:** palabra clave que trae a tu archivo algo que otro archivo exporto.
-> **Para que sirve:** usar codigo definido en otro modulo sin copiarlo.
+> **Para que sirve:** usar codigo definido en otro modulo sin tener que copiarlo.
 > **Donde se usa en un repo real:** en **RachaSimple**, los archivos importan herramientas de TanStack Query (una libreria que maneja la carga de datos) con `import`, igual que importarias tus propios modulos.
 
-Hagamos un ejemplo concreto. Sacamos las funciones de almacenamiento del capitulo a su propio archivo:
+Veamoslo con un ejemplo concreto. Sacamos las funciones de almacenamiento del capitulo a su propio archivo:
 
 ```javascript
 // archivo: almacenamiento.js
@@ -272,7 +272,7 @@ document.body.classList.toggle("oscuro", prefs.tema === "oscuro");
 
 ### Export por defecto
 
-A veces un archivo exporta **una sola cosa principal**. Para eso esta `export default`:
+A veces un archivo exporta **una sola cosa principal**. Para esos casos esta `export default`:
 
 ```javascript
 // archivo: saludo.js
@@ -293,13 +293,13 @@ console.log(saludar("Bit"));
 > **Donde se usa en un repo real:** en **Faro** y otras apps con Next.js, cada pagina o componente principal suele ser un `export default`; es la convencion del framework.
 
 > ### ⚠️ Cuidado
-> No mezcles confusamente las dos formas. Con `export default` importas **sin** llaves y eliges el nombre. Con `export` normal (llamado "nombrado") importas **con** llaves y el nombre debe coincidir. Confundirlos es uno de los errores mas comunes al empezar.
+> No vayas mezclando las dos formas sin orden. Con `export default` importas **sin** llaves y eliges el nombre. Con `export` normal (el llamado "nombrado") importas **con** llaves y el nombre debe coincidir. Confundir los dos es uno de los tropiezos mas comunes al empezar.
 
 ---
 
 ## 8. Como activar los modulos en el navegador
 
-Para que `import`/`export` funcionen en un sitio *vanilla* (asi se le dice a un sitio hecho con HTML, CSS y JavaScript puros, sin frameworks ni librerias) como **tunal-digital**, el navegador necesita saber que tu script es un modulo. Eso se hace en el HTML con el atributo `type="module"`:
+Para que `import`/`export` funcionen en un sitio *vanilla* (asi se le dice a un sitio hecho con HTML, CSS y JavaScript puros, sin frameworks ni librerias) como **tunal-digital**, el navegador necesita saber que tu script es un modulo. Eso se indica en el HTML con el atributo `type="module"`:
 
 ```html
 <!-- En el index.html de tunal-digital -->
@@ -309,23 +309,23 @@ Para que `import`/`export` funcionen en un sitio *vanilla* (asi se le dice a un 
 > ### 🟦 ¿Que significa? — *type="module"*
 > **Definicion simple:** un atributo en la etiqueta `<script>` que le dice al navegador "trata este archivo como un modulo, con `import`/`export` activados".
 > **Para que sirve:** habilitar el sistema de modulos en un sitio sin framework.
-> **Donde se usa en un repo real:** un sitio HTML/CSS/JS puro como **tunal-digital** lo usaria en su `index.html` para que `main.js` pueda importar otros archivos.
+> **Donde se usa en un repo real:** un sitio HTML/CSS/JS puro como **tunal-digital** lo pondria en su `index.html` para que `main.js` pueda importar otros archivos.
 
 > ### ⚠️ Cuidado
-> Los modulos en el navegador **necesitan un servidor** para cargar (aunque sea uno local sencillo). Si abres el `index.html` haciendo doble clic (ruta `file://`), los `import` fallaran por seguridad. Usa una extension de "Live Server" o un comando como `npx serve`. En proyectos como **Faro** o **RachaSimple** esto no te preocupa: la herramienta de construccion (Next.js, Vite) ya levanta un servidor y junta los modulos por ti.
+> Los modulos en el navegador **necesitan un servidor** para cargar, aunque sea uno local muy sencillo. Si abres el `index.html` haciendo doble clic (ruta `file://`), los `import` fallaran por motivos de seguridad. Usa una extension de "Live Server" o un comando como `npx serve`. En proyectos como **Faro** o **RachaSimple** esto ni te lo planteas: la herramienta de construccion (Next.js, Vite) ya levanta un servidor y junta los modulos por ti.
 
 > ### 🟦 ¿Que significa? — *Empaquetador (bundler)*
-> **Definicion simple:** un programa que toma todos tus modulos y los combina/optimiza en archivos listos para el navegador.
+> **Definicion simple:** un programa que toma todos tus modulos y los combina y optimiza en archivos listos para el navegador.
 > **Para que sirve:** que el navegador descargue pocos archivos eficientes en vez de muchos sueltos.
-> **Donde se usa en un repo real:** **Faro** usa el sistema de Next.js y **RachaSimple** usa el suyo de React; ambos empaquetan tus modulos automaticamente. Por eso esos proyectos pueden tener cientos de archivos sin problema.
+> **Donde se usa en un repo real:** **Faro** usa el sistema de Next.js y **RachaSimple** usa el suyo de React; ambos empaquetan tus modulos automaticamente. Por eso esos proyectos pueden tener cientos de archivos sin que sea un problema.
 
 ---
 
 ## 9. Juntando todo: del JSON local de PolyPaw a tu navegador
 
-Cerremos el circulo. **PolyPaw** guarda sus misiones en JSON local (archivos en disco que lee Python). La idea de "datos como texto JSON, organizados en piezas" es exactamente la que acabas de aprender, solo que en otro lenguaje.
+Cerremos el circulo. **PolyPaw** guarda sus misiones en JSON local (archivos en disco que lee Python). La idea de "datos como texto JSON, organizados en piezas" es exactamente la que acabas de aprender, solo que aplicada en otro lenguaje.
 
-Si tu quisieras hacer una version web sencilla que muestre una mision y recuerde en cual se quedo el usuario, combinarias TODO lo del capitulo:
+Si quisieras hacer una version web sencilla que muestre una mision y recuerde en cual se quedo el usuario, combinarias TODO lo del capitulo:
 
 ```javascript
 // archivo: misiones.js  (modulo de datos)
@@ -356,10 +356,10 @@ guardarProgreso(2);
 ```
 
 > ### 🔎 En tu codigo
-> Mira lo limpio que queda: los **datos** estan en `misiones.js`, el **almacenamiento** en `progreso.js`, y `main.js` solo orquesta. Si manana cambias de `localStorage` a una base de datos real (como hace **RachaSimple** con Supabase), solo tocas `progreso.js`; el resto ni se entera. Esa es la magia de los modulos: cada pieza esconde sus detalles tras un nombre claro.
+> Mira lo limpio que queda todo: los **datos** estan en `misiones.js`, el **almacenamiento** en `progreso.js`, y `main.js` se limita a orquestar. Si manana cambias de `localStorage` a una base de datos real (como hace **RachaSimple** con Supabase), solo tocas `progreso.js`; el resto del codigo ni se entera. Esa es la gracia de los modulos: cada pieza esconde sus detalles tras un nombre claro.
 
 > ### 💡 Tip
-> Un buen ejercicio mental antes de escribir codigo: pregunta "¿que piezas tiene esto?" y dale a cada una su archivo. Datos, almacenamiento, interfaz y logica suelen ser buenos limites para separar modulos.
+> Un buen ejercicio mental antes de ponerte a escribir codigo: preguntate "¿que piezas tiene esto?" y dale a cada una su archivo. Datos, almacenamiento, interfaz y logica suelen ser buenas fronteras para separar modulos.
 
 ---
 

@@ -5,33 +5,33 @@
 </p>
 
 
-> Una página solo con texto es como un cuento sin dibujos: se entiende, pero no enamora. En este capítulo aprenderás a poner imágenes que cargan rápido y se ven bien en cualquier pantalla, a meter audio y video con sus botones de play, y a incrustar mapas o videos de YouTube usando un `iframe`. Bit, nuestro ajolote pixelado, te acompaña: él es, literalmente, una imagen, así que de esto sabe un montón.
+> Una página solo con texto es como un cuento sin dibujos: se entiende, pero no enamora. Aquí vas a aprender a poner imágenes que cargan rápido y se ven bien en cualquier pantalla, a meter audio y video con sus botones de play, y a incrustar mapas o videos de YouTube con un `iframe`. Bit, nuestro ajolote pixelado, te acompaña en el camino: él es, literalmente, una imagen, así que de esto sabe un rato.
 
 ## 1. La etiqueta `<img>`: tu primera imagen
 
-Para mostrar una imagen en HTML se usa la etiqueta `<img>`. Es una etiqueta *vacía* (no tiene cierre `</img>`) y necesita dos cosas mínimas: de dónde sale la imagen (`src`) y qué describe (`alt`).
+Para mostrar una imagen en HTML usas la etiqueta `<img>`. Es una etiqueta *vacía* (no lleva cierre `</img>`) y le hacen falta dos cosas como mínimo: de dónde sale la imagen (`src`) y qué describe (`alt`).
 
 ```html
 <img src="bit.png" alt="Bit, el ajolote de pixel art, saludando con la patita">
 ```
 
 > ### 🟦 ¿Qué significa? — *atributo*
-> Un **atributo** es información extra que le das a una etiqueta, escrita dentro de la etiqueta de apertura con la forma `nombre="valor"`. En `<img src="bit.png">`, `src` es un atributo y `"bit.png"` es su valor.
-> **¿Para qué sirve?** Para configurar cómo se comporta o qué muestra una etiqueta.
+> Un **atributo** es información extra que le das a una etiqueta. Se escribe dentro de la etiqueta de apertura con la forma `nombre="valor"`. En `<img src="bit.png">`, `src` es un atributo y `"bit.png"` es su valor.
+> **¿Para qué sirve?** Para configurar cómo se comporta una etiqueta o qué muestra.
 
 > ### 🟦 ¿Qué significa? — *`src` (source / fuente)*
 > El atributo **`src`** indica la ruta o dirección del archivo de imagen que quieres mostrar. Puede ser un archivo de tu propio proyecto (`src="imagenes/bit.png"`) o una dirección de internet (`src="https://..."`).
 > **¿Para qué sirve?** Le dice al navegador *qué* imagen cargar y *desde dónde*.
 
 > ### 🟦 ¿Qué significa? — *`alt` (texto alternativo)*
-> El atributo **`alt`** es un texto que describe la imagen con palabras. Se muestra si la imagen no carga, y lo leen en voz alta los lectores de pantalla que usan las personas con discapacidad visual.
+> El atributo **`alt`** es un texto que describe la imagen con palabras. Aparece cuando la imagen no carga, y lo leen en voz alta los lectores de pantalla que usan las personas con discapacidad visual.
 > **¿Para qué sirve?** Para accesibilidad (que todo el mundo entienda la página) y como respaldo si la imagen falla. Google también lo usa para entender de qué trata la imagen.
 
 > ### ⚠️ Cuidado — El `alt` no es opcional
-> Toda imagen con significado debe tener `alt`. Describe lo que la imagen *comunica*, no escribas "imagen de..." (el lector de pantalla ya dice que es una imagen). Si la imagen es pura decoración (un adorno sin información), deja el atributo vacío: `alt=""`. Así el lector de pantalla la ignora en vez de leer el nombre del archivo.
+> Toda imagen con significado debe tener `alt`. Describe lo que la imagen *comunica*, y no empieces con "imagen de..." (el lector de pantalla ya avisa que es una imagen). Si la imagen es pura decoración (un adorno sin información), deja el atributo vacío: `alt=""`. Así el lector de pantalla la ignora en lugar de leer el nombre del archivo.
 
 > ### 🔎 En tu código
-> En **tunal-digital** (`sitio-web/index.html`) cada logo, ícono o foto del sitio debería llevar su `alt`. Es lo primero que revisa cualquier auditoría de accesibilidad: una página con imágenes sin `alt` pierde puntos al instante.
+> En **tunal-digital** (`sitio-web/index.html`) cada logo, ícono o foto del sitio debería llevar su `alt`. Es lo primero que mira cualquier auditoría de accesibilidad: una página con imágenes sin `alt` pierde puntos al instante.
 
 ### Rutas: ¿dónde está la imagen?
 
@@ -41,7 +41,7 @@ La **ruta** es el "camino" hasta el archivo. Hay dos tipos que verás todo el ti
 - **Ruta absoluta**: una dirección completa de internet. `src="https://tunal.digital/logo.png"`.
 
 > ### 💡 Tip — Tamaño con `width` y `height`
-> Conviene decirle al navegador el tamaño de la imagen con `width` (ancho) y `height` (alto) en píxeles:
+> Vale la pena decirle al navegador el tamaño de la imagen con `width` (ancho) y `height` (alto) en píxeles:
 > ```html
 > <img src="bit.png" alt="Bit saludando" width="200" height="200">
 > ```
@@ -49,20 +49,20 @@ La **ruta** es el "camino" hasta el archivo. Hay dos tipos que verás todo el ti
 
 ## 2. Los formatos de imagen: jpg, png, webp y svg
 
-No todas las imágenes son iguales. El **formato** (la extensión del archivo: `.jpg`, `.png`, etc.) decide qué tan pesa, si tiene transparencia y para qué sirve mejor.
+No todas las imágenes son iguales. El **formato** (la extensión del archivo: `.jpg`, `.png`, etc.) decide cuánto pesa, si tiene transparencia y para qué sirve mejor.
 
 > ### 🟦 ¿Qué significa? — *formato de imagen*
-> Un **formato** es la forma en que el archivo guarda la imagen por dentro. Lo reconoces por la extensión del nombre: `foto.jpg`, `logo.png`, `imagen.webp`, `dibujo.svg`. Cada formato comprime y guarda los colores de manera distinta.
+> Un **formato** es la forma en que el archivo guarda la imagen por dentro. Lo reconoces por la extensión del nombre: `foto.jpg`, `logo.png`, `imagen.webp`, `dibujo.svg`. Cada formato comprime y guarda los colores a su manera.
 
 Aquí va la guía rápida:
 
-- **JPG** (o `.jpeg`): ideal para **fotografías** (paisajes, retratos). Comprime mucho y pesa poco, pero **no admite transparencia** y al comprimir demasiado se ve "sucio" (con manchas). Úsalo para fotos reales.
-- **PNG**: admite **transparencia** (fondos transparentes) y se ve nítido. Pesa más que JPG. Ideal para **logos, íconos y capturas de pantalla** con texto.
-- **WebP**: un formato moderno que pesa **menos** que JPG y PNG manteniendo buena calidad, y *sí* admite transparencia. Lo entienden todos los navegadores actuales. Es la mejor opción por defecto hoy en día.
+- **JPG** (o `.jpeg`): ideal para **fotografías** (paisajes, retratos). Comprime mucho y pesa poco, pero **no admite transparencia** y, si lo comprimes demasiado, se ve "sucio" (con manchas). Úsalo para fotos reales.
+- **PNG**: admite **transparencia** (fondos transparentes) y se ve nítido. Pesa más que JPG. Va perfecto para **logos, íconos y capturas de pantalla** con texto.
+- **WebP**: un formato moderno que pesa **menos** que JPG y PNG manteniendo buena calidad, y *sí* admite transparencia. Lo entienden todos los navegadores actuales. Hoy por hoy, es la mejor opción por defecto.
 - **SVG**: es **diferente**. No guarda píxeles, guarda *instrucciones de dibujo* (líneas, curvas, colores). Por eso se puede agrandar infinitamente sin pixelarse. Ideal para **logos, íconos y gráficos** de formas planas.
 
 > ### 🟦 ¿Qué significa? — *píxel*
-> Un **píxel** es cada puntito de color de una pantalla. Una imagen "de píxeles" (jpg, png, webp) es una rejilla de puntitos: si la agrandas mucho, los puntos se hacen visibles y se ve "cuadriculada" o borrosa.
+> Un **píxel** es cada puntito de color de una pantalla. Una imagen "de píxeles" (jpg, png, webp) es una rejilla de puntitos: si la agrandas mucho, los puntos se hacen visibles y la imagen se ve "cuadriculada" o borrosa.
 
 > ### 🟦 ¿Qué significa? — *transparencia*
 > Una imagen con **transparencia** tiene zonas "vacías" que dejan ver lo que hay detrás. Por ejemplo, el logo de Tunal Digital con fondo transparente se ve bien sobre cualquier color de página, sin un recuadro blanco alrededor.
@@ -83,9 +83,9 @@ Aquí va la guía rápida:
 ## 3. Imágenes responsive: `srcset` y `<picture>`
 
 > ### 🟦 ¿Qué significa? — *responsive (adaptable)*
-> Una página **responsive** se *adapta* al tamaño de la pantalla: se ve bien en el celular, en la tablet y en el computador. Para las imágenes, ser responsive significa enviar una imagen pequeña a pantallas pequeñas y una grande a pantallas grandes, sin desperdiciar datos.
+> Una página **responsive** se *adapta* al tamaño de la pantalla: se ve bien en el celular, en la tablet y en el computador. En el caso de las imágenes, ser responsive significa enviar una imagen pequeña a pantallas pequeñas y una grande a pantallas grandes, sin desperdiciar datos.
 
-Enviar una foto enorme a un celular gasta los datos del usuario y carga lento. La solución es darle al navegador **varias versiones** de la misma imagen y dejar que elija la mejor. Para eso existe `srcset`.
+Mandarle una foto enorme a un celular gasta los datos del usuario y carga lento. La solución es darle al navegador **varias versiones** de la misma imagen y dejar que él elija la mejor. Para eso existe `srcset`.
 
 ### `srcset`: varias resoluciones de la misma imagen
 
@@ -107,7 +107,7 @@ Enviar una foto enorme a un celular gasta los datos del usuario y carga lento. L
 > ### 🟦 ¿Qué significa? — *`vw` (viewport width)*
 > **`vw`** es una unidad de medida: `1vw` es el 1% del ancho de la ventana del navegador. Así, `100vw` es todo el ancho visible y `50vw` la mitad. La ventana visible se llama *viewport*.
 
-No te agobies si `sizes` se ve raro al principio: el `src` normal siempre funciona como respaldo. `srcset` y `sizes` son una mejora encima.
+No te agobies si `sizes` te parece raro al principio: el `src` normal siempre funciona como respaldo. `srcset` y `sizes` son una mejora que va encima.
 
 ### `<picture>`: imágenes distintas según el caso
 
@@ -138,7 +138,7 @@ A veces no quieres solo *otro tamaño*, sino *otra imagen* o *otro formato*. Par
 > **Lazy loading** significa que el navegador *no descarga* una imagen hasta que el usuario está a punto de verla al hacer scroll. Las imágenes de más abajo esperan su turno.
 > **¿Para qué sirve?** Para que la página cargue rápido al principio: solo baja lo que se ve, no las 30 imágenes que están metros más abajo.
 
-Activarlo es de una sola palabra:
+Activarlo es cuestión de una sola palabra:
 
 ```html
 <img src="foto-galeria.webp" alt="Caso de éxito de un cliente" loading="lazy">
@@ -148,7 +148,7 @@ Activarlo es de una sola palabra:
 > A la imagen grande de arriba del todo (el *hero*, lo primero que se ve) **no** le pongas `loading="lazy"`. Esa la quieres cargar de inmediato. El lazy loading es para las imágenes que están *más abajo*, fuera de la pantalla inicial.
 
 > ### 🔎 En tu código
-> En **Faro** (la carpeta *Organizer*, hecho con Next.js) y en **RachaSimple** notarás que el framework ofrece su propio componente de imagen optimizada (`next/image` en el caso de Next.js) que aplica lazy loading, `srcset` y formatos modernos casi solos. Aun así, entender qué hace por debajo (esto que acabas de aprender) te vuelve mucho mejor para depurar cuando algo se ve mal.
+> En **Faro** (la carpeta *Organizer*, hecho con Next.js) y en **RachaSimple** notarás que el framework trae su propio componente de imagen optimizada (`next/image` en el caso de Next.js) que aplica lazy loading, `srcset` y formatos modernos casi solo. Aun así, entender qué hace por debajo (esto que acabas de aprender) te vuelve mucho mejor a la hora de depurar cuando algo se ve mal.
 
 ## 5. Audio con `<audio>`
 
@@ -159,8 +159,8 @@ Para reproducir sonido se usa la etiqueta `<audio>`.
 ```
 
 > ### 🟦 ¿Qué significa? — *`controls`*
-> El atributo **`controls`** le dice al navegador que muestre los botones de reproducción (play, pausa, volumen, barra de avance). Sin `controls`, el reproductor existe pero es invisible.
-> **¿Para qué sirve?** Para que el usuario pueda controlar el sonido. Casi siempre lo querrás.
+> El atributo **`controls`** le dice al navegador que muestre los botones de reproducción (play, pausa, volumen, barra de avance). Sin `controls`, el reproductor existe pero queda invisible.
+> **¿Para qué sirve?** Para que el usuario pueda controlar el sonido. Casi siempre lo vas a querer.
 
 Como no todos los navegadores entienden los mismos formatos de audio, puedes ofrecer varias opciones con `<source>` dentro:
 
@@ -172,13 +172,13 @@ Como no todos los navegadores entienden los mismos formatos de audio, puedes ofr
 </audio>
 ```
 
-El texto del final solo se ve si el navegador no entiende `<audio>`: es un respaldo amable.
+El texto del final solo aparece si el navegador no entiende `<audio>`: es un respaldo amable.
 
 > ### 🟦 ¿Qué significa? — *`type` (en source)*
 > El atributo **`type`** le dice al navegador qué tipo de archivo es *antes* de descargarlo (`audio/mpeg` para MP3, `audio/ogg` para OGG). Así elige el primero que sepa reproducir sin malgastar descarga.
 
 > ### ⚠️ Cuidado — `autoplay` molesta
-> Existe el atributo `autoplay`, que arranca el sonido solo al cargar la página. **Evítalo.** Que una página empiece a sonar sin permiso es de las cosas que más irritan a la gente, y los navegadores modernos suelen bloquearlo de todas formas. Deja que el usuario apriete play.
+> Existe el atributo `autoplay`, que arranca el sonido solo al cargar la página. **Evítalo.** Que una página empiece a sonar sin permiso es de las cosas que más irritan a la gente, y los navegadores modernos suelen bloquearlo de todos modos. Deja que el usuario apriete play.
 
 ## 6. Video con `<video>`
 
@@ -193,8 +193,8 @@ El video funciona casi igual que el audio, con la etiqueta `<video>`:
 ```
 
 > ### 🟦 ¿Qué significa? — *`poster`*
-> El atributo **`poster`** es la imagen que se muestra *antes* de darle play al video (como la "carátula"). Sin `poster`, suele verse un cuadro negro o el primer fotograma.
-> **¿Para qué sirve?** Para que el video se vea atractivo aunque no haya empezado a reproducirse.
+> El atributo **`poster`** es la imagen que se muestra *antes* de darle play al video (como la "carátula"). Sin `poster`, lo normal es ver un cuadro negro o el primer fotograma.
+> **¿Para qué sirve?** Para que el video se vea atractivo aunque todavía no haya empezado a reproducirse.
 
 Atributos útiles del video:
 
@@ -208,7 +208,7 @@ Atributos útiles del video:
 > ¿Has visto webs con un video de fondo silencioso que se repite solo? El secreto es combinar `autoplay muted loop playsinline`. La clave es **`muted`**: los navegadores *sí* permiten autoplay si el video va en silencio (porque entonces no molesta). Sin `muted`, el autoplay se bloquea.
 
 > ### ⚠️ Cuidado — El video pesa, y mucho
-> Un video tuyo alojado en tu propio servidor puede pesar decenas de megas y encarecer el ancho de banda. Si es un video largo o importante, casi siempre conviene subirlo a YouTube o Vimeo e **incrustarlo** (lo vemos ahora) en vez de servirlo tú mismo.
+> Un video tuyo alojado en tu propio servidor puede pesar decenas de megas y dispararte el ancho de banda. Si es un video largo o importante, casi siempre conviene subirlo a YouTube o Vimeo e **incrustarlo** (lo vemos ahora) en vez de servirlo tú mismo.
 
 ## 7. `iframe`: incrustar mapas y videos de YouTube
 
@@ -230,10 +230,7 @@ Un video de YouTube incrustado se ve así (YouTube te da este código en su bot�
 > ### 🟦 ¿Qué significa? — *`allowfullscreen`*
 > El atributo **`allowfullscreen`** permite que el contenido del iframe (el video) pueda ponerse a pantalla completa cuando el usuario aprieta ese botón. Sin él, el botón no funciona.
 
-Un mapa de Google Maps se incrusta igual: copias el código de "Compartir → Insertar un mapa" y pegas el `<iframe>` que te dan. La estructura es la misma; solo cambia el `src`.
-
-> ### 💡 Tip — Pon siempre `title` en tus iframes
-> El atributo **`title`** describe qué contiene el iframe (por ejemplo `title="Mapa de nuestra oficina"`). Los lectores de pantalla lo necesitan para anunciar de qué es ese marco. Y, como con el `alt`, suma puntos de accesibilidad.
+Un mapa de Google Maps se incrusta igual: copias el código de "Compartir → Insertar un mapa" y pegas el `<iframe>` que te dan. La estructura es la misma; lo único que cambia es el `src`.
 
 ### Los riesgos del `iframe`
 

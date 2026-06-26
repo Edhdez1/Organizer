@@ -5,18 +5,18 @@
 </p>
 
 
-> Hasta ahora, cuando escribías CSS, le hablabas a elementos que existen tal cual en tu HTML: un `<button>`, un `<p>`, un `<a>`. Pero la web es viva: el ratón pasa por encima de las cosas, los formularios se enfocan, las casillas se marcan, hay un primer hijo y un último hijo en cada lista. Las **pseudo-clases** te dejan reaccionar a todo eso. Y los **pseudo-elementos** te dejan dibujar trozos nuevos que ni siquiera están en el HTML, como ese iconito que ves al lado de cada recuadro de este mismo manual. Bit el ajolote está moviendo sus branquias de emoción: este capítulo es donde el CSS deja de ser una foto fija y empieza a sentirse interactivo. 🦎
+> Hasta ahora, cuando escribías CSS, le hablabas a elementos que existen tal cual en tu HTML: un `<button>`, un `<p>`, un `<a>`. Pero una página no se queda quieta: el ratón pasa por encima de las cosas, los formularios reciben el foco, las casillas se marcan, y en cada lista siempre hay un primer hijo y un último hijo. Las **pseudo-clases** te dejan reaccionar a todo eso. Y los **pseudo-elementos** van un paso más allá: te dejan dibujar trozos nuevos que ni siquiera figuran en el HTML, como ese iconito que ves al lado de cada recuadro de este mismo manual. Bit el ajolote mueve las branquias de pura emoción, porque aquí es donde el CSS deja de ser una foto fija y empieza a sentirse interactivo. 🦎
 
 ---
 
 ## 1. ¿Qué es una pseudo-clase y por qué la necesitas?
 
-Imagina que tienes un botón. En reposo es azul. Pero quieres que, *cuando el usuario pase el ratón por encima*, se ponga un poco más oscuro para avisar «sí, esto se puede pulsar». Ese «cuando pase el ratón por encima» no es un elemento distinto del HTML: es el **mismo botón** en un **estado distinto**. Las pseudo-clases existen justamente para apuntar a esos estados.
+Imagina que tienes un botón. En reposo es azul. Pero quieres que, *cuando el usuario pase el ratón por encima*, se ponga un poco más oscuro para avisar «sí, esto se puede pulsar». Ese «cuando pase el ratón por encima» no es un elemento distinto del HTML: es el **mismo botón** en un **estado distinto**. Las pseudo-clases existen justo para apuntar a esos estados.
 
 > ### 🟦 ¿Qué significa? — *Pseudo-clase*
-> Una pseudo-clase es una palabra clave que añades a un selector con dos puntos (`:`) para apuntar a un elemento **en un estado o posición especial**, sin necesidad de añadir una clase en el HTML. «Pseudo» significa «falso» o «aparente»: parece una clase, pero no la escribes tú en el `class="..."`, la pone el navegador según lo que esté pasando.
+> Una pseudo-clase es una palabra clave que añades a un selector con dos puntos (`:`) para apuntar a un elemento **en un estado o posición especial**, sin tener que añadir una clase en el HTML. «Pseudo» quiere decir «falso» o «aparente»: parece una clase, pero no la escribes tú en el `class="..."`; la pone el navegador según lo que esté ocurriendo.
 > **Para qué sirve:** cambiar el aspecto de algo según lo que el usuario hace (pasar el ratón, hacer clic, enfocar) o según dónde está (el primero de la lista, el último, los pares).
-> **Dónde se usa en un repo real:** en `tunal-digital/styles.css`, los enlaces del menú y los botones de contacto usan `:hover` para reaccionar al ratón; en `RachaSimple` y `Faro`, Tailwind genera estas mismas pseudo-clases bajo el capó cuando escribes `hover:bg-blue-700`.
+> **Dónde se usa en un repo real:** en `tunal-digital/styles.css`, los enlaces del menú y los botones de contacto usan `:hover` para reaccionar al ratón; en `RachaSimple` y `Faro`, Tailwind genera estas mismas pseudo-clases por debajo cuando escribes `hover:bg-blue-700`.
 
 La forma general es siempre la misma:
 
@@ -26,33 +26,33 @@ selector:pseudo-clase {
 }
 ```
 
-Fíjate en el detalle: **un solo punto y coma de dos puntos** (`:`). Más adelante verás los pseudo-elementos, que usan **dos** (`::`). Esa diferencia de uno contra dos es la pista visual para saber con cuál estás trabajando.
+Fíjate en un detalle pequeño pero clave: **un solo grupo de dos puntos** (`:`). Más adelante verás los pseudo-elementos, que usan **dos** (`::`). Esa diferencia de uno contra dos es la pista visual para saber con cuál estás trabajando.
 
 > ### 💡 Tip
-> No confundas la pseudo-clase `:hover` con una clase normal `.hover`. La primera lleva dos puntos y la controla el navegador; la segunda lleva un punto y la controlas tú en el HTML. Son cosas completamente distintas aunque se parezcan al escribirlas.
+> No confundas la pseudo-clase `:hover` con una clase normal `.hover`. La primera lleva dos puntos y la controla el navegador; la segunda lleva un punto y la controlas tú en el HTML. Aunque se parezcan al escribirlas, son cosas completamente distintas.
 
 ---
 
 ## 2. Estados del ratón y del teclado: `:hover`, `:active`, `:focus`
 
-Estas tres son las pseudo-clases más usadas del mundo, porque hacen que tu página se sienta «viva» al tocarla.
+Estas tres son las pseudo-clases más usadas del mundo, y por buena razón: son las que hacen que tu página se sienta «viva» cuando la tocas.
 
 > ### 🟦 ¿Qué significa? — *`:hover`*
-> Apunta a un elemento **mientras el cursor del ratón está encima** de él. En cuanto el ratón se va, deja de aplicar.
-> **Para qué sirve:** dar retroalimentación visual de «esto es interactivo». Botones que se oscurecen, enlaces que se subrayan, tarjetas que se levantan un poquito.
+> Apunta a un elemento **mientras el cursor del ratón está encima** de él. En cuanto el ratón se aparta, deja de aplicar.
+> **Para qué sirve:** dar una señal visual de «esto es interactivo». Botones que se oscurecen, enlaces que se subrayan, tarjetas que se levantan un poquito.
 > **Dónde se usa en un repo real:** en `tunal-digital/styles.css` los botones del menú cambian de color al pasar el ratón.
 
 > ### 🟦 ¿Qué significa? — *`:active`*
-> Apunta a un elemento **en el instante exacto en que se está pulsando** (el botón del ratón está hundido sobre él). Dura solo mientras mantienes el clic.
+> Apunta a un elemento **en el instante exacto en que se está pulsando** (el botón del ratón está hundido sobre él). Solo dura mientras mantienes el clic.
 > **Para qué sirve:** dar la sensación de que el botón «se hunde» físicamente cuando lo aprietas.
 > **Dónde se usa en un repo real:** en cualquier botón de `tunal-digital`, para que el clic se sienta físico.
 
 > ### 🟦 ¿Qué significa? — *`:focus`*
-> Apunta a un elemento **que tiene el foco**: es donde irían tus teclas si empiezas a escribir. Un `<input>` enfocado, un botón al que llegaste con la tecla Tab, etc.
-> **Para qué sirve:** mostrar dónde está «parado» el teclado. Es fundamental para personas que navegan sin ratón.
+> Apunta a un elemento **que tiene el foco**: el sitio donde irían tus teclas si empezaras a escribir. Un `<input>` enfocado, un botón al que llegaste con la tecla Tab, etcétera.
+> **Para qué sirve:** mostrar dónde está «parado» el teclado. Es fundamental para quien navega sin ratón.
 > **Dónde se usa en un repo real:** en los formularios de contacto de `tunal-digital` y en los campos de login de `Faro` (aunque ahí Tailwind lo escribe como `focus:ring-2`).
 
-Veamos los tres juntos sobre un botón de `tunal-digital`:
+Veámoslos los tres juntos sobre un botón de `tunal-digital`:
 
 ```css
 /* Estado normal, en reposo */
@@ -81,19 +81,19 @@ Veamos los tres juntos sobre un botón de `tunal-digital`:
 }
 ```
 
-El `transition` de la primera regla es lo que hace que el cambio de color sea suave en vez de brusco. No es obligatorio, pero se siente mucho mejor.
+El `transition` de la primera regla es lo que hace que el cambio de color sea suave en lugar de brusco. No es obligatorio, pero la diferencia se nota: con él, todo se siente más cuidado.
 
 > ### ⚠️ Cuidado
-> Nunca borres el indicador de foco con `outline: none;` sin poner algo en su lugar. Si lo haces, las personas que navegan con teclado se quedan «ciegas»: no ven dónde están paradas. Si el contorno por defecto no te gusta, reemplázalo por uno propio, no lo elimines a secas.
+> Nunca borres el indicador de foco con `outline: none;` sin poner algo en su lugar. Si lo haces, quien navega con teclado se queda «a ciegas»: ya no ve dónde está parado. Si el contorno por defecto no te gusta, reemplázalo por uno propio, pero no lo elimines a secas.
 
 ---
 
 ## 3. El foco más educado: `:focus-visible`
 
-Hay un problema clásico: cuando haces clic con el ratón en un botón, a veces aparece ese halo de foco, y se ve raro («yo solo hice clic, no quiero el halo»). Pero cuando llegas con Tab, sí lo quieres. ¿Cómo distinguir un caso del otro? Para eso nació `:focus-visible`.
+Hay un problema clásico. Cuando haces clic con el ratón en un botón, a veces aparece ese halo de foco y se ve raro: «yo solo hice clic, no quería ningún halo». Pero cuando llegas con Tab, ahí sí lo quieres. ¿Cómo distinguir un caso del otro? Para eso nació `:focus-visible`.
 
 > ### 🟦 ¿Qué significa? — *`:focus-visible`*
-> Es como `:focus`, pero el navegador solo lo aplica **cuando tiene sentido mostrar el foco visualmente**, normalmente al navegar con teclado, no al hacer clic con el ratón.
+> Es como `:focus`, pero el navegador solo lo aplica **cuando tiene sentido mostrar el foco visualmente**, que suele ser al navegar con teclado y no al hacer clic con el ratón.
 > **Para qué sirve:** mostrar el halo de accesibilidad a quien navega con teclado, sin molestar con halos a quien usa el ratón. Lo mejor de los dos mundos.
 > **Dónde se usa en un repo real:** ideal para los botones y enlaces de `tunal-digital`, donde quieres accesibilidad sin que cada clic deje un contorno colgando.
 
@@ -111,7 +111,7 @@ Hay un problema clásico: cuando haces clic con el ratón en un botón, a veces 
 ```
 
 > ### 💡 Tip
-> Si tuvieras que elegir solo uno, hoy en día se recomienda estilizar `:focus-visible` antes que `:focus` para el contorno de teclado. Es el estándar moderno y lo soportan todos los navegadores actuales. Bit lo llama «el foco con buenos modales». 🦎
+> Si tuvieras que elegir solo uno, hoy se recomienda estilizar `:focus-visible` antes que `:focus` para el contorno de teclado. Es el estándar moderno y lo soportan todos los navegadores actuales. Bit lo llama «el foco con buenos modales». 🦎
 
 ---
 
@@ -121,17 +121,17 @@ Estas pseudo-clases no miran estados, sino **lugares**: ¿este elemento es el pr
 
 > ### 🟦 ¿Qué significa? — *`:first-child`*
 > Apunta a un elemento **solo si es el primer hijo** de su contenedor padre.
-> **Para qué sirve:** quitar el margen superior del primer elemento, redondear la esquina de arriba de una lista, casos donde «el primero es especial».
-> **Dónde se usa en un repo real:** en una lista de servicios en `tunal-digital`, para que el primer ítem no tenga línea separadora arriba.
+> **Para qué sirve:** quitar el margen superior del primer elemento, redondear la esquina de arriba de una lista, esos casos donde «el primero es especial».
+> **Dónde se usa en un repo real:** en una lista de servicios en `tunal-digital`, para que el primer ítem no lleve línea separadora arriba.
 
 > ### 🟦 ¿Qué significa? — *`:last-child`*
 > Igual que el anterior, pero apunta al elemento **solo si es el último hijo** de su padre.
-> **Para qué sirve:** quitar el borde inferior del último ítem de una lista, o el margen sobrante al final.
+> **Para qué sirve:** quitar el borde inferior del último ítem de una lista, o el margen que sobra al final.
 > **Dónde se usa en un repo real:** en `tunal-digital`, para que el último ítem del menú no deje un separador colgando.
 
 > ### 🟦 ¿Qué significa? — *`:nth-child(n)`*
 > Apunta a hijos **según un patrón numérico**: el tercero, los pares, los impares, uno de cada tres... El patrón va entre paréntesis.
-> **Para qué sirve:** filas alternadas de color en tablas («cebra»), cuadrículas con ritmo visual, resaltar cada cierto número.
+> **Para qué sirve:** filas alternadas de color en tablas (el efecto «cebra»), cuadrículas con ritmo visual, resaltar cada cierto número.
 > **Dónde se usa en un repo real:** en una tabla de precios o de proyectos en `tunal-digital`, para pintar las filas pares de un gris suave y que se lean mejor.
 
 Mira cómo se usan sobre una lista de servicios:
@@ -158,7 +158,7 @@ Mira cómo se usan sobre una lista de servicios:
 }
 ```
 
-Las palabras `even` (pares) y `odd` (impares) son atajos cómodos. Pero `:nth-child` acepta fórmulas más potentes con la letra `n`, que representa «0, 1, 2, 3...» en orden:
+Las palabras `even` (pares) y `odd` (impares) son atajos cómodos. Pero `:nth-child` admite fórmulas más potentes con la letra `n`, que representa «0, 1, 2, 3...» en orden:
 
 ```css
 /* Cada tercer elemento: el 3, el 6, el 9... */
@@ -173,10 +173,10 @@ Las palabras `even` (pares) y `odd` (impares) son atajos cómodos. Pero `:nth-ch
 ```
 
 > ### ⚠️ Cuidado
-> `:nth-child` cuenta **todos** los hermanos, no solo los del mismo tipo de etiqueta. Si dentro de un `<div>` mezclas un `<h2>` y varios `<p>`, el primer `<p>` podría ser en realidad el «segundo hijo» porque el `<h2>` ocupa la posición uno. Si eso te confunde, existe la prima `:nth-of-type()`, que cuenta solo elementos del mismo tipo.
+> `:nth-child` cuenta **todos** los hermanos, no solo los de la misma etiqueta. Si dentro de un `<div>` mezclas un `<h2>` y varios `<p>`, el primer `<p>` podría ser en realidad el «segundo hijo», porque el `<h2>` ya ocupa la posición uno. Si eso te lía, tienes la prima cercana `:nth-of-type()`, que cuenta solo elementos del mismo tipo.
 
 > ### 🔎 En tu código
-> En `RachaSimple` o `Faro`, que usan Tailwind, esto mismo se logra con utilidades como `odd:bg-gray-100` y `even:bg-white`, o con `first:mt-0` y `last:mb-0`. Por dentro Tailwind está generando exactamente estas pseudo-clases que acabas de ver. Saber qué hacen «por debajo» te ayuda a entender qué escribe Tailwind por ti.
+> En `RachaSimple` o `Faro`, que usan Tailwind, esto mismo se logra con utilidades como `odd:bg-gray-100` y `even:bg-white`, o con `first:mt-0` y `last:mb-0`. Por dentro, Tailwind está generando exactamente las pseudo-clases que acabas de ver. Saber qué ocurre «por debajo» te ayuda a entender qué escribe Tailwind en tu lugar.
 
 ---
 
@@ -185,9 +185,9 @@ Las palabras `even` (pares) y `odd` (impares) son atajos cómodos. Pero `:nth-ch
 A veces quieres decir «todos estos, **menos** aquel». Esa palabra «menos» es `:not()`.
 
 > ### 🟦 ¿Qué significa? — *`:not(selector)`*
-> Apunta a todos los elementos que **NO** coinciden con el selector que pones dentro del paréntesis. Es una negación.
-> **Para qué sirve:** aplicar un estilo a un grupo excepto a algunos casos, sin tener que crear una clase aparte para los excluidos.
-> **Dónde se usa en un repo real:** en `tunal-digital`, para poner un margen a todos los botones **menos** al último, o estilizar todos los enlaces **menos** los que están deshabilitados.
+> Apunta a todos los elementos que **NO** coinciden con el selector que pones dentro del paréntesis. Es, sin más, una negación.
+> **Para qué sirve:** aplicar un estilo a un grupo entero excepto a algunos casos, sin tener que crear una clase aparte para los que quedan fuera.
+> **Dónde se usa en un repo real:** en `tunal-digital`, para dar margen a todos los botones **menos** al último, o para estilizar todos los enlaces **menos** los que están deshabilitados.
 
 ```css
 /* Todos los botones llevan margen a la derecha... menos el último */
@@ -201,10 +201,10 @@ nav a:not(.desactivado):hover {
 }
 ```
 
-Fíjate en algo bonito: dentro de `:not()` puedes meter **otra pseudo-clase** (`:not(:last-child)`) o una clase normal (`:not(.desactivado)`). Se combinan sin problema.
+Fíjate en algo elegante: dentro de `:not()` puedes meter **otra pseudo-clase** (`:not(:last-child)`) o una clase normal (`:not(.desactivado)`). Se combinan sin problema.
 
 > ### 💡 Tip
-> `:not(:last-child)` es uno de los trucos más útiles que aprenderás. Te ahorra el clásico problema del «espacio de más al final»: pones la separación a todos menos al último, y queda perfecto sin retoques manuales.
+> `:not(:last-child)` es uno de los trucos más útiles que vas a aprender. Te ahorra el clásico «espacio de más al final»: pones la separación a todos menos al último, y queda perfecto sin retoques a mano.
 
 ---
 
@@ -213,9 +213,9 @@ Fíjate en algo bonito: dentro de `:not()` puedes meter **otra pseudo-clase** (`
 Los formularios tienen estados propios que el HTML conoce: ¿está marcada esta casilla?, ¿está deshabilitado este campo? Las pseudo-clases te dejan reaccionar a ellos.
 
 > ### 🟦 ¿Qué significa? — *`:checked`*
-> Apunta a una casilla (`checkbox`), un botón de radio o una opción que **está marcada/seleccionada** en ese momento.
-> **Para qué sirve:** cambiar el aspecto de lo que rodea a una casilla marcada, hacer interruptores tipo «switch» solo con CSS, resaltar la opción elegida.
-> **Dónde se usa en un repo real:** en un formulario de `tunal-digital` con casillas «Quiero recibir novedades», para resaltar visualmente la opción cuando el usuario la activa.
+> Apunta a una casilla (`checkbox`), un botón de radio o una opción que **está marcada o seleccionada** en ese momento.
+> **Para qué sirve:** cambiar el aspecto de lo que rodea a una casilla marcada, montar interruptores tipo «switch» solo con CSS, resaltar la opción elegida.
+> **Dónde se usa en un repo real:** en un formulario de `tunal-digital` con casillas «Quiero recibir novedades», para resaltar la opción en cuanto el usuario la activa.
 
 ```css
 /* La etiqueta que sigue a un radio marcado se pone en negrita y azul */
@@ -225,26 +225,26 @@ input[type="radio"]:checked + label {
 }
 ```
 
-El `+ label` de ahí significa «el `<label>` que viene justo después»: es un selector hermano que verás más a fondo en otro capítulo. Por ahora quédate con la idea: cuando el radio se marca, su etiqueta vecina cambia.
+El `+ label` de ahí significa «el `<label>` que viene justo después»: es un selector hermano que verás con más calma en otro capítulo. Por ahora quédate con la idea: cuando el radio se marca, su etiqueta vecina cambia.
 
 > ### 🔎 En tu código
-> En `Faro` y `RachaSimple`, los formularios suelen manejarse con estado de React (`useState`) en lugar de depender solo de CSS, porque necesitan guardar datos en Supabase. Aun así, `:checked` sigue siendo útil para el aspecto puramente visual de la casilla, mientras React se encarga de la lógica. CSS para verse bien, React para recordar qué pasó.
+> En `Faro` y `RachaSimple`, los formularios suelen manejarse con estado de React (`useState`) en lugar de depender solo de CSS, porque necesitan guardar datos en Supabase. Aun así, `:checked` sigue siendo útil para el aspecto puramente visual de la casilla, mientras React se ocupa de la lógica. CSS para que se vea bien, React para recordar qué pasó.
 
-Hay más pseudo-clases de formulario que conviene que reconozcas aunque no las domines hoy: `:disabled` (campo desactivado), `:enabled` (activado), `:required` (obligatorio), `:valid` y `:invalid` (si lo escrito cumple las reglas). Todas siguen la misma lógica de «reacciona a un estado del campo».
+Hay más pseudo-clases de formulario que conviene que reconozcas, aunque no las domines hoy: `:disabled` (campo desactivado), `:enabled` (activado), `:required` (obligatorio), `:valid` e `:invalid` (si lo escrito cumple las reglas). Todas siguen la misma lógica de «reacciona a un estado del campo».
 
 ---
 
 ## 7. Pseudo-elementos: dibujar lo que no está en el HTML
 
-Cambiamos de tema, y este es el favorito de Bit. Hasta ahora reaccionábamos a elementos que ya existían. Los **pseudo-elementos** hacen algo distinto: **crean** o **apuntan a partes** que no escribiste como etiquetas.
+Cambiamos de tema, y este es el favorito de Bit. Hasta aquí reaccionábamos a elementos que ya existían. Los **pseudo-elementos** hacen algo distinto: **crean** partes nuevas, o **apuntan a trozos** que nunca escribiste como etiquetas.
 
 > ### 🟦 ¿Qué significa? — *Pseudo-elemento*
-> Es una palabra clave que se añade a un selector con **dos** dos puntos (`::`) para estilizar **una parte específica** de un elemento, o para **inventar contenido nuevo** que no existe en el HTML. El navegador lo «materializa» por ti.
+> Es una palabra clave que se añade a un selector con **dos** dos puntos (`::`) para estilizar **una parte concreta** de un elemento, o para **inventar contenido nuevo** que no existe en el HTML. El navegador lo «materializa» por ti.
 > **Para qué sirve:** poner iconos decorativos, comillas, líneas, o estilizar partes internas como el texto de ayuda de un input o el texto que el usuario selecciona con el ratón.
 > **Dónde se usa en un repo real:** en el propio `site/estilos.css` de este manual, los iconos que ves junto a cada recuadro (💡, ⚠️, 🔎) se ponen con `::before`. ¡Estás leyendo pseudo-elementos ahora mismo!
 
 > ### 💡 Tip
-> Regla mnemotécnica de Bit: **pseudo-CLASE** con **un** dos-puntos (`:hover`), porque reacciona a algo que ya está. **Pseudo-ELEMENTO** con **dos** dos-puntos (`::before`), porque «duplicas» los dos puntos para «crear» algo nuevo. Un punto = estado, doble punto = pieza nueva. 🦎
+> La regla para no perderte, cortesía de Bit: **pseudo-CLASE** con **un** dos-puntos (`:hover`), porque reacciona a algo que ya está ahí. **Pseudo-ELEMENTO** con **dos** dos-puntos (`::before`), porque «duplicas» los puntos para «crear» algo nuevo. Un punto, estado; doble punto, pieza nueva. 🦎
 
 ---
 
@@ -255,7 +255,7 @@ Estos dos son los pseudo-elementos estrella. Crean una cajita invisible **antes*
 > ### 🟦 ¿Qué significa? — *`::before`*
 > Inserta un trozo de contenido **justo antes** del contenido real de un elemento, sin que tengas que escribirlo en el HTML.
 > **Para qué sirve:** iconos a la izquierda de un texto, viñetas personalizadas, comillas de apertura, etiquetas decorativas.
-> **Dónde se usa en un repo real:** los recuadros de este manual usan `::before` para colocar el emoji de icono al inicio de cada caja.
+> **Dónde se usa en un repo real:** los recuadros de este manual usan `::before` para colocar el emoji del icono al inicio de cada caja.
 
 > ### 🟦 ¿Qué significa? — *`::after`*
 > Igual que `::before`, pero inserta el contenido **justo después** del contenido real del elemento.
@@ -266,10 +266,10 @@ Y aquí llega el detalle más importante de todos:
 
 > ### 🟦 ¿Qué significa? — *`content`*
 > Es la propiedad CSS que dice **qué texto o símbolo** va a mostrar un `::before` o un `::after`. **Sin `content`, el pseudo-elemento no aparece**, ni siquiera vacío.
-> **Para qué sirve:** definir el contenido de los pseudo-elementos. Puede ser un texto, un emoji, comillas, o `""` (vacío) si solo lo quieres como adorno geométrico.
+> **Para qué sirve:** definir el contenido de los pseudo-elementos. Puede ser un texto, un emoji, unas comillas, o `""` (vacío) si solo lo quieres como adorno geométrico.
 > **Dónde se usa en un repo real:** en `site/estilos.css`, cada recuadro define algo como `content: "💡"` para su icono.
 
-Veamos cómo el manual pone el icono de los recuadros:
+Veamos cómo el manual coloca el icono de los recuadros:
 
 ```css
 /* La cajita de "Tip" */
@@ -290,7 +290,7 @@ Veamos cómo el manual pone el icono de los recuadros:
 }
 ```
 
-Lo mágico: el emoji 💡 **no está en el HTML**. El HTML solo tiene `<div class="recuadro-tip">...texto...</div>`. El icono lo «inventa» el CSS. Si mañana quieres cambiar todos los iconos de tip a 📌, cambias una sola línea y se actualizan todos. Eso es poder.
+Y aquí está lo bonito: el emoji 💡 **no está en el HTML**. El HTML solo tiene `<div class="recuadro-tip">...texto...</div>`. El icono lo «inventa» el CSS. Si mañana quieres cambiar todos los iconos de tip a 📌, cambias una sola línea y se actualizan todos de golpe. Eso es poder.
 
 Otro ejemplo, la flecha al final de un enlace:
 
@@ -302,10 +302,10 @@ Otro ejemplo, la flecha al final de un enlace:
 ```
 
 > ### ⚠️ Cuidado
-> Si olvidas la propiedad `content`, tu `::before` o `::after` **no se mostrará en absoluto**, aunque le pongas colores, tamaños y bordes. Es el error número uno de los principiantes con pseudo-elementos. Cuando algo «no aparece», lo primero que revisa Bit es si falta `content`. Para adornos puramente geométricos (una línea, un cuadrito), usa `content: "";` con las comillas vacías: vacío, pero presente.
+> Si olvidas la propiedad `content`, tu `::before` o `::after` **no se mostrará en absoluto**, por mucho que le pongas colores, tamaños y bordes. Es el error número uno de quien empieza con pseudo-elementos. Cuando algo «no aparece», lo primero que revisa Bit es si falta `content`. Para adornos puramente geométricos (una línea, un cuadrito), usa `content: "";` con las comillas vacías: vacío, pero presente.
 
 > ### 💡 Tip
-> El contenido que metes con `content` es **decorativo** y los lectores de pantalla suelen ignorarlo. Por eso es perfecto para iconos bonitos, pero **nunca** pongas ahí información importante (como un precio o una instrucción). El texto que importa va en el HTML de verdad.
+> Lo que metes con `content` es **decorativo**, y los lectores de pantalla suelen ignorarlo. Por eso es perfecto para iconos bonitos, pero **nunca** pongas ahí información que importe (como un precio o una instrucción). El texto que cuenta va en el HTML de verdad.
 
 ---
 
@@ -315,8 +315,8 @@ Estos dos no crean contenido nuevo: apuntan a partes que ya existen «dentro» d
 
 > ### 🟦 ¿Qué significa? — *`::placeholder`*
 > Apunta al **texto de ayuda gris** que aparece dentro de un campo de formulario cuando está vacío (el `placeholder="Tu correo"`).
-> **Para qué sirve:** cambiar el color, la cursiva o el tamaño de ese texto guía, para que combine con tu diseño.
-> **Dónde se usa en un repo real:** en los formularios de contacto de `tunal-digital` y en los campos de login de `Faro`, para que el texto guía se vea acorde a la marca.
+> **Para qué sirve:** cambiar el color, la cursiva o el tamaño de ese texto guía para que combine con tu diseño.
+> **Dónde se usa en un repo real:** en los formularios de contacto de `tunal-digital` y en los campos de login de `Faro`, para que el texto guía vaya acorde a la marca.
 
 ```css
 .campo-formulario::placeholder {
@@ -326,7 +326,7 @@ Estos dos no crean contenido nuevo: apuntan a partes que ya existen «dentro» d
 ```
 
 > ### 🟦 ¿Qué significa? — *`::selection`*
-> Apunta al **texto que el usuario ha resaltado** con el ratón (cuando arrastras para seleccionar y se pone de color).
+> Apunta al **texto que el usuario ha resaltado** con el ratón (cuando arrastras para seleccionar y se tiñe de color).
 > **Para qué sirve:** personalizar el color del resaltado para que use los colores de tu marca en vez del azul por defecto del navegador.
 > **Dónde se usa en un repo real:** en `tunal-digital` o en el `site/estilos.css` del manual, para que al seleccionar texto el resaltado sea del color de la marca.
 
@@ -338,13 +338,13 @@ Estos dos no crean contenido nuevo: apuntan a partes que ya existen «dentro» d
 ```
 
 > ### 🔎 En tu código
-> Con Tailwind (en `RachaSimple` y `Faro`) estos pseudo-elementos también están disponibles: escribes `placeholder:text-gray-400` o `selection:bg-blue-700`. De nuevo, Tailwind es solo un atajo para escribir el mismo CSS que viste arriba. El concepto es idéntico; cambia la forma de escribirlo.
+> Con Tailwind (en `RachaSimple` y `Faro`) estos pseudo-elementos también están a tu alcance: escribes `placeholder:text-gray-400` o `selection:bg-blue-700`. Una vez más, Tailwind es solo un atajo para escribir el mismo CSS que viste arriba. El concepto es idéntico; lo que cambia es la forma de escribirlo.
 
 ---
 
 ## 10. Encadenar y combinar: el poder de juntarlo todo
 
-Lo más bonito es que estas piezas se combinan. Puedes pegar varias pseudo-clases, o mezclar pseudo-clase con pseudo-elemento:
+Lo más bonito es que todas estas piezas se combinan. Puedes pegar varias pseudo-clases, o mezclar una pseudo-clase con un pseudo-elemento:
 
 ```css
 /* Un enlace que NO esté deshabilitado, al pasar el ratón,
@@ -360,10 +360,10 @@ nav a:not(.desactivado):hover::after {
 }
 ```
 
-Leído en voz alta, el primero dice: «para los enlaces de `nav` que no tengan la clase desactivado, cuando el ratón esté encima, dibuja una flecha después». Cada pieza se va sumando como ladritos. No te asustes por la longitud: se lee de izquierda a derecha como una frase.
+Léelo en voz alta y el primero dice: «para los enlaces de `nav` que no tengan la clase desactivado, cuando el ratón esté encima, dibuja una flecha después». Cada pieza se va sumando como ladrillos. No te asustes por la longitud: se lee de izquierda a derecha, igual que una frase.
 
 > ### 💡 Tip
-> Si una regla se vuelve tan larga que no la entiendes ni tú, probablemente sea señal de que conviene añadir una clase normal en el HTML para simplificar. Las pseudo-clases son potentes, pero la claridad siempre gana. Bit prefiere tres reglas legibles que una imposible. 🦎
+> Si una regla se vuelve tan larga que ni tú la entiendes, suele ser señal de que conviene añadir una clase normal en el HTML para simplificar. Las pseudo-clases dan mucho juego, pero la claridad siempre gana. Bit prefiere tres reglas legibles a una imposible. 🦎
 
 ---
 
@@ -399,4 +399,4 @@ Leído en voz alta, el primero dice: «para los enlaces de `nav` que no tengan l
 
 ---
 
-> Lo lograste. Hoy tu CSS dejó de ser una estatua y aprendió a reaccionar: sabe cuándo lo tocan, sabe quién va primero y quién va último, y hasta sabe dibujar iconos que no existían en el HTML. La próxima vez que veas el 💡 al lado de un recuadro, ya sabes el secreto: es un `::before` con su `content` haciendo su trabajo en silencio. Bit chapotea de orgullo. Nos vemos en el siguiente capítulo. 🦎
+> Lo lograste. Hoy tu CSS dejó de ser una estatua y aprendió a reaccionar: sabe cuándo lo tocan, sabe quién va primero y quién va último, y hasta sabe dibujar iconos que no existían en el HTML. La próxima vez que veas el 💡 al lado de un recuadro, ya conoces el secreto: es un `::before` con su `content` haciendo su trabajo en silencio. Bit chapotea de orgullo. Nos vemos en el siguiente capítulo. 🦎

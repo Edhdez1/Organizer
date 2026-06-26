@@ -5,18 +5,18 @@
 </p>
 
 
-> Hola otra vez. Soy **Bit**, tu ajolote guia. Hoy vamos a hablar de algo que asusta a casi todos los principiantes: los errores. Esas letras rojas que salen cuando algo sale mal. Pero te tengo una buena noticia: un error no es un castigo, es un **mensaje**. Python te esta hablando. Te dice "oye, aqui hay un problema, y este es justo el problema". Cuando aprendas a leer esos mensajes, vas a dejar de tenerles miedo y vas a empezar a tratarlos como pistas de un detective. Vamos paso a paso, con calma, usando nuestra app **PolyPaw** como ejemplo.
+> Hola otra vez. Soy **Bit**, tu ajolote guia. Hoy toca un tema que pone nerviosos a casi todos cuando empiezan: los errores. Esas letras rojas que aparecen justo cuando algo se rompe. Pero quiero contarte algo que cambia todo: un error no es un castigo, es un **mensaje**. Es Python hablandote. Te dice "oye, aqui hay un problema, y mira, es exactamente este". El dia que aprendas a leer esos mensajes vas a dejar de temerles y vas a empezar a tratarlos como las pistas de un detective. Lo haremos despacio, con calma, y usando nuestra app **PolyPaw** como ejemplo de principio a fin.
 
 ## 1. Un error no es el fin del mundo
 
-Cuando programas, los errores van a aparecer. Siempre. Le pasan al que empieza y le pasan al que lleva veinte anios. La diferencia es que el experto **lee el error** y lo resuelve en segundos, mientras que el principiante se asusta y cierra todo. Mi objetivo en este capitulo es que tu pases del segundo grupo al primero.
+Programa lo que programes, los errores van a aparecer. Siempre. Le pasa al que abre Python por primera vez y le pasa al que lleva veinte anios viviendo de esto. La diferencia esta en otra parte: el experto **lee el error** y lo arregla en segundos, mientras que el principiante se asusta y cierra todo de golpe. Lo que busco en este capitulo es justamente eso, llevarte del segundo grupo al primero.
 
-En PolyPaw, nuestra app de aprendizaje de idiomas hecha **enteramente en Python** con el framework Flet, los datos viven en archivos JSON dentro de la carpeta `missions/`. Imagina que un dia el archivo `missions/saludos.json` no existe (alguien lo borro, o se escribio mal el nombre). Si no manejamos ese caso, la app **se cae** y el usuario ve una pantalla rota. Manejar errores es lo que separa una app fragil de una app que aguanta los golpes.
+PolyPaw, nuestra app de aprendizaje de idiomas hecha **enteramente en Python** con el framework Flet, guarda sus datos en archivos JSON dentro de la carpeta `missions/`. Piensa en este escenario: un dia el archivo `missions/saludos.json` no aparece. Alguien lo borro, o el nombre quedo mal escrito. Si no preparamos la app para ese caso, se **cae** y el usuario se queda mirando una pantalla rota. Justo ahi esta la diferencia entre una app fragil y una que encaja los golpes y sigue de pie.
 
-Primero, definamos el termino mas importante del capitulo.
+Antes de seguir, conviene dejar claro el termino mas importante del capitulo.
 
 > ### 🟦 ¿Que significa? — *Excepcion*
-> Una **excepcion** es un evento que interrumpe el flujo normal de tu programa porque algo salio mal. La palabra viene de "situacion excepcional", es decir, algo que no esperabas. Cuando Python encuentra un problema (dividir entre cero, abrir un archivo que no existe, sumar un numero con un texto), **lanza** una excepcion.
+> Una **excepcion** es un evento que interrumpe el flujo normal de tu programa porque algo salio mal. El nombre viene de "situacion excepcional", es decir, algo con lo que no contabas. Cuando Python se topa con un problema (dividir entre cero, abrir un archivo que no existe, sumar un numero con un texto), **lanza** una excepcion.
 > **Para que sirve:** te avisa exactamente que paso y donde, para que puedas reaccionar.
 > **Donde se usa en un repo real:** en PolyPaw, cuando `database_manager.py` intenta leer una mision que no esta, Python lanza una excepcion del tipo `FileNotFoundError`. Si la atrapamos, podemos mostrar un mensaje amable en vez de que la app explote.
 
@@ -25,10 +25,10 @@ Primero, definamos el termino mas importante del capitulo.
 
 ## 2. Los tipos de error mas comunes
 
-Python tiene muchos tipos de error, pero como principiante te vas a topar una y otra vez con los mismos seis. Vamos a conocerlos uno por uno. Cada uno tiene un **nombre** y ese nombre te dice de que se trata.
+Python tiene un monton de tipos de error, pero como principiante te vas a cruzar una y otra vez con los mismos seis. Vamos a verlos de uno en uno. Cada uno tiene un **nombre**, y ese nombre ya te adelanta de que va la cosa.
 
 > ### 🟦 ¿Que significa? — *SyntaxError*
-> Un **SyntaxError** (error de sintaxis) significa que escribiste algo que Python no puede ni siquiera entender, porque rompe las reglas de gramatica del lenguaje. La "sintaxis" son las reglas de como se escribe el codigo.
+> Un **SyntaxError** (error de sintaxis) significa que escribiste algo que Python ni siquiera puede entender, porque rompe las reglas de gramatica del lenguaje. La "sintaxis" son las reglas de como se escribe el codigo.
 > **Para que sirve:** te avisa que el codigo esta mal **escrito** antes incluso de ejecutarse.
 > **Donde se usa en un repo real:** si en `main.py` de PolyPaw olvidas un parentesis o los dos puntos de un `if`, Python ni arranca y te muestra un SyntaxError.
 
@@ -38,7 +38,7 @@ Ejemplo de SyntaxError (falta el cierre del parentesis):
 print("Bienvenido a PolyPaw"
 ```
 
-Python responde algo asi como `SyntaxError: '(' was never closed`. Te esta diciendo "abriste un parentesis y nunca lo cerraste".
+Python te responde algo parecido a `SyntaxError: '(' was never closed`. En cristiano: "abriste un parentesis y nunca lo cerraste".
 
 > ### 🟦 ¿Que significa? — *NameError*
 > Un **NameError** (error de nombre) ocurre cuando usas un nombre (una variable o funcion) que Python no conoce, porque nunca lo creaste o lo escribiste mal.
@@ -100,11 +100,11 @@ edad = int("doce")   # "doce" no se puede convertir a numero
 Resultado: `ValueError: invalid literal for int() with base 10: 'doce'`.
 
 > ### 💡 Tip
-> No memorices los seis de golpe. Lo que importa es entender que **cada error tiene un nombre que describe el problema**. Cuando veas uno nuevo, lee el nombre en voz alta: "Key... Error... error de clave... ah, pedi una clave que no existe". Con la practica los reconoceras al instante.
+> No intentes memorizar los seis de un tiron. Lo que de verdad importa es captar que **cada error lleva un nombre que describe el problema**. Cuando te aparezca uno nuevo, leelo en voz alta y separalo: "Key... Error... error de clave... ah, pedi una clave que no existe". Con la practica los vas a reconocer al vuelo.
 
 ## 3. Leer el traceback (la pila de error)
 
-Cuando algo falla, Python no te da una sola linea: te da un bloque entero de texto rojo. Eso es el **traceback**, y aprender a leerlo es tu superpoder.
+Cuando algo falla, Python no se conforma con una linea: te suelta un bloque entero de texto rojo. Eso es el **traceback**, y leerlo bien es tu superpoder secreto.
 
 > ### 🟦 ¿Que significa? — *Traceback*
 > El **traceback** (en espanol, "rastreo" o "pila de error") es el reporte completo que Python imprime cuando ocurre una excepcion. Muestra el camino que recorrio el programa hasta llegar al error, archivo por archivo y linea por linea.
@@ -127,22 +127,22 @@ Vamos a leerlo como detectives. Hay un truco de oro:
 > ### 💡 Tip
 > **Lee el traceback de ABAJO hacia ARRIBA.** La ultima linea te dice **que** error fue (`FileNotFoundError`) y el mensaje (`No such file or directory: 'missions/saludos.json'`). Justo encima te dice **donde** paso (archivo `database_manager.py`, linea 18, en la funcion `cargar_mision`). Lo de mas arriba es el camino que llevo hasta alli.
 
-Entonces, de ese traceback aprendemos tres cosas en segundos:
+Asi, en cuestion de segundos, ese traceback nos cuenta tres cosas:
 1. **El tipo:** `FileNotFoundError` (no se encontro un archivo).
 2. **El mensaje:** falta el archivo `missions/saludos.json`.
 3. **El lugar:** linea 18 de `database_manager.py`, dentro de `cargar_mision`.
 
-Con eso ya sabemos exactamente que arreglar: o el archivo no existe, o el nombre esta mal escrito.
+Con eso en la mano ya sabemos que tocar: o el archivo no existe, o el nombre quedo mal escrito.
 
 > ### ⚠️ Cuidado
-> No te asustes por la cantidad de texto. El traceback parece largo y aterrador, pero el 90% de la informacion util esta en la **ultima linea**. Empieza siempre por ahi.
+> Que no te asuste la cantidad de texto. El traceback se ve largo y aterrador, pero el 90% de lo util esta en la **ultima linea**. Empieza siempre por ahi.
 
 > ### 🔎 En tu codigo
 > Abre la terminal donde corre PolyPaw, provoca un error a proposito (por ejemplo, pide una mision que no existe) y practica leer el traceback de abajo hacia arriba. Identifica el tipo, el mensaje y la linea. Hazlo tres veces y veras que ya no te intimida.
 
 ## 4. Atrapar errores con try / except
 
-Hasta ahora dejamos que el error tumbe el programa. Pero podemos hacer algo mejor: **atraparlo** y reaccionar con calma. Para eso usamos `try` y `except`.
+Hasta aqui hemos dejado que el error tumbe el programa. Pero podemos hacer algo mucho mejor: **atraparlo** y reaccionar con calma. Para eso estan `try` y `except`.
 
 > ### 🟦 ¿Que significa? — *try / except*
 > El bloque **try** ("intentar") contiene el codigo que **podria** fallar. El bloque **except** ("excepto") contiene lo que haremos **si** falla. Python intenta correr el `try`; si todo va bien, ignora el `except`; si hay una excepcion, salta al `except` y la maneja.
@@ -162,15 +162,15 @@ def cargar_mision(nombre):
         return {}
 ```
 
-Aqui le decimos a Python: "intenta abrir y leer el JSON; **si** no existe el archivo (`FileNotFoundError`), no te caigas: avisa y devuelve un diccionario vacio".
+Lo que le estamos diciendo a Python es: "intenta abrir y leer el JSON; **si** resulta que el archivo no existe (`FileNotFoundError`), no te caigas: avisa y devuelve un diccionario vacio".
 
 > ### 💡 Tip
 > Compara con JavaScript: en JS escribirias `try { ... } catch (e) { ... }`. En Python es `try: ... except ...: ...`. Mismo concepto, solo cambia `catch` por `except` y se usan dos puntos e indentacion en lugar de llaves.
 
 > ### ⚠️ Cuidado
-> Evita el `except` "pelado", es decir, un `except:` sin decir que error atrapas. Eso captura **cualquier** cosa, incluso errores que ni imaginabas, y te esconde problemas reales. Siempre que puedas, di **que** error esperas, como `except FileNotFoundError:`.
+> Huye del `except` "pelado", es decir, un `except:` que no dice que error atrapa. Ese captura **cualquier** cosa, hasta errores que ni sospechabas, y te tapa los problemas de verdad. Siempre que puedas, di **que** error esperas, como `except FileNotFoundError:`.
 
-Otro error muy comun que vale la pena atrapar es el de dividir entre cero:
+Otro tropiezo muy comun que vale la pena atrapar es dividir entre cero:
 
 > ### 🟦 ¿Que significa? — *ZeroDivisionError*
 > Un **ZeroDivisionError** (error de division por cero) ocurre cuando intentas dividir un numero entre `0`. En matematicas dividir entre cero no tiene sentido, asi que Python se detiene y lanza esta excepcion.
@@ -182,11 +182,11 @@ ejercicios = 0
 promedio = 100 / ejercicios   # no se puede dividir entre cero
 ```
 
-Resultado: `ZeroDivisionError: division by zero`. Lo manejas igual que cualquier otro: `except ZeroDivisionError:`.
+Resultado: `ZeroDivisionError: division by zero`. Se maneja igual que cualquier otro: `except ZeroDivisionError:`.
 
 ### Atrapar varios tipos de error
 
-Puedes tener varios `except` para distintos errores:
+Nada te impide poner varios `except`, uno por cada error distinto:
 
 ```python
 def cargar_mision(nombre):
@@ -201,7 +201,7 @@ def cargar_mision(nombre):
         return "Esta mision no tiene titulo"
 ```
 
-Si el archivo no esta, entra el primer `except`. Si el archivo existe pero le falta la clave `"titulo"`, entra el segundo. Cada problema, su respuesta.
+Si el archivo no esta, entra el primer `except`. Si el archivo existe pero le falta la clave `"titulo"`, entra el segundo. A cada problema, su respuesta.
 
 > ### 🟦 ¿Que significa? — *json.load / JSONDecodeError*
 > `json.load()` lee un archivo JSON y lo convierte en un diccionario de Python. Si el archivo existe pero esta **mal escrito** (le falta una coma, una llave), Python lanza un **JSONDecodeError**.
@@ -210,7 +210,7 @@ Si el archivo no esta, entra el primer `except`. Si el archivo existe pero le fa
 
 ## 5. else y finally: los otros dos bloques
 
-`try/except` tiene dos companeros opcionales: `else` y `finally`.
+`try/except` viene con dos companeros opcionales: `else` y `finally`.
 
 > ### 🟦 ¿Que significa? — *else (en try)*
 > El bloque **else** dentro de un `try` se ejecuta **solo si NO hubo error**. Es decir, "si todo salio bien, haz esto tambien".
@@ -240,14 +240,14 @@ def cargar_mision(nombre):
         print("Intento de carga finalizado")
 ```
 
-Orden de lectura: Python **intenta** (`try`); si falla, va al `except`; si NO falla, va al `else`; y **siempre**, al final, corre el `finally`.
+El orden en que lo lee Python es asi: primero **intenta** (`try`); si falla, va al `except`; si NO falla, va al `else`; y **siempre**, para cerrar, corre el `finally`.
 
 > ### 💡 Tip
-> Al principio te bastara con `try` y `except`. `else` y `finally` son herramientas que usaras mas adelante cuando tu codigo crezca. No te sientas obligado a usarlos todos siempre.
+> Al principio con `try` y `except` te alcanza de sobra. `else` y `finally` son herramientas que iras sacando mas adelante, cuando tu codigo crezca. No te sientas obligado a usarlos todos siempre.
 
 ## 6. Lanzar tus propios errores con raise
 
-A veces **tu** quieres provocar un error a proposito, porque detectas que algo no tiene sentido. Para eso esta `raise`.
+Hay veces en que eres **tu** quien quiere provocar un error a proposito, porque te das cuenta de que algo no cuadra. Para eso esta `raise`.
 
 > ### 🟦 ¿Que significa? — *raise*
 > **raise** ("lanzar" o "levantar") es la instruccion para que **tu** dispares una excepcion manualmente. Le dices a Python "esto esta mal, detente y avisa".
@@ -263,28 +263,28 @@ def validar_mision(mision):
     return True
 ```
 
-Aqui, si la mision no cumple las reglas, **nosotros** lanzamos el error. Quien llame a esta funcion lo podra atrapar con `try/except`.
+Aqui, si la mision no cumple las reglas, el error lo lanzamos **nosotros**. Y quien llame a esta funcion podra atraparlo con `try/except`.
 
 > ### 💡 Tip
 > En JavaScript esto se hace con `throw new Error("mensaje")`. En Python es `raise ValueError("mensaje")`. La idea es la misma: interrumpir y avisar.
 
 ## 7. Validar entradas antes de que truenen
 
-Una de las mejores costumbres es **validar** los datos antes de usarlos. Asi previenes errores en vez de atraparlos despues.
+Una de las mejores manias que puedes adoptar es **validar** los datos antes de tocarlos. Asi previenes el error de raiz en lugar de atraparlo cuando ya estallo.
 
 > ### 🟦 ¿Que significa? — *Validar entradas*
 > **Validar entradas** significa revisar que los datos que recibes (de un archivo, del usuario, de internet) cumplan lo que esperas **antes** de trabajar con ellos. "Entrada" es cualquier dato que entra a tu programa desde afuera.
 > **Para que sirve:** evita errores y datos basura; tu app se vuelve mas robusta y confiable.
 > **Donde se usa en un repo real:** en PolyPaw, antes de mostrar una mision validamos que tenga `titulo`, `idioma` y al menos un ejercicio. Si falta algo, avisamos en vez de romper la pantalla.
 
-Mira la diferencia. En vez de pedir directo una clave que podria no existir:
+Fijate en la diferencia. En lugar de pedir directo una clave que quiza no exista:
 
 ```python
 # Arriesgado: si no existe "titulo", truena con KeyError
 titulo = mision["titulo"]
 ```
 
-Validamos primero o usamos `.get()`, que devuelve un valor por defecto si la clave falta:
+Validamos primero, o usamos `.get()`, que devuelve un valor por defecto cuando la clave no esta:
 
 ```python
 # Seguro: si no existe "titulo", usamos un texto por defecto
@@ -294,7 +294,7 @@ titulo = mision.get("titulo", "Sin titulo")
 > ### 💡 Tip
 > El metodo `.get()` de los diccionarios es tu mejor amigo contra el KeyError. `mision.get("titulo")` devuelve `None` si la clave no esta, y `mision.get("titulo", "Sin titulo")` devuelve el segundo valor como respaldo. Nada de errores.
 
-Validar entradas tambien aplica a lo que escribe el usuario. Por ejemplo, pedir un numero:
+Validar entradas tambien vale para lo que teclea el usuario. Piensa en pedir un numero:
 
 ```python
 respuesta = input("Cuantos puntos? ")
@@ -305,7 +305,7 @@ except ValueError:
     puntos = 0
 ```
 
-Asi, si el usuario escribe "diez" en vez de "10", no se cae nada: avisamos y seguimos.
+De esta forma, si el usuario escribe "diez" en vez de "10", no se rompe nada: avisamos y seguimos adelante.
 
 ## 8. Errores tipicos de principiante (y como resolverlos)
 
@@ -337,7 +337,7 @@ def saludar():
 
 ### 8.2 Dos puntos faltantes
 
-En Python, las lineas que abren un bloque (`if`, `for`, `while`, `def`, `else`) **terminan en dos puntos** `:`. Olvidarlos es clasico.
+En Python, las lineas que abren un bloque (`if`, `for`, `while`, `def`, `else`) **terminan en dos puntos** `:`. Olvidarlos es un clasico de clasicos.
 
 ```python
 def cargar()      # ERROR: falta el : al final
@@ -359,7 +359,7 @@ def cargar():     # correcto, con los dos puntos
 
 ## 9. Todo junto: manejar un JSON que no existe en PolyPaw
 
-Juntemos todo en un caso real de PolyPaw: cargar una mision desde `missions/` cubriendo todos los casos que pueden salir mal. Este es el tipo de funcion que vivira en `database_manager.py`.
+Vamos a juntar todo en un caso real de PolyPaw: cargar una mision desde `missions/` cubriendo cada cosa que podria salir mal. Este es exactamente el tipo de funcion que vivira en `database_manager.py`.
 
 ```python
 import json
@@ -386,13 +386,13 @@ def cargar_mision(nombre):
     return datos
 ```
 
-Esta funcion cubre cuatro escenarios:
+Esta funcion contempla cuatro escenarios:
 1. **El archivo no existe** → atrapamos `FileNotFoundError`, avisamos y devolvemos `None`.
 2. **El JSON esta corrupto** → atrapamos `json.JSONDecodeError`, avisamos y devolvemos `None`.
 3. **Falta el titulo o los ejercicios** → lanzamos nosotros un `ValueError` claro.
 4. **Todo bien** → devolvemos los datos de la mision.
 
-Y asi se usa, sin que la app jamas se caiga:
+Y asi se usa, sin que la app se caiga nunca:
 
 ```python
 mision = cargar_mision("saludos")
@@ -406,7 +406,7 @@ else:
 > En PolyPaw, prueba esta funcion con tres casos: (1) un nombre que existe, como `"saludos"` si ese JSON esta; (2) un nombre inventado como `"xyz123"`; y (3) un JSON al que le quites el titulo a proposito. Observa como cada caso se maneja sin tumbar la app. Eso es codigo robusto.
 
 > ### 💡 Tip
-> Fijate que devolvemos `None` cuando el problema es "esperable" (archivo que falta) pero usamos `raise` cuando es un error de **datos** que alguien debe arreglar (una mision sin titulo nunca deberia existir). Esa distincion es de programador avanzado, y ya la entiendes.
+> Fijate en el detalle: devolvemos `None` cuando el problema es "esperable" (un archivo que falta) pero usamos `raise` cuando es un error de **datos** que alguien tiene que arreglar (una mision sin titulo no deberia existir jamas). Saber distinguir esos dos casos es cosa de programador con experiencia, y ya lo entiendes.
 
 ## ✅ Checklist — ¿ya domino esto?
 

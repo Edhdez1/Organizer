@@ -5,12 +5,12 @@
 </p>
 
 
-> Hasta ahora creaste tus propios tipos con `interface` y `type`. En este capítulo Bit te enseña
-> a **derivar** tipos nuevos a partir de los que ya tienes, sin copiar y pegar. Es la diferencia
-> entre escribir un tipo "a mano" diez veces y decir "este tipo es como aquel, pero **sin** el
-> `id`". RachaSimple y Faro hacen esto todo el tiempo: tienen un puñado de tipos base (un hábito,
-> un proyecto) y de ahí sacan decenas de variantes. Menos repetición, menos errores, y cuando
-> cambias el tipo base, **todo lo demás se actualiza solo**.
+> Hasta ahora has creado tus propios tipos con `interface` y `type`. En este capítulo Bit te enseña
+> a **derivar** tipos nuevos a partir de los que ya tienes, sin andar copiando y pegando. La
+> diferencia es enorme: en lugar de escribir un tipo "a mano" diez veces, dices "este tipo es como
+> aquel, pero **sin** el `id`" y listo. RachaSimple y Faro funcionan así todo el rato: tienen un
+> puñado de tipos base (un hábito, un proyecto) y de ahí sacan decenas de variantes. Menos
+> repetición, menos errores, y cuando cambias el tipo base, **todo lo demás se actualiza solo**.
 
 ---
 
@@ -28,9 +28,9 @@ interface Habito {
 }
 ```
 
-Ahora necesitas un tipo para el **formulario** de crear un hábito. Ahí todavía no hay `id` (lo
+Ahora necesitas un tipo para el **formulario** de crear un hábito. Ahí todavía no hay `id` (eso lo
 pone la base de datos), ni `user_id` (lo pone el servidor), ni `creado_en`. Solo `nombre` y
-`color`. La tentación del principiante es escribir **otra interface** a mano:
+`color`. Y aquí es donde el principiante cae en la tentación de escribir **otra interface** a mano:
 
 ```typescript
 // 😩 repetido: si mañana renombras "nombre" a "titulo", tienes que cambiarlo en DOS sitios
@@ -40,10 +40,10 @@ interface NuevoHabito {
 }
 ```
 
-El problema no es escribirlo una vez: es que ahora tienes **dos fuentes de la verdad**. Si el
-campo `nombre` cambia de tipo, o agregas `icono`, tienes que acordarte de tocar las dos. Tarde o
-temprano se desincronizan. La solución de TypeScript: **derivar** `NuevoHabito` *a partir de*
-`Habito`. Eso es lo que veremos.
+El problema no es escribirlo una vez. Es que ahora tienes **dos fuentes de la verdad**. Si el
+campo `nombre` cambia de tipo, o agregas `icono`, tienes que acordarte de tocar las dos. Y tarde o
+temprano se desincronizan: te olvidas de una y empiezan los errores raros. TypeScript tiene una
+salida mejor: **derivar** `NuevoHabito` *a partir de* `Habito`. Eso es justo lo que veremos.
 
 > ### 💡 Tip — Una sola fuente de la verdad
 > La idea grande de todo este capítulo es **DRY** (*Don't Repeat Yourself*, "no te repitas").
@@ -56,12 +56,12 @@ temprano se desincronizan. La solución de TypeScript: **derivar** `NuevoHabito`
 
 > ### 🟦 ¿Qué significa? — *Tipo utilitario*
 > Un **tipo utilitario** (en inglés *utility type*) es una herramienta que **ya viene dentro de
-> TypeScript** y que toma un tipo y te devuelve **otro tipo modificado**. Funciona parecido a una
-> función, pero en vez de operar sobre datos, opera sobre **tipos**: le das un tipo de entrada y
-> te da un tipo de salida.
+> TypeScript**: toma un tipo y te devuelve **otro tipo modificado**. Piensa en él como una función,
+> solo que en lugar de operar sobre datos, opera sobre **tipos**. Le das un tipo de entrada y te
+> da un tipo de salida.
 >
-> Se usan con la sintaxis `Utilitario<TuTipo>` (el tipo entre los signos `<` y `>`, igual que con
-> los genéricos del capítulo 04). No tienes que instalar nada: están siempre disponibles.
+> Se usan con la sintaxis `Utilitario<TuTipo>` (el tipo va entre los signos `<` y `>`, igual que
+> con los genéricos del capítulo 04). No tienes que instalar nada: están siempre disponibles.
 
 Los seis más útiles para empezar son `Partial`, `Required`, `Pick`, `Omit`, `Record` y
 `Readonly`. Vamos uno por uno.
@@ -70,11 +70,12 @@ Los seis más útiles para empezar son `Partial`, `Required`, `Pick`, `Omit`, `R
 
 > ### 🟦 ¿Qué significa? — *`Partial<T>`*
 > `Partial<T>` toma un tipo `T` y devuelve una copia donde **todas las propiedades pasan a ser
-> opcionales** (les pone el `?` que viste en el capítulo 03). Sirve para cuando vas a **actualizar
-> solo algunos campos** de un objeto, no todos.
+> opcionales** (les pone el `?` que viste en el capítulo 03). Es justo lo que necesitas cuando vas
+> a **actualizar solo algunos campos** de un objeto, no todos.
 
-Donde brilla: una función de **editar**. Cuando editas un hábito, quizá solo cambias el color, no
-todo. Así que el objeto de cambios puede traer cualquier subconjunto de campos:
+Donde más se nota su utilidad es en una función de **editar**. Cuando editas un hábito, a lo mejor
+solo cambias el color y nada más. Así que el objeto de cambios puede traer cualquier subconjunto
+de campos:
 
 ```typescript
 // Partial<Habito> = un Habito donde cada campo puede venir o no
@@ -87,15 +88,16 @@ actualizarHabito("h1", { nombre: "Meditar" });     // ✅ solo el nombre
 ```
 
 > ### 🔎 En tu código — RachaSimple
-> Las mutaciones de TanStack Query que actualizan un hábito en `RachaSimple` reciben justo esto:
-> un `Partial` del tipo del hábito. Así una sola función sirve para cambiar el nombre, el color o
-> lo que sea, sin escribir un tipo distinto por cada combinación posible.
+> Las mutaciones de TanStack Query que actualizan un hábito en `RachaSimple` reciben exactamente
+> esto: un `Partial` del tipo del hábito. De ese modo una sola función sirve para cambiar el
+> nombre, el color o lo que sea, sin tener que escribir un tipo distinto por cada combinación
+> posible.
 
 ### 2.2 `Required<T>` — "todo obligatorio"
 
 > ### 🟦 ¿Qué significa? — *`Required<T>`*
-> Es el **opuesto** de `Partial`: toma un tipo y le **quita el `?` a todas las propiedades**, es
-> decir, las vuelve **obligatorias**. Sirve cuando tienes un tipo con campos opcionales pero, en
+> Es lo **contrario** de `Partial`: toma un tipo y le **quita el `?` a todas las propiedades**, o
+> sea, las vuelve **obligatorias**. Viene bien cuando tienes un tipo con campos opcionales pero, en
 > cierto punto del programa, ya sabes que **todos** deben estar presentes.
 
 ```typescript
@@ -113,8 +115,8 @@ function aplicarConfig(config: Required<Config>) {
 ### 2.3 `Pick<T, K>` — "elige solo estos campos"
 
 > ### 🟦 ¿Qué significa? — *`Pick<T, K>`*
-> `Pick` (en inglés, "escoger") toma un tipo `T` y una lista de nombres de propiedades `K`, y
-> devuelve un tipo **con solo esas propiedades**. Las demás se descartan. Los nombres se escriben
+> `Pick` (en inglés, "escoger") toma un tipo `T` y una lista de nombres de propiedades `K`, y te
+> devuelve un tipo **con solo esas propiedades**. El resto se descarta. Los nombres se escriben
 > como **uniones de texto**: `"nombre" | "color"`.
 
 ```typescript
@@ -130,8 +132,8 @@ type ResumenHabito = Pick<Habito, "nombre" | "color">;
 > propiedades que le indicas en `K`. En vez de decir "quiero estos", dices "quiero todos **menos**
 > estos".
 
-Aquí resolvemos por fin el problema del inicio del capítulo. El formulario de crear un hábito es
-el `Habito` **sin** los campos que pone el sistema:
+Con esto resolvemos por fin el problema del principio del capítulo. El formulario de crear un
+hábito no es más que el `Habito` **sin** los campos que pone el sistema:
 
 ```typescript
 // Un Habito sin id, sin user_id y sin creado_en → lo que llena el usuario
@@ -139,11 +141,12 @@ type NuevoHabito = Omit<Habito, "id" | "user_id" | "creado_en">;
 // Resultado automático: { nombre: string; color: string }
 ```
 
-Si mañana agregas `icono` a `Habito`, `NuevoHabito` lo incluirá **solo**. Una fuente de la verdad.
+Si mañana agregas `icono` a `Habito`, `NuevoHabito` lo incluirá **solo**, sin que muevas un dedo.
+Una fuente de la verdad.
 
 > ### 💡 Tip — ¿`Pick` u `Omit`? Elige el más corto
 > Si te quedas con **pocos** campos de muchos, usa `Pick`. Si descartas **pocos** de muchos, usa
-> `Omit`. El resultado es el mismo tipo; escoge el que se lea más claro. En la práctica, para
+> `Omit`. El resultado es el mismo tipo; quédate con el que se lea más claro. En la práctica, para
 > "quitar las columnas que pone la base de datos" casi siempre se usa `Omit`.
 
 ### 2.5 `Record<K, V>` — "un diccionario tipado"
@@ -163,7 +166,7 @@ const conteo: ConteoPorColor = {
 };
 ```
 
-Puedes restringir las claves a un conjunto fijo usando una unión de texto:
+También puedes limitar las claves a un conjunto fijo con una unión de texto:
 
 ```typescript
 type Estado = "activo" | "pausado" | "archivado";
@@ -178,16 +181,17 @@ const etiquetas: Record<Estado, string> = {
 
 > ### 🔎 En tu código — Faro
 > En `Faro`, los proyectos tienen un **estado** (`activo`, `en pausa`, etc.). Un `Record<Estado,
-> string>` como el de arriba es perfecto para mapear cada estado a su texto o a su color de
-> insignia en la interfaz, y TypeScript te obliga a **cubrir todos los estados**: si olvidas uno,
-> error. Cuando agregas un estado nuevo a la unión, te avisa en cada `Record` que faltó.
+> string>` como el de arriba viene perfecto para mapear cada estado a su texto o a su color de
+> insignia en la interfaz. Y hay un detalle muy cómodo: TypeScript te obliga a **cubrir todos los
+> estados**, así que si olvidas uno, error. Cuando agregas un estado nuevo a la unión, te avisa en
+> cada `Record` donde falte.
 
 ### 2.6 `Readonly<T>` — "solo lectura"
 
 > ### 🟦 ¿Qué significa? — *`Readonly<T>`*
 > `Readonly` ("solo lectura") toma un tipo y marca **todas sus propiedades como inmutables**: una
-> vez creado el objeto, TypeScript **no te deja reasignar** ninguna propiedad. Sirve para datos que
-> no deberían cambiar después de crearse, como la configuración o las props que llegan a un
+> vez creado el objeto, TypeScript **no te deja reasignar** ninguna propiedad. Es ideal para datos
+> que no deberían cambiar después de crearse, como la configuración o las props que llegan a un
 > componente.
 
 ```typescript
@@ -197,7 +201,7 @@ habito.nombre = "Otro"; // ❌ Error: no se puede asignar, es de solo lectura
 
 > ### ⚠️ Cuidado — Es una protección de tipos, no del dato real
 > `Readonly` solo actúa **mientras escribes** (en la fase de tipos). En el JavaScript final el
-> objeto sigue siendo modificable; nadie lo "congela" de verdad. Es un seguro contra errores
+> objeto sigue siendo modificable; nadie lo "congela" de verdad. Es un seguro contra despistes
 > tuyos al programar, no una cerradura en tiempo de ejecución. Para eso último existe
 > `Object.freeze()`, que es otra cosa.
 
@@ -206,12 +210,12 @@ habito.nombre = "Otro"; // ❌ Error: no se puede asignar, es de solo lectura
 ## 3. Intersección: combinar tipos con `&`
 
 > ### 🟦 ¿Qué significa? — *Intersección (`A & B`)*
-> La **intersección** combina dos (o más) tipos en uno solo que tiene **todas las propiedades de
-> ambos a la vez**. Se escribe con el signo `&` ("y"). Un valor de tipo `A & B` debe cumplir lo de
-> `A` **y** lo de `B`.
+> La **intersección** junta dos (o más) tipos en uno solo que tiene **todas las propiedades de
+> ambos a la vez**. Se escribe con el signo `&` ("y"). Un valor de tipo `A & B` tiene que cumplir
+> lo de `A` **y** lo de `B`.
 
-Ojo con la intuición: aunque `&` se lee "y", el resultado es un objeto **más grande** (suma de
-campos), no más pequeño. Es como pegar dos fichas en una.
+Cuidado con la intuición aquí: aunque `&` se lee "y", el resultado es un objeto **más grande**
+(suma de campos), no más pequeño. Es como pegar dos fichas en una sola.
 
 ```typescript
 interface Identificable {
@@ -230,16 +234,16 @@ const h: Habito = { id: "h1", nombre: "Leer", color: "azul" }; // ✅
 ```
 
 > ### 💡 Tip — `&` para props de React
-> En React (Módulo 06) verás mucho la intersección para **props**. Por ejemplo, combinar tus
-> propias props con las de un botón HTML estándar: `type Props = MisProps &
+> En React (Módulo 06) verás muchísimo la intersección para las **props**. Por ejemplo, combinar
+> tus propias props con las de un botón HTML estándar: `type Props = MisProps &
 > React.ButtonHTMLAttributes<HTMLButtonElement>`. Así tu componente acepta tanto tus campos como
 > todos los atributos normales de un `<button>`. No te asustes cuando lo veas: es solo "esto **y**
 > aquello".
 
 > ### ⚠️ Cuidado — No confundas `&` con `|`
 > Ya viste la **unión** `|` ("o") en el capítulo 03: `string | number` es "texto **o** número".
-> La **intersección** `&` ("y") es lo contrario: junta. `A | B` = "uno de los dos"; `A & B` =
-> "los dos a la vez". Bit lo recuerda así: la barra `|` divide, el `&` ("ampersand") amontona.
+> La **intersección** `&` ("y") es justo lo contrario: junta. `A | B` = "uno de los dos"; `A & B`
+> = "los dos a la vez". Bit lo recuerda así: la barra `|` divide, el `&` ("ampersand") amontona.
 
 ---
 
@@ -249,7 +253,7 @@ const h: Habito = { id: "h1", nombre: "Leer", color: "azul" }; // ✅
 > `keyof` toma un tipo de objeto y devuelve una **unión de texto con los nombres de sus
 > propiedades** (sus "llaves"). Si `Habito` tiene `id`, `nombre` y `color`, entonces `keyof
 > Habito` es el tipo `"id" | "nombre" | "color"`. Sirve para escribir funciones que reciben "el
-> **nombre** de un campo" y garantizar que sea uno que existe de verdad.
+> **nombre** de un campo" y asegurar que sea uno que existe de verdad.
 
 ```typescript
 interface Habito {
@@ -264,8 +268,8 @@ const campo: ClaveHabito = "nombre"; // ✅
 const malo: ClaveHabito = "precio";  // ❌ "precio" no es una clave de Habito
 ```
 
-El gran valor de `keyof` es que si **renombras** un campo en la interface, la unión cambia sola.
-Nunca quedan "nombres mágicos" escritos a mano que apuntan a campos que ya no existen.
+Lo bueno de `keyof` es que si **renombras** un campo en la interface, la unión cambia sola. Nunca
+te quedan "nombres mágicos" escritos a mano apuntando a campos que ya no existen.
 
 ---
 
@@ -287,8 +291,8 @@ type TipoDelId = Habito["id"];       // string
 type TipoDeVeces = Habito["veces"];  // number
 ```
 
-Esto evita repetir tipos: si el `id` cambiara de `string` a `number`, `TipoDelId` cambiaría con
-él. Combinado con `keyof`, es la base de funciones genéricas muy potentes:
+Esto te ahorra repetir tipos: si el `id` cambiara de `string` a `number`, `TipoDelId` cambiaría
+con él. Y combinado con `keyof`, es la base de funciones genéricas muy versátiles:
 
 ```typescript
 // Lee un campo cualquiera de un objeto y devuelve EXACTAMENTE su tipo
@@ -303,9 +307,9 @@ const v = leerCampo(h, "veces");  // y que v es number
 
 > ### 💡 Tip — Léelo despacio, no lo memorices
 > `K extends keyof T` significa "`K` es **alguna de las claves** de `T`". Y `T[K]` es "el tipo de
-> esa clave". Junto: "dame un campo que exista en el objeto y te devuelvo su tipo exacto". No
-> necesitas escribir funciones así todavía; basta con **entender** la idea cuando la leas en
-> código de librerías o de tus apps.
+> esa clave". Junta las dos: "dame un campo que exista en el objeto y te devuelvo su tipo exacto".
+> No hace falta que escribas funciones así todavía; con que **entiendas** la idea cuando la veas
+> en código de librerías o de tus apps, vas bien.
 
 ---
 
@@ -331,25 +335,25 @@ type Config = typeof configPorDefecto;
 ```
 
 > ### 🔎 En tu código — Faro y constantes compartidas
-> En `Faro` es común tener un objeto con **constantes** (por ejemplo, los nombres de las fuentes:
-> GitHub, Google Drive) y derivar su tipo con `typeof` en lugar de duplicarlo. Así el objeto real
-> y su tipo nunca se desincronizan: el tipo **es** un reflejo del valor.
+> En `Faro` es habitual tener un objeto con **constantes** (por ejemplo, los nombres de las
+> fuentes: GitHub, Google Drive) y derivar su tipo con `typeof` en lugar de duplicarlo. Así el
+> objeto real y su tipo nunca se desincronizan: el tipo **es** un reflejo del valor.
 
 > ### ⚠️ Cuidado — Son dos `typeof` distintos
 > `typeof` dentro de una expresión normal (un `if`, una variable) es el de JavaScript y devuelve
 > texto. `typeof` dentro de un `type ... =` o de una anotación es el de TypeScript y devuelve un
-> **tipo**. Mismo nombre, contextos distintos. Si estás "del lado de los tipos" (después de `:` o
-> en un `type`), es el segundo.
+> **tipo**. Mismo nombre, contextos distintos. La regla rápida: si estás "del lado de los tipos"
+> (después de `:` o dentro de un `type`), es el segundo.
 
 ---
 
 ## 7. Alias de tipo reutilizables: ponle nombre a tus combinaciones
 
 > ### 🟦 ¿Qué significa? — *Alias de tipo*
-> Un **alias de tipo** es simplemente darle un **nombre** a un tipo con la palabra `type`, para
-> poder reutilizarlo. Ya lo viste en el capítulo 03, pero ahora cobra sentido: cuando empiezas a
-> combinar utilitarios, intersecciones y `keyof`, los tipos se vuelven largos. Un alias los
-> guarda bajo un nombre claro y los reutilizas en todo el proyecto.
+> Un **alias de tipo** es, sencillamente, darle un **nombre** a un tipo con la palabra `type` para
+> poder reutilizarlo. Ya lo viste en el capítulo 03, pero ahora cobra todo su sentido: en cuanto
+> empiezas a combinar utilitarios, intersecciones y `keyof`, los tipos se vuelven largos. Un alias
+> los guarda bajo un nombre claro y los reutilizas en todo el proyecto.
 
 ```typescript
 // Sin alias: ilegible y repetido en cada función
@@ -364,24 +368,24 @@ function validar(h: NuevoHabito) { /* ... */ }
 
 > ### 🔎 En tu código — RachaSimple y Faro
 > Tanto `RachaSimple` (en sus archivos de `src/types/`) como `Faro` definen **un puñado de tipos
-> base** y, a partir de ellos, una familia de alias: el tipo de la fila en la base de datos, el
-> tipo "para insertar" (sin `id`), el tipo "para actualizar" (`Partial`), el tipo "resumido para
+> base** y, a partir de ellos, toda una familia de alias: el tipo de la fila en la base de datos,
+> el tipo "para insertar" (sin `id`), el tipo "para actualizar" (`Partial`), el tipo "resumido para
 > la lista" (`Pick`). Todos cuelgan del mismo origen. Por eso cambiar un campo en el modelo se
-> propaga a toda la app sin cacería de errores manual.
+> propaga a toda la app sin que tengas que ir cazando errores uno por uno.
 
 > ### 💡 Tip — Supabase genera tipos por ti
 > En proyectos con `Supabase` (RachaSimple y Faro) hay una herramienta que **lee tu base de
 > datos** y genera un archivo de tipos automáticamente (algo como `database.types.ts`). De ahí
-> sale el tipo base de cada tabla, y tú aplicas `Pick`, `Omit` y `Partial` encima. Es la forma más
-> pura de "una sola fuente de la verdad": la verdad es la **base de datos**, y los tipos la
+> sale el tipo base de cada tabla, y tú le aplicas `Pick`, `Omit` y `Partial` encima. Es la forma
+> más pura de "una sola fuente de la verdad": la verdad es la **base de datos**, y los tipos la
 > reflejan sin que escribas nada a mano.
 
 ---
 
 ## 8. Todo junto: un caso real
 
-Veamos cómo encajan estas piezas para modelar un hábito en una app como RachaSimple, partiendo de
-**un solo** tipo base:
+Veamos cómo encajan todas estas piezas para modelar un hábito en una app como RachaSimple,
+partiendo de **un solo** tipo base:
 
 ```typescript
 // 1. El tipo base (idealmente generado desde Supabase)
@@ -452,9 +456,9 @@ tipos sin repetir. Bit aplaude con sus cuatro patitas.
 
 ---
 
-🎉 Con esto sabes **derivar** tipos en vez de repetirlos: la marca de un código TypeScript maduro,
-como el de RachaSimple y Faro. En el siguiente módulo todo esto se vuelve indispensable: en
-**React**, las props de los componentes y los hooks tipados se apoyan constantemente en `Pick`,
+🎉 Con esto ya sabes **derivar** tipos en vez de repetirlos: la marca de un código TypeScript
+maduro, como el de RachaSimple y Faro. En el siguiente módulo todo esto se vuelve indispensable:
+en **React**, las props de los componentes y los hooks tipados se apoyan constantemente en `Pick`,
 `Omit`, intersecciones y `keyof`.
 
 ➡️ Siguiente módulo: **[06 — React](../06-react/README.md)** *(en preparación)*.

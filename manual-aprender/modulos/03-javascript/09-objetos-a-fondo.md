@@ -5,17 +5,17 @@
 </p>
 
 
-> Hola otra vez, soy **Bit**, tu ajolote guia. Hasta ahora hemos visto variables, funciones y arreglos. Hoy abrimos la caja fuerte de JavaScript: los **objetos**. Casi todo lo que toca tu codigo real (la respuesta de una API, un usuario de Supabase, la configuracion de un proyecto en Faro) llega en forma de objeto. Si dominas esto, dominas el 80% del trabajo del dia a dia. Respira, mueve las branquias, y vamos despacio. Cada palabra rara la voy a explicar en un recuadro azul. Nada quedara sin definir.
+> Hola otra vez, soy **Bit**, tu ajolote guia. Ya vimos variables, funciones y arreglos. Hoy toca lo bueno: los **objetos**. Y digo lo bueno porque casi todo lo que vas a tocar en codigo real llega en forma de objeto: la respuesta de una API, un usuario de Supabase, la configuracion de un proyecto en Faro. Si entiendes esto, te ahorras la mitad de los dolores de cabeza del dia a dia. Asi que respira, mueve las branquias, y vamos sin prisa. Cada palabra rara la explico en un recuadro azul; no te voy a dejar ninguna sin definir.
 
 ---
 
 ## 1. ¿Que es un objeto y por que importa?
 
-Un arreglo guarda cosas en orden por numero: `lista[0]`, `lista[1]`. Un objeto guarda cosas con **nombre**: `usuario.nombre`, `usuario.edad`. Cuando lo que describes tiene partes que merecen un nombre, usa un objeto.
+Un arreglo guarda cosas en orden, por numero: `lista[0]`, `lista[1]`. Un objeto las guarda con **nombre**: `usuario.nombre`, `usuario.edad`. La regla mental es sencilla: cuando lo que describes tiene partes que merecen un nombre propio, usa un objeto.
 
 > ### 🟦 ¿Que significa? — *Objeto*
-> Es una coleccion de pares **nombre + valor**. Cada nombre se llama **propiedad** y cada valor puede ser un texto, un numero, otro objeto o incluso una funcion.
-> **Para que sirve:** agrupar datos que pertenecen a la misma "cosa" bajo una sola variable.
+> Es una coleccion de pares **nombre + valor**. A cada nombre lo llamamos **propiedad**, y cada valor puede ser un texto, un numero, otro objeto o incluso una funcion.
+> **Para que sirve:** juntar bajo una sola variable todos los datos que pertenecen a la misma "cosa".
 > **Donde se usa en un repo real:** en **Faro/Organizer** cada proyecto analizado es un objeto con propiedades como `nombre`, `estado`, `progreso` y `roadmap`.
 
 ```javascript
@@ -28,21 +28,21 @@ const proyecto = {
 console.log(proyecto.nombre); // "Faro"
 ```
 
-Las llaves `{ }` delimitan el objeto. Dentro van pares `clave: valor` separados por comas.
+Las llaves `{ }` marcan el principio y el final del objeto. Dentro van los pares `clave: valor`, separados por comas.
 
 > ### 🟦 ¿Que significa? — *Propiedad*
-> Es uno de los nombres dentro del objeto (en el ejemplo: `nombre`, `estado`, `progreso`). Tambien se le llama **clave** (en ingles *key*).
-> **Para que sirve:** etiquetar cada dato para poder pedirlo despues por su nombre.
-> **Donde se usa:** en **tunal-digital**, cuando el formulario de contacto arma un objeto con propiedades `nombre`, `email` y `mensaje` antes de enviarlo.
+> Es cada uno de los nombres dentro del objeto (aqui: `nombre`, `estado`, `progreso`). Tambien se le dice **clave** (en ingles *key*).
+> **Para que sirve:** ponerle una etiqueta a cada dato para poder pedirlo despues por su nombre.
+> **Donde se usa:** en **tunal-digital**, cuando el formulario de contacto arma un objeto con las propiedades `nombre`, `email` y `mensaje` antes de enviarlo.
 
 > ### 💡 Tip
-> Lee un objeto como una ficha: "este proyecto **tiene** nombre Faro, **tiene** estado en progreso". La palabra "tiene" es la pista de que estas frente a propiedades.
+> Lee un objeto como si fuera una ficha: "este proyecto **tiene** nombre Faro, **tiene** estado en progreso". Cada vez que cabe la palabra "tiene", estas frente a una propiedad.
 
 ---
 
 ## 2. Leer y escribir propiedades: punto y corchetes
 
-Hay dos formas de acceder a una propiedad.
+Para acceder a una propiedad tienes dos caminos.
 
 ```javascript
 const usuario = { nombre: "Edwar", rol: "dueño" };
@@ -57,13 +57,13 @@ console.log(usuario[clave]); // "dueño"
 
 > ### 🟦 ¿Que significa? — *Notacion de punto*
 > Escribir `objeto.propiedad` para leer o cambiar un valor.
-> **Para que sirve:** es la forma corta y clara cuando ya sabes el nombre exacto de la propiedad.
+> **Para que sirve:** es la via corta y clara cuando ya sabes el nombre exacto de la propiedad.
 > **Donde se usa:** en **RachaSimple**, al leer `racha.dias` de un dato traido de Supabase.
 
 > ### 🟦 ¿Que significa? — *Notacion de corchetes*
-> Escribir `objeto["propiedad"]`. Acepta un texto o una variable que contenga el nombre.
-> **Para que sirve:** cuando el nombre de la propiedad se decide en tiempo de ejecucion (por ejemplo, viene de un bucle o de la eleccion del usuario).
-> **Donde se usa:** util en **PolyPaw** al recorrer las claves de un JSON de misiones donde cada clave es un id distinto.
+> Escribir `objeto["propiedad"]`. Admite un texto directo o una variable que contenga el nombre.
+> **Para que sirve:** cuando el nombre de la propiedad se decide sobre la marcha (por ejemplo, sale de un bucle o de lo que elige el usuario).
+> **Donde se usa:** util en **PolyPaw** al recorrer las claves de un JSON de misiones, donde cada clave es un id distinto.
 
 Para escribir, asignas con `=`:
 
@@ -73,18 +73,18 @@ usuario.activo = true;         // crea una propiedad nueva
 ```
 
 > ### ⚠️ Cuidado
-> Si pides una propiedad que no existe, JavaScript **no se rompe**: devuelve `undefined`. Eso puede confundir, porque parece que "funciono". Mas adelante veremos `?.` para protegerte de esto.
+> Si pides una propiedad que no existe, JavaScript **no se rompe**: te devuelve `undefined`. Y eso despista, porque por un momento parece que todo "funciono". Mas adelante veremos `?.` para cubrirte de esto.
 
 ---
 
 ## 3. Metodos: funciones que viven dentro del objeto
 
-Un objeto no solo guarda datos; tambien puede guardar **acciones**.
+Un objeto no solo guarda datos. Tambien puede guardar **acciones**.
 
 > ### 🟦 ¿Que significa? — *Metodo*
-> Es una propiedad cuyo valor es una funcion. En lugar de un dato, guarda algo que el objeto **sabe hacer**.
-> **Para que sirve:** mantener juntas las acciones con los datos sobre los que actuan.
-> **Donde se usa:** en **tunal-digital**, el `main.js` define funciones de atajo (acortar/seleccionar elementos del DOM); agrupadas en un objeto serian metodos de ese objeto utilitario.
+> Es una propiedad cuyo valor es una funcion. En vez de un dato, guarda algo que el objeto **sabe hacer**.
+> **Para que sirve:** tener las acciones pegadas a los datos sobre los que actuan.
+> **Donde se usa:** en **tunal-digital**, el `main.js` define funciones de atajo (acortar/seleccionar elementos del DOM); si las agrupas en un objeto, pasan a ser metodos de ese objeto utilitario.
 
 ```javascript
 const saludador = {
@@ -97,15 +97,15 @@ const saludador = {
 console.log(saludador.saludar()); // "Hola, soy Bit"
 ```
 
-Fijate en `saludar() { ... }`: es el **atajo de metodo**, una forma corta de escribir `saludar: function() { ... }`. Y aparecio una palabra clave nueva: `this`.
+Fijate en `saludar() { ... }`: ese es el **atajo de metodo**, una manera corta de escribir `saludar: function() { ... }`. Y de paso aparecio una palabra clave nueva: `this`.
 
 ---
 
 ## 4. `this`: el "yo mismo" del objeto
 
 > ### 🟦 ¿Que significa? — *this*
-> Dentro de un metodo, `this` se refiere al **objeto que llamo al metodo**. Es como decir "yo mismo".
-> **Para que sirve:** que un metodo pueda leer las propiedades de su propio objeto sin repetir el nombre de la variable.
+> Dentro de un metodo, `this` apunta al **objeto que llamo al metodo**. Es como si el objeto dijera "yo mismo".
+> **Para que sirve:** que un metodo pueda leer las propiedades de su propio objeto sin tener que repetir el nombre de la variable.
 > **Donde se usa:** en cualquier objeto con metodos; por ejemplo, en componentes de **Faro** cuando un objeto de configuracion necesita referirse a sus propios valores.
 
 ```javascript
@@ -119,24 +119,24 @@ const carrito = {
 console.log(carrito.total()); // 2
 ```
 
-Cuando escribes `carrito.total()`, JavaScript pone `this = carrito` mientras corre el metodo. Por eso `this.productos` es lo mismo que `carrito.productos`.
+Cuando escribes `carrito.total()`, JavaScript hace `this = carrito` mientras el metodo corre. Por eso `this.productos` termina siendo lo mismo que `carrito.productos`.
 
 > ### ⚠️ Cuidado
-> `this` cambia segun **como se llama** la funcion, no segun donde se escribio. Si extraes el metodo a una variable suelta (`const f = carrito.total; f();`), `this` se pierde y obtienes un error o `undefined`. Para principiantes, la regla segura es: **llama los metodos pegados a su objeto** (`carrito.total()`), no por separado.
+> `this` depende de **como se llama** la funcion, no de donde la escribiste. Si sacas el metodo a una variable suelta (`const f = carrito.total; f();`), `this` se pierde y acabas con un error o con `undefined`. Para empezar, la regla segura es facil: **llama los metodos pegados a su objeto** (`carrito.total()`), nunca por separado.
 
 > ### 💡 Tip
-> Las **funciones flecha** (`() => {}`) no tienen su propio `this`: heredan el de afuera. Por eso, para metodos que usan `this`, prefiere la sintaxis normal `metodo() {}` y no la flecha.
+> Las **funciones flecha** (`() => {}`) no traen su propio `this`: heredan el de afuera. Por eso, para metodos que usan `this`, te conviene la sintaxis normal `metodo() {}` y no la flecha.
 
 ---
 
 ## 5. Atajo de propiedades (shorthand)
 
-Muy seguido tienes una variable que se llama igual que la propiedad que quieres crear. JavaScript te deja escribirlo una sola vez.
+Pasa todo el tiempo: tienes una variable que se llama igual que la propiedad que quieres crear. JavaScript te deja escribir ese nombre una sola vez.
 
 > ### 🟦 ¿Que significa? — *Atajo de propiedades* (shorthand)
-> Si ya tienes una variable `nombre`, puedes escribir `{ nombre }` en vez de `{ nombre: nombre }`. Ambos crean una propiedad `nombre` con el valor de la variable.
-> **Para que sirve:** evitar repetir y escribir menos.
-> **Donde se usa:** en **RachaSimple**, al armar el objeto que se envia a Supabase usando variables que ya se llaman como las columnas.
+> Si ya tienes una variable `nombre`, puedes poner `{ nombre }` en lugar de `{ nombre: nombre }`. Las dos formas crean una propiedad `nombre` con el valor de la variable.
+> **Para que sirve:** no repetirte y escribir menos.
+> **Donde se usa:** en **RachaSimple**, al armar el objeto que se manda a Supabase usando variables que ya se llaman como las columnas.
 
 ```javascript
 const nombre = "Faro";
@@ -152,18 +152,18 @@ console.log(b); // { nombre: "Faro", estado: "activo" }
 ```
 
 > ### 🔎 En tu codigo
-> En el `main.js` de **tunal-digital**, cuando recoges los valores del formulario en variables `nombre`, `email`, `mensaje`, puedes mandarlos al Worker como `{ nombre, email, mensaje }` sin repetir nada.
+> En el `main.js` de **tunal-digital**, cuando recoges los valores del formulario en variables `nombre`, `email` y `mensaje`, puedes mandarlos al Worker como `{ nombre, email, mensaje }` sin repetir una sola vez los nombres.
 
 ---
 
 ## 6. Spread y copia de objetos
 
-Aqui empieza una de las herramientas mas usadas en proyectos React (RachaSimple, Faro): el operador **spread**.
+Llegamos a una de las herramientas que mas veras en proyectos React (RachaSimple, Faro): el operador **spread**.
 
 > ### 🟦 ¿Que significa? — *Spread* (`...`)
 > Tres puntos delante de un objeto que "desparraman" todas sus propiedades dentro de otro objeto nuevo.
 > **Para que sirve:** copiar un objeto o combinar varios sin tocar los originales.
-> **Donde se usa:** en **Faro** y **RachaSimple**, para actualizar el estado de React creando una copia con un cambio, en vez de modificar el objeto viejo.
+> **Donde se usa:** en **Faro** y **RachaSimple**, para actualizar el estado de React creando una copia con el cambio, en vez de modificar el objeto viejo.
 
 ```javascript
 const base = { nombre: "Faro", estado: "activo", progreso: 42 };
@@ -178,28 +178,28 @@ console.log(actualizado); // { nombre: "Faro", estado: "activo", progreso: 80 }
 console.log(base.progreso); // 42  (el original NO cambio)
 ```
 
-Cuando dos propiedades chocan, **gana la ultima** escrita. Por eso `progreso: 80` pisa al `progreso: 42` que venia en `...base`.
+Cuando dos propiedades chocan, **gana la ultima** que escribiste. Por eso `progreso: 80` le pasa por encima al `progreso: 42` que venia dentro de `...base`.
 
 > ### 🟦 ¿Que significa? — *Copia (inmutabilidad)*
-> Hacer un objeto nuevo con los mismos datos en vez de modificar el original. Trabajar asi se llama **inmutabilidad**.
-> **Para que sirve:** evitar errores donde un cambio en un lado rompe otra parte del programa que apuntaba al mismo objeto.
-> **Donde se usa:** es **obligatorio** al actualizar estado en React (RachaSimple, Faro); por eso veras `...` por todos lados en esos repos.
+> Hacer un objeto nuevo con los mismos datos en lugar de modificar el original. A esa forma de trabajar la llamamos **inmutabilidad**.
+> **Para que sirve:** esquivar esos errores en los que un cambio aqui rompe otra parte del programa que apuntaba al mismo objeto.
+> **Donde se usa:** es **obligatorio** al actualizar estado en React (RachaSimple, Faro); de ahi que veas `...` por todas partes en esos repos.
 
 > ### ⚠️ Cuidado
-> El spread hace una **copia superficial** (*shallow copy*): copia el primer nivel, pero los objetos anidados se comparten. Si `base` tuviera `config: { tema: "oscuro" }`, la copia y el original apuntarian al **mismo** `config`. Para cambios profundos, copia tambien el nivel interno: `{ ...base, config: { ...base.config, tema: "claro" } }`.
+> El spread hace una **copia superficial** (*shallow copy*): copia el primer nivel, pero los objetos anidados quedan compartidos. Si `base` tuviera `config: { tema: "oscuro" }`, la copia y el original apuntarian al **mismo** `config`. Para tocar lo de adentro sin afectar al original, copia tambien ese nivel interno: `{ ...base, config: { ...base.config, tema: "claro" } }`.
 
 > ### 💡 Tip
-> El mismo `...` sirve para combinar: `{ ...valoresPorDefecto, ...valoresDelUsuario }` aplica los del usuario encima de los defaults. Patron clasico para configuraciones.
+> Ese mismo `...` te sirve para combinar: `{ ...valoresPorDefecto, ...valoresDelUsuario }` pone los del usuario encima de los defaults. Es el patron clasico para configuraciones.
 
 ---
 
 ## 7. Desestructuracion: sacar propiedades a variables
 
-Sacar valores de un objeto uno por uno cansa. La **desestructuracion** lo hace en una linea.
+Sacar los valores de un objeto uno por uno cansa rapido. La **desestructuracion** te lo deja en una sola linea.
 
 > ### 🟦 ¿Que significa? — *Desestructuracion*
-> Sintaxis para extraer propiedades de un objeto y guardarlas en variables sueltas de golpe.
-> **Para que sirve:** escribir menos y dejar claro al inicio de una funcion que datos vas a usar.
+> Una sintaxis para extraer propiedades de un objeto y guardarlas en variables sueltas de un tiron.
+> **Para que sirve:** escribir menos y dejar claro, desde el inicio de una funcion, que datos vas a usar.
 > **Donde se usa:** en **Faro** y **RachaSimple**, en cada componente que recibe `props` o que lee un resultado de TanStack Query con `const { data, isLoading } = useQuery(...)`.
 
 ```javascript
@@ -216,14 +216,14 @@ console.log(nombre); // "Faro"
 console.log(estado); // "activo"
 ```
 
-El nombre de la variable debe coincidir con el de la propiedad. Pero a veces no quieres eso, y para eso existe el renombrado.
+El nombre de la variable tiene que coincidir con el de la propiedad. Pero a veces no te interesa que coincidan, y para eso existe el renombrado.
 
 ### 7.1 Renombrado
 
 > ### 🟦 ¿Que significa? — *Renombrado en desestructuracion*
-> Cambiar el nombre de la variable usando `propiedad: nuevoNombre`.
-> **Para que sirve:** evitar choques de nombres o usar un nombre mas claro en tu codigo.
-> **Donde se usa:** comun en **RachaSimple** cuando dos consultas devuelven `data` y necesitas distinguirlas: `const { data: rachas } = useQuery(...)`.
+> Cambiar el nombre de la variable con la forma `propiedad: nuevoNombre`.
+> **Para que sirve:** evitar choques de nombres o ponerle a la variable un nombre mas claro para tu codigo.
+> **Donde se usa:** muy comun en **RachaSimple** cuando dos consultas devuelven `data` y necesitas distinguirlas: `const { data: rachas } = useQuery(...)`.
 
 ```javascript
 const { nombre: tituloProyecto } = proyecto;
@@ -234,9 +234,9 @@ console.log(tituloProyecto); // "Faro"
 ### 7.2 Valores por defecto
 
 > ### 🟦 ¿Que significa? — *Valor por defecto en desestructuracion*
-> Un valor de respaldo (`propiedad = valor`) que se usa **solo** si la propiedad es `undefined`.
-> **Para que sirve:** que tu variable nunca quede vacia cuando el dato no vino.
-> **Donde se usa:** en **Faro**, al leer configuracion de un proyecto donde algunos campos podrian faltar.
+> Un valor de respaldo (`propiedad = valor`) que entra **solo** si la propiedad es `undefined`.
+> **Para que sirve:** que tu variable nunca quede vacia cuando el dato no llego.
+> **Donde se usa:** en **Faro**, al leer la configuracion de un proyecto donde algunos campos podrian faltar.
 
 ```javascript
 const config = { tema: "oscuro" };
@@ -247,7 +247,7 @@ console.log(tema);   // "oscuro" (vino en el objeto)
 console.log(idioma); // "es"     (no vino, se uso el default)
 ```
 
-Puedes combinar renombrado y default a la vez:
+Y nada te impide combinar renombrado y default al mismo tiempo:
 
 ```javascript
 const { idioma: lang = "es" } = config;
@@ -255,17 +255,17 @@ console.log(lang); // "es"
 ```
 
 > ### ⚠️ Cuidado
-> El default salta **solo con `undefined`**, no con otros valores "vacios". Si la propiedad vale `null`, `0` o `""`, esos SI se respetan y el default no entra. Es un error tipico esperar que `0` active el respaldo: no lo hace.
+> El default salta **solo con `undefined`**, no con cualquier valor que parezca "vacio". Si la propiedad vale `null`, `0` o `""`, esos SI se respetan y el respaldo no entra. El error tipico es esperar que un `0` dispare el default: no lo hace.
 
 ---
 
 ## 8. Optional chaining `?.`: leer sin miedo a romper
 
-Cuando lees datos anidados (un objeto dentro de otro), si un nivel falta, el programa **explota** con un error. El operador `?.` evita ese golpe.
+Cuando lees datos anidados (un objeto dentro de otro) y un nivel falta, el programa **explota** con un error. El operador `?.` te ahorra ese golpe.
 
 > ### 🟦 ¿Que significa? — *Optional chaining* (`?.`)
-> Operador que lee una propiedad solo si lo de la izquierda existe; si es `null` o `undefined`, devuelve `undefined` en vez de lanzar error.
-> **Para que sirve:** acceder con seguridad a datos que podrian no estar (respuestas de API incompletas, usuario sin sesion, etc.).
+> Operador que lee una propiedad solo si lo que tiene a la izquierda existe; si eso es `null` o `undefined`, devuelve `undefined` en vez de lanzar un error.
+> **Para que sirve:** llegar con seguridad a datos que podrian no estar (respuestas de API incompletas, usuario sin sesion, etc.).
 > **Donde se usa:** en **Faro** y **RachaSimple**, al leer datos del usuario de Supabase: `user?.email` no truena aunque `user` sea `null` mientras carga la sesion.
 
 ```javascript
@@ -281,7 +281,7 @@ console.log(respuesta.drive?.archivos); // undefined (no truena)
 console.log(respuesta.proyecto?.nombre); // "Faro"
 ```
 
-Tambien funciona para llamar metodos que quizas no existan:
+Tambien sirve para llamar metodos que a lo mejor no existen:
 
 ```javascript
 const obj = {};
@@ -289,21 +289,21 @@ obj.saludar?.(); // no hace nada, pero NO truena
 ```
 
 > ### 🔎 En tu codigo
-> En el `main.js` de **tunal-digital**, cuando haces `fetch` al Worker y conviertes la respuesta a objeto, no todos los campos llegan siempre. Leer `data?.respuesta?.texto` evita que la pagina se rompa si el chat de IA devolvio algo distinto a lo esperado.
+> En el `main.js` de **tunal-digital**, cuando haces `fetch` al Worker y conviertes la respuesta a objeto, no siempre llegan todos los campos. Leer `data?.respuesta?.texto` evita que la pagina se rompa si el chat de IA devolvio algo distinto a lo que esperabas.
 
 > ### ⚠️ Cuidado
-> No abuses de `?.`. Si una propiedad **siempre** deberia existir, usar `?.` esconde bugs reales. Usalo solo donde de verdad el dato puede faltar.
+> No te pases con `?.`. Si una propiedad **siempre** deberia existir, ponerle `?.` lo unico que hace es esconder bugs reales. Usalo solo donde de verdad el dato puede faltar.
 
 ---
 
 ## 9. Nullish coalescing `??`: un respaldo mas preciso
 
-`?.` te da `undefined` cuando algo falta. Casi siempre quieres poner un valor de respaldo. Para eso esta `??`.
+`?.` te entrega `undefined` cuando algo falta. Pero casi siempre lo que quieres es poner ahi un valor de respaldo. Para eso esta `??`.
 
 > ### 🟦 ¿Que significa? — *Nullish coalescing* (`??`)
-> Operador que devuelve lo de la derecha **solo** si lo de la izquierda es `null` o `undefined`. La palabra *nullish* significa "que es null o undefined".
-> **Para que sirve:** dar un valor por defecto sin equivocarte con datos validos como `0` o `""`.
-> **Donde se usa:** en **Faro**, al mostrar el progreso: `progreso ?? 0` deja pasar un `0` real pero cubre el caso de dato ausente.
+> Operador que devuelve lo de la derecha **solo** si lo de la izquierda es `null` o `undefined`. La palabra *nullish* significa justo eso: "que es null o undefined".
+> **Para que sirve:** dar un valor por defecto sin tropezar con datos validos como `0` o `""`.
+> **Donde se usa:** en **Faro**, al mostrar el progreso: `progreso ?? 0` deja pasar un `0` real pero cubre el caso del dato ausente.
 
 ```javascript
 const progreso = 0;
@@ -312,17 +312,17 @@ console.log(progreso ?? 100); // 0   -> 0 es valido, se respeta
 console.log(progreso || 100); // 100 -> ¡ojo! "||" trata el 0 como falso
 ```
 
-Esa es la diferencia clave con el viejo `||`.
+Y ahi esta la diferencia clave con el viejo `||`.
 
 > ### 🟦 ¿Que significa? — *Valor "falsy"*
-> En JavaScript, los valores que cuentan como "falso" en una condicion: `false`, `0`, `""` (texto vacio), `null`, `undefined` y `NaN`.
-> **Para que sirve:** entender por que `||` a veces "se come" un `0` o un texto vacio que tu si querias conservar.
-> **Donde se usa:** en cualquier repo; saberlo evita bugs sutiles al poner defaults.
+> En JavaScript, los valores que cuentan como "falso" dentro de una condicion: `false`, `0`, `""` (texto vacio), `null`, `undefined` y `NaN`.
+> **Para que sirve:** entender por que `||` a veces "se traga" un `0` o un texto vacio que tu si querias conservar.
+> **Donde se usa:** en cualquier repo; tenerlo claro te evita bugs sutiles cuando pones defaults.
 
 > ### 💡 Tip
-> Regla practica: usa `??` cuando `0`, `""` o `false` sean **valores validos** que quieres conservar. Usa `||` solo cuando de verdad quieras tratar todos esos como "vacio".
+> Regla practica: usa `??` cuando `0`, `""` o `false` sean **valores validos** que quieres conservar. Reserva `||` para cuando de verdad quieras tratar todos esos como "vacio".
 
-`?.` y `??` se combinan de maravilla:
+`?.` y `??` se llevan de maravilla y se usan juntos todo el tiempo:
 
 ```javascript
 const usuario = null;
@@ -334,22 +334,22 @@ console.log(nombre); // "Invitado"
 
 ## 10. Recorrer objetos: keys, values y entries
 
-Un objeto no se recorre con `for` por indice como un arreglo. Para eso `Object` nos da tres ayudantes.
+Un objeto no se recorre con un `for` por indice como un arreglo. Para eso, `Object` nos presta tres ayudantes.
 
 > ### 🟦 ¿Que significa? — *Object.keys()*
-> Funcion que devuelve un **arreglo con los nombres** (claves) de las propiedades de un objeto.
+> Funcion que devuelve un **arreglo con los nombres** (las claves) de las propiedades de un objeto.
 > **Para que sirve:** saber que propiedades tiene un objeto y recorrerlas.
 > **Donde se usa:** en **PolyPaw**, al recorrer las claves de un JSON de misiones para listarlas.
 
 > ### 🟦 ¿Que significa? — *Object.values()*
 > Devuelve un arreglo con los **valores** de las propiedades.
-> **Para que sirve:** trabajar solo con los datos sin importar como se llaman.
+> **Para que sirve:** trabajar solo con los datos, sin importar como se llamen.
 > **Donde se usa:** util para sumar o filtrar todos los valores de un objeto de configuracion.
 
 > ### 🟦 ¿Que significa? — *Object.entries()*
 > Devuelve un arreglo de pares `[clave, valor]`, uno por cada propiedad.
-> **Para que sirve:** recorrer clave y valor al mismo tiempo.
-> **Donde se usa:** en **Faro**, al pintar una tabla donde cada fila muestra el nombre de un dato y su valor.
+> **Para que sirve:** recorrer la clave y el valor a la vez.
+> **Donde se usa:** en **Faro**, al pintar una tabla donde cada fila muestra el nombre de un dato junto a su valor.
 
 ```javascript
 const proyecto = { nombre: "Faro", estado: "activo", progreso: 42 };
@@ -360,7 +360,7 @@ console.log(Object.entries(proyecto));
 // [["nombre","Faro"], ["estado","activo"], ["progreso",42]]
 ```
 
-Como te devuelven **arreglos**, puedes usar todo lo que ya sabes de arreglos, como `forEach`:
+Como lo que te devuelven son **arreglos**, ya puedes aplicarles todo lo que sabes de arreglos, como `forEach`:
 
 ```javascript
 Object.entries(proyecto).forEach(([clave, valor]) => {
@@ -372,7 +372,7 @@ Object.entries(proyecto).forEach(([clave, valor]) => {
 ```
 
 > ### 💡 Tip
-> Fijate en `([clave, valor]) =>`: ahi hay desestructuracion de **arreglos**. Cada par `[clave, valor]` se abre directo en dos variables. Mezclar tecnicas asi es lo normal en codigo real.
+> Mira bien el `([clave, valor]) =>`: ahi hay desestructuracion de **arreglos**. Cada par `[clave, valor]` se abre directo en dos variables. Mezclar tecnicas asi es el pan de cada dia en codigo real.
 
 ---
 
@@ -381,18 +381,18 @@ Object.entries(proyecto).forEach(([clave, valor]) => {
 Cuando guardas datos en un archivo o los mandas por internet, no viajan como objetos: viajan como **texto**. JSON es el formato de ese texto.
 
 > ### 🟦 ¿Que significa? — *JSON*
-> Sigla de *JavaScript Object Notation*. Es un **formato de texto** para representar objetos y arreglos. Se parece mucho a un objeto de JavaScript, pero es texto plano y con reglas estrictas (claves siempre entre comillas dobles, sin funciones, sin comas finales).
+> Sigla de *JavaScript Object Notation*. Es un **formato de texto** para representar objetos y arreglos. Se parece muchisimo a un objeto de JavaScript, pero es texto plano y con reglas estrictas: claves siempre entre comillas dobles, sin funciones, sin comas finales.
 > **Para que sirve:** guardar datos en archivos y enviarlos entre programas o por la red.
 > **Donde se usa:** en **PolyPaw** las misiones se guardan en archivos `.json`; en **tunal-digital** el `fetch` al Worker envia y recibe JSON.
 
 > ### 🟦 ¿Que significa? — *JSON.stringify()*
 > Convierte un objeto de JavaScript en **texto** JSON.
-> **Para que sirve:** preparar datos para guardarlos o mandarlos por `fetch`.
+> **Para que sirve:** dejar listos los datos para guardarlos o mandarlos por `fetch`.
 > **Donde se usa:** en **tunal-digital**, el `main.js` hace `JSON.stringify` del mensaje del usuario antes de enviarlo al Worker de IA.
 
 > ### 🟦 ¿Que significa? — *JSON.parse()*
-> Hace lo contrario: convierte **texto** JSON de vuelta a un objeto de JavaScript usable.
-> **Para que sirve:** leer datos que llegaron como texto (de una API, de un archivo) y volver a usarlos como objeto.
+> Hace justo lo contrario: convierte **texto** JSON de vuelta a un objeto de JavaScript que ya puedes usar.
+> **Para que sirve:** leer datos que llegaron como texto (de una API, de un archivo) y volver a manejarlos como objeto.
 > **Donde se usa:** en **PolyPaw** al cargar un archivo de misiones; en **tunal-digital** al leer la respuesta del Worker.
 
 ```javascript
@@ -422,13 +422,13 @@ console.log(bonito);
 // }
 ```
 
-El `null` es el "filtro" (no filtramos nada) y el `2` son los espacios de sangria. Asi se ven los `.json` legibles de **PolyPaw**.
+El `null` es el "filtro" (aqui no filtramos nada) y el `2` son los espacios de sangria. Asi de legibles se ven los `.json` de **PolyPaw**.
 
 > ### ⚠️ Cuidado
-> `JSON.stringify` **ignora** las funciones y el valor `undefined`: simplemente no aparecen en el texto. JSON guarda datos, no acciones. Si necesitabas un metodo, no estara al volver con `parse`.
+> `JSON.stringify` **ignora** las funciones y el valor `undefined`: ni siquiera aparecen en el texto. JSON guarda datos, no acciones. Asi que si tenias un metodo ahi, no estara cuando vuelvas con `parse`.
 
 > ### ⚠️ Cuidado
-> `JSON.parse` **truena** si el texto no es JSON valido (una coma de mas, una comilla simple). Cuando el texto viene de afuera (de un `fetch`), protege la llamada con `try { ... } catch { ... }` para que un dato malo no rompa toda la pagina.
+> `JSON.parse` **truena** si el texto no es JSON valido: una coma de mas, una comilla simple, y se cae. Cuando el texto viene de afuera (de un `fetch`), protege la llamada con `try { ... } catch { ... }` para que un dato malo no te tumbe toda la pagina.
 
 ```javascript
 try {
@@ -439,13 +439,13 @@ try {
 ```
 
 > ### 🔎 En tu codigo
-> El ciclo completo del chat de **tunal-digital** es: armas un objeto `{ mensaje }`, lo conviertes con `JSON.stringify` para el `fetch`, el Worker responde texto JSON, y tu lo recuperas con `JSON.parse` (o con `await respuesta.json()`, que hace el parse por dentro). Entender este viaje texto-objeto es entender medio backend.
+> El ciclo completo del chat de **tunal-digital** es asi: armas un objeto `{ mensaje }`, lo conviertes con `JSON.stringify` para el `fetch`, el Worker responde texto JSON, y tu lo recuperas con `JSON.parse` (o con `await respuesta.json()`, que hace el parse por dentro). Entender este viaje de ida y vuelta entre texto y objeto es entender medio backend.
 
 ---
 
 ## 12. Todo junto: un mini ejemplo realista
 
-Juntemos varias piezas como en un caso de **Faro**:
+Vamos a juntar varias piezas, como pasaria en un caso real de **Faro**:
 
 ```javascript
 function resumirProyecto(datos) {
@@ -480,7 +480,7 @@ console.log(
 // }
 ```
 
-Mira cuanto cabe en pocas lineas: desestructuracion, defaults, `?.`, `??`, copia con spread implicito y `JSON.stringify`. Eso es JavaScript real.
+Mira cuanta cosa cabe en tan pocas lineas: desestructuracion, defaults, `?.`, `??`, copia con spread implicito y `JSON.stringify`. Esto es JavaScript de verdad, del que vas a escribir.
 
 ---
 
@@ -516,5 +516,4 @@ Mira cuanto cabe en pocas lineas: desestructuracion, defaults, `?.`, `??`, copia
 
 ---
 
-> Lo lograste. Hoy abriste, copiaste, recorriste y empaquetaste objetos como un profesional. Cada vez que en **Faro** o **RachaSimple** veas `{ ...algo }`, `data?.campo` o `JSON.stringify`, ya sabras exactamente que pasa por dentro. Nos vemos en el siguiente capitulo. — Bit 🐾
-```
+> Lo lograste. Hoy abriste, copiaste, recorriste y empaquetaste objetos como todo un profesional. Cada vez que en **Faro** o **RachaSimple** te cruces con un `{ ...algo }`, un `data?.campo` o un `JSON.stringify`, ya sabras al detalle que esta pasando por dentro. Nos vemos en el siguiente capitulo. — Bit 🐾

@@ -5,29 +5,29 @@
 </p>
 
 
-> En el Capítulo 05 conociste Flet de lejos: viste que PolyPaw es una app hecha **solo con
-> Python** y que la pantalla son objetos. Hoy bajamos al detalle. Vas a entender qué hace
-> de verdad `main(page)`, qué es esa `page` que tanto se nombra, por qué hay que llamar a
-> `page.update()`, cómo se colocan los controles, cómo responden a un clic y cómo se pasa de
-> una pantalla a otra. Al final, leerás el `main.py` de PolyPaw sin perderte.
+> En el Capítulo 05 viste Flet desde lejos: que PolyPaw es una app hecha **solo con
+> Python** y que la pantalla, en el fondo, son objetos. Hoy bajamos al detalle. Vas a entender
+> qué hace de verdad `main(page)`, qué es esa `page` que tanto se nombra, por qué hay que llamar a
+> `page.update()`, cómo se colocan los controles, cómo responden a un clic y cómo se salta de
+> una pantalla a otra. Para cuando termines, podrás leer el `main.py` de PolyPaw sin perderte.
 > Bit, nuestro ajolote, ya tiene puesto el casco: vamos a meter las manos en la interfaz.
 
 ---
 
 ## 1. ¿Qué es Flet, en serio?
 
-En el módulo 03 (JavaScript) y en el de HTML/CSS viste que para hacer una página web necesitas
+En el módulo 03 (JavaScript) y en el de HTML/CSS viste que para armar una página web hacen falta
 **tres lenguajes a la vez**: HTML para la estructura, CSS para el aspecto y JavaScript para el
-comportamiento. El repo **tunal-digital** es justo eso: un sitio en HTML/CSS/JS vanilla.
+comportamiento. El repo **tunal-digital** es exactamente eso: un sitio en HTML/CSS/JS vanilla.
 
-Flet propone algo distinto: **una sola cosa, Python, para todo**.
+Flet propone otra cosa: **un solo lenguaje, Python, para todo**.
 
 > ### 🟦 ¿Qué significa? — *Flet*
 > **Flet** es un framework de Python para construir **interfaces gráficas** (pantallas con
-> textos, botones, imágenes, listas) que funcionan en escritorio, web y móvil con el mismo
+> textos, botones, imágenes, listas) que corren en escritorio, web y móvil con el mismo
 > código. Tú escribes solo Python; Flet se encarga de **dibujar** la interfaz y de **escuchar**
 > lo que hace el usuario.
-> **¿Para qué sirve?** Para crear apps con ventanas y botones sin aprender HTML, CSS ni
+> **¿Para qué sirve?** Para crear apps con ventanas y botones sin tener que aprender HTML, CSS ni
 > JavaScript.
 > **¿Dónde se usa en un repo real?** **PolyPaw**, la app de aprendizaje de idiomas, está hecha
 > **íntegramente** con Flet. Toda su pantalla nace en `main.py`.
@@ -47,7 +47,7 @@ Flet propone algo distinto: **una sola cosa, Python, para todo**.
 
 ## 2. La estructura mínima: `main(page)` y `ft.app`
 
-Toda app de Flet arranca igual. Mira el patrón base:
+Toda app de Flet arranca igual. Este es el patrón base:
 
 ```python
 import flet as ft
@@ -59,11 +59,11 @@ def main(page):
 ft.app(target=main)
 ```
 
-Tres ideas viven aquí: la función `main`, el parámetro `page` y la llamada `ft.app`.
+Aquí viven tres ideas: la función `main`, el parámetro `page` y la llamada `ft.app`.
 
 > ### 🟦 ¿Qué significa? — *La función `main(page)`*
 > `main` es la función que **construye tu app**. Flet la llama una vez, al arrancar, y le pasa
-> un objeto: la página. El nombre `main` es por convención (puede ser otro), pero **siempre
+> un objeto: la página. El nombre `main` es por convención (podría ser otro), pero **siempre
 > recibe la página como primer parámetro**.
 > **¿Para qué sirve?** Es el punto de entrada: todo lo que quieras mostrar lo agregas aquí
 > dentro.
@@ -75,7 +75,7 @@ Tres ideas viven aquí: la función `main`, el parámetro `page` y la llamada `f
 > "la función que arma mi app es `main`, llámala". Es la última línea del archivo y la que pone
 > todo en marcha.
 > **¿Para qué sirve?** Sin esta línea, definiste la función pero nadie la ejecuta; la ventana
-> nunca aparecería.
+> no aparecería jamás.
 
 > ### 🟦 ¿Qué significa? — *`import flet as ft`*
 > Esta línea trae la librería Flet y le pone el apodo corto `ft`. A partir de ahí, en vez de
@@ -84,7 +84,7 @@ Tres ideas viven aquí: la función `main`, el parámetro `page` y la llamada `f
 
 > ### 🔎 En tu código
 > En PolyPaw, abre `main.py` y busca al final del archivo la línea que invoca `ft.app(...)`. Esa
-> es la chispa: lo que la ejecuta cuando haces correr la app. Y arriba del todo verás
+> es la chispa: lo que arranca la app cuando la haces correr. Y arriba del todo verás
 > `import flet as ft`, igual que en el ejemplo.
 
 ---
@@ -102,7 +102,7 @@ Tres ideas viven aquí: la función `main`, el parámetro `page` y la llamada `f
 > **¿Dónde se usa en un repo real?** En PolyPaw, `main(page)` configura `page.title`, agrega los
 > controles iniciales y se va pasando a otras funciones para que cada pantalla pueda dibujarse.
 
-Algunas propiedades típicas de la página:
+Estas son algunas propiedades habituales de la página:
 
 ```python
 def main(page):
@@ -118,13 +118,13 @@ ft.app(target=main)
 > ### 🟦 ¿Qué significa? — *`page.add(...)`*
 > `page.add(control)` **mete un control dentro de la página**. Le pasas un objeto (un `Text`, un
 > botón, una columna) y aparece en pantalla.
-> **¿Para qué sirve?** Es la forma más directa de mostrar algo. Si comparas con la web: es
-> parecido a hacer `appendChild` en JavaScript, pero aquí agregas objetos de Python, no nodos de
+> **¿Para qué sirve?** Es la forma más directa de mostrar algo. Si lo comparas con la web: se
+> parece a hacer `appendChild` en JavaScript, pero aquí agregas objetos de Python, no nodos de
 > HTML.
 
 > ### ⚠️ Cuidado
-> `page.add(...)` ya redibuja la pantalla por ti. Pero cuando **modifiques** algo que ya estaba
-> (cambiar un texto, ocultar un botón), `add` no basta: ahí entra `page.update()`, que vemos
+> `page.add(...)` ya redibuja la pantalla por ti. Pero cuando **modificas** algo que ya estaba
+> (cambias un texto, ocultas un botón), `add` no basta: ahí entra `page.update()`, que vemos
 > ahora mismo.
 
 ---
@@ -137,12 +137,12 @@ Este es el concepto que más confunde al principio, así que vamos despacio.
 > `page.update()` le dice a Flet: "cambié algo de la pantalla, **vuelve a dibujarla**". Tú
 > modificas las propiedades de los controles en Python (por ejemplo `texto.value = "Nuevo"`) y
 > esos cambios **no se ven** hasta que llamas a `update()`.
-> **¿Para qué sirve?** Para refrescar la interfaz tras un cambio. Es el "guardar y mostrar" de
-> Flet.
+> **¿Para qué sirve?** Para refrescar la interfaz después de un cambio. Es el "guardar y mostrar"
+> de Flet.
 > **¿Dónde se usa en un repo real?** En PolyPaw, cada vez que respondes una pregunta de una
 > misión y el marcador sube, hay que llamar a `update()` para que el número nuevo aparezca.
 
-Mira la diferencia. Esto **no funciona** como esperas:
+Mira la diferencia. Esto **no funciona** como esperarías:
 
 ```python
 def main(page):
@@ -163,10 +163,10 @@ def main(page):
 ```
 
 > ### 💡 Tip
-> Regla mental de oro: **"cambié algo → llamo a `update()`"**. Si tocaste el `value`, el color o
-> la visibilidad de un control que ya estaba en pantalla, termina con `page.update()`. Si te
-> olvidas, lo más típico es "mi código está bien pero la pantalla no se mueve". Casi siempre es
-> un `update()` que falta.
+> Quédate con esta regla mental: **"cambié algo → llamo a `update()`"**. Si tocaste el `value`, el
+> color o la visibilidad de un control que ya estaba en pantalla, termina con `page.update()`. Si
+> te olvidas, el síntoma típico es "mi código está bien pero la pantalla no se mueve". Casi
+> siempre es un `update()` que falta.
 
 > ### 🟦 ¿Qué significa? — *Renderizar (redibujar)*
 > **Renderizar** es el acto de convertir tus objetos de Python en píxeles reales en la pantalla.
@@ -184,7 +184,7 @@ Recordemos: en Flet **cada elemento de la pantalla es un control**, un objeto de
 > escribir, un botón, una fila, una columna o una caja. Construyes la pantalla **creando estos
 > objetos y combinándolos**.
 
-Vamos uno por uno con los más usados.
+Veámoslos uno por uno, empezando por los más usados.
 
 ### 5.1 `Text` — mostrar texto
 
@@ -244,8 +244,8 @@ ft.Column([
 ])
 ```
 
-Aquí los dos botones quedan lado a lado (van en una `Row`), y esa fila queda debajo del texto y
-del campo (porque todo está dentro de una `Column`).
+Los dos botones quedan lado a lado porque van en una `Row`, y esa fila queda debajo del texto y
+del campo porque todo está dentro de una `Column`.
 
 ### 5.5 `Container` — la caja que envuelve y decora
 
@@ -279,7 +279,7 @@ tarjeta = ft.Container(
 > espacio hay entre ellos, qué tan separados de los bordes están. En Flet se controla con
 > propiedades de `Column`, `Row`, `Container` y de la propia `page`.
 
-Las dos propiedades de alineación que más usarás:
+Estas son las dos propiedades de alineación que más vas a usar:
 
 > ### 🟦 ¿Qué significa? — *`alignment` y `horizontal_alignment`*
 > En una `Column`, `alignment` controla la posición **vertical** (arriba, centro, abajo) y
@@ -305,14 +305,14 @@ ft.Column(
 
 > ### 💡 Tip
 > Para centrar toda tu app en mitad de la ventana, lo más cómodo es ajustar
-> `page.horizontal_alignment` y `page.vertical_alignment` directamente. Así no tienes que
-> centrar control por control.
+> `page.horizontal_alignment` y `page.vertical_alignment` directamente. Así te ahorras centrar
+> control por control.
 
 ---
 
 ## 7. Eventos: que la app reaccione (`on_click`)
 
-Una pantalla bonita pero muerta no sirve. Necesitamos que **responda**.
+Una pantalla bonita pero muerta no sirve de mucho. Necesitamos que **responda**.
 
 > ### 🟦 ¿Qué significa? — *Evento*
 > Un **evento** es algo que ocurre en la app: un clic, un texto que cambia, una tecla. Tú
@@ -330,7 +330,7 @@ Una pantalla bonita pero muerta no sirve. Necesitamos que **responda**.
 > El **manejador** es la función que responde a un evento. Recibe un parámetro (normalmente `e`,
 > de *event*) con la información de lo que pasó.
 
-Ejemplo completo y mínimo: un contador.
+Veámoslo con un ejemplo completo y mínimo: un contador.
 
 ```python
 import flet as ft
@@ -376,7 +376,7 @@ ft.app(target=main)
 > **¿Dónde se usa en un repo real?** En PolyPaw, el estado incluye el progreso del usuario y la
 > misión activa; al avanzar, esos datos cambian y la pantalla se actualiza.
 
-El ciclo en Flet es siempre el mismo, y conviene memorizarlo:
+El ciclo en Flet es siempre el mismo, y vale la pena memorizarlo:
 
 1. Guardas el estado en variables de Python (`cuenta = 0`, `mision_actual = 1`).
 2. Un evento (clic) cambia ese estado.
@@ -384,13 +384,14 @@ El ciclo en Flet es siempre el mismo, y conviene memorizarlo:
 4. Llamas a `page.update()` para que se vea.
 
 > ### 💡 Tip
-> Si vienes de React (lo verás en el módulo 06, y RachaSimple y Faro lo usan), notarás algo: en
-> React la pantalla **se redibuja sola** cuando cambia el estado. En Flet, en cambio, **tú**
-> avisas con `page.update()`. Más manual, pero más fácil de seguir paso a paso.
+> Si vienes de React (lo verás en el módulo 06, y RachaSimple y Faro lo usan), notarás una
+> diferencia: en React la pantalla **se redibuja sola** cuando cambia el estado. En Flet, en
+> cambio, **tú** avisas con `page.update()`. Es más manual, pero también más fácil de seguir paso
+> a paso.
 
 > ### 🔎 En tu código
 > PolyPaw guarda los datos de las misiones en **archivos JSON** (carpeta `missions/`). Un módulo
-> aparte, `database_manager.py`, se encarga de **leer y escribir** esos datos. Esa es una idea
+> aparte, `database_manager.py`, se encarga de **leer y escribir** esos datos. Aquí hay una idea
 > clave: el estado del *contenido* (las misiones, el progreso) vive en JSON y en Python, no
 > "dentro" de los controles. Los controles solo **muestran** lo que el estado dice en cada
 > momento.
@@ -409,14 +410,14 @@ de una a otra en Flet?
 
 > ### 🟦 ¿Qué significa? — *Navegación*
 > La **navegación** es el paso de una pantalla a otra dentro de la app. En Flet, la técnica más
-> sencilla para principiantes es: **borrar lo que hay en la página y dibujar la pantalla nueva**.
+> sencilla para empezar es: **borrar lo que hay en la página y dibujar la pantalla nueva**.
 
 > ### 🟦 ¿Qué significa? — *`page.controls` y `page.clean()`*
 > `page.controls` es la **lista** de todos los controles que hay ahora mismo en la página.
 > `page.clean()` la **vacía** (quita todo lo que se ve). Combinadas con `page.add(...)`, te
 > permiten reemplazar una pantalla entera por otra.
 
-Patrón clásico: una función por pantalla.
+El patrón clásico es: una función por pantalla.
 
 ```python
 import flet as ft
@@ -453,7 +454,7 @@ ft.app(target=main)
 ```
 
 Cada pantalla es **una función** que limpia la página y dibuja lo suyo. Los botones de una
-pantalla llaman a la función de otra. Así de simple es saltar entre vistas.
+pantalla llaman a la función de otra. Saltar entre vistas es así de sencillo.
 
 > ### 💡 Tip
 > Fíjate en el truco: `ir_a_mision(e)` recibe el `e` del clic (Flet siempre lo pasa) y por
@@ -465,10 +466,10 @@ pantalla llaman a la función de otra. Así de simple es saltar entre vistas.
 > queda en blanco o congelada. Otra vez la regla de oro: cambiaste algo, llama a `update()`.
 
 > ### 🔎 En tu código
-> Para Flet más avanzado existe un sistema de rutas con `page.go(...)` y vistas. PolyPaw, siendo
-> una app de aprendizaje, se entiende muy bien con el patrón "una función por pantalla" que
-> acabas de ver. Cuando leas `main.py`, busca funciones cuyo nombre empiece por `mostrar_`,
-> `pantalla_` o similar: cada una arma una vista.
+> Para Flet más avanzado existe un sistema de rutas con `page.go(...)` y vistas. Pero PolyPaw,
+> siendo una app de aprendizaje, se entiende de maravilla con el patrón "una función por
+> pantalla" que acabas de ver. Cuando leas `main.py`, busca funciones cuyo nombre empiece por
+> `mostrar_`, `pantalla_` o similar: cada una arma una vista.
 
 ---
 

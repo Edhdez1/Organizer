@@ -5,19 +5,19 @@
 </p>
 
 
-> Hola otra vez, soy **Bit**, tu ajolote guia. En el capitulo anterior aprendiste a ponerle "etiquetas" a tus datos con tipos. Hoy vamos a dar un paso enorme: aprender a decir cosas como *"esto es texto **o** numero"* y *"este estado solo puede ser `activo` o `pausado`, nada mas"*. Y lo mejor: TypeScript te ayudara a **descubrir cual de las dos cosas es** justo en el momento en que lo necesitas. A eso se le llama *estrechamiento*, y es una de las magias mas utiles del lenguaje. Respira, mueve las branquias, y vamos.
+> Hola otra vez, soy **Bit**, tu ajolote guia. En el capitulo pasado aprendiste a ponerle "etiquetas" a tus datos con tipos. Hoy damos un salto grande: vas a aprender a decir cosas como *"esto es texto **o** numero"* y *"este estado solo puede ser `activo` o `pausado`, y nada mas"*. Y lo mejor de todo: en el momento justo en que lo necesites, TypeScript te ayudara a **averiguar cual de las dos cosas es**. A eso se le llama *estrechamiento*, y es uno de los trucos mas utiles del lenguaje. Respira, mueve las branquias, y arrancamos.
 
-Recuerda la idea base de todo este modulo: **TypeScript es JavaScript con tipos**. Todo lo que veras hoy se ejecuta como JavaScript normal; los tipos solo viven mientras escribes el codigo y desaparecen al compilar. Asi que apoyate en lo que ya sabes de JavaScript (modulo 03): condicionales, `typeof`, comparaciones con `===`, valores "verdaderos" y "falsos".
+Antes de seguir, repasa la idea que sostiene todo este modulo: **TypeScript es JavaScript con tipos**. Lo de hoy se ejecuta como JavaScript de toda la vida; los tipos solo existen mientras escribes y se evaporan al compilar. Asi que apoyate en lo que ya sabes de JavaScript (modulo 03): condicionales, `typeof`, comparaciones con `===` y la idea de valores "verdaderos" y "falsos".
 
 ---
 
 ## 1. El tipo union: "esto o aquello"
 
-A veces un valor puede ser de **mas de un tipo**. Por ejemplo, una funcion que recibe un identificador que a veces llega como numero y a veces como texto. En JavaScript simplemente lo aceptabas y ya. En TypeScript se lo decimos de forma explicita con una **union**.
+Hay valores que pueden ser de **mas de un tipo**. Piensa en una funcion que recibe un identificador: unas veces llega como numero y otras como texto. En JavaScript lo aceptabas sin mas y seguias adelante. En TypeScript se lo decimos de forma explicita con una **union**.
 
 > ### 🟦 ¿Que significa? — *Tipo union (union type)*
 > Es un tipo que dice "el valor puede ser **uno de varios** tipos posibles". Se escribe separando los tipos con una barra vertical `|`, que aqui se lee como **"o"**.
-> **Para que sirve:** para describir datos que legitimamente pueden tener mas de una forma, sin renunciar a la seguridad de tipos.
+> **Para que sirve:** para describir datos que de verdad pueden tener mas de una forma, sin perder la seguridad de tipos.
 > **Donde se usa en un repo real:** en **Faro**, una funcion que formatea un identificador podria recibir `string | number`, porque GitHub a veces entrega IDs numericos y a veces cadenas.
 
 Un ejemplo sencillo:
@@ -33,14 +33,14 @@ mostrarId(42);         // tambien valido
 mostrarId(true);       // ❌ Error: boolean no esta en la union
 ```
 
-La parte `string | number` es la union. TypeScript ahora vigila que **solo** entren cadenas o numeros. Si intentas pasar un booleano, te avisa antes de ejecutar nada.
+La parte `string | number` es la union. A partir de ahi, TypeScript vigila que **solo** entren cadenas o numeros. Si intentas colar un booleano, te avisa antes de ejecutar nada.
 
 > ### 💡 Tip
-> Lee el simbolo `|` como la palabra "o". Asi `string | number | null` se lee literalmente "texto, o numero, o nulo". Tu cerebro lo procesara mucho mas rapido.
+> Lee el simbolo `|` como la palabra "o". Asi `string | number | null` se lee literalmente "texto, o numero, o nulo". Tu cabeza lo procesa mucho mas rapido.
 
 ### Lo que puedes hacer con una union
 
-Aqui viene el detalle importante. Mientras un valor sea `string | number`, **solo puedes usar lo que ambos tipos tienen en comun**. Por ejemplo, `.toFixed()` existe en los numeros pero no en los textos, asi que TypeScript no te deja usarlo todavia:
+Aqui esta el detalle que importa. Mientras un valor sea `string | number`, **solo puedes usar lo que ambos tipos tienen en comun**. Por ejemplo, `.toFixed()` existe en los numeros pero no en los textos, asi que TypeScript todavia no te deja usarlo:
 
 ```typescript
 function aDoble(valor: string | number) {
@@ -48,20 +48,20 @@ function aDoble(valor: string | number) {
 }
 ```
 
-TypeScript es prudente: como no sabe si en ese momento `valor` es texto o numero, no te deja usar nada que pueda fallar. ¿Como lo resolvemos? Necesitamos **demostrarle** cual de los dos es. Eso es el estrechamiento, y llegamos a el en un momento. Primero, un tipo de union muy especial y muy usado.
+TypeScript va con pies de plomo: como no sabe si en ese instante `valor` es texto o numero, no te deja usar nada que pudiera fallar. ¿Y como salimos de ahi? Hay que **demostrarle** cual de los dos es. Eso es el estrechamiento, y llegamos en un momento. Antes, un tipo de union muy especial y muy usado.
 
 ---
 
 ## 2. Tipos literales: valores exactos como tipo
 
-Hasta ahora un tipo era una **categoria** (todos los textos, todos los numeros). Pero TypeScript puede ir mas fino y decir: *"este valor no es cualquier texto, es exactamente la palabra `activo`"*.
+Hasta ahora un tipo era una **categoria**: todos los textos, todos los numeros. Pero TypeScript puede afinar mucho mas y decir: *"este valor no es cualquier texto, es exactamente la palabra `activo`"*.
 
 > ### 🟦 ¿Que significa? — *Tipo literal (literal type)*
 > Es un tipo cuyo unico valor permitido es **un valor concreto**: una cadena especifica, un numero especifico o un booleano especifico. Por ejemplo, el tipo `"activo"` solo acepta la cadena exacta `"activo"`.
-> **Para que sirve:** para limitar un valor a un conjunto cerrado y conocido de opciones, en vez de "cualquier texto".
+> **Para que sirve:** para limitar un valor a un conjunto cerrado y conocido de opciones, en lugar de "cualquier texto".
 > **Donde se usa en un repo real:** en **RachaSimple**, el estado de una racha de habito no es "cualquier texto": es una de unas pocas palabras fijas como `activa` o `rota`.
 
-Un literal solo no sirve de mucho (un tipo que solo acepta una palabra). La gracia aparece cuando combinas **literales con uniones**.
+Un literal a solas no da para mucho (un tipo que solo acepta una palabra). La gracia salta cuando combinas **literales con uniones**.
 
 ### Uniones de literales: el patron estrella
 
@@ -75,31 +75,31 @@ estado = "rota";   // ✅ valido
 estado = "muerta"; // ❌ Error: no esta entre las opciones permitidas
 ```
 
-Esto es oro puro. Antes, en JavaScript, podias escribir `estado = "actva"` con un dedazo y no te enterabas hasta que algo se rompia en produccion. Ahora TypeScript te subraya el error mientras escribes.
+Esto vale oro. Antes, en JavaScript, podias escribir `estado = "actva"` con un dedazo y no te enterabas hasta que algo reventaba en produccion. Ahora TypeScript te subraya el error mientras escribes.
 
 > ### 🔎 En tu codigo
-> En **RachaSimple**, modelar el estado de una racha o de un habito como `"activa" | "pausada" | "rota"` evita un monton de bugs. Si en algun `if` comparas contra `"pauseda"` (mal escrito), TypeScript te avisa porque esa palabra **no existe** en el tipo. En **Faro** pasa lo mismo con el estado de un proyecto, algo como `"al_dia" | "en_riesgo" | "atrasado"`.
+> En **RachaSimple**, modelar el estado de una racha o de un habito como `"activa" | "pausada" | "rota"` te ahorra un monton de bugs. Si en algun `if` comparas contra `"pauseda"` (mal escrito), TypeScript te avisa, porque esa palabra **no existe** en el tipo. En **Faro** ocurre lo mismo con el estado de un proyecto, algo como `"al_dia" | "en_riesgo" | "atrasado"`.
 
 > ### 🟦 ¿Que significa? — *Alias de tipo (`type`)*
 > Es ponerle un **nombre** a un tipo para reutilizarlo. Se escribe `type NombreNuevo = ...`. Una vez definido, puedes usar `NombreNuevo` en muchos sitios en lugar de repetir la union completa.
-> **Para que sirve:** para no repetir `"activa" | "pausada" | "rota"` cien veces y, si un dia agregas un estado, cambiarlo en un solo lugar.
+> **Para que sirve:** para no escribir `"activa" | "pausada" | "rota"` cien veces y, si un dia agregas un estado, cambiarlo en un solo lugar.
 > **Donde se usa en un repo real:** en **RachaSimple** y **Faro**, los tipos de dominio (estados, prioridades, fases) suelen vivir como alias en un archivo de tipos, importados desde componentes y hooks.
 
 > ### 💡 Tip
-> Una union de literales es como un menu cerrado de restaurante: solo puedes pedir lo que esta en la carta. Esto es muchisimo mas seguro que un `string` libre, que seria como dejar al cliente escribir cualquier cosa en una servilleta.
+> Una union de literales es como el menu cerrado de un restaurante: solo puedes pedir lo que esta en la carta. Es muchisimo mas seguro que un `string` libre, que seria como dejar al cliente escribir cualquier cosa en una servilleta.
 
 ---
 
 ## 3. Estrechamiento: convencer a TypeScript de cual tipo es
 
-Volvamos al problema de la seccion 1: teniamos `string | number` y no podiamos usar `.toFixed()`. La solucion se llama **estrechamiento**.
+Retomemos el problema de la seccion 1: teniamos `string | number` y no podiamos usar `.toFixed()`. La salida se llama **estrechamiento**.
 
 > ### 🟦 ¿Que significa? — *Estrechamiento (narrowing)*
 > Es el proceso por el cual TypeScript **reduce** un tipo amplio (como `string | number`) a uno mas concreto (solo `number`) dentro de una parte del codigo, gracias a las comprobaciones que tu escribes. "Estrechar" = pasar de muchas posibilidades a menos.
-> **Para que sirve:** para poder usar de forma segura los metodos y propiedades especificos de un tipo, una vez que has demostrado cual es.
+> **Para que sirve:** para poder usar con seguridad los metodos y propiedades especificos de un tipo, una vez que has demostrado cual es.
 > **Donde se usa en un repo real:** en **Faro** y **RachaSimple**, cada vez que recibes datos que pueden venir nulos o de varios tipos (respuestas de Supabase, datos de OpenAI), estrechas antes de usarlos.
 
-Lo bonito es que el estrechamiento usa **las mismas herramientas de JavaScript que ya conoces** del modulo 03. TypeScript simplemente las "entiende" y ajusta el tipo segun la rama del codigo en la que estes. Veamos las principales.
+Lo bonito es que el estrechamiento usa **las mismas herramientas de JavaScript que ya conoces** del modulo 03. TypeScript simplemente las "entiende" y ajusta el tipo segun la rama del codigo en la que estes. Veamoslas una a una.
 
 ### 3.1 Estrechar con `typeof`
 
@@ -119,14 +119,14 @@ function aDoble(valor: string | number): string {
 }
 ```
 
-Fijate en la magia: dentro del `if`, `valor` es `number`; despues del `if`, TypeScript **descarta** `number` (porque ya lo atrapamos) y deduce que lo unico que queda es `string`. No tuviste que decirselo: lo razono solo.
+Mira la jugada: dentro del `if`, `valor` es `number`; despues del `if`, TypeScript **descarta** `number` (porque ya lo atrapamos) y deduce que lo unico que queda es `string`. No tuviste que decirselo, lo razono el solito.
 
 > ### 💡 Tip
-> Estrechar con `typeof` es como mirar dentro de una caja antes de meter la mano. Una vez que sabes que dentro hay un numero, puedes hacer cuentas con tranquilidad.
+> Estrechar con `typeof` es como mirar dentro de una caja antes de meter la mano. Una vez que sabes que ahi hay un numero, puedes hacer cuentas con tranquilidad.
 
 ### 3.2 Estrechar con `===` (igualdad estricta)
 
-Cuando trabajas con **uniones de literales** (la seccion 2), la herramienta natural es comparar con `===`. Cada comparacion descarta opciones.
+Cuando trabajas con **uniones de literales** (la seccion 2), la herramienta natural es comparar con `===`. Cada comparacion va descartando opciones.
 
 > ### 🟦 ¿Que significa? — *`===` (igualdad estricta)*
 > Compara dos valores **sin convertir tipos**: solo es `true` si son del mismo tipo y el mismo valor. Es la comparacion que usaste en JavaScript; TypeScript la aprovecha para estrechar uniones de literales.
@@ -149,7 +149,7 @@ function colorDeEstado(estado: EstadoRacha): string {
 ```
 
 > ### ⚠️ Cuidado
-> Usa siempre `===` y nunca `==` para estas comparaciones. El `==` convierte tipos por detras y trae sorpresas (por ejemplo, `0 == ""` es `true` en JavaScript). TypeScript y el equipo de cualquier proyecto serio prefieren `===`. En **RachaSimple** y **Faro** la regla es: siempre `===`.
+> Para estas comparaciones usa siempre `===` y nunca `==`. El `==` convierte tipos por detras y te trae sorpresas (por ejemplo, `0 == ""` es `true` en JavaScript). TypeScript, y cualquier equipo que se tome en serio su proyecto, prefiere `===`. En **RachaSimple** y **Faro** la regla es clara: siempre `===`.
 
 ### 3.3 Estrechar con truthiness (valores verdaderos/falsos)
 
@@ -169,7 +169,7 @@ function nombreProyecto(nombre: string | null): string {
 ```
 
 > ### ⚠️ Cuidado
-> Truthiness descarta tambien la cadena vacia `""` y el numero `0`, no solo `null`. Si para tu logica `0` o `""` son valores **validos**, comprueba explicitamente: `if (valor !== null)` en vez de `if (valor)`. Es un error clasico contar mal una racha cuando el contador es `0`.
+> La truthiness descarta tambien la cadena vacia `""` y el numero `0`, no solo `null`. Si para tu logica `0` o `""` son valores **validos**, comprueba de forma explicita: `if (valor !== null)` en vez de `if (valor)`. Es un fallo clasico contar mal una racha justo cuando el contador esta en `0`.
 
 ### 3.4 Estrechar con `in`
 
@@ -194,17 +194,17 @@ function describir(r: Resultado): string {
 ```
 
 > ### 💡 Tip
-> Cuando los objetos de tu union comparten una propiedad "etiqueta" (como `ok: true` / `ok: false`), puedes estrechar comparando esa etiqueta con `===`. A ese patron se le llama **union discriminada** y es comodisimo: `if (r.ok) { ... }`.
+> Cuando los objetos de tu union comparten una propiedad "etiqueta" (como `ok: true` / `ok: false`), puedes estrechar comparando esa etiqueta con `===`. Ese patron se llama **union discriminada** y es comodisimo: `if (r.ok) { ... }`.
 
 ---
 
 ## 4. Type guards: tus propias preguntas de tipo
 
-Las herramientas anteriores (`typeof`, `in`, `===`) son guardias **de tipo** integradas. Pero a veces necesitas una comprobacion mas a tu medida y reutilizable. Para eso existen los **type guards** personalizados.
+Las herramientas anteriores (`typeof`, `in`, `===`) son guardias **de tipo** que vienen de fabrica. Pero a veces necesitas una comprobacion mas a tu medida y que puedas reutilizar. Para eso estan los **type guards** personalizados.
 
 > ### 🟦 ¿Que significa? — *Type guard (guardia de tipo)*
 > Es cualquier comprobacion que le permite a TypeScript estrechar un tipo. Un **type guard personalizado** es una funcion que devuelve `true`/`false` y, ademas, le ensena a TypeScript *que tipo es el valor* cuando devuelve `true`, usando la sintaxis especial `valor is Tipo`.
-> **Para que sirve:** para encapsular una comprobacion de tipo y reutilizarla en varios sitios, manteniendo el estrechamiento.
+> **Para que sirve:** para encapsular una comprobacion de tipo y reutilizarla en varios sitios, sin perder el estrechamiento.
 > **Donde se usa en un repo real:** en **RachaSimple**, para validar que un texto cualquiera es de verdad un `EstadoRacha` valido antes de guardarlo.
 
 ```typescript
@@ -228,11 +228,11 @@ function procesar(textoDelServidor: string) {
 
 > ### 🟦 ¿Que significa? — *Predicado de tipo (`valor is Tipo`)*
 > Es la parte `: valor is EstadoRacha` en el tipo de retorno de la funcion. Le promete a TypeScript: "si esta funcion devuelve `true`, puedes confiar en que `valor` es de ese tipo".
-> **Para que sirve:** para que tu funcion guardiana **estreche** el tipo en quien la llama, no solo devuelva un booleano cualquiera.
+> **Para que sirve:** para que tu funcion guardiana **estreche** el tipo en quien la llama, en vez de devolver un booleano cualquiera.
 > **Donde se usa en un repo real:** en **Faro**, para validar datos que llegan de OpenAI o de Supabase antes de tratarlos como tipos de dominio confiables.
 
 > ### ⚠️ Cuidado
-> Un type guard es una **promesa que tu haces**. Si tu funcion devuelve `true` pero la comprobacion interna esta mal, TypeScript te creera de todos modos y confiara en un tipo equivocado. Escribe la condicion con cuidado: es tu responsabilidad que sea verdad.
+> Un type guard es una **promesa que tu haces**. Si tu funcion devuelve `true` pero la comprobacion de dentro esta mal, TypeScript te creera igual y confiara en un tipo equivocado. Escribe la condicion con cuidado: que sea verdad corre por tu cuenta.
 
 ---
 
@@ -241,11 +241,11 @@ function procesar(textoDelServidor: string) {
 Llegamos al tipo mas filosofico de todos. Cuando estrechas tanto una union que **ya no queda ninguna opcion**, TypeScript le pone a ese valor el tipo `never`.
 
 > ### 🟦 ¿Que significa? — *Tipo `never`*
-> Es el tipo de un valor que **no puede existir**. Aparece cuando has descartado todas las opciones posibles de una union, o en funciones que nunca terminan normalmente (siempre lanzan un error). "never" significa literalmente "nunca".
+> Es el tipo de un valor que **no puede existir**. Aparece cuando has descartado todas las opciones posibles de una union, o en funciones que nunca terminan de forma normal (siempre lanzan un error). "never" significa literalmente "nunca".
 > **Para que sirve:** sobre todo para **comprobaciones de exhaustividad**: asegurarte de que tu codigo maneja *todos* los casos de una union de literales. Si manana agregas un estado nuevo y olvidas manejarlo, TypeScript te avisa.
-> **Donde se usa en un repo real:** en **RachaSimple** y **Faro**, en los `switch` que deciden algo segun el estado, para que el compilador obligue a manejar cada estado posible.
+> **Donde se usa en un repo real:** en **RachaSimple** y **Faro**, en los `switch` que deciden algo segun el estado, para que el compilador te obligue a manejar cada estado posible.
 
-El truco clasico: un `switch` que cubre todos los casos y, en el `default`, asigna el valor a una variable `never`.
+El truco de siempre: un `switch` que cubre todos los casos y, en el `default`, asigna el valor a una variable `never`.
 
 ```typescript
 type EstadoRacha = "activa" | "pausada" | "rota";
@@ -266,19 +266,19 @@ function etiqueta(estado: EstadoRacha): string {
 }
 ```
 
-¿Por que es genial? Imagina que el equipo de **RachaSimple** decide anadir un cuarto estado, `"reiniciada"`, al tipo `EstadoRacha`. En cuanto lo agregas a la union, TypeScript marca un **error** en la linea del `default`: ahora `estado` *podria* ser `"reiniciada"`, asi que ya no es `never`. Eso te recuerda, sin que se te olvide, que debes anadir su `case`. Es como una alarma que suena justo donde tienes que actuar.
+¿Por que esto es tan bueno? Imagina que el equipo de **RachaSimple** decide anadir un cuarto estado, `"reiniciada"`, al tipo `EstadoRacha`. En cuanto lo agregas a la union, TypeScript marca un **error** en la linea del `default`: ahora `estado` *podria* ser `"reiniciada"`, asi que ya no es `never`. Eso te recuerda, sin que se te pase, que tienes que anadir su `case`. Es como una alarma que suena justo donde tienes que actuar.
 
 > ### 💡 Tip
-> Recuerda: `void` significa "esta funcion no devuelve nada util" (pero termina). `never` significa "este punto **no se alcanza jamas**" o "este valor no puede existir". Son distintos: `void` es para funciones que terminan sin valor; `never` es para lo imposible.
+> No los confundas: `void` significa "esta funcion no devuelve nada util" (pero termina). `never` significa "este punto **no se alcanza jamas**" o "este valor no puede existir". `void` es para funciones que terminan sin valor; `never` es para lo imposible.
 
 > ### 🔎 En tu codigo
-> Cada vez que en **Faro** escribas un `switch` sobre el estado de un proyecto (`"al_dia" | "en_riesgo" | "atrasado"`), agrega el caso `default` con `const _: never = estado`. Asi, el dia que el roadmap crezca y agregues un estado nuevo, el compilador te obliga a actualizar todos los lugares que dependen de el. Es seguridad gratis.
+> Cada vez que en **Faro** escribas un `switch` sobre el estado de un proyecto (`"al_dia" | "en_riesgo" | "atrasado"`), agrega el caso `default` con `const _: never = estado`. Asi, el dia que el roadmap crezca y agregues un estado nuevo, el compilador te obliga a actualizar todos los lugares que dependen de el. Seguridad gratis.
 
 ---
 
 ## 6. Juntandolo todo: un ejemplo tipo React
 
-En **RachaSimple** (React 18 + TypeScript) los componentes reciben **props** tipadas. Una union de literales como prop es muy comun: por ejemplo, una insignia que muestra el estado de la racha con color y texto.
+En **RachaSimple** (React 18 + TypeScript) los componentes reciben **props** tipadas. Una union de literales como prop es de lo mas habitual: por ejemplo, una insignia que muestra el estado de la racha con color y texto.
 
 > ### 🟦 ¿Que significa? — *Props tipadas*
 > Las **props** son los datos que un componente de React recibe de su componente padre. Tiparlas significa describir con TypeScript que forma tienen (que campos y de que tipo), para que nadie pase datos equivocados.
@@ -309,10 +309,10 @@ function InsigniaRacha({ estado, dias }: InsigniaProps) {
 }
 ```
 
-Quien use este componente **no podra** escribir `<InsigniaRacha estado="muerta" dias={5} />`, porque `"muerta"` no esta en `EstadoRacha`. Y si pasa `dias="cinco"` (texto en vez de numero), tambien recibe un error. Toda esa proteccion sale de unir literales y estrechar con `===`. Recuerda: en el JavaScript final, esto es solo un `if`/ternario corriente; los tipos hicieron su trabajo *antes* de ejecutarse.
+Quien use este componente **no podra** escribir `<InsigniaRacha estado="muerta" dias={5} />`, porque `"muerta"` no esta en `EstadoRacha`. Y si pasa `dias="cinco"` (texto en vez de numero), tambien recibe un error. Toda esa proteccion sale de unir literales y estrechar con `===`. Y no lo olvides: en el JavaScript final esto es un `if`/ternario corriente; los tipos hicieron su trabajo *antes* de ejecutarse.
 
 > ### 🔎 En tu codigo
-> En **Faro** (Next.js 15 + React 19), un patron identico aparece para mostrar el estado de un proyecto o la fase de un roadmap. Definir esos estados como union de literales y estrechar con `===` mantiene la interfaz coherente y a prueba de dedazos.
+> En **Faro** (Next.js 15 + React 19) aparece un patron identico para mostrar el estado de un proyecto o la fase de un roadmap. Definir esos estados como union de literales y estrechar con `===` mantiene la interfaz coherente y a prueba de dedazos.
 
 ---
 

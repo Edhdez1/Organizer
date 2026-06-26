@@ -1,8 +1,9 @@
 # Capítulo 02 — Tipos y control de flujo
 
-> Aquí verás los tipos de dato de Python y cómo tomar decisiones y repetir. Como ya lo viviste
-> en JavaScript, irá rápido: nos centramos en **las diferencias** de escritura. Ten a mano la
-> idea: *mismos conceptos, distinta forma*.
+> Vamos a ver los tipos de dato de Python y cómo tomar decisiones y repetir cosas. Como ya
+> pasaste por esto en JavaScript, el capítulo irá ligero: lo que de verdad nos interesa son
+> **las diferencias** a la hora de escribirlo. Quédate con una idea de fondo: *mismos
+> conceptos, distinta forma*.
 
 ---
 
@@ -18,11 +19,12 @@
 > | `None` | sin valor | `None` | null |
 > | `list` | lista ordenada | `[1, 2, 3]` | array |
 > | `dict` | datos con etiquetas | `{"nombre": "Edwar"}` | object |
-> Python distingue **enteros** (`int`) de **decimales** (`float`); JavaScript los mezclaba en
-> "number". Listas y diccionarios los vemos en el próximo capítulo.
+> Una diferencia que conviene tener clara: Python separa los **enteros** (`int`) de los
+> **decimales** (`float`), mientras que JavaScript los metía todos en el mismo saco de
+> "number". Las listas y los diccionarios los dejamos para el próximo capítulo.
 
 > ### 🟦 ¿Qué significa? — *Saber el tipo de algo: `type()`*
-> La función `type(valor)` te dice de qué tipo es:
+> Cuando tengas dudas de qué es un valor, `type(valor)` te lo dice:
 > ```python
 > print(type(25))        # <class 'int'>
 > print(type("hola"))    # <class 'str'>
@@ -30,22 +32,23 @@
 > ```
 
 > ### 🟦 ¿Qué significa? — *Convertir entre tipos (casting)*
-> A veces necesitas pasar un texto a número o viceversa:
+> Habrá momentos en que necesites pasar un texto a número, o al revés:
 > ```python
 > int("25")      # 25  (texto a entero)
 > str(25)        # "25" (número a texto)
 > float("3.14")  # 3.14
 > ```
-> **¿Por qué importa?** Lo que el usuario escribe siempre llega como **texto**. Si pide una
-> edad y vas a comparar números, debes convertir: `edad = int(entrada)`.
+> **¿Por qué importa?** Porque todo lo que el usuario teclea llega como **texto**. Si le pides
+> la edad y luego quieres compararla con un número, primero tienes que convertirla:
+> `edad = int(entrada)`.
 
 ---
 
 ## 2. Texto en Python: f-strings
 
 > ### 🟦 ¿Qué significa? — *f-string (texto con variables)*
-> El equivalente a los *template strings* de JavaScript. Pones una `f` antes de las comillas y
-> metes variables entre llaves `{ }`:
+> Es el equivalente a los *template strings* de JavaScript. Pones una `f` justo antes de las
+> comillas y metes las variables entre llaves `{ }`:
 > ```python
 > nombre = "Edwar"
 > edad = 25
@@ -54,26 +57,27 @@
 > | Idea | JavaScript | Python |
 > |---|---|---|
 > | Texto con variables | `` `Hola ${nombre}` `` | `f"Hola {nombre}"` |
-> Es la forma recomendada de armar textos en Python moderno.
+> En el Python de hoy, esta es la forma normal y recomendada de armar textos.
 
 ---
 
 ## 3. Operadores: casi iguales, con dos diferencias
 
-Los operadores aritméticos (`+`, `-`, `*`, `/`, `%`, `**`) y de comparación (`==`, `!=`, `<`,
-`>`, `<=`, `>=`) son **iguales** que en JavaScript, con dos diferencias clave:
+Los operadores aritméticos (`+`, `-`, `*`, `/`, `%`, `**`) y los de comparación (`==`, `!=`,
+`<`, `>`, `<=`, `>=`) funcionan **igual** que en JavaScript. Solo cambian dos cosas, pero son
+importantes:
 
 > ### ⚠️ Cuidado — En Python la igualdad es `==` (¡no `===`!)
-> Recuerda que en JS usábamos `===` (tres iguales) para comparar bien. **Python no tiene `===`**:
-> usa `==` (dos iguales) para comparar, y funciona correctamente (no tiene la "comparación laxa"
-> problemática de JS). Resumen:
+> En JS te pedíamos usar `===` (tres iguales) para comparar bien. En **Python no existe `===`**:
+> comparas con `==` (dos iguales) y ya funciona como debe, sin la "comparación laxa" tramposa
+> que tenía JS. Para que quede claro:
 > | | Comparar igualdad | Distinto |
 > |---|---|---|
 > | JavaScript | `===` | `!==` |
 > | Python | `==` | `!=` |
 
 > ### 🟦 ¿Qué significa? — *Los lógicos se escriben con palabras*
-> Donde JavaScript usaba símbolos, Python usa **palabras en inglés**:
+> Donde JavaScript usaba símbolos, Python prefiere **palabras en inglés**:
 > | Idea | JavaScript | Python |
 > |---|---|---|
 > | Y | `&&` | `and` |
@@ -83,16 +87,16 @@ Los operadores aritméticos (`+`, `-`, `*`, `/`, `%`, `**`) y de comparación (`
 > if edad >= 18 and tiene_entrada:
 >     print("Bienvenido")
 > ```
-> Esto refuerza por qué Python "se lee como inglés".
+> Es justo este tipo de detalle el que hace que Python "se lea casi como inglés".
 
 ---
 
 ## 4. Decisiones: `if`, `elif`, `else`
 
 > ### 🟦 ¿Qué significa? — *`if/elif/else`*
-> Igual que en JavaScript, pero con tres diferencias de forma: **sin paréntesis** en la
-> condición (opcionales), **dos puntos `:`** al final, **sangría** en vez de llaves, y
-> `elif` en lugar de `else if`:
+> Es lo mismo que en JavaScript, pero con tres cambios de forma: la condición va **sin
+> paréntesis** (son opcionales), se cierra con **dos puntos `:`**, el cuerpo va con **sangría**
+> en lugar de llaves, y se escribe `elif` en vez de `else if`:
 > ```python
 > nota = 85
 >
@@ -103,7 +107,8 @@ Los operadores aritméticos (`+`, `-`, `*`, `/`, `%`, `**`) y de comparación (`
 > else:
 >     print("Reprobado")
 > ```
-> Compáralo con el JavaScript del Módulo 03: la lógica es idéntica; solo cambió la "puntuación".
+> Si lo pones al lado del JavaScript del Módulo 03, verás que la lógica es la misma; lo único
+> que cambió fue la "puntuación".
 
 ---
 
@@ -112,39 +117,41 @@ Los operadores aritméticos (`+`, `-`, `*`, `/`, `%`, `**`) y de comparación (`
 ### El bucle `for` (recorre una secuencia)
 
 > ### 🟦 ¿Qué significa? — *`for` en Python*
-> El `for` de Python es distinto al de JavaScript: en vez de un contador con condición, **recorre
-> directamente los elementos** de una lista (o secuencia):
+> El `for` de Python no se parece al de JavaScript: en lugar de llevar un contador con una
+> condición, **recorre directamente los elementos** de una lista (o de cualquier secuencia):
 > ```python
 > servicios = ["Diseño web", "IA", "Marketing"]
 > for servicio in servicios:
 >     print(servicio)
 > # imprime cada servicio en una línea
 > ```
-> Se lee: "para cada servicio en la lista de servicios, imprímelo". Mucho más directo que el
-> `for (let i = 0; ...)` de JavaScript.
+> Se lee tal cual: "para cada servicio en la lista de servicios, imprímelo". Mucho más directo
+> que el `for (let i = 0; ...)` al que estabas acostumbrado en JavaScript.
 
 > ### 🟦 ¿Qué significa? — *`range()` (repetir N veces)*
-> Si quieres repetir un número de veces (como el `for` clásico), usas `range()`:
+> Cuando lo que quieres es repetir un número fijo de veces (como el `for` clásico), echas mano
+> de `range()`:
 > ```python
 > for i in range(5):       # 0, 1, 2, 3, 4
 >     print(i)
 > for i in range(1, 6):    # 1, 2, 3, 4, 5
 >     print(i)
 > ```
-> `range(5)` genera los números de 0 a 4 (empieza en 0, como siempre).
+> `range(5)` te da los números del 0 al 4: empieza en 0, como casi todo en programación.
 
 ### El bucle `while`
 
 > ### 🟦 ¿Qué significa? — *`while` en Python*
-> Idéntico en concepto a JavaScript (repite mientras la condición sea verdadera), con la forma
-> de Python (dos puntos y sangría):
+> En concepto es idéntico al de JavaScript (repite mientras la condición siga siendo verdadera),
+> solo que escrito a la manera de Python, con dos puntos y sangría:
 > ```python
 > saldo = 100
 > while saldo > 0:
 >     print(f"Saldo: {saldo}")
 >     saldo -= 25
 > ```
-> El mismo cuidado de siempre: que algo dentro acerque el fin, o tendrás un **bucle infinito**.
+> Y el aviso de siempre: asegúrate de que algo dentro del bucle vaya acercando el final, o
+> acabarás con un **bucle infinito**.
 
 ---
 
@@ -165,9 +172,9 @@ for nota in notas:
     print(f"Nota {nota}: {resultado}")
 ```
 
-Es el **mismo programa** que cerró el capítulo de funciones en JavaScript, ahora en Python.
-Nota lo limpio que se ve: sin llaves, sin `;`, el `for` recorre la lista directamente.
-(Las funciones con `def` las vemos a fondo en el próximo capítulo.)
+Es **exactamente el mismo programa** que cerraba el capítulo de funciones en JavaScript, ahora
+escrito en Python. Fíjate en lo limpio que queda: sin llaves, sin `;` y con el `for` recorriendo
+la lista de un tirón. (Las funciones con `def` las trabajamos a fondo en el próximo capítulo.)
 
 ---
 

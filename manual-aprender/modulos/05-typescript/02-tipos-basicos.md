@@ -1,7 +1,7 @@
 # Capítulo 02 — Tipos básicos y anotaciones
 
-> Ahora la práctica: cómo se escriben los tipos. Verás que es poca sintaxis y muy lógica. La
-> regla de oro ya la conoces: **nombre `:` tipo**.
+> Pasemos a la práctica: cómo se escriben los tipos en el día a día. Vas a ver que es muy
+> poca sintaxis y que casi todo cuadra solo. La regla de oro ya la tienes: **nombre `:` tipo**.
 
 ---
 
@@ -15,75 +15,81 @@
 > | `boolean` | verdadero/falso | `let a: boolean = true;` |
 > | `null` | "vacío a propósito" | `let x: null = null;` |
 > | `undefined` | "sin definir" | `let y: undefined;` |
-> A diferencia de Python, TypeScript no separa `int` de `float`: todo número es `number`.
+> Un detalle que sorprende a quien viene de Python: aquí no hay `int` ni `float` por separado.
+> Sea entero o decimal, todo número es `number`.
 
 ---
 
 ## 2. La inferencia: TypeScript adivina el tipo
 
 > ### 🟦 ¿Qué significa? — *Inferencia de tipos*
-> **Inferir** es deducir. Si le das un valor inicial a una variable, TypeScript **deduce solo**
-> su tipo; no hace falta que lo escribas:
+> **Inferir** es deducir. Cuando le das un valor inicial a una variable, TypeScript **deduce
+> solo** de qué tipo es; no hace falta que se lo escribas:
 > ```typescript
 > let nombre = "Edwar";   // TypeScript infiere que es string
 > nombre = 42;            // ❌ Error: ya sabe que 'nombre' es string
 > ```
-> **Consecuencia práctica:** no tienes que anotar todo. Anota lo que aporte claridad (sobre todo
-> funciones); deja que la inferencia haga el resto. Menos ruido, misma seguridad.
+> ¿Qué sacas de esto en la práctica? Que no tienes que anotar todo. Anota lo que aclare las
+> cosas (sobre todo las funciones) y deja que la inferencia se encargue del resto. Menos ruido
+> y la misma seguridad.
 
 > ### 💡 Tip — ¿Cuándo anotar y cuándo no?
-> - **Anota** los parámetros de funciones y, a veces, lo que devuelven (no se infieren solos al
->   llamarlas).
-> - **Deja inferir** las variables simples con valor inicial (`const total = 0`).
-> Regla: anota en las "fronteras" (entradas/salidas); confía en la inferencia adentro.
+> - **Anota** los parámetros de funciones y, a veces, lo que devuelven (eso no se infiere solo
+>   al llamarlas).
+> - **Deja inferir** las variables simples que ya nacen con un valor (`const total = 0`).
+> La idea es sencilla: anota en las "fronteras" (lo que entra y lo que sale) y confía en la
+> inferencia hacia adentro.
 
 ---
 
 ## 3. Arrays tipados
 
 > ### 🟦 ¿Qué significa? — *Tipar una lista*
-> Para decir "una lista de textos" o "una lista de números", se pone el tipo seguido de `[]`:
+> Para decir "una lista de textos" o "una lista de números", pones el tipo y le pegas `[]`:
 > ```typescript
 > let servicios: string[] = ["Diseño web", "IA"];
 > let precios: number[] = [100, 250, 99];
 > ```
-> `string[]` se lee "arreglo de strings". Si intentas meter un número en `servicios`, error.
+> `string[]` se lee "arreglo de strings". Si intentas colar un número dentro de `servicios`,
+> TypeScript salta con un error.
 
 ---
 
 ## 4. El tipo `any` (y por qué evitarlo)
 
 > ### 🟦 ¿Qué significa? — *`any` (cualquiera)*
-> `any` significa "cualquier tipo, sin revisar". Apaga la seguridad de TypeScript para esa
-> variable:
+> `any` quiere decir "cualquier tipo, y no lo reviso". En la práctica apaga toda la seguridad
+> de TypeScript para esa variable:
 > ```typescript
 > let cosa: any = "hola";
 > cosa = 42;          // permitido
 > cosa.metodoRaro();  // TypeScript NO se queja (y eso es peligroso)
 > ```
-> ⚠️ **Úsalo lo menos posible.** Si usas `any` en todos lados, vuelves a tener JavaScript sin
-> red. Existe para casos puntuales (código viejo, datos de forma desconocida), pero es una
-> "puerta trasera" que conviene mantener cerrada. Por eso los proyectos serios (como los tuyos)
-> activan reglas que avisan cuando aparece `any`.
+> ⚠️ **Úsalo lo menos posible.** Si llenas todo de `any`, vuelves a programar en JavaScript a
+> pelo, sin red. Tiene su lugar para casos muy concretos (código viejo, datos que llegan con
+> forma desconocida), pero es una "puerta trasera" que conviene tener cerrada. Por eso los
+> proyectos serios (como los tuyos) activan reglas que te avisan en cuanto aparece un `any`.
 
 > ### 🟦 ¿Qué significa? — *`unknown` (la alternativa segura a `any`)*
-> `unknown` también acepta cualquier valor, pero **te obliga a comprobar el tipo antes de
-> usarlo**. Es el "any responsable". Por ahora solo reconócelo; lo importante es: **prefiere
-> tipos concretos; si no sabes el tipo, `unknown` antes que `any`.**
+> `unknown` también acepta cualquier valor, pero con una diferencia clave: **te obliga a
+> comprobar el tipo antes de usarlo**. Es el "any responsable". Por ahora basta con que lo
+> reconozcas; quédate con esto: **mejor tipos concretos; y si de verdad no sabes el tipo, usa
+> `unknown` antes que `any`.**
 
 ---
 
 ## 5. Tipos unión: "esto o aquello"
 
 > ### 🟦 ¿Qué significa? — *Tipo unión (`|`)*
-> A veces un valor puede ser de **uno de varios** tipos. Se expresa con la barra `|`:
+> A veces un valor puede ser de **uno entre varios** tipos. Eso se escribe con la barra `|`:
 > ```typescript
 > let id: string | number;   // puede ser texto O número
 > id = "abc123";   // ✅
 > id = 42;         // ✅
 > id = true;       // ❌ no es ni string ni number
 > ```
-> Una variante muy usada son los **valores literales** como unión, para limitar las opciones:
+> Hay una variante muy usada: poner **valores literales** como unión para limitar las opciones
+> a unas pocas:
 > ```typescript
 > let estado: "completado" | "minimo" | "no_hecho";
 > estado = "completado";   // ✅
@@ -91,10 +97,10 @@
 > ```
 
 > ### 🔎 En tu código
-> RachaSimple usa exactamente esto: el tipo de un check-in diario es algo como
-> `"completed" | "minimum" | "recovery" | "no_done"`. Así, es **imposible** guardar un estado
-> inválido por error: TypeScript lo impediría al escribir. Esa es la seguridad de tipos
-> trabajando para ti.
+> RachaSimple hace justo esto: el tipo de un check-in diario es algo parecido a
+> `"completed" | "minimum" | "recovery" | "no_done"`. Gracias a eso es **imposible** guardar
+> por error un estado inválido: TypeScript te lo cortaría mientras escribes, antes de ejecutar
+> nada. Esa es la seguridad de tipos trabajando a tu favor.
 
 ---
 

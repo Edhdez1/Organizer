@@ -7,8 +7,9 @@
 
 ## 1. El problema que resuelve TypeScript
 
-Recuerda un detalle de JavaScript: una variable puede contener cualquier cosa y cambiar de tipo
-sin avisar. Eso es flexible, pero causa errores difíciles. Ejemplo:
+Hay un detalle de JavaScript que conviene tener fresco: una variable puede guardar cualquier cosa
+y cambiar de tipo cuando le da la gana, sin avisarte. Eso da mucha libertad, pero también abre la
+puerta a errores que luego cuesta cazar. Míralo aquí:
 
 ```javascript
 function precioConIva(precio) {
@@ -17,18 +18,19 @@ function precioConIva(precio) {
 precioConIva("100");   // en JavaScript no se queja… y da un resultado raro
 ```
 
-Pasarle el texto `"100"` en vez del número `100` no provoca un error inmediato; el problema
-aparece **más tarde**, en producción, y cuesta encontrarlo.
+Le pasaste el texto `"100"` en lugar del número `100`, y JavaScript ni se inmuta. No salta ningún
+error en ese momento. El fallo aparece **más tarde**, normalmente en producción, y cuando vas a
+buscarlo se te va medio día encontrándolo.
 
 > ### 🟦 ¿Qué significa? — *Tipo (type)*
 > El **tipo** de un dato es la **clase** de información que es: texto (`string`), número
-> (`number`), booleano (`boolean`), etc. (Ya los viste en JS y Python.) En JavaScript los tipos
-> existen, pero el lenguaje no te obliga a respetarlos. TypeScript sí.
+> (`number`), booleano (`boolean`), etc. Ya te los cruzaste en JS y en Python. En JavaScript los
+> tipos existen, pero el lenguaje no te obliga a respetarlos: tú verás. TypeScript sí te obliga.
 
 > ### 🟦 ¿Qué significa? — *TypeScript*
-> **TypeScript** es JavaScript **más un sistema de tipos**: te permite **declarar** de qué tipo
-> es cada cosa, y un programa revisa tu código **antes de ejecutarlo** para avisarte si te
-> equivocas (por ejemplo, si pasas un texto donde se esperaba un número).
+> **TypeScript** es JavaScript **más un sistema de tipos**: te deja **declarar** de qué tipo es
+> cada cosa, y revisa tu código **antes de ejecutarlo** para avisarte si metes la pata (por
+> ejemplo, si pasas un texto donde tocaba un número).
 > ```typescript
 > function precioConIva(precio: number) {   // ': number' declara el tipo
 >   return precio * 1.13;
@@ -41,54 +43,55 @@ aparece **más tarde**, en producción, y cuesta encontrarlo.
 ## 2. La idea clave: errores temprano, no tarde
 
 > ### 💡 Tip — "Shift left": atrapar el error cuanto antes
-> Cuanto **antes** descubres un error, más barato es arreglarlo. Un error que TypeScript te
-> marca **mientras escribes** (subrayado rojo en el editor) te cuesta segundos. El mismo error
-> descubierto por un cliente en producción te cuesta horas y reputación. TypeScript mueve la
-> detección de errores "hacia la izquierda" en el tiempo: del usuario final a tu teclado.
+> Cuanto **antes** pillas un error, más barato sale arreglarlo. Un error que TypeScript te subraya
+> en rojo **mientras escribes** te cuesta unos segundos. Ese mismo error, descubierto por un
+> cliente en producción, te cuesta horas y un poco de tu reputación. Lo que hace TypeScript es
+> adelantar la detección "hacia la izquierda" en el tiempo: del usuario final a tu teclado.
 
 > ### 🟦 ¿Qué significa? — *Tipado estático vs. dinámico*
-> - **Dinámico** (JavaScript, Python): los tipos se revisan **al ejecutar**. Flexible, pero los
->   errores aparecen tarde.
-> - **Estático** (TypeScript): los tipos se revisan **antes de ejecutar**, al escribir/compilar.
->   Más seguro. "Estático" = comprobado de antemano, sin correr el programa.
+> - **Dinámico** (JavaScript, Python): los tipos se revisan **al ejecutar**. Muy flexible, pero
+>   los errores asoman tarde.
+> - **Estático** (TypeScript): los tipos se revisan **antes de ejecutar**, al escribir o compilar.
+>   Más seguro. "Estático" quiere decir comprobado de antemano, sin tener que correr el programa.
 
 ---
 
 ## 3. TypeScript es un "superset" de JavaScript
 
 > ### 🟦 ¿Qué significa? — *Superset (superconjunto)*
-> Un **superset** es un lenguaje que **contiene a otro entero y le añade cosas**. TypeScript
-> incluye **todo** JavaScript y le suma los tipos. Consecuencia práctica importante: **todo tu
-> JavaScript ya es TypeScript válido**. Puedes adoptar TypeScript poco a poco, añadiendo tipos
-> donde quieras. No tiras nada de lo aprendido en el Módulo 03; lo amplías.
+> Un **superset** es un lenguaje que **contiene a otro entero y le añade cosas encima**. TypeScript
+> mete **todo** JavaScript dentro y le suma los tipos. Y esto tiene una consecuencia muy cómoda:
+> **todo tu JavaScript ya es TypeScript válido**. Puedes ir adoptándolo poco a poco, poniendo tipos
+> donde te apetezca y dejando el resto como está. No tiras nada de lo que aprendiste en el Módulo
+> 03; simplemente lo amplías.
 
 ---
 
 ## 4. Los navegadores no entienden TypeScript: la compilación
 
 > ### 🟦 ¿Qué significa? — *Compilar (transpilar)*
-> Los navegadores solo ejecutan JavaScript, no TypeScript. Por eso, antes de usarlo, el código
-> `.ts` se **compila** (o "transpila"): un programa lo traduce a JavaScript normal, quitando las
-> anotaciones de tipo. **Compilar** es traducir código de un lenguaje/forma a otro que la máquina
-> pueda ejecutar.
+> Los navegadores solo saben ejecutar JavaScript, TypeScript no lo entienden. Así que, antes de
+> usarlo, el código `.ts` se **compila** (o "transpila"): un programa lo traduce a JavaScript
+> normal y le quita las anotaciones de tipo por el camino. **Compilar** es eso, traducir código de
+> una forma a otra que la máquina sepa ejecutar.
 > ```
 >   archivo.ts   ──(compilador de TypeScript)──►   archivo.js   ──►   el navegador lo ejecuta
 > ```
-> Durante esa traducción, el compilador **revisa los tipos** y te avisa de errores. Las
-> herramientas modernas (como **Vite**, que usa RachaSimple) hacen esto automáticamente mientras
-> desarrollas; no tienes que ejecutar nada a mano.
+> Mientras traduce, el compilador **repasa los tipos** y te avisa de los errores. Las herramientas
+> modernas (como **Vite**, que usa RachaSimple) se encargan de todo esto solas mientras programas;
+> no tienes que lanzar nada a mano.
 
 > ### 🟦 ¿Qué significa? — *Las extensiones `.ts` y `.tsx`*
-> - `.ts` → un archivo de TypeScript normal.
-> - `.tsx` → TypeScript que además contiene **JSX** (la sintaxis de React para escribir
->   interfaz; la verás en el Módulo 06). Por eso los componentes de RachaSimple y Faro son
+> - `.ts` → un archivo de TypeScript normal y corriente.
+> - `.tsx` → TypeScript que además lleva **JSX** dentro (la sintaxis de React para escribir
+>   interfaz; la verás en el Módulo 06). Por eso los componentes de RachaSimple y Faro acaban en
 >   `.tsx`.
 
 ---
 
 ## 5. Tu primera anotación de tipo
 
-La sintaxis básica es: después del nombre, dos puntos `:` y el tipo.
+La sintaxis es de lo más simple: tras el nombre, dos puntos `:` y el tipo.
 
 ```typescript
 let nombre: string = "Edwar";
@@ -96,16 +99,17 @@ let edad: number = 25;
 let activo: boolean = true;
 ```
 
-Si intentas guardar algo del tipo equivocado, TypeScript se queja **al instante**:
+Si intentas guardar algo del tipo que no toca, TypeScript protesta **al momento**:
 ```typescript
 let edad: number = 25;
 edad = "veintiséis";   // ❌ Error: el tipo 'string' no se puede asignar a 'number'
 ```
 
 > ### 💡 Tip — El editor se vuelve tu copiloto
-> Con TypeScript, VS Code no solo marca errores: también te **autocompleta** mejor (sabe qué
-> propiedades tiene cada cosa) y te muestra la "forma" de los datos al pasar el cursor. Esa
-> ayuda constante es una de las grandes razones por las que equipos enteros adoptan TypeScript.
+> Con TypeScript, VS Code hace más que marcarte errores: también **autocompleta** mucho mejor
+> (sabe qué propiedades tiene cada cosa) y te enseña la "forma" de los datos con solo pasar el
+> cursor por encima. Esa ayuda constante, todo el rato, es una de las razones de peso por las que
+> equipos enteros se pasan a TypeScript.
 
 ---
 

@@ -5,11 +5,11 @@
 </p>
 
 
-> En este capítulo vas a juntar **todo** lo que aprendiste en el Módulo 00 y construir, con tus propias manos, un proyecto pequeño pero **completo y real**: una carpeta organizada, un archivo de notas, un repositorio de Git con su historial de cambios, y un script muy simple que el computador ejecutará y te responderá. No es un ejercicio de mentira: cuando termines, tendrás en tu disco un proyecto con la misma estructura básica que usan proyectos de verdad como *tunal-digital* o *PolyPaw*. Importa porque dejas de *leer* sobre programar y empiezas a *programar*. Bit, tu ajolote guía, te acompaña paso a paso. Respira: todo lo que sigue se hace despacio y sin prisa.
+> En este capítulo vas a juntar **todo** lo que viste en el Módulo 00 y construir, con tus propias manos, un proyecto pequeño pero **completo y real**: una carpeta ordenada, un archivo de notas, un repositorio de Git con su historial de cambios y un script muy simple que el computador ejecutará para responderte. No es un ejercicio de mentira. Cuando termines, tendrás en tu disco un proyecto con la misma estructura básica que usan proyectos de verdad como *tunal-digital* o *PolyPaw*. Y eso importa porque dejas de *leer* sobre programar y empiezas a *programar*. Bit, tu ajolote guía, te acompaña paso a paso. Respira: todo lo que sigue se hace despacio, sin prisa.
 
 ## 1. Qué vamos a construir (el plan antes que el teclado)
 
-Antes de tocar el teclado, conviene saber a dónde vamos. Un buen programador piensa primero y escribe después. Vamos a construir un mini-proyecto llamado **mi-diario-de-codigo**: una pequeña libreta digital donde anotarás tu avance aprendiendo a programar, con control de versiones (para no perder nada) y un programita que cuente cuántas notas llevas.
+Antes de tocar el teclado, conviene saber a dónde vamos. Un buen programador piensa primero y escribe después. Vamos a construir un mini-proyecto llamado **mi-diario-de-codigo**: una pequeña libreta digital donde anotarás tu avance aprendiendo a programar, con control de versiones para no perder nada y un programita que cuente cuántas notas llevas.
 
 El proyecto terminado se verá así:
 
@@ -20,34 +20,34 @@ mi-diario-de-codigo/
 └── contar.js          (un script que cuenta tus notas)
 ```
 
-Tres archivos. Nada más. Pero con esos tres archivos vas a practicar: crear carpetas, escribir archivos de texto, usar la terminal, inicializar Git, hacer *commits* y ejecutar un programa. Eso es muchísimo para un primer proyecto.
+Tres archivos, nada más. Pero con esos tres archivos vas a practicar un montón de cosas: crear carpetas, escribir archivos de texto, usar la terminal, inicializar Git, hacer *commits* y ejecutar un programa. Para un primer proyecto, eso es muchísimo.
 
 > ### 🟦 ¿Qué significa? — *Mini-proyecto*
-> Un proyecto es un conjunto de archivos que trabajan juntos para lograr un objetivo. "Mini" solo quiere decir que es pequeño y abarcable en una sesión. Sirve para practicar el *ciclo completo* (crear, escribir, guardar, versionar, ejecutar) sin abrumarte. Tus proyectos reales como **RachaSimple** (una app de hábitos) son el mismo concepto, solo que con cientos de archivos en lugar de tres.
+> Un proyecto es un conjunto de archivos que trabajan juntos para lograr un objetivo. El "mini" solo quiere decir que es pequeño y cabe en una sesión. Te sirve para practicar el *ciclo completo* (crear, escribir, guardar, versionar, ejecutar) sin abrumarte. Tus proyectos reales, como **RachaSimple** (una app de hábitos), son el mismo concepto: solo que con cientos de archivos en lugar de tres.
 
 > ### 💡 Tip — Lee el capítulo entero una vez antes de empezar
-> Date una pasada de lectura sin teclear. Así tu cabeza tendrá el mapa completo, y cuando vuelvas al inicio para hacerlo "en serio", cada paso tendrá sentido. Bit insiste: el pánico nace de no saber qué viene después.
+> Date una pasada de lectura sin teclear nada. Así tu cabeza tendrá el mapa completo, y cuando vuelvas al inicio para hacerlo "en serio", cada paso tendrá sentido. Bit insiste en esto: el pánico nace de no saber qué viene después.
 
 ## 2. Abrir la terminal y ubicarte 💻
 
 Todo empieza en la **terminal**, esa ventana de texto donde le hablas al computador escribiendo. Ábrela (en Windows puede ser *PowerShell* o *Git Bash*; en Mac o Linux, *Terminal*).
 
 > ### 🟦 ¿Qué significa? — *Terminal*
-> La terminal es un programa donde escribes órdenes en texto y el computador las ejecuta, en lugar de hacer clic con el ratón. Cada línea que escribes y confirmas con Enter es un *comando*. Sirve para trabajar rápido y para tareas que no tienen botones. Tu servidor **polypaw-nas** (un Acer con Ubuntu Server) se administra casi por completo desde la terminal, porque ni siquiera tiene pantalla con ventanas: solo texto.
+> La terminal es un programa donde escribes órdenes en texto y el computador las ejecuta, en vez de hacer clic con el ratón. Cada línea que escribes y confirmas con Enter es un *comando*. Sirve para trabajar rápido y para tareas que no tienen botones. Tu servidor **polypaw-nas** (un Acer con Ubuntu Server) se administra casi por completo desde la terminal, porque ni siquiera tiene pantalla con ventanas: solo texto.
 
-Lo primero es saber **dónde estás parado**. La terminal siempre está "dentro" de una carpeta, llamada *carpeta actual* o *directorio de trabajo*. Para verla:
+Lo primero es saber **dónde estás parado**. La terminal siempre está "dentro" de una carpeta, que se llama *carpeta actual* o *directorio de trabajo*. Para verla:
 
 ```bash
 pwd
 ```
 
 > ### 🟦 ¿Qué significa? — *pwd*
-> Significa *print working directory* (imprimir directorio de trabajo). Te muestra la ruta de la carpeta donde estás ahora mismo. Sirve para no perderte: antes de crear cosas, conviene saber dónde caerán.
+> Significa *print working directory* (imprimir directorio de trabajo). Te muestra la ruta de la carpeta donde estás ahora mismo. Sirve para no perderte: antes de crear cosas, conviene saber dónde van a caer.
 
-El resultado será algo como `/home/tu-usuario` o `/Users/tu-nombre` o `C:\Users\tu-nombre`. Esa es tu carpeta personal, un buen lugar para trabajar. Si quieres, muévete a tu carpeta de Documentos o Escritorio; lo importante es que recuerdes dónde quedó el proyecto.
+El resultado será algo como `/home/tu-usuario`, `/Users/tu-nombre` o `C:\Users\tu-nombre`. Esa es tu carpeta personal, un buen lugar para trabajar. Si prefieres, muévete a tu carpeta de Documentos o al Escritorio; lo importante es que recuerdes dónde quedó el proyecto.
 
 > ### ⚠️ Cuidado — No crees el proyecto "en cualquier parte"
-> Es muy fácil crear la carpeta, cerrar la terminal y luego no encontrarla nunca más. Anota mentalmente (o en un papel) la ruta que te dio `pwd`. Ahí va a vivir tu proyecto.
+> Es facilísimo crear la carpeta, cerrar la terminal y luego no encontrarla nunca más. Anota mentalmente (o en un papel) la ruta que te dio `pwd`. Ahí va a vivir tu proyecto.
 
 ## 3. Crear la carpeta del proyecto 💻
 
@@ -58,31 +58,31 @@ mkdir mi-diario-de-codigo
 ```
 
 > ### 🟦 ¿Qué significa? — *mkdir*
-> Significa *make directory* (crear directorio). Crea una carpeta nueva con el nombre que le des. "Directorio" y "carpeta" son la misma cosa: la palabra "directorio" es la versión técnica. Lo usas para organizar tus archivos en grupos.
+> Significa *make directory* (crear directorio). Crea una carpeta nueva con el nombre que le des. "Directorio" y "carpeta" son lo mismo: "directorio" es la versión técnica de la palabra. Lo usas para organizar tus archivos en grupos.
 
-No verás nada en pantalla: en la terminal, *silencio suele ser señal de éxito*. Si algo sale mal, te avisará con un mensaje de error. Ahora entra en la carpeta recién creada:
+No verás nada en pantalla, y está bien: en la terminal, *el silencio suele ser señal de éxito*. Si algo sale mal, te avisará con un mensaje de error. Ahora entra en la carpeta que acabas de crear:
 
 ```bash
 cd mi-diario-de-codigo
 ```
 
 > ### 🟦 ¿Qué significa? — *cd*
-> Significa *change directory* (cambiar de directorio). Te mueve "dentro" de una carpeta, como hacer doble clic para entrar en ella. A partir de ahí, todo lo que crees caerá dentro. Para salir y volver atrás un nivel se usa `cd ..` (los dos puntos significan "la carpeta de arriba").
+> Significa *change directory* (cambiar de directorio). Te mueve "dentro" de una carpeta, como hacer doble clic para entrar en ella. A partir de ahí, todo lo que crees caerá dentro. Para salir y subir un nivel se usa `cd ..` (los dos puntos significan "la carpeta de arriba").
 
-Confirma con `pwd` que ahora estás *dentro* de `mi-diario-de-codigo`. Debería aparecer el nombre de la carpeta al final de la ruta. ¡Estás dentro de tu proyecto!
+Confirma con `pwd` que ahora estás *dentro* de `mi-diario-de-codigo`. Al final de la ruta debería aparecer el nombre de la carpeta. ¡Ya estás dentro de tu proyecto!
 
 > ### 💡 Tip — Nombres de carpetas sin espacios ni tildes
-> Fíjate que el proyecto se llama `mi-diario-de-codigo`, con guiones y sin tildes ni espacios. En programación esto evita dolores de cabeza: los espacios obligan a poner comillas, y las tildes a veces confunden a las herramientas. Es la misma razón por la que tus proyectos reales se llaman `tunal-digital` o `polypaw-nas` y no "Tunal Digital" con espacio.
+> Fíjate en que el proyecto se llama `mi-diario-de-codigo`, con guiones y sin tildes ni espacios. En programación esto te ahorra dolores de cabeza: los espacios obligan a poner comillas, y las tildes a veces confunden a las herramientas. Es la misma razón por la que tus proyectos reales se llaman `tunal-digital` o `polypaw-nas`, y no "Tunal Digital" con espacio de por medio.
 
 ## 4. Crear el primer archivo: README.md 💻
 
 Todo proyecto serio empieza con un **README**: un archivo que explica qué es el proyecto. La gente lo lee primero (de ahí su nombre, "léeme" en inglés).
 
 > ### 🟦 ¿Qué significa? — *README*
-> Es un archivo de texto, casi siempre llamado `README.md`, que describe de qué trata el proyecto, cómo usarlo y qué necesita. Sirve para que cualquiera (incluido tú dentro de seis meses) entienda el proyecto sin leer todo el código. La regla del proyecto **Faro** (la carpeta Organizer) es tan estricta con esto que obliga a actualizar el README en cada cambio importante.
+> Es un archivo de texto, casi siempre llamado `README.md`, que describe de qué trata el proyecto, cómo usarlo y qué necesita. Sirve para que cualquiera (incluido tú dentro de seis meses) entienda el proyecto sin leerse todo el código. La regla del proyecto **Faro** (la carpeta Organizer) es tan estricta con esto que obliga a actualizar el README en cada cambio importante.
 
 > ### 🟦 ¿Qué significa? — *Markdown* (la `.md`)
-> Markdown es una forma sencilla de dar formato a un texto usando símbolos: `#` para títulos, `-` para listas, `**texto**` para negrita. La extensión `.md` indica que el archivo está en Markdown. Sirve para escribir documentos legibles tanto en crudo como ya "bonitos". Este mismo manual que lees está escrito en Markdown.
+> Markdown es una forma sencilla de dar formato a un texto con símbolos: `#` para títulos, `-` para listas, `**texto**` para negrita. La extensión `.md` indica que el archivo está en Markdown. Sirve para escribir documentos que se leen bien tanto en crudo como ya "bonitos". Este mismo manual que tienes delante está escrito en Markdown.
 
 Vamos a crear el archivo y abrirlo en tu editor de código (por ejemplo **VS Code**). Si tienes VS Code instalado con el comando `code`, escribe:
 
@@ -90,7 +90,7 @@ Vamos a crear el archivo y abrirlo en tu editor de código (por ejemplo **VS Cod
 code README.md
 ```
 
-Si eso no funciona, no pasa nada: abre tu editor de texto a mano, y guarda un archivo nuevo llamado `README.md` *dentro* de la carpeta `mi-diario-de-codigo`. Dentro del archivo, escribe esto:
+Si eso no funciona, tranquilo: abre tu editor de texto a mano y guarda un archivo nuevo llamado `README.md` *dentro* de la carpeta `mi-diario-de-codigo`. Dentro del archivo, escribe esto:
 
 ```markdown
 # Mi diario de código
@@ -104,7 +104,7 @@ Aquí anoto lo que voy aprendiendo, día por día.
 - `contar.js`: un script que cuenta cuántas notas llevo.
 ```
 
-Guarda el archivo (en VS Code, `Ctrl+S` o `Cmd+S`). ¡Felicidades, escribiste tu primera documentación!
+Guarda el archivo (en VS Code, `Ctrl+S` o `Cmd+S`). ¡Felicidades, acabas de escribir tu primera documentación!
 
 > ### 🔎 En tu código
 > En **tunal-digital**, el sitio web vive en archivos como `sitio-web/index.html`, `styles.css` y `main.js`. Cada uno tiene un propósito claro, igual que tus tres archivos aquí. La idea de "un archivo, una responsabilidad" es la misma sin importar el tamaño del proyecto.
@@ -134,7 +134,7 @@ Aquí entra una de las herramientas más importantes de tu vida como programador
 > Git es un sistema de *control de versiones*: un programa que guarda fotos del estado de tu proyecto a lo largo del tiempo. Sirve para no perder trabajo, poder volver atrás si rompes algo, y ver qué cambió y cuándo. Todos tus proyectos serios (**Faro**, **RachaSimple**, **tunal-digital**) viven en Git.
 
 > ### 🟦 ¿Qué significa? — *Repositorio*
-> Un repositorio (o "repo") es una carpeta que Git está vigilando. Por dentro, Git guarda ahí todo el historial de cambios en una subcarpeta oculta llamada `.git`. Sirve para tener un proyecto entero, con su pasado completo, dentro de una sola carpeta.
+> Un repositorio (o "repo") es una carpeta que Git está vigilando. Por dentro, Git guarda ahí todo el historial de cambios, en una subcarpeta oculta llamada `.git`. Sirve para tener un proyecto entero, con su pasado completo, dentro de una sola carpeta.
 
 Asegúrate de estar dentro de `mi-diario-de-codigo` (usa `pwd` si dudas) y escribe:
 
@@ -142,7 +142,7 @@ Asegúrate de estar dentro de `mi-diario-de-codigo` (usa `pwd` si dudas) y escri
 git init
 ```
 
-Verás un mensaje como *"Initialized empty Git repository"*. ¡Acabas de convertir tu carpeta en un repositorio! No cambió nada visible, pero ahora Git observa todo lo que pase aquí.
+Verás un mensaje como *"Initialized empty Git repository"*. ¡Acabas de convertir tu carpeta en un repositorio! Por fuera no cambió nada visible, pero ahora Git observa todo lo que pase aquí.
 
 > ### ⚠️ Cuidado — `git init` se hace UNA sola vez por proyecto
 > No necesitas repetir `git init` cada vez que trabajas. Solo se hace al nacer el proyecto. Si lo ejecutas dos veces no rompes nada grave, pero es señal de que perdiste el hilo de dónde estás.
@@ -160,10 +160,10 @@ Git te dirá que `README.md` y `notas.md` son archivos *"untracked"* (sin seguim
 
 ## 7. Tu primer commit 💻
 
-Guardar en Git tiene **dos pasos**: primero eliges qué archivos quieres guardar (`git add`), y luego confirmas el guardado con un mensaje (`git commit`). Es como preparar una caja (add) y luego sellarla con una etiqueta (commit).
+Guardar en Git tiene **dos pasos**: primero eliges qué archivos quieres guardar (`git add`) y luego confirmas el guardado con un mensaje (`git commit`). Es como preparar una caja (add) y después sellarla con una etiqueta (commit).
 
 > ### 🟦 ¿Qué significa? — *git add*
-> Marca uno o varios archivos para incluirlos en el próximo guardado. A esa zona de "listos para guardar" se le llama *staging* (área de preparación). Sirve para que tú decidas exactamente qué entra en cada foto, en vez de guardar todo a ciegas.
+> Marca uno o varios archivos para incluirlos en el próximo guardado. A esa zona de "listos para guardar" se le llama *staging* (área de preparación). Sirve para que tú decidas exactamente qué entra en cada foto, en lugar de guardar todo a ciegas.
 
 ```bash
 git add README.md notas.md
@@ -182,10 +182,10 @@ git commit -m "Primer commit: README y notas iniciales"
 ```
 
 > ### 🟦 ¿Qué significa? — *Commit*
-> Un commit es una foto guardada del proyecto en un momento dado, con un mensaje que explica qué cambiaste. Sirve como punto de retorno: siempre puedes volver a cualquier commit anterior. La parte `-m` (de *message*) le pone la etiqueta a esa foto. Cada vez que avances en **Faro** o **PolyPaw**, dejas un commit que cuenta esa historia.
+> Un commit es una foto guardada del proyecto en un momento dado, con un mensaje que explica qué cambiaste. Funciona como punto de retorno: siempre puedes volver a cualquier commit anterior. La parte `-m` (de *message*) le pone la etiqueta a esa foto. Cada vez que avances en **Faro** o **PolyPaw**, dejas un commit que cuenta esa parte de la historia.
 
 > ### 💡 Tip — Mensajes de commit que tu yo futuro agradecerá
-> Un buen mensaje dice *qué* hiciste, en pocas palabras y en presente: "Agrega archivo de notas", "Corrige conteo de líneas". Un mal mensaje es "cosas", "cambios", "asdf". El mensaje es para la persona que lea el historial mañana, y casi siempre esa persona eres tú.
+> Un buen mensaje dice *qué* hiciste, en pocas palabras y en presente: "Agrega archivo de notas", "Corrige conteo de líneas". Un mal mensaje es "cosas", "cambios", "asdf". El mensaje es para quien lea el historial mañana, y casi siempre esa persona eres tú.
 
 Comprueba que funcionó viendo el historial:
 
@@ -194,13 +194,13 @@ git log --oneline
 ```
 
 > ### 🟦 ¿Qué significa? — *git log*
-> Muestra la lista de commits que llevas, del más reciente al más antiguo. La opción `--oneline` los resume en una línea cada uno. Sirve para ver la historia de tu proyecto de un vistazo. Deberías ver tu commit con un código corto (como `a1b2c3d`), que es su identificador único.
+> Muestra la lista de commits que llevas, del más reciente al más antiguo. La opción `--oneline` resume cada uno en una sola línea. Sirve para ver la historia de tu proyecto de un vistazo. Deberías ver tu commit con un código corto (como `a1b2c3d`), que es su identificador único.
 
 ¡Felicidades, doble! Tienes tu primer commit. Tu proyecto ya tiene memoria.
 
 ## 8. El script: contar.js 💻
 
-Llegó la parte de *programar de verdad*: un script que el computador ejecuta. Vamos a usar **JavaScript**, el mismo lenguaje que mueve a **tunal-digital** y **RachaSimple**. Lo correremos con **Node.js**.
+Llegó la parte de *programar de verdad*: un script que el computador ejecuta. Vamos a usar **JavaScript**, el mismo lenguaje que mueve a **tunal-digital** y **RachaSimple**, y lo correremos con **Node.js**.
 
 > ### 🟦 ¿Qué significa? — *Script*
 > Un script es un archivo de texto con instrucciones que el computador ejecuta de arriba abajo. "Script" significa *guion*, como el de una obra de teatro: una lista de pasos a seguir. Sirve para automatizar tareas. El `backend/worker.js` de **tunal-digital** también es, en el fondo, un script (más grande) que corre cuando alguien visita el sitio.
@@ -291,7 +291,7 @@ Si todo está bien, verás algo como:
 Llevas 3 notas. ¡Sigue así!
 ```
 
-¡El computador acaba de leer tu archivo, contar tus notas y responderte! Eso es programar. Si abres `notas.md`, agregas una línea nueva que empiece con `- `, guardas, y vuelves a correr `node contar.js`, el número subirá. Pruébalo: esa pequeña magia de cambiar datos y ver el resultado actualizarse es la esencia de todo software.
+¡El computador acaba de leer tu archivo, contar tus notas y responderte! Eso es programar. Prueba algo: abre `notas.md`, agrega una línea nueva que empiece con `- `, guarda y vuelve a correr `node contar.js`. El número subirá. Esa pequeña magia de cambiar los datos y ver el resultado actualizarse es la esencia de todo software.
 
 > ### ⚠️ Cuidado — Si te sale un error, no es el fin del mundo
 > Errores comunes y su traducción:
@@ -323,10 +323,10 @@ Y revisa tu historial completo:
 git log --oneline
 ```
 
-Ahora deberías ver **dos** commits. Tu proyecto tiene una historia con dos capítulos. Cada vez que avances, agregarás otro. Así, exactamente así, crecen proyectos enormes: un commit a la vez.
+Ahora deberías ver **dos** commits. Tu proyecto tiene una historia con dos capítulos. Cada vez que avances, agregarás otro. Así, exactamente así, crecen los proyectos enormes: un commit a la vez.
 
 > ### 💡 Tip — El ritmo natural del trabajo
-> Fíjate en el patrón que acabas de vivir: *cambio algo → `git status` → `git add` → `git commit -m "..."`*. Ese ciclo lo repetirás miles de veces en tu carrera. No lo memorices a la fuerza; lo absorberás de tanto usarlo, como aprendiste a amarrarte los zapatos.
+> Fíjate en el patrón que acabas de vivir: *cambio algo → `git status` → `git add` → `git commit -m "..."`*. Ese ciclo lo repetirás miles de veces en tu carrera. No lo memorices a la fuerza; lo vas a absorber de tanto usarlo, como aprendiste a amarrarte los zapatos.
 
 ## 11. Repaso del proyecto completo
 

@@ -5,13 +5,13 @@
 </p>
 
 
-> Hola otra vez, soy **Bit**, tu ajolote guia. Hasta ahora has guardado datos en variables, listas y diccionarios, y has escrito funciones para hacer cosas con esos datos. Funciona... pero cuando una app crece, esos datos sueltos se vuelven un charco de variables que nadie entiende. En este capitulo vas a aprender a **agrupar datos y comportamiento en un mismo molde**: eso se llama Programacion Orientada a Objetos (POO). Es justo lo que hace **PolyPaw** por dentro, y tambien lo que hace **Flet** para dibujar botones y textos en pantalla. Respira, mueve la colita y vamos despacio. 🐾
+> Hola otra vez, soy **Bit**, tu ajolote guia. Hasta ahora has metido datos en variables, listas y diccionarios, y has escrito funciones para hacer cosas con ellos. Y funciona... hasta que la app crece. Entonces esos datos sueltos se convierten en un charco de variables que nadie sabe leer. En este capitulo vas a aprender a **juntar datos y comportamiento en un mismo molde**: a eso se le llama Programacion Orientada a Objetos (POO). Es justo lo que hace **PolyPaw** por dentro, y tambien lo que hace **Flet** cuando dibuja botones y textos en la pantalla. Respira, mueve la colita y vamos despacio. 🐾
 
 ---
 
 ## 1. El problema que la POO viene a resolver
 
-Imagina que en PolyPaw quieres representar a un **usuario** que esta aprendiendo idiomas. Cada usuario tiene un nombre, un idioma que estudia, un puntaje y un nivel. Sin POO, terminarias con algo asi:
+Imagina que en PolyPaw quieres representar a un **usuario** que esta aprendiendo idiomas. Ese usuario tiene un nombre, un idioma que estudia, un puntaje y un nivel. Sin POO, acabarias con algo asi:
 
 ```python
 nombre_usuario = "Ana"
@@ -20,21 +20,21 @@ puntaje_usuario = 0
 nivel_usuario = 1
 ```
 
-Cuatro variables sueltas para **un** usuario. ¿Y si hay 50 usuarios? ¿Y si cada uno ademas puede ganar puntos? El charco crece y se vuelve imposible de cuidar.
+Cuatro variables sueltas para **un solo** usuario. ¿Y si tienes 50? ¿Y si encima cada uno puede ir ganando puntos? El charco crece y, en cuanto te descuidas, ya no hay quien lo cuide.
 
-La POO te deja crear un **molde** llamado `Usuario`. Ese molde dice "todo usuario tiene nombre, idioma, puntaje y nivel, y ademas sabe ganar puntos". Despues fabricas usuarios concretos a partir del molde, tantos como quieras, y cada uno cuida sus propios datos.
+La POO te deja crear un **molde** llamado `Usuario`. Ese molde dice algo asi como "todo usuario tiene nombre, idioma, puntaje y nivel, y ademas sabe ganar puntos". Despues fabricas usuarios concretos a partir del molde, tantos como necesites, y cada uno se ocupa de sus propios datos.
 
 > ### 🟦 ¿Que significa? — *Programacion Orientada a Objetos (POO)*
-> Es una forma de organizar el codigo agrupando los **datos** (lo que algo "es") y las **acciones** (lo que algo "sabe hacer") dentro de una misma unidad llamada objeto. **Para que sirve:** mantener apps grandes ordenadas, donde cada pieza tiene su sitio. **Donde se usa en un repo real:** **PolyPaw** la usa para representar misiones, usuarios y la base de datos; su archivo `database_manager.py` es practicamente una clase que gestiona todo el guardado.
+> Es una forma de organizar el codigo agrupando los **datos** (lo que algo "es") y las **acciones** (lo que algo "sabe hacer") dentro de una misma unidad, que llamamos objeto. **Para que sirve:** mantener apps grandes ordenadas, con cada pieza en su sitio. **Donde se usa en un repo real:** **PolyPaw** la usa para representar misiones, usuarios y la base de datos; su archivo `database_manager.py` es practicamente una clase que se encarga de todo el guardado.
 
 ---
 
 ## 2. Clase y objeto: el molde y la galleta
 
-La idea central de la POO son dos palabras: **clase** y **objeto**. La forma mas facil de entenderlas es pensar en moldes de galletas.
+La POO gira en torno a dos palabras: **clase** y **objeto**. La manera mas facil de entenderlas es pensar en moldes de galletas.
 
 - La **clase** es el molde de galletas. Define la forma: "esta galleta tendra forma de estrella".
-- El **objeto** es cada galleta concreta que sacas del molde. Todas comparten la forma, pero cada una es una galleta distinta (una con mas azucar, otra mas dorada).
+- El **objeto** es cada galleta concreta que sacas del molde. Todas comparten la forma, pero cada una es una galleta distinta: una con mas azucar, otra mas dorada.
 
 > ### 🟦 ¿Que significa? — *Clase*
 > Es la plantilla o molde que describe como sera algo: que datos tendra y que podra hacer. **Para que sirve:** definir una sola vez la estructura y reutilizarla cuantas veces quieras. **Donde se usa en un repo real:** en **PolyPaw**, una clase `DatabaseManager` describe como se guarda el progreso del jugador; se escribe una vez y la usa toda la app.
@@ -43,10 +43,10 @@ La idea central de la POO son dos palabras: **clase** y **objeto**. La forma mas
 > Es una cosa concreta creada a partir de una clase; tiene sus propios valores. **Para que sirve:** representar elementos individuales (un usuario, un boton, una mision) que comparten estructura pero no datos. **Donde se usa en un repo real:** cada control que ves en la pantalla de **PolyPaw** (un boton, un texto) es un objeto creado por **Flet**.
 
 > ### 🟦 ¿Que significa? — *Instancia*
-> Es otra palabra para "objeto creado a partir de una clase". Decimos "instancia de Usuario" igual que "objeto Usuario". **Para que sirve:** hablar con precision cuando programas. **Donde se usa en un repo real:** en `main.py` de **PolyPaw** se crea una instancia de `DatabaseManager` al arrancar la app.
+> Es otra palabra para "objeto creado a partir de una clase". Decir "instancia de Usuario" es lo mismo que decir "objeto Usuario". **Para que sirve:** hablar con precision cuando programas. **Donde se usa en un repo real:** en `main.py` de **PolyPaw** se crea una instancia de `DatabaseManager` al arrancar la app.
 
 > ### 💡 Tip
-> Una frase para no olvidarlo nunca: **la clase es la receta, el objeto es el pastel**. Puedes hornear muchos pasteles con la misma receta.
+> Una frase para que no se te olvide nunca: **la clase es la receta, el objeto es el pastel**. Con la misma receta puedes hornear muchos pasteles.
 
 ---
 
@@ -63,22 +63,22 @@ class Usuario:
 > Es la palabra clave de Python para empezar a definir una clase. **Para que sirve:** decirle a Python "aqui empieza un molde nuevo". **Donde se usa en un repo real:** en `database_manager.py` de **PolyPaw**, la linea `class DatabaseManager:` abre la clase que controla el guardado.
 
 > ### 🟦 ¿Que significa? — *`pass`*
-> Es un relleno que significa "aqui no hago nada todavia". Python no permite bloques vacios, asi que `pass` ocupa el hueco. **Para que sirve:** dejar una clase o funcion a medio escribir sin que reviente. **Donde se usa en un repo real:** en cualquier proyecto Python (como **PolyPaw**) mientras se esboza codigo que aun no esta listo.
+> Es un relleno que significa "aqui todavia no hago nada". Python no admite bloques vacios, asi que `pass` ocupa el hueco. **Para que sirve:** dejar una clase o funcion a medio escribir sin que reviente. **Donde se usa en un repo real:** en cualquier proyecto Python (como **PolyPaw**) mientras se esboza codigo que aun no esta listo.
 
-Esa clase no hace nada util todavia, pero ya es valida. Para crear un objeto a partir de ella, **llamas a la clase como si fuera una funcion**:
+Esa clase no hace nada util por ahora, pero ya es valida. Para crear un objeto a partir de ella, **llamas a la clase como si fuera una funcion**:
 
 ```python
 ana = Usuario()
 print(ana)   # <__main__.Usuario object at 0x7f...>
 ```
 
-`ana` es ahora un objeto de tipo `Usuario`. Lo que ves al imprimirlo es la direccion en memoria; aun no tiene datos. Vamos a darle datos.
+`ana` es ahora un objeto de tipo `Usuario`. Eso que ves al imprimirlo es su direccion en memoria; aun no tiene datos. Vamos a darselos.
 
 ---
 
 ## 4. `__init__`: el constructor, donde nace el objeto
 
-Para que cada usuario nazca con su nombre y su idioma, usamos un metodo especial llamado `__init__`. Se ejecuta **automaticamente** cada vez que creas un objeto.
+Para que cada usuario nazca ya con su nombre y su idioma, usamos un metodo especial llamado `__init__`. Se ejecuta **automaticamente** cada vez que creas un objeto.
 
 ```python
 class Usuario:
@@ -89,7 +89,7 @@ class Usuario:
         self.nivel = 1
 ```
 
-Ahora cuando hagas `Usuario("Ana", "ingles")`, Python llama a `__init__` por ti y guarda esos valores dentro del objeto.
+Ahora, cuando escribas `Usuario("Ana", "ingles")`, Python llama a `__init__` por ti y guarda esos valores dentro del objeto.
 
 ```python
 ana = Usuario("Ana", "ingles")
@@ -100,7 +100,7 @@ print(luis.idioma)   # frances
 print(ana.puntaje)   # 0
 ```
 
-¡Mira eso! Dos usuarios, cada uno con sus propios datos, fabricados con el mismo molde.
+¡Mira eso! Dos usuarios, cada uno con sus propios datos, salidos del mismo molde.
 
 > ### 🟦 ¿Que significa? — *`__init__` (constructor)*
 > Es un metodo especial que se ejecuta solo, en el momento exacto en que creas el objeto, para darle sus valores iniciales. **Para que sirve:** asegurar que todo objeto nace "completo" y nunca a medias. **Donde se usa en un repo real:** el `__init__` de `DatabaseManager` en **PolyPaw** prepara la ruta del archivo JSON donde se guardara el progreso, en cuanto la base de datos se crea.
@@ -111,17 +111,17 @@ print(ana.puntaje)   # 0
 > ### 💡 Tip
 > Esos dos guiones bajos antes y despues (`__init__`) se leen en voz alta como "dunder init" (de *double underscore*, doble guion bajo). Python tiene varios metodos "dunder" con poderes especiales; este es el mas importante para empezar.
 
-> Comparado con **JavaScript** (lo viste en el modulo 03): alli el constructor de una clase se llama literalmente `constructor()`. En Python se llama `__init__`. La idea es la misma; cambia el nombre.
+> Comparado con **JavaScript** (lo viste en el modulo 03): alli el constructor de una clase se llama literalmente `constructor()`. En Python se llama `__init__`. La idea es la misma; lo que cambia es el nombre.
 
 ---
 
 ## 5. `self`: el objeto hablando de si mismo
 
-Habras notado la palabra `self` por todas partes. Es la que mas confunde al principio, asi que vamos despacito.
+Habras visto la palabra `self` por todas partes. Es la que mas confunde al principio, asi que vamos con calma.
 
-Cuando escribes `self.nombre = nombre`, le dices a Python: "guarda este nombre **dentro de este objeto en concreto**". `self` es el propio objeto, refiriendose a si mismo.
+Cuando escribes `self.nombre = nombre`, le estas diciendo a Python: "guarda este nombre **dentro de este objeto en concreto**". `self` es el propio objeto refiriendose a si mismo.
 
-Piensa en Bit (¡yo!) diciendo "**mi** colita", "**mi** nombre". Esa palabra "mi" es `self`. Cuando Ana habla, su `self` es Ana; cuando Luis habla, su `self` es Luis. El mismo codigo, distinto dueño.
+Piensa en Bit (¡yo!) diciendo "**mi** colita", "**mi** nombre". Esa palabra "mi" es `self`. Cuando habla Ana, su `self` es Ana; cuando habla Luis, su `self` es Luis. El mismo codigo, pero distinto dueño.
 
 ```python
 class Usuario:
@@ -136,15 +136,15 @@ class Usuario:
 > Es el nombre que usa Python, dentro de la clase, para referirse al objeto concreto sobre el que se esta trabajando. **Para que sirve:** que cada objeto guarde y lea **sus propios** datos sin confundirse con los de otro. **Donde se usa en un repo real:** en `database_manager.py` de **PolyPaw**, lineas como `self.archivo = ...` guardan la ruta del JSON dentro de esa instancia de la base de datos.
 
 > ### ⚠️ Cuidado
-> `self` **siempre** es el primer parametro de los metodos de una clase, pero **nunca** lo pasas tu al llamarlos. Escribes `ana.saludar()`, no `ana.saludar(ana)`. Python pone el `self` por ti, automaticamente. Olvidar `self` en la definicion es el error numero uno de quien empieza con POO.
+> `self` **siempre** es el primer parametro de los metodos de una clase, pero **nunca** lo pasas tu al llamarlos. Escribes `ana.saludar()`, no `ana.saludar(ana)`. El `self` lo pone Python por ti, automaticamente. Olvidar `self` al definir el metodo es el error numero uno de quien empieza con POO.
 
-> Comparado con **JavaScript**: alli existe `this`, que es parecido pero invisible (no aparece como parametro). En Python `self` se escribe explicitamente en cada metodo. Es mas verboso, pero tambien mas claro.
+> Comparado con **JavaScript**: alli existe `this`, que es parecido pero invisible (no aparece como parametro). En Python `self` se escribe a la vista en cada metodo. Es mas verboso, pero tambien mas claro.
 
 ---
 
 ## 6. Atributos: los datos del objeto
 
-Cada `self.algo = valor` que pusiste crea un **atributo**. Los atributos son las "cajitas de datos" que viven dentro del objeto.
+Cada `self.algo = valor` que escribiste crea un **atributo**. Los atributos son las "cajitas de datos" que viven dentro del objeto.
 
 ```python
 ana = Usuario("Ana", "ingles")
@@ -153,7 +153,7 @@ print(ana.puntaje)   # 0         <- atributo puntaje
 print(ana.nivel)     # 1         <- atributo nivel
 ```
 
-Accedes a un atributo con un **punto**: `objeto.atributo`. Tambien puedes cambiarlo:
+A un atributo se llega con un **punto**: `objeto.atributo`. Y tambien lo puedes cambiar:
 
 ```python
 ana.puntaje = 50
@@ -167,15 +167,15 @@ print(ana.puntaje)   # 50
 > En **PolyPaw**, los archivos de misiones (`missions/*.json`) guardan datos como el titulo de la mision o las palabras a aprender. Cuando esos datos se cargan en Python, lo natural es meterlos en los atributos de un objeto `Mision`, para que la app trabaje con misiones como objetos y no con diccionarios sueltos.
 
 > ### 💡 Tip
-> ¿Atributo o variable? Una **variable** vive suelta en tu programa. Un **atributo** es una variable que pertenece a un objeto. La diferencia es de quien "tiene la caja".
+> ¿Atributo o variable? Una **variable** vive suelta en tu programa. Un **atributo** es una variable que pertenece a un objeto. La diferencia esta en quien "tiene la caja".
 
 ---
 
 ## 7. Metodos: las acciones del objeto
 
-Un objeto no solo guarda datos: tambien sabe **hacer cosas**. Esas acciones se llaman **metodos** y son funciones definidas dentro de la clase.
+Un objeto no solo guarda datos: tambien sabe **hacer cosas**. Esas acciones se llaman **metodos**, y no son mas que funciones definidas dentro de la clase.
 
-Demos a `Usuario` la capacidad de ganar puntos y de subir de nivel.
+Vamos a darle a `Usuario` la capacidad de ganar puntos y de subir de nivel.
 
 ```python
 class Usuario:
@@ -194,7 +194,7 @@ class Usuario:
         print(f"{self.nombre} subio al nivel {self.nivel}!")
 ```
 
-Y asi se usan, otra vez con el **punto**:
+Y se usan asi, otra vez con el **punto**:
 
 ```python
 ana = Usuario("Ana", "ingles")
@@ -203,39 +203,39 @@ ana.ganar_puntos(20)    # Ana gano 20 puntos. Total: 50
 ana.subir_nivel()       # Ana subio al nivel 2!
 ```
 
-Fijate: dentro de `ganar_puntos` usamos `self.puntaje` para leer y modificar el puntaje **de ese mismo usuario**. Si lo llamas en `luis`, tocara el puntaje de Luis, no el de Ana.
+Fijate: dentro de `ganar_puntos` usamos `self.puntaje` para leer y cambiar el puntaje **de ese mismo usuario**. Si lo llamas sobre `luis`, tocara el puntaje de Luis, no el de Ana.
 
 > ### 🟦 ¿Que significa? — *Metodo*
 > Es una funcion que pertenece a una clase y describe algo que el objeto sabe hacer. **Para que sirve:** poner las acciones junto a los datos que esas acciones usan, en vez de tenerlos separados. **Donde se usa en un repo real:** `database_manager.py` de **PolyPaw** ofrece metodos como guardar y cargar el progreso; la app llama a esos metodos en vez de tocar el archivo JSON a mano.
 
 > ### 💡 Tip
-> Regla rapida: si esta dentro de una clase y empieza con `def`, es un **metodo**. Si esta suelto, fuera de cualquier clase, es una **funcion**. Por dentro se escriben igual; cambia donde viven.
+> Regla rapida: si esta dentro de una clase y empieza con `def`, es un **metodo**. Si esta suelto, fuera de cualquier clase, es una **funcion**. Por dentro se escriben igual; lo que cambia es donde viven.
 
 > ### 🔎 En tu codigo
-> Cuando en **PolyPaw** el jugador completa una mision, la app no escribe directamente en el JSON. Llama a un metodo del gestor de base de datos (algo como `guardar_progreso(...)`). Ese metodo concentra toda la logica de guardado en un solo sitio: si algun dia cambias como se guarda, lo cambias una vez y listo.
+> Cuando en **PolyPaw** el jugador completa una mision, la app no escribe directamente en el JSON. Llama a un metodo del gestor de base de datos (algo como `guardar_progreso(...)`). Ese metodo reune toda la logica de guardado en un solo sitio: si algun dia cambias como se guarda, lo cambias una vez y listo.
 
 ---
 
 ## 8. Por que la POO ordena apps grandes
 
-Imagina **PolyPaw** sin clases: el codigo para guardar progreso estaria copiado en diez pantallas distintas. Si un dia decides cambiar de archivos JSON a otra forma de guardar, tendrias que corregir diez sitios y seguro olvidas uno. 🫠
+Imagina **PolyPaw** sin clases: el codigo para guardar el progreso estaria copiado en diez pantallas distintas. Si un dia decides pasar de archivos JSON a otra forma de guardar, tendrias que corregir diez sitios y seguro que se te escapa uno. 🫠
 
-Con una clase `DatabaseManager`, **toda** la logica de guardar y cargar vive en un solo archivo (`database_manager.py`). El resto de la app solo dice "oye, gestor, guarda esto" y no le importa el como. Eso tiene un nombre bonito: **encapsulamiento**.
+Con una clase `DatabaseManager`, **toda** la logica de guardar y cargar vive en un solo archivo (`database_manager.py`). El resto de la app solo dice "oye, gestor, guarda esto" y le da igual el como. Y eso tiene un nombre bonito: **encapsulamiento**.
 
 > ### 🟦 ¿Que significa? — *Encapsulamiento*
 > Es esconder los detalles internos de algo y ofrecer solo un par de acciones simples para usarlo. **Para que sirve:** poder cambiar el "como" por dentro sin romper al resto del programa. **Donde se usa en un repo real:** `DatabaseManager` en **PolyPaw** encapsula el manejo de archivos JSON; las pantallas solo piden guardar o cargar, sin saber donde esta el archivo.
 
 > ### 🟦 ¿Que significa? — *Estado*
-> Es el conjunto de valores que un objeto tiene **ahora mismo** (el puntaje actual de Ana, su nivel actual). **Para que sirve:** que el programa recuerde en que punto va cada cosa. **Donde se usa en un repo real:** en **PolyPaw**, el progreso del jugador (misiones completadas, puntos) es estado que `DatabaseManager` guarda y restaura.
+> Es el conjunto de valores que un objeto tiene **ahora mismo** (el puntaje actual de Ana, su nivel actual). **Para que sirve:** que el programa recuerde por donde va cada cosa. **Donde se usa en un repo real:** en **PolyPaw**, el progreso del jugador (misiones completadas, puntos) es estado que `DatabaseManager` guarda y restaura.
 
 > ### 🔎 En tu codigo
-> Faro/Organizer y RachaSimple estan hechos en **TypeScript con React**, no en Python; alli no usaras `class Usuario` de esta forma. Pero el concepto de agrupar datos y comportamiento aparece igual (en componentes y objetos). La POO de este capitulo es sobre todo para tu codigo **Python**, como **PolyPaw**. Y ojo: **tunal-digital** es HTML/CSS/JS plano y **polypaw-nas** es configuracion de servidor (Ubuntu, Samba, Cockpit, Tailscale); ninguno de esos dos usa clases de Python.
+> Faro/Organizer y RachaSimple estan hechos en **TypeScript con React**, no en Python; alli no usaras `class Usuario` de esta forma. Pero la idea de agrupar datos y comportamiento aparece igual (en componentes y objetos). La POO de este capitulo es sobre todo para tu codigo **Python**, como **PolyPaw**. Y ojo: **tunal-digital** es HTML/CSS/JS plano y **polypaw-nas** es configuracion de servidor (Ubuntu, Samba, Cockpit, Tailscale); ninguno de esos dos usa clases de Python.
 
 ---
 
 ## 9. Herencia basica: moldes que nacen de otros moldes
 
-A veces necesitas un molde que es **casi** igual a otro, pero con algo extra. En PolyPaw, un usuario normal y un usuario **premium** comparten casi todo, pero el premium tiene alguna ventaja. En vez de copiar toda la clase `Usuario`, la **heredas**.
+A veces necesitas un molde que es **casi** igual a otro, pero con algo de mas. En PolyPaw, un usuario normal y un usuario **premium** comparten casi todo, salvo que el premium tiene alguna ventaja. En vez de copiar entera la clase `Usuario`, la **heredas**.
 
 ```python
 class UsuarioPremium(Usuario):
@@ -248,7 +248,7 @@ class UsuarioPremium(Usuario):
         super().ganar_puntos(cantidad * 2)
 ```
 
-`UsuarioPremium(Usuario)` significa "este molde **hereda** del molde `Usuario`". Asi obtiene gratis su `__init__`, sus atributos y sus metodos. Despues le anadimos lo nuestro.
+`UsuarioPremium(Usuario)` significa "este molde **hereda** del molde `Usuario`". Asi se queda gratis con su `__init__`, sus atributos y sus metodos. Y luego le añadimos lo nuestro.
 
 ```python
 vip = UsuarioPremium("Sara", "aleman")
@@ -258,26 +258,26 @@ print(vip.nivel)        # 1   <- heredado de Usuario sin escribir nada
 ```
 
 > ### 🟦 ¿Que significa? — *Herencia*
-> Es crear una clase nueva basada en otra ya existente, reutilizando sus atributos y metodos y anadiendo o cambiando lo necesario. **Para que sirve:** evitar copiar codigo cuando dos cosas se parecen mucho. **Donde se usa en un repo real:** en **PolyPaw**, los controles de **Flet** (Boton, Texto, Columna...) heredan todos de un control base comun; por eso todos comparten propiedades como el color o el tamano.
+> Es crear una clase nueva a partir de otra ya existente, reutilizando sus atributos y metodos y añadiendo o cambiando lo que haga falta. **Para que sirve:** evitar copiar codigo cuando dos cosas se parecen mucho. **Donde se usa en un repo real:** en **PolyPaw**, los controles de **Flet** (Boton, Texto, Columna...) heredan todos de un control base comun; por eso todos comparten propiedades como el color o el tamaño.
 
 > ### 🟦 ¿Que significa? — *`super()`*
-> Es una funcion que llama al metodo de la clase **padre** (la clase de la que heredas). **Para que sirve:** reaprovechar lo que el padre ya hace en vez de reescribirlo. **Donde se usa en un repo real:** al crear clases en **PolyPaw** sobre **Flet**, se usa `super().__init__()` para que el control base se prepare correctamente antes de anadir lo propio.
+> Es una funcion que llama al metodo de la clase **padre** (la clase de la que heredas). **Para que sirve:** reaprovechar lo que el padre ya hace en vez de reescribirlo. **Donde se usa en un repo real:** al crear clases en **PolyPaw** sobre **Flet**, se usa `super().__init__()` para que el control base se prepare correctamente antes de añadir lo propio.
 
 > ### 🟦 ¿Que significa? — *Clase padre y clase hija*
-> La **clase padre** (o base) es de la que se hereda; la **clase hija** (o derivada) es la que hereda. Aqui `Usuario` es el padre y `UsuarioPremium` la hija. **Para que sirve:** describir relaciones tipo "esto es un tipo especial de aquello". **Donde se usa en un repo real:** en **Flet**, un Boton es una clase hija de un control mas general; "un boton es un tipo de control".
+> La **clase padre** (o base) es de la que se hereda; la **clase hija** (o derivada) es la que hereda. Aqui `Usuario` es el padre y `UsuarioPremium` la hija. **Para que sirve:** describir relaciones del tipo "esto es un tipo especial de aquello". **Donde se usa en un repo real:** en **Flet**, un Boton es una clase hija de un control mas general; "un boton es un tipo de control".
 
 > ### ⚠️ Cuidado
-> No abuses de la herencia. Solo tiene sentido cuando de verdad puedes decir "X **es un tipo de** Y" (un usuario premium **es un** usuario). Si te descubres heredando solo para ahorrar dos lineas, probablemente sea mejor un atributo o un metodo normal. La herencia mal usada enreda mas de lo que ayuda.
+> No abuses de la herencia. Solo tiene sentido cuando de verdad puedes decir "X **es un tipo de** Y" (un usuario premium **es un** usuario). Si te pillas heredando solo para ahorrarte dos lineas, casi seguro que es mejor un atributo o un metodo normal. La herencia mal usada enreda mas de lo que ayuda.
 
-> Comparado con **JavaScript**: alli heredas con `class Hija extends Padre` y llamas al padre con `super(...)`. En Python escribes `class Hija(Padre)` y usas `super().__init__(...)`. Mismo concepto, sintaxis distinta.
+> Comparado con **JavaScript**: alli heredas con `class Hija extends Padre` y llamas al padre con `super(...)`. En Python escribes `class Hija(Padre)` y usas `super().__init__(...)`. Mismo concepto, distinta sintaxis.
 
 ---
 
 ## 10. Como se conecta esto con Flet (lo que usa PolyPaw)
 
-**PolyPaw** esta hecho integramente en Python con el framework **Flet**, que sirve para construir interfaces graficas (botones, textos, columnas). Y aqui esta lo bonito: **todo en Flet es un objeto de una clase**.
+**PolyPaw** esta hecho enteramente en Python con el framework **Flet**, que sirve para construir interfaces graficas (botones, textos, columnas). Y aqui esta lo bonito: **en Flet todo es un objeto de una clase**.
 
-Cuando en PolyPaw aparece un boton para empezar una mision, por dentro hay algo como:
+Cuando en PolyPaw aparece un boton para empezar una mision, por dentro hay algo como esto:
 
 ```python
 import flet as ft
@@ -289,22 +289,22 @@ texto = ft.Text(value="Hola, Sara")
 `ft.ElevatedButton` y `ft.Text` son **clases** que viven dentro de Flet. Cada vez que escribes `ft.Text(...)` estas **creando un objeto** (una instancia), igual que hiciste con `Usuario("Ana", "ingles")`. Y `text=` o `value=` son **atributos** que le pasas, igual que `nombre` e `idioma`.
 
 > ### 🟦 ¿Que significa? — *Framework*
-> Es un conjunto grande de codigo ya hecho (con sus clases y metodos) sobre el que construyes tu app, siguiendo sus reglas. **Para que sirve:** no reinventar lo basico (dibujar botones, manejar clics) y concentrarte en lo tuyo. **Donde se usa en un repo real:** **PolyPaw** usa el framework **Flet** para toda su interfaz; **Faro/Organizer** y **RachaSimple** usan otros (React) en TypeScript.
+> Es un conjunto grande de codigo ya hecho (con sus clases y metodos) sobre el que construyes tu app, siguiendo sus reglas. **Para que sirve:** no reinventar lo basico (dibujar botones, manejar clics) y poder concentrarte en lo tuyo. **Donde se usa en un repo real:** **PolyPaw** usa el framework **Flet** para toda su interfaz; **Faro/Organizer** y **RachaSimple** usan otros (React) en TypeScript.
 
 > ### 🟦 ¿Que significa? — *Control (en Flet)*
 > Es cada pieza visual de la interfaz (un boton, un texto, una imagen), representada como un objeto de una clase de Flet. **Para que sirve:** construir la pantalla juntando controles como piezas de Lego. **Donde se usa en un repo real:** la pantalla de misiones de **PolyPaw** se arma colocando controles `Text`, `ElevatedButton`, `Column` y similares.
 
 > ### 🔎 En tu codigo
-> Cuando entiendes que `ft.Text(...)` es "crear un objeto de la clase `Text`", la documentacion de Flet deja de dar miedo: cada control es una clase con sus atributos (que ves) y sus metodos (que hace). Lo que aprendiste con `Usuario` se aplica tal cual a cada control de **PolyPaw**.
+> Cuando entiendes que `ft.Text(...)` es "crear un objeto de la clase `Text`", la documentacion de Flet deja de dar miedo: cada control es una clase con sus atributos (lo que ves) y sus metodos (lo que hace). Lo que aprendiste con `Usuario` se aplica tal cual a cada control de **PolyPaw**.
 
 > ### 💡 Tip
-> Asi todo encaja: en `main.py` de **PolyPaw** se crea una instancia de `DatabaseManager` (tu propia clase) **y** se crean muchos controles de Flet (clases ajenas). Tus clases y las del framework conviven como objetos en el mismo programa. Eso es POO trabajando a tu favor.
+> Asi encaja todo: en `main.py` de **PolyPaw** se crea una instancia de `DatabaseManager` (tu propia clase) **y** se crean muchos controles de Flet (clases ajenas). Tus clases y las del framework conviven como objetos en el mismo programa. Eso es la POO trabajando a tu favor.
 
 ---
 
 ## 11. Juntando todo: un mini ejemplo estilo PolyPaw
 
-Cerremos con un ejemplo que combina lo aprendido: una clase `Mision` y una clase `Jugador` que la completa.
+Cerremos con un ejemplo que junta lo aprendido: una clase `Mision` y una clase `Jugador` que la completa.
 
 ```python
 class Mision:
@@ -340,10 +340,10 @@ sara.jugar(saludos)
 print(saludos.completada)   # True
 ```
 
-Mira como un objeto (`sara`) recibe a otro objeto (`saludos`) y trabaja con el. Asi se comunican los objetos en una app real: cada uno cuida lo suyo y se piden cosas con metodos. Eso, multiplicado por muchas clases, es **PolyPaw** por dentro. 🐾
+Mira como un objeto (`sara`) recibe a otro objeto (`saludos`) y trabaja con el. Asi se hablan los objetos en una app de verdad: cada uno cuida lo suyo y se piden cosas con metodos. Eso, multiplicado por muchas clases, es **PolyPaw** por dentro. 🐾
 
 > ### 💡 Tip
-> Cuando una clase te quede grande y confusa, hazte esta pregunta: "¿esto es **lo que la cosa es** (atributo) o **lo que la cosa hace** (metodo)?". Esa sola pregunta ordena casi cualquier clase.
+> Cuando una clase se te haga grande y confusa, hazte esta pregunta: "¿esto es **lo que la cosa es** (atributo) o **lo que la cosa hace** (metodo)?". Esa sola pregunta ordena casi cualquier clase.
 
 ---
 
@@ -378,4 +378,4 @@ Mira como un objeto (`sara`) recibe a otro objeto (`saludos`) y trabaja con el. 
 
 ---
 
-> Lo lograste. Hoy pasaste de tener datos sueltos en un charco a tener **moldes que fabrican objetos ordenados**, justo como **PolyPaw** organiza su base de datos y sus pantallas. La POO es de esas ideas que al principio cuesta ver y de repente, un dia, lo ves en todas partes. Cuando vuelvas a abrir `database_manager.py`, ya no veras codigo raro: veras una clase con su `__init__`, su `self` y sus metodos, contandote una historia que ahora entiendes. Nos vemos en el siguiente capitulo. — Bit 🐾
+> Lo lograste. Hoy pasaste de tener datos sueltos en un charco a tener **moldes que fabrican objetos ordenados**, igual que **PolyPaw** organiza su base de datos y sus pantallas. La POO es de esas ideas que al principio cuesta ver y que, de repente, un dia, ves en todas partes. Cuando vuelvas a abrir `database_manager.py`, ya no veras codigo raro: veras una clase con su `__init__`, su `self` y sus metodos, contandote una historia que ahora entiendes. Nos vemos en el siguiente capitulo. — Bit 🐾

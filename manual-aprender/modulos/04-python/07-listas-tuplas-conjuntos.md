@@ -5,13 +5,13 @@
 </p>
 
 
-> Hasta ahora guardaste datos de uno en uno: una variable, un numero, un texto. Pero un programa real casi nunca trabaja con cosas sueltas. PolyPaw no guarda *una* mision: guarda *muchas*. No guarda *una* palabra para aprender: guarda *listas enteras* de palabras. En este capitulo aprenderemos las tres formas mas importantes que tiene Python para guardar *colecciones* de cosas: las **listas**, las **tuplas** y los **conjuntos**. Y de paso conoceremos un truco precioso que en JavaScript ni existia con esta elegancia: las *comprensiones de lista*. Bit, nuestro ajolote, ya tiene su libreta lista para anotar misiones. Vamos.
+> Hasta ahora guardaste los datos de uno en uno: una variable, un numero, un texto suelto. Pero un programa de verdad casi nunca trabaja asi. PolyPaw no guarda *una* mision, guarda *muchas*. No guarda *una* palabra para aprender, guarda *listas enteras*. En este capitulo veremos las tres formas que tiene Python de guardar *colecciones* de cosas: las **listas**, las **tuplas** y los **conjuntos**. Y de paso te enseno un truco precioso que en JavaScript no existia con esta elegancia: las *comprensiones de lista*. Bit, nuestro ajolote, ya tiene la libreta abierta para anotar misiones. Empecemos.
 
 ---
 
 ## 1. Que es una coleccion (y por que la necesitas)
 
-Imagina que quieres guardar las tres primeras misiones de PolyPaw. Sin colecciones harias algo asi:
+Imagina que quieres guardar las tres primeras misiones de PolyPaw. Sin colecciones tendrias que hacer algo asi:
 
 ```python
 mision_1 = "Saludos basicos"
@@ -19,27 +19,27 @@ mision_2 = "Numeros del 1 al 10"
 mision_3 = "Colores"
 ```
 
-Funciona... hasta que tienes 50 misiones. ¿Vas a escribir `mision_50`? ¿Y como recorres todas? Es un caos. Para eso existen las colecciones: guardan *muchos* valores dentro de *un solo* nombre.
+Y funciona... hasta que llegas a 50 misiones. ¿De verdad vas a escribir `mision_50` a mano? ¿Y como las recorres todas? Es un caos. Justo para evitar eso existen las colecciones: guardan *muchos* valores bajo *un solo* nombre.
 
 > ### 🟦 ¿Que significa? — *Coleccion*
-> Una **coleccion** es una variable que guarda varios valores juntos, dentro de un mismo recipiente. En vez de tener 50 cajas separadas, tienes una caja grande con 50 cosas adentro.
-> **Para que sirve:** agrupar datos relacionados (todas las misiones, todas las palabras de una leccion) y recorrerlos con un solo bucle.
-> **Donde se usa en un repo real:** en PolyPaw, el archivo `database_manager.py` carga las misiones desde `missions/*.json` y las guarda en una lista para mostrarlas en pantalla.
+> Una **coleccion** es una variable que guarda varios valores juntos, dentro de un mismo recipiente. En lugar de tener 50 cajas separadas, tienes una caja grande con 50 cosas dentro.
+> **Para que sirve:** agrupar datos que van juntos (todas las misiones, todas las palabras de una leccion) y recorrerlos de una sola pasada con un bucle.
+> **Donde se usa en un repo real:** en PolyPaw, el archivo `database_manager.py` carga las misiones desde `missions/*.json` y las guarda en una lista para luego mostrarlas en pantalla.
 
-En Python las tres colecciones que veremos son: **lista**, **tupla** y **conjunto**. Cada una sirve para algo distinto. Empecemos por la mas usada.
+En Python veremos tres colecciones: la **lista**, la **tupla** y el **conjunto**. Cada una resuelve un problema distinto. Arranquemos por la que mas vas a usar.
 
 ---
 
 ## 2. Listas: la coleccion estrella
 
-Una lista es una secuencia de valores en *orden*, que puedes *modificar* cuando quieras.
+Una lista es una secuencia de valores en *orden*, que puedes *modificar* cuando te de la gana.
 
 > ### 🟦 ¿Que significa? — *Lista (`list`)*
-> Una **lista** es una coleccion ordenada de elementos que puedes cambiar: agregar, quitar o reordenar. Se escribe entre corchetes `[ ]` y los elementos se separan con comas.
+> Una **lista** es una coleccion ordenada de elementos que puedes cambiar: agregar, quitar o reordenar. Se escribe entre corchetes `[ ]` y los elementos van separados por comas.
 > **Para que sirve:** guardar cosas que crecen o cambian con el tiempo (las misiones que el usuario va desbloqueando, las palabras de una leccion).
 > **Donde se usa en un repo real:** PolyPaw guarda en una lista las misiones disponibles; cada vez que se agrega un `.json` nuevo en `missions/`, ese elemento entra a la lista.
 
-Asi se crea una lista:
+Asi se crea una:
 
 ```python
 misiones = ["Saludos basicos", "Numeros del 1 al 10", "Colores"]
@@ -47,15 +47,15 @@ print(misiones)        # ['Saludos basicos', 'Numeros del 1 al 10', 'Colores']
 print(len(misiones))   # 3  (len = cuantos elementos tiene)
 ```
 
-Si vienes del modulo de JavaScript, esto te sonara: en JS escribias `let misiones = [...]`. La idea es identica; cambia que aqui no hay `let` ni `const`, y los corchetes funcionan igual.
+Si vienes del modulo de JavaScript, esto te va a sonar de inmediato: alla escribias `let misiones = [...]`. La idea es la misma; lo que cambia es que aqui no hace falta `let` ni `const`, y los corchetes funcionan igualito.
 
 ### 2.1 Acceder a un elemento por su indice
 
-Cada elemento tiene una posicion numerada llamada **indice**.
+Cada elemento ocupa una posicion numerada, y a ese numero lo llamamos **indice**.
 
 > ### 🟦 ¿Que significa? — *Indice*
-> El **indice** es el numero de posicion de un elemento dentro de la lista. **Python empieza a contar desde 0**, no desde 1. Asi que el primer elemento es el indice `0`, el segundo el `1`, y asi.
-> **Para que sirve:** sacar un elemento concreto de la lista sin recorrerla entera.
+> El **indice** es el numero de posicion de un elemento dentro de la lista. **Python empieza a contar desde 0**, no desde 1. Asi que el primer elemento es el indice `0`, el segundo el `1`, y asi sucesivamente.
+> **Para que sirve:** sacar un elemento concreto sin tener que recorrer la lista entera.
 > **Donde se usa en un repo real:** cuando PolyPaw muestra "la mision actual", usa un indice para saber en cual va el usuario.
 
 ```python
@@ -66,10 +66,10 @@ print(misiones[-1])   # Colores           (-1 = el ultimo, contando hacia atras)
 ```
 
 > ### 💡 Tip
-> El indice `-1` siempre es el ultimo elemento, `-2` el penultimo, y asi. Es comodisimo cuando no sabes cuantos elementos hay pero quieres el final.
+> El indice `-1` siempre es el ultimo elemento, `-2` el penultimo, y asi hacia atras. Te saca de apuros cuando no sabes cuantos elementos hay pero quieres el del final.
 
 > ### ⚠️ Cuidado
-> Si pides un indice que no existe (por ejemplo `misiones[10]` cuando solo hay 3), Python lanza un error `IndexError: list index out of range`. Siempre revisa con `len()` antes de pedir indices altos.
+> Si pides un indice que no existe (por ejemplo `misiones[10]` cuando solo hay 3), Python te lanza un error `IndexError: list index out of range`. Cuando tengas dudas, revisa con `len()` antes de pedir indices altos.
 
 ### 2.2 Agregar elementos: `append` e `insert`
 
@@ -85,9 +85,9 @@ print(misiones)   # ['Saludos basicos', 'Numeros del 1 al 10', 'Colores']
 ```
 
 > ### 🟦 ¿Que significa? — *`insert`*
-> `insert` agrega un elemento en una *posicion concreta*, empujando los demas hacia la derecha. Se escribe `lista.insert(indice, valor)`.
+> `insert` agrega un elemento en una *posicion concreta* y empuja a los demas hacia la derecha. Se escribe `lista.insert(indice, valor)`.
 > **Para que sirve:** meter algo en medio, no solo al final.
-> **Donde se usa en un repo real:** si PolyPaw quisiera poner una mision de bienvenida siempre al principio, usaria `insert(0, ...)`.
+> **Donde se usa en un repo real:** si PolyPaw quisiera que una mision de bienvenida apareciera siempre al principio, usaria `insert(0, ...)`.
 
 ```python
 misiones = ["Numeros", "Colores"]
@@ -95,13 +95,13 @@ misiones.insert(0, "Saludos")   # lo mete en la posicion 0 (al inicio)
 print(misiones)   # ['Saludos', 'Numeros', 'Colores']
 ```
 
-En JavaScript usabas `push()` para agregar al final; en Python se llama `append()`. Es lo mismo, solo cambia el nombre.
+En JavaScript agregabas al final con `push()`; en Python eso se llama `append()`. Es exactamente lo mismo, solo cambia el nombre.
 
 ### 2.3 Quitar elementos: `pop` y `remove`
 
 > ### 🟦 ¿Que significa? — *`pop`*
-> `pop` *saca y devuelve* un elemento por su indice. Sin indice, saca el ultimo. Se escribe `lista.pop()` o `lista.pop(indice)`.
-> **Para que sirve:** quitar un elemento y, al mismo tiempo, quedarte con el para usarlo.
+> `pop` *saca y devuelve* un elemento por su indice. Si no le pasas indice, saca el ultimo. Se escribe `lista.pop()` o `lista.pop(indice)`.
+> **Para que sirve:** quitar un elemento y, de paso, quedarte con el para usarlo despues.
 > **Donde se usa en un repo real:** una "cola" de palabras por repasar: sacas la siguiente con `pop(0)` y la muestras.
 
 ```python
@@ -112,7 +112,7 @@ print(palabras)              # ['hola', 'adios']
 ```
 
 > ### 🟦 ¿Que significa? — *`remove`*
-> `remove` borra el *primer* elemento que tenga el valor que le indicas (no por indice, sino por contenido). Se escribe `lista.remove(valor)`.
+> `remove` borra el *primer* elemento que tenga el valor que le indicas: no por indice, sino por contenido. Se escribe `lista.remove(valor)`.
 > **Para que sirve:** quitar algo cuando sabes *que* es pero no *donde* esta.
 > **Donde se usa en un repo real:** si el usuario ya domina la palabra "hola", PolyPaw podria sacarla de la lista de repaso con `remove("hola")`.
 
@@ -123,12 +123,12 @@ print(palabras)   # ['hola', 'gracias']
 ```
 
 > ### ⚠️ Cuidado
-> `remove` falla con error si el valor no esta en la lista. Si no estas seguro de que exista, comprueba antes con `if "adios" in palabras:`.
+> `remove` revienta con error si el valor no esta en la lista. Cuando no estes seguro de que exista, comprueba antes con `if "adios" in palabras:`.
 
 ### 2.4 Ordenar: `sort`
 
 > ### 🟦 ¿Que significa? — *`sort`*
-> `sort` reordena los elementos de la lista *en su lugar* (modifica la lista original). Por defecto ordena de menor a mayor, o alfabeticamente para textos.
+> `sort` reordena los elementos de la lista *en su sitio* (modifica la lista original). Por defecto va de menor a mayor, o por orden alfabetico cuando son textos.
 > **Para que sirve:** mostrar las cosas ordenadas (palabras de la A a la Z, puntajes de mayor a menor).
 > **Donde se usa en un repo real:** PolyPaw podria ordenar alfabeticamente el vocabulario de una leccion antes de mostrarlo.
 
@@ -143,12 +143,12 @@ print(numeros)   # [9, 5, 3, 1]
 ```
 
 > ### 💡 Tip
-> Si quieres una copia ordenada *sin* tocar la original, usa la funcion `sorted(lista)` en vez del metodo `lista.sort()`. La primera devuelve una lista nueva; la segunda modifica la que tienes.
+> Si lo que quieres es una copia ordenada *sin* tocar la original, usa la funcion `sorted(lista)` en lugar del metodo `lista.sort()`. La primera te devuelve una lista nueva; la segunda cambia la que ya tienes. Es una diferencia pequena pero te ahorra mas de un dolor de cabeza.
 
 ### 2.5 Slicing: rebanar una lista
 
 > ### 🟦 ¿Que significa? — *Slicing (rebanado)*
-> El **slicing** es sacar un *trozo* de la lista usando `lista[inicio:fin]`. Toma desde el indice `inicio` hasta *justo antes* del indice `fin`. El `fin` no se incluye.
+> El **slicing** es sacar un *trozo* de la lista con `lista[inicio:fin]`. Va desde el indice `inicio` hasta *justo antes* del indice `fin`. Ojo: el `fin` no se incluye.
 > **Para que sirve:** quedarte con una parte (las primeras 3 misiones, las palabras de la 5 a la 10).
 > **Donde se usa en un repo real:** PolyPaw podria mostrar solo las primeras 5 misiones en la pantalla de inicio con `misiones[0:5]`.
 
@@ -161,24 +161,24 @@ print(misiones[-2:])   # ['D', 'E']        (los ultimos dos)
 ```
 
 > ### 💡 Tip
-> Piensa el slicing como una regla con marcas *entre* los elementos. `[1:3]` corta despues de la marca 1 y antes de la marca 3. Por eso el numero de la derecha nunca entra: marca donde *parar*.
+> Piensa el slicing como una regla con marcas *entre* los elementos. `[1:3]` corta despues de la marca 1 y antes de la marca 3. Por eso el numero de la derecha nunca entra: solo marca donde *parar*.
 
-Bit dice que el slicing es como cortar una barra de chocolate: eliges donde empieza el pedazo y donde termina, y te quedas con ese trozo sin destruir la barra.
+Bit lo compara con cortar una barra de chocolate: eliges donde empieza el pedazo y donde termina, te quedas con ese trozo y la barra original sigue intacta.
 
 ---
 
 ## 3. Tuplas: listas que NO se pueden cambiar
 
-A veces tienes datos que *no deberian* cambiar nunca. Para eso existe la tupla.
+A veces tienes datos que *no deberian* cambiar nunca. Para esos casos esta la tupla.
 
 > ### 🟦 ¿Que significa? — *Tupla (`tuple`)*
 > Una **tupla** es como una lista, pero **inmutable**: una vez creada, no puedes agregar, quitar ni cambiar sus elementos. Se escribe con parentesis `( )` en vez de corchetes.
-> **Para que sirve:** guardar datos fijos que no deben modificarse por accidente (un par de coordenadas, una configuracion que no cambia).
-> **Donde se usa en un repo real:** los colores de la marca PolyPaw (por ejemplo, los componentes RGB de un color) podrian guardarse en una tupla porque nunca cambian.
+> **Para que sirve:** guardar datos fijos que no deben tocarse por accidente (un par de coordenadas, una configuracion que no cambia).
+> **Donde se usa en un repo real:** los colores de la marca PolyPaw (por ejemplo, los componentes RGB de un color) podrian ir en una tupla, porque nunca cambian.
 
 > ### 🟦 ¿Que significa? — *Inmutable*
 > Algo **inmutable** es algo que no se puede modificar despues de crearlo. Lo contrario es **mutable** (modificable), como las listas.
-> **Para que sirve:** proteger datos de cambios accidentales; Python te avisa con un error si intentas tocarlos.
+> **Para que sirve:** proteger datos de cambios accidentales; si intentas tocarlos, Python te avisa con un error.
 > **Donde se usa en un repo real:** valores constantes de configuracion en cualquier proyecto serio.
 
 ```python
@@ -190,23 +190,23 @@ color_polypaw[0] = 200           # ❌ TypeError: 'tuple' object does not suppor
 ```
 
 > ### ⚠️ Cuidado
-> Una tupla de un solo elemento *necesita* una coma: `(5,)` es una tupla, pero `(5)` es solo el numero 5 entre parentesis. La coma es lo que la convierte en tupla.
+> Una tupla de un solo elemento *necesita* una coma: `(5,)` es una tupla, pero `(5)` es solo el numero 5 entre parentesis. Esa coma es justo lo que la convierte en tupla.
 
 > ### 💡 Tip
-> ¿Cuando usar tupla y cuando lista? Regla simple: si los datos van a cambiar (crecer, ordenarse, borrarse), usa **lista**. Si son fijos para siempre, usa **tupla**. La tupla tambien es un poco mas rapida y le dice a quien lea tu codigo "esto no se toca".
+> ¿Cuando usar tupla y cuando lista? Hazlo simple: si los datos van a cambiar (crecer, ordenarse, borrarse), usa **lista**. Si son fijos para siempre, usa **tupla**. Como bonus, la tupla es un pelin mas rapida y le deja claro a quien lea tu codigo que "esto no se toca".
 
-En JavaScript no habia tuplas de verdad; lo mas parecido era un array marcado como `const`, pero ese array igual se podia modificar por dentro. La tupla de Python si te bloquea de verdad.
+En JavaScript no habia tuplas de verdad; lo mas parecido era un array marcado como `const`, pero ese array se podia modificar por dentro igual. La tupla de Python si te bloquea en serio.
 
 ---
 
 ## 4. Conjuntos: sin duplicados, por diseno
 
-A veces lo unico que te importa es *que cosas tienes*, sin repetir y sin que importe el orden. Ahi brilla el conjunto.
+A veces lo unico que te interesa es *que cosas tienes*, sin repetir y sin que importe el orden. Ahi es donde el conjunto se luce.
 
 > ### 🟦 ¿Que significa? — *Conjunto (`set`)*
 > Un **conjunto** es una coleccion que **no permite elementos repetidos** y **no tiene orden**. Se escribe con llaves `{ }`.
-> **Para que sirve:** llevar registro de cosas unicas (que palabras ya aprendio el usuario, que misiones completo) sin preocuparte por duplicados.
-> **Donde se usa en un repo real:** PolyPaw podria usar un set para las palabras que el usuario ya domina: aunque acierte la misma palabra dos veces, en el set solo aparece una vez.
+> **Para que sirve:** llevar registro de cosas unicas (que palabras ya aprendio el usuario, que misiones completo) sin pelearte con los duplicados.
+> **Donde se usa en un repo real:** PolyPaw podria usar un set para las palabras que el usuario ya domina: aunque acierte la misma palabra dos veces, en el set aparece una sola vez.
 
 ```python
 palabras_aprendidas = {"hola", "gracias", "adios"}
@@ -217,14 +217,14 @@ print(palabras_aprendidas)
 ```
 
 > ### ⚠️ Cuidado
-> Un conjunto **no tiene orden garantizado**, asi que `conjunto[0]` da error: no puedes pedir "el primero" porque no hay primero. Si necesitas orden o posiciones, usa una lista.
+> Un conjunto **no tiene orden garantizado**, asi que `conjunto[0]` te da error: no puedes pedir "el primero" porque ahi no hay un primero. Si necesitas orden o posiciones, vuelve a la lista.
 
 > ### 💡 Tip
-> Truco clasico: para quitar duplicados de una lista, conviertela a set y de vuelta a lista. `list(set(mi_lista))` te deja solo valores unicos (aunque puede cambiar el orden).
+> Truco que vas a usar mil veces: para quitar duplicados de una lista, conviertela a set y luego de vuelta a lista. `list(set(mi_lista))` te deja solo los valores unicos (eso si, puede cambiar el orden).
 
 ### 4.1 Union e interseccion
 
-Los conjuntos brillan cuando comparas dos grupos.
+Donde de verdad brillan los conjuntos es cuando comparas dos grupos.
 
 > ### 🟦 ¿Que significa? — *Union*
 > La **union** de dos conjuntos es un conjunto nuevo con *todos* los elementos de ambos, sin repetir. Se hace con `|` o con `.union()`.
@@ -248,20 +248,20 @@ print(mision_a & mision_b)
 ```
 
 > ### 🔎 En tu codigo
-> Si en PolyPaw quisieras saber cuantas palabras *distintas* hay en todo el curso, podrias hacer la union de los sets de cada mision y medir su tamano con `len()`. El set se encarga solo de no contar duplicados.
+> Si en PolyPaw quisieras saber cuantas palabras *distintas* hay en todo el curso, harias la union de los sets de cada mision y medirias su tamano con `len()`. El set se encarga solo de no contar los duplicados; tu no tienes que pensar en eso.
 
 ---
 
 ## 5. Comprensiones de lista (list comprehensions), con calma
 
-Esta es una de las cosas mas bonitas y mas usadas de Python. Vamos despacio porque al principio asusta un poco.
+Esta es una de las cosas mas bonitas y mas usadas de Python. Vamos despacio, porque la primera vez que la ves asusta un poco.
 
 > ### 🟦 ¿Que significa? — *Comprension de lista (list comprehension)*
 > Una **comprension de lista** es una forma corta de crear una lista nueva a partir de otra, en una sola linea. La forma es: `[expresion for elemento in coleccion]`.
 > **Para que sirve:** transformar o filtrar una lista sin escribir un bucle largo de varias lineas.
-> **Donde se usa en un repo real:** en PolyPaw, sacar solo los *titulos* de una lista de misiones, o solo las misiones de cierto nivel.
+> **Donde se usa en un repo real:** en PolyPaw, sacar solo los *titulos* de una lista de misiones, o quedarte con las misiones de cierto nivel.
 
-Primero, la forma "larga" que ya conoces con un bucle normal:
+Primero, la version "larga" que ya conoces con un bucle normal:
 
 ```python
 titulos = ["hola", "gracias", "adios"]
@@ -271,7 +271,7 @@ for palabra in titulos:
 print(mayusculas)   # ['HOLA', 'GRACIAS', 'ADIOS']
 ```
 
-Cuatro lineas. Ahora lo mismo con una comprension de lista:
+Cuatro lineas. Ahora exactamente lo mismo con una comprension de lista:
 
 ```python
 titulos = ["hola", "gracias", "adios"]
@@ -279,11 +279,11 @@ mayusculas = [palabra.upper() for palabra in titulos]
 print(mayusculas)   # ['HOLA', 'GRACIAS', 'ADIOS']
 ```
 
-Una sola linea, y se lee casi como ingles: "pon `palabra.upper()` por cada `palabra` en `titulos`". Leela de derecha a izquierda al principio: primero el `for ... in ...` (de donde saco cada cosa), luego la expresion de la izquierda (que hago con cada cosa).
+Una sola linea, y casi se lee como una frase normal: "pon `palabra.upper()` por cada `palabra` en `titulos`". Al principio leela de derecha a izquierda: primero el `for ... in ...` (de donde saco cada cosa) y despues la expresion de la izquierda (que hago con cada cosa).
 
 ### 5.1 Con filtro (`if`)
 
-Tambien puedes quedarte solo con algunos elementos agregando un `if` al final:
+Tambien puedes quedarte solo con algunos elementos si le sumas un `if` al final:
 
 ```python
 numeros = [1, 2, 3, 4, 5, 6]
@@ -291,19 +291,19 @@ pares = [n for n in numeros if n % 2 == 0]
 print(pares)   # [2, 4, 6]
 ```
 
-Esto dice: "pon `n` por cada `n` en `numeros`, *pero solo si* `n` es par". El `if` filtra.
+Esto se lee asi: "pon `n` por cada `n` en `numeros`, *pero solo si* `n` es par". El `if` hace de filtro.
 
 > ### 🔎 En tu codigo
 > En PolyPaw, si cada mision fuera un diccionario con un campo `nivel`, podrias sacar solo las faciles asi:
 > ```python
 > faciles = [m["titulo"] for m in misiones if m["nivel"] == "principiante"]
 > ```
-> En una linea filtras *y* extraes el titulo. Sin comprension necesitarias un bucle con `if` y `append` adentro.
+> En una sola linea filtras *y* extraes el titulo. Sin comprension necesitarias un bucle con un `if` y un `append` dentro.
 
 > ### 💡 Tip
-> No te obsesiones con meter todo en una comprension. Si la linea se vuelve tan larga que no la entiendes de un vistazo, usa el bucle normal de varias lineas. El codigo claro siempre gana al codigo corto.
+> No te obsesiones con meter todo en una comprension. Si la linea se vuelve tan larga que ya no la entiendes de un vistazo, vuelve al bucle normal de varias lineas. El codigo claro siempre le gana al codigo corto.
 
-En JavaScript hacias esto con `.map()` y `.filter()`. La comprension de lista de Python combina ambas ideas en una sola expresion mas compacta.
+En JavaScript esto lo hacias con `.map()` y `.filter()`. La comprension de lista de Python junta las dos ideas en una sola expresion mas compacta.
 
 ---
 
@@ -312,9 +312,9 @@ En JavaScript hacias esto con `.map()` y `.filter()`. La comprension de lista de
 Cuando recorres una lista, a veces necesitas *tambien* saber en que posicion vas.
 
 > ### 🟦 ¿Que significa? — *`enumerate`*
-> `enumerate` es una funcion que, al recorrer una coleccion, te da *dos cosas* en cada vuelta: el indice (la posicion) y el valor. Se usa asi: `for indice, valor in enumerate(lista):`.
+> `enumerate` es una funcion que, al recorrer una coleccion, te entrega *dos cosas* en cada vuelta: el indice (la posicion) y el valor. Se usa asi: `for indice, valor in enumerate(lista):`.
 > **Para que sirve:** numerar elementos al mostrarlos, o saber en que posicion estas sin llevar la cuenta a mano.
-> **Donde se usa en un repo real:** PolyPaw puede mostrar "Mision 1, Mision 2, Mision 3..." numerando la lista de misiones automaticamente.
+> **Donde se usa en un repo real:** PolyPaw puede mostrar "Mision 1, Mision 2, Mision 3..." numerando la lista de misiones de forma automatica.
 
 ```python
 misiones = ["Saludos", "Numeros", "Colores"]
@@ -325,7 +325,7 @@ for indice, mision in enumerate(misiones):
 # 2 -> Colores
 ```
 
-¿Quieres que empiece a contar desde 1 en vez de 0? Pasale un segundo argumento:
+¿Prefieres que empiece a contar desde 1 en vez de 0? Pasale un segundo argumento:
 
 ```python
 for numero, mision in enumerate(misiones, start=1):
@@ -336,13 +336,13 @@ for numero, mision in enumerate(misiones, start=1):
 ```
 
 > ### 💡 Tip
-> En JavaScript hacias `misiones.forEach((mision, indice) => ...)`. `enumerate` es el equivalente de Python, pero ojo: en JS el valor venia primero y el indice despues; en Python con `enumerate` el indice viene *primero*.
+> En JavaScript hacias `misiones.forEach((mision, indice) => ...)`. `enumerate` es el equivalente en Python, pero fijate en un detalle: en JS venia primero el valor y luego el indice; en Python con `enumerate` el indice va *primero*. Es un tropezon clasico al cambiar de lenguaje.
 
 ---
 
 ## 7. `zip`: recorrer dos listas en paralelo
 
-¿Y si tienes dos listas relacionadas, una con palabras y otra con sus traducciones, y quieres emparejarlas?
+¿Y si tienes dos listas que van de la mano, una con palabras y otra con sus traducciones, y quieres emparejarlas?
 
 > ### 🟦 ¿Que significa? — *`zip`*
 > `zip` une dos (o mas) listas elemento por elemento, como el cierre de una chaqueta que junta los dos lados diente con diente. En cada vuelta te entrega un elemento de cada lista, emparejados.
@@ -361,10 +361,10 @@ for palabra, traduccion in zip(palabras, traducciones):
 ```
 
 > ### ⚠️ Cuidado
-> Si las listas tienen distinto tamano, `zip` se detiene en la mas corta y deja fuera lo que sobra de la mas larga. Asegurate de que ambas listas correspondan bien, o perderas datos sin darte cuenta.
+> Si las listas tienen distinto tamano, `zip` se detiene en la mas corta y deja afuera lo que sobra de la mas larga. Asegurate de que ambas se correspondan bien, o perderas datos sin enterarte.
 
 > ### 💡 Tip
-> `zip` y `enumerate` se combinan de maravilla con las comprensiones de lista. Por ejemplo, armar una lista de frases:
+> `zip` y `enumerate` se llevan de maravilla con las comprensiones de lista. Por ejemplo, para armar una lista de frases de un tiron:
 > ```python
 > tarjetas = [f"{p} = {t}" for p, t in zip(palabras, traducciones)]
 > ```
@@ -373,7 +373,7 @@ for palabra, traduccion in zip(palabras, traducciones):
 
 ## 8. Juntandolo todo: una mini-leccion de PolyPaw
 
-Veamos un ejemplo que mezcla casi todo lo del capitulo, parecido a lo que hace `database_manager.py` al preparar el vocabulario de una mision cargada desde `missions/*.json`:
+Veamos un ejemplo que mezcla casi todo lo del capitulo, muy parecido a lo que hace `database_manager.py` cuando prepara el vocabulario de una mision cargada desde `missions/*.json`:
 
 ```python
 # Vocabulario de una mision (en PolyPaw vendria de un archivo JSON)
@@ -397,9 +397,9 @@ print("Repaso rapido:", repaso)
 ```
 
 > ### 🔎 En tu codigo
-> En PolyPaw de verdad, cada mision en `missions/*.json` trae sus palabras y `database_manager.py` las carga en listas de Python. Desde ahi, todo lo que viste aqui (filtrar, ordenar, emparejar, numerar, quitar duplicados) es exactamente lo que el codigo usa para preparar lo que ves en pantalla con Flet.
+> En el PolyPaw de verdad, cada mision de `missions/*.json` trae sus palabras y `database_manager.py` las carga en listas de Python. A partir de ahi, todo lo que viste en este capitulo (filtrar, ordenar, emparejar, numerar, quitar duplicados) es justo lo que el codigo hace para preparar lo que aparece en pantalla con Flet.
 
-Bit asiente con sus branquias: con listas, tuplas y conjuntos ya tienes los recipientes; con comprensiones, `enumerate` y `zip` ya tienes las herramientas para llenarlos y recorrerlos como un profesional.
+Bit asiente con sus branquias: con listas, tuplas y conjuntos ya tienes los recipientes; con las comprensiones, `enumerate` y `zip` ya tienes las herramientas para llenarlos y recorrerlos como un profesional.
 
 ---
 

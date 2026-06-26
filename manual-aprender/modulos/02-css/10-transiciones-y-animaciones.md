@@ -5,34 +5,34 @@
 </p>
 
 
-> ¡Hola otra vez! Soy **Bit**, tu ajolote guía. Hasta ahora tu CSS ha sido como una foto: bonita, pero quieta. En este capítulo le vamos a dar **movimiento**. Vas a aprender a que un botón cambie de color suavemente, a que una tarjeta se eleve cuando pasas el ratón por encima y a que un logo gire solito. Lo mejor: con muy poco código y sin tocar JavaScript. Eso sí, prometeme algo: el movimiento es como la sal en la comida. Una pizca realza el plato; un kilo lo arruina (y marea a la gente). Vamos despacio y con cariño. 🪼
+> ¡Hola otra vez! Soy **Bit**, tu ajolote guía. Hasta ahora tu CSS ha sido como una foto: bonita, pero quieta. En este capítulo le vamos a dar **movimiento**. Vas a aprender a que un botón cambie de color suavemente, a que una tarjeta se eleve cuando pasas el ratón por encima y a que un logo gire solito. Y todo eso con muy poco código, sin tocar JavaScript. Eso sí, prometeme una cosa: el movimiento es como la sal en la comida. Una pizca realza el plato; un kilo lo arruina (y marea a la gente). Vamos despacio y con cariño. 🪼
 
 ---
 
 ## 1. ¿Por qué animar? El antes y el después
 
-Imagina dos botones. El primero, cuando pasas el ratón, **salta** de golpe de azul a verde. El segundo se va tiñendo de verde poco a poco, en un cuarto de segundo. El segundo se siente más profesional, más “vivo”, aunque el cambio final sea idéntico. Esa diferencia —ese “poco a poco”— es lo que vamos a controlar.
+Imagina dos botones. El primero, cuando pasas el ratón, **salta** de golpe de azul a verde. El segundo se va tiñendo de verde poco a poco, en un cuarto de segundo. El segundo se siente más profesional, más “vivo”, aunque el color final sea idéntico en ambos. Esa diferencia —ese “poco a poco”— es justo lo que vamos a controlar.
 
-En CSS hay dos grandes herramientas para mover cosas:
+En CSS tienes dos grandes herramientas para mover cosas:
 
 1. **`transition`**: para suavizar un cambio que ocurre por algo (un `:hover`, un clic, un cambio de clase). Es el “de A a B, despacito”.
 2. **`animation` con `@keyframes`**: para movimientos que ocurren **solos** o se repiten (un spinner que gira, un texto que parpadea, algo que entra deslizándose).
 
-Y, muy importante, una tercera pieza que mucha gente olvida:
+Y hay una tercera pieza que mucha gente olvida y que pesa más de lo que parece:
 
-3. **`prefers-reduced-motion`**: una forma de respetar a las personas a quienes el movimiento les marea o les molesta. Accesibilidad, no es opcional.
+3. **`prefers-reduced-motion`**: una forma de respetar a quienes el movimiento les marea o les molesta. Accesibilidad, y no es opcional.
 
 > ### 🟦 ¿Qué significa? — *Animación (en la web)*
-> Es un cambio visual que ocurre **a lo largo del tiempo** en vez de instantáneamente. En lugar de pasar de “rojo” a “azul” de un frame al siguiente, la animación dibuja todos los pasos intermedios. Sirve para guiar la atención, dar feedback (“sí, te hice caso”) y hacer la interfaz más agradable. Lo usarías, por ejemplo, en `styles.css` de **tunal-digital** para que las tarjetas de servicios reaccionen cuando el visitante las recorre con el ratón.
+> Es un cambio visual que ocurre **a lo largo del tiempo** en lugar de instantáneamente. En vez de pasar de “rojo” a “azul” de un frame al siguiente, la animación dibuja todos los pasos intermedios. Sirve para guiar la atención, dar feedback (“sí, te hice caso”) y hacer la interfaz más agradable. Lo usarías, por ejemplo, en el `styles.css` de **tunal-digital** para que las tarjetas de servicios reaccionen cuando el visitante las recorre con el ratón.
 
 ---
 
 ## 2. `transition`: suavizar los cambios
 
-Vamos con la estrella del capítulo. La idea es: tú tienes un elemento con un estado normal y otro estado distinto (al pasar el ratón, al enfocar, al añadir una clase). `transition` le dice al navegador: **“no cambies de golpe, tómate tu tiempo”**.
+Vamos con la estrella del capítulo. La idea es sencilla: tienes un elemento con un estado normal y otro estado distinto (al pasar el ratón, al enfocar, al añadir una clase). `transition` le dice al navegador: **“no cambies de golpe, tómate tu tiempo”**.
 
 > ### 🟦 ¿Qué significa? — *transition*
-> Es una propiedad CSS que **interpola** (rellena los pasos intermedios) entre el valor inicial y el final de otras propiedades cuando estas cambian. Sirve para que los cambios se sientan fluidos en vez de bruscos. La encontrarías en el `styles.css` de **tunal-digital** sobre los botones y las tarjetas, y en el `site/estilos.css` del propio manual cuando un enlace cambia de color al pasar por encima.
+> Es una propiedad CSS que **interpola** (rellena los pasos intermedios) entre el valor inicial y el final de otras propiedades cuando estas cambian. Sirve para que los cambios se sientan fluidos en vez de bruscos. La encontrarías en el `styles.css` de **tunal-digital** sobre los botones y las tarjetas, y en el `site/estilos.css` del propio manual, cuando un enlace cambia de color al pasar por encima.
 
 ### 2.1 El ejemplo más pequeño posible
 
@@ -47,36 +47,36 @@ Vamos con la estrella del capítulo. La idea es: tú tienes un elemento con un e
 }
 ```
 
-Lee la línea clave: `transition: background-color 0.3s;`. Le estás diciendo al botón: *“cuando tu `background-color` cambie, hazlo en 0.3 segundos”*. El cambio lo dispara `:hover`. Sin la línea de `transition`, el salto sería instantáneo.
+Fíjate en la línea clave: `transition: background-color 0.3s;`. Le estás diciendo al botón: *“cuando tu `background-color` cambie, hazlo en 0.3 segundos”*. Quien dispara ese cambio es el `:hover`. Sin la línea de `transition`, el salto sería instantáneo.
 
 > ### 💡 Tip
-> La `transition` se escribe en el estado **normal** del elemento, no en el `:hover`. Así el suavizado funciona tanto al **entrar** el ratón como al **salir**. Si solo la pones en el `:hover`, se anima al entrar pero vuelve de golpe al salir, lo cual se siente raro.
+> La `transition` va en el estado **normal** del elemento, no en el `:hover`. Así el suavizado funciona tanto al **entrar** el ratón como al **salir**. Si solo la pones en el `:hover`, se anima al entrar pero vuelve de golpe al salir, y eso se siente raro.
 
 ### 2.2 Las cuatro piezas de `transition`
 
-La forma corta de `transition` puede llevar hasta cuatro valores en orden:
+La forma corta de `transition` admite hasta cuatro valores, en este orden:
 
 ```css
 transition: background-color 0.3s ease-in-out 0s;
 /*           ↑propiedad      ↑duración ↑curva    ↑retraso */
 ```
 
-Veámoslas una por una, porque cada una tiene su propia propiedad “larga”.
+Veámoslas una por una, porque cada una tiene además su propia propiedad “larga”.
 
 > ### 🟦 ¿Qué significa? — *transition-property*
-> Indica **qué propiedad** quieres animar: `background-color`, `transform`, `opacity`, `color`… Sirve para no animar todo a lo loco, sino solo lo que te interesa. Si pones `all`, animas cualquier cosa que cambie (cómodo, pero a veces anima cosas que no querías).
+> Indica **qué propiedad** quieres animar: `background-color`, `transform`, `opacity`, `color`… Sirve para no animar todo a lo loco, sino solo lo que te interesa. Si pones `all`, animas cualquier cosa que cambie: es cómodo, pero a veces termina animando cosas que no querías.
 
 > ### 🟦 ¿Qué significa? — *transition-duration*
-> Cuánto **tiempo** tarda la transición, en segundos (`s`) o milisegundos (`ms`). `0.3s` y `300ms` son lo mismo. Sirve para controlar la velocidad: valores entre `0.15s` y `0.4s` suelen sentirse naturales. Más de `0.6s` empieza a sentirse lento y pesado para un simple `:hover`.
+> Cuánto **tarda** la transición, en segundos (`s`) o milisegundos (`ms`). `0.3s` y `300ms` son lo mismo. Sirve para controlar la velocidad: valores entre `0.15s` y `0.4s` suelen sentirse naturales. Por encima de `0.6s` un simple `:hover` empieza a sentirse lento y pesado.
 
 > ### 🟦 ¿Qué significa? — *transition-timing-function (easing)*
-> Es la **curva de velocidad**: ¿el movimiento es constante, arranca lento, frena al final? Sirve para que el movimiento se sienta orgánico, como en el mundo real (las cosas no arrancan ni frenan de golpe). Valores comunes: `ease` (por defecto, arranca y frena suave), `linear` (velocidad constante), `ease-in`, `ease-out`, `ease-in-out`.
+> Es la **curva de velocidad**: ¿el movimiento va a ritmo constante, arranca lento, frena al final? Sirve para que el movimiento se sienta orgánico, como en el mundo real, donde las cosas no arrancan ni frenan de golpe. Los valores más comunes: `ease` (el de por defecto, arranca y frena suave), `linear` (velocidad constante), `ease-in`, `ease-out`, `ease-in-out`.
 
 > ### 🟦 ¿Qué significa? — *transition-delay*
-> Cuánto **espera** antes de empezar. `0s` = empieza ya. Sirve para encadenar efectos o para que algo no reaccione al instante. La mayoría de las veces lo dejarás en `0s` (o ni lo escribes).
+> Cuánto **espera** antes de empezar. `0s` = empieza ya. Sirve para encadenar efectos o para que algo no reaccione al instante. Casi siempre lo dejarás en `0s` (o ni lo escribes).
 
 > ### 🟦 ¿Qué significa? — *Easing*
-> “Easing” es el término general para esa curva de velocidad. La palabra viene de “to ease” (suavizar). Sirve para que los movimientos no sean robóticos. Una regla práctica: para cosas que **aparecen/responden** usa `ease-out` (entra rápido y frena, se siente atento); para cosas que **se van** usa `ease-in`.
+> “Easing” es el término general para esa curva de velocidad. La palabra viene de “to ease” (suavizar). Sirve para que los movimientos no parezcan robóticos. Una regla práctica: para cosas que **aparecen o responden** usa `ease-out` (entra rápido y frena, se siente atenta); para cosas que **se van** usa `ease-in`.
 
 ### 2.3 Animar varias propiedades a la vez
 
@@ -98,27 +98,27 @@ Puedes separar varias transiciones con comas:
 }
 ```
 
-Aquí pasan **dos** cosas a la vez al pasar el ratón: la sombra crece (la tarjeta parece “levantarse” del papel) y la tarjeta sube 6 píxeles. Las dos se animan en 0.25s con la misma curva. Esto es, casi literalmente, el efecto hover de tarjeta que ves en muchos sitios… incluido el tuyo.
+Al pasar el ratón ocurren **dos** cosas al mismo tiempo: la sombra crece (la tarjeta parece “levantarse” del papel) y la tarjeta sube 6 píxeles. Las dos se animan en 0.25s con la misma curva. Esto es, casi literalmente, el efecto hover de tarjeta que ves en montones de sitios… incluido el tuyo.
 
 > ### 🔎 En tu código
-> En **tunal-digital**, en `styles.css`, busca tu sección de tarjetas de servicios. El patrón “sombra suave en reposo + sombra grande y `translateY` negativo en `:hover`” es exactamente el de arriba. Si tus tarjetas hoy cambian de golpe, agrégales una línea de `transition` en el estado normal y siente la diferencia. En **RachaSimple** y **Faro**, que usan **Tailwind**, este mismo efecto se escribe con clases utilitarias como `transition`, `duration-200`, `ease-out` y `hover:-translate-y-1`, pero por debajo es el mismísimo CSS.
+> En **tunal-digital**, dentro de `styles.css`, busca tu sección de tarjetas de servicios. El patrón “sombra suave en reposo + sombra grande y `translateY` negativo en `:hover`” es exactamente el de arriba. Si tus tarjetas hoy cambian de golpe, agrégales una línea de `transition` en el estado normal y siente la diferencia. En **RachaSimple** y **Faro**, que usan **Tailwind**, este mismo efecto se escribe con clases utilitarias como `transition`, `duration-200`, `ease-out` y `hover:-translate-y-1`, pero por debajo es exactamente el mismo CSS.
 
 > ### ⚠️ Cuidado
-> No animes propiedades como `width`, `height`, `top` o `margin` si puedes evitarlo. Esas obligan al navegador a **recalcular el layout** de la página en cada frame, lo que puede verse a tirones. Las dos propiedades “baratas” y fluidas por excelencia son **`transform`** y **`opacity`**. Si quieres mover o agrandar algo, usa `transform` (lo vemos ahora), no `top`/`left`/`width`.
+> Evita animar propiedades como `width`, `height`, `top` o `margin` siempre que puedas. Esas obligan al navegador a **recalcular el layout** de la página en cada frame, y eso se ve a tirones. Las dos propiedades “baratas” y fluidas por excelencia son **`transform`** y **`opacity`**. Si quieres mover o agrandar algo, usa `transform` (lo vemos ahora mismo), no `top`/`left`/`width`.
 
 ---
 
 ## 3. `transform`: mover, escalar y rotar sin romper nada
 
 > ### 🟦 ¿Qué significa? — *transform*
-> Es una propiedad que **desplaza, escala, rota o inclina** un elemento visualmente, sin afectar a los demás elementos de la página. Sirve para mover cosas de forma fluida y barata. Es la herramienta ideal para combinar con `transition`. La usarías en `styles.css` de **tunal-digital** para elevar tarjetas, agrandar un icono al pasar el ratón o rotar una flecha en un acordeón.
+> Es una propiedad que **desplaza, escala, rota o inclina** un elemento visualmente, sin afectar a los demás elementos de la página. Sirve para mover cosas de forma fluida y barata, y se lleva de maravilla con `transition`. La usarías en el `styles.css` de **tunal-digital** para elevar tarjetas, agrandar un icono al pasar el ratón o rotar una flecha en un acordeón.
 
-Lo mágico de `transform` es que el espacio que ocupaba el elemento **se queda reservado**: aunque lo muevas o lo agrandes, no empuja a sus vecinos. Por eso es tan suave.
+Lo bonito de `transform` es que el espacio que ocupaba el elemento **se queda reservado**: aunque lo muevas o lo agrandes, no empuja a sus vecinos. Por eso resulta tan suave.
 
 ### 3.1 `translate` — mover
 
 > ### 🟦 ¿Qué significa? — *translate*
-> Mueve el elemento en horizontal y/o vertical. `translateX(10px)` lo mueve a la derecha; `translateY(-6px)` lo sube; `translate(10px, -6px)` hace las dos. Sirve para desplazamientos suaves sin tocar el layout.
+> Mueve el elemento en horizontal y/o vertical. `translateX(10px)` lo desplaza a la derecha; `translateY(-6px)` lo sube; `translate(10px, -6px)` hace las dos cosas a la vez. Sirve para desplazamientos suaves sin tocar el layout.
 
 ```css
 .icono:hover {
@@ -126,7 +126,7 @@ Lo mágico de `transform` es que el espacio que ocupaba el elemento **se queda r
 }
 ```
 
-Ojo al signo: en la web el eje Y crece **hacia abajo**, así que un valor **negativo** sube. Esto confunde a todo el mundo al principio; a mí también me pasó cuando era un ajolote más pequeño. 🪼
+Ojo al signo: en la web el eje Y crece **hacia abajo**, así que un valor **negativo** sube. Esto confunde a todo el mundo al principio; a mí también me pasaba cuando era un ajolote más pequeño. 🪼
 
 ### 3.2 `scale` — agrandar o encoger
 
@@ -143,7 +143,7 @@ Ojo al signo: en la web el eje Y crece **hacia abajo**, así que un valor **nega
 ```
 
 > ### 💡 Tip
-> Para fotos dentro de una tarjeta, combina `scale` con `overflow: hidden` en la tarjeta contenedora. Así la imagen se agranda “por dentro” del marco y produce el clásico efecto de zoom elegante sin desbordar.
+> Para fotos dentro de una tarjeta, combina `scale` con `overflow: hidden` en la tarjeta contenedora. Así la imagen se agranda “por dentro” del marco y consigues el clásico efecto de zoom elegante sin que nada se desborde.
 
 ### 3.3 `rotate` — girar
 
@@ -170,7 +170,7 @@ Puedes encadenar varias en una sola línea, separadas por espacios:
 ```
 
 > ### ⚠️ Cuidado
-> El **orden importa**. `translate(...) rotate(...)` no da el mismo resultado que `rotate(...) translate(...)`, porque cada transformación mueve también los ejes para la siguiente. Si algo se mueve “raro”, prueba a invertir el orden.
+> El **orden importa**. `translate(...) rotate(...)` no da el mismo resultado que `rotate(...) translate(...)`, porque cada transformación arrastra también los ejes para la siguiente. Si algo se mueve “raro”, prueba a invertir el orden.
 
 > ### 🔎 En tu código
 > En **PolyPaw** (Python + Flet) y en **polypaw-nas** (Ubuntu/Samba/Cockpit) no escribes CSS a mano: Flet genera la interfaz desde Python y Cockpit ya trae sus propios estilos. Por eso `transform` y `@keyframes` viven sobre todo en tus proyectos **web**: `tunal-digital`, el `site/estilos.css` del manual, y vía Tailwind en **RachaSimple** y **Faro**. Tenlo presente para no buscar CSS donde no lo hay.
@@ -179,13 +179,13 @@ Puedes encadenar varias en una sola línea, separadas por espacios:
 
 ## 4. `@keyframes` y `animation`: movimiento que ocurre solo
 
-`transition` necesita un “disparador” (un `:hover`, un clic). Pero ¿y si quieres que algo se mueva **solo**, nada más cargar la página, o que **se repita** para siempre, como un spinner de carga? Para eso están las animaciones con `@keyframes`.
+`transition` siempre necesita un “disparador” (un `:hover`, un clic). ¿Y si quieres que algo se mueva **solo**, nada más cargar la página, o que **se repita** para siempre, como un spinner de carga? Ahí entran las animaciones con `@keyframes`.
 
 > ### 🟦 ¿Qué significa? — *@keyframes*
-> Es una regla CSS donde defines los **fotogramas clave** de una animación: cómo empieza, cómo termina y, si quieres, pasos intermedios. Le pones un nombre y luego lo usas. Sirve para describir un movimiento completo una sola vez y reutilizarlo. Lo usarías para un spinner de carga mientras **Faro** consulta a OpenAI, o para que una tarjeta de **tunal-digital** entre deslizándose al cargar.
+> Es una regla CSS donde defines los **fotogramas clave** de una animación: cómo empieza, cómo termina y, si quieres, los pasos intermedios. Le pones un nombre y luego lo usas. Sirve para describir un movimiento completo una sola vez y reutilizarlo. Lo usarías para un spinner de carga mientras **Faro** consulta a OpenAI, o para que una tarjeta de **tunal-digital** entre deslizándose al cargar.
 
 > ### 🟦 ¿Qué significa? — *animation*
-> Es la propiedad que **aplica** unos `@keyframes` a un elemento, indicando cuánto duran, cuántas veces se repiten, con qué curva, etc. Sin `animation`, los `@keyframes` no hacen nada por sí solos: son la receta; `animation` es ponerse a cocinar.
+> Es la propiedad que **aplica** unos `@keyframes` a un elemento, indicando cuánto duran, cuántas veces se repiten, con qué curva, etc. Por sí solos, los `@keyframes` no hacen nada: son la receta; `animation` es ponerse a cocinar.
 
 ### 4.1 Un spinner de carga (el ejemplo clásico)
 
@@ -205,10 +205,10 @@ Puedes encadenar varias en una sola línea, separadas por espacios:
 }
 ```
 
-Lee la última línea como una frase: anima usando los keyframes `girar`, dura `0.8s` cada vuelta, con velocidad constante (`linear`, porque un giro constante no debe frenar) y se repite `infinite` (para siempre). Eso es un spinner completo. Con `from`/`to` defines solo el inicio y el final; el navegador rellena el resto.
+Lee la última línea como si fuera una frase: anima usando los keyframes `girar`, cada vuelta dura `0.8s`, a velocidad constante (`linear`, porque un giro no debería frenar) y se repite `infinite` (para siempre). Eso ya es un spinner completo. Con `from`/`to` defines solo el inicio y el final; el navegador rellena todo lo de en medio.
 
 > ### 💡 Tip
-> En vez de `from`/`to` puedes usar **porcentajes** para pasos intermedios. `0%` es el inicio, `100%` el final, y puedes poner los que quieras en medio:
+> En vez de `from`/`to` puedes usar **porcentajes** para marcar pasos intermedios. `0%` es el inicio, `100%` el final, y entre medias pones los que quieras:
 > ```css
 > @keyframes pulso {
 >   0%   { transform: scale(1); }
@@ -216,7 +216,7 @@ Lee la última línea como una frase: anima usando los keyframes `girar`, dura `
 >   100% { transform: scale(1); }
 > }
 > ```
-> Esto crece y vuelve, ideal para un “latido” que llama la atención.
+> Esto crece y vuelve, perfecto para un “latido” que llama la atención.
 
 ### 4.2 Las piezas de `animation`
 
@@ -231,24 +231,24 @@ animation: girar 0.8s linear infinite;
 > El nombre de los `@keyframes` que quieres usar (aquí, `girar`). Tiene que coincidir exactamente con el nombre que definiste. Sirve para conectar la receta con el elemento.
 
 > ### 🟦 ¿Qué significa? — *animation-duration*
-> Cuánto dura **una pasada** de la animación. Igual que en `transition`, en `s` o `ms`.
+> Cuánto dura **una pasada** de la animación. Igual que en `transition`, se mide en `s` o `ms`.
 
 > ### 🟦 ¿Qué significa? — *animation-iteration-count*
 > Cuántas veces se repite. Un número (`1`, `3`) o `infinite` (sin parar). Sirve para spinners (`infinite`) o para efectos que ocurren una sola vez al cargar (`1`).
 
 > ### 🟦 ¿Qué significa? — *animation-timing-function*
-> La misma curva de velocidad (easing) que en `transition`: `ease`, `linear`, `ease-in-out`… Para giros y barras de progreso suele querer `linear`; para entradas, `ease-out`.
+> La misma curva de velocidad (easing) que en `transition`: `ease`, `linear`, `ease-in-out`… Para giros y barras de progreso normalmente querrás `linear`; para entradas, `ease-out`.
 
-Hay más piezas útiles que vale la pena conocer aunque no las uses siempre:
+Hay más piezas que vale la pena conocer, aunque no las uses todos los días:
 
 > ### 🟦 ¿Qué significa? — *animation-delay*
-> Espera antes de empezar. Muy útil para **escalonar** entradas: si tres tarjetas entran con delays de `0s`, `0.1s` y `0.2s`, aparecen una tras otra con un efecto de cascada precioso.
+> Cuánto espera antes de empezar. Muy útil para **escalonar** entradas: si tres tarjetas entran con delays de `0s`, `0.1s` y `0.2s`, aparecen una tras otra con un efecto de cascada precioso.
 
 > ### 🟦 ¿Qué significa? — *animation-fill-mode*
-> Decide qué aspecto tiene el elemento **antes** de empezar y **después** de terminar. El valor `forwards` hace que el elemento se quede con el estilo del último fotograma (no “vuelva” a su estado inicial). Imprescindible para animaciones de entrada: sin `forwards`, el elemento parpadearía de vuelta a invisible al acabar.
+> Decide qué aspecto tiene el elemento **antes** de empezar y **después** de terminar. El valor `forwards` hace que el elemento se quede con el estilo del último fotograma, sin “volver” a su estado inicial. Es imprescindible para animaciones de entrada: sin `forwards`, el elemento parpadearía de vuelta a invisible al acabar.
 
 > ### 🟦 ¿Qué significa? — *animation-direction*
-> Si la animación va hacia adelante, hacia atrás o alterna (`normal`, `reverse`, `alternate`). Con `alternate` un pulso va y vuelve suavemente sin saltos.
+> Si la animación va hacia adelante, hacia atrás o alterna (`normal`, `reverse`, `alternate`). Con `alternate`, un pulso va y vuelve suavemente, sin saltos.
 
 ### 4.3 Una entrada elegante (fade + subida)
 
@@ -269,10 +269,10 @@ Hay más piezas útiles que vale la pena conocer aunque no las uses siempre:
 }
 ```
 
-La tarjeta empieza invisible (`opacity: 0`) y 16px más abajo, y termina visible en su sitio. Como animamos `opacity` y `transform`, es súper fluido. El `forwards` evita que vuelva a desaparecer al final.
+La tarjeta empieza invisible (`opacity: 0`) y 16px más abajo, y termina visible en su sitio. Como animamos `opacity` y `transform`, queda súper fluido. El `forwards` evita que vuelva a desaparecer al terminar.
 
 > ### 🔎 En tu código
-> En **Faro/Organizer** (Next.js + React), un spinner como el de la sección 4.1 es justo lo que muestras mientras esperas la respuesta de OpenAI para generar la descripción o el roadmap de un proyecto. Con Tailwind ya viene de fábrica la utilidad `animate-spin`, que internamente define unos `@keyframes` idénticos a `girar`. Saber qué hay debajo te permite entender y, si hace falta, personalizar esa animación.
+> En **Faro/Organizer** (Next.js + React), un spinner como el de la sección 4.1 es justo lo que muestras mientras esperas la respuesta de OpenAI para generar la descripción o el roadmap de un proyecto. Con Tailwind ya viene de fábrica la utilidad `animate-spin`, que por dentro define unos `@keyframes` idénticos a `girar`. Saber qué hay debajo te permite entender la animación y, si hace falta, personalizarla.
 
 > ### 💡 Tip — `transition` vs `animation`, ¿cuál uso?
 > Regla rápida: si el cambio lo dispara una interacción (hover, clic, foco) y va de un estado a otro, usa **`transition`**. Si el movimiento ocurre solo, se repite, o tiene varios pasos intermedios definidos, usa **`@keyframes` + `animation`**. El 80% de tus efectos del día a día serán `transition`.
@@ -281,10 +281,10 @@ La tarjeta empieza invisible (`opacity: 0`) y 16px más abajo, y termina visible
 
 ## 5. Accesibilidad: `prefers-reduced-motion`
 
-Aquí viene la parte que separa a quien “sabe animar” de quien “anima con responsabilidad”. Para algunas personas, el movimiento en pantalla no es bonito: les provoca mareo, náuseas o dolor de cabeza (se llama trastorno vestibular). Los sistemas operativos permiten activar un ajuste de “reducir movimiento”, y nosotros podemos **escucharlo** desde CSS.
+Aquí llega la parte que separa a quien “sabe animar” de quien “anima con responsabilidad”. Para algunas personas, el movimiento en pantalla no es bonito: les provoca mareo, náuseas o dolor de cabeza (se llama trastorno vestibular). Los sistemas operativos permiten activar un ajuste de “reducir movimiento”, y nosotros podemos **escucharlo** desde CSS.
 
 > ### 🟦 ¿Qué significa? — *prefers-reduced-motion*
-> Es una *media query* que detecta si la persona ha pedido en su sistema operativo **reducir las animaciones**. Sirve para apagar o suavizar tus efectos para quien los necesita apagados, sin afectar a los demás. Es una pieza de **accesibilidad** que deberías incluir en `tunal-digital` y en el `site/estilos.css` del manual.
+> Es una *media query* que detecta si la persona ha pedido en su sistema operativo **reducir las animaciones**. Sirve para apagar o suavizar tus efectos para quien los necesita apagados, sin tocar la experiencia de los demás. Es una pieza de **accesibilidad** que deberías incluir en `tunal-digital` y en el `site/estilos.css` del manual.
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -298,10 +298,10 @@ Aquí viene la parte que separa a quien “sabe animar” de quien “anima con 
 }
 ```
 
-Esta receta tan corta es casi un estándar de la industria: si la persona pidió menos movimiento, todas las animaciones y transiciones se vuelven **prácticamente instantáneas**. El contenido sigue funcionando igual, solo que sin el “viaje”.
+Esta receta tan corta es casi un estándar de la industria: si la persona pidió menos movimiento, todas tus animaciones y transiciones se vuelven **prácticamente instantáneas**. El contenido sigue funcionando igual; lo único que desaparece es el “viaje”.
 
 > ### ⚠️ Cuidado
-> No basta con que tu animación sea “suave” para ti. Lo que a una persona le parece elegante, a otra le revuelve el estómago. Incluir `prefers-reduced-motion` no es un extra de lujo: es parte de hacer una web para **todo el mundo**. Pégalo al final de tu hoja de estilos y ya cubriste a mucha gente con tres líneas.
+> No basta con que tu animación te parezca “suave” a ti. Lo que a una persona le resulta elegante, a otra le revuelve el estómago. Incluir `prefers-reduced-motion` no es un extra de lujo: es parte de hacer una web para **todo el mundo**. Pégalo al final de tu hoja de estilos y, con tres líneas, ya cubriste a un montón de gente.
 
 > ### 💡 Tip
 > Si usas **Tailwind** (RachaSimple, Faro), tienes el prefijo `motion-reduce:` para aplicar clases solo cuando la persona pidió menos movimiento, y `motion-safe:` para lo contrario. Por ejemplo, `motion-safe:transition` solo activa la transición si el usuario **no** ha pedido reducir el movimiento.
@@ -348,19 +348,19 @@ Repasemos por qué cada línea está donde está:
 - El bloque de `prefers-reduced-motion` apaga el efecto para quien lo necesita.
 
 > ### 🔎 En tu código
-> Compara este `.card` con tus tarjetas reales en el `styles.css` de **tunal-digital**. Si encuentras que el `:hover` cambia la sombra pero la transición está dentro del `:hover` (o no está), ese es justo el detalle que hace que se sienta “a saltos”. Moverla al estado normal es un cambio de una línea con un gran efecto. Recuerda: si tocas algo funcional en Faro, actualiza también el `README.md` en el mismo PR, como pide la convención del proyecto. 🪼
+> Compara este `.card` con tus tarjetas reales en el `styles.css` de **tunal-digital**. Si encuentras que el `:hover` cambia la sombra pero la transición está dentro del `:hover` (o ni aparece), ese es justo el detalle que hace que todo se sienta “a saltos”. Moverla al estado normal es un cambio de una sola línea con un efecto enorme. Y recuerda: si tocas algo funcional en Faro, actualiza también el `README.md` en el mismo PR, como pide la convención del proyecto. 🪼
 
 > ### 💡 Tip — el detalle del cursor
-> Acompaña tus tarjetas y botones clicables con `cursor: pointer;`. No es animación, pero refuerza el mensaje “esto se puede tocar”. Pequeños detalles, gran sensación de calidad.
+> Acompaña tus tarjetas y botones clicables con `cursor: pointer;`. No es animación, pero refuerza el mensaje “esto se puede tocar”. Detalles pequeños, gran sensación de calidad.
 
 ---
 
 ## 7. Errores comunes (y cómo te das cuenta)
 
-- **“No se anima nada”**: probablemente pusiste la `transition` solo en el `:hover`, o el navegador no puede interpolar entre los dos valores (por ejemplo, animar entre `display: none` y `display: block` no funciona: `display` no es animable de forma sencilla). Usa `opacity` + `visibility`, o `transform`, en su lugar.
-- **“Se ve a tirones”**: seguramente estás animando `width`, `height`, `top` o `margin`. Cambia a `transform` y `opacity`.
+- **“No se anima nada”**: lo más probable es que pusieras la `transition` solo en el `:hover`, o que el navegador no pueda interpolar entre los dos valores (por ejemplo, animar entre `display: none` y `display: block` no funciona: `display` no es animable de forma sencilla). Usa `opacity` + `visibility`, o `transform`, en su lugar.
+- **“Se ve a tirones”**: seguramente estás animando `width`, `height`, `top` o `margin`. Cámbialo a `transform` y `opacity`.
 - **“Parpadea al terminar la animación de entrada”**: te falta `animation-fill-mode: forwards;`.
-- **“Marea / es demasiado”**: baja la duración, reduce el desplazamiento, y añade `prefers-reduced-motion`. Menos es más.
+- **“Marea / es demasiado”**: baja la duración, reduce el desplazamiento y añade `prefers-reduced-motion`. Menos es más.
 
 > ### ⚠️ Cuidado — la prueba del abuelo
 > Antes de dar por bueno un efecto, imagina a alguien que entra a tu sitio por trabajo, con prisa, treinta veces al día. ¿El movimiento le ayuda o le estorba? Si dudas, hazlo más sutil y más rápido. La animación buena casi no se nota: solo se siente que “todo va fino”.
@@ -384,7 +384,7 @@ Repasemos por qué cada línea está donde está:
 
 ## 🧪 Ejercicios
 
-1. **💻 Botón suave.** En el `styles.css` de **tunal-digital**, toma un botón y haz que su `background-color` cambie en `0.25s` con `ease-out` al pasar el ratón. Prueba quitar la `transition` para sentir el “antes”, y vuelve a ponerla.
+1. **💻 Botón suave.** En el `styles.css` de **tunal-digital**, toma un botón y haz que su `background-color` cambie en `0.25s` con `ease-out` al pasar el ratón. Prueba a quitar la `transition` para sentir el “antes”, y vuelve a ponerla.
 
 2. **💻 Tarjeta que flota.** Aplica el patrón de la sección 6 a tus tarjetas de servicios: `transition` en el estado normal, y en `:hover` un `translateY(-6px)` más una `box-shadow` más grande. Ajusta los valores hasta que te guste.
 

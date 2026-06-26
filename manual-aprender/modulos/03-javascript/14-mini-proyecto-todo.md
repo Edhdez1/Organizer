@@ -5,30 +5,30 @@
 </p>
 
 
-> ¡Hola de nuevo! Soy **Bit**, tu ajolote programador. Hoy es un dia especial: vamos a juntar TODO lo que aprendiste en el modulo de JavaScript (el DOM, los eventos, los arrays y el almacenamiento) para construir algo de verdad, algo que funciona y que puedes ensenarle a tu familia. Vamos a hacer una **lista de tareas interactiva**: escribes una tarea, la anades, la marcas como hecha, la borras... y lo mejor: aunque cierres el navegador, ¡tus tareas siguen ahi! Respira hondo. Lo vas a lograr paso a paso. Yo te acompano. 🐾
+> ¡Hola otra vez! Soy **Bit**, tu ajolote programador. Hoy toca un dia especial: vamos a juntar todo lo que viste en el modulo de JavaScript (el DOM, los eventos, los arrays y el almacenamiento) para construir algo de verdad, algo que funciona y que puedes ensenarle a tu familia. Haremos una **lista de tareas interactiva**: escribes una tarea, la anades, la marcas como hecha, la borras... y lo mejor de todo, aunque cierres el navegador, ¡tus tareas siguen ahi! Respira hondo. Lo vas a lograr, paso a paso. Yo te acompano. 🐾
 
 ## 1. ¿Que vamos a construir?
 
-Imagina una libretita digital. Tiene una cajita donde escribes "Comprar pan", aprietas un boton y la tarea aparece en una lista. Si ya compraste el pan, le das clic y se tacha. Si te equivocaste, la borras. Y si cierras la pestana y vuelves manana, tus tareas siguen ahi esperandote.
+Imagina una libretita digital. Tiene una cajita donde escribes "Comprar pan", aprietas un boton y la tarea aparece en una lista. Si ya compraste el pan, le das clic y se tacha. Si te equivocaste, la borras. Y si cierras la pestana y vuelves manana, tus tareas siguen ahi, esperandote.
 
-Eso es exactamente lo que harás hoy. Vamos a usar tres lenguajes juntos:
+Eso es justo lo que vas a hacer hoy. Vamos a combinar tres lenguajes:
 
 - **HTML** para la estructura (la cajita, el boton, la lista vacia).
 - **CSS** para que se vea bonito.
 - **JavaScript** para que cobre vida: que reaccione a tus clics y recuerde tus datos.
 
 > ### 🟦 ¿Que significa? — *Mini-proyecto*
-> Un mini-proyecto es un programa pequeno pero **completo**: tiene principio y fin, y hace algo util de verdad, no es solo un ejercicio suelto. Sirve para practicar uniendo varios temas a la vez, que es como funciona la programacion en la vida real. En **tunal-digital** (un sitio web hecho con HTML, CSS y JavaScript puro), todo el sitio es como un gran proyecto donde el archivo `main.js` une muchas piezas: el chat con IA, el formulario de contacto y las llamadas al servidor. Tu lista de tareas es tu primer "main.js" en miniatura.
+> Un mini-proyecto es un programa pequeno pero **completo**: tiene principio y fin, y hace algo util de verdad, no es un ejercicio suelto. Sirve para practicar uniendo varios temas a la vez, que es como funciona la programacion en la vida real. En **tunal-digital** (un sitio web hecho con HTML, CSS y JavaScript puro), todo el sitio es como un gran proyecto donde el archivo `main.js` une muchas piezas: el chat con IA, el formulario de contacto y las llamadas al servidor. Tu lista de tareas es tu primer "main.js" en miniatura.
 
 > ### 💡 Tip
-> No intentes escribir todo el codigo de golpe. La forma profesional de trabajar es **un pasito, probar, otro pasito, probar**. Asi, si algo se rompe, sabes exactamente que linea fue. Bit lo hace asi todos los dias.
+> No intentes escribir todo el codigo de golpe. La forma profesional de trabajar es **un pasito, probar, otro pasito, probar**. Asi, si algo se rompe, sabes exactamente que linea fue la culpable. Bit lo hace asi todos los dias.
 
 ## 2. Preparamos el escenario: el HTML
 
 Abre tu editor de codigo y crea una carpeta nueva llamada `lista-tareas`. Dentro, crea un archivo llamado `index.html`. Este archivo es el **esqueleto** de nuestra pagina.
 
 > ### 🟦 ¿Que significa? — *HTML*
-> HTML (HyperText Markup Language) es el lenguaje que define **la estructura** de una pagina web: que hay un titulo aqui, una caja de texto alla, un boton mas abajo. No decide colores ni comportamiento, solo el "que cosas hay y en que orden". Sirve como el esqueleto de cualquier web. En **tunal-digital**, cada pagina empieza por un archivo HTML que dibuja los botones y formularios que luego el JavaScript hace funcionar.
+> HTML (HyperText Markup Language) es el lenguaje que define **la estructura** de una pagina web: que hay un titulo aqui, una caja de texto alla, un boton mas abajo. No decide colores ni comportamiento, solo el "que cosas hay y en que orden". Es el esqueleto de cualquier web. En **tunal-digital**, cada pagina empieza por un archivo HTML que dibuja los botones y formularios que luego el JavaScript hace funcionar.
 
 Escribe esto dentro de `index.html`:
 
@@ -55,24 +55,24 @@ Escribe esto dentro de `index.html`:
 </html>
 ```
 
-Fijate en tres cosas importantes que vamos a usar despues desde JavaScript:
+Fijate en tres cosas que vamos a usar despues desde JavaScript:
 
 - El `<input>` tiene `id="entrada"`: ahi escribira el usuario.
 - El `<button>` tiene `id="boton-anadir"`: el boton que dispara la accion.
 - El `<ul>` tiene `id="lista"`: la lista (por ahora vacia) donde apareceran las tareas.
 
 > ### 🟦 ¿Que significa? — *id (identificador)*
-> Un `id` es un **nombre unico** que le pones a un elemento del HTML para poder encontrarlo despues desde JavaScript. Como ponerle nombre a una mascota: solo puede haber un "entrada" en toda la pagina. Sirve para que tu codigo diga "agarra ESE elemento exacto". En **tunal-digital**, el `main.js` usa ids para encontrar el formulario de contacto y la caja del chat antes de hacerlos funcionar.
+> Un `id` es un **nombre unico** que le pones a un elemento del HTML para poder encontrarlo despues desde JavaScript. Es como ponerle nombre a una mascota: solo puede haber un "entrada" en toda la pagina. Sirve para que tu codigo diga "agarra ESE elemento exacto". En **tunal-digital**, el `main.js` usa ids para encontrar el formulario de contacto y la caja del chat antes de hacerlos funcionar.
 
 > ### 🟦 ¿Que significa? — *input*
 > Un `input` es una caja donde el usuario **escribe o introduce datos**. El tipo `type="text"` es para texto normal. Sirve para recoger lo que la persona quiere comunicarle al programa. En **tunal-digital**, el formulario de contacto usa varios `input` para que el visitante escriba su nombre y su correo.
 
 > ### 🔎 En tu codigo
-> El `<ul>` esta vacio a proposito. Las tareas NO se escriben a mano en el HTML: las va a crear JavaScript automaticamente cada vez que el usuario anada una. Esa es la magia de una pagina "interactiva".
+> El `<ul>` esta vacio a proposito. Las tareas NO se escriben a mano en el HTML: las crea JavaScript automaticamente cada vez que el usuario anade una. Esa es la gracia de una pagina "interactiva".
 
 ## 3. Un toque de estilo: el CSS
 
-Crea ahora `estilos.css` en la misma carpeta. No te preocupes por entenderlo todo, el CSS solo decora.
+Crea ahora `estilos.css` en la misma carpeta. No te preocupes por entenderlo todo de una vez; el CSS solo decora.
 
 > ### 🟦 ¿Que significa? — *CSS*
 > CSS (Cascading Style Sheets) es el lenguaje que decide **como se ve** la pagina: colores, tamanos, espacios, tipos de letra. Sirve para que algo que ya existe (gracias al HTML) se vea agradable. En **tunal-digital**, el CSS le da al sitio su aspecto de marca: los colores, los botones redondeados y los espacios.
@@ -97,20 +97,20 @@ li {
 li.hecha span { text-decoration: line-through; color: gray; }
 ```
 
-La ultima regla es la mas interesante para nosotros: cuando un `<li>` tenga la clase `hecha`, su texto aparecera **tachado y gris**. Lo activaremos desde JavaScript.
+La ultima regla es la que mas nos interesa: cuando un `<li>` tenga la clase `hecha`, su texto se vera **tachado y gris**. Esa clase la activaremos desde JavaScript.
 
 > ### 🟦 ¿Que significa? — *clase (class)*
-> Una clase es una **etiqueta reutilizable** que le pones a uno o varios elementos para darles un estilo o marcarlos. A diferencia del `id` (unico), muchos elementos pueden compartir la misma clase. Sirve para aplicar el mismo aspecto o comportamiento a un grupo. Aqui, `hecha` marcara todas las tareas completadas.
+> Una clase es una **etiqueta reutilizable** que le pones a uno o varios elementos para darles un estilo o marcarlos. A diferencia del `id` (unico), muchos elementos pueden compartir la misma clase. Sirve para aplicar el mismo aspecto o comportamiento a un grupo entero. Aqui, `hecha` marcara todas las tareas completadas.
 
 ## 4. ¡Llega JavaScript! Conectamos con la pagina
 
-Crea el archivo `app.js`. Aqui vive toda la inteligencia. Lo primero: que JavaScript **encuentre** los elementos del HTML.
+Crea el archivo `app.js`. Aqui vive toda la inteligencia de la app. Lo primero es que JavaScript **encuentre** los elementos del HTML.
 
 > ### 🟦 ¿Que significa? — *JavaScript*
 > JavaScript es el lenguaje que le da **comportamiento** a la pagina: hace que reaccione a clics, que cambie sola, que recuerde cosas. Si el HTML es el esqueleto y el CSS la piel, JavaScript es el sistema nervioso. En **tunal-digital**, el archivo `main.js` es JavaScript puro y se encarga de todo lo "vivo" del sitio.
 
 > ### 🟦 ¿Que significa? — *DOM*
-> El DOM (Document Object Model) es la forma en que JavaScript **ve** la pagina HTML: como una coleccion de objetos que puede leer y modificar. Gracias al DOM, tu codigo puede decir "agarra la caja de texto" o "crea un elemento nuevo en la lista". Sirve de puente entre tu codigo y lo que el usuario ve. En **tunal-digital**, el `main.js` usa el DOM constantemente para mostrar y ocultar partes del sitio.
+> El DOM (Document Object Model) es la forma en que JavaScript **ve** la pagina HTML: como una coleccion de objetos que puede leer y modificar. Gracias al DOM, tu codigo puede decir "agarra la caja de texto" o "crea un elemento nuevo en la lista". Es el puente entre tu codigo y lo que el usuario ve. En **tunal-digital**, el `main.js` usa el DOM constantemente para mostrar y ocultar partes del sitio.
 
 ```javascript
 // Buscamos los elementos del HTML por su id
@@ -123,17 +123,17 @@ let tareas = [];
 ```
 
 > ### 🟦 ¿Que significa? — *document.getElementById*
-> Es una funcion del DOM que **busca un elemento por su id** y te lo entrega para trabajar con el. El nombre se lee facil: "del documento, dame el elemento con este id". Sirve para conectar una variable de JavaScript con algo real de la pagina. En **tunal-digital**, `main.js` define funciones de atajo justo para hacer mas corto este tipo de busquedas, porque se usan muchisimo.
+> Es una funcion del DOM que **busca un elemento por su id** y te lo entrega para trabajar con el. El nombre se lee facil: "del documento, dame el elemento con este id". Sirve para conectar una variable de JavaScript con algo real de la pagina. En **tunal-digital**, `main.js` define funciones de atajo justo para acortar este tipo de busquedas, porque se usan muchisimo.
 
 > ### 🟦 ¿Que significa? — *variable*
-> Una variable es una **cajita con nombre** donde guardas un dato para usarlo despues. Con `const` guardas algo que no cambiara (como la referencia a la caja de texto) y con `let` algo que si cambiara (como nuestra lista de tareas, que crecera). Sirven para que tu programa recuerde cosas mientras trabaja.
+> Una variable es una **cajita con nombre** donde guardas un dato para usarlo despues. Con `const` guardas algo que no cambiara (como la referencia a la caja de texto) y con `let` algo que si cambiara (como nuestra lista de tareas, que ira creciendo). Sirven para que tu programa recuerde cosas mientras trabaja.
 
 > ### 🟦 ¿Que significa? — *array (arreglo)*
-> Un array es una **lista ordenada de datos** dentro de una sola variable. Lo escribes con corchetes `[]`. Aqui, `tareas` sera un array donde cada elemento es una tarea. Sirve para guardar muchas cosas del mismo tipo juntas y recorrerlas. En **PolyPaw** (una app hecha en Python con Flet) los datos del juego se guardan en estructuras tipo lista dentro de archivos JSON, una idea muy parecida a un array.
+> Un array es una **lista ordenada de datos** dentro de una sola variable. Se escribe con corchetes `[]`. Aqui, `tareas` sera un array donde cada elemento es una tarea. Sirve para guardar muchas cosas del mismo tipo juntas y recorrerlas. En **PolyPaw** (una app hecha en Python con Flet) los datos del juego se guardan en estructuras tipo lista dentro de archivos JSON, una idea muy parecida a un array.
 
 ## 5. Anadir una tarea
 
-Ahora la primera accion real: cuando el usuario haga clic en "Anadir", queremos tomar el texto, guardarlo y mostrarlo.
+Vamos con la primera accion real: cuando el usuario haga clic en "Anadir", queremos tomar el texto, guardarlo y mostrarlo.
 
 ```javascript
 function anadirTarea() {
@@ -164,26 +164,26 @@ botonAnadir.addEventListener("click", anadirTarea);
 > `.trim()` **quita los espacios en blanco** del principio y el final de un texto. Asi, si el usuario escribe solo espacios, lo detectamos como vacio. Sirve para limpiar lo que la persona escribe antes de usarlo.
 
 > ### 🟦 ¿Que significa? — *.value*
-> `.value` es **el contenido actual de una caja de texto** (`input`). Al leerlo (`entrada.value`) sabemos que escribio el usuario; al asignarlo (`entrada.value = ""`) lo cambiamos, por ejemplo para vaciar la caja despues de anadir. Sirve de puente entre lo que la persona teclea y tu codigo. En **tunal-digital**, el formulario de contacto lee el `.value` de cada campo antes de enviar el mensaje.
+> `.value` es **el contenido actual de una caja de texto** (`input`). Al leerlo (`entrada.value`) sabemos que escribio el usuario; al asignarlo (`entrada.value = ""`) lo cambiamos, por ejemplo para vaciar la caja despues de anadir. Es el puente entre lo que la persona teclea y tu codigo. En **tunal-digital**, el formulario de contacto lee el `.value` de cada campo antes de enviar el mensaje.
 
 > ### 🟦 ¿Que significa? — *operador === (comparacion)*
-> El triple igual `===` **compara dos valores y responde verdadero o falso** segun si son iguales. La linea `texto === ""` pregunta "¿el texto esta vacio?". No confundir con un solo `=`, que sirve para *guardar* un valor, no para comparar. Sirve para tomar decisiones en tu codigo.
+> El triple igual `===` **compara dos valores y responde verdadero o falso** segun si son iguales. La linea `texto === ""` pregunta "¿el texto esta vacio?". Ojo con no confundirlo con un solo `=`, que sirve para *guardar* un valor, no para comparar. Sirve para tomar decisiones en tu codigo.
 
 > ### 🟦 ¿Que significa? — *return*
-> `return` **corta la funcion en ese punto** y no ejecuta lo que viene despues. Aqui, si el texto esta vacio, `return` hace que `anadirTarea` termine de inmediato sin guardar nada. Sirve para salir temprano cuando no tiene sentido seguir.
+> `return` **corta la funcion en ese punto** y no ejecuta lo que viene despues. Aqui, si el texto esta vacio, `return` hace que `anadirTarea` termine de inmediato sin guardar nada. Sirve para salir temprano cuando ya no tiene sentido seguir.
 
 > ### 🟦 ¿Que significa? — *evento*
 > Un evento es **algo que ocurre** en la pagina: un clic, una tecla, mover el raton. JavaScript puede "escuchar" esos eventos y reaccionar. Sirve para que tu programa responda al usuario. En **tunal-digital**, `main.js` escucha el evento de enviar el formulario de contacto para procesarlo.
 
 > ### 🟦 ¿Que significa? — *addEventListener*
-> `addEventListener` es la funcion que **conecta un evento con una accion**. Se lee: "al elemento, anadele un escuchador del evento 'click' que ejecute esta funcion". Aqui, al hacer clic en el boton, se ejecuta `anadirTarea`. Sirve para definir como reacciona la pagina.
+> `addEventListener` es la funcion que **conecta un evento con una accion**. Se lee asi: "al elemento, anadele un escuchador del evento 'click' que ejecute esta funcion". Aqui, al hacer clic en el boton, se ejecuta `anadirTarea`. Sirve para definir como reacciona la pagina.
 
 > ### 💡 Tip
-> Fijate que NO escribimos `anadirTarea()` con parentesis dentro del `addEventListener`, sino solo `anadirTarea`. Con parentesis, JavaScript ejecutaria la funcion de inmediato; sin parentesis, solo le pasamos el nombre para que la guarde y la ejecute "cuando ocurra el clic". Es un error muy comun al empezar.
+> Fijate que dentro del `addEventListener` NO escribimos `anadirTarea()` con parentesis, sino solo `anadirTarea`. Con parentesis, JavaScript ejecutaria la funcion de inmediato; sin parentesis, solo le pasamos el nombre para que la guarde y la ejecute "cuando ocurra el clic". Es un tropiezo muy comun al empezar.
 
 ## 6. Pintar la lista en pantalla
 
-Mencionamos `pintarLista()` pero aun no existe. Esta funcion es el corazon visual: borra la lista y la vuelve a dibujar desde el array. Asi siempre lo que ves coincide con lo que hay guardado.
+Ya nombramos `pintarLista()`, pero todavia no existe. Esta funcion es el corazon visual: borra la lista y la vuelve a dibujar desde el array. Asi, lo que ves siempre coincide con lo que hay guardado.
 
 ```javascript
 function pintarLista() {
@@ -207,10 +207,10 @@ function pintarLista() {
 ```
 
 > ### 🟦 ¿Que significa? — *.forEach()*
-> `.forEach()` es una funcion de los arrays que **recorre uno por uno** todos los elementos y ejecuta codigo para cada uno. Aqui, por cada tarea creamos su `<li>`. Nos da tambien el `indice` (la posicion: 0, 1, 2...). Sirve para procesar listas completas sin escribir lo mismo muchas veces.
+> `.forEach()` es una funcion de los arrays que **recorre uno por uno** todos los elementos y ejecuta codigo para cada uno. Aqui, por cada tarea creamos su `<li>`. Tambien nos da el `indice` (la posicion: 0, 1, 2...). Sirve para procesar listas completas sin escribir lo mismo muchas veces.
 
 > ### 🟦 ¿Que significa? — *document.createElement*
-> Crea un **elemento HTML nuevo desde JavaScript**, sin escribirlo a mano en el archivo HTML. Aqui creamos `<li>`, `<span>` y `<button>` en el momento. Sirve para construir partes de la pagina dinamicamente.
+> Crea un **elemento HTML nuevo desde JavaScript**, sin escribirlo a mano en el archivo HTML. Aqui creamos `<li>`, `<span>` y `<button>` al vuelo. Sirve para construir partes de la pagina sobre la marcha.
 
 > ### 🟦 ¿Que significa? — *.appendChild()*
 > "Append child" significa **anadir un hijo**: mete un elemento dentro de otro. Aqui metemos el texto y el boton dentro del `<li>`, y el `<li>` dentro de la lista. Sirve para armar la estructura visual pieza por pieza.
@@ -219,14 +219,14 @@ function pintarLista() {
 > `.textContent` es **el texto que muestra un elemento**. Al asignarle un valor, cambiamos lo que se lee en pantalla. Sirve para mostrar datos al usuario de forma segura.
 
 > ### 🟦 ¿Que significa? — *.innerHTML*
-> `.innerHTML` es **todo el contenido HTML de un elemento**. Aqui lo ponemos en `""` (vacio) para limpiar la lista antes de redibujarla. Sirve para vaciar o reemplazar contenido completo.
+> `.innerHTML` es **todo el contenido HTML de un elemento**. Aqui lo ponemos en `""` (vacio) para limpiar la lista antes de redibujarla. Sirve para vaciar o reemplazar el contenido completo.
 
 > ### ⚠️ Cuidado
-> Vaciar con `innerHTML = ""` y redibujar desde el array es facil de entender, pero ojo: significa que la "fuente de la verdad" es SIEMPRE el array `tareas`, no lo que ves en pantalla. Primero cambiamos el array, luego pintamos. Nunca al reves. Si te confundes y modificas la pantalla sin tocar el array, al redibujar perderas el cambio.
+> Vaciar con `innerHTML = ""` y redibujar desde el array es comodo de entender, pero ojo con una cosa: la "fuente de la verdad" es SIEMPRE el array `tareas`, no lo que ves en pantalla. Primero cambiamos el array, luego pintamos. Nunca al reves. Si te confundes y modificas la pantalla sin tocar el array, al redibujar perderas el cambio.
 
 ## 7. Marcar como hecha y borrar
 
-Ahora hagamos que esos elementos reaccionen. Modificamos el `forEach` para anadir eventos al texto (marcar/desmarcar) y al boton de la basura (borrar). Reemplaza el interior del `forEach` por esto:
+Ahora hagamos que esos elementos reaccionen. Vamos a modificar el `forEach` para anadir eventos al texto (marcar/desmarcar) y al boton de la basura (borrar). Reemplaza el interior del `forEach` por esto:
 
 ```javascript
 tareas.forEach(function (tarea, indice) {
@@ -258,16 +258,16 @@ tareas.forEach(function (tarea, indice) {
 ```
 
 > ### 🟦 ¿Que significa? — *.classList.add()*
-> `.classList` es la lista de clases de un elemento, y `.add()` le **agrega una clase**. Aqui anadimos la clase `hecha` para que el CSS tache el texto. Existe tambien `.remove()` para quitarla. Sirve para cambiar el aspecto segun el estado.
+> `.classList` es la lista de clases de un elemento, y `.add()` le **agrega una clase**. Aqui anadimos la clase `hecha` para que el CSS tache el texto. Tambien existe `.remove()` para quitarla. Sirve para cambiar el aspecto segun el estado.
 
 > ### 🟦 ¿Que significa? — *operador ! (negacion)*
-> El signo `!` **invierte un valor verdadero/falso**: si era `true` lo vuelve `false` y viceversa. La linea `!tareas[indice].hecha` significa "lo contrario de como estaba": si estaba hecha, la desmarcamos; si no, la marcamos. Sirve para alternar estados con un clic.
+> El signo `!` **invierte un valor verdadero/falso**: si era `true` lo vuelve `false` y al reves. La linea `!tareas[indice].hecha` significa "lo contrario de como estaba": si estaba hecha, la desmarcamos; si no, la marcamos. Sirve para alternar estados con un solo clic.
 
 > ### 🟦 ¿Que significa? — *.splice()*
 > `.splice()` es una funcion de los arrays que **quita (o inserta) elementos** en una posicion. `tareas.splice(indice, 1)` significa "desde esa posicion, elimina 1 elemento". Sirve para borrar una tarea concreta de la lista.
 
 > ### 🔎 En tu codigo
-> Cada accion (marcar, borrar) hace tres cosas en orden: cambia el array, llama a `pintarLista()` para refrescar la pantalla, y llama a `guardar()` para no perder los datos. Ese trio se repite a proposito. En el siguiente paso creamos `guardar()`.
+> Cada accion (marcar, borrar) hace tres cosas en orden: cambia el array, llama a `pintarLista()` para refrescar la pantalla y llama a `guardar()` para no perder los datos. Ese trio se repite a proposito. En el siguiente paso creamos `guardar()`.
 
 ## 8. La memoria: guardar en localStorage
 
@@ -282,7 +282,7 @@ Hasta ahora, si recargas la pagina, ¡todo desaparece! El array `tareas` vive so
 > JSON es un **formato de texto** para representar datos (listas y objetos) de forma que cualquier programa los entienda. Sirve para guardar y transportar informacion. En **PolyPaw**, los datos del juego viven en archivos JSON; en **RachaSimple**, los datos viajan como JSON entre la app y Supabase.
 
 > ### 🟦 ¿Que significa? — *JSON.stringify*
-> Convierte un objeto o array de JavaScript en **texto JSON**. Lo necesitamos porque `localStorage` solo guarda texto. Sirve para "empaquetar" datos antes de guardarlos.
+> Convierte un objeto o array de JavaScript en **texto JSON**. Lo necesitamos porque `localStorage` solo guarda texto. Sirve para "empaquetar" los datos antes de guardarlos.
 
 > ### 🟦 ¿Que significa? — *JSON.parse*
 > Hace lo contrario: convierte **texto JSON de vuelta en un objeto o array** real de JavaScript. Sirve para "desempaquetar" lo que habiamos guardado y volver a usarlo.
@@ -304,7 +304,7 @@ cargar(); // se ejecuta al abrir la pagina
 ```
 
 > ### 🟦 ¿Que significa? — *.setItem() y .getItem()*
-> `setItem("nombre", valor)` **guarda** un dato en localStorage bajo una etiqueta. `getItem("nombre")` lo **recupera** despues. Son como guardar y sacar algo de un cajon con su etiqueta. Sirven para escribir y leer la memoria del navegador.
+> `setItem("nombre", valor)` **guarda** un dato en localStorage bajo una etiqueta. `getItem("nombre")` lo **recupera** despues. Es como guardar y sacar algo de un cajon que lleva su etiqueta. Sirven para escribir y leer la memoria del navegador.
 
 No olvides anadir la llamada a `guardar()` tambien dentro de `anadirTarea`, justo despues del `push`:
 
@@ -320,11 +320,11 @@ function anadirTarea() {
 ```
 
 > ### ⚠️ Cuidado
-> Si abres tu `index.html` directamente con doble clic, localStorage funciona igual. Pero si algun dia cambias el codigo y ves errores raros, revisa que el nombre de la etiqueta (`"tareas"`) sea siempre el mismo en `setItem` y `getItem`. Un nombre mal escrito y la pagina "olvida" todo.
+> Si abres tu `index.html` directamente con doble clic, localStorage funciona igual. Pero si algun dia cambias el codigo y empiezan a salir errores raros, revisa que el nombre de la etiqueta (`"tareas"`) sea siempre el mismo en `setItem` y en `getItem`. Un nombre mal escrito y la pagina "olvida" todo.
 
 ## 9. Un detalle amable: anadir con la tecla Enter
 
-Apretar el boton funciona, pero seria mas comodo poder pulsar **Enter** tras escribir. Anade esto al final de tu `app.js`:
+Apretar el boton funciona, pero seria mas comodo poder pulsar **Enter** despues de escribir. Anade esto al final de tu `app.js`:
 
 ```javascript
 entrada.addEventListener("keydown", function (evento) {
@@ -335,14 +335,14 @@ entrada.addEventListener("keydown", function (evento) {
 ```
 
 > ### 🟦 ¿Que significa? — *evento keydown*
-> `keydown` es el evento que ocurre cuando el usuario **presiona una tecla**. El objeto `evento` que recibimos tiene la propiedad `.key` con el nombre de la tecla (aqui buscamos `"Enter"`). Sirve para responder al teclado, no solo al raton.
+> `keydown` es el evento que ocurre cuando el usuario **presiona una tecla**. El objeto `evento` que recibimos trae la propiedad `.key` con el nombre de la tecla (aqui buscamos `"Enter"`). Sirve para responder al teclado, no solo al raton.
 
 > ### 💡 Tip
-> Estos detalles pequenos (responder a Enter, limpiar la caja al anadir, ignorar tareas vacias) se llaman **experiencia de usuario**. No cambian lo que el programa hace, pero hacen que se sienta agradable. Los buenos programas estan llenos de estos mimos.
+> Estos detalles pequenos (responder a Enter, limpiar la caja al anadir, ignorar tareas vacias) se llaman **experiencia de usuario**. No cambian lo que el programa hace, pero hacen que se sienta agradable de usar. Los buenos programas estan llenos de estos mimos.
 
 ## 10. Probamos todo junto
 
-¡Momento de la verdad! Abre `index.html` en tu navegador (doble clic sobre el archivo) y comprueba:
+¡Momento de la verdad! Abre `index.html` en tu navegador (doble clic sobre el archivo) y comprueba lo siguiente:
 
 1. Escribe "Estudiar JavaScript" y pulsa Anadir. Debe aparecer en la lista.
 2. Haz clic sobre el texto. Debe tacharse en gris.
@@ -356,11 +356,11 @@ Si algo no funciona, abre la consola del navegador (tecla F12, pestana "Console"
 > La consola es una ventanita donde el navegador **muestra mensajes y errores** de tu JavaScript. Sirve para descubrir por que algo no funciona. Es la mejor amiga de quien programa. Puedes escribir `console.log("hola")` en tu codigo para imprimir mensajes ahi.
 
 > ### 🔎 En tu codigo
-> Con apenas tres archivos (`index.html`, `estilos.css`, `app.js`) construiste una app interactiva con memoria. Eso es exactamente el patron de **tunal-digital**: HTML para la estructura, CSS para el estilo y un `main.js` que conecta eventos y maneja los datos. Cambia la escala, no la idea: proyectos como **Faro/Organizer** (Next.js + React) o **RachaSimple** (React + TypeScript) hacen lo mismo, solo que con herramientas mas grandes que organizan estas piezas cuando la app crece.
+> Con apenas tres archivos (`index.html`, `estilos.css`, `app.js`) construiste una app interactiva con memoria. Ese es justo el patron de **tunal-digital**: HTML para la estructura, CSS para el estilo y un `main.js` que conecta eventos y maneja los datos. Cambia la escala, no la idea: proyectos como **Faro/Organizer** (Next.js + React) o **RachaSimple** (React + TypeScript) hacen lo mismo, solo que con herramientas mas grandes que organizan estas piezas cuando la app crece.
 
 ## 11. ¡Lo lograste! 🎉
 
-Para. Mira lo que hiciste. Tomaste una pagina vacia y la convertiste en una aplicacion **real** que:
+Para un momento. Mira lo que hiciste. Tomaste una pagina vacia y la convertiste en una aplicacion **real** que:
 
 - Lee lo que el usuario escribe (DOM e inputs).
 - Reacciona a clics y al teclado (eventos).

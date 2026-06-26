@@ -5,16 +5,16 @@
 </p>
 
 
-> En este capítulo no vas a aprender un lenguaje nuevo: vas a aprender la **forma de pensar** que está debajo de todos ellos. Descomponer un problema en pasos, escribir un plan en palabras antes de tocar el teclado, distinguir los datos de las decisiones y de las repeticiones, leer un mensaje de error sin asustarte, encontrar el bug paso a paso, pedir ayuda de forma que de verdad te respondan y, sobre todo, dar órdenes precisas a una IA. Esta es la habilidad que hace que todo lo demás cobre sentido. Bit, nuestro ajolote, dice que esto es como aprender a caminar antes de correr: aburrido al principio, imprescindible siempre.
+> Aquí no vas a aprender un lenguaje nuevo. Vas a aprender la **forma de pensar** que está debajo de todos ellos. Partir un problema en pasos, escribir el plan con palabras antes de tocar el teclado, distinguir los datos de las decisiones y de las repeticiones, leer un mensaje de error sin que te tiemble el pulso, cazar el bug poco a poco, pedir ayuda de manera que de verdad te respondan y, sobre todo, dar órdenes precisas a una IA. Esta es la habilidad que le da sentido a todo lo demás. Bit, nuestro ajolote, lo compara con aprender a caminar antes de correr: pesado al principio, imprescindible siempre.
 
 ## 1. ¿Qué es "pensar como programador"?
 
-Mucha gente cree que programar es memorizar comandos raros. No lo es. Programar es, sobre todo, **resolver problemas con pasos tan claros que una máquina pueda seguirlos sin equivocarse ni inventar nada**. La computadora no entiende intenciones, solo instrucciones exactas.
+Mucha gente cree que programar es memorizar comandos raros. No lo es. Programar es, ante todo, **resolver problemas con pasos tan claros que una máquina pueda seguirlos sin equivocarse ni inventarse nada**. La computadora no entiende intenciones; entiende instrucciones exactas y poco más.
 
 > ### 🟦 ¿Qué significa? — *Algoritmo*
-> Un algoritmo es una lista de pasos ordenados que resuelve un problema o cumple una tarea. No tiene por qué estar en ningún lenguaje de programación: una receta de cocina o las instrucciones para armar un mueble también son algoritmos. Sirve para describir *qué hay que hacer* antes de preocuparte por *cómo escribirlo* en código.
+> Un algoritmo es una lista de pasos ordenados que resuelve un problema o cumple una tarea. No tiene por qué estar en ningún lenguaje de programación: una receta de cocina o las instrucciones para armar un mueble también son algoritmos. Te sirve para describir *qué hay que hacer* antes de pelearte con *cómo escribirlo* en código.
 
-Pensar como programador significa adquirir cuatro reflejos:
+Pensar como programador es, en el fondo, tener cuatro reflejos:
 
 1. **Descomponer**: partir un problema grande en problemas pequeños.
 2. **Reconocer patrones**: ver lo que se parece a algo que ya resolviste.
@@ -22,11 +22,11 @@ Pensar como programador significa adquirir cuatro reflejos:
 4. **Diseñar un algoritmo**: escribir los pasos antes de programarlos.
 
 > ### 💡 Tip — El código es el último paso
-> Antes de escribir una sola línea, pregúntate: "¿Sabría explicarle esto a una persona, paso por paso, sin saltarme nada?". Si la respuesta es no, todavía no estás listo para programar. Estás listo para *pensar* un poco más.
+> Antes de escribir una sola línea, hazte una pregunta: "¿Sabría explicarle esto a una persona, paso por paso, sin saltarme nada?". Si la respuesta es no, todavía no estás listo para programar. Estás listo para *pensar* un rato más.
 
 ## 2. Descomponer un problema en pasos
 
-Imagina que en tu app de hábitos **RachaSimple** quieres una función nueva: "marcar un hábito como completado hoy". Suena pequeño, pero contiene varios pasos escondidos. Descomponer es sacarlos a la luz:
+Imagina que en tu app de hábitos **RachaSimple** quieres una función nueva: "marcar un hábito como completado hoy". Suena pequeño, pero esconde varios pasos. Descomponer es justo eso, sacarlos a la luz:
 
 1. Saber **qué** hábito se está marcando (su identificador).
 2. Saber **qué día** es hoy.
@@ -35,10 +35,10 @@ Imagina que en tu app de hábitos **RachaSimple** quieres una función nueva: "m
 5. Volver a calcular la **racha** (cuántos días seguidos lleva).
 6. Mostrar el cambio en la pantalla.
 
-Fíjate que un "simple botón" esconde seis decisiones. Esto es lo normal. Quien no descompone, se atasca; quien descompone, avanza paso a paso.
+Fíjate: un "simple botón" esconde seis decisiones. Y eso es lo normal. Quien no descompone se atasca; quien descompone avanza, paso a paso.
 
 > ### 🔎 En tu código
-> En **RachaSimple** esos pasos se reparten entre carpetas: la pantalla y el botón viven en `src/components`, la lógica de "qué pasa al marcar" suele vivir en `src/hooks`, y la conversación con la base de datos en `src/repositories`. Descomponer también es decidir *dónde* va cada pieza.
+> En **RachaSimple** esos pasos se reparten entre carpetas: la pantalla y el botón viven en `src/components`, la lógica de "qué pasa al marcar" suele estar en `src/hooks`, y la conversación con la base de datos en `src/repositories`. Descomponer también es decidir *dónde* va cada pieza.
 
 > ### 💡 Tip — La regla del "y luego"
 > Cuenta tu problema en voz alta usando "y luego". "El usuario toca el botón, *y luego* miro qué hábito es, *y luego* reviso si ya estaba marcado...". Cada "y luego" es, casi siempre, un paso de tu algoritmo.
@@ -48,9 +48,9 @@ Fíjate que un "simple botón" esconde seis decisiones. Esto es lo normal. Quien
 El pseudocódigo es el puente entre tu cabeza y el lenguaje de programación.
 
 > ### 🟦 ¿Qué significa? — *Pseudocódigo*
-> Es escribir los pasos de tu algoritmo en lenguaje casi humano, pero con la estructura de un programa (decisiones, repeticiones, datos). No se ejecuta en ninguna máquina; sirve para *pensar con orden* y para detectar errores de lógica antes de escribir código real. La palabra significa "casi-código".
+> Es escribir los pasos de tu algoritmo en lenguaje casi humano, pero con la estructura de un programa (decisiones, repeticiones, datos). No se ejecuta en ninguna máquina; sirve para *pensar con orden* y para cazar errores de lógica antes de escribir código de verdad. La palabra significa "casi-código".
 
-Veamos el ejemplo de marcar un hábito en **RachaSimple**, ahora en pseudocódigo:
+Volvamos al ejemplo de marcar un hábito en **RachaSimple**, ahora en pseudocódigo:
 
 ```text
 FUNCIÓN marcarHabito(idHabito):
@@ -65,9 +65,9 @@ FUNCIÓN marcarHabito(idHabito):
 FIN FUNCIÓN
 ```
 
-No es JavaScript, no es Python, no es de nadie. Pero cualquier persona que sepa programar podría convertirlo a su lenguaje. Esa es la magia: **el pseudocódigo separa la lógica del idioma**.
+No es JavaScript, no es Python, no es de nadie. Pero cualquiera que sepa programar podría pasarlo a su lenguaje. Ahí está la gracia: **el pseudocódigo separa la lógica del idioma**.
 
-Otro ejemplo, esta vez de **PolyPaw**, tu app educativa en Python. Quieres elegir una misión al azar de las que el niño aún no ha completado:
+Otro ejemplo, esta vez de **PolyPaw**, tu app educativa en Python. Quieres elegir una misión al azar de las que el niño todavía no ha completado:
 
 ```text
 FUNCIÓN elegirMision(misionesDisponibles, misionesHechas):
@@ -82,24 +82,24 @@ FUNCIÓN elegirMision(misionesDisponibles, misionesHechas):
 ```
 
 > ### 🔎 En tu código
-> En **PolyPaw** las misiones viven en archivos `missions/*.json` y el progreso del niño en `polypaw_db.json`. El pseudocódigo de arriba describe, sin tecnicismos, cómo `main.py` decidiría qué misión mostrar. Primero el plan, luego lo traduces a Python.
+> En **PolyPaw** las misiones viven en archivos `missions/*.json` y el progreso del niño en `polypaw_db.json`. El pseudocódigo de arriba describe, sin tecnicismos, cómo `main.py` decidiría qué misión mostrar. Primero el plan; luego lo traduces a Python.
 
 > ### ⚠️ Cuidado — No saltes este paso "porque es obvio"
-> Los problemas que parecen obvios son los que más bugs esconden. Escribir cuatro líneas de pseudocódigo te cuesta dos minutos y te ahorra una hora de confusión. Bit ha visto a muchos atascarse por confiar demasiado en su memoria.
+> Los problemas que parecen obvios son los que más bugs esconden. Escribir cuatro líneas de pseudocódigo te cuesta dos minutos y te ahorra una hora de líos. Bit ha visto a mucha gente atascarse por fiarse de más de su memoria.
 
 ## 4. Las tres piezas de todo programa: datos, decisiones y repeticiones
 
-Casi cualquier programa del mundo se construye con tres ingredientes. Saber reconocerlos te da rayos X para leer cualquier código.
+Casi cualquier programa del mundo se arma con tres ingredientes. Saber reconocerlos es como tener rayos X para leer cualquier código.
 
 ### 4.1 Datos
 
 > ### 🟦 ¿Qué significa? — *Dato / Variable*
-> Un **dato** es una pieza de información que tu programa guarda y usa: un nombre, un número, una fecha, una lista. Una **variable** es una caja con etiqueta donde guardas un dato para reutilizarlo. Si escribes `racha = 5`, "racha" es la variable y "5" es el dato.
+> Un **dato** es una pieza de información que tu programa guarda y usa: un nombre, un número, una fecha, una lista. Una **variable** es una caja con etiqueta donde guardas un dato para reutilizarlo después. Si escribes `racha = 5`, "racha" es la variable y "5" es el dato.
 
-En **RachaSimple**, los datos son cosas como: el nombre del hábito, la fecha de hoy, el número de la racha, si está completado o no.
+En **RachaSimple**, los datos son cosas como el nombre del hábito, la fecha de hoy, el número de la racha o si está completado o no.
 
 > ### 🔎 En tu código
-> En **RachaSimple** la forma exacta de tus datos está descrita en `src/types/database.ts`. Ese archivo es como el plano de qué información existe (qué es un hábito, qué campos tiene). Cuando dudes "¿qué datos manejo?", ese archivo te responde.
+> En **RachaSimple** la forma exacta de tus datos está descrita en `src/types/database.ts`. Ese archivo es como el plano de qué información existe: qué es un hábito y qué campos tiene. Cuando dudes "¿qué datos manejo?", ese archivo te responde.
 
 ### 4.2 Decisiones
 
@@ -124,14 +124,14 @@ for mision in misiones_disponibles:
 ```
 
 > ### 💡 Tip — El juego de los tres colores
-> Toma cualquier trozo de código (tuyo o ajeno) y subraya mentalmente: datos en azul, decisiones (`if`) en verde, repeticiones (`for`/`while`) en naranja. Verás que casi todo cae en uno de los tres. Reconocer la estructura es la mitad de entenderla.
+> Toma cualquier trozo de código (tuyo o ajeno) y subraya mentalmente: datos en azul, decisiones (`if`) en verde, repeticiones (`for`/`while`) en naranja. Verás que casi todo cae en uno de los tres. Reconocer la estructura ya es media batalla ganada.
 
 > ### 🔎 En tu código
-> En el backend de **tunal-digital** (`backend/worker.js`), un Cloudflare Worker que habla con la API de Claude, encontrarás los tres ingredientes: **datos** (el mensaje que envía el visitante), una **decisión** (¿la petición es válida o respondo con error?) y a veces una **repetición** (recorrer una lista de mensajes). Mismos tres ladrillos, otro proyecto.
+> En el backend de **tunal-digital** (`backend/worker.js`), un Cloudflare Worker que habla con la API de Claude, están los tres ingredientes: **datos** (el mensaje que envía el visitante), una **decisión** (¿la petición es válida o respondo con error?) y a veces una **repetición** (recorrer una lista de mensajes). Mismos tres ladrillos, otro proyecto.
 
 ## 5. Leer y entender un mensaje de error
 
-Un error no es un castigo: es la computadora **ayudándote** a encontrar dónde se rompió algo. Aprender a leerlos es una superhabilidad.
+Un error no es un castigo: es la computadora **echándote una mano** para encontrar dónde se rompió algo. Aprender a leerlos es una superhabilidad.
 
 > ### 🟦 ¿Qué significa? — *Error / Excepción*
 > Un error (o "excepción") es un aviso de que el programa no pudo seguir porque algo no cuadró: un archivo que no existe, una variable mal escrita, un número donde esperabas texto. El mensaje suele decir **qué** pasó, **dónde** (archivo y línea) y a veces **por qué**.
@@ -145,13 +145,13 @@ Traceback (most recent call last):
 KeyError: 'titulo'
 ```
 
-Vamos a leerlo de abajo hacia arriba, que es como más rápido se entiende:
+Vamos a leerlo de abajo hacia arriba, que es como se entiende más rápido:
 
 - **`KeyError: 'titulo'`** → el tipo de error: buscaste una clave llamada `titulo` que no existe.
 - **`File "main.py", line 42`** → dónde ocurrió: archivo `main.py`, línea 42.
 - **`in cargar_mision`** → dentro de qué función.
 
-Conclusión: una misión de tus `missions/*.json` no tiene el campo `titulo`, o lo escribiste distinto (`Titulo`, `title`). Sin entrar en pánico, el error ya te llevó casi de la mano al problema.
+Conclusión: una misión de tus `missions/*.json` no tiene el campo `titulo`, o lo escribiste distinto (`Titulo`, `title`). Sin entrar en pánico, el propio error ya te llevó casi de la mano hasta el problema.
 
 Ahora uno de **RachaSimple** (TypeScript/React):
 
@@ -160,20 +160,20 @@ TypeError: Cannot read properties of undefined (reading 'nombre')
     at HabitCard (src/components/HabitCard.tsx:18:30)
 ```
 
-Traducción: en `src/components/HabitCard.tsx`, línea 18, intentaste leer `.nombre` de algo que era `undefined` (no existía). Probablemente un hábito llegó vacío. El error te da archivo y línea exactos. Es un mapa, no un regaño.
+Traducción: en `src/components/HabitCard.tsx`, línea 18, intentaste leer `.nombre` de algo que era `undefined` (no existía). Lo más probable es que un hábito llegara vacío. El error te da archivo y línea exactos. Es un mapa, no un regaño.
 
 > ### ⚠️ Cuidado — No leas solo la primera línea roja
-> Mucha gente ve rojo y cierra la terminal. El detalle útil suele estar en el **nombre del error** y en la **línea de TU archivo** (no la de las librerías). Busca tu nombre de archivo en el mensaje: ahí empieza la pista.
+> Mucha gente ve rojo y cierra la terminal. El detalle útil casi siempre está en el **nombre del error** y en la **línea de TU archivo** (no la de las librerías). Busca el nombre de tu archivo en el mensaje: ahí empieza la pista.
 
 > ### 💡 Tip — Copia el error completo, no lo cuentes con tus palabras
 > Cuando guardes un error para buscarlo o preguntarlo, copia el texto literal. "Me sale algo de undefined" no sirve; `TypeError: Cannot read properties of undefined (reading 'nombre')` sí.
 
 ## 6. Depurar paso a paso
 
-Depurar es encontrar y arreglar errores. La palabra viene de "debug" (quitar el bicho, *bug*).
+Depurar es encontrar y arreglar errores. La palabra viene de "debug", quitar el bicho, el *bug*.
 
 > ### 🟦 ¿Qué significa? — *Bug y depurar (debug)*
-> Un **bug** es un fallo en el programa: hace algo distinto de lo que querías. **Depurar** es el proceso de encontrar por qué ocurre y corregirlo. No es magia: es un método ordenado de ir descartando sospechosos.
+> Un **bug** es un fallo en el programa: hace algo distinto de lo que querías. **Depurar** es el proceso de averiguar por qué ocurre y corregirlo. No es magia: es un método ordenado de ir descartando sospechosos.
 
 ### El método de los cuatro pasos
 
@@ -197,13 +197,13 @@ console.log("DEBUG: el habito vale ->", habito);
 > Son instrucciones que muestran un valor en la pantalla o en la consola mientras el programa corre. `print` se usa en Python (PolyPaw); `console.log` en JavaScript y TypeScript (tunal-digital, RachaSimple, Faro). Sirven para "espiar" qué valen tus datos en un punto concreto y entender por qué algo falla.
 
 > ### 🔎 En tu código
-> En **Faro** (carpeta Organizer, Next.js + OpenAI), cuando una llamada a la IA devuelva algo inesperado, un `console.log` justo después de recibir la respuesta de OpenAI, dentro de `src/app/api`, te muestra exactamente qué llegó. Casi siempre el bug está en que lo recibido no tenía la forma que esperabas.
+> En **Faro** (carpeta Organizer, Next.js + OpenAI), cuando una llamada a la IA devuelva algo raro, un `console.log` justo después de recibir la respuesta de OpenAI, dentro de `src/app/api`, te muestra exactamente qué llegó. Casi siempre el bug está en que lo recibido no tenía la forma que esperabas.
 
 > ### 💡 Tip — El patito de goma
 > Hay una técnica real y famosa: explícale tu bug en voz alta a un objeto (un patito, una taza... o a Bit). Al obligarte a contar el problema paso a paso, tu cerebro encuentra la falla solo. Suena raro; funciona muchísimo.
 
 > ### ⚠️ Cuidado — "No cambié nada y dejó de funcionar"
-> Casi siempre **sí** cambió algo: una actualización, un dato distinto, un archivo movido. En lugar de pelear con esa frase, pregúntate "¿qué fue lo último que toqué?" y empieza por ahí.
+> Casi siempre **sí** cambió algo: una actualización, un dato distinto, un archivo movido. En lugar de pelearte con esa frase, pregúntate "¿qué fue lo último que toqué?" y empieza por ahí.
 
 ## 7. Buscar ayuda eficazmente
 
@@ -225,17 +225,17 @@ Una buena pregunta tiene cuatro partes:
 4. **Qué pasó en realidad** (el mensaje de error literal).
 
 > ### 💡 Tip — El ejemplo mínimo
-> Reduce tu problema al trozo más pequeño que aún falla. Si puedes reproducir el bug en 10 líneas en vez de 500, lo resolverás tú mismo la mitad de las veces *mientras* lo recortas. A esto se le llama "ejemplo reproducible mínimo".
+> Reduce tu problema al trozo más pequeño que aún falla. Si consigues reproducir el bug en 10 líneas en vez de 500, la mitad de las veces lo resolverás tú mismo *mientras* lo recortas. A esto se le llama "ejemplo reproducible mínimo".
 
 > ### ⚠️ Cuidado — Nunca pegues tus secretos
-> Al pedir ayuda (en un foro o a una IA), borra claves, tokens y contraseñas. En tus proyectos eso incluye la clave de la API de Claude en **tunal-digital**, las credenciales de Supabase en **RachaSimple** y **Faro**, o la clave de OpenAI en **Faro**. Esas viven en variables de entorno justo para no exponerlas. Si las pegas en internet, considéralas comprometidas.
+> Al pedir ayuda (en un foro o a una IA), borra claves, tokens y contraseñas. En tus proyectos eso incluye la clave de la API de Claude en **tunal-digital**, las credenciales de Supabase en **RachaSimple** y **Faro**, o la clave de OpenAI en **Faro**. Esas viven en variables de entorno precisamente para no exponerlas. Si las pegas en internet, dalas por comprometidas.
 
 ## 8. Cómo dar órdenes precisas a una IA
 
-Este es el objetivo del manual, así que vamos despacio. Una IA como Claude es muy capaz, pero **no adivina lo que tienes en la cabeza**. Hace lo que le dices, no lo que querías decir. Pensar como programador es justo lo que te vuelve bueno pidiéndole cosas.
+Este es el objetivo del manual, así que vamos con calma. Una IA como Claude es muy capaz, pero **no adivina lo que tienes en la cabeza**. Hace lo que le dices, no lo que querías decir. Y pensar como programador es justo lo que te vuelve bueno pidiéndole cosas.
 
 > ### 🟦 ¿Qué significa? — *Prompt*
-> Un prompt es el mensaje o instrucción que le das a una IA para que haga algo. Un buen prompt es claro, da contexto y dice exactamente qué quieres de salida. Pedirle bien a una IA es una habilidad tan real como escribir código.
+> Un prompt es el mensaje o la instrucción que le das a una IA para que haga algo. Un buen prompt es claro, da contexto y dice exactamente qué quieres de salida. Pedirle bien a una IA es una habilidad tan real como escribir código.
 
 ### Las cinco partes de una buena orden a la IA
 
@@ -266,13 +266,13 @@ la función con comentarios en español. Aquí está mi tipo de hábito:
 La segunda funciona porque **descompusiste el problema antes de pedir** (secciones 2 y 3), nombraste tus datos (sección 4) y diste contexto real. Pensar como programador es lo que te permite escribir el prompt de la derecha.
 
 > ### 💡 Tip — Pide el plan antes del código
-> Una técnica poderosa: "Antes de escribir código, dame el pseudocódigo de los pasos y espera mi visto bueno." Así revisas la *lógica* antes de recibir 80 líneas. Si el plan está mal, el código estaría mal igual.
+> Una técnica poderosa: "Antes de escribir código, dame el pseudocódigo de los pasos y espera mi visto bueno." Así revisas la *lógica* antes de recibir 80 líneas. Si el plan está mal, el código saldría mal igual.
 
 > ### 💡 Tip — Dale el error literal a la IA
-> Igual que con un humano, pega el mensaje de error completo y el archivo y línea. "Tengo este `KeyError: 'titulo'` en main.py línea 42, aquí está la función y aquí un ejemplo de mi JSON de misión. ¿Por qué falla?". Con eso, la IA acierta muchísimo más.
+> Igual que con una persona, pega el mensaje de error completo, con archivo y línea. "Tengo este `KeyError: 'titulo'` en main.py línea 42, aquí está la función y aquí un ejemplo de mi JSON de misión. ¿Por qué falla?". Con eso, la IA acierta muchísimo más.
 
 > ### ⚠️ Cuidado — Revisa, no copies a ciegas
-> La IA se equivoca, inventa funciones que no existen o asume cosas de tu proyecto que no son ciertas. Tú eres quien manda. Lee lo que te da, entiéndelo (para eso es este manual) y pruébalo antes de confiar. Una IA que programa por ti sin que entiendas nada te deja indefenso cuando algo falla.
+> La IA se equivoca, inventa funciones que no existen o da por hechas cosas de tu proyecto que no son ciertas. Tú eres quien manda. Lee lo que te da, entiéndelo (para eso es este manual) y pruébalo antes de confiar. Una IA que programa por ti sin que entiendas nada te deja indefenso el día que algo falla.
 
 > ### 🔎 En tu código
 > Hasta para administrar tu **polypaw-nas** (Ubuntu Server, Samba, Docker/Podman, Cockpit) aplica lo mismo: si le pides ayuda a una IA con un servicio que no arranca, dile la versión exacta del sistema (Ubuntu Server 26.04), qué servicio falla (`smbd` de Samba, por ejemplo) y pega el mensaje de error literal del log. Contexto preciso, respuesta precisa.

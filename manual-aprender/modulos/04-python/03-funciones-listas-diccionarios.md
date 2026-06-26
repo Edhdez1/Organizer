@@ -1,15 +1,17 @@
 # Capítulo 03 — Funciones, listas y diccionarios
 
-> Tres herramientas que usarás en cada programa Python: **funciones** (para organizar), **listas**
-> (colecciones ordenadas) y **diccionarios** (datos con etiquetas). Son la base de cómo PolyPaw
-> guarda sus misiones y el perfil del usuario.
+> Tres herramientas que vas a usar en prácticamente todos tus programas en Python: **funciones**
+> (para organizar el código), **listas** (colecciones ordenadas) y **diccionarios** (datos con
+> etiquetas). Sobre estas tres piezas se apoya la forma en que PolyPaw guarda sus misiones y el
+> perfil del usuario.
 
 ---
 
 ## 1. Funciones con `def`
 
 > ### 🟦 ¿Qué significa? — *Definir una función con `def`*
-> En Python las funciones se crean con la palabra `def`, dos puntos y el cuerpo sangrado:
+> En Python las funciones nacen con la palabra `def`, seguida del nombre, los dos puntos y el
+> cuerpo sangrado debajo:
 > ```python
 > def saludar(nombre):
 >     print(f"¡Hola, {nombre}!")
@@ -20,11 +22,12 @@
 > |---|---|---|
 > | Definir función | `function saludar(n) { ... }` | `def saludar(n):` |
 > | Devolver valor | `return x;` | `return x` |
-> Los **parámetros**, **argumentos** y `return` funcionan igual que en JavaScript (Módulo 03);
-> solo cambia la forma de escribirlos.
+> Los **parámetros**, los **argumentos** y el `return` se comportan igual que en JavaScript
+> (Módulo 03); lo único que cambia es cómo se escriben.
 
 > ### 🟦 ¿Qué significa? — *Valores por defecto en parámetros*
-> Python permite dar un valor **por defecto** a un parámetro, que se usa si no pasas argumento:
+> Python te deja darle a un parámetro un valor **por defecto**, que entra en juego cuando no pasas
+> ese argumento:
 > ```python
 > def saludar(nombre, saludo="Hola"):
 >     print(f"{saludo}, {nombre}")
@@ -32,21 +35,21 @@
 > saludar("Edwar")              # Hola, Edwar
 > saludar("Ana", "Buenas")      # Buenas, Ana
 > ```
-> Muy útil para opciones que casi siempre son iguales.
+> Viene de maravilla para esas opciones que casi siempre valen lo mismo.
 
 ---
 
 ## 2. Listas
 
 > ### 🟦 ¿Qué significa? — *Lista (`list`)*
-> Una **lista** es una colección **ordenada** de elementos, entre corchetes `[ ]`. Es el
-> equivalente al *array* de JavaScript:
+> Una **lista** es una colección **ordenada** de elementos, escrita entre corchetes `[ ]`. Es la
+> hermana del *array* de JavaScript:
 > ```python
 > servicios = ["Diseño web", "IA", "Marketing"]
 > servicios[0]        # "Diseño web"  (índice desde 0)
 > len(servicios)      # 3  (cantidad de elementos)
 > ```
-> Nota: para la longitud, Python usa `len(lista)`, no `lista.length`.
+> Un detalle: para medir la longitud, Python usa `len(lista)`, no `lista.length`.
 
 > ### 🟦 ¿Qué significa? — *Métodos comunes de lista*
 > ```python
@@ -58,23 +61,24 @@
 > ```
 
 > ### 🟦 ¿Qué significa? — *Rebanadas (slicing)*
-> Python permite tomar "trozos" de una lista con `[inicio:fin]`:
+> Python te deja cortar "trozos" de una lista con la notación `[inicio:fin]`:
 > ```python
 > numeros = [10, 20, 30, 40, 50]
 > numeros[1:3]    # [20, 30]  (del índice 1 hasta antes del 3)
 > numeros[:2]     # [10, 20]  (desde el principio)
 > numeros[-1]     # 50  (el último; los negativos cuentan desde el final)
 > ```
-> El slicing es una de las cosas más cómodas de Python. Por ahora reconócelo; lo dominarás con
-> la práctica.
+> El slicing es de esas cosas que hacen muy cómodo trabajar en Python. De momento basta con que lo
+> reconozcas; le tomarás el gusto a fuerza de usarlo.
 
 ---
 
 ## 3. Diccionarios (la pieza clave de PolyPaw)
 
 > ### 🟦 ¿Qué significa? — *Diccionario (`dict`)*
-> Un **diccionario** guarda datos como pares **clave: valor**, entre llaves `{ }`. Es el
-> equivalente al *objeto* de JavaScript, y la estructura más importante para datos:
+> Un **diccionario** guarda datos como pares **clave: valor**, encerrados entre llaves `{ }`. Es
+> el equivalente al *objeto* de JavaScript, y la estructura que más vas a usar para organizar
+> datos:
 > ```python
 > usuario = {
 >     "nombre": "Edwar",
@@ -89,8 +93,8 @@
 > |---|---|---|
 > | Acceder | `usuario.nombre` | `usuario["nombre"]` |
 > | Crear | `{ nombre: "Edwar" }` | `{"nombre": "Edwar"}` |
-> Diferencia visible: en Python las **claves van entre comillas** y se accede con **corchetes**,
-> no con punto.
+> Las dos diferencias que saltan a la vista: en Python las **claves van entre comillas** y se
+> accede con **corchetes**, no con punto.
 
 > ### 🟦 ¿Qué significa? — *Recorrer un diccionario*
 > ```python
@@ -100,14 +104,15 @@
 > # edad: 26
 > # ...
 > ```
-> `.items()` te da cada par clave-valor. También existen `.keys()` (solo claves) y `.values()`
-> (solo valores).
+> `.items()` te entrega cada par clave-valor de un tirón. Cuando solo necesites una parte, tienes
+> `.keys()` (las claves) y `.values()` (los valores).
 
 ---
 
 ## 4. Listas de diccionarios: cómo se guardan los datos de verdad
 
-La combinación más potente —y la que usan tus proyectos— es una **lista de diccionarios**:
+Cuando combinas las dos estructuras, aparece la forma con la que de verdad se guardan los datos en
+tus proyectos: una **lista de diccionarios**.
 
 ```python
 habitos = [
@@ -121,16 +126,16 @@ for h in habitos:
 ```
 
 > ### 🔎 En tu código
-> Así es **exactamente** cómo PolyPaw guarda su contenido. Abre `missions/a1_identity_es_en.json`:
-> es una **lista de diccionarios**, donde cada misión es un diccionario con claves como
-> `mission_id`, `scenario`, `answer_key`, `tokens`. Y `polypaw_db.json` es un diccionario con el
-> perfil del usuario (nombre, nivel, XP, racha). Entender listas y diccionarios es entender el
+> Esto es **exactamente** lo que hace PolyPaw por dentro. Abre `missions/a1_identity_es_en.json`:
+> verás una **lista de diccionarios**, donde cada misión es un diccionario con claves como
+> `mission_id`, `scenario`, `answer_key` y `tokens`. Y `polypaw_db.json` es un diccionario con el
+> perfil del usuario: nombre, nivel, XP y racha. Si entiendes listas y diccionarios, entiendes el
 > corazón de los datos de tu app.
 
 > ### 💡 Tip — `if` en una línea (expresión condicional)
-> En el ejemplo viste `"✅" if h["hecho"] else "⬜"`: es un `if/else` compacto que **devuelve un
-> valor**. Se lee "✅ si está hecho, si no ⬜". Útil para asignaciones cortas; el equivalente del
-> operador ternario `condición ? a : b` de JavaScript.
+> En el ejemplo apareció `"✅" if h["hecho"] else "⬜"`: es un `if/else` compacto que **devuelve un
+> valor**. Se lee tal cual: "✅ si está hecho, si no ⬜". Va muy bien para asignaciones cortas, y es
+> el primo del operador ternario `condición ? a : b` de JavaScript.
 
 ---
 

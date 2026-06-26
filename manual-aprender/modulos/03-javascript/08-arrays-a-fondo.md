@@ -5,23 +5,23 @@
 </p>
 
 
-> Hola otra vez, soy **Bit**, tu ajolote de confianza. Ya sabes crear arrays y recorrerlos con bucles. Pero JavaScript guarda un cofre lleno de **metodos** que hacen el trabajo pesado por ti: transformar, filtrar, buscar y resumir listas con una sola linea. En este capitulo abrimos ese cofre. Al terminar vas a mirar un `for` largo y pensar "esto cabe en un `map`". Vamos despacio, con muchos ejemplos del proyecto **tunal-digital** (sitio HTML/CSS/JS vanilla). Respira y sigueme.
+> Hola otra vez, soy **Bit**, tu ajolote de confianza. Ya sabes crear arrays y recorrerlos con bucles. Lo que quiza no sabes es que JavaScript trae de fabrica un monton de **metodos** que hacen el trabajo pesado por ti: transformar, filtrar, buscar y resumir listas, muchas veces en una sola linea. De eso va este capitulo. Cuando lleguemos al final vas a mirar un `for` de seis lineas y vas a pensar "esto en realidad es un `map`". Iremos despacio y con muchos ejemplos sacados del proyecto **tunal-digital** (un sitio en HTML/CSS/JS vanilla). Respira y sigueme.
 
 ## 1. Antes de empezar: que es un metodo de array
 
-Un array es una lista ordenada de valores. Lo que cambia en este capitulo es **como** trabajamos con esa lista: en vez de escribir bucles a mano, usamos funciones que ya vienen incluidas.
+Un array es una lista ordenada de valores; eso ya lo tienes. Lo que cambia aqui es **como** trabajas con esa lista. En vez de escribir bucles a mano una y otra vez, vas a apoyarte en funciones que ya vienen incluidas en el lenguaje.
 
 > ### 🟦 ¿Que significa? — *Metodo*
 > Un **metodo** es una funcion que "pertenece" a algo y se llama poniendo un punto despues de ese algo: `lista.map(...)`. La parte antes del punto (`lista`) es sobre lo que actua el metodo.
-> **Para que sirve:** te da herramientas listas para usar sin reinventarlas.
-> **Donde se usa en un repo real:** en `main.js` de **tunal-digital**, cuando se recogen los campos de un formulario o se procesan respuestas del Worker, se usan metodos de array para no escribir bucles repetidos.
+> **Para que sirve:** te da herramientas ya hechas para no tener que reinventarlas cada vez.
+> **Donde se usa en un repo real:** en el `main.js` de **tunal-digital**, cuando se recogen los campos de un formulario o se procesan las respuestas del Worker, se usan metodos de array para evitar escribir el mismo bucle una y otra vez.
 
 > ### 🟦 ¿Que significa? — *Callback*
-> Un **callback** es una funcion que le pasas a otra funcion para que la llame por ti. En `lista.map(n => n * 2)`, la flecha `n => n * 2` es el callback: tu describes "que hacer con cada elemento" y `map` se encarga de recorrer.
+> Un **callback** es una funcion que le pasas a otra funcion para que la llame por ti. En `lista.map(n => n * 2)`, la flecha `n => n * 2` es el callback: tu describes "que hacer con cada elemento" y `map` se ocupa de recorrer.
 > **Para que sirve:** separa el "que hacer" del "como recorrer".
 > **Donde se usa en un repo real:** todos los metodos de este capitulo reciben un callback.
 
-Para los ejemplos usaremos esta lista de servicios imaginaria de **tunal-digital**:
+Para los ejemplos vamos a usar esta lista de servicios inventada de **tunal-digital**:
 
 ```javascript
 const servicios = [
@@ -34,7 +34,7 @@ const servicios = [
 
 ## 2. map: transformar cada elemento
 
-`map` recorre la lista y devuelve **una lista nueva** del mismo tamano, donde cada elemento es el resultado de tu callback.
+`map` recorre la lista y te devuelve **una lista nueva** del mismo tamano, en la que cada elemento es el resultado de tu callback.
 
 > ### 🟦 ¿Que significa? — *map*
 > **map** (mapear) toma cada elemento, le aplica una transformacion y guarda el resultado en un array nuevo.
@@ -49,17 +49,17 @@ const conIva = servicios.map((s) => s.precio * 1.21);
 // [968, 363, 605, 181.5]
 ```
 
-Lo importante: **`map` no modifica el array original**. Te entrega uno nuevo. `servicios` sigue intacto.
+Quedate con un detalle: **`map` no toca el array original**. Te entrega uno nuevo y `servicios` se queda exactamente igual que antes.
 
 > ### 💡 Tip
-> Regla de oro: si la lista nueva tiene **el mismo numero de elementos** que la original, casi seguro quieres `map`. Si tiene **menos**, quieres `filter`. Si tiene **uno solo** (un total, un texto unico), quieres `reduce`.
+> Una regla que casi nunca falla: si la lista nueva tiene **el mismo numero de elementos** que la original, lo que quieres es `map`. Si tiene **menos**, es `filter`. Y si lo que buscas es **un solo valor** (un total, un texto unico), es `reduce`.
 
 > ### ⚠️ Cuidado
-> `map` siempre devuelve un array. Si dentro del callback **no escribes `return`** (y no usas la flecha corta), obtendras una lista llena de `undefined`. Con `=> s.nombre` el `return` es implicito; con llaves `=> { ... }` debes escribir `return` tu mismo.
+> `map` siempre devuelve un array. Si dentro del callback **no pones `return`** (y no usas la flecha corta), acabaras con una lista llena de `undefined`. Con `=> s.nombre` el `return` es implicito; con llaves `=> { ... }` tienes que escribir el `return` tu mismo.
 
 ## 3. filter: quedarte solo con algunos
 
-`filter` recorre la lista y devuelve un array nuevo **solo con los elementos que pasan una prueba**.
+`filter` recorre la lista y te devuelve un array nuevo **solo con los elementos que pasan una prueba**.
 
 > ### 🟦 ¿Que significa? — *filter*
 > **filter** (filtrar) conserva los elementos cuyo callback devuelve `true` y descarta los que devuelven `false`.
@@ -75,13 +75,13 @@ const baratos = servicios.filter((s) => s.precio < 400);
 ```
 
 > ### 🟦 ¿Que significa? — *Booleano*
-> Un **booleano** es un valor que solo puede ser `true` (verdadero) o `false` (falso). El callback de `filter` debe devolver un booleano: "¿este elemento se queda? si o no".
+> Un **booleano** es un valor que solo puede ser `true` (verdadero) o `false` (falso). El callback de `filter` tiene que devolver un booleano: "¿este elemento se queda? si o no".
 > **Para que sirve:** representar decisiones de "si/no".
 > **Donde se usa en un repo real:** el campo `activo` de cada servicio ya es un booleano.
 
 ## 4. reduce: convertir la lista en un solo valor
 
-`reduce` es el mas potente y el que mas asusta al principio. Recorre la lista acumulando un resultado, y al final devuelve **un solo valor**.
+`reduce` es el que mas musculo tiene y tambien el que mas intimida al principio. Recorre la lista acumulando un resultado y, al final, te devuelve **un solo valor**.
 
 > ### 🟦 ¿Que significa? — *reduce*
 > **reduce** (reducir) combina todos los elementos en uno solo, paso a paso. En cada vuelta recibe el **acumulador** (lo que llevas hasta ahora) y el elemento actual, y tu devuelves el nuevo acumulador.
@@ -93,7 +93,7 @@ const total = servicios.reduce((suma, s) => suma + s.precio, 0);
 // 800 + 300 + 500 + 150 = 1750
 ```
 
-Desmenuzemoslo:
+Vamos parte por parte:
 
 - `suma` es el **acumulador**.
 - `s` es el elemento actual.
@@ -101,24 +101,24 @@ Desmenuzemoslo:
 - El `0` del final es el **valor inicial**: con que empieza `suma` en la primera vuelta.
 
 > ### 🟦 ¿Que significa? — *Acumulador*
-> El **acumulador** es la "caja" donde `reduce` guarda el resultado parcial mientras recorre la lista. Empieza con el valor inicial y se va actualizando vuelta a vuelta.
+> El **acumulador** es la "caja" donde `reduce` va guardando el resultado parcial mientras recorre la lista. Empieza con el valor inicial y se actualiza vuelta a vuelta.
 > **Para que sirve:** llevar la cuenta de lo que vas construyendo (una suma, un objeto, otra lista).
 > **Donde se usa en un repo real:** sumar precios o agrupar tareas por estado.
 
 > ### ⚠️ Cuidado
-> **Casi siempre pon el valor inicial** (`, 0` o `, {}` o `, []`). Si lo olvidas, `reduce` usa el primer elemento como acumulador, y eso da resultados raros con listas de objetos (o un error si la lista esta vacia).
+> **Pon casi siempre el valor inicial** (`, 0` o `, {}` o `, []`). Si te lo saltas, `reduce` usa el primer elemento como acumulador, y con listas de objetos eso da resultados raros (o directamente un error si la lista esta vacia).
 
 > ### 💡 Tip
-> Si te cuesta `reduce`, recuerda: muchas cosas que la gente hace con `reduce` tambien se pueden hacer con un `for` normal. Empieza con `for`, y cuando te sientas comodo, traducelo a `reduce`. Bit tardo semanas en quererlo, no pasa nada.
+> Si `reduce` se te resiste, recuerda esto: casi todo lo que la gente hace con `reduce` tambien se puede hacer con un `for` normal. Empieza con `for` y, cuando te sientas comodo, lo traduces a `reduce`. A Bit le costo semanas tomarle carino, asi que sin prisa.
 
 ## 5. find, some y every: buscar y preguntar
 
-Estos tres no transforman la lista; te dan **una respuesta**.
+Estos tres no transforman la lista; lo que te dan es **una respuesta**.
 
 > ### 🟦 ¿Que significa? — *find*
-> **find** (encontrar) devuelve el **primer** elemento que cumple la prueba, o `undefined` si ninguno cumple.
+> **find** (encontrar) devuelve el **primer** elemento que cumple la prueba, o `undefined` si ninguno la cumple.
 > **Para que sirve:** localizar un elemento concreto: el usuario con cierto id, el servicio con cierto nombre.
-> **Donde se usa en un repo real:** en **PolyPaw** (Python/Flet/JSON) hay datos en listas; el equivalente en JS seria `find` para sacar la mision con cierto id.
+> **Donde se usa en un repo real:** en **PolyPaw** (Python/Flet/JSON) hay datos guardados en listas; el equivalente en JS seria un `find` para sacar la mision con cierto id.
 
 ```javascript
 const chat = servicios.find((s) => s.nombre === "Chat IA");
@@ -126,7 +126,7 @@ const chat = servicios.find((s) => s.nombre === "Chat IA");
 ```
 
 > ### 🟦 ¿Que significa? — *undefined*
-> **undefined** ("indefinido") es el valor que JavaScript usa para decir "aqui no hay nada". `find` lo devuelve cuando no encuentra coincidencia.
+> **undefined** ("indefinido") es el valor que usa JavaScript para decir "aqui no hay nada". `find` lo devuelve cuando no encuentra ninguna coincidencia.
 > **Para que sirve:** representar la ausencia de un valor.
 > **Donde se usa en un repo real:** siempre que buscas algo que podria no existir, conviene comprobar `if (resultado === undefined)`.
 
@@ -136,7 +136,7 @@ const chat = servicios.find((s) => s.nombre === "Chat IA");
 
 > ### 🟦 ¿Que significa? — *every*
 > **every** (todos) devuelve `true` si **todos** los elementos cumplen la prueba.
-> **Para que sirve:** preguntar "¿todos cumplen...?". Util para validar formularios.
+> **Para que sirve:** preguntar "¿todos cumplen...?". Va muy bien para validar formularios.
 > **Donde se usa en un repo real:** en **tunal-digital**, antes de enviar el formulario al Worker, `every` sirve para comprobar que todos los campos obligatorios estan rellenos.
 
 ```javascript
@@ -145,7 +145,7 @@ const todosActivos = servicios.every((s) => s.activo);     // false (Chat IA no 
 ```
 
 > ### 🔎 En tu codigo
-> En el `main.js` de **tunal-digital**, el formulario recoge campos como nombre, email y mensaje. Validar con `campos.every((c) => c.value.trim() !== "")` es mas limpio que un `if` gigante. Si devuelve `false`, no hace `fetch` al Worker y muestra un aviso.
+> En el `main.js` de **tunal-digital**, el formulario recoge campos como nombre, email y mensaje. Validarlos con `campos.every((c) => c.value.trim() !== "")` queda mucho mas limpio que un `if` gigante. Si devuelve `false`, no se hace `fetch` al Worker y se muestra un aviso.
 
 ## 6. includes e indexOf: ¿esta este valor?
 
@@ -166,11 +166,11 @@ etiquetas.indexOf("logo");   // -1  (no esta)
 ```
 
 > ### 💡 Tip
-> `includes` es mas legible cuando solo quieres saber "si o no". Usa `indexOf` cuando ademas necesites la posicion. Antiguamente solo existia `indexOf` y se escribia `indexOf(x) !== -1`; hoy `includes(x)` dice lo mismo de forma mas clara.
+> `includes` se lee mejor cuando solo te interesa el "si o no". Tira de `indexOf` cuando ademas necesites saber la posicion. Antes solo existia `indexOf` y se escribia `indexOf(x) !== -1`; hoy `includes(x)` dice lo mismo de forma mucho mas clara.
 
 ## 7. slice y splice: cortar la lista
 
-Cuidado con estos dos, se parecen en el nombre pero hacen cosas muy distintas.
+Ojo con estos dos: se parecen muchisimo en el nombre, pero hacen cosas bien distintas.
 
 > ### 🟦 ¿Que significa? — *slice*
 > **slice** (rebanada) devuelve una **copia** de un trozo del array, sin tocar el original. Recibe el indice de inicio y el de fin (este ultimo **no** se incluye).
@@ -183,7 +183,7 @@ const top2 = servicios.slice(0, 2);
 ```
 
 > ### 🟦 ¿Que significa? — *splice*
-> **splice** (empalmar) **modifica el array original**: puede borrar elementos, insertar nuevos o ambas cosas. Recibe el indice donde empezar, cuantos borrar y, opcionalmente, que insertar.
+> **splice** (empalmar) **modifica el array original**: puede borrar elementos, insertar nuevos o las dos cosas a la vez. Recibe el indice donde empezar, cuantos borrar y, si quieres, que insertar.
 > **Para que sirve:** quitar o agregar elementos en mitad de la lista.
 > **Donde se usa en un repo real:** quitar un item de una lista de tareas en memoria antes de redibujar la interfaz.
 
@@ -194,11 +194,11 @@ items.splice(1, 2);   // borra desde el indice 1, dos elementos
 ```
 
 > ### ⚠️ Cuidado
-> `slice` **no** cambia el original (es seguro). `splice` **si** lo cambia (es destructivo). Truco para recordarlo: spli**ce** tiene una **C** de "Cambia". En React (como en **RachaSimple** o **Faro**) evita `splice` sobre el estado: alli prefieres copias con `slice`, `filter` o spread.
+> `slice` **no** cambia el original (es seguro). `splice` **si** lo cambia (es destructivo). Un truco para no liarte: spli**ce** lleva una **C** de "Cambia". En React (como en **RachaSimple** o **Faro**) evita `splice` sobre el estado: alli prefieres copias con `slice`, `filter` o spread.
 
 ## 8. Encadenar metodos
 
-Como `map`, `filter` y `slice` devuelven **un array nuevo**, puedes pegar un metodo tras otro con puntos. A esto se le llama **encadenar**.
+Como `map`, `filter` y `slice` devuelven **un array nuevo**, puedes pegar un metodo detras de otro con puntos. A eso se le llama **encadenar**.
 
 > ### 🟦 ¿Que significa? — *Encadenar*
 > **Encadenar** es aplicar varios metodos en fila, donde la salida de uno es la entrada del siguiente: `lista.filter(...).map(...).reduce(...)`.
@@ -213,13 +213,13 @@ const totalActivos = servicios
 // 800 + 300 + 150 = 1250
 ```
 
-Leelo en voz alta: "de los servicios, filtra los activos, saca sus precios, sumalos". Cada linea es un paso claro.
+Leelo en voz alta: "de los servicios, filtra los activos, saca sus precios y sumalos". Cada linea es un paso, y se entiende de un vistazo.
 
 > ### 💡 Tip
-> Pon **cada metodo en su propia linea**, como arriba. Es mucho mas facil de leer y de comentar paso a paso que una cadena larga en una sola linea.
+> Pon **cada metodo en su propia linea**, como en el ejemplo de arriba. Se lee mucho mejor y puedes comentar paso a paso, mejor que meter toda la cadena en una sola linea kilometrica.
 
 > ### ⚠️ Cuidado
-> Cada metodo de la cadena recorre la lista entera otra vez. Para listas de unos cientos de elementos no importa nada. Solo en listas enormes (decenas de miles) conviene pensar si se puede hacer en un solo `reduce`. Para casi todo lo que haras al empezar, la claridad gana.
+> Cada metodo de la cadena vuelve a recorrer la lista entera. Para listas de unos cientos de elementos esto no importa lo mas minimo. Solo en listas enormes (decenas de miles) merece la pena plantearse si todo cabe en un solo `reduce`. Para casi todo lo que haras al principio, gana la claridad.
 
 ## 9. sort: ordenar
 
@@ -234,14 +234,14 @@ const porPrecio = [...servicios].sort((a, b) => a.precio - b.precio);
 ```
 
 > ### ⚠️ Cuidado
-> Dos trampas con `sort`:
-> 1. **Modifica el array original.** Por eso arriba hacemos primero una copia con `[...servicios]` (lo veras en la seccion del spread).
-> 2. **Sin callback, ordena como texto.** Es decir, `[10, 2, 1].sort()` da `[1, 10, 2]` porque compara caracteres. Para numeros, pasa siempre `(a, b) => a - b`.
+> `sort` tiene dos trampas que conviene tener fichadas:
+> 1. **Modifica el array original.** Por eso en el ejemplo de arriba hacemos primero una copia con `[...servicios]` (lo veras en la seccion del spread).
+> 2. **Sin callback, ordena como texto.** Es decir, `[10, 2, 1].sort()` da `[1, 10, 2]` porque compara caracteres uno a uno. Para numeros, pasa siempre `(a, b) => a - b`.
 
 ## 10. El spread (...): expandir un array
 
 > ### 🟦 ¿Que significa? — *Spread*
-> El **spread** (esparcir), escrito con tres puntos `...`, "desempaca" los elementos de un array (o las propiedades de un objeto) y los suelta donde lo pongas.
+> El **spread** (esparcir), escrito con tres puntos `...`, "desempaca" los elementos de un array (o las propiedades de un objeto) y los suelta donde tu lo pongas.
 > **Para que sirve:** copiar arrays, juntar varios, o anadir elementos sin modificar el original.
 > **Donde se usa en un repo real:** en **RachaSimple** y **Faro**, para actualizar el estado de React sin mutarlo: `setLista([...lista, nuevo])`.
 
@@ -255,16 +255,16 @@ const masUno = [...a, 99];   // [1, 2, 99]
 ```
 
 > ### 💡 Tip
-> El spread crea una **copia superficial**: el array nuevo es independiente, pero si dentro hay objetos, esos objetos siguen siendo compartidos. Para listas de numeros o textos, es exactamente lo que necesitas.
+> El spread hace una **copia superficial**: el array nuevo es independiente, pero si dentro hay objetos, esos objetos se siguen compartiendo. Para listas de numeros o textos, es justo lo que necesitas.
 
 > ### 🔎 En tu codigo
-> Cuando en la seccion 9 escribimos `[...servicios].sort(...)`, el spread hace una copia y `sort` ordena la copia. Asi `servicios` no se desordena. Este patron "copiar y luego transformar" es clave en React, donde nunca debes mutar el estado directamente.
+> Cuando en la seccion 9 escribimos `[...servicios].sort(...)`, el spread hace una copia y `sort` ordena esa copia. Asi `servicios` no se desordena. Este patron de "copiar y luego transformar" es la base de trabajar con React, donde nunca debes mutar el estado directamente.
 
 ## 11. Desestructuracion de arrays
 
 > ### 🟦 ¿Que significa? — *Desestructuracion*
 > La **desestructuracion** te deja sacar valores de un array y meterlos en variables con nombre, en una sola linea, segun su posicion.
-> **Para que sirve:** dar nombres claros a los elementos sin escribir `lista[0]`, `lista[1]`...
+> **Para que sirve:** dar nombres claros a los elementos sin tener que escribir `lista[0]`, `lista[1]`...
 > **Donde se usa en un repo real:** en **RachaSimple** y **Faro**, el hook `useState` de React devuelve un array de dos elementos que se desestructura: `const [valor, setValor] = useState(...)`.
 
 ```javascript
@@ -273,7 +273,7 @@ const [lat, lng] = punto;
 // lat = 40.4, lng = -3.7
 ```
 
-Puedes saltarte posiciones con comas, y recoger "el resto" con spread:
+Puedes saltarte posiciones dejando una coma vacia, y recoger "el resto" con spread:
 
 ```javascript
 const [primero, , tercero] = ["a", "b", "c"];
@@ -284,11 +284,11 @@ const [cabeza, ...resto] = [1, 2, 3, 4];
 ```
 
 > ### 🔎 En tu codigo
-> Cada vez que en **RachaSimple** escribes `const [data, setData] = useState([])`, estas desestructurando el array que devuelve `useState`. El primer hueco es el valor; el segundo, la funcion para cambiarlo. Es el mismo `[a, b] = array` de arriba.
+> Cada vez que en **RachaSimple** escribes `const [data, setData] = useState([])`, estas desestructurando el array que devuelve `useState`. El primer hueco es el valor; el segundo, la funcion para cambiarlo. Es exactamente el mismo `[a, b] = array` de arriba.
 
 ## 12. Un ejemplo completo: de datos crudos a HTML
 
-Juntemos varias piezas como lo harias en **tunal-digital** para pintar tarjetas de servicios activos, ordenados por precio:
+Vamos a juntar varias piezas, tal como lo harias en **tunal-digital** para pintar tarjetas con los servicios activos, ordenados por precio:
 
 ```javascript
 const html = servicios
@@ -301,12 +301,12 @@ const html = servicios
 ```
 
 > ### 🟦 ¿Que significa? — *join*
-> **join** (unir) convierte un array en un solo texto, pegando los elementos con el separador que le indiques (aqui `""`, sin separador).
+> **join** (unir) convierte un array en un solo texto, pegando los elementos con el separador que le indiques (aqui `""`, o sea sin separador).
 > **Para que sirve:** pasar de una lista de fragmentos HTML a una sola cadena lista para `innerHTML`.
-> **Donde se usa en un repo real:** en **tunal-digital**, `main.js` construye trozos de HTML con `map` y los une con `join` antes de insertarlos en la pagina.
+> **Donde se usa en un repo real:** en **tunal-digital**, `main.js` construye trozos de HTML con `map` y los une con `join` antes de meterlos en la pagina.
 
 > ### ⚠️ Cuidado
-> Insertar texto del usuario directo en `innerHTML` puede ser peligroso (codigo malicioso). Para datos tuyos de confianza, como esta lista fija de servicios, esta bien. Cuando muestres lo que escribe un visitante, hay que escapar el texto. Lo veremos mas adelante; por ahora, recuerdalo.
+> Meter texto del usuario directo en `innerHTML` puede ser peligroso (alguien podria colar codigo malicioso). Para datos tuyos de confianza, como esta lista fija de servicios, no hay problema. Cuando muestres lo que escribe un visitante, hay que escapar el texto. Lo veremos mas adelante; por ahora basta con que te suene.
 
 ## ✅ Checklist — ¿ya domino esto?
 
@@ -335,4 +335,4 @@ const html = servicios
 
 6. 💻 Reto: desestructura `const [primero, ...resto] = ["web", "seo", "ia", "social"]`. Luego, con `resto`, construye un texto `"seo, ia, social"` usando `join`.
 
-> Lo lograste. Si algun metodo todavia se te enreda, escribe el ejercicio con un `for` normal primero y luego traducelo al metodo. Yo, Bit, sigo confundiendo `slice` y `splice` de vez en cuando, asi que estas en buena compania. Nos vemos en el Capitulo 09.
+> Lo lograste. Si algun metodo todavia se te enreda, escribe el ejercicio con un `for` normal primero y luego traducelo al metodo. Yo, Bit, sigo confundiendo `slice` y `splice` cada dos por tres, asi que estas en muy buena compania. Nos vemos en el Capitulo 09.
