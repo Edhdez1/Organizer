@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 09 — Agregaciones, GROUP BY y funciones — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-09-agregaciones-group-by-y-funciones">Capitulo 09 — Agregaciones, GROUP BY y funciones</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap09.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora has aprendido a sacar filas de una tabla: "dame todos los habitos", "dame los proyectos de este usuario". Pero muchas preguntas reales no son sobre filas sueltas, sino sobre <em>grupos</em> de filas: ¿cuantos habitos tengo?, ¿cuantos dias seguidos llevo?, ¿que porcentaje de mis proyectos esta terminado? Para responder eso necesitas <strong>agregaciones</strong>: operaciones que toman muchas filas y devuelven un solo numero (o un numero por grupo). En este capitulo Bit, nuestro ajolote, te acompana a contar, sumar, promediar y agrupar datos reales de RachaSimple y Faro.</p>
+</blockquote>
+<hr />
+<h2 id="1-por-que-necesitamos-agregar">1. ¿Por que necesitamos agregar?</h2>
+<p>Imagina que en RachaSimple tienes una tabla <code>registros</code> donde cada vez que completas un habito se guarda una fila: la fecha, el habito y el usuario. Si tienes 200 dias registrados, esa tabla tiene 200 filas. Pero tu no quieres ver 200 filas: quieres ver <em>un</em> numero ("llevas 200 dias") o <em>un numero por habito</em> ("meditacion: 80 dias, ejercicio: 120 dias").</p>
+<p>Pasar de "muchas filas" a "un resumen" es lo que hacen las <strong>funciones de agregacion</strong>. Y cuando quieres ese resumen separado por categorias (por habito, por semana, por proyecto), usas <strong>GROUP BY</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-agregacion">🟦 ¿Que significa? — <em>Agregacion</em></h3>
+<p>Una <strong>agregacion</strong> es un calculo que toma un conjunto de filas y produce un solo valor resumen: un conteo, una suma, un promedio, un maximo. En vez de devolver datos crudos, devuelve una <em>conclusion</em> sobre esos datos.
+<strong>Para que sirve:</strong> responder preguntas de tipo "cuantos", "cuanto", "en promedio", "el mayor".
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, para mostrar "Has completado 47 dias este mes" en el panel del usuario; en Faro, para calcular el progreso de un proyecto a partir de sus fases.</p>
+</blockquote>
+<p>PolyPaw, en cambio, guarda sus datos en archivos JSON sueltos (sin base de datos relacional). Ahi, si quisieras contar cuantas misiones completo un jugador, tendrias que abrir el archivo en Python, recorrer una lista y llevar un contador a mano. SQL te da esa misma cuenta con una sola linea. Esa es justo la diferencia que hace valioso tener una base de datos como la de RachaSimple o Faro.</p>
+<hr />
+<h2 id="2-las-cinco-funciones-de-agregacion-basicas">2. Las cinco funciones de agregacion basicas</h2>
+<p>SQL trae cinco funciones que vas a usar todo el tiempo: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code> y <code>MAX</code>. Veamoslas con la tabla <code>registros</code> de RachaSimple (una fila por dia completado).</p>
+<blockquote class="def">
+<h3 id="que-significa-count">🟦 ¿Que significa? — <em>COUNT</em></h3>
+<p><code>COUNT</code> cuenta filas. <code>COUNT(*)</code> cuenta todas las filas del grupo; <code>COUNT(columna)</code> cuenta solo las filas donde esa columna no es NULL.
+<strong>Para que sirve:</strong> saber "cuantos".
+<strong>Donde se usa en un repo real:</strong> en RachaSimple para contar dias completados; en Faro para contar cuantas fases tiene un proyecto.</p>
+</blockquote>
+<pre><code class="language-sql">-- ¿Cuantos dias en total he registrado?
+select count(*) as total_dias
+from registros
+where user_id = auth.uid();
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-authuid">🟦 ¿Que significa? — <em>auth.uid()</em></h3>
+<p><code>auth.uid()</code> es una funcion que Supabase expone dentro de Postgres y que devuelve el identificador (UUID) del usuario que esta haciendo la consulta en ese momento. La veras en casi todos los ejemplos como <code>where user_id = auth.uid()</code>, que significa "solo mis filas".
+<strong>Para que sirve:</strong> filtrar datos por el usuario logueado sin tener que pasarle el id a mano; es la pieza con la que se construyen las politicas de RLS.
+<strong>Donde se usa en un repo real:</strong> en RachaSimple y Faro aparece en consultas y en las politicas de seguridad de cada tabla (registros, habitos, proyectos, fases) para que cada quien vea unicamente lo suyo.</p>
+<h3 id="que-significa-sum">🟦 ¿Que significa? — <em>SUM</em></h3>
+<p><code>SUM(columna)</code> suma todos los valores numericos de una columna dentro del grupo.
+<strong>Para que sirve:</strong> totalizar cantidades (minutos, puntos, dinero).
+<strong>Donde se usa en un repo real:</strong> si en RachaSimple cada registro guardara <code>minutos_dedicados</code>, <code>SUM(minutos_dedicados)</code> daria el total de minutos invertidos en el habito.</p>
+</blockquote>
+<pre><code class="language-sql">-- Total de minutos dedicados a habitos este usuario
+select sum(minutos_dedicados) as minutos_totales
+from registros
+where user_id = auth.uid();
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-avg">🟦 ¿Que significa? — <em>AVG</em></h3>
+<p><code>AVG(columna)</code> calcula el promedio (la media aritmetica) de los valores de una columna.
+<strong>Para que sirve:</strong> saber "cuanto en promedio".
+<strong>Donde se usa en un repo real:</strong> el promedio de minutos por sesion en RachaSimple, o el progreso promedio de los proyectos en Faro.</p>
+<h3 id="que-significa-min-y-max">🟦 ¿Que significa? — <em>MIN y MAX</em></h3>
+<p><code>MIN(columna)</code> devuelve el valor mas pequeno del grupo; <code>MAX(columna)</code>, el mas grande. Funcionan con numeros, fechas y texto (orden alfabetico).
+<strong>Para que sirve:</strong> encontrar el primero, el ultimo, el mayor, el menor.
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, <code>MIN(fecha)</code> es el primer dia que registraste y <code>MAX(fecha)</code> el ultimo; en Faro, <code>MAX(updated_at)</code> dice cuando se toco un proyecto por ultima vez.</p>
+</blockquote>
+<pre><code class="language-sql">-- Primer y ultimo dia registrado, y promedio de minutos por sesion
+select
+  min(fecha)            as primer_dia,
+  max(fecha)            as ultimo_dia,
+  count(*)              as total_sesiones,
+  avg(minutos_dedicados) as promedio_minutos
+from registros
+where user_id = auth.uid();
+</code></pre>
+<p>Fijate que puedes pedir varias agregaciones a la vez en el mismo <code>SELECT</code>. El resultado siempre es <strong>una sola fila</strong> con varias columnas, porque estas resumiendo toda la tabla en un solo resumen.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Cuando quieras contar solo cosas <em>distintas</em>, usa <code>COUNT(DISTINCT columna)</code>. Por ejemplo, <code>COUNT(DISTINCT habito_id)</code> te dice <em>cuantos habitos diferentes</em> tienes registrados, sin importar cuantas veces aparezca cada uno.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p><code>COUNT(*)</code> cuenta filas (incluso si tienen columnas en NULL). <code>COUNT(columna)</code> ignora los NULL de esa columna. Si una fila tiene <code>minutos_dedicados</code> vacio, <code>AVG(minutos_dedicados)</code> no la cuenta y <code>SUM</code> la trata como si no existiera. No es lo mismo "promedio de las sesiones con minutos" que "promedio de todas las sesiones".</p>
+<h3 id="que-significa-null">🟦 ¿Que significa? — <em>NULL</em></h3>
+<p><code>NULL</code> es la ausencia de valor: significa "aqui no hay dato" (distinto de cero o de texto vacio). Las funciones de agregacion, salvo <code>COUNT(*)</code>, ignoran los NULL.
+<strong>Para que sirve:</strong> representar datos faltantes u opcionales.
+<strong>Donde se usa en un repo real:</strong> en Faro, un proyecto recien creado puede tener <code>descripcion</code> en NULL hasta que la IA la genera; en RachaSimple, un registro sin nota deja la columna <code>nota</code> en NULL.</p>
+</blockquote>
+<hr />
+<h2 id="3-group-by-un-resumen-por-categoria">3. GROUP BY: un resumen por categoria</h2>
+<p>Hasta aqui hemos resumido <em>toda</em> la tabla en una fila. Pero casi siempre quieres el resumen <em>separado</em> por algo: por habito, por semana, por proyecto. Para eso esta <code>GROUP BY</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-group-by">🟦 ¿Que significa? — <em>GROUP BY</em></h3>
+<p><code>GROUP BY columna</code> agrupa las filas que comparten el mismo valor en esa columna y aplica las funciones de agregacion <em>a cada grupo por separado</em>. En vez de una sola fila de resumen, obtienes una fila por grupo.
+<strong>Para que sirve:</strong> comparar categorias entre si (cuantos por habito, cuanto por proyecto).
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, contar dias completados <em>por habito</em>; en Faro, contar fases <em>por proyecto</em>.</p>
+</blockquote>
+<pre><code class="language-sql">-- Cuantos dias he completado de cada habito
+select
+  habito_id,
+  count(*) as dias_completados
+from registros
+where user_id = auth.uid()
+group by habito_id
+order by dias_completados desc;
+</code></pre>
+<p>La idea mental: SQL toma todas tus filas, las reparte en montones segun <code>habito_id</code>, y cuenta cada monton. El resultado es una fila por habito con su conteo.</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Regla de oro del <code>GROUP BY</code>: en el <code>SELECT</code>, <strong>cada columna debe estar agregada (con COUNT, SUM, etc.) o aparecer en el GROUP BY</strong>. Si pones una columna suelta que no esta agrupada ni agregada, Postgres te dara un error como "column must appear in the GROUP BY clause". Esto es porque SQL no sabria <em>cual</em> de los muchos valores del grupo mostrarte.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En RachaSimple el cliente normalmente usa Supabase con TanStack Query. Para una agregacion mas elaborada que un <code>.select()</code> simple, lo limpio es crear una <em>vista</em> o una funcion en Postgres y llamarla desde el cliente:
+<code>ts
+// RachaSimple: leer el resumen por habito desde una vista
+const { data, error } = await supabase
+  .from("resumen_por_habito") // una view que ya hace el GROUP BY
+  .select("habito_id, dias_completados")
+  .order("dias_completados", { ascending: false });</code>
+Asi la logica de agregacion vive en la base de datos (rapida y con RLS aplicada) y el front solo la consume.</p>
+<h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
+<p>Es una funcion de Postgres (y Supabase) que filtra automaticamente las filas segun quien hace la consulta, mediante <em>politicas</em>. Aunque escribas <code>select * from registros</code>, RLS solo te devuelve <em>tus</em> filas.
+<strong>Para que sirve:</strong> que cada usuario vea solo sus datos sin tener que recordar el <code>where user_id = ...</code> en cada consulta.
+<strong>Donde se usa en un repo real:</strong> RachaSimple y Faro tienen RLS en todas sus tablas (registros, habitos, perfiles, proyectos, fases, conexiones de usuario). Por eso muchos ejemplos podrian funcionar incluso sin el <code>where user_id</code>, porque RLS ya filtra.</p>
+</blockquote>
+<hr />
+<h2 id="4-having-filtrar-grupos">4. HAVING: filtrar grupos</h2>
+<p>Ya sabes que <code>WHERE</code> filtra <em>filas</em> antes de agrupar. Pero, ¿como filtras los <em>grupos</em>? Por ejemplo: "muestrame solo los habitos que he completado mas de 30 dias". Eso es una condicion sobre el <em>resultado de un COUNT</em>, y <code>WHERE</code> no puede verlo todavia. Para eso existe <code>HAVING</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-having">🟦 ¿Que significa? — <em>HAVING</em></h3>
+<p><code>HAVING</code> es como <code>WHERE</code>, pero se aplica <em>despues</em> de agrupar, sobre los valores agregados. Filtra grupos completos segun su resumen.
+<strong>Para que sirve:</strong> quedarte solo con los grupos que cumplen una condicion calculada (conteo, suma, promedio).
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, mostrar solo los habitos "consolidados" (mas de 30 dias); en Faro, listar proyectos con mas de 5 fases.</p>
+</blockquote>
+<pre><code class="language-sql">-- Habitos en los que llevo mas de 30 dias completados
+select
+  habito_id,
+  count(*) as dias_completados
+from registros
+where user_id = auth.uid()      -- filtra filas: solo mis registros
+group by habito_id
+having count(*) &gt; 30            -- filtra grupos: solo los de mas de 30
+order by dias_completados desc;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Orden mental de una consulta con grupos: primero <strong>WHERE</strong> descarta filas, luego <strong>GROUP BY</strong> arma los montones, luego se calculan las agregaciones, luego <strong>HAVING</strong> descarta montones, y al final <strong>ORDER BY</strong> ordena el resultado. Si recuerdas ese orden, nunca confundiras WHERE con HAVING.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No metas condiciones de <em>fila</em> en <code>HAVING</code> ni condiciones de <em>grupo</em> en <code>WHERE</code>. <code>where minutos &gt; 10</code> (fila) y <code>having count(*) &gt; 30</code> (grupo) van en sitios distintos. Mezclarlos da errores o resultados raros.</p>
+</blockquote>
+<hr />
+<h2 id="5-funciones-de-fecha-utiles-contar-por-semana">5. Funciones de fecha utiles: contar por semana</h2>
+<p>Un caso clasico de RachaSimple: "cuantos habitos complete cada semana". El problema es que cada registro tiene una <em>fecha exacta</em> (2026-06-26), no una "semana". Necesitamos agrupar fechas distintas dentro de la misma semana. Para eso usamos funciones de fecha.</p>
+<blockquote class="def">
+<h3 id="que-significa-date_trunc">🟦 ¿Que significa? — <em>DATE_TRUNC</em></h3>
+<p><code>date_trunc('unidad', fecha)</code> "recorta" una fecha a la unidad que pidas: <code>'week'</code>, <code>'month'</code>, <code>'day'</code>, <code>'year'</code>. Todas las fechas de la misma semana se convierten en el mismo valor (el lunes de esa semana).
+<strong>Para que sirve:</strong> agrupar fechas distintas en periodos (semana, mes) para poder contarlas juntas.
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, para la grafica de "habitos por semana"; en Faro, para ver actividad por mes.</p>
+</blockquote>
+<pre><code class="language-sql">-- Habitos completados por semana
+select
+  date_trunc('week', fecha)::date as semana,
+  count(*)                        as completados
+from registros
+where user_id = auth.uid()
+group by date_trunc('week', fecha)
+order by semana;
+</code></pre>
+<p>Aqui <code>date_trunc('week', fecha)</code> convierte, por ejemplo, el lunes 22, el miercoles 24 y el viernes 26 todos al "lunes 22", asi que las tres filas caen en el mismo grupo y <code>count(*)</code> da 3 para esa semana. El <code>::date</code> es una conversion de tipo para mostrar solo la fecha sin la hora.</p>
+<blockquote class="def">
+<h3 id="que-significa-conversion-de-tipo-cast">🟦 ¿Que significa? — <em>Conversion de tipo (cast)</em></h3>
+<p>El <code>::tipo</code> (por ejemplo <code>::date</code> o <code>::int</code>) convierte un valor de un tipo a otro. <code>valor::date</code> quita la parte de hora de una fecha-hora.
+<strong>Para que sirve:</strong> mostrar o comparar datos en el formato correcto.
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, mostrar la semana como fecha limpia; en Faro, convertir texto a numero al calcular progreso.</p>
+</blockquote>
+<p>Otras funciones de fecha que veras seguido:</p>
+<blockquote class="def">
+<h3 id="que-significa-extract-y-age">🟦 ¿Que significa? — <em>EXTRACT y AGE</em></h3>
+<p><code>extract(dow from fecha)</code> saca un trozo de la fecha (<code>dow</code> = dia de la semana, 0=domingo; tambien <code>month</code>, <code>year</code>, <code>hour</code>). <code>age(fecha1, fecha2)</code> da la diferencia entre dos fechas como un intervalo legible (ej. "3 days").
+<strong>Para que sirve:</strong> analizar patrones (¿en que dia de la semana fallo mas?) o medir antiguedad.
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, ver en que dia de la semana se rompe mas la racha; en Faro, <code>age(now(), created_at)</code> para "este proyecto tiene 2 meses".</p>
+</blockquote>
+<pre><code class="language-sql">-- ¿En que dia de la semana completo mas habitos?
+select
+  extract(dow from fecha) as dia_semana,  -- 0=domingo ... 6=sabado
+  count(*)                as completados
+from registros
+where user_id = auth.uid()
+group by extract(dow from fecha)
+order by completados desc;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>En Postgres <code>now()</code> te da la fecha-hora actual y <code>current_date</code> solo la fecha de hoy. Para "lo de los ultimos 7 dias" usa <code>where fecha &gt;= current_date - interval '7 days'</code>. Ese <code>interval</code> es la forma de restar tiempo.</p>
+</blockquote>
+<hr />
+<h2 id="6-funciones-de-texto-utiles">6. Funciones de texto utiles</h2>
+<p>A veces necesitas limpiar o transformar texto antes de agrupar o mostrar. Estas son las mas comunes en RachaSimple y Faro.</p>
+<blockquote class="def">
+<h3 id="que-significa-funciones-de-texto-lower-upper-length-trim-concat">🟦 ¿Que significa? — <em>Funciones de texto (LOWER, UPPER, LENGTH, TRIM, CONCAT, ||)</em></h3>
+<p><code>lower(t)</code> y <code>upper(t)</code> cambian a minusculas/mayusculas; <code>length(t)</code> da el numero de caracteres; <code>trim(t)</code> quita espacios sobrantes a los lados; <code>concat(a, b)</code> y el operador <code>||</code> unen textos.
+<strong>Para que sirve:</strong> normalizar texto (para que "Ejercicio" y "ejercicio" cuenten igual) y armar etiquetas legibles.
+<strong>Donde se usa en un repo real:</strong> en Faro, para mostrar el nombre del proyecto en mayuscula inicial o juntar "nombre + estado"; en RachaSimple, para que los nombres de habito se comparen sin importar mayusculas.</p>
+</blockquote>
+<pre><code class="language-sql">-- Normalizar el nombre del habito y contar sin que mayusculas separen grupos
+select
+  lower(trim(nombre)) as habito_normalizado,
+  count(*)            as veces
+from habitos
+where user_id = auth.uid()
+group by lower(trim(nombre))
+order by veces desc;
+</code></pre>
+<pre><code class="language-sql">-- Faro: armar una etiqueta legible juntando nombre y estado
+select
+  nombre || ' (' || estado || ')' as etiqueta
+from proyectos
+where user_id = auth.uid();
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Si concatenas con <code>||</code> y una de las partes es NULL, <em>todo el resultado se vuelve NULL</em>. Si <code>estado</code> puede estar vacio, protegelo con <code>COALESCE</code> (lo vemos en la seccion 8) para no terminar con etiquetas en NULL.</p>
+</blockquote>
+<hr />
+<h2 id="7-case-clasificar-dentro-de-la-consulta">7. CASE: clasificar dentro de la consulta</h2>
+<p><code>CASE</code> es el "si... entonces... si no..." de SQL. Te deja crear categorias o etiquetas calculadas sobre la marcha, y es potentisimo combinado con agregaciones.</p>
+<blockquote class="def">
+<h3 id="que-significa-case">🟦 ¿Que significa? — <em>CASE</em></h3>
+<p><code>CASE WHEN condicion THEN valor ... ELSE otro END</code> evalua condiciones en orden y devuelve el primer <code>valor</code> cuya condicion sea verdadera; si ninguna lo es, devuelve el <code>ELSE</code>.
+<strong>Para que sirve:</strong> clasificar, etiquetar o transformar valores fila por fila sin salir de SQL.
+<strong>Donde se usa en un repo real:</strong> en Faro, traducir el progreso numerico a un estado ("En curso", "Casi listo"); en RachaSimple, marcar si un dia fue laborable o fin de semana.</p>
+</blockquote>
+<pre><code class="language-sql">-- RachaSimple: clasificar cada registro y contar por categoria
+select
+  case
+    when extract(dow from fecha) in (0, 6) then 'fin de semana'
+    else 'entre semana'
+  end as tipo_dia,
+  count(*) as completados
+from registros
+where user_id = auth.uid()
+group by 1   -- agrupa por la primera columna del SELECT (el CASE)
+order by completados desc;
+</code></pre>
+<p>Un truco muy util es <code>CASE</code> <em>dentro</em> de un <code>SUM</code> para contar condicionalmente:</p>
+<pre><code class="language-sql">-- Faro: por proyecto, cuantas fases hechas vs total
+select
+  proyecto_id,
+  count(*) as fases_totales,
+  sum(case when completada then 1 else 0 end) as fases_hechas
+from fases
+where user_id = auth.uid()
+group by proyecto_id;
+</code></pre>
+<p>Aqui <code>sum(case when completada then 1 else 0 end)</code> pone un 1 por cada fase completada y un 0 por cada una que no, y suma: el resultado es <em>cuantas fases estan hechas</em>. Es la forma clasica de "contar solo las que cumplen una condicion" dentro de un grupo.</p>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p><code>group by 1</code> significa "agrupa por la primera columna del SELECT". Es comodo cuando esa columna es una expresion larga (como un CASE) y no quieres repetirla. Funciona igual con <code>order by 1</code>, <code>order by 2</code>, etc.</p>
+</blockquote>
+<hr />
+<h2 id="8-coalesce-un-valor-de-respaldo-para-los-null">8. COALESCE: un valor de respaldo para los NULL</h2>
+<p>Los NULL son utiles, pero a veces molestan: no quieres mostrar "null" en pantalla ni que un NULL rompa un calculo. <code>COALESCE</code> resuelve eso.</p>
+<blockquote class="def">
+<h3 id="que-significa-coalesce">🟦 ¿Que significa? — <em>COALESCE</em></h3>
+<p><code>coalesce(a, b, c)</code> devuelve el primer argumento que <em>no</em> sea NULL. Si <code>a</code> tiene valor, devuelve <code>a</code>; si <code>a</code> es NULL, prueba <code>b</code>; y asi.
+<strong>Para que sirve:</strong> poner un valor por defecto cuando un dato falta, para no mostrar ni sumar NULL.
+<strong>Donde se usa en un repo real:</strong> en Faro, mostrar "Sin descripcion" cuando la IA aun no genero el texto; en RachaSimple, tratar los minutos vacios como 0.</p>
+</blockquote>
+<pre><code class="language-sql">-- Faro: nunca mostrar NULL en la descripcion
+select
+  nombre,
+  coalesce(descripcion, 'Sin descripcion aun') as descripcion
+from proyectos
+where user_id = auth.uid();
+</code></pre>
+<pre><code class="language-sql">-- RachaSimple: tratar minutos faltantes como 0 antes de sumar
+select
+  habito_id,
+  sum(coalesce(minutos_dedicados, 0)) as minutos_totales
+from registros
+where user_id = auth.uid()
+group by habito_id;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>No abuses de <code>COALESCE(columna, 0)</code> dentro de <code>AVG</code>. Convertir los NULL en 0 <em>baja</em> el promedio, porque ahora cuentan como sesiones de 0 minutos. Si lo que quieres es el promedio de las sesiones que <em>si</em> tienen minutos, deja que <code>AVG</code> ignore los NULL por su cuenta.</p>
+</blockquote>
+<hr />
+<h2 id="9-caso-real-progreso-por-proyecto-en-faro">9. Caso real: progreso por proyecto en Faro</h2>
+<p>Faro calcula el progreso de cada proyecto como porcentaje de fases completadas. Juntemos casi todo lo del capitulo en una sola consulta.</p>
+<pre><code class="language-sql">-- Faro: progreso (%) de cada proyecto segun sus fases
+select
+  p.id,
+  p.nombre,
+  count(f.id) as fases_totales,
+  sum(case when f.completada then 1 else 0 end) as fases_hechas,
+  round(
+    100.0 * sum(case when f.completada then 1 else 0 end)
+          / nullif(count(f.id), 0)
+  ) as progreso_pct
+from proyectos p
+left join fases f on f.proyecto_id = p.id
+where p.user_id = auth.uid()
+group by p.id, p.nombre
+order by progreso_pct desc nulls last;
+</code></pre>
+<p>Vamos por partes, que aqui hay varias ideas nuevas trabajando juntas:</p>
+<ul>
+<li><code>left join fases</code> trae todas las fases de cada proyecto. Usamos <code>LEFT JOIN</code> (no <code>JOIN</code> normal) para que un proyecto <em>sin fases</em> aun aparezca, con <code>count(f.id) = 0</code>.</li>
+<li><code>sum(case when f.completada then 1 else 0 end)</code> cuenta las fases hechas (truco de la seccion 7).</li>
+<li><code>100.0 * hechas / totales</code> da el porcentaje. Ponemos <code>100.0</code> (con decimal) para forzar division con decimales; si pusieramos <code>100</code> entero, Postgres haria division entera y un proyecto a medias daria 0%.</li>
+<li><code>round(...)</code> redondea a un numero entero bonito para la interfaz.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-nullif">🟦 ¿Que significa? — <em>NULLIF</em></h3>
+<p><code>nullif(a, b)</code> devuelve NULL si <code>a</code> es igual a <code>b</code>, y <code>a</code> en caso contrario.
+<strong>Para que sirve:</strong> sobre todo, evitar la division por cero. <code>count / nullif(total, 0)</code> convierte un divisor de 0 en NULL, y dividir entre NULL da NULL en lugar de un error.
+<strong>Donde se usa en un repo real:</strong> en Faro, para que un proyecto sin fases no rompa el calculo de progreso (da NULL, no un crash).</p>
+<h3 id="que-significa-left-join">🟦 ¿Que significa? — <em>LEFT JOIN</em></h3>
+<p><code>LEFT JOIN</code> combina dos tablas conservando <em>todas</em> las filas de la tabla izquierda, aunque no tengan pareja en la derecha (esas parejas faltantes salen como NULL). Un <code>JOIN</code> normal descartaria las que no emparejan.
+<strong>Para que sirve:</strong> no perder los registros "sin hijos" (proyectos sin fases, habitos sin registros).
+<strong>Donde se usa en un repo real:</strong> en Faro, listar todos los proyectos aunque alguno no tenga fases todavia.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En Faro, este calculo suele vivir en una vista o funcion de Postgres y se consume desde Next.js:
+<code>ts
+// Faro: leer el progreso ya calculado por la base de datos
+const { data } = await supabase
+  .from("vista_progreso_proyectos")
+  .select("id, nombre, progreso_pct")
+  .order("progreso_pct", { ascending: false, nullsFirst: false });</code>
+Nota que el progreso de Faro es <em>hibrido</em>: a veces lo ajusta la IA (OpenAI). Esta consulta da la parte "objetiva" (milestones/fases) que luego se combina con la sugerencia de la IA.</p>
+</blockquote>
+<hr />
+<h2 id="10-caso-real-la-racha-mas-larga-en-rachasimple">10. Caso real: la racha mas larga en RachaSimple</h2>
+<p>La pregunta estrella de una app de habitos: "¿cual es mi racha mas larga de dias seguidos?". Esto es mas dificil de lo que parece, porque hay que detectar tramos de fechas <em>consecutivas</em>. Hay un truco clasico en SQL para esto, y aunque usa cosas que veras a fondo mas adelante (funciones de ventana), vale la pena verlo como meta.</p>
+<pre><code class="language-sql">-- RachaSimple: racha mas larga de dias consecutivos
+with dias as (
+  select distinct fecha
+  from registros
+  where user_id = auth.uid()
+),
+grupos as (
+  select
+    fecha,
+    -- a cada fecha le restamos su numero de orden; los dias seguidos
+    -- comparten el mismo &quot;ancla&quot;, asi que forman un grupo
+    fecha - (row_number() over (order by fecha))::int as ancla
+  from dias
+)
+select
+  count(*)    as racha_dias,
+  min(fecha)  as inicio,
+  max(fecha)  as fin
+from grupos
+group by ancla
+order by racha_dias desc
+limit 1;
+</code></pre>
+<p>La intuicion: si tomas dias consecutivos (22, 23, 24) y a cada uno le restas su posicion en la lista (1, 2, 3), todos dan el mismo numero "ancla". Cuando hay un hueco, el ancla cambia. Asi que agrupar por <code>ancla</code> te separa los tramos de dias seguidos, y <code>count(*)</code> mide cada tramo. El <code>order by ... limit 1</code> se queda con el tramo mas largo: tu racha record.</p>
+<blockquote class="def">
+<h3 id="que-significa-cte-clausula-with">🟦 ¿Que significa? — <em>CTE (clausula WITH)</em></h3>
+<p>Un <strong>CTE</strong> (Common Table Expression) es una consulta con nombre, definida con <code>WITH</code>, que puedes usar como si fuera una tabla temporal dentro de la consulta principal. Sirve para partir un problema grande en pasos legibles.
+<strong>Para que sirve:</strong> ordenar la logica en etapas (primero <code>dias</code>, luego <code>grupos</code>, luego el resumen) en vez de una consulta gigante e ilegible.
+<strong>Donde se usa en un repo real:</strong> en RachaSimple, para el calculo de rachas; en Faro, para reportes de progreso que combinan varias tablas.</p>
+<h3 id="que-significa-funcion-de-ventana-row_number-over">🟦 ¿Que significa? — <em>Funcion de ventana (ROW_NUMBER, OVER)</em></h3>
+<p>Una <strong>funcion de ventana</strong> calcula un valor mirando un conjunto de filas relacionadas <em>sin colapsarlas en una sola</em> (a diferencia de las agregaciones). <code>row_number() over (order by fecha)</code> numera las filas 1, 2, 3... segun la fecha.
+<strong>Para que sirve:</strong> numerar, rankear o comparar filas vecinas. Es un tema grande que tiene su propio capitulo mas adelante.
+<strong>Donde se usa en un repo real:</strong> el truco de la racha en RachaSimple depende de <code>row_number()</code>.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>No te agobies si la consulta de la racha te parece magia. Es un patron avanzado; aqui lo importante es que entiendas <em>que</em> hace cada agregacion (<code>count</code>, <code>min</code>, <code>max</code>) y que reconozcas un <code>WITH</code>. Las funciones de ventana las dominaras en su propio capitulo.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En RachaSimple lo practico es encapsular esto en una funcion de Postgres (<code>get_longest_streak</code>) y llamarla con RPC desde el cliente:
+<code>ts
+// RachaSimple: pedir la racha mas larga calculada en la base de datos
+const { data, error } = await supabase.rpc("get_longest_streak");
+// data -&gt; { racha_dias, inicio, fin }</code>
+Asi el calculo pesado ocurre en Postgres (con RLS aplicada) y TanStack Query cachea el resultado en el front.</p>
+</blockquote>
+<hr />
+<h2 id="11-por-que-esto-no-existe-igual-en-polypaw">11. Por que esto no existe igual en PolyPaw</h2>
+<p>Conviene cerrar contrastando. PolyPaw guarda sus datos en archivos JSON: una lista de misiones, un objeto por jugador. No hay tablas ni SQL. Para "contar misiones completadas por semana" tendrias que, en Python, abrir el JSON, recorrer la lista con un bucle, parsear cada fecha, agrupar a mano en un diccionario y sumar. Funciona para pocos datos, pero todo el peso recae en tu codigo.</p>
+<p>En RachaSimple y Faro, con Postgres detras, esa misma pregunta es un <code>GROUP BY</code> de tres lineas que ademas respeta RLS (cada quien ve solo lo suyo) y se ejecuta cerca de los datos. Esa es la ventaja de tener una base de datos relacional: las preguntas de resumen se vuelven triviales y seguras. Bit lo resume asi: <em>en JSON cuentas tu; en SQL, cuenta la base de datos por ti.</em></p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se que una agregacion convierte muchas filas en un valor resumen.</li>
+<li>[ ] Uso <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code> y <code>MAX</code>, y se que <code>COUNT(*)</code> cuenta filas y <code>COUNT(col)</code> ignora NULL.</li>
+<li>[ ] Entiendo que <code>GROUP BY</code> hace un resumen por cada categoria, una fila por grupo.</li>
+<li>[ ] Recuerdo la regla: en el SELECT, toda columna va agregada o en el GROUP BY.</li>
+<li>[ ] Distingo <code>WHERE</code> (filtra filas, antes de agrupar) de <code>HAVING</code> (filtra grupos, despues de agrupar).</li>
+<li>[ ] Uso <code>date_trunc</code> para agrupar fechas por semana o mes, y <code>extract</code> para sacar dia/mes/ano.</li>
+<li>[ ] Aplico funciones de texto (<code>lower</code>, <code>trim</code>, <code>||</code>) para normalizar y armar etiquetas.</li>
+<li>[ ] Uso <code>CASE</code> para clasificar, incluido el truco <code>sum(case when ... then 1 else 0 end)</code>.</li>
+<li>[ ] Uso <code>COALESCE</code> para dar valores de respaldo a los NULL y <code>NULLIF</code> para evitar dividir entre cero.</li>
+<li>[ ] Entiendo a grandes rasgos como se calcula el progreso por proyecto (Faro) y la racha mas larga (RachaSimple).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 En el editor SQL de Supabase de RachaSimple, escribe una consulta que devuelva, en una sola fila, el total de dias registrados (<code>count</code>), tu primer dia (<code>min(fecha)</code>) y tu ultimo dia (<code>max(fecha)</code>).</p>
+</li>
+<li>
+<p>💻 Escribe una consulta con <code>GROUP BY habito_id</code> que cuente los dias completados de cada habito y los ordene de mayor a menor. Luego agregale un <code>HAVING</code> para mostrar solo los habitos con mas de 10 dias.</p>
+</li>
+<li>
+<p>💻 Usa <code>date_trunc('week', fecha)</code> para contar cuantos habitos completaste por semana en el ultimo mes. Anade <code>where fecha &gt;= current_date - interval '30 days'</code>.</p>
+</li>
+<li>
+<p>💻 En Faro, escribe la consulta de progreso por proyecto de la seccion 9, pero protege el caso de proyectos sin fases con <code>nullif</code>. Comprueba que un proyecto sin fases sale con progreso NULL y no rompe la consulta.</p>
+</li>
+<li>
+<p>Sin computadora: explica con tus palabras la diferencia entre <code>WHERE</code> y <code>HAVING</code>, y pon un ejemplo de cada uno usando la tabla <code>registros</code>. Pista: una condicion sobre <code>fecha</code> vs. una condicion sobre <code>count(*)</code>.</p>
+</li>
+<li>
+<p>💻 Reto: usando <code>CASE</code>, clasifica tus registros en "entre semana" y "fin de semana" (con <code>extract(dow ...)</code>) y cuenta cuantos hay de cada tipo. ¿En cual eres mas constante? Comparte el resultado con Bit.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

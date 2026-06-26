@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 13 — Leer y resolver errores de tipos — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-13-leer-y-resolver-errores-de-tipos">Capítulo 13 — Leer y resolver errores de tipos</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap13.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora has escrito tipos: interfaces, uniones, genéricos, props de React. Pero seamos honestos
+sobre cómo se siente programar de verdad: el 80% del tiempo no estás escribiendo tipos nuevos,
+estás <strong>leyendo errores rojos</strong> que TypeScript te subraya y preguntándote "¿y ahora qué quiere de
+mí?". Buenas noticias de parte de Bit, tu ajolote: esos errores no son tu enemigo. Son un revisor
+obsesivo que leyó todo tu código antes de que se ejecute y te avisa, <strong>antes de que la app falle
+frente a un usuario</strong>, que algo no encaja. Este capítulo te enseña a leer un error de TypeScript
+como quien lee un mapa: de dónde sale, qué te está diciendo y cómo arreglarlo de verdad (no
+taparlo). Vamos a usar los errores <strong>reales</strong> que aparecen al trabajar en RachaSimple (la app de
+hábitos) y en Faro (tu organizador de proyectos). Y recuerda lo de siempre: <strong>TypeScript es
+JavaScript con tipos.</strong> El error no cambia tu código que corre; cambia lo que TypeScript te deja
+escribir.</p>
+</blockquote>
+<hr />
+<h2 id="1-anatomia-de-un-error-de-typescript">1. Anatomía de un error de TypeScript</h2>
+<p>Cuando TypeScript no está contento, te subraya un trozo de código con una línea ondulada roja y, al
+poner el cursor encima (o en la pestaña "Problems" de VS Code, o en la terminal cuando corres
+<code>npm run build</code>), te muestra un mensaje. Ese mensaje siempre tiene la misma forma. Mira uno real que
+aparece en Faro si te equivocas:</p>
+<pre><code class="language-typescript">// project.description es de tipo `string | null`
+const inicial = project.description.trim();
+//                                 ~~~~ 'project.description' is possibly 'null'.
+//              ts(18047)
+</code></pre>
+<p>Vamos a despiezar lo que ves:</p>
+<ul>
+<li><strong>El lugar subrayado</strong> (<code>project.description</code>): el trozo exacto donde TS detectó el problema.</li>
+<li><strong>El mensaje</strong> ("'project.description' is possibly 'null'"): la explicación en inglés.</li>
+<li><strong>El número</strong> (<code>ts(18047)</code>): el código del error. No tienes que memorizarlos, pero te sirve para
+  buscar en Google "ts 18047" y encontrar gente con tu mismo problema.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-error-de-tipos-type-error">🟦 ¿Qué significa? — <em>Error de tipos (type error)</em></h3>
+<p>Un aviso que da TypeScript cuando el <strong>tipo</strong> de un valor no coincide con lo que tu código intenta
+hacer con él. No es un error que ocurre al ejecutar; es un error que TS detecta <strong>antes</strong>, leyendo
+los tipos. <strong>Para qué sirve:</strong> atrapar bugs (como acceder a algo que podría ser <code>null</code>) en tu
+editor, mucho antes de que se rompa en producción. <strong>Dónde se usa:</strong> en Faro, <code>npm run build</code>
+falla si hay un solo error de tipos, así que arreglarlos es obligatorio antes de fusionar un PR.</p>
+<h3 id="que-significa-compilador-compiler">🟦 ¿Qué significa? — <em>Compilador (compiler)</em></h3>
+<p>El programa de TypeScript (<code>tsc</code>) que lee tu código <code>.ts</code>/<code>.tsx</code>, revisa todos los tipos y traduce
+a JavaScript normal. <strong>Para qué sirve:</strong> es quien "se queja" con los errores de tipos. <strong>Dónde se
+usa:</strong> cuando corres <code>npm run build</code> en Faro o <code>tsc --noEmit</code> en RachaSimple, ese es el compilador
+revisando todo tu proyecto de una sola pasada.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>El número de error (<code>ts(2339)</code>, <code>ts(18047)</code>, etc.) es tu mejor amigo para buscar ayuda. Copia el
+mensaje completo en inglés en el buscador; casi siempre alguien ya tuvo exactamente ese error.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Un error de tipos <strong>no</strong> significa que tu app esté rota <em>ahora mismo</em>. A veces el código hasta
+funciona en ejecución. Pero TS te avisa porque podría romperse con ciertos datos (un <code>null</code> que
+aún no has visto). Ignorarlo es jugar a la lotería con tus usuarios.</p>
+</blockquote>
+<hr />
+<h2 id="2-leer-el-error-de-adentro-hacia-afuera">2. Leer el error de adentro hacia afuera</h2>
+<p>Los mensajes de TypeScript pueden parecer un muro de texto, sobre todo con tipos complicados. El
+truco profesional es leerlos <strong>de adentro hacia afuera</strong>: busca primero el dato más concreto (el
+nombre de la variable, el tipo más pequeño) y desde ahí entiende el resto.</p>
+<p>Imagina que en RachaSimple intentas pasarle a <code>HabitCard</code> un objeto equivocado. El componente espera
+esto (es su código real):</p>
+<pre><code class="language-typescript">interface HabitCardProps {
+  habit: Habit;
+  todayCheckin: DailyCheckin | undefined;
+}
+</code></pre>
+<p>Si por error le pasas un texto donde va <code>habit</code>, TS dice algo así:</p>
+<pre><code class="language-typescript">&lt;HabitCard habit={&quot;correr&quot;} todayCheckin={undefined} /&gt;
+//          ~~~~~
+// Type 'string' is not assignable to type 'Habit'. ts(2322)
+</code></pre>
+<p>Léelo de adentro hacia afuera:</p>
+<ol>
+<li><strong>Lo más concreto:</strong> <code>'string'</code> → lo que TÚ diste (un texto).</li>
+<li><strong>Con qué se compara:</strong> <code>type 'Habit'</code> → lo que el componente ESPERA.</li>
+<li><strong>El verbo clave:</strong> <code>is not assignable to</code> → "no se puede meter esto en aquello".</li>
+</ol>
+<p>Traducido a humano: <em>"me diste un texto, pero <code>habit</code> necesita un objeto <code>Habit</code>."</em> Casi todos los
+errores de "tipos incompatibles" tienen esta estructura: <strong><code>Type A is not assignable to type B</code></strong>,
+donde A es lo que pusiste y B es lo que se esperaba.</p>
+<blockquote class="def">
+<h3 id="que-significa-is-not-assignable-to-no-asignable-a">🟦 ¿Qué significa? — <em>"is not assignable to" (no asignable a)</em></h3>
+<p>La frase clave de los errores de incompatibilidad. Significa "el valor de la izquierda no cabe en
+el hueco de la derecha porque sus tipos no encajan". <strong>Para qué sirve:</strong> te dice exactamente las
+dos piezas que no coinciden. <strong>Dónde se usa:</strong> sale en RachaSimple cada vez que pasas una prop con
+el tipo equivocado a un componente como <code>HabitCard</code> o <code>MetricCard</code>.</p>
+<h3 id="que-significa-prop">🟦 ¿Qué significa? — <em>Prop</em></h3>
+<p>Un valor que le pasas a un componente de React desde fuera, como un argumento de función pero en
+JSX. <strong>Para qué sirve:</strong> configurar el componente (qué hábito mostrar, qué color usar). <strong>Dónde se
+usa:</strong> <code>habit</code> y <code>todayCheckin</code> son las props de <code>HabitCard</code> en RachaSimple.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Cuando el error sea largo, lee solo la <strong>última línea</strong> primero. Suele tener el resumen
+("Type 'X' is not assignable to type 'Y'"). El resto del muro es TS explicándote <em>por qué</em>, campo
+por campo. Si la última línea ya te basta, no leas lo demás.</p>
+</blockquote>
+<hr />
+<h2 id="3-error-comun-el-objeto-posiblemente-es-null-o-undefined">3. Error común: "el objeto posiblemente es null o undefined"</h2>
+<p>Este es, de lejos, el error que más vas a ver. Aparece porque muchos de tus datos tienen tipos como
+<code>string | null</code> o <code>Algo | undefined</code>. Mira los tipos reales de Faro:</p>
+<pre><code class="language-typescript">export interface Project {
+  name: string;
+  description: string | null;     // puede ser texto O null
+  ai_summary: string | null;      // puede ser texto O null
+  progress_pct: number | null;    // puede ser número O null
+  // ...
+}
+</code></pre>
+<p>El <code>| null</code> no es un descuido: significa "este proyecto <strong>todavía no tiene</strong> descripción porque
+nadie ha disparado el análisis con IA". Entonces, si haces esto:</p>
+<pre><code class="language-typescript">const resumen = project.ai_summary.slice(0, 100);
+//                                 ~~~~~ 'project.ai_summary' is possibly 'null'. ts(18047)
+</code></pre>
+<p>TS te frena porque si <code>ai_summary</code> fuera <code>null</code>, llamar a <code>.slice()</code> reventaría en ejecución con el
+clásico <em>"Cannot read properties of null"</em>. TS te está salvando de un bug real.</p>
+<blockquote class="def">
+<h3 id="que-significa-null-y-undefined">🟦 ¿Qué significa? — <em>null y undefined</em></h3>
+<p>Dos formas de decir "aquí no hay valor". <code>null</code> suele significar "vacío a propósito" (un proyecto
+sin descripción aún). <code>undefined</code> suele significar "esto no existe / no se pasó". <strong>Para qué
+sirven:</strong> representar la ausencia de un dato. <strong>Dónde se usan:</strong> en Faro <code>description: string | null</code>
+marca un campo que puede venir vacío de la base de datos; en RachaSimple <code>todayCheckin: DailyCheckin | undefined</code>
+marca "puede que hoy todavía no haya check-in".</p>
+<h3 id="que-significa-estrechar-el-tipo-narrowing">🟦 ¿Qué significa? — <em>Estrechar el tipo (narrowing)</em></h3>
+<p>Reducir un tipo amplio (<code>string | null</code>) a uno más concreto (<code>string</code>) demostrándole a TS, con un
+<code>if</code> o similar, que en ese punto el valor ya no puede ser <code>null</code>. <strong>Para qué sirve:</strong> después de
+estrechar, TS te deja usar el valor sin quejarse. <strong>Dónde se usa:</strong> lo viste en el Capítulo 06; es
+la forma correcta de resolver los errores de "possibly null".</p>
+</blockquote>
+<p>La forma más limpia de resolverlo es <strong>estrechar con un <code>if</code></strong>:</p>
+<pre><code class="language-typescript">if (project.ai_summary !== null) {
+  // Aquí dentro, TS YA SABE que ai_summary es string. Sin error.
+  const resumen = project.ai_summary.slice(0, 100);
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En Faro, el componente <code>ProjectCard</code> recibe un <code>Project</code> cuyo <code>description</code> es <code>string | null</code>. Por
+eso verás patrones como <code>project.description ?? "Sin descripción aún"</code>: es la manera de dar un texto
+de respaldo cuando el dato viene vacío. No es paranoia; es que la base de datos <strong>de verdad</strong>
+devuelve <code>null</code> mientras no corras el análisis.</p>
+</blockquote>
+<hr />
+<h2 id="4-error-comun-la-propiedad-no-existe-en-este-tipo">4. Error común: "la propiedad no existe en este tipo"</h2>
+<p>El segundo gran clásico: <code>Property 'X' does not exist on type 'Y'</code> (<code>ts(2339)</code>). Significa que estás
+pidiendo un campo que ese tipo no tiene. Casi siempre es un <strong>typo</strong> o que confundiste dos tipos.</p>
+<pre><code class="language-typescript">// El tipo Project tiene `progress_pct`, no `progress`
+const p = project.progress;
+//                ~~~~~~~~ Property 'progress' does not exist on type 'Project'.
+//                Did you mean 'progress_pct'? ts(2339)
+</code></pre>
+<p>Fíjate en el regalo del final: <em>"Did you mean 'progress_pct'?"</em>. TS conoce todos los campos de
+<code>Project</code> (porque tú los declaraste en <code>types.ts</code>) y te sugiere el que más se parece. Nueve de cada
+diez veces, ese es el arreglo.</p>
+<blockquote class="def">
+<h3 id="que-significa-propiedad-property">🟦 ¿Qué significa? — <em>Propiedad (property)</em></h3>
+<p>Cada uno de los campos con nombre que tiene un objeto: <code>name</code>, <code>phase</code>, <code>progress_pct</code>. <strong>Para qué
+sirve:</strong> guardar cada pedazo de información del objeto. <strong>Dónde se usa:</strong> las propiedades de
+<code>Project</code> en Faro y de <code>Habit</code> o <code>UserProfile</code> en RachaSimple están todas declaradas en sus
+archivos de tipos, y por eso TS sabe cuáles existen y cuáles no.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Si TS dice "Property 'foo' does not exist" y estás <strong>segurísimo</strong> de que existe, revisa que estés
+importando el tipo correcto. En RachaSimple es fácil confundir <code>Habit</code> con <code>NewHabit</code> (el primero
+tiene <code>id</code>, el segundo no). El error no miente: estás mirando el tipo equivocado.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>¿No recuerdas qué campos tiene un tipo? Escribe el objeto, pon un punto (<code>project.</code>) y deja que el
+autocompletado de VS Code te muestre la lista completa. Esa lista sale directa de tus tipos, así
+que es la verdad absoluta.</p>
+</blockquote>
+<hr />
+<h2 id="5-y-tus-dos-herramientas-para-nullundefined">5. <code>?.</code> y <code>??</code>: tus dos herramientas para null/undefined</h2>
+<p>Estrechar con <code>if</code> está bien, pero a veces es demasiado aparatoso. TypeScript (y JavaScript moderno)
+te dan dos operadores cortitos que resuelven la mayoría de los casos.</p>
+<h3 id="el-optional-chaining">El optional chaining <code>?.</code></h3>
+<pre><code class="language-typescript">// En RachaSimple, todayCheckin es `DailyCheckin | undefined`
+const status = todayCheckin?.status;
+</code></pre>
+<p>El <code>?.</code> significa: <em>"si <code>todayCheckin</code> es <code>null</code> o <code>undefined</code>, no sigas; devuelve <code>undefined</code>. Si
+no, sigue y dame <code>.status</code>."</em> Es exactamente el código real de <code>HabitCard</code>. Sin <code>?.</code>, TS se quejaría
+de que <code>todayCheckin</code> podría ser <code>undefined</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-optional-chaining-encadenamiento-opcional">🟦 ¿Qué significa? — <em>Optional chaining (<code>?.</code>, encadenamiento opcional)</em></h3>
+<p>Un operador que accede a una propiedad <strong>solo si</strong> el valor de antes no es <code>null</code>/<code>undefined</code>; si lo
+es, frena y devuelve <code>undefined</code> sin reventar. <strong>Para qué sirve:</strong> leer datos anidados que podrían
+faltar, sin escribir <code>if</code> por todos lados. <strong>Dónde se usa:</strong> <code>todayCheckin?.status</code> en el
+<code>HabitCard</code> de RachaSimple; en Faro, cosas como <code>snapshot?.last_commit?.message</code>.</p>
+</blockquote>
+<h3 id="el-nullish-coalescing">El nullish coalescing <code>??</code></h3>
+<pre><code class="language-typescript">// En Faro: si description es null, usa un texto por defecto
+const texto = project.description ?? &quot;Sin descripción todavía&quot;;
+</code></pre>
+<p>El <code>??</code> significa: <em>"usa lo de la izquierda, </em><em>a menos que</em><em> sea <code>null</code> o <code>undefined</code>; en ese caso,
+usa lo de la derecha."</em> Es perfecto para valores por defecto.</p>
+<blockquote class="def">
+<h3 id="que-significa-nullish-coalescing-fusion-de-nulos">🟦 ¿Qué significa? — <em>Nullish coalescing (<code>??</code>, fusión de nulos)</em></h3>
+<p>Un operador que devuelve el valor de la izquierda salvo que sea <code>null</code> o <code>undefined</code>, en cuyo caso
+devuelve el de la derecha. <strong>Para qué sirve:</strong> dar un valor de respaldo cuando el dato falta.
+<strong>Dónde se usa:</strong> <code>project.description ?? "..."</code> en Faro para mostrar algo cuando aún no hay
+descripción generada.</p>
+</blockquote>
+<p><code>?.</code> y <code>??</code> se combinan de maravilla:</p>
+<pre><code class="language-typescript">// &quot;Dame el mensaje del último commit; si algo falta, di 'sin commits'.&quot;
+const ultimo = snapshot?.last_commit?.message ?? &quot;sin commits&quot;;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado-no-es-lo-mismo-que">⚠️ Cuidado: <code>??</code> NO es lo mismo que <code>||</code></h3>
+<p>Quizá conozcas <code>||</code> del Módulo 03. La diferencia te puede morder: <code>||</code> reemplaza <strong>cualquier valor
+falsy</strong> (incluido <code>0</code>, <code>""</code> y <code>false</code>). <code>??</code> solo reemplaza <code>null</code> y <code>undefined</code>. En Faro,
+<code>progress_pct ?? 0</code> está bien; pero <code>progress_pct || 100</code> sería un <strong>bug</strong>: si el progreso real es
+<code>0</code>, ¡<code>||</code> lo tomaría como falsy y lo cambiaría a 100! Para datos numéricos, casi siempre quieres
+<code>??</code>.</p>
+<h3 id="que-significa-valor-falsy">🟦 ¿Qué significa? — <em>Valor falsy</em></h3>
+<p>En JavaScript, un valor que se considera "falso" cuando se usa en una condición. Los falsy son
+exactamente seis: <code>false</code>, <code>0</code>, <code>""</code> (texto vacío), <code>null</code>, <code>undefined</code> y <code>NaN</code>. Todo lo demás es
+"truthy" (verdadero). <strong>Para qué sirve:</strong> entender qué reemplaza <code>||</code> (cualquier falsy) frente a
+qué reemplaza <code>??</code> (solo <code>null</code> y <code>undefined</code>). <strong>Dónde se usa:</strong> en Faro, <code>progress_pct</code> puede ser
+<code>0</code>, que es falsy; por eso usar <code>||</code> ahí lo trataría como "vacío" por error y <code>??</code> es la opción
+correcta.</p>
+</blockquote>
+<hr />
+<h2 id="6-optional-chaining-tipado-que-te-devuelve-realmente">6. Optional chaining "tipado": qué te devuelve realmente</h2>
+<p>Un detalle que confunde a principiantes: cuando usas <code>?.</code>, el tipo del resultado <strong>cambia</strong>. Mira:</p>
+<pre><code class="language-typescript">// status NO es CheckinStatus. Es CheckinStatus | undefined.
+const status = todayCheckin?.status;
+</code></pre>
+<p>Aunque <code>DailyCheckin.status</code> sea de tipo <code>CheckinStatus</code>, al usar <code>?.</code> TS le añade <code>| undefined</code>,
+porque el <code>?.</code> puede frenar y devolver <code>undefined</code>. Esto significa que el error de "possibly
+undefined" puede <strong>mudarse</strong> una línea más abajo:</p>
+<pre><code class="language-typescript">const status = todayCheckin?.status;
+const etiqueta = statusLabel[status];
+//                           ~~~~~~ 'status' is possibly 'undefined'. ts(18048)
+</code></pre>
+<p>Para resolverlo, vuelves a tus herramientas: un <code>if</code>, un <code>??</code> con valor por defecto, o un valor de
+respaldo:</p>
+<pre><code class="language-typescript">const status = todayCheckin?.status ?? &quot;not_done&quot;;
+// Ahora status es CheckinStatus a secas. Sin error.
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-tipo-union-union-type">🟦 ¿Qué significa? — <em>Tipo unión (union type)</em></h3>
+<p>Un tipo que dice "esto puede ser una cosa <strong>o</strong> otra", escrito con <code>|</code>. <strong>Para qué sirve:</strong>
+describir datos que tienen varias formas posibles. <strong>Dónde se usa:</strong> <code>CheckinStatus | undefined</code> es
+lo que produce <code>todayCheckin?.status</code>; en Faro, <code>string | null</code> es la unión más común en <code>Project</code>.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En RachaSimple verás muchos <code>?? valorPorDefecto</code> justo después de un <code>?.</code>. No es casualidad: es el
+patrón estándar para "leer algo que puede faltar y quedarme con un tipo concreto al final". Primero
+<code>?.</code> para no reventar, luego <code>??</code> para quitar el <code>undefined</code>.</p>
+</blockquote>
+<hr />
+<h2 id="7-el-as-el-boton-rojo-que-casi-nunca-debes-apretar">7. El <code>as</code>: el botón rojo que casi nunca debes apretar</h2>
+<p>Tarde o temprano descubrirás <code>as</code>, y parecerá magia: silencia errores al instante. Por eso mismo es
+peligroso.</p>
+<blockquote class="def">
+<h3 id="que-significa-asercion-de-tipo-as">🟦 ¿Qué significa? — <em>Aserción de tipo (<code>as</code>)</em></h3>
+<p>Una forma de decirle a TypeScript "confía en mí, este valor es de tipo X aunque tú no lo veas".
+<strong>Para qué sirve:</strong> forzar un tipo cuando tú sabes algo que TS no puede deducir. <strong>Dónde se usa:</strong>
+con mucha mesura; en RachaSimple aparece como <code>['habits'] as const</code> (un uso seguro y legítimo).</p>
+</blockquote>
+<p>El problema es que <code>as</code> <strong>no comprueba nada</strong>: es una promesa tuya, no una verificación. Si mientes
+(aunque sea sin querer), TS te cree y el bug pasa a ejecución:</p>
+<pre><code class="language-typescript">// MAL: estás obligando a TS a creerte que nunca es null.
+const resumen = (project.ai_summary as string).slice(0, 100);
+// Compila sin error... pero si ai_summary ES null, REVIENTA en ejecución.
+</code></pre>
+<p>Con <code>as</code> apagaste exactamente la alarma que existía para protegerte. La forma correcta era estrechar
+con <code>if</code> o usar <code>??</code>. Regla de Bit: <strong>si tu primer instinto al ver un error rojo es escribir <code>as</code>,
+respira y busca el <code>if</code> o el <code>??</code> primero.</strong></p>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p><code>as</code> no convierte nada. <code>valor as string</code> no transforma un número en texto; solo le tapa los ojos
+a TypeScript. Si el dato de verdad no es lo que dijiste, la app falla en producción <strong>sin aviso
+previo</strong>, que es justo lo que TypeScript intentaba evitar.</p>
+</blockquote>
+<h3 id="cuando-si-es-legitimo-usar-as">¿Cuándo SÍ es legítimo usar <code>as</code>?</h3>
+<ul>
+<li><strong><code>as const</code></strong>, como en <code>const KEY = ['habits'] as const</code> de RachaSimple: aquí no estás mintiendo,
+  estás pidiéndole a TS que trate ese array como algo fijo e inmutable. Uso seguro.</li>
+<li><strong>Datos de los que TÚ eres responsable de validar</strong>, como <code>await request.json()</code> en una ruta de
+  Faro, donde el JSON entrante no tiene tipo y <em>después de revisarlo a mano</em> lo afirmas. Pero incluso
+  ahí, lo ideal es validar de verdad.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Una regla mental simple: usa <code>as</code> para <strong>darle forma a algo que TS no podía conocer</strong> (como un JSON
+externo), nunca para <strong>callar un error sobre algo que TS sí conocía</strong> (como un <code>string | null</code>). En
+el segundo caso, el error tenía razón.</p>
+</blockquote>
+<hr />
+<h2 id="8-errores-tipicos-al-trabajar-en-faro-y-rachasimple">8. Errores típicos al trabajar en Faro y RachaSimple</h2>
+<p>Recopilemos los que más vas a encontrar en estos dos repos, con su arreglo correcto:</p>
+<p><strong>1. "is possibly 'null'" en campos de Faro.</strong> Casi cualquier campo de IA (<code>ai_summary</code>,
+<code>ai_description</code>, <code>progress_pct</code>) es <code>| null</code> porque puede no estar generado todavía.
+→ Arreglo: <code>?? valorPorDefecto</code> o un <code>if</code>.</p>
+<p><strong>2. "is possibly 'undefined'" en check-ins de RachaSimple.</strong> <code>todayCheckin</code> es
+<code>DailyCheckin | undefined</code> porque puede que hoy no haya registro.
+→ Arreglo: <code>todayCheckin?.algo</code> y, si necesitas el valor concreto, <code>?? "not_done"</code>.</p>
+<p><strong>3. "Property 'X' does not exist".</strong> Un typo o confundir tipos parecidos (<code>Habit</code> vs <code>NewHabit</code>,
+<code>progress</code> vs <code>progress_pct</code>).
+→ Arreglo: lee la sugerencia "Did you mean...?" y corrige el nombre o el import.</p>
+<p><strong>4. "is not assignable to" al pasar props.</strong> Le diste a <code>HabitCard</code> o <code>MetricCard</code> un valor del tipo
+equivocado.
+→ Arreglo: mira la interfaz de props del componente y ajusta lo que pasas.</p>
+<p><strong>5. Pasar un <code>id</code> opcional a un hook.</strong> En <code>useHabit(id: string | undefined)</code>, dentro se llama a
+<code>habitsRepo.getById(id!)</code>. Ese <code>!</code> solo es seguro porque arriba hay <code>enabled: !!id</code>, que impide que
+la consulta corra si no hay <code>id</code>.
+→ Lección: el <code>!</code> (igual que <code>as</code>) solo se justifica cuando una guardia cercana ya garantiza el
+valor.</p>
+<blockquote class="def">
+<h3 id="que-significa-non-null-assertion">🟦 ¿Qué significa? — <em>Non-null assertion (<code>!</code>)</em></h3>
+<p>Un primo de <code>as</code> que afirma "esto NO es null ni undefined, créeme". <strong>Para qué sirve:</strong> quitar el
+<code>| null/undefined</code> cuando tú sabes que ahí hay valor. <strong>Dónde se usa:</strong> <code>getById(id!)</code> en el hook
+<code>useHabit</code> de RachaSimple, protegido por <code>enabled: !!id</code>. Igual de riesgoso que <code>as</code> si no hay una
+guardia que lo respalde.</p>
+<h3 id="que-significa-hook">🟦 ¿Qué significa? — <em>Hook</em></h3>
+<p>Una función especial de React (su nombre suele empezar por <code>use</code>) que te deja "engancharte" a la
+lógica de React: datos, estado, efectos. <strong>Para qué sirve:</strong> reutilizar lógica con datos sin repetir
+código en cada componente. <strong>Dónde se usa:</strong> <code>useHabit(id)</code> en RachaSimple es un hook que trae un
+hábito por su <code>id</code>; lo verás a fondo en el Módulo 06, aquí solo aparece como ejemplo de dónde un <code>!</code>
+puede ser seguro.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Cuando <code>npm run build</code> falla en Faro (la regla del proyecto es que el build debe pasar antes de
+fusionar), lo más probable es que sea uno de estos cinco. La terminal te dará archivo, línea y el
+mensaje <code>tsXXXX</code>: léelo de adentro hacia afuera y casi siempre el arreglo es un <code>??</code>, un <code>if</code> o
+corregir un nombre.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé identificar en un error las tres partes: el trozo subrayado, el mensaje y el código <code>tsXXXX</code>.</li>
+<li>[ ] Leo los mensajes de adentro hacia afuera y reconozco la frase "is not assignable to".</li>
+<li>[ ] Entiendo por qué <code>string | null</code> y <code>Algo | undefined</code> provocan el error "possibly null/undefined".</li>
+<li>[ ] Resuelvo un "possibly null" estrechando con <code>if</code>.</li>
+<li>[ ] Uso <code>?.</code> para leer algo que podría faltar sin que la app reviente.</li>
+<li>[ ] Uso <code>??</code> para dar un valor por defecto y sé por qué es distinto de <code>||</code>.</li>
+<li>[ ] Entiendo que <code>?.</code> añade <code>| undefined</code> al tipo del resultado, y sé quitarlo con <code>??</code>.</li>
+<li>[ ] Reconozco "Property X does not exist" como un typo o tipo confundido, y uso "Did you mean...?".</li>
+<li>[ ] Sé que <code>as</code> y <code>!</code> NO comprueban nada y evito usarlos para callar errores legítimos.</li>
+<li>[ ] Distingo el uso legítimo de <code>as</code> (como <code>as const</code>) del peligroso (tapar un <code>string | null</code>).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Despieza el mensaje.</strong> Toma este error y escribe, en tus palabras, qué diste tú y qué se
+   esperaba: <code>Type 'number' is not assignable to type 'string'. ts(2322)</code>. ¿Cuál es A y cuál es B?</p>
+</li>
+<li>
+<p>💻 <strong>Provoca el "possibly null".</strong> En un archivo <code>.ts</code> de prueba, copia el tipo <code>Project</code> de Faro
+   (al menos <code>name</code> y <code>description: string | null</code>). Crea un <code>project</code> y escribe
+   <code>project.description.trim()</code>. Observa el error, anota su número <code>tsXXXX</code> y luego arréglalo de DOS
+   formas distintas: una con <code>if</code> y otra con <code>??</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Caza el typo.</strong> Escribe <code>project.progres</code> (sin la <code>s</code> final) sobre un objeto de tipo
+   <code>Project</code>. Lee la sugerencia "Did you mean...?" que te da VS Code y corrígela. ¿Qué número de error
+   salió?</p>
+</li>
+<li>
+<p>💻 <strong><code>?.</code> y <code>??</code> juntos.</strong> Crea una variable <code>todayCheckin</code> de tipo <code>DailyCheckin | undefined</code>
+   (puede ser <code>undefined</code>). Escribe una línea que obtenga el <code>status</code> y, si no hay check-in, valga
+   <code>"not_done"</code>. Pista: necesitas los dos operadores de este capítulo.</p>
+</li>
+<li>
+<p>💻 <strong>El peligro de <code>as</code>.</strong> Escribe <code>const r = (project.ai_summary as string).slice(0, 3);</code> con
+   <code>ai_summary</code> puesto a <code>null</code>. Compila (no dará error de tipos) y luego ejecútalo con <code>node</code> o en el
+   navegador. ¿Qué pasa en ejecución? Explica por qué <code>as</code> fue una mala idea aquí.</p>
+</li>
+<li>
+<p><strong><code>??</code> vs <code>||</code>.</strong> Dado <code>progress_pct</code> que puede valer <code>0</code>, explica por escrito qué devuelve
+   <code>progress_pct ?? 100</code> y qué devuelve <code>progress_pct || 100</code> cuando el progreso real es <code>0</code>. ¿Cuál
+   de los dos es un bug y por qué?</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Con esto cierras el capítulo más práctico del módulo: no escribiste tipos nuevos, aprendiste a
+<strong>conversar con TypeScript</strong> cuando te corrige. Bit te deja una idea para llevar: cada error rojo es
+TypeScript haciéndote un favor <em>antes</em> de que tu usuario sufra el bug. Léelo con calma, de adentro
+hacia afuera, y casi siempre el arreglo cabe en un <code>if</code>, un <code>?.</code> o un <code>??</code>. Apretar <code>as</code> para que
+el rojo desaparezca es como tapar la luz del tablero del coche: el problema sigue ahí. Nos vemos en
+el Módulo 06, donde React entra en escena de lleno. 🦎</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

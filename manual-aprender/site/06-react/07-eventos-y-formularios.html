@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 07 — Eventos y formularios controlados — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-07-eventos-y-formularios-controlados">Capítulo 07 — Eventos y formularios controlados</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora tus componentes mostraban datos y los cambiaban con botones de juguete. Pero una app
+de verdad <strong>escucha al usuario</strong>: clics, teclas, texto que se escribe, formularios que se envían.
+En este capítulo aprenderás a manejar <strong>eventos</strong> en React (<code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>) y a
+construir <strong>formularios controlados</strong>, donde el <strong>estado</strong> es la única fuente de verdad de lo que
+hay escrito en cada campo. Terminaremos armando, paso a paso, el formulario de <strong>crear hábito</strong> de
+<strong>RachaSimple</strong>. Bit el ajolote viene contigo, con sus branquias rosadas y muchas ganas de teclear.</p>
+</blockquote>
+<p align="center">
+  <img src="../../recursos/imagenes/06-react/formulario-controlado.png" alt="Bit el ajolote escribe en un input mientras una flecha conecta lo que teclea con una caja de estado que dice la verdad sobre el valor del campo" width="640">
+</p>
+
+<hr />
+<h2 id="1-eventos-como-react-escucha-al-usuario">1. Eventos: cómo React escucha al usuario</h2>
+<p>Una <strong>interfaz</strong> está muerta hasta que reacciona. Que reaccione significa que, cuando ocurre algo
+(un clic, una tecla), se ejecuta una función tuya. Esa "cosa que ocurre" es un <strong>evento</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-evento">🟦 ¿Qué significa? — <em>Evento</em></h3>
+<p>Un <strong>evento</strong> es algo que pasa en la página y que el navegador te avisa: el usuario hizo clic,
+movió el ratón, escribió una letra, envió un formulario. En el Módulo 03 (JavaScript) los
+escuchabas con <code>addEventListener</code>. En React no usas <code>addEventListener</code> a mano: pones la función
+directamente en el JSX y React se encarga del resto.</p>
+<h3 id="que-significa-manejador-de-evento-event-handler">🟦 ¿Qué significa? — <em>Manejador de evento (event handler)</em></h3>
+<p>Un <strong>manejador de evento</strong> es la <strong>función que se ejecuta cuando el evento ocurre</strong>. Tú la
+escribes y se la pasas a React; React la llama en el momento justo. Por costumbre se nombran
+empezando por <code>handle...</code> (<code>handleClick</code>, <code>handleSubmit</code>, <code>handleChange</code>), para que al leerlas
+sepas de inmediato que son respuestas a eventos.</p>
+</blockquote>
+<p>En JSX, los eventos se escriben como <strong>atributos en camelCase</strong> que empiezan por <code>on</code>: <code>onClick</code>,
+<code>onChange</code>, <code>onSubmit</code>. Les pasas una <strong>función</strong> (no el resultado de llamarla).</p>
+<pre><code class="language-tsx">function BotonSaludo() {
+  function handleClick() {
+    alert(&quot;¡Hola desde React!&quot;);
+  }
+
+  return &lt;button onClick={handleClick}&gt;Saluda&lt;/button&gt;;
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Fíjate que es <code>onClick={handleClick}</code> y <strong>no</strong> <code>onClick={handleClick()}</code>. Con paréntesis,
+JavaScript <strong>ejecuta la función al renderizar</strong> y le pasa a <code>onClick</code> lo que esa función devuelva
+(normalmente <code>undefined</code>). Sin paréntesis, le pasas la función <strong>para que React la llame luego</strong>,
+cuando ocurra el clic. Esta confusión es uno de los errores más comunes de quien empieza.</p>
+</blockquote>
+<p>Si necesitas pasarle argumentos al manejador, lo envuelves en una <strong>función flecha</strong>:</p>
+<pre><code class="language-tsx">&lt;button onClick={() =&gt; borrarHabito(habito.id)}&gt;Borrar&lt;/button&gt;
+</code></pre>
+<p>Aquí <code>() =&gt; borrarHabito(habito.id)</code> es una función que <strong>todavía no se ejecuta</strong>: se ejecutará
+cuando alguien haga clic, y entonces sí llamará a <code>borrarHabito</code> con el <code>id</code> correcto.</p>
+<blockquote class="def">
+<h3 id="que-significa-funcion-flecha">🟦 ¿Qué significa? — <em>Función flecha</em></h3>
+<p>Una <strong>función flecha</strong> (<code>() =&gt; { ... }</code>) es una forma corta de escribir una función, que viste en
+el Módulo 03. En React se usan muchísimo como manejadores rápidos: <code>onClick={() =&gt; setAbierto(true)}</code>.
+El <code>() =&gt;</code> es "una función que recibe esto y hace aquello".</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>En <strong>RachaSimple</strong>, los componentes de tarjeta de hábito usan exactamente este patrón: el botón de
+completar lleva algo como <code>onClick={() =&gt; marcarHecho(habito.id)}</code> y el de eliminar
+<code>onClick={() =&gt; eliminar(habito.id)}</code>. La flecha es la que "recuerda" de qué hábito hablamos.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-objeto-del-evento">2. El objeto del evento</h2>
+<p>Cuando React llama a tu manejador, le pasa un <strong>objeto del evento</strong> con información sobre lo que
+pasó: qué elemento lo disparó, qué tecla se pulsó, qué texto hay escrito, etc.</p>
+<blockquote class="def">
+<h3 id="que-significa-objeto-del-evento-event-e">🟦 ¿Qué significa? — <em>Objeto del evento (<code>event</code> / <code>e</code>)</em></h3>
+<p>Es un objeto que React entrega a tu manejador con los <strong>datos del evento</strong>. Por costumbre se llama
+<code>e</code> o <code>event</code>. Los más útiles son <code>e.target</code> (el elemento HTML que disparó el evento) y, dentro de
+él, <code>e.target.value</code> (el texto que tiene un input en ese momento).</p>
+<h3 id="que-significa-etargetvalue">🟦 ¿Qué significa? — <em><code>e.target.value</code></em></h3>
+<p><code>e.target</code> es el <strong>elemento del DOM</strong> que originó el evento (por ejemplo, el <code>&lt;input&gt;</code> donde
+escribiste). <code>e.target.value</code> es <strong>el texto que ese input tiene escrito</strong> en ese instante. Es la
+pieza con la que sabrás "qué acaba de teclear el usuario".</p>
+</blockquote>
+<p>En TypeScript (Módulo 05) conviene <strong>tipar</strong> el evento para que el editor te ayude. Para un cambio
+en un input, el tipo es <code>React.ChangeEvent&lt;HTMLInputElement&gt;</code>:</p>
+<pre><code class="language-tsx">function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+  console.log(&quot;Lo que hay escrito ahora:&quot;, e.target.value);
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No memorices todos los tipos de evento. Empieza a escribir <code>(e) =&gt;</code> dentro de un <code>onChange</code> y tu
+editor (VS Code) te dirá el tipo correcto. Los tres que usarás casi siempre son
+<code>ChangeEvent&lt;HTMLInputElement&gt;</code> (inputs de texto), <code>ChangeEvent&lt;HTMLTextAreaElement&gt;</code> (áreas de
+texto) y <code>FormEvent&lt;HTMLFormElement&gt;</code> (envío de formulario).</p>
+</blockquote>
+<hr />
+<h2 id="3-inputs-no-controlados-vs-controlados">3. Inputs no controlados vs. controlados</h2>
+<p>Aquí está el concepto central del capítulo. Hay dos formas de manejar un campo de texto en React.</p>
+<blockquote class="def">
+<h3 id="que-significa-input-no-controlado">🟦 ¿Qué significa? — <em>Input no controlado</em></h3>
+<p>Un <strong>input no controlado</strong> es un campo donde <strong>el navegador guarda el texto por su cuenta</strong> y React
+no sabe lo que hay escrito hasta que lo va a buscar. Es como en HTML puro (Módulo 01): el <code>&lt;input&gt;</code>
+tiene su propio valor interno. Sirve para casos simples, pero React no "ve" el valor en cada
+momento.</p>
+<h3 id="que-significa-input-controlado-componente-controlado">🟦 ¿Qué significa? — <em>Input controlado (componente controlado)</em></h3>
+<p>Un <strong>input controlado</strong> es un campo cuyo valor <strong>vive en el estado de React</strong> (<code>useState</code>, del
+Módulo 06-cap.04). El <code>&lt;input&gt;</code> no decide nada por su cuenta: muestra lo que dice el estado, y cada
+tecleo actualiza el estado. Así el estado es <strong>la fuente de verdad</strong>: lo que está en pantalla y lo
+que hay en tu variable son siempre lo mismo.</p>
+<h3 id="que-significa-fuente-de-verdad-source-of-truth">🟦 ¿Qué significa? — <em>Fuente de verdad (source of truth)</em></h3>
+<p>La <strong>fuente de verdad</strong> es <strong>el único lugar donde un dato vive de forma oficial</strong>. Si quieres saber
+qué hay escrito en el campo, miras el estado, no el DOM. Tener una sola fuente de verdad evita que
+la pantalla y tus datos se contradigan, que es una fuente clásica de bugs.</p>
+</blockquote>
+<p>La receta de un input controlado tiene <strong>dos cables</strong> conectados al mismo estado:</p>
+<pre><code class="language-tsx">import { useState } from &quot;react&quot;;
+
+function CampoNombre() {
+  const [nombre, setNombre] = useState(&quot;&quot;);
+
+  return (
+    &lt;input
+      value={nombre}                                  // 1) muestra el estado
+      onChange={(e) =&gt; setNombre(e.target.value)}     // 2) cada tecla actualiza el estado
+      placeholder=&quot;Tu nombre&quot;
+    /&gt;
+  );
+}
+</code></pre>
+<p>Lee despacio los dos cables:</p>
+<ol>
+<li><strong><code>value={nombre}</code></strong> → el input <strong>siempre muestra</strong> lo que dice el estado <code>nombre</code>. El estado
+   manda sobre la pantalla.</li>
+<li><strong><code>onChange={(e) =&gt; setNombre(e.target.value)}</code></strong> → cada vez que el usuario teclea, leemos
+   <code>e.target.value</code> (el texto nuevo) y lo guardamos con <code>setNombre</code>. Eso provoca un <strong>re-render</strong> y el
+   input vuelve a mostrar el estado, ya actualizado.</li>
+</ol>
+<blockquote class="def">
+<h3 id="que-significa-value-y-onchange-el-bucle-controlado">🟦 ¿Qué significa? — <em><code>value</code> y <code>onChange</code> (el bucle controlado)</em></h3>
+<p>En un input controlado, <code>value</code> y <code>onChange</code> trabajan en pareja. <code>value</code> <strong>lee</strong> del estado y
+<code>onChange</code> <strong>escribe</strong> en el estado. Juntos forman un pequeño bucle: tecleo → <code>onChange</code> →
+<code>setEstado</code> → re-render → nuevo <code>value</code>. Si pones <code>value</code> pero olvidas <code>onChange</code>, el campo queda
+<strong>bloqueado</strong> (no puedes escribir), porque el estado nunca cambia.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>El error "A component is changing an uncontrolled input to be controlled" en la consola casi siempre
+significa que tu <code>value</code> empezó siendo <code>undefined</code> (no inicializaste el estado) y luego pasó a tener
+texto. Solución: inicializa siempre el estado con un string vacío <code>useState("")</code>, no <code>useState()</code>.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>¿Por qué tanto lío para escribir en un campo? Porque cuando el estado es la fuente de verdad puedes
+hacer cosas potentes: validar mientras se escribe, transformar el texto (pasar a mayúsculas, recortar
+espacios), deshabilitar el botón si el campo está vacío, o rellenar el campo desde código. Todo eso
+sería incómodo con un input no controlado.</p>
+</blockquote>
+<hr />
+<h2 id="4-onchange-reaccionar-a-cada-tecla">4. <code>onChange</code>: reaccionar a cada tecla</h2>
+<p><code>onChange</code> se dispara <strong>cada vez que cambia el contenido del campo</strong>. En React, eso es prácticamente
+en cada tecla (a diferencia del HTML clásico, donde <code>change</code> esperaba a que el campo perdiera el
+foco).</p>
+<pre><code class="language-tsx">function ContadorLetras() {
+  const [texto, setTexto] = useState(&quot;&quot;);
+
+  return (
+    &lt;div&gt;
+      &lt;input value={texto} onChange={(e) =&gt; setTexto(e.target.value)} /&gt;
+      &lt;p&gt;Llevas {texto.length} caracteres&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<p>Como el estado cambia con cada tecla y la app se re-renderiza, el contador <code>texto.length</code> se actualiza
+en vivo. Esa es la "reactividad" del Módulo 06-cap.01 en acción.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>En <strong>Faro/Organizer</strong> (Next.js 15 + React 19), las cajas de búsqueda y filtrado de proyectos son
+inputs controlados: lo que escribes vive en estado y la lista de proyectos se filtra en vivo. El
+mismo patrón <code>value</code> + <code>onChange</code> que acabas de ver, a mayor escala.</p>
+<h3 id="que-significa-textarea-y-select-controlados">🟦 ¿Qué significa? — <em><code>textarea</code> y <code>select</code> controlados</em></h3>
+<p>Un <code>&lt;textarea&gt;</code> (caja de texto multilínea) y un <code>&lt;select&gt;</code> (lista desplegable) se controlan <strong>igual</strong>
+que un <code>&lt;input&gt;</code>: con <code>value</code> y <code>onChange</code>. Ojo: en HTML puro el <code>&lt;textarea&gt;</code> ponía su contenido
+entre etiquetas; en React se usa <code>value={...}</code> como en cualquier input. Más consistente, menos cosas
+que recordar.</p>
+</blockquote>
+<hr />
+<h2 id="5-onsubmit-y-prevenir-el-envio-por-defecto">5. <code>onSubmit</code> y prevenir el envío por defecto</h2>
+<p>Un <code>&lt;form&gt;</code> se envía cuando el usuario pulsa Enter o un botón de tipo <code>submit</code>. Por defecto, el
+navegador <strong>recarga la página entera</strong> y manda los datos a una URL, comportamiento heredado de la web
+de los años 90. En una app React <strong>no queremos eso</strong>: queremos manejar el envío con JavaScript sin
+recargar.</p>
+<blockquote class="def">
+<h3 id="que-significa-comportamiento-por-defecto-del-formulario">🟦 ¿Qué significa? — <em>Comportamiento por defecto del formulario</em></h3>
+<p>Es lo que el navegador hace <strong>automáticamente</strong> al enviar un <code>&lt;form&gt;</code>: recargar la página y navegar a
+otra URL. En una <strong>SPA</strong> (aplicación de una sola página, como RachaSimple) eso borraría todo el
+estado y rompería la experiencia. Por eso lo cancelamos.</p>
+<h3 id="que-significa-epreventdefault">🟦 ¿Qué significa? — <em><code>e.preventDefault()</code></em></h3>
+<p><code>e.preventDefault()</code> es un método del objeto del evento que le dice al navegador: <strong>"no hagas tu
+comportamiento automático"</strong>. En un formulario, evita la recarga de la página, dejándote a ti el
+control total de qué hacer con los datos.</p>
+<h3 id="que-significa-onsubmit">🟦 ¿Qué significa? — <em><code>onSubmit</code></em></h3>
+<p><code>onSubmit</code> es el manejador del evento de <strong>envío del formulario</strong>. Se pone en el <code>&lt;form&gt;</code>, no en el
+botón. Así capturas tanto el clic en el botón "Enviar" como cuando el usuario pulsa Enter dentro de
+un campo. Casi siempre, lo primero que hace su manejador es <code>e.preventDefault()</code>.</p>
+</blockquote>
+<pre><code class="language-tsx">function FormularioMini() {
+  const [nombre, setNombre] = useState(&quot;&quot;);
+
+  function handleSubmit(e: React.FormEvent&lt;HTMLFormElement&gt;) {
+    e.preventDefault();                 // 1) no recargues la página
+    console.log(&quot;Enviando:&quot;, nombre);   // 2) haz lo tuyo con los datos
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input value={nombre} onChange={(e) =&gt; setNombre(e.target.value)} /&gt;
+      &lt;button type=&quot;submit&quot;&gt;Guardar&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Pon <code>onSubmit</code> en el <code>&lt;form&gt;</code> y deja el botón como <code>type="submit"</code>. Un error frecuente es poner un
+<code>onClick</code> en el botón en vez de <code>onSubmit</code> en el form: así pierdes el envío con la tecla Enter, que
+muchos usuarios esperan. Y recuerda: si olvidas <code>e.preventDefault()</code>, verás la página parpadear y
+recargarse al enviar.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>El botón de enviar dentro de un <code>&lt;form&gt;</code> es <code>type="submit"</code> por defecto. Si dentro del mismo form
+tienes <strong>otros</strong> botones que NO deben enviar (por ejemplo "Cancelar"), márcalos explícitamente como
+<code>type="button"</code>. Si no, harán submit sin querer.</p>
+</blockquote>
+<hr />
+<h2 id="6-validacion-basica">6. Validación básica</h2>
+<p><strong>Validar</strong> es comprobar que lo que escribió el usuario tiene sentido <strong>antes</strong> de aceptarlo: que el
+nombre no esté vacío, que no sea absurdamente largo, etc.</p>
+<blockquote class="def">
+<h3 id="que-significa-validacion">🟦 ¿Qué significa? — <em>Validación</em></h3>
+<p><strong>Validar</strong> es revisar que los datos cumplen unas reglas antes de usarlos o guardarlos. Si no las
+cumplen, le avisas al usuario con un mensaje y no envías. Evita guardar basura en la base de datos
+(Supabase, Módulo 07) y mejora la experiencia.</p>
+<h3 id="que-significa-trim">🟦 ¿Qué significa? — <em><code>.trim()</code></em></h3>
+<p><code>.trim()</code> es un método de los strings (Módulo 03) que <strong>quita los espacios</strong> sobrantes al principio y
+al final. Sirve para que <code>"   "</code> (solo espacios) no cuente como un nombre válido: tras <code>.trim()</code>
+queda <code>""</code>, y <code>""</code> es vacío.</p>
+</blockquote>
+<pre><code class="language-tsx">function FormularioConValidacion() {
+  const [nombre, setNombre] = useState(&quot;&quot;);
+  const [error, setError] = useState(&quot;&quot;);
+
+  function handleSubmit(e: React.FormEvent&lt;HTMLFormElement&gt;) {
+    e.preventDefault();
+
+    const limpio = nombre.trim();
+    if (limpio === &quot;&quot;) {
+      setError(&quot;El nombre no puede estar vacío&quot;);
+      return;                      // cortamos: no seguimos
+    }
+    if (limpio.length &gt; 40) {
+      setError(&quot;Máximo 40 caracteres&quot;);
+      return;
+    }
+
+    setError(&quot;&quot;);                  // todo bien: limpiamos el error
+    console.log(&quot;Guardando:&quot;, limpio);
+    setNombre(&quot;&quot;);                 // y vaciamos el campo
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input value={nombre} onChange={(e) =&gt; setNombre(e.target.value)} /&gt;
+      {error &amp;&amp; &lt;p style={{ color: &quot;red&quot; }}&gt;{error}&lt;/p&gt;}
+      &lt;button type=&quot;submit&quot;&gt;Guardar&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-return-temprano-early-return">🟦 ¿Qué significa? — <em><code>return</code> temprano (early return)</em></h3>
+<p>Es usar <code>return</code> para <strong>salir de la función antes de tiempo</strong> cuando algo no cuadra. En el ejemplo,
+si el nombre está vacío, mostramos el error y hacemos <code>return</code>: el código de guardar nunca se
+ejecuta. Es más limpio que anidar muchos <code>if/else</code>.</p>
+<h3 id="que-significa-renderizado-condicional-con">🟦 ¿Qué significa? — <em>Renderizado condicional con <code>&amp;&amp;</code></em></h3>
+<p><code>{error &amp;&amp; &lt;p&gt;...&lt;/p&gt;}</code> significa "si <code>error</code> tiene contenido, muestra el <code>&lt;p&gt;</code>; si está vacío, no
+muestres nada". Lo viste en el Módulo 06-cap.02: cuando lo de la izquierda de <code>&amp;&amp;</code> es falso (un
+string vacío cuenta como falso), React no dibuja nada. Es el truco para mostrar mensajes solo cuando
+hacen falta.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Además de validar en <code>handleSubmit</code>, puedes <strong>deshabilitar el botón</strong> mientras el campo esté vacío:
+<code>&lt;button type="submit" disabled={nombre.trim() === ""}&gt;</code>. Así el usuario ve de inmediato que aún no
+puede enviar. Las dos cosas se complementan: el <code>disabled</code> guía, la validación protege.</p>
+</blockquote>
+<hr />
+<h2 id="7-formularios-con-varios-campos">7. Formularios con varios campos</h2>
+<p>Un formulario real tiene más de un campo. Tienes dos estrategias:</p>
+<p><strong>Opción A — un <code>useState</code> por campo.</strong> Sencilla y clarísima de leer cuando son pocos campos:</p>
+<pre><code class="language-tsx">const [nombre, setNombre] = useState(&quot;&quot;);
+const [meta, setMeta] = useState(&quot;&quot;);
+</code></pre>
+<p><strong>Opción B — un solo <code>useState</code> con un objeto.</strong> Útil cuando hay muchos campos:</p>
+<pre><code class="language-tsx">const [form, setForm] = useState({ nombre: &quot;&quot;, meta: &quot;&quot; });
+
+function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+  const { name, value } = e.target;          // name = &quot;nombre&quot; o &quot;meta&quot;
+  setForm((prev) =&gt; ({ ...prev, [name]: value }));
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-el-atributo-name-del-input">🟦 ¿Qué significa? — <em>El atributo <code>name</code> del input</em></h3>
+<p><code>name</code> es un atributo del <code>&lt;input&gt;</code> que le da una <strong>etiqueta</strong> al campo (<code>name="nombre"</code>). Con un
+solo <code>handleChange</code> puedes leer <code>e.target.name</code> para saber <strong>qué campo</strong> cambió y <code>e.target.value</code>
+para saber su nuevo texto. Así un único manejador sirve para todos los campos.</p>
+<h3 id="que-significa-el-operador-spread-prev">🟦 ¿Qué significa? — <em>El operador spread <code>...prev</code></em></h3>
+<p><code>{ ...prev, [name]: value }</code> significa "copia <strong>todo</strong> lo que ya había en el objeto <code>prev</code> y, encima,
+cambia solo el campo <code>[name]</code>". El <code>...</code> (spread, Módulo 03) clona el objeto. Es importante porque el
+estado en React <strong>no se debe mutar</strong>: creas un objeto nuevo en vez de modificar el viejo.</p>
+<h3 id="que-significa-clave-dinamica-name">🟦 ¿Qué significa? — <em>Clave dinámica <code>[name]</code></em></h3>
+<p><code>[name]</code> entre corchetes dentro de un objeto significa "usa el <strong>valor</strong> de la variable <code>name</code> como
+nombre de la propiedad". Si <code>name</code> vale <code>"meta"</code>, entonces <code>{ [name]: value }</code> equivale a
+<code>{ meta: value }</code>. Permite escribir un solo manejador que sirva para cualquier campo.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Nunca hagas <code>form.nombre = "x"</code> para cambiar el estado: eso es <strong>mutar</strong> el objeto y React no se
+entera (no re-renderiza). Siempre crea un objeto nuevo con <code>setForm({ ...prev, ... })</code>. La regla de
+oro del estado, ya vista en el cap.04, es: <strong>trata el estado como inmutable</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="8-el-formulario-de-crear-habito-en-rachasimple">8. El formulario de crear hábito en RachaSimple</h2>
+<p>Pongamos todo junto en el caso real: el formulario que crea un hábito en <strong>RachaSimple</strong> (React 18 +
+TypeScript + Vite + Tailwind + shadcn/ui + Supabase + TanStack Query). El usuario escribe el nombre
+del hábito y una pequeña meta, y al enviar se guarda. Aquí una versión didáctica, fiel al patrón del
+proyecto:</p>
+<pre><code class="language-tsx">import { useState } from &quot;react&quot;;
+
+// El tipo del nuevo hábito (lenguaje del Módulo 05: TypeScript)
+type NuevoHabito = {
+  nombre: string;
+  meta: string;
+};
+
+type Props = {
+  onCrear: (habito: NuevoHabito) =&gt; void;   // función que el padre nos pasa por props
+};
+
+export function FormCrearHabito({ onCrear }: Props) {
+  const [nombre, setNombre] = useState(&quot;&quot;);
+  const [meta, setMeta] = useState(&quot;&quot;);
+  const [error, setError] = useState(&quot;&quot;);
+
+  function handleSubmit(e: React.FormEvent&lt;HTMLFormElement&gt;) {
+    e.preventDefault();
+
+    const nombreLimpio = nombre.trim();
+    if (nombreLimpio === &quot;&quot;) {
+      setError(&quot;Ponle un nombre a tu hábito&quot;);
+      return;
+    }
+
+    onCrear({ nombre: nombreLimpio, meta: meta.trim() });
+
+    // limpiamos el formulario para el siguiente hábito
+    setNombre(&quot;&quot;);
+    setMeta(&quot;&quot;);
+    setError(&quot;&quot;);
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit} className=&quot;space-y-3&quot;&gt;
+      &lt;input
+        value={nombre}
+        onChange={(e) =&gt; setNombre(e.target.value)}
+        placeholder=&quot;Ej: Beber agua&quot;
+        className=&quot;w-full rounded border px-3 py-2&quot;
+      /&gt;
+      &lt;input
+        value={meta}
+        onChange={(e) =&gt; setMeta(e.target.value)}
+        placeholder=&quot;Ej: 8 vasos al día&quot;
+        className=&quot;w-full rounded border px-3 py-2&quot;
+      /&gt;
+
+      {error &amp;&amp; &lt;p className=&quot;text-sm text-red-500&quot;&gt;{error}&lt;/p&gt;}
+
+      &lt;button
+        type=&quot;submit&quot;
+        disabled={nombre.trim() === &quot;&quot;}
+        className=&quot;rounded bg-emerald-600 px-4 py-2 text-white disabled:opacity-50&quot;
+      &gt;
+        Crear hábito
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+</code></pre>
+<p>Repasa las piezas que ya conoces, ahora juntas:</p>
+<ul>
+<li><strong>Dos inputs controlados</strong> (<code>nombre</code>, <code>meta</code>): cada uno con su <code>value</code> + <code>onChange</code>.</li>
+<li><strong><code>onSubmit</code> con <code>e.preventDefault()</code></strong>: nada de recargar la página.</li>
+<li><strong>Validación</strong>: si falta el nombre, mostramos error y <code>return</code> temprano.</li>
+<li><strong><code>onCrear(...)</code></strong>: en vez de hablar con Supabase aquí dentro, este componente <strong>avisa al padre</strong>
+  pasándole el hábito por una función recibida en props (Módulo 06-cap.03). Separa "el formulario" de
+  "guardar en la base de datos".</li>
+<li><strong>Limpieza</strong> del formulario tras crear, y <strong><code>disabled</code></strong> mientras falte el nombre.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-levantar-el-estado-avisar-al-padre-oncrear">🟦 ¿Qué significa? — <em>Levantar el estado / avisar al padre (<code>onCrear</code>)</em></h3>
+<p>En vez de que el formulario sepa cómo guardar en Supabase, recibe una función <code>onCrear</code> por <strong>props</strong>
+y la llama cuando el usuario envía. El componente padre decide qué hacer (guardar, refrescar la
+lista…). Esto se llama <strong>levantar el estado</strong> y mantiene al formulario simple y reutilizable.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>En <strong>RachaSimple</strong>, ese <code>onCrear</code> del padre normalmente dispara una <strong>mutación de TanStack Query</strong>
+que inserta el hábito en <strong>Supabase</strong> y luego refresca la lista de hábitos en pantalla. TanStack
+Query lo verás más adelante; por ahora quédate con la idea: el formulario <strong>recoge y valida</strong>, el
+padre <strong>persiste</strong>. Cada uno hace una cosa.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Las <code>className</code> largas (<code>w-full rounded border px-3 py-2</code>) son utilidades de <strong>Tailwind</strong>, el sistema
+de estilos de RachaSimple y de Faro. No te asustes: cada palabra es un pequeño estilo (ancho
+completo, bordes redondeados, padding…). Lo importante de este capítulo es la <strong>lógica</strong> de eventos y
+estado, no las clases de estilo.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu código</h3>
+<p>Compara con tus otros proyectos: en <strong>tunal-digital</strong> (HTML/CSS/JS vanilla) un formulario usaría
+<code>addEventListener("submit", ...)</code> y <code>e.preventDefault()</code> igual que aquí, pero leyendo el valor del
+DOM directamente; en <strong>PolyPaw</strong> (Python + Flet) los campos se manejan con widgets de Flet y sus
+propios eventos. El patrón "evento → leer dato → validar → guardar" es universal; lo que cambia es
+<strong>dónde vive la fuente de verdad</strong>. En React, vive en el estado.</p>
+</blockquote>
+<hr />
+<h2 id="9-resumen-del-flujo">9. Resumen del flujo</h2>
+<p>Cada formulario controlado de React sigue el mismo ciclo, sin importar cuántos campos tenga:</p>
+<ol>
+<li>El estado guarda lo que hay en cada campo (<code>useState</code>).</li>
+<li><code>value</code> muestra el estado; <code>onChange</code> lo actualiza en cada tecla.</li>
+<li><code>onSubmit</code> captura el envío y empieza con <code>e.preventDefault()</code>.</li>
+<li>Validas; si algo falla, muestras error y haces <code>return</code>.</li>
+<li>Si todo va bien, usas los datos (avisas al padre, guardas en Supabase…) y limpias el formulario.</li>
+</ol>
+<p>Domina ese ciclo y habrás dominado el 90% de los formularios que escribirás. Bit ya está aplaudiendo
+con sus patitas: tu UI por fin escucha.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé escribir un manejador de evento y pasarlo a <code>onClick</code> <strong>sin</strong> los paréntesis.</li>
+<li>[ ] Entiendo la diferencia entre <code>onClick={fn}</code> y <code>onClick={fn()}</code>.</li>
+<li>[ ] Sé leer lo que el usuario escribe con <code>e.target.value</code>.</li>
+<li>[ ] Puedo explicar qué es un <strong>input controlado</strong> y por qué el estado es la <strong>fuente de verdad</strong>.</li>
+<li>[ ] Conozco los dos cables de un input controlado: <code>value</code> (lee) y <code>onChange</code> (escribe).</li>
+<li>[ ] Sé poner <code>onSubmit</code> en el <code>&lt;form&gt;</code> y empezar con <code>e.preventDefault()</code>.</li>
+<li>[ ] Puedo validar un campo con <code>.trim()</code> y un <code>return</code> temprano, y mostrar el error con <code>&amp;&amp;</code>.</li>
+<li>[ ] Sé manejar varios campos, con un <code>useState</code> por campo o con un objeto y <code>...prev</code>.</li>
+<li>[ ] Entiendo cómo el formulario de RachaSimple <strong>avisa al padre</strong> con <code>onCrear</code> en lugar de guardar él mismo.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 <strong>Saludo en vivo.</strong> Crea un componente con un input controlado para el nombre y un <code>&lt;p&gt;</code> que
+   diga "Hola, {nombre} 👋" actualizándose con cada tecla. Si el campo está vacío, que el <code>&lt;p&gt;</code> diga
+   "Escribe tu nombre".</p>
+</li>
+<li>
+<p>💻 <strong>Botón con argumento.</strong> Renderiza tres botones de colores ("rojo", "verde", "azul"). Cada uno,
+   al hacer clic, debe llamar a un mismo manejador <code>elegirColor(color)</code> y guardar el color elegido en
+   estado, mostrándolo abajo. Usa funciones flecha para pasar el argumento.</p>
+</li>
+<li>
+<p>💻 <strong>Formulario de hábito mínimo.</strong> Reproduce <code>FormCrearHabito</code> con un solo campo (<code>nombre</code>).
+   Valida con <code>.trim()</code> que no esté vacío, muestra un error en rojo si lo está, deshabilita el botón
+   mientras el campo esté vacío y, al enviar bien, haz <code>console.log</code> del nombre y limpia el campo.</p>
+</li>
+<li>
+<p>💻 <strong>Dos campos con un objeto.</strong> Convierte el formulario del ejercicio 3 para que use un solo
+   <code>useState({ nombre: "", meta: "" })</code> y un único <code>handleChange</code> que use <code>e.target.name</code> y el spread
+   <code>...prev</code>. Añade el atributo <code>name</code> a cada input.</p>
+</li>
+<li>
+<p><strong>Caza del error (sin computadora).</strong> Un compañero escribió <code>&lt;input value={nombre} /&gt;</code> y se queja
+   de que "no puede escribir nada en el campo". Explica por escrito por qué pasa y cómo se arregla en
+   una sola línea.</p>
+</li>
+<li>
+<p>💻 <strong>Contador con límite.</strong> Haz un <code>&lt;textarea&gt;</code> controlado que muestre debajo "X/120 caracteres" y
+   ponga el contador en rojo cuando pase de 120. Deshabilita el botón "Publicar" si se supera el
+   límite. (Pista: <code>value.length</code> y un <code>&amp;&amp;</code> para el color.)</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

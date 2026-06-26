@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 12 — tsconfig y el modo estricto — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-12-tsconfig-y-el-modo-estricto">Capítulo 12 — tsconfig y el modo estricto</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap12.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora escribías tipos y, por arte de magia, el editor te corregía. Pero ¿quién decide
+<strong>qué tan estricto</strong> es TypeScript contigo? ¿Quién le dice «mira en esta carpeta», «este código
+es para un navegador moderno» o «no me dejes pasar ni un solo <code>null</code> despistado»? La respuesta
+es un archivo pequeño y muy poderoso: <strong><code>tsconfig.json</code></strong>. Es el panel de control de TypeScript.
+En este capítulo lo vamos a abrir tornillo por tornillo usando los <code>tsconfig.json</code> <strong>reales</strong> de
+RachaSimple (la app de hábitos) y de Faro (tu organizador de proyectos). Verás qué hace cada
+opción, por qué el <strong>modo estricto</strong> es tu mejor amigo aunque al principio parezca un profe muy
+exigente, y cómo <strong>leer los errores del compilador</strong> sin entrar en pánico. Bit, tu ajolote, te
+recuerda algo: TypeScript es JavaScript con tipos, y <code>tsconfig.json</code> es solo el reglamento que
+dice <strong>cómo</strong> se revisan esos tipos. Nada que no puedas dominar. Vamos.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-tsconfigjson-y-para-que-existe">1. ¿Qué es <code>tsconfig.json</code> y para qué existe?</h2>
+<p>Cada proyecto de TypeScript tiene en su raíz un archivo llamado <code>tsconfig.json</code>. Cuando ejecutas el
+compilador (la herramienta que revisa y traduce tu código), lo primero que hace es <strong>buscar este
+archivo</strong> y leer sus instrucciones. Sin él, TypeScript no sabría qué carpetas mirar ni con qué
+reglas trabajar.</p>
+<blockquote class="def">
+<h3 id="que-significa-compilador-tsc">🟦 ¿Qué significa? — <em>Compilador (<code>tsc</code>)</em></h3>
+<p>El <strong>compilador</strong> de TypeScript es el programa que <strong>revisa tus tipos</strong> y <strong>traduce</strong> tu <code>.ts</code>/<code>.tsx</code>
+a JavaScript normal que el navegador o Node entienden. Su comando se llama <code>tsc</code> (de <em>TypeScript
+compiler</em>). <strong>Para qué sirve:</strong> detectar errores antes de ejecutar, y convertir TypeScript en
+JavaScript. <strong>Dónde se usa:</strong> en RachaSimple y Faro, <code>tsc</code> corre cada vez que haces <code>npm run build</code>,
+revisando todo el proyecto de golpe.</p>
+<h3 id="que-significa-tsconfigjson">🟦 ¿Qué significa? — <em><code>tsconfig.json</code></em></h3>
+<p>Es el <strong>archivo de configuración</strong> de TypeScript: un objeto JSON con todas las reglas del proyecto.
+<strong>Para qué sirve:</strong> decidir qué versión de JavaScript generar, qué carpetas incluir y qué tan
+estricta es la revisión de tipos. <strong>Dónde se usa:</strong> está en la raíz de Faro
+(<code>/Organizer/tsconfig.json</code>) y de RachaSimple (<code>/RachaSimple/tsconfig.json</code>). Cada repo tiene el
+suyo.</p>
+</blockquote>
+<p>Recuerda del Módulo 03: un archivo <code>.json</code> es solo datos en pares «clave: valor». Aquí la clave más
+importante es <code>compilerOptions</code>, que agrupa todos los ajustes del compilador.</p>
+<pre><code class="language-typescript">// Estructura mínima de un tsconfig.json
+{
+  &quot;compilerOptions&quot;: {
+    // ...aquí van todas las reglas...
+  },
+  &quot;include&quot;: [&quot;src&quot;],     // qué carpetas/archivos revisar
+  &quot;exclude&quot;: [&quot;node_modules&quot;]  // qué ignorar
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No tienes que memorizar las opciones. Casi siempre el <code>tsconfig.json</code> lo genera la herramienta que
+usas (Vite en RachaSimple, Next.js en Faro) y tú solo lo <strong>ajustas</strong>. Lo importante es saber
+<strong>leerlo</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="2-include-y-exclude-que-archivos-mira-typescript">2. <code>include</code> y <code>exclude</code>: qué archivos mira TypeScript</h2>
+<p>Antes de revisar tipos, TypeScript necesita saber <strong>dónde</strong> está tu código. Eso lo dicen dos claves
+que viven fuera de <code>compilerOptions</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-include">🟦 ¿Qué significa? — <em><code>include</code></em></h3>
+<p>Lista de carpetas o patrones de archivos que TypeScript <strong>debe revisar</strong>. <strong>Para qué sirve:</strong>
+apuntar el compilador a tu código fuente y nada más. <strong>Dónde se usa:</strong> RachaSimple usa
+<code>"include": ["src"]</code> (solo la carpeta <code>src</code>); Faro usa un patrón más amplio que incluye todos los
+<code>.ts</code> y <code>.tsx</code>.</p>
+<h3 id="que-significa-exclude">🟦 ¿Qué significa? — <em><code>exclude</code></em></h3>
+<p>Lista de carpetas que TypeScript <strong>debe ignorar</strong>. <strong>Para qué sirve:</strong> evitar perder tiempo
+revisando código que no es tuyo. <strong>Dónde se usa:</strong> Faro pone <code>"exclude": ["node_modules"]</code> para no
+revisar las librerías descargadas (¡miles de archivos que no escribiste tú!).</p>
+</blockquote>
+<p>Mira los dos repos lado a lado. Faro (Next.js):</p>
+<pre><code class="language-typescript">// Faro: /Organizer/tsconfig.json (final del archivo)
+&quot;include&quot;: [&quot;next-env.d.ts&quot;, &quot;**/*.ts&quot;, &quot;**/*.tsx&quot;, &quot;.next/types/**/*.ts&quot;],
+&quot;exclude&quot;: [&quot;node_modules&quot;]
+</code></pre>
+<p>RachaSimple (Vite + React):</p>
+<pre><code class="language-typescript">// RachaSimple: /RachaSimple/tsconfig.json (final del archivo)
+&quot;include&quot;: [&quot;src&quot;],
+&quot;references&quot;: [{ &quot;path&quot;: &quot;./tsconfig.node.json&quot; }]
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-patron-glob-ts">🟦 ¿Qué significa? — <em>Patrón glob (<code>**/*.ts</code>)</em></h3>
+<p>Un <strong>glob</strong> es una forma de escribir «todos los archivos que cumplan esta forma» con comodines.
+<code>*</code> significa «cualquier nombre» y <code>**</code> significa «cualquier carpeta, por profunda que esté».
+<strong>Para qué sirve:</strong> incluir muchos archivos sin nombrarlos uno por uno. <strong>Dónde se usa:</strong> Faro usa
+<code>**/*.tsx</code> para revisar <strong>todos</strong> sus componentes de React sin importar en qué subcarpeta estén.</p>
+</blockquote>
+<hr />
+<h2 id="3-target-module-y-lib-para-que-motor-generamos-codigo">3. <code>target</code>, <code>module</code> y <code>lib</code>: para qué motor generamos código</h2>
+<p>Estas tres opciones le dicen a TypeScript <strong>a qué tipo de JavaScript</strong> debe traducir y <strong>qué
+funciones del lenguaje</strong> puedes usar.</p>
+<blockquote class="def">
+<h3 id="que-significa-target">🟦 ¿Qué significa? — <em><code>target</code></em></h3>
+<p>La <strong>versión de JavaScript</strong> que el compilador genera al final. Los valores son años: <code>ES2017</code>,
+<code>ES2022</code>, etc. (de <em>ECMAScript</em>, el nombre oficial de JavaScript). <strong>Para qué sirve:</strong> elegir entre
+«JavaScript moderno y corto» o «JavaScript viejo y compatible con navegadores antiguos». <strong>Dónde se
+usa:</strong> Faro apunta a <code>"ES2017"</code>; RachaSimple a <code>"ES2022"</code> (más moderno, porque su público usa
+navegadores recientes).</p>
+<h3 id="que-significa-module">🟦 ¿Qué significa? — <em><code>module</code></em></h3>
+<p>El <strong>sistema de módulos</strong> que usará el código generado: cómo se escriben los <code>import</code> y <code>export</code>
+que viste en el Capítulo 10. <strong>Para qué sirve:</strong> decidir si los módulos se cargan al estilo moderno
+(<code>esnext</code>) o al estilo antiguo. <strong>Dónde se usa:</strong> ambos repos usan <code>"esnext"</code>/<code>"ESNext"</code>, el estilo
+moderno de <code>import</code>/<code>export</code>.</p>
+<h3 id="que-significa-lib">🟦 ¿Qué significa? — <em><code>lib</code></em></h3>
+<p>Lista de <strong>librerías de tipos incorporadas</strong> que TypeScript asume que existen en tu entorno: por
+ejemplo, los tipos del navegador (<code>DOM</code>) o de las funciones modernas del lenguaje (<code>esnext</code>).
+<strong>Para qué sirve:</strong> que el editor conozca cosas como <code>document</code>, <code>window</code> o <code>Promise</code> sin que las
+definas tú. <strong>Dónde se usa:</strong> Faro y RachaSimple incluyen <code>"DOM"</code> y <code>"DOM.Iterable"</code> porque ambos
+corren en el navegador y necesitan tipos como <code>document.querySelector</code>.</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple: arranque de compilerOptions
+&quot;target&quot;: &quot;ES2022&quot;,
+&quot;lib&quot;: [&quot;ES2022&quot;, &quot;DOM&quot;, &quot;DOM.Iterable&quot;],
+&quot;module&quot;: &quot;ESNext&quot;,
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Regla mental sencilla: <strong><code>target</code> = a qué JavaScript traduzco</strong>, <strong><code>lib</code> = qué tipos doy por
+existentes</strong>, <strong><code>module</code> = cómo conecto los archivos entre sí</strong>. Tres preguntas distintas, tres
+opciones distintas.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pones <code>"lib"</code> sin <code>"DOM"</code> y luego usas <code>document.getElementById</code>, el compilador te dirá que
+<code>document</code> no existe. No es que tu código esté mal: es que le quitaste al compilador la «lista de
+cosas conocidas» del navegador. En RachaSimple y Faro nunca falta <code>DOM</code> por eso.</p>
+</blockquote>
+<hr />
+<h2 id="4-moduleresolution-y-paths-como-encuentra-typescript-tus-imports">4. <code>moduleResolution</code> y <code>paths</code>: cómo encuentra TypeScript tus imports</h2>
+<p>Cuando escribes <code>import { algo } from "..."</code>, TypeScript tiene que <strong>encontrar</strong> ese archivo. Dos
+opciones gobiernan esa búsqueda.</p>
+<blockquote class="def">
+<h3 id="que-significa-moduleresolution">🟦 ¿Qué significa? — <em><code>moduleResolution</code></em></h3>
+<p>La <strong>estrategia</strong> que usa TypeScript para localizar el archivo de un <code>import</code>. <strong>Para qué sirve:</strong>
+seguir las mismas reglas que tu herramienta de construcción. <strong>Dónde se usa:</strong> Faro y RachaSimple
+usan <code>"bundler"</code>, la estrategia pensada para herramientas modernas como Vite y Next.js (un
+<em>bundler</em> es el programa que junta todos tus archivos en uno para el navegador).</p>
+<h3 id="que-significa-paths-alias-de-import">🟦 ¿Qué significa? — <em><code>paths</code> (alias de import)</em></h3>
+<p>Un <strong>diccionario de atajos</strong> para los imports. Te permite escribir <code>@/algo</code> en vez de
+<code>../../../algo</code>. <strong>Para qué sirve:</strong> evitar rutas relativas larguísimas y frágiles. <strong>Dónde se
+usa:</strong> ambos repos definen el alias <code>@/*</code>. En el Capítulo 11 viste <code>import { Badge } from
+"@/components/ui"</code> en Faro: ese <code>@</code> es exactamente este atajo.</p>
+</blockquote>
+<p>Los dos repos usan el <strong>mismo</strong> alias <code>@</code>, solo que apuntando a su propia carpeta <code>src</code>:</p>
+<pre><code class="language-typescript">// Faro
+&quot;paths&quot;: {
+  &quot;@/*&quot;: [&quot;./src/*&quot;]
+}
+
+// RachaSimple (necesita además baseUrl)
+&quot;baseUrl&quot;: &quot;.&quot;,
+&quot;paths&quot;: {
+  &quot;@/*&quot;: [&quot;src/*&quot;]
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-baseurl">🟦 ¿Qué significa? — <em><code>baseUrl</code></em></h3>
+<p>La <strong>carpeta base</strong> desde la que se calculan los <code>paths</code>. <strong>Para qué sirve:</strong> darle un punto de
+partida a los alias. <strong>Dónde se usa:</strong> RachaSimple pone <code>"baseUrl": "."</code> (la raíz del proyecto), y
+sobre esa base el alias <code>@/*</code> apunta a <code>src/*</code>.</p>
+<h3 id="en-tu-codigo">🔎 En tu código</h3>
+<p>Gracias a estos <code>paths</code>, cuando un archivo de RachaSimple necesita el hook de hábitos puede
+escribir <code>import { useHabits } from "@/hooks/useHabits"</code> desde <strong>cualquier</strong> carpeta, sin contar
+cuántos <code>../</code> necesita. El alias siempre apunta al mismo lugar.</p>
+</blockquote>
+<hr />
+<h2 id="5-la-estrella-del-capitulo-strict">5. La estrella del capítulo: <code>strict</code></h2>
+<p>Llegamos a la opción más importante de todas. Una sola línea que cambia por completo cuánto te
+protege TypeScript.</p>
+<blockquote class="def">
+<h3 id="que-significa-strict-modo-estricto">🟦 ¿Qué significa? — <em><code>strict</code> (modo estricto)</em></h3>
+<p>Un <strong>interruptor maestro</strong> que activa de golpe un grupo de revisiones severas de tipos. <strong>Para qué
+sirve:</strong> atrapar los errores más comunes y peligrosos (valores <code>null</code> olvidados, variables sin
+tipo, etc.) <strong>antes</strong> de que rompan la app. <strong>Dónde se usa:</strong> tanto Faro como RachaSimple tienen
+<code>"strict": true</code>. Es el estándar recomendado para proyectos serios.</p>
+</blockquote>
+<pre><code class="language-typescript">// Faro y RachaSimple: ambos tienen esta línea
+&quot;strict&quot;: true,
+</code></pre>
+<p>Poner <code>"strict": true</code> es como encender <strong>varios interruptores a la vez</strong>. Cada uno tiene su propio
+nombre, y vale la pena conocer los dos más importantes, porque son los que más errores te van a
+mostrar al principio.</p>
+<blockquote class="def">
+<h3 id="que-significa-strictnullchecks">🟦 ¿Qué significa? — <em><code>strictNullChecks</code></em></h3>
+<p>Una revisión (incluida en <code>strict</code>) que <strong>separa <code>null</code> y <code>undefined</code></strong> del resto de tipos. Sin
+ella, TypeScript dejaba que un <code>string</code> fuera secretamente <code>null</code>. Con ella, si algo <strong>puede ser
+<code>null</code></strong>, estás obligado a comprobarlo antes de usarlo. <strong>Para qué sirve:</strong> evitar el error más
+famoso de JavaScript: <em>"Cannot read property of null"</em>. <strong>Dónde se usa:</strong> en Faro, donde un
+proyecto puede no tener descripción todavía, esta revisión te obliga a manejar el caso «todavía no
+hay dato».</p>
+<h3 id="que-significa-noimplicitany">🟦 ¿Qué significa? — <em><code>noImplicitAny</code></em></h3>
+<p>Una revisión (incluida en <code>strict</code>) que <strong>prohíbe el <code>any</code> invisible</strong>. Si TypeScript no puede
+adivinar el tipo de algo y tú no lo escribiste, en vez de poner <code>any</code> en silencio, <strong>te avisa con
+un error</strong>. <strong>Para qué sirve:</strong> que no queden huecos sin tipar por descuido. <strong>Dónde se usa:</strong> en
+los hooks tipados de RachaSimple, obliga a que cada parámetro de cada función diga qué tipo recibe.</p>
+</blockquote>
+<p>Recuerda del Módulo 03 y de capítulos anteriores: <code>null</code> es «vacío a propósito», <code>undefined</code> es «no
+existe todavía», y <code>any</code> es «cualquier cosa, sin revisar». El modo estricto vigila precisamente esas
+tres trampas.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Hay otras revisiones dentro de <code>strict</code> (como <code>strictFunctionTypes</code> o <code>strictBindCallApply</code>), pero
+las dos que de verdad notarás como principiante son <code>strictNullChecks</code> y <code>noImplicitAny</code>. Si
+entiendes esas dos, entiendes el 90% del modo estricto.</p>
+</blockquote>
+<hr />
+<h2 id="6-por-que-el-modo-estricto-te-protege-y-no-te-molesta">6. ¿Por qué el modo estricto te <em>protege</em> (y no te molesta)?</h2>
+<p>Al principio el modo estricto se siente como un profe quisquilloso: marca errores donde tu código
+«parecía funcionar». Pero piénsalo así: cada error que <code>tsc</code> te muestra en tu editor es un error que
+<strong>no le va a aparecer al usuario</strong> de RachaSimple o Faro. Es un bug atrapado en la sala de ensayo, no
+en el escenario.</p>
+<p>Veamos un caso concreto del tipo de dato que maneja Faro. Imagina un proyecto cuya descripción
+todavía no ha sido generada por la IA:</p>
+<pre><code class="language-typescript">type Project = {
+  name: string;
+  description: string | null; // puede no tener descripción aún
+};
+
+function mostrarLargo(p: Project) {
+  // ❌ Error con strictNullChecks:
+  // 'p.description' is possibly 'null'.
+  return p.description.length;
+}
+</code></pre>
+<p>Sin modo estricto, este código compilaría feliz... y luego <strong>explotaría</strong> en producción el día que un
+proyecto sin descripción llegara a esa función. Con <code>strictNullChecks</code>, TypeScript te detiene antes y
+te obliga a manejar el caso vacío:</p>
+<pre><code class="language-typescript">function mostrarLargo(p: Project) {
+  if (p.description === null) {
+    return 0; // caso «todavía no hay descripción»
+  }
+  return p.description.length; // ✅ aquí ya es string seguro
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu código</h3>
+<p>Este patrón —comprobar <code>null</code> antes de usar el dato— es exactamente lo que llamaste
+<strong>estrechamiento</strong> en el Capítulo 06. El modo estricto y el estrechamiento son socios: el primero
+te obliga a comprobar, el segundo es la técnica con la que compruebas.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>La tentación del principiante es «apagar» el error con <code>any</code> o con el operador <code>!</code> (que dice «yo sé
+que no es null, confía en mí»). Resiste. Apagar la alarma no apaga el incendio: solo lo escondes
+hasta que el usuario lo encuentre. En RachaSimple y Faro se prefiere <strong>comprobar</strong> de verdad.</p>
+</blockquote>
+<hr />
+<h2 id="7-las-revisiones-extra-de-rachasimple">7. Las revisiones extra de RachaSimple</h2>
+<p>Faro se queda con el <code>strict</code> que trae Next.js por defecto. RachaSimple es <strong>aún más estricto</strong>: su
+<code>tsconfig.json</code> añade revisiones que <code>strict</code> no incluye. Conocerlas te enseña qué tan lejos puede
+llegar la protección.</p>
+<pre><code class="language-typescript">// RachaSimple: revisiones extra encima de strict
+&quot;noUnusedLocals&quot;: true,
+&quot;noUnusedParameters&quot;: true,
+&quot;noFallthroughCasesInSwitch&quot;: true,
+&quot;noUncheckedIndexedAccess&quot;: true,
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-nounusedlocals">🟦 ¿Qué significa? — <em><code>noUnusedLocals</code></em></h3>
+<p>Marca un error si declaras una variable y <strong>nunca la usas</strong>. <strong>Para qué sirve:</strong> mantener el código
+limpio, sin restos olvidados. <strong>Dónde se usa:</strong> en RachaSimple, si en un hook creas una variable de
+«borrador» y la dejas sin usar, el compilador te lo recuerda.</p>
+<h3 id="que-significa-nounusedparameters">🟦 ¿Qué significa? — <em><code>noUnusedParameters</code></em></h3>
+<p>Igual que la anterior, pero para <strong>parámetros de función</strong> que no usas. <strong>Para qué sirve:</strong> detectar
+argumentos que sobran o que olvidaste aprovechar. <strong>Dónde se usa:</strong> en los componentes de
+RachaSimple, evita que una prop quede aceptada pero ignorada por error.</p>
+<h3 id="que-significa-nofallthroughcasesinswitch">🟦 ¿Qué significa? — <em><code>noFallthroughCasesInSwitch</code></em></h3>
+<p>Prohíbe que un <code>case</code> de un <code>switch</code> «se cuele» al siguiente por olvidar el <code>break</code>. <strong>Para qué
+sirve:</strong> evitar un bug clásico y difícil de ver. <strong>Dónde se usa:</strong> cuando RachaSimple decide qué
+hacer según el estado de un hábito, garantiza que cada caso esté cerrado.</p>
+<h3 id="que-significa-nouncheckedindexedaccess">🟦 ¿Qué significa? — <em><code>noUncheckedIndexedAccess</code></em></h3>
+<p>Hace que acceder a un elemento de un array por índice (<code>lista[0]</code>) devuelva «el tipo <strong>o</strong>
+<code>undefined</code>», porque ese índice <strong>podría no existir</strong>. <strong>Para qué sirve:</strong> obligarte a comprobar
+antes de confiar en que un elemento está ahí. <strong>Dónde se usa:</strong> en RachaSimple, al leer el primer
+check-in de una lista de hábitos, te obliga a contemplar que la lista esté vacía.</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple: con noUncheckedIndexedAccess activado
+const checkins: string[] = [];
+const primero = checkins[0]; // tipo: string | undefined
+
+// ❌ Error: 'primero' is possibly 'undefined'.
+console.log(primero.toUpperCase());
+
+// ✅ Hay que comprobar primero
+if (primero !== undefined) {
+  console.log(primero.toUpperCase());
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>No todos los proyectos usan estas cuatro. Son una decisión del equipo: RachaSimple eligió ser muy
+riguroso. Si un día empiezas tu propio proyecto, puedes activarlas desde el día uno (es fácil) o
+añadirlas después (puede dar muchos errores de golpe). Empezar estricto duele menos.</p>
+</blockquote>
+<hr />
+<h2 id="8-otras-opciones-que-veras-en-tus-repos">8. Otras opciones que verás en tus repos</h2>
+<p>Hay varias claves más en tus <code>tsconfig.json</code> reales. No te asustes: aquí están las que faltan, en
+versión corta.</p>
+<blockquote class="def">
+<h3 id="que-significa-noemit">🟦 ¿Qué significa? — <em><code>noEmit</code></em></h3>
+<p>Le dice a <code>tsc</code> que <strong>revise los tipos pero NO genere archivos JavaScript</strong>. <strong>Para qué sirve:</strong>
+dejar que otra herramienta (Vite, Next.js) haga la traducción, mientras <code>tsc</code> solo actúa como
+revisor. <strong>Dónde se usa:</strong> Faro y RachaSimple ambos ponen <code>"noEmit": true</code>, porque la traducción
+real la hacen sus <em>bundlers</em>.</p>
+<h3 id="que-significa-jsx">🟦 ¿Qué significa? — <em><code>jsx</code></em></h3>
+<p>Le indica al compilador <strong>cómo tratar el JSX</strong> (el HTML dentro del código de React que viste en el
+Capítulo 11). <strong>Para qué sirve:</strong> que TypeScript entienda etiquetas como <code>&lt;Badge&gt;</code>. <strong>Dónde se
+usa:</strong> Faro usa <code>"preserve"</code> (deja el JSX para que Next.js lo procese); RachaSimple usa
+<code>"react-jsx"</code> (el modo moderno de React 18).</p>
+<h3 id="que-significa-resolvejsonmodule">🟦 ¿Qué significa? — <em><code>resolveJsonModule</code></em></h3>
+<p>Permite <strong>importar archivos <code>.json</code></strong> directamente como si fueran datos tipados. <strong>Para qué
+sirve:</strong> traer un archivo de configuración o de textos sin parsearlo a mano. <strong>Dónde se usa:</strong> ambos
+repos lo activan; útil cuando importas datos fijos guardados en JSON.</p>
+<h3 id="que-significa-esmoduleinterop">🟦 ¿Qué significa? — <em><code>esModuleInterop</code></em></h3>
+<p>Suaviza las diferencias entre los dos estilos de módulos (el viejo de Node y el moderno de
+<code>import</code>/<code>export</code>) para que mezclarlos no dé errores raros. <strong>Para qué sirve:</strong> que librerías
+antiguas se importen con la sintaxis moderna sin pelear. <strong>Dónde se usa:</strong> Faro lo activa para
+convivir con paquetes de distintas épocas.</p>
+<h3 id="que-significa-skiplibcheck">🟦 ¿Qué significa? — <em><code>skipLibCheck</code></em></h3>
+<p>Le dice a <code>tsc</code> que <strong>no revise los tipos dentro de las librerías</strong> que descargaste, solo los
+tuyos. <strong>Para qué sirve:</strong> acelerar la compilación y evitar errores en código que no controlas.
+<strong>Dónde se usa:</strong> los dos repos lo activan; es práctica estándar.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>No necesitas dominar todas estas hoy. Con que sepas <strong>buscar el nombre de la opción</strong> cuando la
+veas, vas sobradísimo. El <code>tsconfig.json</code> se lee, no se memoriza.</p>
+</blockquote>
+<hr />
+<h2 id="9-como-leer-y-resolver-un-error-de-tsc">9. Cómo leer y resolver un error de <code>tsc</code></h2>
+<p>Los errores del compilador asustan al principio porque vienen en inglés y con códigos. Pero tienen
+<strong>siempre la misma forma</strong>, y una vez que la reconoces, son tu mejor herramienta de aprendizaje.</p>
+<blockquote class="def">
+<h3 id="que-significa-error-de-compilacion">🟦 ¿Qué significa? — <em>Error de compilación</em></h3>
+<p>Un mensaje de <code>tsc</code> que dice que tu código <strong>rompe alguna regla de tipos</strong>. Aparece en el editor
+(subrayado rojo) y en la terminal al hacer <code>npm run build</code>. <strong>Para qué sirve:</strong> señalarte el
+problema exacto antes de ejecutar. <strong>Dónde se usa:</strong> lo verás cada vez que <code>npm run build</code> de Faro o
+RachaSimple falle por un tipo mal puesto.</p>
+</blockquote>
+<p>Un error típico se ve así en la terminal:</p>
+<pre><code class="language-typescript">src/hooks/useHabits.ts:42:10 - error TS2532: Object is possibly 'undefined'.
+
+42   return habits[0].name;
+              ~~~~~~~~~~
+</code></pre>
+<p>Léelo de izquierda a derecha, en cuatro pedazos:</p>
+<ol>
+<li><strong><code>src/hooks/useHabits.ts:42:10</code></strong> — el archivo, la línea (42) y la columna (10). Aquí está el
+   problema.</li>
+<li><strong><code>error TS2532</code></strong> — el código del error. Es buscable: pega <code>TS2532</code> en internet y encuentras
+   explicaciones.</li>
+<li><strong><code>Object is possibly 'undefined'</code></strong> — la frase clave. Aquí dice: «eso que usas podría no existir».</li>
+<li><strong>El subrayado <code>~~~~</code></strong> — te señala exactamente la parte sospechosa.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>El error casi siempre te dice <strong>qué tipo esperaba</strong> y <strong>qué tipo le diste</strong>. Cuando veas «Type 'X'
+is not assignable to type 'Y'», traduce mentalmente: «le pasé una X donde se necesitaba una Y». La
+mitad de los errores se resuelven con solo leer esa frase con calma.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No copies y pegues «soluciones» de internet que silencien el error con <code>any</code> o <code>// @ts-ignore</code> (un
+comentario que apaga la revisión de la línea siguiente). Eso es taparte los ojos. El compilador
+tiene razón el 99% de las veces; tu trabajo es entender <strong>por qué</strong> y arreglar el dato, no callar
+al mensajero.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu código</h3>
+<p>Cuando hagas <code>npm run build</code> en Faro (la regla del proyecto dice que debe pasar antes de fusionar),
+ese build corre <code>tsc</code> por dentro. Si ves errores rojos, son exactamente estos. Léelos con la receta
+de los cuatro pedazos y resuélvelos uno a uno: archivo, línea, código, frase clave.</p>
+</blockquote>
+<hr />
+<h2 id="10-un-detalle-de-rachasimple-archivos-tsconfig-multiples">10. Un detalle de RachaSimple: archivos <code>tsconfig</code> múltiples</h2>
+<p>Quizá notaste que RachaSimple tiene <strong>dos</strong> archivos: <code>tsconfig.json</code> y <code>tsconfig.node.json</code>. No es un
+error, es una técnica para separar <strong>dos mundos</strong> dentro del mismo proyecto.</p>
+<blockquote class="def">
+<h3 id="que-significa-references-referencias-de-proyecto">🟦 ¿Qué significa? — <em><code>references</code> (referencias de proyecto)</em></h3>
+<p>Una forma de <strong>enlazar varios <code>tsconfig.json</code></strong> dentro de un mismo repo, cada uno con sus propias
+reglas. <strong>Para qué sirve:</strong> que el código de la app (que corre en el navegador) y el código de
+configuración (que corre en Node, como <code>vite.config.ts</code>) tengan ajustes distintos. <strong>Dónde se
+usa:</strong> el <code>tsconfig.json</code> de RachaSimple referencia a <code>tsconfig.node.json</code>, que solo revisa
+<code>vite.config.ts</code> y <code>vitest.config.ts</code>.</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple: tsconfig.json enlaza al de Node
+&quot;references&quot;: [{ &quot;path&quot;: &quot;./tsconfig.node.json&quot; }]
+</code></pre>
+<pre><code class="language-typescript">// RachaSimple: tsconfig.node.json (solo herramientas)
+&quot;composite&quot;: true,
+&quot;include&quot;: [&quot;vite.config.ts&quot;, &quot;vitest.config.ts&quot;]
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-composite">🟦 ¿Qué significa? — <em><code>composite</code></em></h3>
+<p>Una opción que marca un <code>tsconfig.json</code> como <strong>parte de un sistema de referencias</strong> y le permite
+ser «enlazado» desde otro. Cuando un proyecto va a ser referenciado con <code>references</code> (como acabas
+de ver), TypeScript exige que tenga <code>"composite": true</code>. <strong>Para qué sirve:</strong> habilitar el modo de
+proyectos enlazados y guardar información extra que acelera recompilaciones. <strong>Dónde se usa:</strong> en
+RachaSimple, el <code>tsconfig.node.json</code> lleva <code>"composite": true</code> justamente porque el <code>tsconfig.json</code>
+principal lo referencia.</p>
+<h3 id="tip_6">💡 Tip</h3>
+<p>No te preocupes por dominar las referencias de proyecto ahora. Solo recuerda la idea: el código de
+la app y el de las herramientas de construcción a veces necesitan reglas distintas, y por eso hay
+más de un <code>tsconfig</code>. Faro, al usar Next.js, se las arregla con uno solo.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que <code>tsconfig.json</code> es el panel de control de TypeScript y vive en la raíz del proyecto.</li>
+<li>[ ] Entiendo qué hacen <code>include</code> y <code>exclude</code> (qué revisar y qué ignorar).</li>
+<li>[ ] Distingo <code>target</code> (a qué JS traduzco), <code>lib</code> (qué tipos doy por existentes) y <code>module</code> (cómo
+      conecto archivos).</li>
+<li>[ ] Sé qué es el alias <code>@/*</code> en <code>paths</code> y por qué evita rutas relativas largas.</li>
+<li>[ ] Puedo explicar qué activa <code>"strict": true</code> y nombrar <code>strictNullChecks</code> y <code>noImplicitAny</code>.</li>
+<li>[ ] Entiendo por qué el modo estricto me protege en vez de molestarme.</li>
+<li>[ ] Reconozco las revisiones extra de RachaSimple (<code>noUnusedLocals</code>, <code>noUncheckedIndexedAccess</code>...).</li>
+<li>[ ] Sé leer un error de <code>tsc</code> en sus cuatro partes: archivo, línea, código y frase clave.</li>
+<li>[ ] Sé que NO debo silenciar errores con <code>any</code> o <code>@ts-ignore</code>, sino arreglar la causa.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Lectura de configuración.</strong> Abre el <code>tsconfig.json</code> de Faro (<code>/Organizer/tsconfig.json</code>) y el de
+   RachaSimple (<code>/RachaSimple/tsconfig.json</code>). Haz una tabla de tres columnas (opción, valor en Faro,
+   valor en RachaSimple) con: <code>target</code>, <code>module</code>, <code>jsx</code> y <code>strict</code>. ¿En cuáles coinciden y en cuáles
+   no?</p>
+</li>
+<li>
+<p><strong>Caza del interruptor.</strong> Sin mirar el capítulo, explica con tus palabras qué hace <code>strictNullChecks</code>
+   y da un ejemplo de un dato de Faro que «puede ser <code>null</code>». (Pista: piensa en algo que la IA todavía
+   no ha generado.)</p>
+</li>
+<li>
+<p>💻 <strong>Provoca un error a propósito.</strong> Crea un archivo <code>prueba.ts</code>. Declara
+   <code>const lista: string[] = []</code> y luego escribe <code>console.log(lista[0].toUpperCase())</code>. Con
+   <code>noUncheckedIndexedAccess</code> activado, esto debe marcar error. Léelo en sus cuatro partes y luego
+   arréglalo comprobando <code>undefined</code> antes de usar el elemento.</p>
+</li>
+<li>
+<p>💻 <strong>Inventa un alias.</strong> En un <code>tsconfig.json</code> de práctica, añade a <code>paths</code> un alias nuevo, por
+   ejemplo <code>"@hooks/*": ["src/hooks/*"]</code>. Escribe un import imaginario usando ese alias y compáralo con
+   cómo se vería la misma ruta sin alias (con <code>../../</code>). ¿Cuál prefieres leer?</p>
+</li>
+<li>
+<p>💻 <strong>Apaga y enciende strict.</strong> En un proyecto de práctica, escribe la función <code>mostrarLargo</code> del
+   apartado 6 (con <code>description: string | null</code>). Pon <code>"strict": false</code>, observa que no hay error. Luego
+   ponlo en <code>true</code> y observa cómo aparece. Anota qué cambió. (Esto te muestra, en vivo, para qué sirve el
+   modo estricto.)</p>
+</li>
+<li>
+<p><strong>Diagnóstico de errores.</strong> Te dan este mensaje:
+   <code>src/components/HabitCard.tsx:18:7 - error TS2322: Type 'string' is not assignable to type 'number'.</code>
+   Responde en tres frases: ¿en qué archivo y línea está?, ¿qué tipo esperaba el código?, ¿qué tipo le
+   diste? Propón en una frase cómo lo arreglarías.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Bit cierra el cuaderno y mueve sus branquias con orgullo: ahora no solo escribes tipos, sino que
+entiendes el <strong>reglamento</strong> que decide cómo se revisan. El <code>tsconfig.json</code> ya no es un archivo
+misterioso de la raíz del proyecto: es tu panel de control, y el modo estricto es el cinturón de
+seguridad que te lleva a producción sin sustos. En el siguiente módulo darás el salto a React de
+verdad, y todo lo que aprendiste aquí —tipos, estrechamiento, configuración estricta— va contigo.
+Nos vemos en el Módulo 06. 🪼</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

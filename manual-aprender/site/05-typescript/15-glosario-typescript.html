@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Glosario de TypeScript y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-typescript-y-mapa">Capitulo 15 — Glosario de TypeScript y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/05-typescript/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote programador favorito. Llegamos al final del Modulo 05 y, antes de saltar a React, quiero que tengamos un <strong>diccionario de bolsillo</strong>: todas las palabras raras que aprendimos, ordenadas alfabeticamente, cada una explicada en una o dos lineas, con un ejemplo de codigo de verdad sacado de <strong>RachaSimple</strong> o de <strong>Faro</strong>. Si en algun capitulo te perdiste con un termino, este es el lugar para volver. Recuerda la idea madre de todo el modulo: <strong>TypeScript es JavaScript con tipos</strong>. Nada que aprendiste en el Modulo 03 se borro; solo le pusimos etiquetas para que la computadora nos avise cuando metemos la pata. Vamos despacio, sin prisa, que para eso son los ajolotes.</p>
+</blockquote>
+<hr />
+<h2 id="1-como-usar-este-glosario">1. Como usar este glosario</h2>
+<p>Este capitulo no es para leerlo de corrido y memorizar (aunque puedes). Es un <strong>mapa para volver</strong>. Cada termino vive en su propio recuadro azul con tres partes: que significa en palabras simples, para que sirve, y donde aparece en un repo real. Si ves una palabra que no recuerdas mientras programas, busca aqui su letra y listo.</p>
+<p>Los repos que citamos en los ejemplos son reales y los hemos visto a lo largo del modulo:</p>
+<ul>
+<li><strong>RachaSimple</strong> — app de habitos en <strong>React 18 + TypeScript + Vite + Tailwind + Supabase + TanStack Query</strong>. De aqui salen casi todos los ejemplos de tipos de datos y hooks tipados.</li>
+<li><strong>Faro/Organizer</strong> — organizador de proyectos en <strong>Next.js 15 + React 19 + TypeScript + Supabase + OpenAI</strong>. De aqui salen los tipos del dominio (proyectos, fuentes, snapshots).</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Otros repos del manual (<strong>tunal-digital</strong> en HTML/CSS/JS vanilla, <strong>PolyPaw</strong> en Python/Flet/JSON, <strong>polypaw-nas</strong> en Ubuntu/Samba) <strong>no usan TypeScript</strong>. Por eso aqui solo aparecen RachaSimple y Faro: son los unicos donde tiene sentido buscar archivos <code>.ts</code> y <code>.tsx</code>.</p>
+</blockquote>
+<hr />
+<h2 id="2-glosario-alfabetico">2. Glosario alfabetico</h2>
+<p>Aqui esta el corazon del capitulo. Cada termino tecnico tiene su recuadro. Nada queda sin explicar.</p>
+<h3 id="a">A</h3>
+<blockquote class="def">
+<h3 id="que-significa-anotacion-de-tipo">🟦 ¿Que significa? — <em>Anotacion (de tipo)</em></h3>
+<p>Es escribir, despues de los dos puntos, <strong>que tipo</strong> tiene una variable, parametro o resultado: <code>nombre: string</code>. Sirve para decirle a TypeScript lo que esperas, y que te corrija si te equivocas. En RachaSimple, cada campo de <code>UserProfile</code> lleva su anotacion: <code>referral_code: string | null</code>.</p>
+<h3 id="que-significa-as-asercion-de-tipo">🟦 ¿Que significa? — <em><code>as</code> (asercion de tipo)</em></h3>
+<p>Es una forma de decirle a TypeScript "confia en mi, esto es de este tipo", aunque el no lo pueda comprobar solo. Sirve para casos donde tu sabes mas que el compilador. En RachaSimple aparece como <code>const KEY = ['habits'] as const</code>, que congela el arreglo para que sea un tipo exacto y no un <code>string[]</code> cualquiera.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p><code>as</code> no convierte nada en tiempo de ejecucion: solo silencia al compilador. Si mientes (<code>valor as Habit</code> cuando no lo es), el error explotara mas tarde y sera mas dificil de encontrar. Usalo poco y con razon.</p>
+</blockquote>
+<h3 id="c">C</h3>
+<blockquote class="def">
+<h3 id="que-significa-compilador-tsc">🟦 ¿Que significa? — <em>Compilador (<code>tsc</code>)</em></h3>
+<p>Es el programa que lee tu TypeScript, revisa todos los tipos y lo traduce a JavaScript normal que el navegador entiende. Sirve para atrapar errores <strong>antes</strong> de ejecutar. En RachaSimple el <code>build</code> lo invoca: <code>"build": "tsc -b &amp;&amp; vite build"</code>.</p>
+<h3 id="que-significa-restriccion-constraint-de-un-generico">🟦 ¿Que significa? — <em>Restriccion (constraint) de un generico</em></h3>
+<p>Es poner un limite a un tipo generico con <code>extends</code>, para exigir que cumpla cierta forma. Sirve para que el generico no sea "cualquier cosa" sino "cualquier cosa que al menos tenga esto". Por ejemplo <code>function primero&lt;T extends { id: string }&gt;(lista: T[])</code> exige que cada elemento tenga <code>id</code>.</p>
+</blockquote>
+<h3 id="d">D</h3>
+<blockquote class="def">
+<h3 id="que-significa-dts-archivo-de-declaracion">🟦 ¿Que significa? — <em><code>.d.ts</code> (archivo de declaracion)</em></h3>
+<p>Es un archivo que <strong>solo describe tipos</strong>, sin codigo que se ejecute. Sirve para decirle a TypeScript que forma tienen cosas que vienen de fuera (librerias, variables de entorno). RachaSimple tiene <code>src/vite-env.d.ts</code>, donde Vite declara los tipos de <code>import.meta.env</code>.</p>
+</blockquote>
+<h3 id="e">E</h3>
+<blockquote class="def">
+<h3 id="que-significa-extends">🟦 ¿Que significa? — <em><code>extends</code></em></h3>
+<p>Palabra clave con dos usos: en interfaces, para <strong>heredar</strong> campos de otra; en genericos, para <strong>restringir</strong> un tipo. En Faro, <code>interface ProjectWithSources extends Project</code> significa "tiene todo lo de <code>Project</code> y ademas lo suyo".</p>
+</blockquote>
+<h3 id="g">G</h3>
+<blockquote class="def">
+<h3 id="que-significa-generico">🟦 ¿Que significa? — <em>Generico</em></h3>
+<p>Es un tipo "con un hueco" que se rellena al usarlo, escrito entre <code>&lt;&gt;</code>. Sirve para escribir codigo reutilizable que funciona con muchos tipos sin perder seguridad. <code>Array&lt;string&gt;</code> es un generico: la caja <code>Array</code> rellena con <code>string</code>. TanStack Query, en RachaSimple, devuelve <code>UseQueryResult&lt;Habit[]&gt;</code> para que sepas exactamente que trae.</p>
+</blockquote>
+<h3 id="i">I</h3>
+<blockquote class="def">
+<h3 id="que-significa-inferencia-de-tipos">🟦 ¿Que significa? — <em>Inferencia (de tipos)</em></h3>
+<p>Es cuando TypeScript <strong>adivina solo</strong> el tipo sin que lo escribas, mirando el valor. Sirve para escribir menos y mantener la seguridad. En <code>const KEY = ['habits']</code>, TypeScript infiere que <code>KEY</code> es <code>string[]</code> sin que digas nada.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Buena regla de principiante: <strong>deja que infiera lo obvio</strong> (variables con valor claro) y <strong>anota lo importante</strong> (parametros de funciones y resultados de API). Asi el codigo queda limpio pero protegido en las fronteras.</p>
+<h3 id="que-significa-import-type">🟦 ¿Que significa? — <em><code>import type</code></em></h3>
+<p>Es una importacion que trae <strong>solo un tipo</strong>, no codigo que se ejecute. Sirve para que el compilador sepa que esa importacion desaparece al traducir a JavaScript. En RachaSimple es muy comun: <code>import type { Habit, NewHabit } from '@/types/database'</code>.</p>
+<h3 id="que-significa-interface">🟦 ¿Que significa? — <em>Interface</em></h3>
+<p>Es una forma de describir la <strong>forma de un objeto</strong>: que campos tiene y de que tipo. Sirve para dar nombre a una estructura y reutilizarla. En Faro, <code>interface Project</code> describe un proyecto completo: <code>id</code>, <code>name</code>, <code>phase</code>, <code>progress_pct</code>, etc.</p>
+</blockquote>
+<pre><code class="language-typescript">// Faro · src/lib/types.ts
+export interface RoadmapStep {
+  title: string;
+  done: boolean;
+}
+</code></pre>
+<h3 id="k">K</h3>
+<blockquote class="def">
+<h3 id="que-significa-keyof">🟦 ¿Que significa? — <em><code>keyof</code></em></h3>
+<p>Es un operador que toma un tipo objeto y te da la <strong>union de sus nombres de campo</strong> como tipo. Sirve para escribir funciones que reciben "alguna clave valida de este objeto" y no cualquier texto. Si tienes <code>interface Project</code>, entonces <code>keyof Project</code> es <code>"id" | "name" | "phase" | ...</code>.</p>
+</blockquote>
+<h3 id="l">L</h3>
+<blockquote class="def">
+<h3 id="que-significa-tipo-literal">🟦 ¿Que significa? — <em>Tipo literal</em></h3>
+<p>Es un tipo que es <strong>un valor exacto</strong>, no toda una categoria: no <code>string</code> sino <code>"free"</code>. Sirve para limitar las opciones validas. En RachaSimple, <code>UserPlan</code> solo puede ser <code>'free'</code> o <code>'pro'</code>, no cualquier texto.</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple · src/types/database.ts
+export type UserPlan = 'free' | 'pro';
+export type CheckinStatus = 'completed' | 'minimum' | 'recovery' | 'not_done';
+</code></pre>
+<h3 id="m">M</h3>
+<blockquote class="def">
+<h3 id="que-significa-modulo">🟦 ¿Que significa? — <em>Modulo</em></h3>
+<p>En TypeScript, cada archivo <code>.ts</code> que usa <code>import</code> o <code>export</code> es un modulo: una cajita con sus propias cosas. Sirve para organizar y compartir solo lo necesario. <code>src/types/database.ts</code> de RachaSimple es un modulo que exporta tipos para todo el proyecto.</p>
+</blockquote>
+<h3 id="n">N</h3>
+<blockquote class="def">
+<h3 id="que-significa-narrowing-estrechamiento">🟦 ¿Que significa? — <em>Narrowing (estrechamiento)</em></h3>
+<p>Es cuando TypeScript <strong>reduce</strong> un tipo amplio a uno mas preciso dentro de un <code>if</code>. Sirve para trabajar seguro con uniones. Si <code>id</code> es <code>string | undefined</code>, dentro de <code>if (id) { ... }</code> TypeScript ya sabe que ahi <code>id</code> es <code>string</code>. RachaSimple lo usa en <code>useHabit</code>: chequea <code>enabled: !!id</code> y luego usa <code>id!</code>.</p>
+<h3 id="que-significa-null-y-undefined">🟦 ¿Que significa? — <em><code>null</code> y <code>undefined</code></em></h3>
+<p>Son los dos "valores vacios" de JavaScript. Con <code>strict</code> activado, TypeScript te obliga a tener en cuenta que algo puede estar vacio. En Faro, <code>description: string | null</code> avisa: "el texto puede no existir, contempla ese caso".</p>
+</blockquote>
+<h3 id="o">O</h3>
+<blockquote class="def">
+<h3 id="que-significa-omitt-k">🟦 ¿Que significa? — <em><code>Omit&lt;T, K&gt;</code></em></h3>
+<p>Es un tipo utilitario que toma un tipo <code>T</code> y te da una copia <strong>sin</strong> los campos <code>K</code>. Sirve para reutilizar un tipo quitando lo que sobra (por ejemplo, quitar <code>id</code> para un objeto que aun no se guardo). Es el primo opuesto de <code>Pick</code>.</p>
+<h3 id="que-significa-as-const-asercion-const">🟦 ¿Que significa? — <em><code>as const</code> (asercion const)</em></h3>
+<p>Es un <code>as</code> especial que congela un valor para que su tipo sea lo mas exacto posible y de solo lectura. RachaSimple lo usa en <code>const KEY = ['habits'] as const</code>, asi la clave de cache es un tipo fijo y no un arreglo modificable.</p>
+</blockquote>
+<h3 id="p">P</h3>
+<blockquote class="def">
+<h3 id="que-significa-partialt">🟦 ¿Que significa? — <em><code>Partial&lt;T&gt;</code></em></h3>
+<p>Es un tipo utilitario que toma <code>T</code> y hace <strong>todos sus campos opcionales</strong>. Sirve para actualizaciones, donde solo mandas lo que cambia. RachaSimple lo usa para editar habitos: <code>changes: Partial&lt;Habit&gt;</code> significa "puedes mandar uno, varios o ningun campo de <code>Habit</code>".</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple · src/hooks/useHabits.ts
+mutationFn: ({ id, changes }: { id: string; changes: Partial&lt;Habit&gt; }) =&gt;
+  habitsRepo.update(id, changes),
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-pickt-k">🟦 ¿Que significa? — <em><code>Pick&lt;T, K&gt;</code></em></h3>
+<p>Es un tipo utilitario que toma <code>T</code> y te da una copia con <strong>solo</strong> los campos <code>K</code>. Sirve para construir un tipo nuevo a partir de unos pocos campos de otro. RachaSimple lo usa para definir lo minimo que necesita un habito nuevo.</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple · src/types/database.ts
+export type NewHabit = Pick&lt;
+  Habit,
+  'name' | 'daily_goal' | 'minimum_version' | 'category' | 'support_tone'
+&gt; &amp; { active?: boolean; emoji?: string | null };
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-props-tipadas">🟦 ¿Que significa? — <em>Props (tipadas)</em></h3>
+<p>En React, las props son los datos que un componente recibe. Tiparlas es describir, con un <code>type</code> o <code>interface</code>, que props acepta. Sirve para que TypeScript te avise si olvidas pasar una o la pasas del tipo equivocado. En Faro, los componentes <code>.tsx</code> como <code>phase-progress.tsx</code> declaran sus props para no recibir basura.</p>
+</blockquote>
+<h3 id="r">R</h3>
+<blockquote class="def">
+<h3 id="que-significa-recordk-v">🟦 ¿Que significa? — <em><code>Record&lt;K, V&gt;</code></em></h3>
+<p>Es un tipo utilitario para un objeto cuyas <strong>claves son de tipo <code>K</code> y los valores de tipo <code>V</code></strong>. Sirve para diccionarios. En Faro aparece <code>Record&lt;string, unknown&gt;</code> (un objeto con claves de texto y valores desconocidos) y <code>Record&lt;Weekday, DayConfig&gt;</code> (un dia de la semana mapeado a su configuracion).</p>
+</blockquote>
+<h3 id="s">S</h3>
+<blockquote class="def">
+<h3 id="que-significa-strict-modo-estricto">🟦 ¿Que significa? — <em><code>strict</code> (modo estricto)</em></h3>
+<p>Es una opcion del <code>tsconfig.json</code> que enciende todas las revisiones serias de TypeScript de golpe (entre ellas, vigilar los <code>null</code>). Sirve para que el lenguaje te proteja de verdad. Tanto RachaSimple como Faro tienen <code>"strict": true</code>. RachaSimple suma <code>"noUncheckedIndexedAccess": true</code>, aun mas cuidadoso.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Empezar un proyecto sin <code>strict</code> y activarlo despues suele soltar decenas de errores de golpe. Mejor nacer con <code>strict: true</code> desde el primer dia, como hicieron estos dos repos. Duele menos.</p>
+</blockquote>
+<h3 id="t">T</h3>
+<blockquote class="def">
+<h3 id="que-significa-tipo">🟦 ¿Que significa? — <em>Tipo</em></h3>
+<p>Es la <strong>categoria</strong> de un valor: que clase de dato es y que se puede hacer con el (<code>string</code>, <code>number</code>, <code>boolean</code>, un objeto, una funcion). Es el concepto base de todo el modulo. JavaScript ya tenia tipos por dentro; TypeScript solo los hace visibles y revisables.</p>
+<h3 id="que-significa-type-alias-de-tipo">🟦 ¿Que significa? — <em><code>type</code> (alias de tipo)</em></h3>
+<p>Es una palabra clave para <strong>ponerle nombre a un tipo</strong>, sea objeto, union o lo que sea. Sirve para no repetir y para dar significado. RachaSimple define <code>type SupportTone = 'gentle' | 'practical' | 'encouraging' | 'direct'</code> y luego lo usa por nombre en todos lados.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>¿<code>type</code> o <code>interface</code>? Para la forma de un objeto, ambos sirven. Regla simple: usa <code>interface</code> para objetos que podrian crecer o heredar, y <code>type</code> para uniones, literales y combinaciones. Faro usa <code>interface Project</code> (objeto) y <code>type ProjectPhase</code> (union). Aprende imitando esa eleccion.</p>
+<h3 id="que-significa-tsconfigjson">🟦 ¿Que significa? — <em><code>tsconfig.json</code></em></h3>
+<p>Es el archivo de configuracion que le dice al compilador como comportarse: que tan estricto ser, a que version de JavaScript traducir, donde buscar archivos. Sirve para que todo el equipo comparta las mismas reglas. Cada proyecto TypeScript tiene el suyo; RachaSimple y Faro incluidos.</p>
+</blockquote>
+<h3 id="u">U</h3>
+<blockquote class="def">
+<h3 id="que-significa-union-tipo-union">🟦 ¿Que significa? — <em>Union (tipo union)</em></h3>
+<p>Es un tipo que puede ser <strong>una cosa u otra</strong>, escrito con la barra <code>|</code>. Sirve para valores con varias formas posibles. En Faro, <code>ProjectPhase</code> es la union de cinco fases; un snapshot puede ser <code>GithubSnapshot | Record&lt;string, unknown&gt;</code>.</p>
+</blockquote>
+<pre><code class="language-typescript">// Faro · src/lib/types.ts
+export type ProjectPhase =
+  | &quot;idea&quot;
+  | &quot;en_progreso&quot;
+  | &quot;en_pausa&quot;
+  | &quot;bloqueado&quot;
+  | &quot;terminado&quot;;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-unknown">🟦 ¿Que significa? — <em><code>unknown</code></em></h3>
+<p>Es el tipo "no se que es esto todavia". Sirve para datos que llegan de fuera (una API, un JSON) y que debes <strong>revisar antes de usar</strong>. Es el primo seguro de <code>any</code>: con <code>unknown</code>, TypeScript te obliga a comprobar el tipo antes de tocarlo. Faro lo usa en <code>Record&lt;string, unknown&gt;</code> para datos de snapshot aun sin validar.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No confundas <code>unknown</code> con <code>any</code>. <code>any</code> apaga todas las revisiones (peligroso); <code>unknown</code> las mantiene encendidas y te exige verificar primero. Cuando dudes, prefiere <code>unknown</code>.</p>
+<h3 id="que-significa-tipo-utilitario-utility-type">🟦 ¿Que significa? — <em>Tipo utilitario (utility type)</em></h3>
+<p>Son tipos que ya vienen con TypeScript para <strong>transformar otros tipos</strong>: <code>Partial</code>, <code>Pick</code>, <code>Omit</code>, <code>Record</code>, <code>Required</code>, <code>Readonly</code>. Sirven para no escribir tipos repetidos a mano. RachaSimple los combina sin miedo: <code>Pick&lt;...&gt; &amp; Partial&lt;Pick&lt;...&gt;&gt;</code> para definir cada tipo "Nuevo".</p>
+</blockquote>
+<pre><code class="language-typescript">// RachaSimple · src/types/database.ts
+export type NewFeedback = Pick&lt;Feedback, 'message'&gt; &amp;
+  Partial&lt;Pick&lt;Feedback, 'mood' | 'contact_email'&gt;&gt;;
+</code></pre>
+<h3 id="v">V</h3>
+<blockquote class="def">
+<h3 id="que-significa-variable-de-entorno-tipada">🟦 ¿Que significa? — <em>Variable de entorno (tipada)</em></h3>
+<p>Son valores secretos o de configuracion que viven fuera del codigo (claves, URLs). Tiparlas (en un <code>.d.ts</code>) ayuda a que TypeScript sepa cuales existen. RachaSimple lo prepara en <code>src/vite-env.d.ts</code>. Recuerda la regla de Faro: los secretos van solo en el servidor, nunca en el cliente.</p>
+</blockquote>
+<hr />
+<h2 id="3-mapa-mental-de-typescript">3. Mapa mental de TypeScript</h2>
+<p>Una imagen vale mas que mil definiciones. Aqui esta como se conecta todo lo que aprendiste, en forma de arbol. Lee desde la raiz hacia las ramas.</p>
+<pre><code class="language-text">                         TYPESCRIPT
+                  (JavaScript + tipos)
+                            |
+   ┌────────────┬───────────┼────────────┬──────────────┐
+   |            |           |            |              |
+ TIPOS       FORMAS      COMBINAR     SEGURIDAD       HERRAMIENTAS
+   |            |           |            |              |
+ string      interface   union (|)    strict        tsconfig.json
+ number      type        literal      null/undefined compilador (tsc)
+ boolean     props       narrowing    unknown        .d.ts
+ array       (objetos)   keyof        as / as const  import type
+   |            |           |            |              |
+   └── INFERENCIA: TS adivina solo lo obvio ──────────┘
+                            |
+                  GENERICOS  &lt;T&gt;
+                  (tipos con hueco)
+                            |
+              ┌─────────────┴─────────────┐
+        restriccion (extends)      utilitarios
+                                Partial · Pick · Omit · Record
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>Mira cualquier archivo de RachaSimple o Faro y veras estas ramas mezcladas en una sola linea. Por ejemplo, <code>changes: Partial&lt;Habit&gt;</code> junta <strong>utilitario</strong> (<code>Partial</code>), <strong>generico</strong> (los <code>&lt;&gt;</code>) e <strong>interface/objeto</strong> (<code>Habit</code>). No son temas separados: son piezas de un mismo lego.</p>
+</blockquote>
+<hr />
+<h2 id="4-las-cuatro-ideas-que-de-verdad-importan">4. Las cuatro ideas que de verdad importan</h2>
+<p>Si olvidas todo lo demas, quedate con esto, dice Bit moviendo sus branquias:</p>
+<ol>
+<li><strong>TypeScript es JavaScript con etiquetas.</strong> El codigo corre igual; los tipos solo viven mientras programas y desaparecen al traducir.</li>
+<li><strong>Los tipos describen la forma de tus datos.</strong> <code>interface Project</code>, <code>type UserPlan</code>: son fotos de como lucen tus datos para que la computadora vigile que no se deformen.</li>
+<li><strong>Las fronteras necesitan cuidado.</strong> Donde entran datos de fuera (API, formularios, env), ahi anota bien y usa <code>unknown</code> + revision. Adentro, deja que la inferencia trabaje.</li>
+<li><strong><code>strict: true</code> es tu amigo gruñon.</strong> Te molesta hoy para que no llores manana con un <code>undefined</code> en produccion.</li>
+</ol>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Puedo explicar con mis palabras la diferencia entre <strong>tipo</strong>, <strong>anotacion</strong> e <strong>inferencia</strong>.</li>
+<li>[ ] Se cuando usar <code>type</code> y cuando <code>interface</code> (y por que da casi igual para objetos).</li>
+<li>[ ] Entiendo que es una <strong>union</strong> (<code>|</code>) y un <strong>tipo literal</strong>, y reconozco ambos en <code>ProjectPhase</code>.</li>
+<li>[ ] Se que hace el <strong>narrowing</strong> dentro de un <code>if</code> y por que TypeScript "se vuelve mas listo" ahi.</li>
+<li>[ ] Puedo leer un <strong>generico</strong> como <code>UseQueryResult&lt;Habit[]&gt;</code> y decir que tipo lleva dentro.</li>
+<li>[ ] Reconozco los <strong>utilitarios</strong> <code>Partial</code>, <code>Pick</code>, <code>Omit</code> y <code>Record</code> cuando aparecen.</li>
+<li>[ ] Se para que sirve <code>keyof</code>, <code>as</code>, <code>as const</code> y <code>unknown</code>, y por que <code>unknown</code> es mas seguro que <code>any</code>.</li>
+<li>[ ] Entiendo que hace <code>import type</code> y por que se usa tanto en los hooks de RachaSimple.</li>
+<li>[ ] Se que es <code>strict</code> en el <code>tsconfig.json</code> y por que ambos repos lo tienen encendido.</li>
+<li>[ ] Se que es un archivo <code>.d.ts</code> y que ahi viven declaraciones de tipos sin codigo ejecutable.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<p>No son ejercicios de programar funciones nuevas, sino de <strong>repasar y reconocer</strong>. Asi cerramos el modulo afianzando el vocabulario. Los marcados con 💻 piden abrir el editor.</p>
+<ol>
+<li>
+<p><strong>Diccionario sin mirar.</strong> Tapa este capitulo y escribe en una hoja la definicion de estos cinco terminos en una linea cada uno: <em>inferencia</em>, <em>union</em>, <em>narrowing</em>, <em>generico</em>, <em>utilitario</em>. Luego destapa y compara. ¿Cuales se te resistieron?</p>
+</li>
+<li>
+<p><strong>Caza de literales.</strong> Sin abrir el editor, lista cuatro tipos literales que viste en RachaSimple (pista: planes, tonos, estados de check-in, temas). ¿Por que crees que el autor uso literales en vez de <code>string</code> suelto?</p>
+</li>
+<li>
+<p>💻 <strong>Safari de tipos.</strong> Abre <code>RachaSimple/src/types/database.ts</code>. Encuentra y senala una <strong>interface</strong>, un <strong>alias <code>type</code></strong>, una <strong>union literal</strong> y un uso de <strong><code>Pick</code></strong>. Anota la linea de cada uno.</p>
+</li>
+<li>
+<p>💻 <strong>El detective del <code>strict</code>.</strong> Abre <code>RachaSimple/tsconfig.json</code> y <code>Organizer/tsconfig.json</code>. Confirma que ambos tienen <code>"strict": true</code>. Luego busca en RachaSimple la opcion extra <code>noUncheckedIndexedAccess</code> y, con tus palabras, escribe que crees que protege.</p>
+</li>
+<li>
+<p>💻 <strong>Lee un hook tipado.</strong> Abre <code>RachaSimple/src/hooks/useHabits.ts</code>. Encuentra la linea <code>import type { Habit, NewHabit }</code>. ¿Por que <code>import type</code> y no un <code>import</code> normal? Luego ubica el <code>Partial&lt;Habit&gt;</code> y explica que permite hacer.</p>
+</li>
+<li>
+<p><strong>Dibuja tu mapa.</strong> Cierra este capitulo y dibuja de memoria el mapa mental de la seccion 3, aunque sea torcido. El objetivo no es que quede bonito, sino que las ramas (tipos, formas, combinar, seguridad, herramientas) te salgan solas.</p>
+</li>
+</ol>
+<hr />
+<h2 id="5-como-sigue-rumbo-al-modulo-06-react">5. Como sigue: rumbo al Modulo 06 (React)</h2>
+<p>Lo lograste, dice Bit dando una vuelta de campana en el agua. Terminaste TypeScript. Pero fijate en algo: casi todos los ejemplos venian de <strong>RachaSimple</strong> y <strong>Faro</strong>, que son apps de <strong>React</strong>. No fue casualidad. TypeScript brilla de verdad cuando tipas <strong>componentes y props</strong>.</p>
+<p>En el <strong>Modulo 06</strong> vamos a juntar todo:</p>
+<ul>
+<li>Construiremos <strong>componentes</strong> que reciben <strong>props tipadas</strong> (te acordaras de <code>Project</code> y de los <code>.tsx</code> de Faro).</li>
+<li>Usaremos <strong>hooks</strong> como <code>useState</code> y <code>useQuery</code>, que son <strong>genericos</strong> por dentro (ya viste <code>UseQueryResult&lt;Habit[]&gt;</code>).</li>
+<li>Modelaremos los datos de la pantalla con las mismas <strong>interfaces</strong> y <strong>uniones</strong> de este modulo.</li>
+</ul>
+<p>O sea: no empezamos de cero. <strong>Cada termino de este glosario reaparece en React</strong>, ahora con botones y pantallas. Guarda este capitulo a mano: sera tu diccionario cuando una prop te de error en rojo.</p>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Antes de pasar al Modulo 06, vuelve a leer una vez la seccion 4 ("Las cuatro ideas que de verdad importan"). Si esas cuatro te quedan claras, estas mas que listo para React. Nos vemos alla. — Bit 🦎</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

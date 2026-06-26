@@ -42,7 +42,17 @@ son React + TypeScript. Iremos abriéndolos.
 | 03 | [Props](03-props.md) | Pasar datos a componentes, props tipadas, listas |
 | 04 | [Estado con useState](04-estado-usestate.md) | Estado, re-render, eventos, formularios |
 | 05 | [Hooks y efectos](05-hooks-y-efectos.md) | `useEffect`, hooks propios, cargar datos |
+| 06 | [Listas y renderizado condicional](06-listas-y-renderizado-condicional.md) | `.map()`, `key`, `&&`, ternario, fragmentos |
+| 07 | [Eventos y formularios controlados](07-eventos-y-formularios.md) | `onClick`/`onChange`/`onSubmit`, componentes controlados |
+| 08 | [useEffect a fondo](08-useeffect-a-fondo.md) | Dependencias, limpieza, errores comunes |
+| 09 | [Hooks personalizados](09-hooks-propios.md) | Extraer lógica reutilizable, convención `use*` |
+| 10 | [Estado global y Context](10-estado-global-y-contexto.md) | Prop drilling, `createContext`, `useContext` |
+| 11 | [Datos del servidor con TanStack Query](11-datos-con-tanstack-query.md) | `useQuery`, `useMutation`, caché, Supabase |
+| 12 | [Rendimiento: memo y useMemo](12-rendimiento-y-memo.md) | `React.memo`, `useMemo`, `useCallback` |
+| 13 | [Rutas y estructura de una app](13-routing-y-estructura.md) | Routing, React Router vs Next.js, carpetas |
+| 14 | [Mini-proyecto: mini app de hábitos](14-mini-proyecto-habitos.md) | Una versión simplificada de RachaSimple |
+| 15 | [Glosario de React](15-glosario-react.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 06 — versión ampliada (capítulos 01–15, ~100 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es React?](01-que-es-react.md)**.

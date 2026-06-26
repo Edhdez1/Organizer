@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 11 — Acceso remoto seguro con Tailscale — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-11-acceso-remoto-seguro-con-tailscale">Capitulo 11 — Acceso remoto seguro con Tailscale</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap11.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora has manejado tu NAS estando en casa, conectado a la misma red Wi-Fi o cable que <strong>polypaw-nas</strong>. Pero, ¿qué pasa cuando sales? ¿Y si estás en la cafetería, en casa de un amigo o de viaje y necesitas un archivo guardado en tu HDD de 954 GB, o quieres entrar a Cockpit para revisar la RAM? En este capítulo aprenderás a llegar a tu laptop Acer Nitro desde cualquier parte del mundo, de forma segura, sin abrir tu casa a internet. Bit, el ajolote, te acompaña: él odia las puertas abiertas (es un anfibio muy precavido) y va a celebrar que aquí casi no abrimos ninguna.</p>
+</blockquote>
+<h2 id="1-el-problema-tu-nas-vive-detras-de-un-muro">1. El problema: tu NAS vive detrás de un muro</h2>
+<p>Tu servidor <strong>polypaw-nas</strong> (ese laptop Acer Nitro AN515-54 con Ubuntu Server 26.04) está conectado a tu router de casa. Dentro de tu red local todo es fácil: escribes la IP del NAS y entras a Samba o a Cockpit. Pero esa red local es como una casa con muros: desde la calle (internet) no se ve lo que hay dentro.</p>
+<p>Esto lo hace tu router con una técnica llamada NAT.</p>
+<blockquote class="def">
+<h3 id="que-significa-nat-network-address-translation">🟦 ¿Que significa? — <em>NAT (Network Address Translation)</em></h3>
+<p>Es la función del router que comparte una sola dirección de internet entre todos los aparatos de tu casa (laptop, teléfono, NAS, tele). Por dentro cada aparato tiene una IP privada que <strong>solo es válida dentro de tu casa</strong>; por fuera todos salen con la misma IP pública del router.
+<strong>Para qué sirve:</strong> permite que muchos dispositivos compartan una conexión y, de paso, los esconde de internet.
+<strong>Dónde aparece en tu NAS real:</strong> <strong>polypaw-nas</strong> tiene una IP privada (algo como <code>192.168.x.x</code>) que solo funciona en tu casa. Desde la cafetería, esa dirección no lleva a ninguna parte.</p>
+<h3 id="que-significa-ip-publica-vs-ip-privada">🟦 ¿Que significa? — <em>IP pública vs IP privada</em></h3>
+<p>La <strong>IP pública</strong> es la dirección de tu casa vista desde internet (te la asigna tu proveedor). La <strong>IP privada</strong> es la dirección interna de cada aparato dentro de tu red.
+<strong>Para qué sirve:</strong> la pública es como la dirección de tu calle; la privada es como el número de habitación dentro de la casa. Desde fuera solo se ve la calle, no las habitaciones.
+<strong>Dónde aparece en tu NAS real:</strong> <strong>polypaw-nas</strong> vive en una "habitación" (IP privada) detrás de la "puerta de la calle" (IP pública de tu router).</p>
+</blockquote>
+<p>El problema es claro: desde fuera no hay forma directa de tocar a polypaw-nas. La tentación clásica es abrir un "agujero" en el muro para colarte. A eso se le llama abrir puertos, y es justo lo que <strong>no</strong> vamos a hacer.</p>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>"Abrir un puerto" significa decirle al router que deje entrar tráfico de internet directo hacia un aparato de tu casa. Suena práctico, pero es como dejar una ventana de tu casa abierta de par en par para que entre un repartidor... y también cualquier ladrón que pase. Internet está lleno de robots que escanean ventanas abiertas día y noche. Más adelante verás la alternativa segura.</p>
+</blockquote>
+<h2 id="2-que-es-una-vpn">2. Qué es una VPN</h2>
+<p>La solución elegante no es abrir el muro, sino construir un túnel secreto entre tu teléfono y tu NAS. Ese túnel es una VPN.</p>
+<blockquote class="def">
+<h3 id="que-significa-vpn-red-privada-virtual">🟦 ¿Que significa? — <em>VPN (Red Privada Virtual)</em></h3>
+<p>Es una conexión cifrada que une dos o más dispositivos como si estuvieran en la misma red local, aunque estén en ciudades distintas. "Virtual" porque la red no existe físicamente: se monta por software sobre internet. "Privada" porque solo tus dispositivos entran.
+<strong>Para qué sirve:</strong> te deja hablar con tu NAS desde fuera como si estuvieras sentado en casa, sin exponer nada a internet.
+<strong>Dónde aparece en tu NAS real:</strong> instalarás una VPN llamada Tailscale en <strong>polypaw-nas</strong> y en tu teléfono/laptop; ambos quedarán en la misma "red mágica".</p>
+<h3 id="que-significa-cifrado">🟦 ¿Que significa? — <em>Cifrado</em></h3>
+<p>Es convertir la información en un texto ilegible para cualquiera que no tenga la llave correcta. Si alguien intercepta los datos en el camino, solo ve basura.
+<strong>Para qué sirve:</strong> que tus archivos y contraseñas viajen protegidos por internet.
+<strong>Dónde aparece en tu NAS real:</strong> todo lo que pase entre tu teléfono y polypaw-nas por la VPN va cifrado, incluso en una Wi-Fi pública insegura.</p>
+</blockquote>
+<p>Piensa en la VPN como un tubo neumático privado, de esos de los bancos antiguos, que conecta solo tu mano con la ventanilla del NAS. Nadie más puede meter la mano en el tubo.</p>
+<h2 id="3-tailscale-y-wireguard-a-grandes-rasgos">3. Tailscale y WireGuard a grandes rasgos</h2>
+<p>Montar una VPN tradicional a mano es complicado: claves, configuraciones, IPs, cortafuegos. Tailscale nació para que eso sea casi automático.</p>
+<blockquote class="def">
+<h3 id="que-significa-cortafuegos-firewall">🟦 ¿Que significa? — <em>Cortafuegos (firewall)</em></h3>
+<p>Es un guardián que decide qué tráfico de red puede entrar o salir de un equipo. Bloquea las conexiones no permitidas y deja pasar solo las que tú autorizas.
+<strong>Para qué sirve:</strong> proteger tu NAS filtrando quién puede tocarlo, como un portero que solo deja pasar a los invitados.
+<strong>Dónde aparece en tu NAS real:</strong> Ubuntu Server trae un cortafuegos integrado; combinado con Tailscale, <strong>polypaw-nas</strong> mantiene cerrado todo lo que mira a internet y abre solo el túnel cifrado de tu tailnet.</p>
+<h3 id="que-significa-tailscale">🟦 ¿Que significa? — <em>Tailscale</em></h3>
+<p>Es un servicio que crea una VPN privada entre tus dispositivos con muy poca configuración. Tú instalas un programa, inicias sesión con una cuenta, y Tailscale se encarga de conectar todo de forma segura.
+<strong>Para qué sirve:</strong> tener acceso remoto a tu NAS sin ser experto en redes.
+<strong>Dónde aparece en tu NAS real:</strong> ya está instalado en <strong>polypaw-nas</strong> y es la pieza que te deja entrar a Cockpit y Samba desde fuera de casa.</p>
+<h3 id="que-significa-wireguard">🟦 ¿Que significa? — <em>WireGuard</em></h3>
+<p>Es la tecnología (el "motor") que Tailscale usa por debajo para crear los túneles cifrados. WireGuard es moderno, rápido y con muy poco código, lo que lo hace difícil de atacar.
+<strong>Para qué sirve:</strong> es el cifrado y el transporte real de los datos; Tailscale solo le pone una cara fácil de usar.
+<strong>Dónde aparece en tu NAS real:</strong> no lo verás directamente, pero cada vez que tu teléfono habla con polypaw-nas por Tailscale, WireGuard está moviendo los datos.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Una forma sencilla de recordarlo: <strong>WireGuard es el motor; Tailscale es el coche completo</strong> con volante, asientos y llave fácil. Tú conduces el coche y no necesitas armar el motor pieza por pieza.</p>
+</blockquote>
+<p>Hay un detalle importante de seguridad que tranquiliza a Bit: Tailscale ayuda a que tus dispositivos se encuentren, pero <strong>tus archivos no pasan por los servidores de Tailscale</strong>. Lo normal es que tu teléfono y polypaw-nas se conecten directamente entre sí, de punta a punta, cifrados con WireGuard.</p>
+<h2 id="4-la-tailnet-tu-red-privada-personal">4. La tailnet: tu red privada personal</h2>
+<p>Cuando instalas Tailscale en varios dispositivos con la misma cuenta, todos juntos forman tu red privada. Esa red tiene un nombre: tailnet.</p>
+<blockquote class="def">
+<h3 id="que-significa-tailnet">🟦 ¿Que significa? — <em>Tailnet</em></h3>
+<p>Es el conjunto de todos tus dispositivos conectados a tu cuenta de Tailscale. Es tu "red mágica" privada: tu teléfono, tu laptop personal y polypaw-nas viven dentro de ella aunque estén en lugares distintos.
+<strong>Para qué sirve:</strong> agrupar tus equipos para que se vean entre sí, sin que nadie de fuera pueda entrar.
+<strong>Dónde aparece en tu NAS real:</strong> <strong>polypaw-nas</strong> es uno de los miembros de tu tailnet; los demás (tu móvil, tu portátil) se conectan a él dentro de esa red.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Tu tailnet es <strong>tuya y solo tuya</strong>. Por defecto nadie más que los dispositivos con tu cuenta puede entrar. Es como un grupo de chat privado: si no estás invitado, no existe para ti.</p>
+</blockquote>
+<h2 id="5-instalar-tailscale-en-polypaw-nas">5. Instalar Tailscale en polypaw-nas</h2>
+<p>En tu NAS real ya está instalado, pero conviene que sepas cómo se hace, porque algún día reinstalarás el sistema o añadirás un dispositivo nuevo. El proceso en Ubuntu Server 26.04 es directo.</p>
+<p>Primero, instala Tailscale con el script oficial:</p>
+<pre><code class="language-bash">curl -fsSL https://tailscale.com/install.sh | sh
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-curl">🟦 ¿Que significa? — <em>curl</em></h3>
+<p>Es una herramienta de terminal que descarga cosas de internet (páginas, archivos, scripts). El <code>| sh</code> que ves después le dice "lo que descargues, ejecútalo".
+<strong>Para qué sirve:</strong> aquí, bajar e instalar Tailscale de un solo paso.
+<strong>Dónde aparece en tu NAS real:</strong> lo usarás muchas veces en polypaw-nas para instalar programas o scripts oficiales.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Ejecutar <code>curl ... | sh</code> corre código de internet directamente en tu servidor. Hazlo <strong>solo</strong> con fuentes de confianza absoluta, como la web oficial de Tailscale (<code>tailscale.com</code>). Nunca con un enlace que no reconozcas. Bit revisa siempre de dónde viene el tubo antes de meter la mano.</p>
+</blockquote>
+<p>Una vez instalado, levantas el servicio y vinculas la máquina a tu cuenta:</p>
+<pre><code class="language-bash">sudo tailscale up
+</code></pre>
+<p>Esto te mostrará un enlace. Lo abres en cualquier navegador (en tu teléfono o portátil), inicias sesión con tu cuenta (Google, GitHub, etc.) y autorizas a polypaw-nas. Desde ese momento, el NAS forma parte de tu tailnet.</p>
+<blockquote class="def">
+<h3 id="que-significa-sudo">🟦 ¿Que significa? — <em>sudo</em></h3>
+<p>Es el prefijo que da permisos de administrador a un comando. Sin él, muchas tareas de sistema fallan por falta de permisos.
+<strong>Para qué sirve:</strong> ejecutar acciones que tocan el sistema completo, como arrancar un servicio de red.
+<strong>Dónde aparece en tu NAS real:</strong> lo usas constantemente en polypaw-nas para administrar Samba, Cockpit, Docker, etc.</p>
+</blockquote>
+<p>Para ver el estado de la conexión:</p>
+<pre><code class="language-bash">tailscale status
+</code></pre>
+<p>Esto te lista todos los dispositivos de tu tailnet, sus nombres y sus direcciones especiales. Justo de esas direcciones hablamos ahora.</p>
+<blockquote class="def">
+<h3 id="que-significa-systemctl-y-systemd">🟦 ¿Que significa? — <em>systemctl y systemd</em></h3>
+<p><strong>systemd</strong> es el "director de orquesta" de Ubuntu: el programa que arranca y vigila todos los servicios del sistema al encender. <strong>systemctl</strong> es el comando con el que tú le das órdenes a ese director (arrancar, parar o consultar un servicio). El servicio de Tailscale se llama <code>tailscaled</code> (la <code>d</code> final significa <em>daemon</em>, un programa que corre en segundo plano sin que lo veas).
+<strong>Para qué sirve:</strong> comprobar y controlar que un servicio, como Tailscale, está corriendo.
+<strong>Dónde aparece en tu NAS real:</strong> en <strong>polypaw-nas</strong> usas <code>systemctl</code> para revisar Tailscale, Samba, Cockpit o Docker, y para que arranquen solos al encender el laptop.</p>
+<h3 id="que-significa-ups-sistema-de-alimentacion-ininterrumpida">🟦 ¿Que significa? — <em>UPS (Sistema de Alimentación Ininterrumpida)</em></h3>
+<p>Es una batería de emergencia que mantiene encendido un equipo durante un corte de luz, dándole tiempo de seguir funcionando o de apagarse sin perder datos.
+<strong>Para qué sirve:</strong> que un microcorte eléctrico no tumbe el servidor de golpe.
+<strong>Dónde aparece en tu NAS real:</strong> <strong>polypaw-nas</strong> es un laptop Acer Nitro, así que su propia batería interna actúa como UPS natural: ante un microcorte, sigue en línea sin apagarse.</p>
+<h3 id="en-tu-servidor">🔎 En tu servidor</h3>
+<p>En <strong>polypaw-nas</strong> puedes comprobar que Tailscale arranca solo al encender el laptop:
+<code>bash
+systemctl status tailscaled</code>
+Si dice <code>active (running)</code>, tu NAS estará disponible en la tailnet cada vez que lo enciendas, sin que tengas que tocar nada. Recuerda que su batería actúa como UPS natural, así que ante un microcorte de luz seguirá en línea.</p>
+</blockquote>
+<h2 id="6-la-ip-100x-la-direccion-dentro-de-la-tailnet">6. La IP 100.x: la dirección dentro de la tailnet</h2>
+<p>Cuando un dispositivo entra a tu tailnet, Tailscale le da una dirección nueva, distinta de su IP de casa. Esas direcciones empiezan por <code>100.</code></p>
+<blockquote class="def">
+<h3 id="que-significa-ip-100x-direccion-de-la-tailnet">🟦 ¿Que significa? — <em>IP 100.x (dirección de la tailnet)</em></h3>
+<p>Es una IP privada que Tailscale asigna a cada dispositivo de tu red mágica, dentro del rango <code>100.64.x.x</code> a <code>100.127.x.x</code>. Es estable: a polypaw-nas le toca siempre la misma mientras esté en tu cuenta.
+<strong>Para qué sirve:</strong> identificar a cada equipo dentro de la tailnet, sin importar dónde esté físicamente.
+<strong>Dónde aparece en tu NAS real:</strong> <strong>polypaw-nas</strong> tiene una IP como <code>100.x.y.z</code>. Escribiéndola desde tu teléfono (con Tailscale activo) llegas al NAS desde cualquier parte del mundo.</p>
+</blockquote>
+<p>Para ver la IP 100.x de tu propia máquina:</p>
+<pre><code class="language-bash">tailscale ip -4
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>La gracia de la IP 100.x es que <strong>no cambia aunque te muevas de red</strong>. Tu casa cambia de IP pública cada cierto tiempo, pero la <code>100.x</code> de polypaw-nas es estable. Apúntala o, mejor aún, usa MagicDNS para no tener que memorizarla (siguiente sección).</p>
+</blockquote>
+<h2 id="7-magicdns-llamar-a-tu-nas-por-su-nombre">7. MagicDNS: llamar a tu NAS por su nombre</h2>
+<p>Memorizar números como <code>100.84.31.7</code> es incómodo. Tailscale tiene una función para llamar a tus equipos por su nombre.</p>
+<blockquote class="def">
+<h3 id="que-significa-dns">🟦 ¿Que significa? — <em>DNS</em></h3>
+<p>Es la "agenda de contactos" de internet: traduce nombres fáciles (como <code>google.com</code>) a las direcciones IP numéricas que entienden las máquinas.
+<strong>Para qué sirve:</strong> que tú escribas nombres en vez de números difíciles de recordar.
+<strong>Dónde aparece en tu NAS real:</strong> ya conoces el DNS porque en polypaw-nas corre <strong>AdGuard Home</strong>, que es un DNS que además bloquea anuncios.</p>
+<h3 id="que-significa-magicdns">🟦 ¿Que significa? — <em>MagicDNS</em></h3>
+<p>Es la función de Tailscale que pone nombres automáticos a los dispositivos de tu tailnet. En vez de la IP <code>100.x</code>, puedes escribir directamente el nombre del equipo, por ejemplo <code>polypaw-nas</code>.
+<strong>Para qué sirve:</strong> acceder a tus equipos por nombre, sin memorizar números.
+<strong>Dónde aparece en tu NAS real:</strong> con MagicDNS activado, escribir <code>polypaw-nas</code> en tu navegador o explorador de archivos lleva directo a tu laptop Acer, esté donde esté.</p>
+</blockquote>
+<p>MagicDNS se activa con un clic en el panel web de Tailscale (en <code>login.tailscale.com</code>, sección DNS). Una vez activo, puedes probar desde otro dispositivo de tu tailnet:</p>
+<pre><code class="language-bash">ping polypaw-nas
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-ping">🟦 ¿Que significa? — <em>ping</em></h3>
+<p>Es un comando que envía un pequeño mensaje a otro equipo y espera respuesta, como decir "¿estás ahí?" y escuchar un "sí". Si contesta, hay conexión; si no, algo falla en el camino.
+<strong>Para qué sirve:</strong> comprobar de forma rápida si un dispositivo está accesible en la red.
+<strong>Dónde aparece en tu NAS real:</strong> lo usas para verificar que <strong>polypaw-nas</strong> responde por su nombre de MagicDNS desde otro equipo de tu tailnet.</p>
+</blockquote>
+<p>Si responde, el nombre ya funciona y olvidaste para siempre la IP numérica.</p>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>A partir de aquí, en todos los ejemplos puedes usar indistintamente la IP <code>100.x</code> o el nombre <code>polypaw-nas</code>. El nombre es más cómodo; la IP es el plan B si MagicDNS no estuviera activo.</p>
+</blockquote>
+<h2 id="8-por-que-tailscale-es-mas-seguro-que-abrir-puertos">8. Por qué Tailscale es más seguro que abrir puertos</h2>
+<p>Esta es la sección que más le importa a Bit. Comparemos las dos formas de llegar a tu NAS desde fuera.</p>
+<p><strong>Abrir puertos (lo que NO debes hacer):</strong> le dices al router que cualquiera de internet pueda tocar el puerto de Cockpit (9090) o de Samba de tu casa. Resultado: tu NAS queda visible y expuesto a todo internet. Robots automáticos lo encontrarán en minutos y probarán contraseñas sin parar. Una sola debilidad y entran.</p>
+<p><strong>Usar Tailscale (lo recomendado):</strong> tu NAS <strong>no abre ninguna puerta a internet</strong>. Solo es accesible para los dispositivos de tu tailnet, ya autenticados con tu cuenta y cifrados con WireGuard. Para el resto de internet, polypaw-nas es invisible: no existe.</p>
+<blockquote class="def">
+<h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
+<p>Es un "número de canal" dentro de un dispositivo de red. Cada servicio escucha en su puerto: Cockpit usa el 9090, Samba usa los suyos, un servidor web el 80 o el 443.
+<strong>Para qué sirve:</strong> distinguir varios servicios en una misma máquina, como apartados distintos en un mismo edificio.
+<strong>Dónde aparece en tu NAS real:</strong> en <strong>polypaw-nas</strong>, Cockpit escucha en el puerto <strong>9090</strong>. Con Tailscale, ese puerto solo es alcanzable desde tu tailnet, nunca desde internet abierto.</p>
+<h3 id="que-significa-superficie-de-ataque">🟦 ¿Que significa? — <em>Superficie de ataque</em></h3>
+<p>Es la cantidad de "puertas y ventanas" que un atacante podría intentar forzar. Cuantas menos, más seguro.
+<strong>Para qué sirve:</strong> medir tu riesgo. Menos puertos abiertos = menos superficie = menos riesgo.
+<strong>Dónde aparece en tu NAS real:</strong> al no abrir puertos y usar solo Tailscale, la superficie de ataque de polypaw-nas hacia internet es prácticamente cero.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Aunque uses Tailscale, <strong>las contraseñas fuertes siguen siendo obligatorias</strong>. Tailscale protege el camino, pero la cuenta de tu usuario en polypaw-nas, la de Samba y la de Cockpit deben tener contraseñas largas y únicas. Y protege con celo el acceso a tu cuenta de Tailscale (activa verificación en dos pasos): quien entre a tu cuenta entra a tu tailnet.</p>
+</blockquote>
+<h2 id="9-acceder-a-cockpit-por-tailscale">9. Acceder a Cockpit por Tailscale</h2>
+<p>Cockpit es el panel web con el que administras polypaw-nas desde el navegador. Recordemos qué es.</p>
+<blockquote class="def">
+<h3 id="que-significa-cockpit">🟦 ¿Que significa? — <em>Cockpit</em></h3>
+<p>Es un panel de administración con interfaz web para gestionar un servidor Linux: ver uso de CPU y RAM, discos, servicios, actualizaciones, todo desde el navegador.
+<strong>Para qué sirve:</strong> administrar el NAS sin escribir comandos, de forma visual.
+<strong>Dónde aparece en tu NAS real:</strong> en <strong>polypaw-nas</strong> corre en el puerto <strong>9090</strong> y es donde vigilas, por ejemplo, que la RAM de 8 GB no se quede corta.</p>
+</blockquote>
+<p>Estando fuera de casa, con Tailscale activo en tu teléfono o portátil, abre el navegador y escribe:</p>
+<pre><code>https://polypaw-nas:9090
+</code></pre>
+<p>O, si prefieres la IP de la tailnet:</p>
+<pre><code>https://100.x.y.z:9090
+</code></pre>
+<p>Y listo: entras a Cockpit como si estuvieras en el salón de tu casa. Inicias sesión con tu usuario de Ubuntu y administras el NAS desde donde estés.</p>
+<blockquote class="def">
+<h3 id="que-significa-docker-podman">🟦 ¿Que significa? — <em>Docker / Podman</em></h3>
+<p>Son herramientas de <strong>contenedores</strong>: empaquetan una aplicación con todo lo que necesita para funcionar, de forma aislada del resto del sistema. Docker es el más conocido; Podman hace lo mismo y es compatible, pero sin un servicio central corriendo siempre.
+<strong>Para qué sirve:</strong> instalar y mover programas sin que se peleen entre sí ni ensucien el sistema; ideal para un NAS donde conviven varios servicios.
+<strong>Dónde aparece en tu NAS real:</strong> en <strong>polypaw-nas</strong> puedes correr servicios como AdGuard Home dentro de contenedores Docker o Podman, cada uno en su propia "caja".</p>
+<h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
+<p>Desde Cockpit en <strong>polypaw-nas</strong>, lo primero que conviene revisar al entrar de forma remota es el panel de <strong>Overview</strong>: ahí ves la RAM. Como solo tienes 8 GB, si AdGuard Home, Cockpit, Docker/Podman y Samba coinciden con un análisis pesado, la memoria puede apretarse. Detectarlo a tiempo desde la cafetería te evita un susto.</p>
+<h3 id="que-significa-certificado-autofirmado">🟦 ¿Que significa? — <em>Certificado autofirmado</em></h3>
+<p>Un <strong>certificado</strong> es el carnet digital que usa una web para demostrar su identidad y cifrar la conexión <code>https</code>. Normalmente lo valida una autoridad externa de confianza. Uno <strong>autofirmado</strong> es el que el propio servidor se emite a sí mismo: el cifrado funciona igual, pero el navegador no conoce a quién lo firmó y por eso muestra un aviso.
+<strong>Para qué sirve:</strong> cifrar la conexión a Cockpit sin depender de una autoridad externa de pago.
+<strong>Dónde aparece en tu NAS real:</strong> Cockpit en <strong>polypaw-nas</strong> usa un certificado autofirmado; el aviso del navegador es esperable y, dentro de tu tailnet, la conexión sigue cifrada y segura.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Si el navegador te avisa de que el certificado no es de confianza al entrar por <code>https</code>, es normal: Cockpit usa un certificado propio (autofirmado) y la conexión va de todos modos cifrada y protegida dentro de tu tailnet. Acepta la excepción y continúa.</p>
+</blockquote>
+<h2 id="10-acceder-a-samba-por-tailscale">10. Acceder a Samba por Tailscale</h2>
+<p>Samba es el servicio que comparte tu carpeta de archivos en la red. Recordemos.</p>
+<blockquote class="def">
+<h3 id="que-significa-samba">🟦 ¿Que significa? — <em>Samba</em></h3>
+<p>Es el software que permite compartir carpetas entre computadoras como si fueran una unidad de red. Funciona con Windows, macOS y Linux.
+<strong>Para qué sirve:</strong> acceder a archivos del NAS desde otros equipos, arrastrar y soltar como en una carpeta normal.
+<strong>Dónde aparece en tu NAS real:</strong> en <strong>polypaw-nas</strong> tienes el recurso compartido <strong>PolyPawNAS</strong>, apuntado a tu HDD de 954 GB montado en <code>/srv/nas</code>.</p>
+<h3 id="que-significa-recurso-compartido-share">🟦 ¿Que significa? — <em>Recurso compartido (share)</em></h3>
+<p>Es una carpeta concreta que el servidor publica para que otros la usen por la red. Tiene un nombre y permisos.
+<strong>Para qué sirve:</strong> decidir qué parte del disco se comparte y quién puede entrar.
+<strong>Dónde aparece en tu NAS real:</strong> tu share se llama <strong>PolyPawNAS</strong> y vive en <code>/srv/nas</code>, en el HDD de 954 GB (no en el SSD de 238 GB del sistema).</p>
+</blockquote>
+<p>Desde fuera de casa, con Tailscale activo, conectas a Samba usando el nombre o la IP de la tailnet. En el explorador de archivos:</p>
+<ul>
+<li><strong>Windows:</strong> en la barra de direcciones escribe <code>\\polypaw-nas\PolyPawNAS</code></li>
+<li><strong>macOS:</strong> menú Ir → Conectar al servidor → <code>smb://polypaw-nas/PolyPawNAS</code></li>
+<li><strong>Linux:</strong> en el gestor de archivos → <code>smb://polypaw-nas/PolyPawNAS</code></li>
+</ul>
+<p>Si MagicDNS no estuviera activo, sustituye <code>polypaw-nas</code> por la IP <code>100.x.y.z</code>.</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Esto es justo lo que necesitas para respaldar y mover datos de tus proyectos. Por ejemplo, copiar a <code>/srv/nas</code> una versión de <strong>tunal-digital</strong>, <strong>PolyPaw</strong>, <strong>RachaSimple</strong> o <strong>Faro/Organizer</strong> mientras estás fuera, o recuperar un archivo que olvidaste. Todo viaja cifrado por la tailnet.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Samba por Tailscale es seguro porque va por el túnel cifrado y solo desde tu tailnet. Pero nunca, jamás, expongas Samba directamente a internet abriendo sus puertos en el router. Samba abierto a internet es de las cosas más peligrosas que puedes hacer con un NAS. Bit se desmaya solo de pensarlo.</p>
+</blockquote>
+<h2 id="11-buenas-costumbres-de-seguridad-y-respaldos">11. Buenas costumbres de seguridad y respaldos</h2>
+<p>Tailscale resuelve el acceso remoto, pero la seguridad es un conjunto de hábitos, no un solo botón.</p>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>Repasa esta lista mental cada cierto tiempo:
+- <strong>Contraseñas fuertes y únicas</strong> para tu usuario de Ubuntu, Samba y Cockpit.
+- <strong>Verificación en dos pasos</strong> en tu cuenta de Tailscale.
+- <strong>Nada de puertos abiertos</strong> en el router salvo que sea estrictamente necesario y sepas exactamente qué haces.
+- <strong>Actualiza</strong> polypaw-nas con regularidad (<code>sudo apt update &amp;&amp; sudo apt upgrade</code>).
+- <strong>Respaldos:</strong> tener los datos en <code>/srv/nas</code> no es un respaldo si solo existen ahí. Un HDD puede fallar. Mantén copias en otro disco o en la nube.</p>
+<h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
+<p>Si algún dispositivo se pierde o lo dejas de usar (un teléfono viejo, por ejemplo), entra al panel de Tailscale en <code>login.tailscale.com</code>, busca ese equipo y elimínalo de la tailnet. Así nadie podrá usar ese dispositivo robado o desechado para entrar a <strong>polypaw-nas</strong>. Mantener limpia la lista de dispositivos es parte de la higiene de seguridad.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo por qué desde fuera de casa no puedo llegar a polypaw-nas por su IP privada (por el NAT del router).</li>
+<li>[ ] Sé qué es una VPN y por qué crea un túnel cifrado entre mis dispositivos.</li>
+<li>[ ] Puedo explicar, a grandes rasgos, la relación entre Tailscale (el coche) y WireGuard (el motor).</li>
+<li>[ ] Sé qué es mi tailnet y qué dispositivos la forman.</li>
+<li>[ ] Reconozco la IP <code>100.x</code> y sé que es la dirección de polypaw-nas dentro de la tailnet.</li>
+<li>[ ] Entiendo qué hace MagicDNS y puedo llamar a mi NAS por el nombre <code>polypaw-nas</code>.</li>
+<li>[ ] Puedo explicar por qué Tailscale es más seguro que abrir puertos en el router.</li>
+<li>[ ] Sé acceder a Cockpit (puerto 9090) desde fuera de casa por Tailscale.</li>
+<li>[ ] Sé conectar al recurso compartido PolyPawNAS de Samba por Tailscale.</li>
+<li>[ ] Tengo presente que necesito contraseñas fuertes y respaldos aunque use Tailscale.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 <strong>Comprueba el estado de Tailscale en polypaw-nas.</strong> Ejecuta <code>tailscale status</code> y <code>systemctl status tailscaled</code>. Anota cuántos dispositivos hay en tu tailnet y confirma que el servicio aparece como <code>active (running)</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Encuentra tu IP 100.x.</strong> En polypaw-nas ejecuta <code>tailscale ip -4</code> y apunta la dirección. Luego comprueba con <code>tailscale status</code> que coincide con la que figura junto al nombre del NAS.</p>
+</li>
+<li>
+<p>💻 <strong>Prueba MagicDNS desde otro dispositivo.</strong> Con Tailscale activo en tu teléfono o portátil, ejecuta <code>ping polypaw-nas</code> (o intenta abrir <code>https://polypaw-nas:9090</code> en el navegador). Verifica que el nombre resuelve sin escribir la IP numérica.</p>
+</li>
+<li>
+<p>💻 <strong>Entra a Cockpit como si estuvieras fuera.</strong> Apaga el Wi-Fi de tu teléfono y usa solo datos móviles (para simular que estás en la calle). Con Tailscale activo, abre <code>https://polypaw-nas:9090</code>, inicia sesión y revisa la RAM de polypaw-nas en el panel Overview. ¿Cuánta memoria de los 8 GB está libre?</p>
+</li>
+<li>
+<p>💻 <strong>Conecta a Samba por la tailnet.</strong> Desde fuera de la red de casa (o simulándolo con datos móviles), conecta al recurso compartido <code>PolyPawNAS</code> usando <code>\\polypaw-nas\PolyPawNAS</code> o <code>smb://polypaw-nas/PolyPawNAS</code>. Copia un archivo pequeño de uno de tus repos (por ejemplo, de RachaSimple o Faro) a <code>/srv/nas</code> para practicar un respaldo remoto.</p>
+</li>
+<li>
+<p><strong>Explica con tus palabras</strong> (sin terminal): a un amigo que quiere "abrir el puerto 9090 de su router para entrar a su NAS desde el trabajo", convéncelo de usar Tailscale en su lugar. Menciona superficie de ataque, cifrado y qué pasa con los robots que escanean internet.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

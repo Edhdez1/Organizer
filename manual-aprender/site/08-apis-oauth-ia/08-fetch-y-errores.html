@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 08 — fetch a fondo y manejo de errores — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-08-fetch-a-fondo-y-manejo-de-errores">Capitulo 08 — fetch a fondo y manejo de errores</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>🐾 ¡Hola de nuevo! Soy <strong>Bit</strong>, tu ajolote programador. En el capítulo 06 vimos cómo viaja la información por internet (HTTP, peticiones, respuestas, códigos de estado) y en el módulo 03 ya jugaste con <code>fetch</code> de manera básica. Hoy abrimos el capó del coche: vamos a entender <code>fetch</code> por dentro, a pedir cosas a una API de verdad, y —muy importante— a manejar lo que pasa cuando algo sale mal. Porque en internet, créeme, las cosas salen mal con frecuencia. Usaremos como ejemplo real el chat de IA de <strong>tunal-digital</strong>, que habla con la API de Claude. ¡Vamos!</p>
+</blockquote>
+<hr />
+<h2 id="1-recordando-que-es-fetch">1. Recordando: ¿qué es <code>fetch</code>?</h2>
+<p>Antes de profundizar, recordemos al protagonista de este capítulo.</p>
+<blockquote class="def">
+<h3 id="que-significa-fetch">🟦 ¿Que significa? — <em>fetch</em></h3>
+<p><code>fetch</code> es una función que ya viene incluida en el navegador (no hay que instalar nada). <strong>Sirve para</strong> pedir datos a un servidor por internet sin recargar la página: tú le das una dirección (URL), opcionalmente le explicas cómo quieres hacer la petición, y te devuelve la respuesta. <strong>Dónde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, cuando el visitante escribe un mensaje en el chat, el JavaScript del navegador usa <code>fetch</code> para enviar ese texto a un Cloudflare Worker, que a su vez habla con la API de Claude.</p>
+</blockquote>
+<p>La forma más sencilla de usar <code>fetch</code> es darle solo una URL:</p>
+<pre><code class="language-javascript">// La versión más simple: solo una URL
+fetch(&quot;https://api.ejemplo.com/datos&quot;);
+</code></pre>
+<p>Pero esto se queda corto. La mayoría de las APIs necesitan que les digamos <strong>cómo</strong> queremos hablarles: con qué verbo HTTP, qué información de cabecera enviamos, y qué datos mandamos en el cuerpo. Para eso, <code>fetch</code> acepta un <strong>segundo argumento</strong>: un objeto de configuración. Eso es lo que veremos en la sección 2.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Recuerda del capítulo 06: una petición HTTP es como enviar una carta. La URL es la dirección, el método es lo que quieres hacer (leer, crear, borrar), las cabeceras son notas en el sobre, y el cuerpo es el contenido de la carta. <code>fetch</code> es simplemente quien lleva la carta al correo.</p>
+</blockquote>
+<hr />
+<h2 id="2-fetch-completo-method-headers-y-body">2. <code>fetch</code> completo: method, headers y body</h2>
+<p>Veamos una llamada <code>fetch</code> "de verdad", parecida a la que hace tunal-digital para enviar un mensaje al chat:</p>
+<pre><code class="language-javascript">fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+  method: &quot;POST&quot;,
+  headers: {
+    &quot;Content-Type&quot;: &quot;application/json&quot;
+  },
+  body: JSON.stringify({
+    mensaje: &quot;Hola, ¿qué servicios ofrecen?&quot;
+  })
+});
+</code></pre>
+<p>Aquí pasamos un segundo argumento: un objeto con tres campos clave. Vamos uno por uno.</p>
+<h3 id="el-method">El <code>method</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-metodo-http">🟦 ¿Que significa? — <em>método HTTP</em></h3>
+<p>El <strong>método</strong> (o verbo) le dice al servidor qué tipo de acción queremos. Los más comunes son <code>GET</code> (leer datos), <code>POST</code> (enviar/crear datos), <code>PUT</code> (reemplazar), <code>DELETE</code> (borrar). <strong>Sirve para</strong> que el servidor sepa tu intención. <strong>Dónde se usa:</strong> el chat de tunal-digital usa <code>POST</code> porque está <strong>enviando</strong> el mensaje del usuario al Worker. Si solo <code>fetch(url)</code> sin método, por defecto es <code>GET</code>.</p>
+</blockquote>
+<h3 id="los-headers">Los <code>headers</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-headers-cabeceras">🟦 ¿Que significa? — <em>headers (cabeceras)</em></h3>
+<p>Los <strong>headers</strong> son pares de "etiqueta: valor" que acompañan a tu petición con información adicional sobre ella. <strong>Sirven para</strong> indicar cosas como el tipo de contenido que envías, idioma, autenticación, etc. <strong>Dónde se usa:</strong> en tunal-digital el navegador envía <code>Content-Type: application/json</code> para avisar "lo que mando en el cuerpo es JSON". La clave secreta de Claude <strong>NO</strong> va aquí en el navegador; eso lo veremos en la sección 7.</p>
+</blockquote>
+<h3 id="el-body">El <code>body</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-body-cuerpo">🟦 ¿Que significa? — <em>body (cuerpo)</em></h3>
+<p>El <strong>body</strong> es el contenido principal que envías en la petición: los datos en sí. <strong>Sirve para</strong> transportar la información que el servidor necesita (un formulario, un mensaje, un JSON...). <strong>Dónde se usa:</strong> en el chat, el body lleva el texto que escribió el visitante. Solo se usa con métodos como <code>POST</code> o <code>PUT</code>; un <code>GET</code> normalmente no lleva body.</p>
+</blockquote>
+<h3 id="jsonstringify-del-objeto-al-texto"><code>JSON.stringify</code>: del objeto al texto</h3>
+<p>Fíjate que el body no es directamente el objeto <code>{ mensaje: "..." }</code>. Está envuelto en <code>JSON.stringify(...)</code>. ¿Por qué?</p>
+<blockquote class="def">
+<h3 id="que-significa-jsonstringify">🟦 ¿Que significa? — <em>JSON.stringify</em></h3>
+<p><code>JSON.stringify</code> convierte un objeto de JavaScript en <strong>texto</strong> con formato JSON. <strong>Sirve porque</strong> internet transporta texto, no objetos de JavaScript: hay que "aplanar" el objeto a una cadena antes de enviarlo. <strong>Dónde se usa:</strong> tunal-digital convierte <code>{ mensaje: "..." }</code> en el texto <code>{"mensaje":"..."}</code> justo antes de mandarlo en el body.</p>
+</blockquote>
+<pre><code class="language-javascript">const datos = { mensaje: &quot;Hola&quot; };
+
+console.log(datos);                 // un objeto de JavaScript
+console.log(JSON.stringify(datos)); // el texto:  {&quot;mensaje&quot;:&quot;Hola&quot;}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pones un objeto directamente en el body sin <code>JSON.stringify</code>, JavaScript lo convierte en el texto inútil <code>"[object Object]"</code> y el servidor no entenderá nada. Casi siempre que el <code>Content-Type</code> es <code>application/json</code>, el body debe pasar por <code>JSON.stringify</code>.</p>
+</blockquote>
+<hr />
+<h2 id="3-la-respuesta-es-una-promise-asyncawait">3. La respuesta es una Promise: <code>async</code>/<code>await</code></h2>
+<p>Aquí viene un concepto importante. <code>fetch</code> <strong>no te devuelve los datos de inmediato</strong>. Pedir algo por internet toma tiempo (milisegundos, a veces segundos), y JavaScript no se queda congelado esperando. En lugar de eso, <code>fetch</code> te devuelve una <strong>promesa</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-promise-promesa">🟦 ¿Que significa? — <em>Promise (promesa)</em></h3>
+<p>Una <strong>Promise</strong> es un objeto que representa un resultado que <strong>todavía no está listo, pero llegará</strong> (o fallará) en el futuro. <strong>Sirve para</strong> manejar tareas que tardan, como pedir datos por internet, sin congelar el programa. <strong>Dónde se usa:</strong> cada <code>fetch</code> de tunal-digital devuelve una promesa que se "resuelve" cuando el Worker responde. Piensa en ella como un ticket del guardarropa: aún no tienes el abrigo, pero tienes la promesa de recogerlo.</p>
+</blockquote>
+<p>Para trabajar con promesas de forma cómoda y legible, usamos <code>async</code> y <code>await</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-asyncawait">🟦 ¿Que significa? — <em>async/await</em></h3>
+<p><code>async</code> es una palabra que pones antes de una función para avisar "esta función hace tareas que tardan". Dentro de ella puedes usar <code>await</code>, que significa "<strong>espera</strong> aquí hasta que la promesa termine, y dame el resultado". <strong>Sirve para</strong> escribir código asíncrono que se lee de arriba abajo, como si fuera normal. <strong>Dónde se usa:</strong> la función que envía el mensaje del chat en tunal-digital es <code>async</code>, y usa <code>await fetch(...)</code> para esperar la respuesta del Worker.</p>
+</blockquote>
+<p>Veamos la diferencia. Sin <code>await</code>, tienes una promesa "cruda":</p>
+<pre><code class="language-javascript">const promesa = fetch(&quot;https://chat.tunal-digital.workers.dev&quot;);
+console.log(promesa); // Promise { &lt;pending&gt; } — ¡aún no hay datos!
+</code></pre>
+<p>Con <code>await</code>, esperas el resultado real:</p>
+<pre><code class="language-javascript">async function enviarMensaje(texto) {
+  // await: &quot;espera a que llegue la respuesta antes de seguir&quot;
+  const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+    method: &quot;POST&quot;,
+    headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+    body: JSON.stringify({ mensaje: texto })
+  });
+
+  // Aquí 'respuesta' ya es la respuesta real del servidor
+  const datos = await respuesta.json();
+  console.log(datos);
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Solo puedes usar <code>await</code> dentro de una función marcada con <code>async</code>. Si intentas usar <code>await</code> "suelto" fuera de una función async, JavaScript te dará un error. Por eso casi siempre envolvemos nuestra lógica de <code>fetch</code> en una función <code>async</code>.</p>
+</blockquote>
+<h3 id="respuestajson-tambien-es-una-promesa"><code>respuesta.json()</code> también es una promesa</h3>
+<p>¿Notaste el segundo <code>await</code> en <code>respuesta.json()</code>? Leer y procesar el cuerpo de la respuesta también toma tiempo, así que también devuelve una promesa.</p>
+<blockquote class="def">
+<h3 id="que-significa-jsonparse">🟦 ¿Que significa? — <em>JSON.parse</em></h3>
+<p><code>JSON.parse</code> hace lo contrario de <code>JSON.stringify</code>: convierte un <strong>texto</strong> en formato JSON de vuelta a un <strong>objeto</strong> de JavaScript usable. <strong>Sirve para</strong> entender la respuesta del servidor (que llega como texto) como datos que puedes recorrer. <strong>Dónde se usa:</strong> el método <code>respuesta.json()</code> que usa tunal-digital internamente hace un <code>JSON.parse</code> por ti para devolverte la respuesta de Claude como objeto.</p>
+</blockquote>
+<pre><code class="language-javascript">const texto = '{&quot;respuesta&quot;:&quot;¡Hola! Ofrecemos diseño web.&quot;}';
+const objeto = JSON.parse(texto);
+console.log(objeto.respuesta); // &quot;¡Hola! Ofrecemos diseño web.&quot;
+</code></pre>
+<hr />
+<h2 id="4-salio-bien-responseok-y-responsestatus">4. ¿Salió bien? <code>response.ok</code> y <code>response.status</code></h2>
+<p>Aquí hay una trampa que sorprende a casi todos los principiantes:</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>fetch</code> <strong>NO falla</strong> cuando el servidor responde con un error como 404 (no encontrado) o 500 (error del servidor). Para <code>fetch</code>, "el servidor me contestó algo" ya cuenta como éxito, aunque ese algo sea un error. Tú tienes que revisar <strong>a mano</strong> si la respuesta fue buena.</p>
+</blockquote>
+<p>Para eso existen dos propiedades de la respuesta.</p>
+<blockquote class="def">
+<h3 id="que-significa-codigo-de-estado">🟦 ¿Que significa? — <em>código de estado</em></h3>
+<p>Un <strong>código de estado</strong> es un número de tres cifras que el servidor pone en su respuesta para resumir qué pasó. Del capítulo 06: 200 = todo bien, 400 = pediste algo mal, 401 = no autorizado, 404 = no existe, 429 = demasiadas peticiones, 500 = el servidor reventó. <strong>Sirve para</strong> saber de un vistazo el resultado. <strong>Dónde se usa:</strong> si la API de Claude responde 429 (límite de uso) al Worker de tunal-digital, ese código viaja de vuelta para que el navegador muestre un aviso amable.</p>
+<h3 id="que-significa-responsestatus">🟦 ¿Que significa? — <em>response.status</em></h3>
+<p><code>response.status</code> es la propiedad que contiene ese número de código de estado de la respuesta. <strong>Sirve para</strong> revisar el resultado exacto y decidir qué hacer. <strong>Dónde se usa:</strong> tunal-digital puede mirar <code>respuesta.status</code> para distinguir entre "te pasaste del límite" (429) y "algo se rompió en el servidor" (500).</p>
+<h3 id="que-significa-responseok">🟦 ¿Que significa? — <em>response.ok</em></h3>
+<p><code>response.ok</code> es un atajo: vale <code>true</code> si el código de estado está entre 200 y 299 (es decir, "todo bien"), y <code>false</code> en cualquier otro caso. <strong>Sirve para</strong> comprobar rápido si la petición tuvo éxito sin memorizar todos los números. <strong>Dónde se usa:</strong> el chat de tunal-digital comprueba <code>if (!respuesta.ok)</code> antes de intentar leer la respuesta de Claude.</p>
+</blockquote>
+<p>Así se ve la comprobación correcta:</p>
+<pre><code class="language-javascript">async function enviarMensaje(texto) {
+  const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+    method: &quot;POST&quot;,
+    headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+    body: JSON.stringify({ mensaje: texto })
+  });
+
+  // ¿El servidor respondió con un código de éxito (200-299)?
+  if (!respuesta.ok) {
+    console.log(&quot;Algo salió mal. Código:&quot;, respuesta.status);
+    return; // no seguimos leyendo
+  }
+
+  const datos = await respuesta.json();
+  return datos.respuesta;
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En tunal-digital, distinguir entre códigos te permite dar mensajes útiles al visitante: un 429 ("Estamos recibiendo muchos mensajes, intenta en un momento") suena muy distinto a un 500 ("Hubo un problema técnico"). El mismo aviso genérico para todo confunde al usuario.</p>
+</blockquote>
+<hr />
+<h2 id="5-dos-tipos-de-error-de-red-y-de-api">5. Dos tipos de error: de red y de API</h2>
+<p>Cuando hablamos con una API, las cosas pueden fallar de <strong>dos maneras muy distintas</strong>. Entender la diferencia es clave.</p>
+<blockquote class="def">
+<h3 id="que-significa-error-de-red-vs-error-de-api">🟦 ¿Que significa? — <em>error de red vs error de API</em></h3>
+<p>Un <strong>error de red</strong> es cuando la petición ni siquiera <strong>llega</strong> al servidor o no vuelve: no hay internet, el servidor está caído, el dominio no existe, o se cae la conexión. En este caso, <code>fetch</code> <strong>sí lanza una excepción</strong>. Un <strong>error de API</strong> es cuando la petición <strong>sí llegó</strong> y el servidor te contestó, pero con un código de error (404, 401, 500...). Aquí <code>fetch</code> <strong>no lanza nada</strong>; lo detectas con <code>response.ok</code>. <strong>Dónde se usa:</strong> en tunal-digital, "no hay wifi" es error de red; "Claude rechazó la clave" (401) es error de API.</p>
+</blockquote>
+<p>Resumen rápido para que no se te olvide:</p>
+<ul>
+<li><strong>Error de red</strong> → <code>fetch</code> explota → lo atrapas con <code>try/catch</code>.</li>
+<li><strong>Error de API</strong> → <code>fetch</code> no explota → lo detectas con <code>if (!respuesta.ok)</code>.</li>
+</ul>
+<p>Necesitamos manejar <strong>ambos</strong>. Para los errores de red, usamos <code>try/catch</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-trycatch">🟦 ¿Que significa? — <em>try/catch</em></h3>
+<p><code>try/catch</code> es una estructura para capturar errores sin que el programa se rompa. Pones el código que <strong>podría</strong> fallar dentro de <code>try { ... }</code>, y si algo lanza un error, salta automáticamente al bloque <code>catch (error) { ... }</code>, donde decides qué hacer. <strong>Sirve para</strong> que un fallo (como perder internet) no congele toda la página. <strong>Dónde se usa:</strong> el chat de tunal-digital envuelve su <code>fetch</code> en <code>try/catch</code> para que, si se cae la conexión, muestre "No pudimos conectar" en lugar de quedarse colgado.</p>
+</blockquote>
+<p>Juntando todo, un manejo completo se ve así:</p>
+<pre><code class="language-javascript">async function enviarMensaje(texto) {
+  try {
+    const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+      method: &quot;POST&quot;,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ mensaje: texto })
+    });
+
+    // --- Error de API: llegó, pero el servidor dice que no ---
+    if (!respuesta.ok) {
+      if (respuesta.status === 429) {
+        return &quot;Estamos recibiendo muchos mensajes. Intenta en un momento.&quot;;
+      }
+      return &quot;Hubo un problema técnico. Intenta más tarde.&quot;;
+    }
+
+    const datos = await respuesta.json();
+    return datos.respuesta;
+
+  } catch (error) {
+    // --- Error de red: ni siquiera pudimos hablar con el servidor ---
+    console.log(&quot;Error de red:&quot;, error);
+    return &quot;No pudimos conectar. Revisa tu conexión a internet.&quot;;
+  }
+}
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Una buena regla mental: el <code>try/catch</code> rodea <strong>todo</strong> el <code>fetch</code>, y dentro del <code>try</code> revisas <code>response.ok</code>. Así cubres los dos mundos: la red (catch) y la API (el <code>if</code>).</p>
+</blockquote>
+<hr />
+<h2 id="6-timeouts-abortcontroller-y-reintentos-a-grandes-rasgos">6. Timeouts, AbortController y reintentos (a grandes rasgos)</h2>
+<p>¿Qué pasa si el servidor no se cae... pero tarda muchísimo? El usuario se queda mirando un "cargando" eterno. Para eso existen los <strong>timeouts</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-timeout-tiempo-limite">🟦 ¿Que significa? — <em>timeout (tiempo límite)</em></h3>
+<p>Un <strong>timeout</strong> es un tiempo máximo que estás dispuesto a esperar una respuesta. Si se cumple y la respuesta no llegó, cancelas la petición. <strong>Sirve para</strong> no dejar al usuario esperando para siempre cuando algo va muy lento. <strong>Dónde se usa:</strong> tunal-digital podría poner un límite de, digamos, 20 segundos para la respuesta de Claude; si tarda más, avisa al visitante en vez de colgarse.</p>
+</blockquote>
+<p>Pero <code>fetch</code> no tiene un botón de "cancelar" por sí solo. Para cancelarlo necesitamos una herramienta especial.</p>
+<blockquote class="def">
+<h3 id="que-significa-abortcontroller">🟦 ¿Que significa? — <em>AbortController</em></h3>
+<p><code>AbortController</code> es un objeto del navegador que actúa como un <strong>interruptor de cancelación</strong>. Lo creas, le pasas su <code>signal</code> a <code>fetch</code>, y cuando llamas a <code>controller.abort()</code>, la petición se cancela. <strong>Sirve para</strong> poder detener un <code>fetch</code> que ya no quieres (porque tardó demasiado o el usuario cambió de pantalla). <strong>Dónde se usa:</strong> combinándolo con un temporizador, tunal-digital puede abortar la llamada a Claude si se pasa del tiempo límite.</p>
+<h3 id="que-significa-signal">🟦 ¿Que significa? — <em>signal</em></h3>
+<p>El <code>signal</code> es la "antena" que el <code>AbortController</code> le entrega a <code>fetch</code>. <strong>Sirve para</strong> que <code>fetch</code> escuche la orden de cancelar: si el controller dispara <code>abort()</code>, la <code>signal</code> avisa a <code>fetch</code> y este se detiene, lanzando un error que puedes atrapar. <strong>Dónde se usa:</strong> se pasa como una opción más en la configuración del <code>fetch</code>: <code>{ signal: controller.signal }</code>.</p>
+</blockquote>
+<p>Veamos un timeout con <code>AbortController</code>:</p>
+<pre><code class="language-javascript">async function enviarConTimeout(texto, milisegundos = 20000) {
+  const controller = new AbortController();
+
+  // Programa la cancelación: si pasan los milisegundos, aborta
+  const temporizador = setTimeout(() =&gt; controller.abort(), milisegundos);
+
+  try {
+    const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+      method: &quot;POST&quot;,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ mensaje: texto }),
+      signal: controller.signal // &lt;- aquí conectamos el interruptor
+    });
+
+    clearTimeout(temporizador); // llegó a tiempo: cancela el temporizador
+    return await respuesta.json();
+
+  } catch (error) {
+    clearTimeout(temporizador);
+    if (error.name === &quot;AbortError&quot;) {
+      return &quot;La respuesta tardó demasiado. Intenta de nuevo.&quot;;
+    }
+    return &quot;Error de conexión.&quot;;
+  }
+}
+</code></pre>
+<h3 id="reintentos-y-backoff">Reintentos y backoff</h3>
+<p>A veces un error es <strong>pasajero</strong>: una conexión que parpadeó, o un 429 momentáneo. En esos casos puede valer la pena <strong>volver a intentar</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-reintento-retry">🟦 ¿Que significa? — <em>reintento (retry)</em></h3>
+<p>Un <strong>reintento</strong> es volver a hacer la misma petición automáticamente cuando falló, con la esperanza de que la segunda vez funcione. <strong>Sirve para</strong> superar fallos temporales sin molestar al usuario. <strong>Dónde se usa:</strong> si la API de Claude devuelve un 429 ocasional, tunal-digital podría reintentar una o dos veces antes de rendirse.</p>
+<h3 id="que-significa-backoff">🟦 ¿Que significa? — <em>backoff</em></h3>
+<p><strong>Backoff</strong> es la idea de <strong>esperar cada vez más</strong> entre reintentos: primero 1 segundo, luego 2, luego 4... <strong>Sirve para</strong> no bombardear a un servidor que ya está saturado (lo cual empeoraría las cosas). <strong>Dónde se usa:</strong> un reintento educado ante un 429 espera un poco más en cada intento, dándole aire al servidor.</p>
+</blockquote>
+<pre><code class="language-javascript">async function enviarConReintentos(texto, intentos = 3) {
+  for (let i = 0; i &lt; intentos; i++) {
+    try {
+      const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+        method: &quot;POST&quot;,
+        headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+        body: JSON.stringify({ mensaje: texto })
+      });
+
+      if (respuesta.ok) {
+        return await respuesta.json(); // ¡éxito!
+      }
+      // si no fue ok, caemos abajo y reintentamos (si quedan intentos)
+    } catch (error) {
+      // error de red: también reintentamos
+    }
+
+    // backoff: esperar más en cada vuelta (1s, 2s, 4s...)
+    const espera = 1000 * Math.pow(2, i);
+    await new Promise(r =&gt; setTimeout(r, espera));
+  }
+
+  return &quot;No pudimos obtener respuesta tras varios intentos.&quot;;
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>No reintentes <strong>todo</strong>. Un error 400 ("pediste mal") o 401 ("clave inválida") <strong>no</strong> se arregla repitiendo: vas a fallar igual y desperdiciar recursos. Los reintentos tienen sentido sobre todo para errores de red y para 429/500 (cosas temporales).</p>
+</blockquote>
+<hr />
+<h2 id="7-el-patron-real-de-tunal-digital-navegador-worker-claude">7. El patrón real de tunal-digital: navegador → Worker → Claude</h2>
+<p>Ahora la pieza más importante de todo el capítulo. Quizá te preguntes: <em>"Bit, si quiero hablar con la API de Claude, ¿por qué no hago <code>fetch</code> directo a la API desde el navegador?"</em> La respuesta es una sola palabra: <strong>seguridad</strong>.</p>
+<p>Para usar la API de Claude necesitas una <strong>clave secreta</strong> (una API key). Esa clave es como la contraseña de tu cuenta: quien la tenga puede gastar tu dinero. Y aquí está el problema:</p>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p><strong>TODO el código JavaScript que corre en el navegador es visible para cualquiera.</strong> Basta con abrir las herramientas de desarrollador (F12) para leerlo. Si pones tu clave de Claude en el JavaScript del navegador, la estás <strong>regalando</strong> al mundo entero. Cualquiera podría copiarla y gastar tu cuota.</p>
+</blockquote>
+<p>Por eso tunal-digital usa un intermediario en el servidor: un <strong>Cloudflare Worker</strong>. El flujo es:</p>
+<pre><code>[Navegador del visitante]
+        |  fetch (POST con el mensaje, SIN clave)
+        v
+[Cloudflare Worker]  &lt;-- aquí vive la clave secreta, oculta
+        |  fetch a la API de Claude (CON la clave en los headers)
+        v
+[API de Claude / Anthropic]
+        |  respuesta
+        v
+[Worker] --&gt; [Navegador]  (le devuelve solo el texto de la respuesta)
+</code></pre>
+<p>El navegador nunca ve la clave. El Worker la guarda en una variable de entorno secreta (en Cloudflare), la añade a los headers de <strong>su</strong> <code>fetch</code> hacia Claude, recibe la respuesta y le pasa al navegador <strong>solo lo necesario</strong>.</p>
+<p>Así se ve, simplificado, el <code>fetch</code> que hace el <strong>Worker</strong> (este código corre en el servidor, no en el navegador):</p>
+<pre><code class="language-javascript">// ESTO CORRE EN EL CLOUDFLARE WORKER (servidor), no en el navegador
+async function llamarAClaude(mensajeDelUsuario, env) {
+  const respuesta = await fetch(&quot;https://api.anthropic.com/v1/messages&quot;, {
+    method: &quot;POST&quot;,
+    headers: {
+      &quot;Content-Type&quot;: &quot;application/json&quot;,
+      // La clave vive SOLO aquí, en el servidor, leída de una variable secreta:
+      &quot;x-api-key&quot;: env.ANTHROPIC_API_KEY,
+      &quot;anthropic-version&quot;: &quot;2023-06-01&quot;
+    },
+    body: JSON.stringify({
+      model: &quot;claude-sonnet-4-5&quot;,
+      max_tokens: 1024,
+      messages: [{ role: &quot;user&quot;, content: mensajeDelUsuario }]
+    })
+  });
+
+  const datos = await respuesta.json();
+  return datos; // el Worker decide qué parte devolver al navegador
+}
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Fíjate en la simetría: el navegador hace <code>fetch</code> al Worker, y el Worker hace <strong>otro</strong> <code>fetch</code> a Claude. Es la misma herramienta (<code>fetch</code>) en dos lugares distintos. La diferencia crucial es <strong>dónde está la clave</strong>: solo en el segundo <code>fetch</code>, el que corre en el servidor. Esta misma filosofía la usa Faro/Organizer: las claves de OpenAI viven en el servidor de Next.js, nunca en el cliente.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Regla de oro para todo el módulo: <strong>las claves secretas nunca tocan el navegador.</strong> Si una API necesita una clave, pon un pequeño servidor (un Worker, una función serverless, una ruta de API) en medio que la guarde. El navegador habla con tu servidor; tu servidor habla con la API.</p>
+</blockquote>
+<hr />
+<h2 id="8-poniendolo-todo-junto">8. Poniéndolo todo junto</h2>
+<p>Mira cómo encaja la pieza del navegador con todo lo aprendido. Este es el código del <strong>lado del cliente</strong> de tunal-digital, con manejo de errores incluido:</p>
+<pre><code class="language-javascript">async function enviarMensajeAlChat(texto) {
+  const controller = new AbortController();
+  const temporizador = setTimeout(() =&gt; controller.abort(), 20000);
+
+  try {
+    const respuesta = await fetch(&quot;https://chat.tunal-digital.workers.dev&quot;, {
+      method: &quot;POST&quot;,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ mensaje: texto }),
+      signal: controller.signal
+    });
+    clearTimeout(temporizador);
+
+    // Error de API
+    if (!respuesta.ok) {
+      if (respuesta.status === 429) {
+        return &quot;Muchos mensajes ahora mismo. Intenta en un momento.&quot;;
+      }
+      return &quot;Hubo un problema técnico. Intenta más tarde.&quot;;
+    }
+
+    const datos = await respuesta.json();
+    return datos.respuesta;
+
+  } catch (error) {
+    clearTimeout(temporizador);
+    // Error de red o timeout
+    if (error.name === &quot;AbortError&quot;) {
+      return &quot;La respuesta tardó demasiado.&quot;;
+    }
+    return &quot;No pudimos conectar. Revisa tu internet.&quot;;
+  }
+}
+</code></pre>
+<p>Si entiendes este bloque línea por línea, ya dominas lo esencial de este capítulo. Tiene: <code>fetch</code> completo (method, headers, body con <code>JSON.stringify</code>), <code>async</code>/<code>await</code>, comprobación de <code>response.ok</code> y <code>response.status</code>, manejo separado de errores de API y de red, y un timeout con <code>AbortController</code> y <code>signal</code>. ¡Todo lo de hoy en una sola función!</p>
+<blockquote>
+<p>🐾 Bit dice: no memorices el código, <strong>memoriza las preguntas</strong>. Ante cada <code>fetch</code> pregúntate: ¿qué método? ¿qué headers? ¿hay body (y lo paso por <code>JSON.stringify</code>)? ¿revisé <code>response.ok</code>? ¿qué hago si falla la red? ¿dónde está la clave secreta (ojalá NO en el navegador)? Si respondes esas seis, estás listo.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Sé que <code>fetch</code> recibe una URL y, opcionalmente, un objeto con <code>method</code>, <code>headers</code> y <code>body</code>.</li>
+<li>[ ] Entiendo que el <code>body</code> con JSON debe pasar por <code>JSON.stringify</code> antes de enviarse.</li>
+<li>[ ] Sé que <code>fetch</code> devuelve una <strong>Promise</strong> y que uso <code>async</code>/<code>await</code> para esperar la respuesta.</li>
+<li>[ ] Entiendo que <code>respuesta.json()</code> también devuelve una promesa (por eso lleva su propio <code>await</code>).</li>
+<li>[ ] Reviso <code>response.ok</code> y <code>response.status</code> para saber si la petición tuvo éxito.</li>
+<li>[ ] Sé que <code>fetch</code> <strong>no</strong> lanza error en un 404 o 500; eso lo detecto yo con <code>response.ok</code>.</li>
+<li>[ ] Distingo un <strong>error de red</strong> (se atrapa con <code>try/catch</code>) de un <strong>error de API</strong> (se detecta con <code>if (!respuesta.ok)</code>).</li>
+<li>[ ] Conozco la idea de <strong>timeout</strong> y sé que se implementa con <code>AbortController</code> y su <code>signal</code>.</li>
+<li>[ ] Entiendo qué son los <strong>reintentos</strong> y el <strong>backoff</strong>, y cuándo NO conviene reintentar.</li>
+<li>[ ] Tengo grabado que las <strong>claves secretas viven en el servidor (el Worker)</strong>, jamás en el navegador.</li>
+<li>[ ] Puedo explicar el flujo navegador → Cloudflare Worker → API de Claude de tunal-digital.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>(en papel)</strong> Dibuja el flujo de un mensaje del chat de tunal-digital desde que el visitante presiona "Enviar" hasta que ve la respuesta. Marca con un círculo el único lugar donde aparece la clave secreta de Claude. Explica con tus palabras por qué no puede ir en el navegador.</p>
+</li>
+<li>
+<p><strong>(en papel)</strong> Para cada situación, escribe si es <strong>error de red</strong> o <strong>error de API</strong>, y cómo lo detectarías (<code>try/catch</code> o <code>response.ok</code>):
+   - El usuario se quedó sin wifi.
+   - La API responde 401 porque la clave es inválida.
+   - La API responde 429 por demasiadas peticiones.
+   - El dominio del Worker está mal escrito y no existe.</p>
+</li>
+<li>
+<p>💻 Escribe una función <code>async</code> llamada <code>pedirChiste()</code> que haga <code>fetch</code> a <code>https://api.chucknorris.io/jokes/random</code>, revise <code>response.ok</code>, y si todo va bien imprima en consola el campo <code>value</code> de la respuesta. Si no, imprime el <code>status</code>. Envuélvelo en <code>try/catch</code>.</p>
+</li>
+<li>
+<p>💻 Toma la función del ejercicio 3 y añádele un <strong>timeout de 5 segundos</strong> usando <code>AbortController</code> y <code>signal</code>. Si la petición se aborta, imprime "Tardó demasiado". Pista: revisa <code>error.name === "AbortError"</code> en el <code>catch</code>.</p>
+</li>
+<li>
+<p>💻 Crea una función <code>enviarDatos(objeto)</code> que haga un <code>POST</code> a una URL de prueba (puedes usar <code>https://httpbin.org/post</code>), enviando <code>objeto</code> en el body con <code>JSON.stringify</code> y el header <code>Content-Type: application/json</code>. Imprime la respuesta con <code>respuesta.json()</code>. Comprueba en la respuesta de httpbin que tus datos llegaron tal cual.</p>
+</li>
+<li>
+<p>💻 <strong>(reto)</strong> Implementa una función <code>fetchConReintentos(url, intentos)</code> con <strong>backoff</strong>: si falla (red o <code>response.ok</code> falso), espera 1s, luego 2s, luego 4s antes de reintentar, hasta agotar los <code>intentos</code>. NO reintentes si el <code>status</code> es 400 o 401 (esos no se arreglan repitiendo). Devuelve los datos si tiene éxito o un mensaje de fallo si no.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>🐾 ¡Lo lograste! Ahora <code>fetch</code> ya no es una caja negra: sabes pedir bien, esperar con <code>async</code>/<code>await</code>, distinguir los fallos de red de los de la API, cancelar lo que tarda demasiado y, sobre todo, <strong>proteger tus claves</strong> poniéndolas en el servidor. En el próximo capítulo seguiremos construyendo sobre esto. Nos vemos. — Bit 🪶</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

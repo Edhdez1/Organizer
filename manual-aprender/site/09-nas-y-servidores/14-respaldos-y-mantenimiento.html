@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 14 — Respaldos, mantenimiento y seguridad — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-respaldos-mantenimiento-y-seguridad">Capitulo 14 — Respaldos, mantenimiento y seguridad</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora montaste tu <code>polypaw-nas</code>, compartiste carpetas con Samba, abriste Cockpit y entraste desde lejos con Tailscale. Felicidades: tienes un servidor casero de verdad. Pero un servidor es como una mascota (hola, Bit el ajolote): no basta con adoptarlo, hay que cuidarlo. En este capitulo vamos a darle de comer respaldos, peinarle las actualizaciones, ponerle un collar de seguridad y enseñarle a aguantar un apagon. Nada de magia: comandos sencillos, explicados uno por uno, para que tu Acer Nitro siga vivo y sano por años.</p>
+</blockquote>
+<hr />
+<h2 id="1-por-que-importa-cuidar-tu-nas">1. Por que importa cuidar tu NAS</h2>
+<p>Tu <code>polypaw-nas</code> es un laptop Acer Nitro AN515-54 con un SSD de 238 GB para Ubuntu Server 26.04 y un HDD de 954 GB montado en <code>/srv/nas</code> para tus datos. Ahi viven cosas que te importan: copias de tus repos como <code>tunal-digital</code>, <code>PolyPaw</code>, <code>RachaSimple</code> y <code>Faro/Organizer</code>, fotos, documentos, lo que sea que guardes por Samba en el recurso <code>PolyPawNAS</code>.</p>
+<p>Un disco duro se puede morir sin avisar. Un dedo torpe puede borrar la carpeta equivocada. Un corte de luz puede dañar archivos a medio escribir. Y si dejas tu servidor mal cerrado, alguien en internet podria meterse. Cuidarlo es barato; recuperarse de un desastre, no.</p>
+<blockquote class="def">
+<h3 id="que-significa-nas">🟦 ¿Que significa? — <em>NAS</em></h3>
+<p>NAS son las siglas en ingles de <em>Network Attached Storage</em>: "almacenamiento conectado a la red". Es un equipo encendido siempre que guarda archivos y los comparte con otros dispositivos de tu casa.
+<strong>Para que sirve:</strong> tener tus datos centralizados y accesibles desde el celular, la tele o tu PC.
+<strong>Donde aparece en tu NAS real:</strong> tu <code>polypaw-nas</code> <em>es</em> el NAS. El HDD de 954 GB en <code>/srv/nas</code> es donde guarda los datos compartidos.</p>
+<h3 id="que-significa-respaldo-backup">🟦 ¿Que significa? — <em>Respaldo (backup)</em></h3>
+<p>Una copia de tus datos guardada en otro lugar, para recuperarla si el original se pierde o se daña.
+<strong>Para que sirve:</strong> no llorar cuando un disco falle o borres algo por error.
+<strong>Donde aparece en tu NAS real:</strong> harás copias de <code>/srv/nas</code> hacia un disco externo y, si quieres, hacia la nube.</p>
+</blockquote>
+<hr />
+<h2 id="2-la-regla-3-2-1-el-mandamiento-de-los-respaldos">2. La regla 3-2-1: el mandamiento de los respaldos</h2>
+<p>Si solo te llevas una idea de este capitulo, que sea esta. La regla 3-2-1 es un resumen sencillo de como NO perder tus datos:</p>
+<ul>
+<li><strong>3</strong> copias de tus datos (el original + 2 respaldos).</li>
+<li><strong>2</strong> tipos de medio distintos (por ejemplo, el HDD interno + un disco USB externo).</li>
+<li><strong>1</strong> copia fuera de casa (en otro lugar fisico o en la nube).</li>
+</ul>
+<p>¿Por que tanto? Porque cada copia protege contra un desastre diferente. Si el HDD de tu Nitro muere, tienes el disco USB. Si un robo o un incendio se lleva el laptop <em>y</em> el disco USB juntos, tienes la copia que esta fuera de casa.</p>
+<blockquote class="def">
+<h3 id="que-significa-medio-de-almacenamiento">🟦 ¿Que significa? — <em>Medio (de almacenamiento)</em></h3>
+<p>El soporte fisico donde se guardan los datos: un SSD, un disco duro (HDD), una memoria USB, la nube, etc.
+<strong>Para que sirve:</strong> entender que dos copias en el <em>mismo</em> disco no son dos copias de verdad; si el disco muere, mueren las dos.
+<strong>Donde aparece en tu NAS real:</strong> tu Nitro ya tiene dos medios (el SSD de 238 GB y el HDD de 954 GB), pero ambos estan dentro del mismo laptop.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Tener los datos en el SSD y en el HDD del <em>mismo</em> laptop NO cumple la regla 3-2-1. Si se cae el laptop, se moja o se lo roban, pierdes ambos discos de golpe. El respaldo de verdad vive <em>afuera</em>.</p>
+<h3 id="en-tu-servidor">🔎 En tu servidor</h3>
+<p>Plan realista para <code>polypaw-nas</code>:
+- <strong>Copia 1 (original):</strong> <code>/srv/nas</code> en el HDD de 954 GB.
+- <strong>Copia 2:</strong> un disco USB externo que conectas una vez por semana.
+- <strong>Copia 3 (fuera de casa):</strong> lo mas crítico (tus repos, documentos importantes) sincronizado a la nube o a un disco que guardas en casa de un familiar.</p>
+</blockquote>
+<hr />
+<h2 id="3-copiar-datos-con-rsync">3. Copiar datos con <code>rsync</code></h2>
+<p><code>rsync</code> es la herramienta clasica de Linux para copiar carpetas de forma inteligente. No es como arrastrar archivos a mano: la primera vez copia todo, y las siguientes veces copia <em>solo lo que cambio</em>. Eso hace que un respaldo diario tarde segundos en vez de horas.</p>
+<blockquote class="def">
+<h3 id="que-significa-rsync">🟦 ¿Que significa? — <em>rsync</em></h3>
+<p>Un programa de terminal que sincroniza carpetas, copiando solo las diferencias entre origen y destino.
+<strong>Para que sirve:</strong> hacer respaldos rapidos y mantener dos carpetas identicas.
+<strong>Donde aparece en tu NAS real:</strong> lo usarás para copiar <code>/srv/nas</code> a tu disco USB externo.</p>
+</blockquote>
+<p>Primero, conecta tu disco USB externo. Ubuntu lo suele montar bajo <code>/media/</code>. Para verlo:</p>
+<pre><code class="language-bash">lsblk
+</code></pre>
+<p><code>lsblk</code> ("list block devices") lista tus discos y donde estan montados. Imagina que tu disco USB aparece montado en <code>/media/edwar/RespaldoUSB</code>. La copia se hace asi:</p>
+<pre><code class="language-bash">sudo rsync -av --delete /srv/nas/ /media/edwar/RespaldoUSB/
+</code></pre>
+<p>Veamos cada parte sin miedo:</p>
+<ul>
+<li><code>sudo</code>: ejecutar como administrador, porque <code>/srv/nas</code> puede tener archivos protegidos.</li>
+<li><code>rsync</code>: el programa.</li>
+<li><code>-a</code> (archivo): copia conservando permisos, fechas y subcarpetas. Es el modo "copialo tal cual".</li>
+<li><code>-v</code> (verbose): muestra en pantalla lo que va copiando, para que veas que pasa.</li>
+<li><code>--delete</code>: si borraste algo en el origen, lo borra también en el destino, para que sean idénticos.</li>
+<li><code>/srv/nas/</code>: el origen (¡ojo con la <code>/</code> final!).</li>
+<li><code>/media/edwar/RespaldoUSB/</code>: el destino.</li>
+</ul>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>La barra <code>/</code> al final del origen importa mucho. <code>/srv/nas/</code> (con barra) copia el <em>contenido</em> de la carpeta. <code>/srv/nas</code> (sin barra) copia la carpeta <em>entera dentro</em> del destino, creando <code>/media/edwar/RespaldoUSB/nas/</code>. Decide cual quieres y se consistente. Si dudas, prueba primero con <code>--dry-run</code>, que simula la copia sin tocar nada:
+<code>bash
+sudo rsync -av --delete --dry-run /srv/nas/ /media/edwar/RespaldoUSB/</code></p>
+<h3 id="tip">💡 Tip</h3>
+<p>El parametro <code>--delete</code> es poderoso pero filoso: borra en el destino lo que ya no esta en el origen. Si por accidente vacias <code>/srv/nas</code> y luego corres el respaldo, ¡vacias también el respaldo! Por eso es buena idea tener mas de una copia y, para datos muy valiosos, respaldos que NO borren (sin <code>--delete</code>).</p>
+<h3 id="que-significa-verbose">🟦 ¿Que significa? — <em>Verbose</em></h3>
+<p>Modo "hablador": el programa explica en pantalla lo que va haciendo, paso a paso.
+<strong>Para que sirve:</strong> ver el progreso y detectar errores mientras corre.
+<strong>Donde aparece en tu NAS real:</strong> la <code>-v</code> de tus comandos <code>rsync</code>.</p>
+</blockquote>
+<hr />
+<h2 id="4-tareas-programadas-con-cron">4. Tareas programadas con <code>cron</code></h2>
+<p>Un respaldo que dependes de recordar hacer "algún día" no es un respaldo: es una buena intención. Lo que queremos es que el servidor se respalde <em>solo</em>. Para eso existe <code>cron</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-cron">🟦 ¿Que significa? — <em>cron</em></h3>
+<p>El programador de tareas de Linux. Ejecuta comandos automaticamente en horarios que tu defines (cada hora, todos los dias a las 3am, etc.).
+<strong>Para que sirve:</strong> automatizar tareas repetitivas como respaldos o limpieza.
+<strong>Donde aparece en tu NAS real:</strong> lo configurarás para que <code>polypaw-nas</code> respalde solo, de madrugada.</p>
+</blockquote>
+<p>Cada usuario tiene su propia lista de tareas, llamada <em>crontab</em>. Para editarla:</p>
+<pre><code class="language-bash">crontab -e
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-crontab">🟦 ¿Que significa? — <em>crontab</em></h3>
+<p>La tabla de tareas programadas de un usuario: un archivo de texto donde cada linea es "cuando" + "que comando ejecutar".
+<strong>Para que sirve:</strong> guardar tus tareas automaticas.
+<strong>Donde aparece en tu NAS real:</strong> el archivo que editas con <code>crontab -e</code> en tu Nitro.</p>
+</blockquote>
+<p>Cada linea de cron tiene cinco campos de tiempo seguidos del comando:</p>
+<pre><code>┌─ minuto (0-59)
+│ ┌─ hora (0-23)
+│ │ ┌─ dia del mes (1-31)
+│ │ │ ┌─ mes (1-12)
+│ │ │ │ ┌─ dia de la semana (0-7, 0 y 7 = domingo)
+│ │ │ │ │
+* * * * *  comando-a-ejecutar
+</code></pre>
+<p>Para respaldar <code>/srv/nas</code> todos los dias a las 3:30 de la madrugada (cuando nadie usa el NAS), añade esta linea:</p>
+<pre><code class="language-bash">30 3 * * * rsync -a --delete /srv/nas/ /media/edwar/RespaldoUSB/ &gt;&gt; /var/log/respaldo-nas.log 2&gt;&amp;1
+</code></pre>
+<p>Desglosemos lo nuevo:</p>
+<ul>
+<li><code>30 3 * * *</code>: minuto 30, hora 3, cualquier dia, cualquier mes, cualquier dia de la semana → 03:30 cada dia.</li>
+<li><code>&gt;&gt; /var/log/respaldo-nas.log</code>: guarda la salida en un archivo de registro, para revisar despues si todo salio bien.</li>
+<li><code>2&gt;&amp;1</code>: manda también los errores a ese mismo registro.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Si necesitas <code>sudo</code> para el respaldo, edita el crontab del root con <code>sudo crontab -e</code> en vez del tuyo. Asi se ejecuta con permisos de administrador sin pedir contraseña a las 3:30am (cuando estarás dormido).</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Cron NO encenderá tu laptop si esta apagado, ni lo despertará si esta suspendido. Para un NAS conviene que el Nitro este configurado para no suspenderse con la tapa cerrada. Eso ya lo viste en capitulos anteriores; aqui solo recuerda: si el equipo duerme, los respaldos no corren.</p>
+</blockquote>
+<hr />
+<h2 id="5-actualizaciones-del-sistema-con-apt">5. Actualizaciones del sistema con <code>apt</code></h2>
+<p>Ubuntu recibe parches de seguridad casi cada semana. Aplicarlos es la forma mas barata de tapar agujeros antes de que alguien los aproveche.</p>
+<blockquote class="def">
+<h3 id="que-significa-apt">🟦 ¿Que significa? — <em>apt</em></h3>
+<p>El gestor de paquetes de Ubuntu (<em>Advanced Package Tool</em>). Instala, actualiza y elimina programas del sistema.
+<strong>Para que sirve:</strong> mantener tu software al dia con un par de comandos.
+<strong>Donde aparece en tu NAS real:</strong> lo usas para actualizar Ubuntu Server 26.04 y todos sus programas en <code>polypaw-nas</code>.</p>
+</blockquote>
+<p>El ritual de actualizacion son dos comandos:</p>
+<pre><code class="language-bash">sudo apt update
+sudo apt upgrade
+</code></pre>
+<ul>
+<li><code>apt update</code>: refresca la <em>lista</em> de paquetes disponibles. No actualiza nada todavía; solo se entera de que hay novedades. Piensa en mirar el catalogo nuevo.</li>
+<li><code>apt upgrade</code>: ahora si descarga e instala las versiones nuevas de lo que ya tienes.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-paquete">🟦 ¿Que significa? — <em>Paquete</em></h3>
+<p>La forma en que Linux empaqueta un programa (con sus archivos y dependencias) para instalarlo limpio.
+<strong>Para que sirve:</strong> instalar y actualizar software sin armar rompecabezas a mano.
+<strong>Donde aparece en tu NAS real:</strong> Samba, Cockpit, AdGuard Home... casi todo en tu NAS llego como paquetes.</p>
+</blockquote>
+<p>Cada cierto tiempo, limpia paquetes viejos que ya nadie usa:</p>
+<pre><code class="language-bash">sudo apt autoremove
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Para que las actualizaciones <em>de seguridad</em> se instalen solas, instala el paquete <code>unattended-upgrades</code>:
+<code>bash
+sudo apt install unattended-upgrades</code>
+Aplicará parches criticos sin que tengas que acordarte. Aun asi, entra de vez en cuando a revisar manualmente.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>A veces una actualizacion del <em>kernel</em> (el nucleo de Linux) pide reiniciar para tener efecto. Si ves un mensaje sobre "reinicio requerido", reinicia tu NAS en un momento en que nadie lo este usando. Reiniciar es seguro; dejar parches a medio aplicar, no tanto.</p>
+</blockquote>
+<hr />
+<h2 id="6-monitorear-espacio-memoria-y-temperatura">6. Monitorear espacio, memoria y temperatura</h2>
+<p>Un NAS sano es uno que no se queda sin disco, sin memoria ni se recalienta. Tu Nitro tiene un limite importante a vigilar: <strong>solo 8 GB de RAM</strong>. Si lo llenas de servicios, se pondra lento.</p>
+<h3 id="espacio-en-disco">Espacio en disco</h3>
+<pre><code class="language-bash">df -h
+</code></pre>
+<p><code>df</code> ("disk free") muestra cuanto espacio te queda en cada disco. La <code>-h</code> lo pone en formato humano (GB en vez de bloques). Busca tu HDD de datos: si <code>/srv/nas</code> se acerca al 90% lleno, es hora de borrar cosas o ampliar.</p>
+<blockquote class="def">
+<h3 id="que-significa-ram">🟦 ¿Que significa? — <em>RAM</em></h3>
+<p>Memoria de trabajo del equipo (<em>Random Access Memory</em>). Es rapida pero temporal: se borra al apagar. Distinta del disco, que guarda datos de forma permanente.
+<strong>Para que sirve:</strong> ejecutar los programas que estan corriendo <em>ahora mismo</em>.
+<strong>Donde aparece en tu NAS real:</strong> tu Nitro tiene 8 GB. Cada contenedor Docker, AdGuard, Samba y Cockpit consumen un pedacito.</p>
+</blockquote>
+<h3 id="memoria">Memoria</h3>
+<pre><code class="language-bash">free -h
+</code></pre>
+<p><code>free</code> te dice cuanta RAM esta usada y cuanta libre. Si la columna de memoria libre esta casi en cero y el <em>swap</em> se usa mucho, tu Nitro esta sufriendo.</p>
+<blockquote class="def">
+<h3 id="que-significa-swap">🟦 ¿Que significa? — <em>Swap</em></h3>
+<p>Un espacio en el disco que Linux usa como RAM "de emergencia" cuando se le acaba la memoria real.
+<strong>Para que sirve:</strong> evitar que el sistema se cuelgue cuando falta RAM, a costa de ir mas lento (el disco es mucho mas lento que la RAM).
+<strong>Donde aparece en tu NAS real:</strong> con solo 8 GB, si abres demasiados contenedores tu Nitro tirará de swap y se notará lento.</p>
+</blockquote>
+<h3 id="temperatura">Temperatura</h3>
+<p>Como tu NAS es un laptop gamer (Acer Nitro), tiene buenos ventiladores, pero conviene vigilar el calor. Instala <code>lm-sensors</code>:</p>
+<pre><code class="language-bash">sudo apt install lm-sensors
+sudo sensors-detect
+sensors
+</code></pre>
+<p><code>sensors</code> te muestra la temperatura del CPU i5-9300H. En reposo deberia estar fresca (40-55°C); bajo carga puede subir, pero si pasa de los 85-90°C de forma sostenida, revisa que no este tapado de polvo o ahogado en una superficie blanda.</p>
+<blockquote class="code">
+<h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
+<p>Cockpit (el panel web en el puerto 9090) te muestra disco, memoria y carga del CPU en graficas, sin teclear comandos. Para una mirada rapida, abre <code>https://polypaw-nas:9090</code> desde tu navegador. Para revisar a fondo o desde scripts, usa los comandos de terminal.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>El comando <code>htop</code> (instalalo con <code>sudo apt install htop</code>) te da una vista en vivo, colorida y ordenable de procesos, RAM y CPU. Es perfecto para cazar al programa que se esta comiendo tus 8 GB.</p>
+</blockquote>
+<hr />
+<h2 id="7-contrasenas-fuertes-y-ssh-con-llave">7. Contraseñas fuertes y SSH con llave</h2>
+<p>Aqui empieza la parte de seguridad de verdad. La puerta de entrada a tu NAS por terminal se llama SSH, y como cualquier puerta, conviene un buen candado.</p>
+<blockquote class="def">
+<h3 id="que-significa-ssh">🟦 ¿Que significa? — <em>SSH</em></h3>
+<p><em>Secure Shell</em>: el protocolo que usas para conectarte a la terminal de tu NAS desde otra computadora, de forma cifrada.
+<strong>Para que sirve:</strong> administrar <code>polypaw-nas</code> a distancia escribiendo comandos.
+<strong>Donde aparece en tu NAS real:</strong> cada vez que haces <code>ssh edwar@polypaw-nas</code>.</p>
+</blockquote>
+<h3 id="primero-contrasenas-fuertes">Primero, contraseñas fuertes</h3>
+<p>Una contraseña fuerte es larga (12+ caracteres), unica y dificil de adivinar. Mejor aun: una <em>frase</em> de varias palabras que solo tu recuerdes. Nunca reutilices la del correo en el servidor.</p>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Usa un gestor de contraseñas (como Bitwarden o KeePassXC) para generar y guardar claves largas que ni tu memorizas. Asi cada servicio tiene su propia clave imposible de adivinar.</p>
+</blockquote>
+<h3 id="mejor-que-contrasena-llaves-ssh">Mejor que contraseña: llaves SSH</h3>
+<p>Una <em>llave SSH</em> es un par de archivos: una clave <strong>privada</strong> que se queda en TU computadora (jamas se comparte) y una <strong>pública</strong> que copias al servidor. Para entrar, ambas tienen que encajar, como una cerradura y su llave fisica. Es muchisimo mas seguro que una contraseña, porque nadie puede adivinar una llave.</p>
+<blockquote class="def">
+<h3 id="que-significa-llave-ssh-par-de-claves">🟦 ¿Que significa? — <em>Llave SSH (par de claves)</em></h3>
+<p>Dos archivos matematicamente ligados: la clave privada (secreta, en tu PC) y la pública (se instala en el servidor). Solo quien tiene la privada puede entrar.
+<strong>Para que sirve:</strong> entrar al NAS sin escribir contraseña y de forma mucho mas segura.
+<strong>Donde aparece en tu NAS real:</strong> la pública vivirá en <code>~/.ssh/authorized_keys</code> dentro de <code>polypaw-nas</code>.</p>
+</blockquote>
+<p>Desde TU computadora (no desde el NAS), genera el par:</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;edwar-laptop&quot;
+</code></pre>
+<p><code>-t ed25519</code> elige un tipo de llave moderno y seguro; <code>-C</code> solo le pone una etiqueta para que recuerdes de que equipo es. Acepta la ruta por defecto y, opcionalmente, ponle una frase de paso a la llave.</p>
+<p>Ahora copia la llave pública a tu NAS:</p>
+<pre><code class="language-bash">ssh-copy-id edwar@polypaw-nas
+</code></pre>
+<p>Te pedirá tu contraseña <em>esta última vez</em>. A partir de ahora entrarás sin contraseña, con la llave.</p>
+<h3 id="apagar-el-acceso-por-contrasena">Apagar el acceso por contraseña</h3>
+<p>Cuando confirmes que entras con la llave, desactiva el ingreso por contraseña para que nadie pueda intentar adivinarla. Edita la configuracion de SSH:</p>
+<pre><code class="language-bash">sudo nano /etc/ssh/sshd_config
+</code></pre>
+<p>Busca y deja estas lineas asi (quita el <code>#</code> si lo tienen delante):</p>
+<pre><code>PasswordAuthentication no
+PermitRootLogin no
+</code></pre>
+<p><code>PermitRootLogin no</code> impide entrar directo como el superusuario root, otra puerta que conviene cerrar. Guarda y reinicia el servicio:</p>
+<pre><code class="language-bash">sudo systemctl restart ssh
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>NO desactives <code>PasswordAuthentication</code> antes de comprobar que tu llave funciona. Abre una segunda terminal y verifica que entras sin contraseña <em>antes</em> de cerrar la sesion actual. Si te equivocas y cierras todo, podrias quedarte fuera de tu propio NAS. (Tranquilo: siempre puedes conectar pantalla y teclado al laptop para arreglarlo.)</p>
+<h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
+<p>Como tu Nitro es fisicamente accesible (lo tienes en casa), si algo sale mal con SSH siempre puedes abrir la tapa, conectar teclado y entrar localmente. Esa es una ventaja de un NAS casero sobre uno en la nube.</p>
+</blockquote>
+<hr />
+<h2 id="8-un-firewall-basico-con-ufw">8. Un firewall basico con <code>ufw</code></h2>
+<p>Un firewall decide que conexiones entran y salen de tu NAS. Por defecto Ubuntu Server no trae uno activo de forma sencilla; <code>ufw</code> lo hace facil.</p>
+<blockquote class="def">
+<h3 id="que-significa-firewall-cortafuegos">🟦 ¿Que significa? — <em>Firewall (cortafuegos)</em></h3>
+<p>Un guardia que revisa cada conexion que intenta entrar o salir y la deja pasar o la bloquea segun tus reglas.
+<strong>Para que sirve:</strong> cerrar puertas que no usas para que nadie se cuele por ellas.
+<strong>Donde aparece en tu NAS real:</strong> lo activarás en <code>polypaw-nas</code> para permitir solo lo necesario (SSH, Samba en tu red, Cockpit, AdGuard).</p>
+<h3 id="que-significa-ufw">🟦 ¿Que significa? — <em>ufw</em></h3>
+<p><em>Uncomplicated Firewall</em>: una forma sencilla de configurar el firewall de Linux con comandos en español llano (allow = permitir, deny = denegar).
+<strong>Para que sirve:</strong> poner reglas de firewall sin pelearte con la sintaxis complicada de <code>iptables</code>.
+<strong>Donde aparece en tu NAS real:</strong> sera tu cortafuegos en el Nitro.</p>
+<h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
+<p>Un numero que identifica un servicio dentro de un equipo. Como las puertas numeradas de un edificio: SSH usa la 22, Cockpit la 9090, etc.
+<strong>Para que sirve:</strong> dirigir cada tipo de conexion al programa correcto.
+<strong>Donde aparece en tu NAS real:</strong> Cockpit escucha en el 9090, SSH en el 22, AdGuard en el 53 (el puerto del DNS, el sistema que traduce nombres de webs a direcciones; lo viste en el capitulo de AdGuard), Samba en 139 y 445.</p>
+</blockquote>
+<p>Configuracion paso a paso. Primero define la politica por defecto: bloquear todo lo que entra, permitir todo lo que sale.</p>
+<pre><code class="language-bash">sudo ufw default deny incoming
+sudo ufw default allow outgoing
+</code></pre>
+<p>Ahora abre solo lo que de verdad necesitas. Importante: limita Samba y Cockpit a tu red local de casa (suponiendo que sea <code>192.168.1.0/24</code>; ajusta el rango al tuyo):</p>
+<pre><code class="language-bash">sudo ufw allow ssh
+sudo ufw allow from 192.168.1.0/24 to any port 445 proto tcp
+sudo ufw allow from 192.168.1.0/24 to any port 9090 proto tcp
+</code></pre>
+<p>La primera linea permite SSH. Las otras dos permiten Samba (445) y Cockpit (9090) <strong>solo desde dispositivos de tu casa</strong>, no desde internet. Finalmente, activa el firewall:</p>
+<pre><code class="language-bash">sudo ufw enable
+sudo ufw status verbose
+</code></pre>
+<p><code>ufw status verbose</code> te muestra todas las reglas activas para revisar que quedaron bien.</p>
+<blockquote class="warn">
+<h3 id="cuidado-la-regla-de-oro-de-la-seguridad">⚠️ Cuidado — la regla de oro de la seguridad</h3>
+<p><strong>NO abras puertos hacia internet a menos que sea absolutamente necesario.</strong> Cada puerto abierto al mundo es una puerta que alguien puede tocar. Para acceder a tu NAS desde fuera de casa, usa <strong>Tailscale</strong>, no abras puertos en tu router. Tailscale crea un tunel privado y cifrado sin exponer nada al internet abierto.</p>
+<h3 id="que-significa-tailscale-vpn">🟦 ¿Que significa? — <em>Tailscale (VPN)</em></h3>
+<p>Una VPN (red privada virtual) que conecta tus dispositivos entre si como si estuvieran en la misma red local, aunque esten en lugares distintos, sin abrir puertos en el router.
+<strong>Para que sirve:</strong> acceder a tu NAS desde el celular o el trabajo de forma segura, sin exponerlo a internet.
+<strong>Donde aparece en tu NAS real:</strong> ya tienes Tailscale instalado en <code>polypaw-nas</code>. Por eso puedes llegar a Cockpit y Samba desde lejos sin tocar el router.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>Si usas Tailscale para todo el acceso remoto, tu firewall puede ser muy estricto de cara a internet: no necesitas abrir Cockpit ni Samba al mundo <em>en absoluto</em>. Tailscale te lleva por dentro. Es la combinacion mas segura y comoda para un NAS casero.</p>
+</blockquote>
+<hr />
+<h2 id="9-que-hacer-si-se-va-la-luz-la-bateria-como-ups">9. Que hacer si se va la luz: la bateria como UPS</h2>
+<p>Un corte de luz mientras el servidor escribe en disco puede corromper archivos. Por eso los NAS profesionales usan una UPS.</p>
+<blockquote class="def">
+<h3 id="que-significa-ups">🟦 ¿Que significa? — <em>UPS</em></h3>
+<p><em>Uninterruptible Power Supply</em>, en español "sistema de alimentacion ininterrumpida". Una bateria que mantiene encendido el equipo unos minutos cuando se corta la luz, dando tiempo a apagarlo bien.
+<strong>Para que sirve:</strong> evitar apagones bruscos que dañan datos y discos.
+<strong>Donde aparece en tu NAS real:</strong> ¡tu Nitro ya tiene una! La bateria del laptop <em>es</em> tu UPS natural.</p>
+</blockquote>
+<p>Esta es una de las grandes ventajas de usar un laptop como NAS: si se va la luz, el Nitro sigue funcionando con su bateria, mientras una PC de escritorio se apagaria de golpe. Tu servidor aguanta el bajon sin perder ni un byte.</p>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>Revisa la salud de la bateria de tu Nitro de vez en cuando:
+<code>bash
+upower -i $(upower -e | grep BAT)</code>
+Busca la linea <code>capacity</code>: te dice cuanta vida le queda a la bateria comparada con cuando era nueva. Si baja mucho con los años, durará menos en un apagon.</p>
+<h3 id="cuidado_5">⚠️ Cuidado</h3>
+<p>Una bateria de laptop encendida 24/7 y siempre al 100% se desgasta. Si tu modelo de Acer Nitro lo permite (revisa la BIOS o herramientas de Acer), puedes limitar la carga maxima al 80% para alargar la vida de la bateria. No es obligatorio, pero ayuda.</p>
+<h3 id="en-tu-servidor_3">🔎 En tu servidor</h3>
+<p>Aunque tu bateria aguante el corte, configura un apagado limpio si la bateria baja de cierto nivel durante un apagon largo. El paquete <code>upower</code> ya monitorea la bateria; en capitulos avanzados puedes crear una regla que ejecute <code>sudo shutdown</code> automaticamente cuando quede poca carga. Por ahora, con saber que tu Nitro sobrevive a los cortes cortos vas muy bien.</p>
+</blockquote>
+<hr />
+<h2 id="10-una-rutina-de-mantenimiento-sencilla">10. Una rutina de mantenimiento sencilla</h2>
+<p>No necesitas hacer todo a diario. Aqui una rutina realista para <code>polypaw-nas</code>:</p>
+<ul>
+<li><strong>Diario (automatico):</strong> respaldo con cron a las 3:30am; actualizaciones de seguridad con <code>unattended-upgrades</code>.</li>
+<li><strong>Semanal (5 minutos):</strong> conectar el disco USB y confirmar que el respaldo corrio (revisa <code>/var/log/respaldo-nas.log</code>); mirar Cockpit para ver disco, RAM y temperatura.</li>
+<li><strong>Mensual (15 minutos):</strong> <code>sudo apt update &amp;&amp; sudo apt upgrade</code> a mano por si algo quedo pendiente; <code>df -h</code> para vigilar el espacio; <code>sudo apt autoremove</code> para limpiar; revisar la salud de la bateria.</li>
+<li><strong>Cada tanto:</strong> verificar que de verdad puedes <em>restaurar</em> un respaldo (un respaldo que nunca probaste a recuperar no es un respaldo confiable).</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_7">💡 Tip</h3>
+<p>Bit el ajolote dice: "Un respaldo que nunca probaste es como un paracaidas que nunca empacaste bien: te enteras de que falla justo cuando lo necesitas." Una vez al mes, copia un archivo desde tu respaldo de vuelta y abrelo, solo para confirmar que todo esta sano.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo la regla 3-2-1 y por que dos copias en el mismo laptop no cuentan.</li>
+<li>[ ] Se hacer una copia de <code>/srv/nas</code> con <code>rsync</code> y entiendo que hacen <code>-a</code>, <code>-v</code> y <code>--delete</code>.</li>
+<li>[ ] Se programar un respaldo automatico con <code>cron</code> (<code>crontab -e</code>).</li>
+<li>[ ] Se actualizar Ubuntu con <code>apt update</code> y <code>apt upgrade</code>, y se que a veces hay que reiniciar.</li>
+<li>[ ] Puedo revisar espacio (<code>df -h</code>), memoria (<code>free -h</code>) y temperatura (<code>sensors</code>), y se que 8 GB de RAM es mi limite.</li>
+<li>[ ] Cree una llave SSH y entro a mi NAS sin contraseña.</li>
+<li>[ ] Se desactivar el login por contraseña y por root con cuidado (probando la llave primero).</li>
+<li>[ ] Active <code>ufw</code> permitiendo solo lo necesario y limitando Samba/Cockpit a mi red local.</li>
+<li>[ ] Entiendo por que NO debo abrir puertos a internet y prefiero Tailscale para el acceso remoto.</li>
+<li>[ ] Se que la bateria de mi Nitro funciona como UPS y como revisar su salud.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>💻 Tu primer respaldo manual.</strong> Conecta un disco USB a tu <code>polypaw-nas</code>, averigua con <code>lsblk</code> donde quedo montado y haz una copia de prueba de una subcarpeta de <code>/srv/nas</code> con <code>rsync -av</code> (sin <code>--delete</code> la primera vez). Verifica que los archivos llegaron al destino.</p>
+</li>
+<li>
+<p><strong>💻 Simulacion antes de borrar.</strong> Repite el respaldo anterior pero añadiendo <code>--dry-run</code> y <code>--delete</code>. Lee la salida con calma: ¿que archivos <em>borraria</em> en el destino? Asegurate de entender el resultado antes de correrlo de verdad.</p>
+</li>
+<li>
+<p><strong>💻 Respaldo automatico.</strong> Abre tu crontab con <code>crontab -e</code> y programa el respaldo de <code>/srv/nas</code> todos los dias a una hora en que no uses el NAS. Guarda la salida en un log. Al dia siguiente, revisa el log para confirmar que corrio.</p>
+</li>
+<li>
+<p><strong>💻 Llave SSH.</strong> Desde tu computadora personal genera una llave con <code>ssh-keygen -t ed25519</code>, copiala al NAS con <code>ssh-copy-id</code> y comprueba que entras sin contraseña. (No desactives todavia el login por contraseña hasta estar 100% seguro.)</p>
+</li>
+<li>
+<p><strong>💻 Firewall a tu medida.</strong> Averigua el rango de tu red local de casa (algo como <code>192.168.x.0/24</code>) y configura <code>ufw</code> para permitir SSH, y Samba/Cockpit solo desde esa red. Activa el firewall y revisa las reglas con <code>sudo ufw status verbose</code>.</p>
+</li>
+<li>
+<p><strong>Plan 3-2-1 en papel.</strong> Sin tocar la terminal, escribe en una nota tu plan de respaldo concreto: ¿cuales son tus 3 copias?, ¿que 2 medios usas?, ¿cual copia esta fuera de casa? Piensa que repos y carpetas (<code>tunal-digital</code>, <code>Faro/Organizer</code>, fotos...) son los mas valiosos y merecen la copia fuera de casa.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Y con esto, tu <code>polypaw-nas</code> no solo funciona: esta cuidado. Respaldos automaticos, sistema al dia, llaves en vez de contraseñas, un firewall que cierra las puertas que no usas, Tailscale en vez de exponerlo al internet, y una bateria que lo protege de los apagones. Bit el ajolote esta orgulloso: un NAS sano es un NAS feliz, y un dueño que duerme tranquilo sabiendo que sus datos estan a salvo. En el proximo capitulo seguiremos sumando capas a tu servidor casero.</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

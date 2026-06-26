@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Montar tu NAS desde cero (guía completa) y glosario — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-montar-tu-nas-desde-cero-guia-completa-y-glosario">Capitulo 15 — Montar tu NAS desde cero (guía completa) y glosario</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Bit el ajolote se estira, sacude las branquias y se sienta frente a la pantalla. "Llegamos al gran final del módulo", dice. "Hasta ahora vimos las piezas sueltas: discos, redes, Samba, VPN... Hoy vamos a juntarlas TODAS y montar un NAS completo desde el primer tornillo hasta la primera prueba. Vamos a usar tu equipo real, <code>polypaw-nas</code>, como ejemplo de principio a fin. No te voy a pedir que memorices nada: te voy a pedir que entiendas <em>por qué</em> tomamos cada decisión. Y al final te dejo un glosario con todo el vocabulario del módulo para que vuelvas cuando se te olvide una palabra. Que no pasa nada por olvidar palabras. Pasa por no preguntar."</p>
+</blockquote>
+<hr />
+<h2 id="1-antes-de-empezar-que-estamos-construyendo-y-por-que">1. Antes de empezar: ¿qué estamos construyendo y por qué?</h2>
+<p>Un NAS no es magia ni un aparato caro de una tienda. Es, simplemente, una computadora encendida todo el tiempo que guarda tus archivos y los comparte por la red de tu casa. Tú ya tienes una: un laptop Acer Nitro convertido en servidor.</p>
+<blockquote class="def">
+<h3 id="que-significa-servidor">🟦 ¿Que significa? — <em>Servidor</em></h3>
+<p>Un servidor es una computadora cuyo trabajo es <strong>prestar un servicio a otras computadoras</strong> (servir archivos, páginas web, bloquear anuncios...). No es un tipo especial de hardware: cualquier computadora encendida y disponible para otros es un servidor. En tu caso, <code>polypaw-nas</code> es un laptop normal que decidiste poner a "servir".</p>
+<h3 id="que-significa-nas">🟦 ¿Que significa? — <em>NAS</em></h3>
+<p>NAS son las siglas en inglés de <em>Network Attached Storage</em>, o sea <strong>almacenamiento conectado a la red</strong>. Es un servidor especializado en guardar y compartir archivos. Donde aparece en tu NAS real: <code>polypaw-nas</code> es exactamente esto. Guarda tus respaldos de proyectos como <code>tunal-digital</code>, <code>PolyPaw</code>, <code>RachaSimple</code> y <code>Faro/Organizer</code>, y los comparte por tu red.</p>
+</blockquote>
+<p>El plan del capítulo es montar <code>polypaw-nas</code> paso a paso:</p>
+<ol>
+<li>Entender el hardware que ya tienes.</li>
+<li>Instalar Ubuntu Server.</li>
+<li>Configurar lo básico: usuario, SSH e IP fija.</li>
+<li>Montar el disco de datos en <code>/srv/nas</code>.</li>
+<li>Instalar Samba (compartir archivos), Cockpit (panel web), Tailscale (acceso remoto) y AdGuard (bloquear anuncios).</li>
+<li>Hacer las primeras pruebas.</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Aunque hablemos de "tu Acer Nitro", todo lo que verás aquí aplica a <strong>cualquier</strong> servidor casero: una Raspberry Pi, un mini PC, otro laptop viejo. Cambia el hardware, no las ideas.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-hardware-por-que-un-laptop-es-un-nas-perfecto-para-empezar">2. El hardware: por qué un laptop es un NAS perfecto para empezar</h2>
+<p>Tu <code>polypaw-nas</code> es un Acer Nitro AN515-54. Veamos qué tiene y por qué importa cada pieza.</p>
+<ul>
+<li><strong>CPU Intel i5-9300H</strong>: el "cerebro". Más que suficiente para servir archivos y correr unos cuantos servicios.</li>
+<li><strong>8 GB de RAM</strong>: la memoria de trabajo. Aquí está tu límite a vigilar. La RAM es donde el servidor pone lo que está usando <em>ahora mismo</em>; si se llena, todo se pone lento.</li>
+<li><strong>SSD de 238 GB</strong>: disco rápido. Lo usamos para el <strong>sistema operativo</strong> (Ubuntu y los programas).</li>
+<li><strong>HDD de 954 GB</strong>: disco grande y lento. Lo usamos para los <strong>datos</strong> (tus archivos y respaldos). Se monta en <code>/srv/nas</code>.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-cpu-procesador">🟦 ¿Que significa? — <em>CPU (procesador)</em></h3>
+<p>La CPU es el componente que hace los cálculos: ejecuta los programas. En <code>polypaw-nas</code> es un Intel i5 de portátil, potente de sobra para un NAS casero.</p>
+<h3 id="que-significa-ram-memoria">🟦 ¿Que significa? — <em>RAM (memoria)</em></h3>
+<p>La RAM es la memoria temporal donde el servidor guarda lo que usa en el momento. Es rápida pero se borra al apagar. Tus 8 GB son el recurso más ajustado de <code>polypaw-nas</code>: por eso a lo largo del módulo insistimos en no instalar mil cosas a la vez.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Con 8 GB de RAM, cada servicio que enciendes (Samba, Cockpit, AdGuard, contenedores Docker) consume un pedazo. No es un problema hoy, pero es algo que <strong>debes vigilar</strong>: si el equipo empieza a ir lento, lo primero que reviso es cuánta RAM queda libre con el comando <code>free -h</code>.</p>
+<h3 id="en-tu-servidor">🔎 En tu servidor</h3>
+<p>Tu Acer tiene una ventaja secreta sobre un PC de escritorio o una Raspberry Pi: <strong>la batería</strong>. Si se va la luz en casa, el laptop sigue encendido con su batería. Eso es lo que en el mundo de los servidores se llama una UPS, y tú la tienes gratis.</p>
+<h3 id="que-significa-ups-bateria-de-respaldo">🟦 ¿Que significa? — <em>UPS (batería de respaldo)</em></h3>
+<p>UPS significa <em>Uninterruptible Power Supply</em> (fuente de alimentación ininterrumpida): una batería que mantiene encendido un equipo cuando se corta la luz, dándote tiempo de apagarlo bien. La batería de tu Acer Nitro hace de UPS "natural": si se va la luz, <code>polypaw-nas</code> no se apaga de golpe (lo cual podría corromper datos en mitad de una escritura).</p>
+</blockquote>
+<hr />
+<h2 id="3-instalar-ubuntu-server">3. Instalar Ubuntu Server</h2>
+<p>El sistema operativo es el programa base que hace funcionar todo lo demás. En <code>polypaw-nas</code> usamos <strong>Ubuntu Server 26.04</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-linux">🟦 ¿Que significa? — <em>Linux</em></h3>
+<p>Linux es un sistema operativo libre y gratuito, la base de la mayoría de los servidores del mundo. Es estable, ligero y no te cobra licencia. Ubuntu es una "distribución" de Linux: Linux empaquetado de forma fácil de instalar.</p>
+<h3 id="que-significa-servidor-version-server-vs-de-escritorio">🟦 ¿Que significa? — <em>Servidor (versión Server vs. de escritorio)</em></h3>
+<p>"Ubuntu Server" es Ubuntu <strong>sin escritorio gráfico</strong>: no hay ventanas ni ratón, solo texto. Esto suena incómodo, pero es ideal para un NAS: gasta menos RAM (importante con tus 8 GB) y se administra por red. A <code>polypaw-nas</code> lo manejas desde otra computadora, no sentado frente a él.</p>
+</blockquote>
+<p>Pasos resumidos para instalarlo:</p>
+<ol>
+<li>Descarga la imagen de Ubuntu Server desde la web oficial.</li>
+<li>Grábala en una memoria USB (con una herramienta como Balena Etcher).</li>
+<li>Arranca el Acer desde el USB (tecla <code>F12</code> al encender, en estos Acer).</li>
+<li>Sigue el instalador: elige idioma, teclado, y <strong>cuándo te pregunte dónde instalar, elige el SSD de 238 GB</strong>, no el HDD.</li>
+</ol>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>En el instalador verás los dos discos. Instala el sistema <strong>solo en el SSD</strong>. Si tocas el HDD de 954 GB aquí, podrías borrar el espacio que reservaste para tus datos. El sistema en el SSD (rápido), los datos en el HDD (grande). Cada cosa en su lugar.</p>
+<h3 id="que-significa-disco">🟦 ¿Que significa? — <em>Disco</em></h3>
+<p>Un disco es donde se guardan los archivos de forma permanente (no se borran al apagar, a diferencia de la RAM). Tu NAS tiene dos: un SSD (rápido, para el sistema) y un HDD (grande, para los datos).</p>
+</blockquote>
+<p>Durante la instalación, Ubuntu te ofrecerá instalar OpenSSH. <strong>Acéptalo</strong>: lo vas a necesitar en el siguiente paso.</p>
+<blockquote class="def">
+<h3 id="que-significa-openssh">🟦 ¿Que significa? — <em>OpenSSH</em></h3>
+<p>OpenSSH es el programa que pone a tu NAS a "escuchar" conexiones SSH para que puedas entrar desde otra computadora. Dicho fácil: SSH es la forma de conectarte; OpenSSH es la pieza que tienes que tener instalada en <code>polypaw-nas</code> para que esa conexión sea posible. Por eso lo aceptas en la instalación.</p>
+<h3 id="que-significa-particion">🟦 ¿Que significa? — <em>Partición</em></h3>
+<p>Una partición es una "porción" en la que se divide un disco, como dividir un cuaderno en secciones. El instalador crea las particiones necesarias en el SSD automáticamente. No tienes que pelearte con esto si dejas la opción por defecto.</p>
+<h3 id="que-significa-lvm">🟦 ¿Que significa? — <em>LVM</em></h3>
+<p>LVM (<em>Logical Volume Manager</em>) es una capa que te deja agrupar y redimensionar particiones con flexibilidad, como si los discos fueran de plastilina. El instalador de Ubuntu lo usa por defecto. Para un NAS de una persona no necesitas entenderlo a fondo hoy; solo saber que existe y que facilita agrandar el espacio en el futuro.</p>
+</blockquote>
+<hr />
+<h2 id="4-primeras-configuraciones-usuario-ssh-e-ip-fija">4. Primeras configuraciones: usuario, SSH e IP fija</h2>
+<p>Ubuntu ya está instalado. Ahora lo dejamos listo para administrarlo cómodamente y con seguridad.</p>
+<h3 id="41-tu-usuario-y-el-poder-de-administrador">4.1 Tu usuario y el poder de administrador</h3>
+<p>Durante la instalación creaste un usuario (por ejemplo, <code>edwar</code>). Ese usuario no es todopoderoso, y eso es bueno.</p>
+<blockquote class="def">
+<h3 id="que-significa-root">🟦 ¿Que significa? — <em>root</em></h3>
+<p><code>root</code> es el usuario administrador total del sistema: puede hacer y deshacer cualquier cosa, incluso romper el servidor. Por seguridad, <strong>no se usa root en el día a día</strong>. En <code>polypaw-nas</code> no inicias sesión como root.</p>
+<h3 id="que-significa-sudo">🟦 ¿Que significa? — <em>sudo</em></h3>
+<p><code>sudo</code> es la palabra que pones delante de un comando para ejecutarlo "como administrador" solo por esa vez. Te pide tu contraseña. Es la forma segura de hacer tareas de administrador sin vivir como root. Lo verás muchísimo: <code>sudo apt install ...</code>.</p>
+<h3 id="que-significa-permiso">🟦 ¿Que significa? — <em>Permiso</em></h3>
+<p>Los permisos son las reglas que dicen quién puede leer, escribir o ejecutar cada archivo. En Linux cada archivo tiene un dueño y unos permisos. Por eso a veces un comando "falla" hasta que le pones <code>sudo</code>: no tenías permiso.</p>
+</blockquote>
+<h3 id="42-ssh-administrar-el-nas-desde-otra-computadora">4.2 SSH: administrar el NAS desde otra computadora</h3>
+<blockquote class="def">
+<h3 id="que-significa-ssh">🟦 ¿Que significa? — <em>SSH</em></h3>
+<p>SSH (<em>Secure Shell</em>) es la forma de <strong>controlar el servidor por la red desde otra computadora</strong>, escribiendo comandos en una terminal, con la conexión cifrada (protegida). Es como sentarte frente a <code>polypaw-nas</code> pero desde tu laptop de diario.</p>
+</blockquote>
+<p>Desde tu computadora normal, te conectas así (sustituye <code>edwar</code> por tu usuario y la IP por la de tu NAS):</p>
+<pre><code class="language-bash">ssh edwar@192.168.1.50
+</code></pre>
+<p>La primera vez te preguntará si confías en el equipo (di que sí) y te pedirá la contraseña.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Más adelante puedes configurar "llaves SSH" para entrar sin escribir contraseña, de forma más segura. Por hoy, con una <strong>contraseña fuerte</strong> (larga, con números y símbolos) es suficiente. Una contraseña débil en un servidor es una puerta abierta.</p>
+</blockquote>
+<h3 id="43-ip-fija-que-el-nas-siempre-tenga-la-misma-direccion">4.3 IP fija: que el NAS siempre tenga la misma dirección</h3>
+<blockquote class="def">
+<h3 id="que-significa-ip">🟦 ¿Que significa? — <em>IP</em></h3>
+<p>Una IP (dirección IP) es el "número de casa" de un equipo en la red, como <code>192.168.1.50</code>. Cada dispositivo de tu red tiene uno. Así es como tu laptop encuentra a <code>polypaw-nas</code>.</p>
+<h3 id="que-significa-gateway">🟦 ¿Que significa? — <em>Gateway</em></h3>
+<p>El gateway (puerta de enlace) es la IP de tu <strong>router</strong>: el equipo por el que todo el tráfico sale hacia internet. Suele ser algo como <code>192.168.1.1</code>. El NAS necesita saberlo para conectarse fuera.</p>
+</blockquote>
+<p>Por defecto, el router asigna IPs automáticamente y pueden cambiar. Para un servidor eso es un problema: si hoy es <code>.50</code> y mañana <code>.73</code>, no lo encuentras. Por eso le fijamos una IP que no cambie.</p>
+<p>La forma más fácil es entrar a tu router y, en la sección de DHCP, "reservar" una IP para la dirección MAC de tu NAS. Alternativamente, se configura dentro de Ubuntu con Netplan. Lo importante es el concepto: <strong>el NAS debe tener una dirección estable</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-dhcp">🟦 ¿Que significa? — <em>DHCP</em></h3>
+<p>DHCP (<em>Dynamic Host Configuration Protocol</em>) es el servicio del router que <strong>reparte direcciones IP automáticamente</strong> a cada equipo que se conecta. Por eso, sin tocar nada, tu celular o tu laptop reciben una IP al entrar a la red. El problema es que esa IP puede cambiar con el tiempo; para un servidor como <code>polypaw-nas</code> eso no sirve, así que le pedimos al DHCP que siempre le dé la misma (una "reserva").</p>
+<h3 id="que-significa-direccion-mac">🟦 ¿Que significa? — <em>Dirección MAC</em></h3>
+<p>La dirección MAC es un <strong>número único de fábrica</strong> que tiene cada tarjeta de red (el carnet de identidad físico del equipo). A diferencia de la IP, no cambia. Por eso, para reservar una IP fija en el router, lo identificas por su MAC: le dices "al equipo con esta MAC, dale siempre esta IP".</p>
+<h3 id="que-significa-netplan">🟦 ¿Que significa? — <em>Netplan</em></h3>
+<p>Netplan es la herramienta de Ubuntu para <strong>configurar la red por archivo de texto</strong>: ahí defines IP, gateway y DNS del equipo. Es la alternativa a la reserva por DHCP cuando prefieres fijar la dirección desde dentro del propio NAS en lugar de desde el router.</p>
+<h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
+<p>Una vez fijada, anota la IP de <code>polypaw-nas</code> en un papel o nota. Será la dirección que uses para SSH, para entrar a Cockpit en el navegador y para conectarte a la carpeta compartida.</p>
+</blockquote>
+<hr />
+<h2 id="5-montar-el-disco-de-datos-en-srvnas">5. Montar el disco de datos en /srv/nas</h2>
+<p>El sistema vive en el SSD. Ahora necesitamos que el HDD de 954 GB esté disponible y "montado" en una carpeta donde guardaremos los datos: <code>/srv/nas</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-montar-un-disco">🟦 ¿Que significa? — <em>Montar (un disco)</em></h3>
+<p>Montar un disco es <strong>conectarlo a una carpeta</strong> para poder usarlo. En Linux los discos no tienen "letra" (no hay C: ni D:); en su lugar aparecen dentro de una carpeta. Decimos "monté el HDD en <code>/srv/nas</code>": eso significa que todo lo que pongas en <code>/srv/nas</code> se guarda físicamente en el disco grande.</p>
+</blockquote>
+<p>Primero vemos qué discos hay:</p>
+<pre><code class="language-bash">lsblk
+</code></pre>
+<p>Verás algo como <code>sda</code> (probablemente el HDD) y <code>sdb</code> (el SSD), o similar. Identifica el HDD de ~954 GB.</p>
+<p>Si el HDD es nuevo y no tiene formato, se le crea un sistema de archivos (lo "formateamos", solo una vez):</p>
+<pre><code class="language-bash">sudo mkfs.ext4 /dev/sda1
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-sistema-de-archivos-ext4">🟦 ¿Que significa? — <em>Sistema de archivos / ext4</em></h3>
+<p>Un sistema de archivos es la <strong>forma en que el disco organiza los datos</strong> (cómo sabe dónde empieza y termina cada archivo), parecido al índice y los capítulos de un libro. Un disco sin sistema de archivos es papel en blanco: no se puede usar. <strong>ext4</strong> es el sistema de archivos estándar de Linux, robusto y probado; es el que le ponemos al HDD de <code>polypaw-nas</code>. El comando <code>mkfs.ext4</code> significa "crea (make) un sistema de archivos (fs) de tipo ext4".</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p><code>mkfs</code> <strong>borra todo</strong> lo que haya en esa partición. Asegúrate mil veces de que <code>/dev/sda1</code> es el HDD vacío y no otra cosa. Un disco mal elegido aquí es pérdida de datos. Si el disco ya tenía datos que quieres conservar, <strong>no lo formatees</strong>.</p>
+</blockquote>
+<p>Creamos la carpeta y montamos:</p>
+<pre><code class="language-bash">sudo mkdir -p /srv/nas
+sudo mount /dev/sda1 /srv/nas
+</code></pre>
+<p>Para que el disco se monte <strong>solo</strong> cada vez que enciende el NAS, se añade una línea en el archivo <code>/etc/fstab</code>. Así no tienes que montarlo a mano tras cada reinicio.</p>
+<blockquote class="def">
+<h3 id="que-significa-fstab">🟦 ¿Que significa? — <em>fstab</em></h3>
+<p><code>/etc/fstab</code> es la <strong>lista de discos que el sistema monta automáticamente al arrancar</strong>. Cada línea dice "este disco va en esta carpeta". Si no añades el HDD aquí, tras cada reinicio de <code>polypaw-nas</code> tendrías que volver a montarlo a mano. Apuntarlo en <code>fstab</code> lo hace permanente.</p>
+<h3 id="que-significa-uuid">🟦 ¿Que significa? — <em>UUID</em></h3>
+<p>UUID (<em>Universally Unique Identifier</em>) es un <strong>código largo y único que identifica a cada disco</strong> de forma permanente, como su huella digital. A diferencia de <code>/dev/sda1</code> (que es solo "el primer disco que el sistema vio"), el UUID no cambia aunque conectes o quites otros discos.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Conviene montar el disco en <code>fstab</code> por su <strong>UUID</strong> y no por <code>/dev/sda1</code>. ¿Por qué? Porque <code>sda</code>/<code>sdb</code> pueden cambiar de orden si conectas otro disco, pero el UUID nunca cambia. Lo ves con <code>sudo blkid</code>. Así evitas que un día el NAS arranque montando el disco equivocado.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>¿Por qué <code>/srv/nas</code> y no el escritorio? En Linux, <code>/srv</code> es la carpeta pensada justamente para "datos que el servidor sirve a otros". Es la convención correcta y mantiene el orden. Bit aprueba el orden.</p>
+</blockquote>
+<hr />
+<h2 id="6-samba-compartir-archivos-por-la-red">6. Samba: compartir archivos por la red</h2>
+<p>Tenemos los datos en <code>/srv/nas</code>, pero solo el NAS los ve. Samba los hace visibles para el resto de tu casa.</p>
+<blockquote class="def">
+<h3 id="que-significa-samba-smb">🟦 ¿Que significa? — <em>Samba / SMB</em></h3>
+<p>Samba es el programa que permite que <strong>Windows, Mac y otros Linux vean carpetas compartidas</strong> de tu NAS como si fueran una unidad de red. SMB es el "idioma" (protocolo) que usan para hablarse. En <code>polypaw-nas</code> Samba comparte una carpeta llamada <strong>PolyPawNAS</strong>.</p>
+</blockquote>
+<p>Se instala así:</p>
+<pre><code class="language-bash">sudo apt update
+sudo apt install samba
+</code></pre>
+<p>La configuración vive en <code>/etc/samba/smb.conf</code>, donde defines el recurso compartido apuntando a <code>/srv/nas</code>. Luego creas la contraseña de Samba para tu usuario y reinicias el servicio:</p>
+<pre><code class="language-bash">sudo smbpasswd -a edwar
+sudo systemctl restart smbd
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-servicio">🟦 ¿Que significa? — <em>Servicio</em></h3>
+<p>Un servicio es un programa que corre <strong>en segundo plano</strong>, siempre disponible, sin que tú lo abras a mano. Samba, Cockpit o AdGuard son servicios. Se encienden, se apagan y se reinician con comandos.</p>
+<h3 id="que-significa-systemd">🟦 ¿Que significa? — <em>systemd</em></h3>
+<p>systemd es el "director de orquesta" de Linux: arranca y gestiona todos los servicios. El comando <code>systemctl</code> es como hablas con él. <code>sudo systemctl restart smbd</code> significa "reinicia el servicio de Samba".</p>
+<h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
+<p>Un puerto es como una "puerta numerada" del servidor: cada servicio escucha por un número de puerto. Samba usa el 445, Cockpit el 9090, AdGuard usa el 53 para DNS y el 3000 para su panel. La IP dice <em>a qué equipo</em>; el puerto dice <em>a qué servicio dentro de ese equipo</em>.</p>
+</blockquote>
+<p>Desde otra computadora, accedes a la carpeta poniendo <code>\\192.168.1.50\PolyPawNAS</code> (en Windows) o <code>smb://192.168.1.50</code> (en Mac/Linux).</p>
+<blockquote class="code">
+<h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
+<p>Aquí es donde guardas los respaldos de tus proyectos. Una copia de <code>tunal-digital</code>, <code>PolyPaw</code>, <code>RachaSimple</code> y <code>Faro/Organizer</code> en <code>PolyPawNAS</code> es una red de seguridad: si tu laptop principal muere, los datos siguen vivos en el NAS.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Samba es para tu <strong>red local</strong>, no para internet. Nunca abras el puerto de Samba (445) hacia internet en tu router: es uno de los blancos favoritos de los ataques. Para acceder desde fuera de casa usaremos Tailscale (sección 8), que es muchísimo más seguro.</p>
+</blockquote>
+<hr />
+<h2 id="7-cockpit-el-panel-web-de-administracion">7. Cockpit: el panel web de administración</h2>
+<p>Escribir comandos está bien, pero a veces quieres ver el estado del NAS de un vistazo. Cockpit es un panel web para eso.</p>
+<blockquote class="def">
+<h3 id="que-significa-cockpit">🟦 ¿Que significa? — <em>Cockpit</em></h3>
+<p>Cockpit es un <strong>panel de administración que abres en el navegador</strong>. Te muestra el uso de CPU, de RAM, de disco, los servicios encendidos, y te deja administrar sin memorizar comandos. En <code>polypaw-nas</code> vive en el <strong>puerto 9090</strong>.</p>
+</blockquote>
+<pre><code class="language-bash">sudo apt install cockpit
+sudo systemctl enable --now cockpit.socket
+</code></pre>
+<p>Luego abres en el navegador de tu laptop: <code>https://192.168.1.50:9090</code>. Inicias sesión con tu usuario de Ubuntu.</p>
+<blockquote class="code">
+<h3 id="en-tu-servidor_3">🔎 En tu servidor</h3>
+<p>Cockpit es tu mejor amigo para vigilar la RAM. Como <code>polypaw-nas</code> solo tiene 8 GB, abre Cockpit de vez en cuando y mira la gráfica de memoria. Si está siempre al tope, sabrás que es hora de cerrar algún servicio o contenedor.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Cockpit también te deja apagar y reiniciar el NAS desde el navegador, ver los registros (logs) y administrar discos. Es una rampa suave: usas la interfaz mientras aprendes los comandos por debajo.</p>
+</blockquote>
+<hr />
+<h2 id="8-tailscale-acceso-remoto-seguro-la-pieza-clave-de-seguridad">8. Tailscale: acceso remoto seguro (la pieza clave de seguridad)</h2>
+<p>¿Y si quieres entrar a tu NAS desde la calle, desde el trabajo o desde el celular? La tentación es "abrir puertos" en el router. <strong>No lo hagas.</strong> Hay una forma mucho mejor.</p>
+<blockquote class="def">
+<h3 id="que-significa-vpn">🟦 ¿Que significa? — <em>VPN</em></h3>
+<p>Una VPN (<em>Virtual Private Network</em>, red privada virtual) crea un <strong>túnel privado y cifrado</strong> entre dos equipos a través de internet. Es como tender un cable secreto entre tu celular y tu NAS, sin que nadie más pueda asomarse.</p>
+<h3 id="que-significa-tailscale">🟦 ¿Que significa? — <em>Tailscale</em></h3>
+<p>Tailscale es una VPN súper fácil de usar. Instalas su programa en el NAS y en tu celular/laptop, inicias sesión con la misma cuenta, y <strong>todos tus dispositivos se ven entre sí como si estuvieran en la misma red</strong>, estés donde estés. En <code>polypaw-nas</code> es lo que te permite entrar desde fuera de casa de forma segura.</p>
+</blockquote>
+<pre><code class="language-bash">curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+</code></pre>
+<p>El comando te dará un enlace para iniciar sesión en tu cuenta de Tailscale. Repite la instalación de la app en tu celular y laptop. Listo: a partir de ahí, <code>polypaw-nas</code> tiene una IP de Tailscale privada por la que lo alcanzas desde cualquier lugar.</p>
+<blockquote class="warn">
+<h3 id="cuidado-la-regla-de-oro-de-seguridad">⚠️ Cuidado — la regla de oro de seguridad</h3>
+<p><strong>No abras puertos de tu NAS hacia internet en el router salvo que sea estrictamente necesario.</strong> Abrir un puerto es como dejar una ventana abierta a la calle: cualquiera puede intentar entrar. Tailscale evita esto por completo: nada queda expuesto al internet público, y aun así puedes acceder a Samba, Cockpit y todo lo demás desde fuera. Esta es, de lejos, la decisión de seguridad más importante de todo el montaje.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>Con Tailscale activo, desde tu celular en la calle puedes abrir Cockpit usando la IP de Tailscale del NAS, igual que si estuvieras en casa. Sin abrir un solo puerto. Bit hace una pequeña danza de victoria.</p>
+</blockquote>
+<hr />
+<h2 id="9-adguard-home-un-dns-que-bloquea-anuncios">9. AdGuard Home: un DNS que bloquea anuncios</h2>
+<p>Última pieza. Ya que el NAS está siempre encendido, le damos un trabajo extra que beneficia a toda la casa: bloquear publicidad y rastreadores.</p>
+<blockquote class="def">
+<h3 id="que-significa-dns">🟦 ¿Que significa? — <em>DNS</em></h3>
+<p>DNS (<em>Domain Name System</em>) es la "agenda de contactos" de internet: traduce nombres como <code>google.com</code> al número IP del servidor real. Cada vez que abres una página, tu dispositivo le pregunta a un DNS "¿dónde queda este nombre?".</p>
+<h3 id="que-significa-adguard-home">🟦 ¿Que significa? — <em>AdGuard Home</em></h3>
+<p>AdGuard Home es un DNS que vive en tu NAS y que, cuando un dispositivo le pregunta por una dirección de publicidad o rastreo, simplemente responde "no existe". Resultado: <strong>menos anuncios en todos los dispositivos de la casa</strong>, sin instalar nada en cada uno. En <code>polypaw-nas</code> usa el puerto 53 (DNS) y un panel web en el 3000.</p>
+</blockquote>
+<p>La forma más limpia de instalarlo es con Docker (lo veremos abajo), pero AdGuard también tiene su propio instalador. Una vez funcionando, entras a su panel (<code>http://192.168.1.50:3000</code>) y, para que toda la casa lo use, configuras el router para que entregue la IP del NAS como servidor DNS.</p>
+<blockquote class="warn">
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>AdGuard se vuelve una pieza central: si lo apagas y el router apunta a él como único DNS, <strong>toda la casa se queda sin internet</strong> hasta que vuelva. No es peligroso, pero tenlo presente: cuando el NAS hace de DNS, mantenerlo encendido importa más. Aquí la batería-UPS de tu Acer vuelve a darte tranquilidad.</p>
+</blockquote>
+<hr />
+<h2 id="10-docker-y-contenedores-como-conviven-tantos-servicios">10. Docker y contenedores: cómo conviven tantos servicios</h2>
+<p>Mencioné Docker. Vale la pena entender qué es, porque es como en <code>polypaw-nas</code> corren varias cosas sin pisarse.</p>
+<blockquote class="def">
+<h3 id="que-significa-docker-contenedor">🟦 ¿Que significa? — <em>Docker / contenedor</em></h3>
+<p>Un contenedor es una <strong>cajita aislada</strong> que lleva dentro un programa con todo lo que necesita para funcionar, separado del resto del sistema. Docker (y Podman, su alternativa) es la herramienta que crea y maneja esas cajitas. Ventaja: instalas y borras servicios sin ensuciar el sistema. En <code>polypaw-nas</code> tienes Docker/Podman instalados para correr cosas como AdGuard de forma limpia.</p>
+<h3 id="cuidado_5">⚠️ Cuidado</h3>
+<p>Cada contenedor consume RAM. Con tus 8 GB, los contenedores son geniales pero <strong>no infinitos</strong>. Levanta solo los que uses y vigila la memoria desde Cockpit. La regla de <code>polypaw-nas</code>: menos servicios bien cuidados, antes que muchos a medias.</p>
+</blockquote>
+<hr />
+<h2 id="11-respaldos-y-tareas-automaticas">11. Respaldos y tareas automáticas</h2>
+<p>Un NAS guarda lo importante, así que él mismo debe estar respaldado y mantenido.</p>
+<blockquote class="def">
+<h3 id="que-significa-respaldo-backup">🟦 ¿Que significa? — <em>Respaldo (backup)</em></h3>
+<p>Un respaldo es una <strong>copia de seguridad</strong> de tus datos en otro lugar. La regla sana: lo que existe en un solo sitio, no existe. Tener tus proyectos en el laptop <em>y</em> en <code>PolyPawNAS</code> ya es un respaldo. Idealmente, una tercera copia fuera de casa.</p>
+<h3 id="que-significa-cron">🟦 ¿Que significa? — <em>cron</em></h3>
+<p>cron es el "despertador" de Linux: ejecuta tareas <strong>automáticamente a una hora fija</strong> (cada noche, cada domingo...). En un NAS sirve para que los respaldos se hagan solos, sin que te acuerdes.</p>
+<h3 id="en-tu-servidor_4">🔎 En tu servidor</h3>
+<p>Una tarea de cron clásica en <code>polypaw-nas</code>: cada madrugada, copiar una carpeta importante a otro disco o a la nube. Lo configuras una vez y se ejecuta para siempre. Tu yo del futuro te lo agradece.</p>
+</blockquote>
+<hr />
+<h2 id="12-primeras-pruebas-esta-todo-vivo">12. Primeras pruebas: ¿está todo vivo?</h2>
+<p>Hora de comprobar que el NAS respira. Desde tu laptop normal:</p>
+<pre><code class="language-bash">ssh edwar@192.168.1.50        # ¿entro por SSH?
+</code></pre>
+<p>Ya dentro del NAS:</p>
+<pre><code class="language-bash">df -h /srv/nas                # ¿el HDD está montado y con espacio?
+free -h                       # ¿cuánta RAM libre tengo? (¡vigila esto!)
+systemctl status smbd         # ¿Samba está activo (active running)?
+systemctl status cockpit.socket
+tailscale status              # ¿Tailscale conectado?
+</code></pre>
+<p>Y desde el navegador:</p>
+<ul>
+<li><code>https://192.168.1.50:9090</code> → debe abrir Cockpit.</li>
+<li><code>\\192.168.1.50\PolyPawNAS</code> → debe pedir usuario y mostrar la carpeta.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>Si algo no responde, el orden de revisión es casi siempre el mismo: ¿está encendido el servicio (<code>systemctl status</code>)? ¿es la IP correcta? ¿es el puerto correcto? ¿hay permisos? Bit dice que el 90% de los problemas son una de esas cuatro.</p>
+<h3 id="en-tu-servidor_5">🔎 En tu servidor</h3>
+<p>Cuando las cinco comprobaciones de arriba salen en verde, felicidades: <code>polypaw-nas</code> es un NAS completo y funcional, montado por ti, entendiendo cada pieza. No compraste una caja: construiste un servidor.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que un NAS es solo una computadora encendida que comparte archivos.</li>
+<li>[ ] Sé por qué el sistema va en el SSD y los datos en el HDD (<code>/srv/nas</code>).</li>
+<li>[ ] Puedo conectarme a <code>polypaw-nas</code> por SSH desde otra computadora.</li>
+<li>[ ] Sé qué es una IP fija y por qué un servidor la necesita.</li>
+<li>[ ] Entiendo qué significa "montar" un disco en una carpeta.</li>
+<li>[ ] Sé qué hace Samba y cómo accedo al recurso <code>PolyPawNAS</code>.</li>
+<li>[ ] Puedo abrir Cockpit en el puerto 9090 y vigilar la RAM (mi límite de 8 GB).</li>
+<li>[ ] Entiendo por qué uso Tailscale en lugar de abrir puertos al internet.</li>
+<li>[ ] Sé qué hace AdGuard Home y qué pasa si lo apago.</li>
+<li>[ ] Distingo entre un servicio, un contenedor y un puerto.</li>
+<li>[ ] Sé qué es un respaldo y por qué cron sirve para automatizarlo.</li>
+<li>[ ] Tengo contraseñas fuertes en el usuario y en Samba.</li>
+</ul>
+<hr />
+<h2 id="repaso-del-montaje-recorrido-completo">🔁 Repaso del montaje (recorrido completo)</h2>
+<p>Este capítulo no trae ejercicios nuevos: es el montaje guiado de todo el módulo junto, más el glosario. Así que, en lugar de mandarte tareas nuevas, hagamos un <strong>repaso</strong> rehaciendo mentalmente el camino completo. Si puedes contar cada paso con tus palabras, dominas el módulo. Bit te va guiando.</p>
+<p><strong>Recorre el montaje de <code>polypaw-nas</code>, decisión por decisión:</strong></p>
+<ol>
+<li>
+<p><strong>Hardware.</strong> Tu Acer Nitro AN515-54 tiene un i5-9300H, 8 GB de RAM, un SSD de 238 GB y un HDD de 954 GB. ¿Por qué los 8 GB de RAM son "el recurso a vigilar"? ¿Y por qué la batería del laptop te regala una UPS gratis?</p>
+</li>
+<li>
+<p><strong>Sistema en el SSD.</strong> Instalaste Ubuntu Server 26.04 <strong>solo en el SSD</strong>. Repasa por qué el sistema va en el disco rápido (238 GB) y los datos en el grande (954 GB), y por qué tocar el HDD en el instalador sería un error.</p>
+</li>
+<li>
+<p><strong>Acceso y dirección.</strong> Activaste OpenSSH para entrar por SSH desde tu laptop de diario, y le diste a <code>polypaw-nas</code> una <strong>IP fija</strong> (reserva por DHCP usando su MAC, o por Netplan). Repasa: ¿qué pasaría si la IP cambiara sola cada semana?</p>
+</li>
+<li>
+<p><strong>Disco de datos.</strong> Formateaste el HDD con ext4, lo montaste en <code>/srv/nas</code> y lo dejaste permanente en <code>/etc/fstab</code> (mejor por UUID que por <code>/dev/sda1</code>). Repasa qué significa "montar" un disco en una carpeta.</p>
+</li>
+<li>
+<p><strong>Servicios.</strong> Levantaste <strong>Samba</strong> (recurso <code>PolyPawNAS</code> sobre <code>/srv/nas</code>, puerto 445), <strong>Cockpit</strong> (panel web, puerto 9090) y <strong>AdGuard Home</strong> (DNS, puerto 53; panel 3000), gestionados por systemd y, donde conviene, dentro de contenedores Docker/Podman. Repasa la diferencia entre servicio, contenedor y puerto.</p>
+</li>
+<li>
+<p><strong>Seguridad (lo más importante).</strong> Instalaste <strong>Tailscale</strong> para llegar a <code>polypaw-nas</code> desde la calle <strong>sin abrir un solo puerto</strong> en el router. Repasa, con tus palabras y como si se lo explicaras a un amigo, por qué abrir el puerto 445 de Samba a internet sería un error grave y cómo Tailscale lo evita por completo. Esta es la decisión de seguridad que más importa de todo el montaje.</p>
+</li>
+<li>
+<p><strong>Pruebas.</strong> Cerraste comprobando que todo respira: <code>ssh</code>, <code>df -h /srv/nas</code>, <code>free -h</code>, <code>systemctl status smbd cockpit.socket</code>, <code>tailscale status</code>, y abriendo Cockpit y <code>PolyPawNAS</code> desde otra computadora.</p>
+</li>
+</ol>
+<blockquote class="tip">
+<h3 id="tip_7">💡 Tip</h3>
+<p>Si en algún paso del repaso te quedaste en blanco, no sigas de largo: vuelve a la sección correspondiente y al <strong>glosario</strong> de abajo. Olvidar una palabra es normal; lo que no debes hacer es seguir como si la entendieras. Bit lo dice siempre: se aprende preguntando, no fingiendo.</p>
+</blockquote>
+<hr />
+<h2 id="glosario-alfabetico-del-modulo">📖 Glosario alfabético del módulo</h2>
+<ul>
+<li><strong>AdGuard Home</strong> — DNS que se ejecuta en tu NAS y bloquea publicidad y rastreadores para toda la casa. En <code>polypaw-nas</code>: puerto 53 (DNS) y panel en el 3000.</li>
+<li><strong>Backup (respaldo)</strong> — Copia de seguridad de tus datos en otro lugar. Lo que existe en un solo sitio, no existe.</li>
+<li><strong>Cockpit</strong> — Panel de administración web del servidor. En <code>polypaw-nas</code>: puerto 9090.</li>
+<li><strong>Contenedor</strong> — Cajita aislada que lleva un programa con todo lo necesario, separado del resto del sistema. Lo gestiona Docker/Podman.</li>
+<li><strong>CPU (procesador)</strong> — El "cerebro" que ejecuta los programas. En <code>polypaw-nas</code>: Intel i5-9300H.</li>
+<li><strong>cron</strong> — Programador de tareas automáticas a horas fijas. Útil para respaldos.</li>
+<li><strong>DHCP</strong> — Servicio del router que reparte IPs automáticamente. Le pedimos que "reserve" una fija para el NAS.</li>
+<li><strong>Dirección MAC</strong> — Número único de fábrica de cada tarjeta de red. No cambia; sirve para reservar la IP fija.</li>
+<li><strong>Disco</strong> — Donde se guardan los archivos de forma permanente. SSD (rápido, sistema) y HDD (grande, datos).</li>
+<li><strong>DNS</strong> — La "agenda" que traduce nombres (<code>google.com</code>) a direcciones IP.</li>
+<li><strong>Docker</strong> — Herramienta para crear y manejar contenedores. Instalado en <code>polypaw-nas</code> junto a Podman.</li>
+<li><strong>ext4</strong> — Sistema de archivos estándar de Linux. Es el que lleva el HDD de <code>polypaw-nas</code>.</li>
+<li><strong>fstab</strong> (<code>/etc/fstab</code>) — Lista de discos que el sistema monta solo al arrancar. Ahí queda fijo el HDD en <code>/srv/nas</code>.</li>
+<li><strong>Gateway (puerta de enlace)</strong> — IP del router, por donde sale el tráfico hacia internet.</li>
+<li><strong>HDD</strong> — Disco duro grande y lento. En <code>polypaw-nas</code>: 954 GB para datos, montado en <code>/srv/nas</code>.</li>
+<li><strong>IP</strong> — Dirección numérica de un equipo en la red. El "número de casa".</li>
+<li><strong>Linux</strong> — Sistema operativo libre, base de la mayoría de servidores. Ubuntu es una distribución de Linux.</li>
+<li><strong>LVM</strong> — Gestor que permite agrupar y redimensionar particiones con flexibilidad.</li>
+<li><strong>Montar</strong> — Conectar un disco a una carpeta para poder usarlo. El HDD se monta en <code>/srv/nas</code>.</li>
+<li><strong>NAS</strong> — Almacenamiento conectado a la red: servidor especializado en compartir archivos. Tu <code>polypaw-nas</code>.</li>
+<li><strong>Netplan</strong> — Herramienta de Ubuntu para configurar la red (IP, gateway, DNS) por archivo de texto. Alternativa a la reserva por DHCP.</li>
+<li><strong>OpenSSH</strong> — Programa que pone al NAS a escuchar conexiones SSH. Se acepta durante la instalación de Ubuntu.</li>
+<li><strong>Partición</strong> — Porción en la que se divide un disco.</li>
+<li><strong>Permiso</strong> — Regla que dice quién puede leer, escribir o ejecutar un archivo.</li>
+<li><strong>Podman</strong> — Alternativa a Docker para correr contenedores. Instalado en <code>polypaw-nas</code>.</li>
+<li><strong>Puerto</strong> — "Puerta numerada" por la que escucha un servicio (Samba 445, Cockpit 9090, DNS 53).</li>
+<li><strong>RAM (memoria)</strong> — Memoria temporal de trabajo. En <code>polypaw-nas</code>: 8 GB, el recurso a vigilar.</li>
+<li><strong>root</strong> — Usuario administrador total. No se usa en el día a día por seguridad.</li>
+<li><strong>Samba / SMB</strong> — Programa y protocolo para compartir carpetas por la red. Recurso <code>PolyPawNAS</code>.</li>
+<li><strong>Servicio</strong> — Programa que corre en segundo plano, siempre disponible (Samba, Cockpit, AdGuard).</li>
+<li><strong>Servidor</strong> — Computadora que presta un servicio a otras. <code>polypaw-nas</code> lo es.</li>
+<li><strong>Sistema de archivos</strong> — Forma en que un disco organiza los datos. En el HDD del NAS usamos ext4.</li>
+<li><strong>SSD</strong> — Disco rápido. En <code>polypaw-nas</code>: 238 GB para el sistema operativo.</li>
+<li><strong>SSH</strong> — Forma cifrada de controlar el servidor por la red desde otra computadora.</li>
+<li><strong>sudo</strong> — Ejecutar un comando como administrador solo por esa vez, con tu contraseña.</li>
+<li><strong>systemd / systemctl</strong> — Director de servicios de Linux, y el comando para hablarle.</li>
+<li><strong>Tailscale</strong> — VPN fácil que conecta tus dispositivos entre sí estés donde estés, sin abrir puertos.</li>
+<li><strong>Ubuntu Server</strong> — Versión de Ubuntu sin escritorio gráfico, ideal para NAS. En <code>polypaw-nas</code>: 26.04.</li>
+<li><strong>UPS</strong> — Batería de respaldo ante cortes de luz. La batería del Acer hace de UPS natural.</li>
+<li><strong>UUID</strong> — Código único y permanente que identifica un disco. Mejor que <code>/dev/sda1</code> para montar en <code>fstab</code>.</li>
+<li><strong>VPN</strong> — Túnel privado y cifrado entre equipos a través de internet.</li>
+</ul>
+<hr />
+<h2 id="mapa-mental-del-nas">🧠 Mapa mental del NAS</h2>
+<pre><code>                          polypaw-nas (Acer Nitro)
+                                   │
+        ┌──────────────┬──────────┼───────────┬──────────────┐
+        │              │          │           │              │
+   HARDWARE        SISTEMA     RED        SERVICIOS      SEGURIDAD
+   ────────        ───────     ───        ─────────      ─────────
+   i5-9300H        Ubuntu      IP fija    Samba          Tailscale
+   8GB RAM ⚠       Server      Gateway    (PolyPawNAS)   (no abrir
+   SSD 238 → /     26.04       DNS         puerto 445     puertos)
+   HDD 954 →       root/sudo   Puertos    Cockpit        Contraseñas
+   /srv/nas        systemd     445/9090   (9090)         fuertes
+   Batería=UPS     permisos    53/3000    AdGuard (53)   Respaldos
+                                          Docker/Podman  (backup+cron)
+        │              │          │           │              │
+        └──────────────┴──────────┴───────────┴──────────────┘
+                                   │
+                    Guarda y comparte tus proyectos:
+              tunal-digital · PolyPaw · RachaSimple · Faro
+</code></pre>
+<blockquote>
+<p>Bit cierra la tapa del laptop a medias (nunca del todo, el NAS sigue trabajando) y sonríe. "Lo lograste. Empezaste el módulo sin saber qué era un servidor y ahora montaste uno entero, decisión por decisión. No memorizaste: entendiste. Y si mañana se te olvida qué era un puerto o por qué no abrimos nada al internet... vuelves al glosario, sin pena. Eso es exactamente lo que está ahí para. Nos vemos en el próximo módulo, futuro administrador de servidores."</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

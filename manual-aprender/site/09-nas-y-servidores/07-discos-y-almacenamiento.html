@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 07 — Discos y almacenamiento — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-07-discos-y-almacenamiento">Capitulo 07 — Discos y almacenamiento</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola de nuevo. Soy <strong>Bit</strong>, tu ajolote guia. Hoy bajamos al sotano de tu NAS: los discos. Tu servidor <strong>polypaw-nas</strong> (un laptop Acer Nitro AN515-54) tiene <strong>dos discos</strong> muy distintos, y entender quien es quien te va a salvar de muchos sustos. Vamos a aprender a ver los discos, medir cuanto espacio te queda, montar el HDD de datos en <code>/srv/nas</code>, hacer que se monte solo al encender y vigilar la salud de los discos para que tus respaldos no desaparezcan un mal dia. Respira: es mas facil de lo que parece, y lo haremos con calma. 🪼</p>
+</blockquote>
+<hr />
+<h2 id="1-los-dos-discos-de-polypaw-nas">1. Los dos discos de polypaw-nas</h2>
+<p>Antes de tocar comandos, fija una idea: tu NAS no tiene un disco, tiene <strong>dos</strong>, y cumplen papeles diferentes.</p>
+<ul>
+<li><strong>El SSD de 238 GB</strong> → es el <strong>disco de sistema</strong>. Ahi vive Ubuntu Server, los programas (Samba, Cockpit, Docker/Podman...) y la configuracion. Es rapido.</li>
+<li><strong>El HDD de 954 GB</strong> → es el <strong>disco de datos</strong>. Ahi van tus archivos del recurso compartido, los respaldos de tus repos (<code>tunal-digital</code>, <code>PolyPaw</code>, <code>RachaSimple</code>, <code>Faro/Organizer</code>), tus fotos, etc. Es mas grande pero mas lento.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-ssd-solid-state-drive">🟦 ¿Que significa? — <em>SSD (Solid State Drive)</em></h3>
+<p>Un disco <strong>de estado solido</strong>: guarda datos en memoria tipo "chip", sin partes que giren. Es muy rapido y silencioso. <strong>Para que sirve:</strong> arrancar el sistema y abrir programas veloz. <strong>En tu polypaw-nas:</strong> es el disco de <strong>238 GB</strong> donde esta instalado Ubuntu Server. Como es mas pequeno, NO conviene llenarlo de archivos personales.</p>
+<h3 id="que-significa-hdd-hard-disk-drive">🟦 ¿Que significa? — <em>HDD (Hard Disk Drive)</em></h3>
+<p>Un disco <strong>duro mecanico</strong>: guarda datos en platos que giran con una aguja, como un tocadiscos diminuto. Es mas lento que un SSD pero suele dar <strong>mas espacio por menos dinero</strong>. <strong>Para que sirve:</strong> almacenar muchos archivos que no necesitas abrir a maxima velocidad. <strong>En tu polypaw-nas:</strong> es el disco de <strong>954 GB</strong> que montas en <code>/srv/nas</code> y que comparte Samba.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Regla de oro casera: <strong>el sistema en el SSD, tus datos en el HDD.</strong> Si pones tus respaldos en el SSD, lo llenas rapido y el servidor empieza a fallar. Manten cada cosa en su lugar.</p>
+</blockquote>
+<hr />
+<h2 id="2-como-ve-linux-los-discos-lsblk">2. Como ve Linux los discos: <code>lsblk</code></h2>
+<p>En Linux, <strong>todo es un archivo</strong>, y los discos tambien. Cada disco aparece con un nombre dentro de la carpeta <code>/dev</code> (de "devices", dispositivos).</p>
+<blockquote class="def">
+<h3 id="que-significa-dispositivo-de-bloque-block-device">🟦 ¿Que significa? — <em>Dispositivo de bloque (block device)</em></h3>
+<p>Es como Linux llama a un disco o memoria donde se leen y escriben datos en <strong>bloques</strong> (trozos). <strong>Para que sirve:</strong> darle a cada disco un nombre con el que referirte a el. <strong>En tu polypaw-nas:</strong> tus discos aparecen como <code>/dev/sda</code>, <code>/dev/sdb</code>, <code>/dev/nvme0n1</code>, etc. La "b" de <code>sdb</code> no significa "segundo bueno", solo es el orden en que el sistema los encontro.</p>
+</blockquote>
+<p>El comando estrella para ver tus discos es <code>lsblk</code> (de "list block devices", listar dispositivos de bloque):</p>
+<pre><code class="language-bash">lsblk
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-lsblk">🟦 ¿Que significa? — <em><code>lsblk</code></em></h3>
+<p>Comando que <strong>dibuja un arbol</strong> de todos tus discos, sus particiones y donde estan montados. <strong>Para que sirve:</strong> ver de un vistazo "que discos tengo y como estan organizados". <strong>En tu polypaw-nas:</strong> lo usaras para distinguir el SSD del HDD y confirmar que <code>/srv/nas</code> apunta al disco correcto.</p>
+</blockquote>
+<p>Una salida tipica en tu Acer Nitro se veria parecida a esto (los nombres exactos pueden variar):</p>
+<pre><code class="language-bash">NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda           8:0    0   954G  0 disk
+└─sda1        8:1    0   954G  0 part /srv/nas
+nvme0n1     259:0    0 238.5G  0 disk
+├─nvme0n1p1 259:1    0   512M  0 part /boot/efi
+└─nvme0n1p2 259:2    0   238G  0 part /
+</code></pre>
+<p>Leelo asi:</p>
+<ul>
+<li><code>nvme0n1</code> es tu <strong>SSD de 238 GB</strong> (los SSD modernos suelen llamarse <code>nvme...</code>). Su particion <code>nvme0n1p2</code> esta montada en <code>/</code> (la raiz del sistema).</li>
+<li><code>sda</code> es tu <strong>HDD de 954 GB</strong>. Su particion <code>sda1</code> esta montada en <code>/srv/nas</code>. ¡Ese es tu disco de datos!</li>
+<li>La columna <code>SIZE</code> es el tamano, <code>TYPE</code> dice si es disco (<code>disk</code>) o particion (<code>part</code>), y <code>MOUNTPOINTS</code> dice donde esta "enganchado" en el sistema.</li>
+</ul>
+<blockquote class="code">
+<h3 id="en-tu-servidor">🔎 En tu servidor</h3>
+<p>Conectate por SSH a polypaw-nas y corre <code>lsblk</code>. Identifica cual linea es el SSD (238 GB, raiz <code>/</code>) y cual es el HDD (954 GB, <code>/srv/nas</code>). Si el HDD no muestra <code>/srv/nas</code> en MOUNTPOINTS, es que no esta montado todavia: lo arreglaremos en la seccion 6.</p>
+</blockquote>
+<hr />
+<h2 id="3-particiones-y-sistemas-de-archivos">3. Particiones y sistemas de archivos</h2>
+<p>Un disco "crudo" recien comprado no sirve para guardar archivos directamente. Hay que hacer dos cosas: <strong>particionarlo</strong> y <strong>formatearlo</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-particion">🟦 ¿Que significa? — <em>Particion</em></h3>
+<p>Es <strong>dividir un disco en zonas</strong> independientes, como separar una habitacion grande con paredes. Cada zona se trata como si fuera un disco aparte. <strong>Para que sirve:</strong> organizar el espacio (por ejemplo, una zona para el sistema y otra para datos). <strong>En tu polypaw-nas:</strong> el HDD tiene una particion grande, <code>sda1</code>, que ocupa casi todo el disco y guarda tus datos del NAS.</p>
+<h3 id="que-significa-sistema-de-archivos-filesystem">🟦 ¿Que significa? — <em>Sistema de archivos (filesystem)</em></h3>
+<p>Es el <strong>idioma con el que un disco organiza los archivos</strong>: como guarda nombres, carpetas, permisos y donde esta cada cosa. <strong>Para que sirve:</strong> sin el, el disco seria un monton de bytes sin orden. <strong>En tu polypaw-nas:</strong> tanto el SSD como el HDD usan <strong>ext4</strong>, el sistema de archivos estandar de Linux.</p>
+<h3 id="que-significa-ext4">🟦 ¿Que significa? — <em>ext4</em></h3>
+<p>Es el <strong>sistema de archivos por defecto en Ubuntu</strong>. Maduro, estable y muy probado. <strong>Para que sirve:</strong> guardar tus archivos de forma segura y con permisos de usuario. <strong>En tu polypaw-nas:</strong> es el formato del HDD en <code>/srv/nas</code>. Cuando ves <code>ext4</code> en los comandos, es "el idioma" de tu disco de datos.</p>
+<h3 id="que-significa-formatear">🟦 ¿Que significa? — <em>Formatear</em></h3>
+<p>Es <strong>escribir un sistema de archivos vacio en una particion</strong>, dejandola lista para usar. ¡OJO! Formatear <strong>borra todo</strong> lo que hubiera dentro. <strong>Para que sirve:</strong> preparar un disco nuevo. <strong>En tu polypaw-nas:</strong> solo lo harias <strong>una vez</strong>, al estrenar un disco. No vuelvas a formatear el HDD si ya tiene tus datos.</p>
+</blockquote>
+<p>Para ver el tipo de sistema de archivos de cada particion, usa <code>lsblk</code> con la opcion <code>-f</code>:</p>
+<pre><code class="language-bash">lsblk -f
+</code></pre>
+<p>Veras una columna <code>FSTYPE</code> con <code>ext4</code> en tus particiones de datos y sistema, y un valor <code>UUID</code> larguisimo que sera clave en la seccion 6.</p>
+<blockquote class="def">
+<h3 id="que-significa-mkfs-make-filesystem">🟦 ¿Que significa? — <em><code>mkfs</code> (make filesystem)</em></h3>
+<p>Comando que <strong>crea un sistema de archivos vacio</strong> en una particion, es decir, la formatea. La version para ext4 es <code>mkfs.ext4</code>. <strong>Para que sirve:</strong> dejar un disco nuevo listo para guardar datos. <strong>En tu polypaw-nas:</strong> es el comando mas peligroso del capitulo. Solo se usa <strong>una vez</strong>, cuando estrenas un disco. Si lo corres sobre el HDD que ya tiene tus respaldos, los borra sin posibilidad de recuperarlos.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>El comando para formatear es <code>mkfs</code> (make filesystem). <strong>Nunca</strong> lo corras "para probar". Si escribes <code>sudo mkfs.ext4 /dev/sda1</code> sobre tu HDD lleno de respaldos, <strong>se borra todo en segundos y no hay deshacer</strong>. Antes de cualquier comando que mencione un <code>/dev/sdX</code>, respira y confirma con <code>lsblk</code> que es el disco correcto.</p>
+</blockquote>
+<hr />
+<h2 id="4-cuanto-espacio-me-queda-df-h">4. Cuanto espacio me queda: <code>df -h</code></h2>
+<p>La pregunta mas frecuente en un NAS es: <strong>¿cuanto espacio me queda?</strong> Para eso esta <code>df</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-df-disk-free">🟦 ¿Que significa? — <em><code>df</code> (disk free)</em></h3>
+<p>Comando que muestra el <strong>espacio libre y usado</strong> de cada disco montado. <strong>Para que sirve:</strong> saber si te estas quedando sin espacio. <strong>En tu polypaw-nas:</strong> lo usaras para vigilar el HDD de <code>/srv/nas</code> antes de que se llene de respaldos.</p>
+</blockquote>
+<p>La opcion <code>-h</code> significa "human-readable" (legible para humanos): muestra GB y MB en vez de numeros gigantescos.</p>
+<pre><code class="language-bash">df -h
+</code></pre>
+<p>Una salida tipica en polypaw-nas:</p>
+<pre><code class="language-bash">Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2  234G   18G  204G   8% /
+/dev/sda1       938G  120G  770G  14% /srv/nas
+tmpfs           3.9G     0  3.9G   0% /dev/shm
+</code></pre>
+<p>Lee la fila de <code>/srv/nas</code>: tiene <strong>938 GB de tamano</strong>, <strong>120 GB usados</strong>, <strong>770 GB libres</strong> y un <strong>14% de uso</strong>. Eso es lo que te importa para tus datos.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Si solo quieres ver el disco de datos, pasa la ruta directamente:
+<code>bash
+df -h /srv/nas</code>
+Asi evitas el ruido de <code>tmpfs</code> y otras lineas de sistema.</p>
+<h3 id="que-significa-punto-de-montaje-mountpoint">🟦 ¿Que significa? — <em>Punto de montaje (mountpoint)</em></h3>
+<p>Es la <strong>carpeta donde "aparece" el contenido de un disco</strong>. <strong>Para que sirve:</strong> acceder a un disco como si fuera una carpeta normal. <strong>En tu polypaw-nas:</strong> <code>/srv/nas</code> es el punto de montaje del HDD. Cuando entras a <code>/srv/nas</code>, en realidad estas dentro del disco de 954 GB.</p>
+</blockquote>
+<p>¿Y para saber que carpeta esta ocupando mas? Usa <code>du</code> (disk usage):</p>
+<pre><code class="language-bash">sudo du -h --max-depth=1 /srv/nas | sort -h
+</code></pre>
+<p>Esto te dice cuanto pesa cada subcarpeta de <code>/srv/nas</code>, ordenado de menor a mayor. Util para descubrir que respaldo crecio de mas.</p>
+<blockquote class="def">
+<h3 id="que-significa-du-disk-usage">🟦 ¿Que significa? — <em><code>du</code> (disk usage)</em></h3>
+<p>Comando que mide <strong>cuanto pesa cada carpeta</strong>, sumando todos los archivos que tiene dentro. <strong>Para que sirve:</strong> mientras <code>df</code> te dice cuanto queda en el disco entero, <code>du</code> te dice <strong>quien se esta comiendo el espacio</strong>. <strong>En tu polypaw-nas:</strong> lo usas dentro de <code>/srv/nas</code> para cazar la carpeta o el respaldo gigante que llena el HDD de 954 GB. El <code>--max-depth=1</code> evita que liste cada archivo suelto y solo te muestre el peso de las carpetas de primer nivel.</p>
+<h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
+<p>Cada cierto tiempo corre <code>df -h /srv/nas</code>. Si el <code>Use%</code> pasa del <strong>80%</strong>, empieza a planear: borra respaldos viejos o consigue mas disco. Un NAS lleno al 100% deja de funcionar bien, y Samba puede empezar a rechazar escrituras.</p>
+</blockquote>
+<hr />
+<h2 id="5-montar-y-desmontar-a-mano">5. Montar y desmontar a mano</h2>
+<p>"Montar" un disco es <strong>engancharlo a una carpeta</strong> para poder usarlo. "Desmontar" es soltarlo de forma segura.</p>
+<blockquote class="def">
+<h3 id="que-significa-montar-mount">🟦 ¿Que significa? — <em>Montar (mount)</em></h3>
+<p>Es <strong>conectar un disco a una carpeta</strong> del sistema para acceder a sus archivos. <strong>Para que sirve:</strong> sin montarlo, el disco existe pero no puedes entrar a el. <strong>En tu polypaw-nas:</strong> montar el HDD en <code>/srv/nas</code> es lo que hace que Samba pueda compartir tus datos.</p>
+<h3 id="que-significa-desmontar-umount">🟦 ¿Que significa? — <em>Desmontar (umount)</em></h3>
+<p>Es <strong>soltar el disco de forma ordenada</strong>, asegurando que todo lo que estaba a medio escribir se guarde. <strong>Para que sirve:</strong> evitar corromper datos al apagar o desconectar. <strong>En tu polypaw-nas:</strong> rara vez lo haras, pero es importante saber que existe.</p>
+</blockquote>
+<p>Montar el HDD a mano (ejemplo):</p>
+<pre><code class="language-bash">sudo mount /dev/sda1 /srv/nas
+</code></pre>
+<p>Esto dice: "engancha la particion <code>sda1</code> a la carpeta <code>/srv/nas</code>". Despues, <code>df -h /srv/nas</code> deberia mostrarte el disco de 938 GB.</p>
+<p>Desmontar:</p>
+<pre><code class="language-bash">sudo umount /srv/nas
+</code></pre>
+<p>(Si, se escribe <code>umount</code>, sin la "n" — es una rareza historica de Unix.)</p>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>No desmontes <code>/srv/nas</code> mientras alguien copia archivos por Samba o un contenedor de Docker lo esta usando. Si lo intentas, veras "target is busy" (objetivo ocupado). <strong>Avisa, espera a que nadie lo use, y entonces desmonta.</strong> Para ver quien lo esta usando: <code>sudo lsof /srv/nas</code>.</p>
+</blockquote>
+<p>El problema de montar a mano es que <strong>se olvida al reiniciar</strong>. Si apagas y enciendes polypaw-nas (o se va la luz), el HDD vuelve a quedar sin montar. Para eso existe <code>/etc/fstab</code>.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Tu Acer Nitro tiene una ventaja secreta: <strong>la bateria del laptop funciona como una UPS natural</strong>. Si se va la luz, el NAS sigue encendido con la bateria, dandote tiempo de apagarlo bien o de que vuelva la corriente. Aun asi, configurar <code>/etc/fstab</code> para que el disco se monte solo es imprescindible.</p>
+<h3 id="que-significa-ups-uninterruptible-power-supply">🟦 ¿Que significa? — <em>UPS (Uninterruptible Power Supply)</em></h3>
+<p>Una <strong>bateria de respaldo</strong> que mantiene un equipo encendido cuando se corta la luz. <strong>Para que sirve:</strong> evitar apagones bruscos que corrompen discos. <strong>En tu polypaw-nas:</strong> no necesitas comprar una; la <strong>bateria interna del Acer Nitro</strong> ya cumple ese papel mientras este sana.</p>
+</blockquote>
+<hr />
+<h2 id="6-montar-al-arranque-etcfstab">6. Montar al arranque: <code>/etc/fstab</code></h2>
+<p>Aqui esta el corazon del capitulo. <code>/etc/fstab</code> es un archivo de texto que le dice a Ubuntu <strong>que discos montar automaticamente al encender</strong> y donde.</p>
+<blockquote class="def">
+<h3 id="que-significa-etcfstab-file-systems-table">🟦 ¿Que significa? — <em><code>/etc/fstab</code> (file systems table)</em></h3>
+<p>Es la <strong>lista de discos que se montan solos al arrancar</strong>. <strong>Para que sirve:</strong> que <code>/srv/nas</code> aparezca montado siempre, sin que tengas que escribir <code>mount</code> cada vez. <strong>En tu polypaw-nas:</strong> garantiza que despues de un reinicio, Samba siga compartiendo tus datos sin que muevas un dedo.</p>
+</blockquote>
+<p>Para que <code>fstab</code> identifique el disco de forma segura, NO usamos <code>/dev/sda1</code> (ese nombre puede cambiar si conectas otro disco USB). Usamos el <strong>UUID</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-uuid-identificador-unico-universal">🟦 ¿Que significa? — <em>UUID (identificador unico universal)</em></h3>
+<p>Es un <strong>codigo unico</strong> que identifica una particion para siempre, aunque cambie de nombre o de puerto. Algo como <code>a1b2c3d4-...</code>. <strong>Para que sirve:</strong> que <code>fstab</code> siempre encuentre el disco correcto. <strong>En tu polypaw-nas:</strong> usar el UUID del HDD evita que un dia montes el disco equivocado en <code>/srv/nas</code>.</p>
+</blockquote>
+<p>Primero, averigua el UUID de tu HDD:</p>
+<pre><code class="language-bash">sudo blkid /dev/sda1
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-blkid">🟦 ¿Que significa? — <em><code>blkid</code></em></h3>
+<p>Comando que <strong>lee la etiqueta de identidad</strong> de una particion: su UUID y su tipo de sistema de archivos. <strong>Para que sirve:</strong> conseguir el UUID exacto que necesitas para <code>/etc/fstab</code>. <strong>En tu polypaw-nas:</strong> lo corres sobre <code>/dev/sda1</code> (tu HDD de 954 GB) para copiar su UUID y pegarlo en <code>fstab</code>, de modo que <code>/srv/nas</code> se monte siempre en el disco correcto aunque cambie de nombre.</p>
+</blockquote>
+<p>Te dara algo como:</p>
+<pre><code class="language-bash">/dev/sda1: UUID=&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot; TYPE=&quot;ext4&quot;
+</code></pre>
+<p>Copia ese UUID. Ahora edita <code>/etc/fstab</code> (usa <code>nano</code>, un editor sencillo):</p>
+<pre><code class="language-bash">sudo nano /etc/fstab
+</code></pre>
+<p>Anade una linea al final (cambia el UUID por el tuyo real):</p>
+<pre><code class="language-bash">UUID=a1b2c3d4-e5f6-7890-abcd-ef1234567890  /srv/nas  ext4  defaults,nofail  0  2
+</code></pre>
+<p>Que significa cada campo, de izquierda a derecha:</p>
+<ol>
+<li><strong>UUID=...</strong> → que disco montar.</li>
+<li><strong>/srv/nas</strong> → donde montarlo.</li>
+<li><strong>ext4</strong> → el tipo de sistema de archivos.</li>
+<li><strong>defaults,nofail</strong> → opciones. <code>defaults</code> son ajustes normales; <code>nofail</code> es clave: si el disco falta, el servidor <strong>arranca igual</strong> en vez de quedarse colgado.</li>
+<li><strong>0</strong> → respaldo con la herramienta <code>dump</code> (casi nadie la usa hoy; deja 0).</li>
+<li><strong>2</strong> → orden de revision al arrancar (1 para la raiz, 2 para los demas).</li>
+</ol>
+<blockquote class="def">
+<h3 id="que-significa-nofail">🟦 ¿Que significa? — <em><code>nofail</code></em></h3>
+<p>Opcion que le dice a Ubuntu: <strong>"si este disco no esta, arranca de todas formas"</strong>. <strong>Para que sirve:</strong> evitar que polypaw-nas se quede atascado en pantalla negra si el HDD falla o se desconecta. <strong>En tu polypaw-nas:</strong> ponla SIEMPRE en discos de datos. Sin ella, un disco con problemas puede dejarte el servidor inaccesible.</p>
+</blockquote>
+<p>Antes de reiniciar, <strong>prueba</strong> que <code>fstab</code> no tiene errores:</p>
+<pre><code class="language-bash">sudo mount -a
+</code></pre>
+<p>Esto monta todo lo de <code>fstab</code>. Si no da ningun error y <code>df -h /srv/nas</code> muestra tu disco, ¡quedo perfecto!</p>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Un error en <code>/etc/fstab</code> (un UUID mal copiado, sin <code>nofail</code>) puede impedir que el servidor arranque. <strong>Siempre</strong> corre <code>sudo mount -a</code> despues de editar. Si no da errores, reiniciar es seguro. Esta es de las pocas cosas que pueden dejarte el NAS sin arrancar, asi que tomatelo en serio.</p>
+<h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
+<p>Tambien puedes administrar discos desde <strong>Cockpit</strong> (el panel web en el puerto 9090). En su seccion de Almacenamiento ves los discos graficamente y puedes montar/desmontar con clics. Esta bien para mirar, pero entender <code>fstab</code> por texto te da control total cuando algo se rompe.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Cockpit escucha en el puerto <strong>9090</strong>, pero eso NO significa que debas abrir ese puerto en tu router. Para entrar a Cockpit desde fuera de casa, conectate primero por <strong>Tailscale</strong> y luego abre <code>https://polypaw-nas:9090</code> dentro de esa red privada. Exponer el 9090 directo a internet es regalarle a cualquier atacante la puerta de administracion de todo tu NAS. Tailscale primero, siempre.</p>
+</blockquote>
+<hr />
+<h2 id="7-lvm-a-grandes-rasgos">7. LVM a grandes rasgos</h2>
+<p>Quizas en <code>lsblk</code> veas nombres raros como <code>ubuntu--vg-ubuntu--lv</code>. Eso es <strong>LVM</strong>, y conviene saber que es aunque hoy no lo toques.</p>
+<blockquote class="def">
+<h3 id="que-significa-lvm-logical-volume-manager">🟦 ¿Que significa? — <em>LVM (Logical Volume Manager)</em></h3>
+<p>Es una <strong>capa flexible para manejar discos</strong>. En vez de particiones rigidas, junta el espacio en un "monton" (grupo de volumenes) del que cortas "volumenes logicos" del tamano que quieras, y puedes agrandarlos despues. <strong>Para que sirve:</strong> ampliar espacio sin reformatear, o sumar varios discos en uno solo. <strong>En tu polypaw-nas:</strong> Ubuntu Server suele instalar el <strong>sistema (el SSD)</strong> sobre LVM. Tu HDD de <code>/srv/nas</code> puede estar en ext4 simple o sobre LVM, segun como lo configuraste.</p>
+</blockquote>
+<p>La idea en una frase: <strong>LVM es como tener tabiques movibles</strong> en vez de paredes de concreto. Si un dia tu volumen de sistema se queda corto, con LVM puedes agrandarlo sin reinstalar.</p>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>No necesitas dominar LVM para tener un NAS funcional. Para empezar, <strong>ext4 simple en el HDD</strong> es perfecto y mas facil de entender. Aprende LVM mas adelante, cuando quieras sumar un segundo disco de datos o redimensionar volumenes.</p>
+<h3 id="que-significa-volumen-logico-logical-volume">🟦 ¿Que significa? — <em>Volumen logico (logical volume)</em></h3>
+<p>Es una <strong>"particion flexible"</strong> dentro de LVM que puedes agrandar o achicar. <strong>Para que sirve:</strong> ajustar el espacio segun lo que necesites. <strong>En tu polypaw-nas:</strong> si tu SSD de sistema usa LVM, la raiz <code>/</code> es en realidad un volumen logico.</p>
+</blockquote>
+<hr />
+<h2 id="8-la-salud-del-disco-smart">8. La salud del disco: SMART</h2>
+<p>Los discos no son eternos. Un HDD mecanico, con sus partes que giran, <strong>falla con el tiempo</strong>. La buena noticia: los discos avisan antes de morir, gracias a SMART.</p>
+<blockquote class="def">
+<h3 id="que-significa-smart-auto-diagnostico-del-disco">🟦 ¿Que significa? — <em>SMART (auto-diagnostico del disco)</em></h3>
+<p>Es un sistema dentro del disco que <strong>vigila su propia salud</strong> y registra senales de desgaste: sectores danados, temperatura, errores de lectura. <strong>Para que sirve:</strong> avisarte ANTES de que el disco muera, para que respaldes a tiempo. <strong>En tu polypaw-nas:</strong> lo consultas con la herramienta <code>smartctl</code> para vigilar la salud del HDD de 954 GB, que es el que mas trabaja.</p>
+</blockquote>
+<p>Primero instala las herramientas (si no las tienes):</p>
+<pre><code class="language-bash">sudo apt install smartmontools
+</code></pre>
+<p>Para ver la salud de tu HDD:</p>
+<pre><code class="language-bash">sudo smartctl -H /dev/sda
+</code></pre>
+<p>La linea importante dice:</p>
+<pre><code class="language-bash">SMART overall-health self-assessment test result: PASSED
+</code></pre>
+<p><code>PASSED</code> = el disco se ve sano. Si dijera <code>FAILED</code>, <strong>respalda todo de inmediato</strong> y cambia el disco.</p>
+<p>Para un informe completo:</p>
+<pre><code class="language-bash">sudo smartctl -a /dev/sda
+</code></pre>
+<p>Mira sobre todo estos valores:</p>
+<ul>
+<li><strong>Reallocated_Sector_Ct</strong> → sectores danados que el disco tuvo que "jubilar". Si crece, mala senal.</li>
+<li><strong>Power_On_Hours</strong> → cuantas horas lleva encendido. Un NAS acumula muchas.</li>
+<li><strong>Temperature</strong> → temperatura. En un laptop dentro de una caja cerrada puede subir; vigilala.</li>
+</ul>
+<p>Tambien puedes lanzar una prueba corta:</p>
+<pre><code class="language-bash">sudo smartctl -t short /dev/sda
+</code></pre>
+<p>Espera unos minutos y luego mira el resultado con <code>sudo smartctl -a /dev/sda</code>.</p>
+<blockquote class="warn">
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>SMART avisa, pero <strong>no siempre con tiempo</strong>. La unica proteccion real contra perder datos es tener <strong>copias de respaldo en otro lugar</strong>. SMART te dice "este disco esta cansado"; tus respaldos te salvan cuando, aun asi, falla de golpe.</p>
+<h3 id="en-tu-servidor_3">🔎 En tu servidor</h3>
+<p>Revisa SMART del HDD una vez al mes. Como polypaw-nas vive encendido como NAS, el HDD de datos suma horas rapido. Si ves que <code>Reallocated_Sector_Ct</code> empieza a subir mes a mes, ve consiguiendo un disco nuevo sin prisa pero sin pausa.</p>
+</blockquote>
+<hr />
+<h2 id="9-seguridad-y-respaldos-la-parte-que-no-se-ve">9. Seguridad y respaldos: la parte que no se ve</h2>
+<p>Hablar de discos sin hablar de seguridad seria dejarte a medias. Tus datos en <code>/srv/nas</code> valen mas que el hardware.</p>
+<p><strong>La regla 3-2-1 de respaldos</strong> (simplificada para tu caso):</p>
+<ul>
+<li><strong>3</strong> copias de lo importante.</li>
+<li><strong>2</strong> soportes distintos (por ejemplo, el HDD del NAS + un disco USB externo).</li>
+<li><strong>1</strong> copia fuera de casa (otro lugar fisico, o un repo en GitHub como <code>Faro/Organizer</code> para codigo).</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>Tus repos (<code>tunal-digital</code>, <code>PolyPaw</code>, <code>RachaSimple</code>, <code>Faro/Organizer</code>) ya viven en GitHub, asi que el codigo tiene respaldo natural. Lo que de verdad debes respaldar del NAS son <strong>los datos que solo existen ahi</strong>: fotos, documentos, bases de datos de tus contenedores Docker.</p>
+</blockquote>
+<p>Y sobre el acceso al NAS:</p>
+<blockquote class="warn">
+<h3 id="cuidado_5">⚠️ Cuidado</h3>
+<p><strong>No abras puertos de tu router hacia internet</strong> para llegar al NAS (ni el 9090 de Cockpit, ni Samba, ni nada). Abrir puertos expone polypaw-nas a todo el mundo y a ataques automaticos. <strong>Usa Tailscale</strong>, que crea una red privada cifrada: accedes a tu NAS desde fuera como si estuvieras en casa, sin abrir un solo puerto. Es la diferencia entre dejar la puerta abierta de par en par y tener una llave secreta.</p>
+<h3 id="que-significa-tailscale">🟦 ¿Que significa? — <em>Tailscale</em></h3>
+<p>Es una <strong>VPN sencilla</strong> que conecta tus dispositivos en una red privada y cifrada, sin configurar el router. <strong>Para que sirve:</strong> acceder a tu NAS de forma segura desde cualquier lugar. <strong>En tu polypaw-nas:</strong> ya esta instalado; es tu via segura para llegar a Cockpit (9090) y a Samba sin exponer nada a internet.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>Pon <strong>contrasenas fuertes</strong> al usuario de Samba (el recurso <code>PolyPawNAS</code>) y a tu cuenta de Ubuntu. Un disco bien montado pero con clave "1234" es como una caja fuerte con la puerta entreabierta.</p>
+<h3 id="en-tu-servidor_4">🔎 En tu servidor</h3>
+<p>Recuerda el limite de <strong>8 GB de RAM</strong> del Acer Nitro. Los discos en si no gastan RAM, pero copiar archivos enormes por Samba o correr muchos contenedores Docker a la vez si la consume. Vigila la memoria con <code>free -h</code> mientras mueves datos grandes; si la RAM se agota, el sistema se pone lento o mata procesos. Datos y memoria van de la mano.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se que polypaw-nas tiene <strong>dos discos</strong>: SSD de 238 GB (sistema) y HDD de 954 GB (datos en <code>/srv/nas</code>).</li>
+<li>[ ] Entiendo la diferencia entre <strong>SSD</strong> (rapido, sistema) y <strong>HDD</strong> (grande, datos).</li>
+<li>[ ] Se usar <code>lsblk</code> para ver mis discos y particiones como un arbol.</li>
+<li>[ ] Se que es una <strong>particion</strong>, un <strong>sistema de archivos</strong> y que mi disco usa <strong>ext4</strong>.</li>
+<li>[ ] Se medir el espacio libre con <code>df -h /srv/nas</code> y vigilar no pasar del 80%.</li>
+<li>[ ] Entiendo que es <strong>montar</strong> y <strong>desmontar</strong> un disco, y por que el montaje manual se pierde al reiniciar.</li>
+<li>[ ] Se editar <code>/etc/fstab</code> con el <strong>UUID</strong> y la opcion <strong>nofail</strong> para montar <code>/srv/nas</code> al arranque.</li>
+<li>[ ] Se que <code>sudo mount -a</code> prueba <code>fstab</code> antes de reiniciar.</li>
+<li>[ ] Tengo una idea de que es <strong>LVM</strong> (tabiques movibles) aunque no lo use aun.</li>
+<li>[ ] Se consultar la salud del HDD con <strong>SMART</strong> (<code>smartctl -H</code>) y que <code>PASSED</code> es buena senal.</li>
+<li>[ ] Tengo claro que <strong>respaldos + Tailscale + contrasenas fuertes</strong> protegen mis datos, y que NO debo abrir puertos a internet.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 <strong>Conoce tus discos.</strong> Conectate por SSH a polypaw-nas y corre <code>lsblk -f</code>. Escribe en un papel: cual es el SSD, cual el HDD, que UUID tiene la particion de <code>/srv/nas</code> y que sistema de archivos usa.</p>
+</li>
+<li>
+<p>💻 <strong>Mide tu espacio.</strong> Corre <code>df -h /srv/nas</code> y anota el porcentaje de uso. Luego corre <code>sudo du -h --max-depth=1 /srv/nas | sort -h</code> y descubre que carpeta ocupa mas. ¿Hay algun respaldo viejo que podrias borrar?</p>
+</li>
+<li>
+<p>💻 <strong>Revisa la salud del HDD.</strong> Instala <code>smartmontools</code> si hace falta y corre <code>sudo smartctl -H /dev/sda</code>. Confirma que dice <code>PASSED</code>. Bonus: lanza <code>sudo smartctl -t short /dev/sda</code>, espera 3 minutos y revisa el informe completo.</p>
+</li>
+<li>
+<p>💻 <strong>Verifica tu fstab sin reiniciar.</strong> Mira tu archivo con <code>cat /etc/fstab</code> y encuentra la linea de <code>/srv/nas</code>. Comprueba que tiene <code>nofail</code>. Si todo esta bien, corre <code>sudo mount -a</code> y confirma que no da errores.</p>
+</li>
+<li>
+<p><strong>Disena tu plan de respaldo.</strong> Sin tocar la terminal, escribe en una nota tu plan 3-2-1: ¿que datos de <code>/srv/nas</code> son irreemplazables? ¿En que segundo soporte los copiarias? ¿Cual seria tu copia "fuera de casa"?</p>
+</li>
+<li>
+<p>💻 <strong>Vigila la memoria.</strong> Corre <code>free -h</code> en polypaw-nas y anota cuanta RAM libre tienes de los 8 GB. Imagina que copias un archivo de 20 GB por Samba: ¿crees que la RAM seria el problema, o el disco? (Pista: el disco se llena, la RAM se usa de paso.)</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. 🪼 Ahora ves a tus discos con rayos X: sabes quien es el SSD, quien el HDD, donde se monta <code>/srv/nas</code>, como hacer que se monte solo y como vigilar su salud antes de que falle. Recuerda la frase que Bit repite hasta dormido: <strong>"un dato sin respaldo es un dato que ya casi perdiste"</strong>. Cuida tus discos, cuida tus copias, y polypaw-nas te servira fiel por anos. Nos vemos en el siguiente capitulo. 🐾</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

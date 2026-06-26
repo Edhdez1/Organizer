@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 06 — Linux a fondo para tu servidor — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-06-linux-a-fondo-para-tu-servidor">Capitulo 06 — Linux a fondo para tu servidor</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/09-nas-y-servidores/cap06.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola de nuevo, soy <strong>Bit</strong>, tu ajolote acompañante. Hasta ahora hemos tratado a <strong>polypaw-nas</strong> como una cajita mágica que guarda archivos. En este capítulo vamos a abrir la caja. Vas a entender cómo piensa Linux por dentro: quién manda (root y sudo), quién puede tocar qué (usuarios, grupos y permisos), dónde guarda cada cosa (la estructura de carpetas) y cómo editar la configuración a mano sin romper nada (nano). Todo aplicado a tu laptop Acer Nitro convertido en servidor. Respira: no hay escritorio, no hay ratón, solo terminal por SSH... y eso es exactamente lo que un servidor necesita. Vamos despacio.</p>
+</blockquote>
+<hr />
+<h2 id="1-por-que-tu-servidor-no-tiene-escritorio-y-esta-bien-asi">1. Por qué tu servidor no tiene escritorio (y está bien así)</h2>
+<p>Cuando instalaste <strong>Ubuntu Server 26.04</strong> en tu Acer Nitro AN515-54 (procesador Intel <strong>i5-9300H</strong> y 8 GB de RAM), no apareció un fondo de pantalla bonito ni iconos. Apareció una pantalla negra pidiendo usuario y contraseña. Eso no es un error: es la versión "Server" de Ubuntu, pensada para máquinas que trabajan sin que nadie las mire.</p>
+<blockquote class="def">
+<h3 id="que-significa-ubuntu-server">🟦 ¿Que significa? — <em>Ubuntu Server</em></h3>
+<p>Es una variante de Ubuntu (el sistema Linux) que viene <strong>sin entorno gráfico de escritorio</strong>: no hay ventanas ni ratón, solo una línea de comandos (la terminal).
+<strong>Para qué sirve:</strong> un escritorio gráfico consume memoria y procesador para dibujar cosas que nadie va a ver. Tu polypaw-nas solo tiene <strong>8 GB de RAM</strong>, así que cada megabyte cuenta. Sin escritorio, esa RAM queda libre para lo que importa: Samba, Docker, AdGuard Home.
+<strong>Dónde aparece en tu NAS real:</strong> es el sistema operativo que corre en el SSD de 238 GB. Lo administras siempre desde otra computadora, conectándote por SSH.</p>
+<h3 id="que-significa-terminal-linea-de-comandos">🟦 ¿Que significa? — <em>Terminal (línea de comandos)</em></h3>
+<p>Es una pantalla donde escribes órdenes de texto y el sistema las ejecuta. En vez de hacer clic en un botón, escribes una palabra y presionas Enter.
+<strong>Para qué sirve:</strong> es la forma más precisa y ligera de controlar un servidor. Una sola línea puede hacer lo que en una interfaz gráfica tomaría veinte clics.
+<strong>Dónde aparece en tu NAS real:</strong> es la pantalla negra que ves cuando entras por SSH a polypaw-nas.</p>
+<h3 id="que-significa-ssh">🟦 ¿Que significa? — <em>SSH</em></h3>
+<p>Significa <em>Secure Shell</em> (caparazón seguro). Es una forma de <strong>conectarte a la terminal de otra computadora a través de la red, de forma cifrada</strong> (nadie puede espiar lo que escribes).
+<strong>Para qué sirve:</strong> te deja administrar polypaw-nas desde tu laptop principal sin estar físicamente frente al Acer. Escribes en tu teclado, pero los comandos se ejecutan en el servidor.
+<strong>Dónde aparece en tu NAS real:</strong> lo usas cada vez que abres una terminal y escribes algo como <code>ssh edwar@polypaw-nas</code>. Idealmente entras a través de <strong>Tailscale</strong>, no por internet abierto.</p>
+</blockquote>
+<p>Así te conectas a tu servidor desde tu laptop principal:</p>
+<pre><code class="language-bash"># Conéctate a polypaw-nas por SSH (usuario &quot;edwar&quot;)
+ssh edwar@polypaw-nas
+
+# Si usas Tailscale, puedes usar el nombre que te dio Tailscale
+ssh edwar@polypaw-nas.tu-tailnet.ts.net
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-servidor">🔎 En tu servidor</h3>
+<p>Tu laptop tiene una ventaja secreta que un servidor de verdad no tiene: <strong>la batería funciona como una UPS natural</strong>. Si se va la luz, polypaw-nas no se apaga de golpe; sigue con la batería. Eso protege tus datos de cortes eléctricos. Cuida esa batería: no la dejes siempre al 100% si puedes evitarlo.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>Apunta el nombre y la IP de polypaw-nas en un papel o en una nota. Vas a escribir ese comando <code>ssh</code> muchas veces. Más adelante puedes configurar un alias para no repetir la dirección larga de Tailscale.</p>
+</blockquote>
+<hr />
+<h2 id="2-el-superusuario-root-y-sudo">2. El superusuario: root y sudo</h2>
+<p>En Linux hay un usuario especial que <strong>puede hacer absolutamente todo</strong>: borrar cualquier archivo, instalar programas, apagar el sistema. Se llama <strong>root</strong>. Es el dueño total de la máquina.</p>
+<blockquote class="def">
+<h3 id="que-significa-root-superusuario">🟦 ¿Que significa? — <em>root (superusuario)</em></h3>
+<p>Es la cuenta con <strong>poder total</strong> sobre el sistema. No tiene restricciones: puede leer, modificar y borrar cualquier cosa, incluido lo que haría que el servidor deje de arrancar.
+<strong>Para qué sirve:</strong> para tareas de administración que un usuario normal no puede hacer (instalar software, cambiar configuración del sistema, montar discos).
+<strong>Dónde aparece en tu NAS real:</strong> es el dueño de carpetas del sistema como <code>/etc</code>. Cuando un archivo "no te deja modificarlo", casi siempre es porque pertenece a root.</p>
+</blockquote>
+<p>Usar root todo el tiempo es peligroso: un error tonto puede destruir el sistema sin preguntar. Por eso Linux moderno prefiere que uses tu cuenta normal y pidas permisos de root <strong>solo cuando los necesites</strong>, con la palabra <code>sudo</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-sudo">🟦 ¿Que significa? — <em>sudo</em></h3>
+<p>Significa <em>superuser do</em> (haz esto como superusuario). Pones <code>sudo</code> delante de un comando para ejecutarlo <strong>con poderes de root solo por esta vez</strong>, y normalmente te pide tu contraseña.
+<strong>Para qué sirve:</strong> te da el poder justo cuando lo necesitas, sin estar permanentemente como root. Es como pedir prestada la llave maestra para una sola puerta y devolverla.
+<strong>Dónde aparece en tu NAS real:</strong> lo usas para instalar Samba, editar configuración de AdGuard, reiniciar servicios, montar el HDD de datos... casi cualquier tarea administrativa.</p>
+</blockquote>
+<pre><code class="language-bash"># SIN sudo: intentas editar un archivo del sistema y te lo niega
+nano /etc/samba/smb.conf
+# Resultado: se abre en modo &quot;solo lectura&quot; o no te deja guardar
+
+# CON sudo: ahora sí tienes permiso
+sudo nano /etc/samba/smb.conf
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Cada vez que escribas <code>sudo</code>, <strong>piensa un segundo antes de presionar Enter</strong>. Estás actuando como root. Un comando como <code>sudo rm -rf /</code> borraría TODO el sistema sin preguntar y sin posibilidad de recuperación. No hay papelera de reciclaje en la terminal. Lee siempre lo que escribiste antes de confirmar.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Cuando escribes tu contraseña tras un <code>sudo</code>, <strong>no verás asteriscos ni puntos</strong> mientras la tecleas. La terminal no muestra nada por seguridad. No está congelada: escribe tu contraseña y presiona Enter con confianza.</p>
+<h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
+<p>El usuario que creaste al instalar Ubuntu (por ejemplo <code>edwar</code>) ya tiene permiso para usar <code>sudo</code>. Eso significa que <strong>tu contraseña personal es, en la práctica, la llave maestra de polypaw-nas</strong>. Por eso debe ser una contraseña fuerte y única: si alguien la adivina, tiene root.</p>
+</blockquote>
+<hr />
+<h2 id="3-usuarios-y-grupos-quien-es-quien-en-polypaw-nas">3. Usuarios y grupos: quién es quién en polypaw-nas</h2>
+<p>Linux fue diseñado para que muchas personas y muchos programas compartan la misma máquina sin pisarse. Para eso, todo pertenece a un <strong>usuario</strong> y a un <strong>grupo</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-usuario">🟦 ¿Que significa? — <em>Usuario</em></h3>
+<p>Es una cuenta que identifica a una persona o a un programa dentro del sistema. Cada usuario tiene su propia carpeta personal, su contraseña y sus permisos.
+<strong>Para qué sirve:</strong> separa quién puede hacer qué. Tu cuenta <code>edwar</code> no es lo mismo que la cuenta <code>root</code> ni que las cuentas que crean Samba o Docker para funcionar.
+<strong>Dónde aparece en tu NAS real:</strong> tienes tu usuario personal para administrar, y existen usuarios "de servicio" (creados automáticamente) que usan Samba, AdGuard Home y Docker por debajo.</p>
+<h3 id="que-significa-grupo">🟦 ¿Que significa? — <em>Grupo</em></h3>
+<p>Es un conjunto de usuarios que comparten ciertos permisos. En vez de dar permiso uno por uno, pones a varios usuarios en un grupo y le das permiso al grupo entero.
+<strong>Para qué sirve:</strong> facilita compartir. Por ejemplo, todos los usuarios que deben poder escribir en el recurso compartido de Samba pueden estar en un mismo grupo.
+<strong>Dónde aparece en tu NAS real:</strong> el grupo que controla quién accede a los datos del recurso <strong>PolyPawNAS</strong> en el HDD de <code>/srv/nas</code>.</p>
+</blockquote>
+<p>Comandos básicos para ver y crear usuarios y grupos:</p>
+<pre><code class="language-bash"># ¿Quién soy yo ahora mismo?
+whoami
+
+# ¿A qué grupos pertenezco?
+groups
+
+# Ver tu usuario y grupos con detalle (números de identificación incluidos)
+id
+
+# Crear un usuario nuevo (por ejemplo, para tu pareja o un compañero)
+sudo adduser ana
+
+# Crear un grupo nuevo, por ejemplo para quien accede a los datos del NAS
+sudo addgroup nas-datos
+
+# Meter al usuario &quot;ana&quot; en el grupo &quot;nas-datos&quot;
+sudo usermod -aG nas-datos ana
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-la-opcion-ag-en-usermod">🟦 ¿Que significa? — <em>La opción -aG en usermod</em></h3>
+<p><code>usermod</code> modifica un usuario. <code>-aG</code> significa "añadir (append) al grupo sin quitarlo de los demás".
+<strong>Para qué sirve:</strong> la <code>a</code> es vital. Si pones solo <code>-G</code> sin la <code>a</code>, sacas al usuario de TODOS sus otros grupos y lo dejas solo en el que indicaste. Eso puede romper accesos. Siempre usa <code>-aG</code> para añadir.
+<strong>Dónde aparece en tu NAS real:</strong> lo usarás para dar acceso a Samba o a la carpeta de datos sin afectar otros permisos del usuario.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>No crees usuarios "de prueba" con contraseñas débiles (<code>1234</code>, <code>admin</code>) y luego los olvides. Cada cuenta activa es una puerta. Si creaste una cuenta para probar y ya no la usas, <strong>bórrala</strong> con <code>sudo deluser ana</code>. Menos puertas, menos riesgo.</p>
+</blockquote>
+<hr />
+<h2 id="4-permisos-de-archivos-el-corazon-de-la-seguridad-en-linux">4. Permisos de archivos: el corazón de la seguridad en Linux</h2>
+<p>Aquí está la idea más importante de todo el capítulo. En Linux, <strong>cada archivo y cada carpeta tiene permisos</strong> que definen tres cosas para tres grupos de personas.</p>
+<p>Las tres acciones posibles son:</p>
+<ul>
+<li><strong>r</strong> = read (leer): puedes ver el contenido.</li>
+<li><strong>w</strong> = write (escribir): puedes modificar o borrar.</li>
+<li><strong>x</strong> = execute (ejecutar): puedes correrlo como programa, o (en carpetas) entrar en ella.</li>
+</ul>
+<p>Y esos permisos se definen por separado para tres "audiencias":</p>
+<ul>
+<li><strong>Usuario (owner / dueño):</strong> la persona dueña del archivo.</li>
+<li><strong>Grupo (group):</strong> los miembros del grupo asignado al archivo.</li>
+<li><strong>Otros (others):</strong> todos los demás.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-permisos-rwx">🟦 ¿Que significa? — <em>Permisos rwx</em></h3>
+<p>Son las tres letras que indican si se puede <strong>leer (r), escribir (w) o ejecutar (x)</strong> un archivo, repetidas para dueño, grupo y otros.
+<strong>Para qué sirve:</strong> controlan quién puede tocar cada cosa. Es la primera línea de defensa de tu servidor: aunque alguien entre con un usuario limitado, no podrá modificar archivos que no le pertenecen.
+<strong>Dónde aparece en tu NAS real:</strong> lo ves cada vez que listas archivos con <code>ls -l</code>. Esos guiones y letras del principio (<code>-rw-r--r--</code>) son los permisos.</p>
+</blockquote>
+<p>Vamos a leer permisos reales. Escribe esto en polypaw-nas:</p>
+<pre><code class="language-bash"># Listar archivos con detalle (la &quot;l&quot; es de &quot;long&quot;, largo)
+ls -l /srv/nas
+</code></pre>
+<p>Una línea de salida se ve así:</p>
+<pre><code>-rw-r--r--  1 edwar nas-datos  1048576 jun 26 10:30 respaldo-faro.tar.gz
+drwxr-xr-x  2 edwar nas-datos     4096 jun 26 10:31 PolyPaw
+</code></pre>
+<p>Vamos a descifrarla, carácter por carácter, en la primera línea:</p>
+<ul>
+<li>El primer carácter <code>-</code> significa "archivo normal". Si fuera <code>d</code>, sería un directorio (carpeta), como en la segunda línea.</li>
+<li>Luego vienen <strong>tres bloques de rwx</strong>:</li>
+<li><code>rw-</code> → el <strong>dueño</strong> (<code>edwar</code>) puede leer y escribir, pero no ejecutar.</li>
+<li><code>r--</code> → el <strong>grupo</strong> (<code>nas-datos</code>) solo puede leer.</li>
+<li><code>r--</code> → <strong>otros</strong> solo pueden leer.</li>
+<li><code>edwar</code> es el dueño; <code>nas-datos</code> es el grupo.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-directorio">🟦 ¿Que significa? — <em>Directorio</em></h3>
+<p>Es la palabra técnica de Linux para "carpeta". Una carpeta que contiene archivos y otras carpetas.
+<strong>Para qué sirve:</strong> organiza los datos. En un directorio, el permiso de ejecución (<code>x</code>) no significa "correr un programa", sino "poder entrar y atravesar la carpeta".
+<strong>Dónde aparece en tu NAS real:</strong> cada carpeta de tus respaldos en <code>/srv/nas</code> es un directorio. La <code>d</code> al inicio de la línea de <code>ls -l</code> te lo confirma.</p>
+</blockquote>
+<h3 id="chmod-cambiar-permisos">chmod: cambiar permisos</h3>
+<blockquote class="def">
+<h3 id="que-significa-chmod">🟦 ¿Que significa? — <em>chmod</em></h3>
+<p>Significa <em>change mode</em> (cambiar modo). Es el comando para <strong>cambiar los permisos</strong> de un archivo o carpeta.
+<strong>Para qué sirve:</strong> ajustar quién puede leer, escribir o ejecutar algo. Por ejemplo, hacer que un script de respaldo sea ejecutable.
+<strong>Dónde aparece en tu NAS real:</strong> lo usarás al crear scripts de respaldo o al ajustar permisos de la carpeta de datos.</p>
+</blockquote>
+<p>Hay dos formas de usar chmod. La fácil de recordar es la <strong>simbólica</strong>:</p>
+<pre><code class="language-bash"># Dar permiso de ejecución al dueño de un script de respaldo
+chmod u+x respaldo.sh
+# u = usuario/dueño, + = añadir, x = ejecutar
+
+# Quitar el permiso de escritura a &quot;otros&quot; en un archivo importante
+chmod o-w datos-importantes.txt
+# o = otros, - = quitar, w = escribir
+
+# Dar lectura al grupo
+chmod g+r informe.txt
+# g = grupo
+</code></pre>
+<p>La otra forma es la <strong>numérica (octal)</strong>, que verás mucho en guías de internet. Cada permiso vale un número: <strong>r=4, w=2, x=1</strong>. Se suman por audiencia:</p>
+<pre><code class="language-bash"># 7 = 4+2+1 (rwx) para el dueño
+# 5 = 4+0+1 (r-x) para el grupo
+# 5 = 4+0+1 (r-x) para otros
+chmod 755 respaldo.sh
+
+# 6 = 4+2 (rw-) para el dueño
+# 4 = 4   (r--) para el grupo
+# 4 = 4   (r--) para otros
+chmod 644 informe.txt
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Recuerda estos dos "clásicos": <strong>755</strong> para carpetas y programas (todos pueden entrar/ejecutar, solo el dueño modifica) y <strong>644</strong> para archivos normales (todos leen, solo el dueño escribe). Con esos dos cubres el 90% de los casos.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Nunca pongas <code>chmod 777</code> a algo "para que funcione de una vez". <code>777</code> significa que <strong>cualquiera puede leer, escribir y ejecutar</strong>, incluidos programas maliciosos. Es la solución perezosa que abre agujeros de seguridad. Si algo no funciona por permisos, ajusta el dueño o el grupo, no abras todo a todos.</p>
+</blockquote>
+<h3 id="chown-cambiar-el-dueno">chown: cambiar el dueño</h3>
+<blockquote class="def">
+<h3 id="que-significa-chown">🟦 ¿Que significa? — <em>chown</em></h3>
+<p>Significa <em>change owner</em> (cambiar dueño). Cambia <strong>quién es el dueño y/o el grupo</strong> de un archivo o carpeta.
+<strong>Para qué sirve:</strong> transferir la propiedad. Por ejemplo, hacer que la carpeta de datos pertenezca al grupo que accede por Samba.
+<strong>Dónde aparece en tu NAS real:</strong> lo usarás al configurar <code>/srv/nas</code> para que el grupo correcto pueda escribir en el recurso compartido.</p>
+</blockquote>
+<pre><code class="language-bash"># Cambiar el dueño de un archivo a &quot;ana&quot;
+sudo chown ana respaldo.tar.gz
+
+# Cambiar dueño Y grupo a la vez (formato dueño:grupo)
+sudo chown edwar:nas-datos /srv/nas/PolyPaw
+
+# Aplicarlo a una carpeta y TODO su contenido (-R = recursivo)
+sudo chown -R edwar:nas-datos /srv/nas
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-recursivo-r">🟦 ¿Que significa? — <em>Recursivo (-R)</em></h3>
+<p>"Recursivo" significa "que se aplica también a todo lo que está dentro": la carpeta, sus archivos, sus subcarpetas y los archivos de esas subcarpetas.
+<strong>Para qué sirve:</strong> cambiar permisos o dueño de una carpeta entera de una sola vez, en lugar de archivo por archivo.
+<strong>Dónde aparece en tu NAS real:</strong> lo usarás sobre <code>/srv/nas</code> para arreglar el dueño de todos tus respaldos de golpe. Cuidado: con <code>-R</code> un error afecta MUCHOS archivos.</p>
+<h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
+<p>Cuando muevas un respaldo de <strong>tunal-digital</strong>, <strong>RachaSimple</strong> o <strong>Faro/Organizer</strong> al NAS, a veces queda con dueño <code>root</code> (porque lo copiaste con <code>sudo</code>). Si luego tu usuario o Samba no lo pueden tocar, el culpable suele ser el dueño. Un <code>sudo chown -R edwar:nas-datos /srv/nas/loquesea</code> lo arregla.</p>
+</blockquote>
+<hr />
+<h2 id="5-la-estructura-de-carpetas-de-linux-un-mapa-de-polypaw-nas">5. La estructura de carpetas de Linux: un mapa de polypaw-nas</h2>
+<p>En Windows todo cuelga de <code>C:\</code>. En Linux todo cuelga de una sola raíz llamada <code>/</code> (barra). Dentro hay carpetas con nombres estándar, cada una con un propósito. Conocerlas es como tener el mapa de tu servidor.</p>
+<blockquote class="def">
+<h3 id="que-significa-la-raiz">🟦 ¿Que significa? — <em>La raíz <code>/</code></em></h3>
+<p>Es el punto de partida de TODO el sistema de archivos. No existe un "disco C" o "disco D"; todo (incluidos tus discos) aparece como carpetas dentro de <code>/</code>.
+<strong>Para qué sirve:</strong> unifica todo en un solo árbol. Tu SSD del sistema y tu HDD de datos están ambos dentro de <code>/</code>, solo que en lugares distintos.
+<strong>Dónde aparece en tu NAS real:</strong> el SSD de 238 GB es la raíz <code>/</code>; el HDD de 954 GB aparece "colgado" dentro de <code>/srv/nas</code>.</p>
+</blockquote>
+<p>Las cuatro carpetas que más te importan como administrador de NAS:</p>
+<blockquote class="def">
+<h3 id="que-significa-etc">🟦 ¿Que significa? — <em>/etc</em></h3>
+<p>Es la carpeta de <strong>configuración del sistema y los programas</strong>. Casi todo lo que se ajusta vive aquí, en archivos de texto.
+<strong>Para qué sirve:</strong> centraliza la configuración. Si quieres cambiar cómo se comporta un servicio, su archivo casi siempre está en <code>/etc</code>.
+<strong>Dónde aparece en tu NAS real:</strong> la configuración de Samba está en <code>/etc/samba/smb.conf</code>, y la de AdGuard Home y otros servicios también tiene su lugar bajo <code>/etc</code>.</p>
+<h3 id="que-significa-var">🟦 ¿Que significa? — <em>/var</em></h3>
+<p>Viene de "variable". Guarda <strong>datos que cambian constantemente</strong>: registros (logs), colas, datos de algunos servicios.
+<strong>Para qué sirve:</strong> separar lo que cambia mucho de lo que es fijo. Aquí miras los "logs" cuando algo falla.
+<strong>Dónde aparece en tu NAS real:</strong> los registros del sistema viven en <code>/var/log</code>. Si Samba o Docker dan problemas, las pistas suelen estar ahí.</p>
+<h3 id="que-significa-home">🟦 ¿Que significa? — <em>/home</em></h3>
+<p>Es donde viven las <strong>carpetas personales de cada usuario</strong>. Tu usuario <code>edwar</code> tiene su carpeta en <code>/home/edwar</code>.
+<strong>Para qué sirve:</strong> dar a cada persona un espacio propio y privado para sus archivos y su configuración personal.
+<strong>Dónde aparece en tu NAS real:</strong> cuando entras por SSH, empiezas en <code>/home/edwar</code>. Es tu "casa" dentro del servidor.</p>
+<h3 id="que-significa-srv">🟦 ¿Que significa? — <em>/srv</em></h3>
+<p>Viene de "serve" (servir). Es la carpeta pensada para <strong>los datos que tu servidor ofrece a la red</strong>: archivos compartidos, sitios web, etc.
+<strong>Para qué sirve:</strong> es el lugar "oficial" de Linux para guardar lo que un servidor sirve. Por eso es perfecta para tu NAS.
+<strong>Dónde aparece en tu NAS real:</strong> tu HDD de 954 GB está montado en <code>/srv/nas</code>, y ahí vive el recurso compartido <strong>PolyPawNAS</strong> de Samba. Todos tus respaldos y archivos compartidos están aquí.</p>
+</blockquote>
+<pre><code class="language-bash"># Pasear por el árbol de carpetas
+ls /              # Ver la raíz: aquí están etc, var, home, srv...
+ls /etc/samba     # Ver la configuración de Samba
+ls /srv/nas       # Ver tus datos compartidos en el HDD
+ls /home          # Ver qué usuarios tienen carpeta personal
+
+# ¿Dónde estoy parado ahora?
+pwd               # &quot;print working directory&quot; = imprime carpeta actual
+
+# Moverme a la carpeta de datos
+cd /srv/nas
+
+# Ver cuánto espacio queda en cada disco (h = legible para humanos)
+df -h
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-montar-un-disco-mount">🟦 ¿Que significa? — <em>Montar un disco (mount)</em></h3>
+<p>"Montar" es <strong>conectar un disco a una carpeta</strong> para poder usarlo. El disco no tiene letra; aparece como el contenido de una carpeta que tú eliges.
+<strong>Para qué sirve:</strong> integrar discos al árbol único de Linux. Tu HDD de datos no es "el disco D": es lo que aparece dentro de <code>/srv/nas</code>.
+<strong>Dónde aparece en tu NAS real:</strong> tu HDD de 954 GB está <strong>montado en <code>/srv/nas</code></strong>. Si por error no se monta al arrancar, <code>/srv/nas</code> aparecería vacío aunque el disco esté lleno.</p>
+<h3 id="en-tu-servidor_3">🔎 En tu servidor</h3>
+<p>Vigila el espacio con <code>df -h</code>. Tu SSD del sistema es de solo 238 GB; no guardes respaldos grandes ahí. Los datos pesados (respaldos de PolyPaw, tunal-digital, Faro) van al HDD en <code>/srv/nas</code>. Y vigila también la <strong>RAM de 8 GB</strong> con el comando <code>free -h</code> (<code>free</code> muestra la memoria libre y usada; la <code>-h</code> la presenta legible para humanos): si Docker, Samba y AdGuard juntos la llenan, el servidor se pone lento.</p>
+</blockquote>
+<hr />
+<h2 id="6-editar-archivos-de-configuracion-con-nano">6. Editar archivos de configuración con nano</h2>
+<p>Como vimos, la configuración de Linux vive en archivos de texto dentro de <code>/etc</code>. Para cambiarla necesitas un editor de texto que funcione <strong>dentro de la terminal</strong>, sin ratón. El más amable para principiantes es <strong>nano</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-nano">🟦 ¿Que significa? — <em>nano</em></h3>
+<p>Es un editor de texto sencillo que funciona dentro de la terminal. Muestra los atajos de teclado en la parte de abajo, así que no hay que memorizar nada.
+<strong>Para qué sirve:</strong> editar archivos de configuración (como los de Samba) directamente en el servidor, sin entorno gráfico.
+<strong>Dónde aparece en tu NAS real:</strong> lo usas para tocar <code>/etc/samba/smb.conf</code>, ajustar configuraciones o escribir scripts.</p>
+</blockquote>
+<pre><code class="language-bash"># Abrir el archivo de configuración de Samba con permisos de root
+sudo nano /etc/samba/smb.conf
+</code></pre>
+<p>Dentro de nano verás abajo una lista de atajos con el símbolo <code>^</code>, que significa la tecla <strong>Ctrl</strong>:</p>
+<ul>
+<li><strong>Ctrl + O</strong> = guardar (la letra O, de "Output"). Te pregunta el nombre; pulsa Enter para confirmar.</li>
+<li><strong>Ctrl + X</strong> = salir. Si no guardaste, te pregunta si quieres hacerlo.</li>
+<li><strong>Ctrl + W</strong> = buscar texto dentro del archivo.</li>
+<li><strong>Ctrl + K</strong> = cortar la línea actual.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Antes de modificar cualquier archivo de configuración importante, <strong>haz una copia de seguridad</strong> con un solo comando. Si rompes algo, restauras la copia y listo:
+<code>bash
+sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.respaldo</code>
+El comando <code>cp</code> es "copy" (copiar). Así de fácil te proteges de tus propios errores.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Un archivo de configuración roto puede impedir que un servicio arranque. Por ejemplo, si dejas mal <code>smb.conf</code>, Samba podría no compartir nada. Por eso: copia primero, edita con calma, y guarda solo cuando estés seguro. Después reinicia el servicio y verifica que todo siga funcionando.</p>
+<h3 id="en-tu-servidor_4">🔎 En tu servidor</h3>
+<p>Tras editar la configuración de Samba, aplica los cambios reiniciando el servicio. Linux gestiona los servicios con <code>systemctl</code>:
+```bash</p>
+<h1 id="comprobar-que-la-configuracion-de-samba-no-tiene-errores">Comprobar que la configuración de Samba no tiene errores</h1>
+<p>testparm</p>
+<h1 id="reiniciar-samba-para-aplicar-cambios">Reiniciar Samba para aplicar cambios</h1>
+<p>sudo systemctl restart smbd</p>
+<h1 id="ver-si-quedo-funcionando-active-running-bien">Ver si quedó funcionando ("active (running)" = bien)</h1>
+<p>sudo systemctl status smbd
+```</p>
+<h3 id="que-significa-servicio-y-systemctl">🟦 ¿Que significa? — <em>Servicio y systemctl</em></h3>
+<p>Un <strong>servicio</strong> es un programa que corre en segundo plano todo el tiempo (Samba, AdGuard, Docker). <code>systemctl</code> es el comando para arrancarlos, pararlos, reiniciarlos y ver su estado.
+<strong>Para qué sirve:</strong> controlar lo que tu servidor mantiene activo sin que tú estés mirando.
+<strong>Dónde aparece en tu NAS real:</strong> Samba (<code>smbd</code>), Cockpit, Tailscale y AdGuard Home corren como servicios. Los administras todos con <code>systemctl</code>.</p>
+<h3 id="que-significa-testparm">🟦 ¿Que significa? — <em>testparm</em></h3>
+<p>Es una pequeña herramienta de Samba que <strong>revisa el archivo <code>smb.conf</code> y avisa si tiene errores</strong> antes de reiniciar el servicio.
+<strong>Para qué sirve:</strong> evita que reinicies Samba con una configuración rota. Si <code>testparm</code> dice "Loaded services file OK", puedes reiniciar tranquilo.
+<strong>Dónde aparece en tu NAS real:</strong> lo corres justo después de editar <code>/etc/samba/smb.conf</code> y antes de <code>systemctl restart smbd</code>.</p>
+<h3 id="que-significa-docker-y-podman-contenedores">🟦 ¿Que significa? — <em>Docker y Podman (contenedores)</em></h3>
+<p>Un <strong>contenedor</strong> es una forma de empaquetar un programa con todo lo que necesita para correr, aislado del resto del sistema. <strong>Docker</strong> y <strong>Podman</strong> son dos herramientas que crean y gestionan esos contenedores; Podman es una alternativa a Docker que funciona sin un proceso permanente con permisos de root, lo que algunos consideran más seguro.
+<strong>Para qué sirve:</strong> instalar y ejecutar aplicaciones (como AdGuard Home u otros servicios) sin "ensuciar" el sistema, y poder borrarlas limpiamente. Cada app vive en su cajita.
+<strong>Dónde aparece en tu NAS real:</strong> puedes correr servicios de polypaw-nas dentro de contenedores. Las órdenes de Docker y Podman son casi idénticas, así que lo que aprendas de uno te sirve para el otro.</p>
+</blockquote>
+<hr />
+<h2 id="7-seguridad-las-reglas-de-oro-de-tu-polypaw-nas">7. Seguridad: las reglas de oro de tu polypaw-nas</h2>
+<p>Ya tienes el poder de root, sabes cambiar permisos y editar configuraciones. Con ese poder viene responsabilidad. Estas son las reglas que protegen tu servidor y tus datos.</p>
+<p><strong>Regla 1 — No abras puertos al internet sin necesidad.</strong> Cada "puerto" abierto hacia internet es una puerta por la que pueden intentar entrar.</p>
+<blockquote class="def">
+<h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
+<p>Es un número que identifica un "canal" de comunicación en tu servidor. Cada servicio escucha en un puerto: Cockpit en el <strong>9090</strong>, SSH en el <strong>22</strong>, Samba en otros.
+<strong>Para qué sirve:</strong> permite que distintos servicios convivan en la misma máquina sin mezclarse.
+<strong>Dónde aparece en tu NAS real:</strong> Cockpit está en el puerto 9090. Si lo abres a internet abierto, cualquiera en el mundo podría intentar entrar a tu panel de administración.</p>
+<h3 id="que-significa-tailscale">🟦 ¿Que significa? — <em>Tailscale</em></h3>
+<p>Es una <strong>VPN</strong> (red privada virtual): crea un túnel cifrado y privado entre tus dispositivos, como si estuvieran en la misma red local aunque estén lejos.
+<strong>Para qué sirve:</strong> acceder a polypaw-nas desde fuera de casa <strong>sin abrir ningún puerto a internet</strong>. Solo tus dispositivos autorizados entran.
+<strong>Dónde aparece en tu NAS real:</strong> es tu forma recomendada de conectarte por SSH o de abrir Cockpit cuando no estás en casa. Mucho más seguro que abrir puertos en el router.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Regla de oro: <strong>prefiere siempre Tailscale antes que abrir puertos en el router.</strong> Con Tailscale, polypaw-nas es invisible para internet, pero tú lo alcanzas desde cualquier lado. Es lo mejor de los dos mundos: acceso remoto y cero exposición pública.</p>
+</blockquote>
+<p><strong>Regla 2 — Contraseñas fuertes.</strong> Tu usuario tiene <code>sudo</code>, o sea root. Una contraseña como <code>polypaw123</code> se adivina en segundos. Usa una larga, única, mezclando palabras que solo tú asociarías. Considera además autenticar SSH con llaves en vez de contraseña (lo veremos en otro capítulo).</p>
+<p><strong>Regla 3 — Copias de respaldo.</strong> Tu NAS guarda lo importante: respaldos de tunal-digital, PolyPaw, RachaSimple y Faro/Organizer. Pero <strong>un NAS no es un respaldo por sí solo</strong>: si se daña el HDD, pierdes todo. La regla clásica es <strong>3-2-1</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-regla-de-respaldo-3-2-1">🟦 ¿Que significa? — <em>Regla de respaldo 3-2-1</em></h3>
+<p><strong>3</strong> copias de tus datos, en <strong>2</strong> tipos de medios distintos, con <strong>1</strong> copia fuera de tu casa.
+<strong>Para qué sirve:</strong> sobrevivir a desastres. Si se quema la casa o falla un disco, una copia siempre se salva.
+<strong>Dónde aparece en tu NAS real:</strong> tus datos viven en el HDD de <code>/srv/nas</code> (copia 1). Deberías tener al menos otra copia en un disco externo (copia 2) y, idealmente, una en la nube o en otra ubicación (copia 3, fuera de casa).</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>No confundas "tener un NAS" con "estar respaldado". Tu polypaw-nas es excelente para centralizar y compartir, pero si es la <strong>única</strong> copia de tus repos y fotos, estás a un disco dañado de perderlo todo. Configura al menos una copia adicional cuanto antes.</p>
+</blockquote>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo por qué Ubuntu Server no tiene escritorio y por qué eso ahorra RAM en mis 8 GB.</li>
+<li>[ ] Sé conectarme a polypaw-nas por SSH (mejor a través de Tailscale).</li>
+<li>[ ] Entiendo qué es root y por qué uso <code>sudo</code> en lugar de actuar siempre como root.</li>
+<li>[ ] Pienso antes de presionar Enter en cualquier comando con <code>sudo</code>.</li>
+<li>[ ] Sé crear usuarios y grupos, y meter un usuario a un grupo con <code>usermod -aG</code>.</li>
+<li>[ ] Sé leer una línea de <code>ls -l</code> e identificar dueño, grupo y permisos rwx.</li>
+<li>[ ] Sé cambiar permisos con <code>chmod</code> (simbólico y numérico) y dueño con <code>chown</code>.</li>
+<li>[ ] Entiendo por qué <code>chmod 777</code> es peligroso y lo evito.</li>
+<li>[ ] Sé qué guardan <code>/etc</code>, <code>/var</code>, <code>/home</code> y <code>/srv</code> en mi servidor.</li>
+<li>[ ] Entiendo que mi HDD de 954 GB está montado en <code>/srv/nas</code>.</li>
+<li>[ ] Sé editar y guardar un archivo con nano (Ctrl+O, Ctrl+X).</li>
+<li>[ ] Hago copia de un archivo de configuración antes de editarlo.</li>
+<li>[ ] Sé reiniciar un servicio con <code>systemctl</code> y comprobar <code>smb.conf</code> con <code>testparm</code>.</li>
+<li>[ ] Entiendo qué es un contenedor (Docker/Podman) y por qué aísla las aplicaciones.</li>
+<li>[ ] Prefiero Tailscale a abrir puertos al internet.</li>
+<li>[ ] Uso contraseñas fuertes y tengo una estrategia de respaldo (3-2-1).</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 <strong>Reconocimiento.</strong> Conéctate a polypaw-nas por SSH y ejecuta <code>whoami</code>, <code>id</code> y <code>groups</code>. Anota tu usuario, tus grupos y los números de identificación. ¿Apareces en algún grupo relacionado con <code>sudo</code>?</p>
+</li>
+<li>
+<p>💻 <strong>Leer permisos.</strong> Ejecuta <code>ls -l /srv/nas</code> y elige un archivo. Escribe en un papel: ¿es archivo o directorio?, ¿quién es el dueño?, ¿quién es el grupo?, y traduce los permisos rwx para dueño, grupo y otros. Verifica también el espacio del HDD con <code>df -h</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Practicar chmod en seguro.</strong> En tu carpeta personal (<code>cd ~</code>), crea un archivo de prueba con <code>touch prueba.sh</code>. Dale permiso de ejecución al dueño con <code>chmod u+x prueba.sh</code> y comprueba con <code>ls -l</code> que apareció la <code>x</code>. Luego ponlo en <code>644</code> y observa el cambio. (Trabajas en tu carpeta, así que no rompes nada del sistema.)</p>
+</li>
+<li>
+<p>💻 <strong>Explorar el mapa.</strong> Recorre <code>/etc</code>, <code>/var/log</code>, <code>/home</code> y <code>/srv/nas</code> con <code>ls</code>. En <code>/etc/samba</code>, abre <code>smb.conf</code> en <strong>solo lectura</strong> (sin <code>sudo</code>) con nano, busca el bloque que menciona <code>PolyPawNAS</code> usando Ctrl+W, y sal con Ctrl+X <strong>sin guardar</strong>. Solo observa.</p>
+</li>
+<li>
+<p>💻 <strong>Copia de seguridad de configuración.</strong> Practica el reflejo de seguridad: haz <code>sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.respaldo</code> y verifica con <code>ls -l /etc/samba</code> que existe la copia. Este es el paso que siempre debes dar antes de editar.</p>
+</li>
+<li>
+<p><strong>Plan de respaldo en papel.</strong> Sin tocar el servidor, escribe tu plan 3-2-1 para los respaldos de tunal-digital, PolyPaw, RachaSimple y Faro/Organizer: ¿dónde está la copia 1 (en <code>/srv/nas</code>)?, ¿qué disco externo será la copia 2?, ¿qué nube o ubicación externa será la copia 3? Define una fecha para montarlo.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Lo lograste. Hoy dejaste de ver Linux como una pantalla negra intimidante y empezaste a verlo como una casa ordenada: sabes quién manda (root y sudo), quién puede entrar a cada cuarto (usuarios, grupos y permisos), dónde está cada cosa (/etc, /var, /home, /srv) y cómo arreglar la configuración sin romper nada (nano, con copia previa). Tu polypaw-nas ya no es magia: es una máquina que entiendes. Nos vemos en el siguiente capítulo. — Bit 🐾</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

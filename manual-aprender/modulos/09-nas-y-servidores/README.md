@@ -49,7 +49,17 @@ servicios en casa).
 | 03 | [Compartir archivos con Samba](03-samba.md) | Protocolo SMB, recurso PolyPawNAS, conectarse |
 | 04 | [Redes desde cero y acceso remoto](04-redes-y-acceso-remoto.md) | IP/DNS/puertos, Cockpit, Tailscale (VPN), AdGuard |
 | 05 | [Usarlo y montar uno desde cero](05-usarlo-y-montar.md) | Respaldos, Docker, self-hosting, guía de instalación |
+| 06 | [Linux a fondo para tu servidor](06-linux-a-fondo.md) | root/sudo, usuarios, permisos, `chmod`/`chown`, `/etc` |
+| 07 | [Discos y almacenamiento](07-discos-y-almacenamiento.md) | `lsblk`, `df`, montar, `/etc/fstab`, SSD vs HDD, SMART |
+| 08 | [systemd y los servicios](08-systemd-y-servicios.md) | `systemctl`, `journalctl`, smbd/cockpit/tailscaled |
+| 09 | [Samba a fondo](09-samba-a-fondo.md) | `smb.conf`, recurso PolyPawNAS, conectarse desde todo |
+| 10 | [Redes desde cero a fondo](10-redes-a-fondo.md) | IP privada/pública, puertos, gateway, IP fija |
+| 11 | [Acceso remoto seguro con Tailscale](11-acceso-remoto-tailscale.md) | VPN, WireGuard, tailnet, IP 100.x, MagicDNS |
+| 12 | [Administración web: Cockpit y AdGuard](12-cockpit-y-adguard.md) | Panel `:9090`, recursos, AdGuard DNS anti-anuncios |
+| 13 | [Docker y autoalojamiento](13-docker-y-autoalojamiento.md) | Contenedores, imágenes, volúmenes, self-hosting |
+| 14 | [Respaldos, mantenimiento y seguridad](14-respaldos-y-mantenimiento.md) | Regla 3-2-1, `rsync`, `cron`, SSH con llave, `ufw` |
+| 15 | [Montar tu NAS desde cero (guía) y glosario](15-montar-desde-cero.md) | Guía completa paso a paso + todos los términos |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 09 — versión ampliada (capítulos 01–15, ~100 páginas).** Basado en tu NAS real `polypaw-nas`.
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es un servidor y un NAS?](01-servidor-y-nas.md)**.

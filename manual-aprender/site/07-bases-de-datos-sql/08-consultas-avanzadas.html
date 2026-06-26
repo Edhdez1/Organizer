@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 08 — Consultas avanzadas y JOIN a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-08-consultas-avanzadas-y-join-a-fondo">Capitulo 08 — Consultas avanzadas y JOIN a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/07-bases-de-datos-sql/cap08.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote acompañante. En el capitulo anterior aprendiste a sacar filas de una sola tabla con <code>SELECT</code>. Pero la vida real casi nunca cabe en una sola tabla: un habito tiene muchos registros de racha, un proyecto tiene muchas fases. ¿Como las unimos sin volvernos locos? Con <code>JOIN</code>. En este capitulo vamos despacito, con las tablas reales de <strong>RachaSimple</strong> (app de habitos) y <strong>Faro/Organizer</strong> (organizador de proyectos), ambas en Supabase/Postgres. Respira, mueve las branquias, y vamos.</p>
+</blockquote>
+<h2 id="1-por-que-necesitamos-unir-tablas">1. Por que necesitamos unir tablas</h2>
+<p>En una base de datos relacional <strong>no guardamos todo junto</strong>. Separamos la informacion en tablas y las conectamos con referencias. En <strong>RachaSimple</strong> hay una tabla de <code>habitos</code> y otra de <code>registros</code> (cada vez que cumples el habito un dia). En <strong>Faro/Organizer</strong> hay una tabla de <code>proyectos</code> y otra de <code>fases</code>.</p>
+<p>¿Por que no meter todo en una tabla gigante? Porque se repetiria. Si guardaras el nombre del habito en cada registro de racha, lo escribirias mil veces. Mejor: el habito vive una sola vez en su tabla, y cada registro <strong>apunta</strong> a el con su <code>id</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-tabla-relacional">🟦 ¿Que significa? — <em>Tabla relacional</em></h3>
+<p>Una tabla es una rejilla de filas y columnas, como una hoja de calculo. "Relacional" significa que las tablas se <strong>conectan</strong> entre si mediante valores compartidos (un id). Sirve para no repetir datos y mantener todo ordenado. En <strong>RachaSimple</strong>, <code>habitos</code> y <code>registros</code> son dos tablas que se relacionan: cada registro pertenece a un habito.</p>
+<h3 id="que-significa-clave-foranea-foreign-key">🟦 ¿Que significa? — <em>Clave foranea (foreign key)</em></h3>
+<p>Es una columna que guarda el <code>id</code> de una fila de <strong>otra</strong> tabla, creando un puente entre ambas. Sirve para decir "este registro pertenece a este habito". En <strong>Faro/Organizer</strong>, la tabla <code>fases</code> tiene una columna <code>proyecto_id</code> que es clave foranea hacia <code>proyectos.id</code>: asi cada fase sabe a que proyecto pertenece.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <strong>PolyPaw</strong> (Python/Flet) los datos viven en archivos <strong>JSON</strong>, sin tablas ni claves foraneas. Para relacionar una mascota con sus misiones tienes que leer el archivo y recorrerlo con codigo Python. En <strong>RachaSimple</strong> y <strong>Faro</strong>, en cambio, esa relacion la resuelve la base de datos con un <code>JOIN</code>. Es la gran diferencia entre "datos en archivos" y "base de datos relacional".</p>
+</blockquote>
+<h2 id="2-inner-join-lo-que-coincide-en-ambas-tablas">2. INNER JOIN: lo que coincide en ambas tablas</h2>
+<p>Empecemos con el <code>JOIN</code> mas usado. Queremos traer cada registro de racha <strong>junto con</strong> el nombre de su habito.</p>
+<blockquote class="def">
+<h3 id="que-significa-join">🟦 ¿Que significa? — <em>JOIN</em></h3>
+<p><code>JOIN</code> es la instruccion de SQL para <strong>combinar filas de dos tablas</strong> segun una condicion (normalmente que un id coincida). Sirve para responder preguntas que cruzan tablas, como "¿que registros pertenecen a este habito?". En <strong>RachaSimple</strong> lo usamos para mostrar la lista de dias cumplidos con el nombre del habito al lado.</p>
+<h3 id="que-significa-inner-join">🟦 ¿Que significa? — <em>INNER JOIN</em></h3>
+<p>Es el tipo de <code>JOIN</code> que devuelve <strong>solo las filas que tienen pareja en ambas tablas</strong>. Si un registro no tiene habito (o un habito no tiene registros), no aparece. Sirve cuando solo te interesan las coincidencias. En <strong>Faro</strong> lo usariamos para listar fases que si tienen un proyecto valido asociado.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT registros.fecha, habitos.nombre
+FROM registros
+INNER JOIN habitos
+  ON registros.habito_id = habitos.id;
+</code></pre>
+<p>Vamos linea por linea, sin prisa:</p>
+<ul>
+<li><code>FROM registros</code>: empezamos por la tabla de registros.</li>
+<li><code>INNER JOIN habitos</code>: queremos pegarle la tabla de habitos.</li>
+<li><code>ON registros.habito_id = habitos.id</code>: la regla de union. Une cada registro con el habito cuyo <code>id</code> coincide con su <code>habito_id</code>.</li>
+<li><code>SELECT registros.fecha, habitos.nombre</code>: elegimos que columnas mostrar de cada tabla.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-on-la-condicion-de-union">🟦 ¿Que significa? — <em>ON (la condicion de union)</em></h3>
+<p>Es la palabra que indica <strong>como</strong> se emparejan las filas de las dos tablas. Casi siempre dice "esta columna de aqui es igual a esta de alla". Sirve para que la base sepa que fila va con cual. Sin <code>ON</code>, Postgres no sabe como casar <code>registros</code> con <code>habitos</code>.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si olvidas el <code>ON</code>, Postgres puede combinar <strong>cada fila con todas las demas</strong> (un producto cartesiano). Con 100 registros y 10 habitos terminarias con 1000 filas sin sentido. Siempre pon tu condicion de union.</p>
+<h3 id="que-significa-producto-cartesiano">🟦 ¿Que significa? — <em>Producto cartesiano</em></h3>
+<p>Es lo que pasa cuando unes dos tablas <strong>sin</strong> una condicion <code>ON</code>: cada fila de una se combina con <strong>todas</strong> las filas de la otra. Con 100 registros y 10 habitos salen 100 × 10 = 1000 filas, casi todas sin sentido. Sirve solo en casos muy raros; en el dia a dia de <strong>RachaSimple</strong> y <strong>Faro</strong> es un error a evitar poniendo siempre tu <code>ON</code>.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>"Inner" se traduce como "interno": piensa en la <strong>interseccion</strong> de dos circulos. Solo lo que esta en ambos a la vez. Si solo escribes <code>JOIN</code>, Postgres asume <code>INNER JOIN</code> por defecto.</p>
+</blockquote>
+<h2 id="3-alias-de-tabla-escribir-menos-y-leer-mejor">3. Alias de tabla: escribir menos y leer mejor</h2>
+<p>Escribir <code>registros.fecha</code> y <code>habitos.nombre</code> una y otra vez cansa. Para eso existen los <strong>alias</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-alias-de-tabla">🟦 ¿Que significa? — <em>Alias de tabla</em></h3>
+<p>Es un <strong>apodo corto</strong> que le das a una tabla dentro de la consulta. Sirve para escribir menos y para que la consulta se lea mejor, sobre todo cuando unes varias tablas. En las consultas de <strong>Faro</strong> es comodo escribir <code>p</code> para <code>proyectos</code> y <code>f</code> para <code>fases</code>.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT r.fecha, h.nombre
+FROM registros AS r
+INNER JOIN habitos AS h
+  ON r.habito_id = h.id;
+</code></pre>
+<p>Le pusimos <code>r</code> a <code>registros</code> y <code>h</code> a <code>habitos</code>. La palabra <code>AS</code> es opcional: <code>FROM registros r</code> funciona igual. Lo mismo en <strong>Faro</strong>:</p>
+<pre><code class="language-sql">SELECT p.nombre AS proyecto, f.titulo AS fase, f.estado
+FROM proyectos AS p
+INNER JOIN fases AS f
+  ON f.proyecto_id = p.id;
+</code></pre>
+<p>Aqui tambien usamos <code>AS</code> para renombrar <strong>columnas</strong> en el resultado: <code>p.nombre</code> aparecera con el encabezado <code>proyecto</code> y <code>f.titulo</code> como <code>fase</code>. Mas legible para quien lee la tabla de salida.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Usa alias con sentido: <code>p</code> para proyectos, <code>f</code> para fases, <code>h</code> para habitos. Una sola letra esta bien en consultas cortas. Si la consulta crece, <code>proj</code> o <code>fase</code> pueden ser mas claros.</p>
+</blockquote>
+<h2 id="4-left-join-incluir-tambien-lo-que-no-tiene-pareja">4. LEFT JOIN: incluir tambien lo que no tiene pareja</h2>
+<p>El <code>INNER JOIN</code> esconde lo que no coincide. Pero a veces eso es justo lo que queremos ver: <strong>habitos que aun no tienen ningun registro</strong> (esos dias que prometiste y no cumpliste, te miro Bit). Para eso esta el <code>LEFT JOIN</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-left-join">🟦 ¿Que significa? — <em>LEFT JOIN</em></h3>
+<p>Devuelve <strong>todas las filas de la tabla de la izquierda</strong> (la que va en el <code>FROM</code>), y las de la derecha solo si hay coincidencia. Donde no hay pareja, las columnas de la derecha quedan en <code>NULL</code>. Sirve para no perder filas. En <strong>RachaSimple</strong> lo usariamos para mostrar todos los habitos, incluso los que el usuario nunca ha registrado.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT h.nombre, r.fecha
+FROM habitos AS h
+LEFT JOIN registros AS r
+  ON r.habito_id = h.id;
+</code></pre>
+<p>Aqui <code>habitos</code> es la tabla "izquierda" (esta en el <code>FROM</code>). Aparecen <strong>todos</strong> los habitos. Si un habito no tiene registros, saldra con <code>r.fecha</code> en <code>NULL</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-null">🟦 ¿Que significa? — <em>NULL</em></h3>
+<p><code>NULL</code> significa "no hay valor / dato ausente". No es cero ni texto vacio: es <strong>la nada</strong>. Sirve para representar "aqui falta informacion". En un <code>LEFT JOIN</code>, las columnas de la tabla derecha salen <code>NULL</code> cuando no hubo coincidencia.</p>
+</blockquote>
+<p>Si quisieras justamente los habitos <strong>sin</strong> registros (los abandonados), filtras por ese <code>NULL</code>:</p>
+<pre><code class="language-sql">SELECT h.nombre
+FROM habitos AS h
+LEFT JOIN registros AS r
+  ON r.habito_id = h.id
+WHERE r.id IS NULL;
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Para comparar con <code>NULL</code> se usa <code>IS NULL</code> / <code>IS NOT NULL</code>, <strong>nunca</strong> <code>= NULL</code>. Escribir <code>WHERE r.id = NULL</code> no da error pero <strong>nunca encuentra nada</strong>, porque <code>NULL</code> no es igual a nada, ni siquiera a si mismo. Es uno de los tropiezos mas comunes.</p>
+</blockquote>
+<h2 id="5-right-join-el-espejo-del-left">5. RIGHT JOIN: el espejo del LEFT</h2>
+<blockquote class="def">
+<h3 id="que-significa-right-join">🟦 ¿Que significa? — <em>RIGHT JOIN</em></h3>
+<p>Es el inverso del <code>LEFT JOIN</code>: devuelve <strong>todas las filas de la tabla de la derecha</strong> y las de la izquierda solo si coinciden. Sirve para lo mismo que un <code>LEFT JOIN</code>, pero mirando desde el otro lado. En la practica se usa poco, porque casi siempre puedes reescribirlo como <code>LEFT JOIN</code> cambiando el orden de las tablas.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT h.nombre, r.fecha
+FROM registros AS r
+RIGHT JOIN habitos AS h
+  ON r.habito_id = h.id;
+</code></pre>
+<p>Este <code>RIGHT JOIN</code> hace lo mismo que el <code>LEFT JOIN</code> del apartado anterior: trae todos los habitos. La tabla "completa" es <code>habitos</code>, que ahora esta a la derecha.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>La mayoria de desarrolladores prefieren <code>LEFT JOIN</code> y casi nunca escriben <code>RIGHT JOIN</code>, porque es mas facil pensar "empiezo por esta tabla y le pego las demas". Si te confunde el <code>RIGHT</code>, dale la vuelta al orden y usa <code>LEFT</code>. Misma respuesta, mente mas tranquila.</p>
+</blockquote>
+<h2 id="6-unir-tres-tablas-a-la-vez">6. Unir tres tablas a la vez</h2>
+<p>Los <code>JOIN</code> se pueden encadenar. En <strong>RachaSimple</strong> existe una tabla <code>perfiles</code> (un perfil por usuario). Imagina que queremos: nombre del usuario, nombre del habito y fecha del registro, todo junto.</p>
+<blockquote class="def">
+<h3 id="que-significa-encadenar-joins">🟦 ¿Que significa? — <em>Encadenar JOINs</em></h3>
+<p>Es poner varios <code>JOIN</code> seguidos para combinar tres o mas tablas en una sola consulta. Cada <code>JOIN</code> añade una tabla mas con su propia condicion <code>ON</code>. Sirve para responder preguntas que cruzan muchas tablas. En <strong>Faro</strong> lo usariamos para traer el dueño del proyecto, el proyecto y sus fases en una sola consulta.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT pe.nombre AS usuario, h.nombre AS habito, r.fecha
+FROM registros AS r
+INNER JOIN habitos AS h
+  ON r.habito_id = h.id
+INNER JOIN perfiles AS pe
+  ON h.user_id = pe.id;
+</code></pre>
+<p>Leelo como una cadena: empiezo por <code>registros</code>, le pego <code>habitos</code> (por <code>habito_id</code>), y a <code>habitos</code> le pego <code>perfiles</code> (por <code>user_id</code>). Cada <code>JOIN</code> trae su <code>ON</code>.</p>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Cuando uses varias tablas, <strong>siempre antepon el alias</strong> a la columna (<code>h.nombre</code>, <code>pe.nombre</code>). Si <code>habitos</code> y <code>perfiles</code> tienen ambas una columna <code>nombre</code> y escribes solo <code>nombre</code>, Postgres se queja con un error de "columna ambigua" porque no sabe a cual te refieres.</p>
+</blockquote>
+<h2 id="7-subconsultas-una-consulta-dentro-de-otra">7. Subconsultas: una consulta dentro de otra</h2>
+<p>A veces necesitas un resultado intermedio para usarlo dentro de otra consulta. Eso es una <strong>subconsulta</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-subconsulta">🟦 ¿Que significa? — <em>Subconsulta</em></h3>
+<p>Es una consulta <code>SELECT</code> metida <strong>dentro</strong> de otra, normalmente entre parentesis. La interna se ejecuta primero y su resultado lo usa la externa. Sirve para preguntas en dos pasos. En <strong>Faro</strong> podriamos pedir "las fases de los proyectos que estan activos" calculando primero cuales proyectos estan activos.</p>
+</blockquote>
+<p>Ejemplo en <strong>Faro</strong>: traer las fases que pertenecen a proyectos en estado <code>'activo'</code>.</p>
+<pre><code class="language-sql">SELECT f.titulo, f.estado
+FROM fases AS f
+WHERE f.proyecto_id IN (
+  SELECT p.id
+  FROM proyectos AS p
+  WHERE p.estado = 'activo'
+);
+</code></pre>
+<p>La parte entre parentesis se ejecuta primero: devuelve una lista de <code>id</code> de proyectos activos. Luego la consulta de afuera trae las fases cuyo <code>proyecto_id</code> este <strong>en</strong> esa lista.</p>
+<blockquote class="def">
+<h3 id="que-significa-in">🟦 ¿Que significa? — <em>IN</em></h3>
+<p><code>IN</code> comprueba si un valor esta <strong>dentro de una lista</strong> de valores. Sirve para filtrar por varias opciones de una vez. Puedes darle valores fijos (<code>WHERE estado IN ('activo','pausado')</code>) o una subconsulta que produce la lista, como arriba en <strong>Faro</strong>.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Muchas subconsultas con <code>IN</code> se pueden reescribir como <code>JOIN</code> y suelen correr mas rapido. Pero la subconsulta a veces se <strong>lee</strong> mas clara ("dame las fases de proyectos activos"). Empieza por lo que entiendas mejor; la optimizacion viene despues.</p>
+</blockquote>
+<h2 id="8-exists-hay-al-menos-uno">8. EXISTS: ¿hay al menos uno?</h2>
+<p>Hay otra forma de preguntar "¿existe algo relacionado?": con <code>EXISTS</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-exists">🟦 ¿Que significa? — <em>EXISTS</em></h3>
+<p><code>EXISTS</code> recibe una subconsulta y devuelve verdadero si esa subconsulta produce <strong>al menos una fila</strong>. No importa cuantas, solo si hay alguna. Sirve para preguntar "¿existe relacion?". En <strong>RachaSimple</strong> lo usariamos para traer los habitos que tienen <strong>al menos un</strong> registro de racha.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT h.nombre
+FROM habitos AS h
+WHERE EXISTS (
+  SELECT 1
+  FROM registros AS r
+  WHERE r.habito_id = h.id
+);
+</code></pre>
+<p>Fijate que la subconsulta menciona <code>h.id</code>, que viene de la consulta externa. Por cada habito, Postgres revisa si existe <strong>algun</strong> registro con ese <code>habito_id</code>. Si lo hay, el habito pasa el filtro.</p>
+<blockquote class="tip">
+<h3 id="tip_4">💡 Tip</h3>
+<p>El <code>SELECT 1</code> de adentro es una costumbre: a <code>EXISTS</code> no le importa <strong>que</strong> seleccionas, solo si hay filas. Puedes poner <code>SELECT 1</code>, <code>SELECT *</code> o lo que sea; el resultado es el mismo. <code>SELECT 1</code> deja claro "no me interesa el contenido, solo la existencia".</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p><code>IN</code> vs <code>EXISTS</code>: ambos responden "¿hay relacion?", pero <code>EXISTS</code> suele ser mejor cuando la subconsulta usa una columna de la consulta externa (como <code>h.id</code> arriba), y <code>IN</code> brilla cuando comparas contra una lista fija o pequeña. En <strong>Faro</strong> y <strong>RachaSimple</strong>, para "¿este proyecto tiene fases?" o "¿este habito tiene registros?", <code>EXISTS</code> encaja muy bien.</p>
+</blockquote>
+<h2 id="9-distinct-eliminar-duplicados">9. DISTINCT: eliminar duplicados</h2>
+<p>Cuando unes tablas, un mismo valor puede repetirse. Si un habito tiene 30 registros y unes ambas tablas, el nombre del habito aparece 30 veces. Para quedarte con valores <strong>unicos</strong> existe <code>DISTINCT</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-distinct">🟦 ¿Que significa? — <em>DISTINCT</em></h3>
+<p>Es una palabra que pones tras <code>SELECT</code> para que el resultado <strong>no repita filas iguales</strong>. Sirve para obtener la lista de valores unicos. En <strong>RachaSimple</strong>, para saber "¿de que habitos hay registros?" sin que cada nombre salga decenas de veces.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT DISTINCT h.nombre
+FROM registros AS r
+INNER JOIN habitos AS h
+  ON r.habito_id = h.id;
+</code></pre>
+<p>Sin <code>DISTINCT</code> veriamos el nombre repetido una vez por cada registro. Con <code>DISTINCT</code>, cada nombre aparece una sola vez.</p>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p><code>DISTINCT</code> mira <strong>todas</strong> las columnas del <code>SELECT</code> juntas. <code>SELECT DISTINCT h.nombre, r.fecha</code> considera unica cada <strong>combinacion</strong> nombre+fecha, no solo el nombre. Si esperabas un nombre por fila y salen repetidos, casi seguro hay otra columna metiendo variedad.</p>
+</blockquote>
+<h2 id="10-ordenar-por-varias-columnas">10. Ordenar por varias columnas</h2>
+<p>Ya conoces <code>ORDER BY</code> para ordenar. Ahora: puedes ordenar por <strong>varias columnas</strong>, una como desempate de la otra.</p>
+<blockquote class="def">
+<h3 id="que-significa-order-by-con-varias-columnas">🟦 ¿Que significa? — <em>ORDER BY con varias columnas</em></h3>
+<p>Ordena el resultado por la primera columna y, cuando hay empates, usa la segunda para desempatar, luego la tercera, etc. <code>ASC</code> es ascendente (de menor a mayor) y <code>DESC</code> descendente. Sirve para listados ordenados con criterio fino. En <strong>Faro</strong>, ordenar fases por proyecto y, dentro de cada proyecto, por su orden.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT p.nombre AS proyecto, f.titulo, f.orden
+FROM proyectos AS p
+INNER JOIN fases AS f
+  ON f.proyecto_id = p.id
+ORDER BY p.nombre ASC, f.orden ASC;
+</code></pre>
+<p>Primero agrupa visualmente por nombre de proyecto (A→Z) y, dentro de cada proyecto, ordena las fases por su columna <code>orden</code>. En <strong>RachaSimple</strong>, registros mas recientes primero:</p>
+<pre><code class="language-sql">SELECT h.nombre, r.fecha
+FROM registros AS r
+INNER JOIN habitos AS h
+  ON r.habito_id = h.id
+ORDER BY r.fecha DESC, h.nombre ASC;
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>El orden de las columnas en <code>ORDER BY</code> importa: <code>fecha DESC, nombre ASC</code> no es lo mismo que <code>nombre ASC, fecha DESC</code>. La primera manda; las siguientes solo deciden empates.</p>
+</blockquote>
+<h2 id="11-limit-y-offset-paginacion">11. LIMIT y OFFSET: paginacion</h2>
+<p>Una tabla puede tener miles de filas. No quieres traerlas todas de golpe. Aqui entran <code>LIMIT</code> y <code>OFFSET</code>, la base de la <strong>paginacion</strong> (mostrar resultados de a pocos, pagina por pagina).</p>
+<blockquote class="def">
+<h3 id="que-significa-limit">🟦 ¿Que significa? — <em>LIMIT</em></h3>
+<p><code>LIMIT n</code> indica que quieres <strong>como maximo n filas</strong>. Sirve para no traer mas de lo necesario. En <strong>RachaSimple</strong>, para mostrar solo los ultimos 10 registros de racha en pantalla.</p>
+<h3 id="que-significa-offset">🟦 ¿Que significa? — <em>OFFSET</em></h3>
+<p><code>OFFSET m</code> indica <strong>cuantas filas saltar</strong> desde el inicio antes de empezar a devolver. Combinado con <code>LIMIT</code>, te deja avanzar de pagina en pagina. En <strong>Faro</strong>, para la "pagina 2" de un listado de proyectos.</p>
+</blockquote>
+<pre><code class="language-sql">SELECT h.nombre, r.fecha
+FROM registros AS r
+INNER JOIN habitos AS h
+  ON r.habito_id = h.id
+ORDER BY r.fecha DESC
+LIMIT 10 OFFSET 0;
+</code></pre>
+<p>Eso es la <strong>pagina 1</strong>: las primeras 10 filas. Para la <strong>pagina 2</strong>, saltas 10:</p>
+<pre><code class="language-sql">... ORDER BY r.fecha DESC
+LIMIT 10 OFFSET 10;
+</code></pre>
+<p>Patron general: <code>OFFSET = (numero_de_pagina - 1) * tamaño_de_pagina</code>. Pagina 3 con paginas de 10: <code>OFFSET 20</code>.</p>
+<blockquote class="warn">
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>Usa <strong>siempre</strong> <code>ORDER BY</code> junto con <code>LIMIT</code>/<code>OFFSET</code>. Sin un orden fijo, Postgres puede devolver las filas en cualquier orden, y "las primeras 10" cambiarian entre llamadas. Resultado: filas repetidas o saltadas al pasar de pagina. El <code>ORDER BY</code> ancla la lista.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En <strong>RachaSimple</strong> y <strong>Faro</strong> muchas veces no escribes este SQL a mano: usas el <strong>cliente de Supabase</strong> desde TypeScript. La libreria traduce tus llamadas a un <code>SELECT ... JOIN ... LIMIT ...</code> por debajo. Asi se ve traer un habito con sus registros:</p>
+</blockquote>
+<pre><code class="language-ts">// Cliente de Supabase en RachaSimple (TypeScript)
+const { data, error } = await supabase
+  .from(&quot;habitos&quot;)
+  .select(&quot;id, nombre, registros(fecha)&quot;) // trae el habito y sus registros relacionados
+  .order(&quot;created_at&quot;, { ascending: false })
+  .range(0, 9); // equivale a LIMIT 10 OFFSET 0 (filas 0 a 9)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-cliente-de-supabase">🟦 ¿Que significa? — <em>Cliente de Supabase</em></h3>
+<p>Es una libreria de JavaScript/TypeScript que habla con tu base de datos Postgres sin que escribas SQL a mano. Tu pides datos con metodos (<code>.select()</code>, <code>.order()</code>, <code>.range()</code>) y ella genera la consulta. En <strong>RachaSimple</strong> y <strong>Faro</strong> se combina con <strong>TanStack Query</strong> para guardar los resultados en cache y refrescarlos.</p>
+<h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
+<p>Es una libreria que <strong>guarda en cache</strong> los datos que ya pediste y decide cuando volver a pedirlos, para no golpear la base de datos en cada pantalla. Sirve para que la app vaya rapida y muestre datos frescos sin repetir consultas. En <strong>RachaSimple</strong> y <strong>Faro</strong> envuelve las llamadas del cliente de Supabase: si dos pantallas piden los mismos habitos, la consulta viaja una sola vez.</p>
+<h3 id="que-significa-cache">🟦 ¿Que significa? — <em>Cache</em></h3>
+<p>Es una copia temporal de datos que guardas "a mano" para reusarla sin volver a buscarla en la fuente original. Sirve para ahorrar trabajo y tiempo. En <strong>RachaSimple</strong> y <strong>Faro</strong>, TanStack Query mantiene en cache los habitos o proyectos ya cargados, asi al volver a una pantalla se ven al instante.</p>
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>En el <code>.select("id, nombre, registros(fecha)")</code> de arriba, Supabase detecta la <strong>clave foranea</strong> entre <code>registros</code> y <code>habitos</code> y arma el <code>JOIN</code> por ti. Por eso es tan importante que la relacion exista en la base: sin ella, no sabria como unir las tablas. Y gracias a las <strong>politicas RLS</strong>, cada usuario solo recibe <strong>sus</strong> habitos y registros, aunque tu no escribas ningun filtro de usuario.</p>
+<h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
+<p>Es una funcion de Postgres que filtra <strong>automaticamente</strong> las filas segun reglas de seguridad, normalmente "cada usuario solo ve sus propias filas". Sirve para que ningun usuario acceda a datos de otro. En <strong>RachaSimple</strong> y <strong>Faro</strong> protege habitos, registros, proyectos, fases y conexiones de usuario, incluso cuando tus consultas no mencionan al usuario.</p>
+</blockquote>
+<h2 id="12-juntando-todo-un-proyecto-con-sus-fases-paginado">12. Juntando todo: un proyecto con sus fases, paginado</h2>
+<p>Cerremos con una consulta que mezcla casi todo lo del capitulo, sobre <strong>Faro</strong>:</p>
+<pre><code class="language-sql">SELECT DISTINCT
+  p.nombre AS proyecto,
+  f.titulo AS fase,
+  f.estado
+FROM proyectos AS p
+LEFT JOIN fases AS f
+  ON f.proyecto_id = p.id
+WHERE p.estado IN ('activo', 'pausado')
+ORDER BY p.nombre ASC, f.titulo ASC
+LIMIT 20 OFFSET 0;
+</code></pre>
+<p>Que hace, en palabras: trae proyectos <code>activo</code> o <code>pausado</code> (<code>IN</code>), les pega sus fases sin perder los proyectos sin fases (<code>LEFT JOIN</code>), sin filas duplicadas (<code>DISTINCT</code>), ordenado por proyecto y luego por fase, y solo las primeras 20 filas (<code>LIMIT</code>/<code>OFFSET</code>). Una sola consulta responde una pregunta muy concreta. Eso es el poder del SQL avanzado.</p>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>No escribas consultas asi de golpe. Construyelas por capas: primero el <code>JOIN</code> solo, mira el resultado; luego añade el <code>WHERE</code>, mira; luego <code>ORDER BY</code>; al final <code>LIMIT</code>. En el <strong>editor SQL de Supabase</strong> puedes ejecutar cada version y ver como cambia. Equivocarse pronto y poco es mas facil de arreglar.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo por que separamos los datos en varias tablas y como una clave foranea las conecta.</li>
+<li>[ ] Se hacer un <code>INNER JOIN</code> con su condicion <code>ON</code> y explicar que solo trae coincidencias.</li>
+<li>[ ] Puedo poner alias de tabla (<code>r</code>, <code>h</code>, <code>p</code>, <code>f</code>) y de columna con <code>AS</code>.</li>
+<li>[ ] Distingo <code>LEFT JOIN</code> de <code>INNER JOIN</code> y se que el <code>LEFT</code> conserva la tabla de la izquierda con <code>NULL</code> donde falta pareja.</li>
+<li>[ ] Se que <code>RIGHT JOIN</code> es el espejo del <code>LEFT</code> y que casi siempre puedo usar <code>LEFT</code> dandole la vuelta.</li>
+<li>[ ] Comparo con <code>NULL</code> usando <code>IS NULL</code> / <code>IS NOT NULL</code>, nunca <code>= NULL</code>.</li>
+<li>[ ] Puedo encadenar dos o tres <code>JOIN</code> y antepongo el alias a cada columna para evitar ambiguedad.</li>
+<li>[ ] Se usar una subconsulta con <code>IN</code> y entiendo cuando conviene <code>EXISTS</code>.</li>
+<li>[ ] Uso <code>DISTINCT</code> para quitar duplicados y se que mira todas las columnas del <code>SELECT</code>.</li>
+<li>[ ] Ordeno por varias columnas y entiendo que la primera manda y las demas desempatan.</li>
+<li>[ ] Pagino con <code>LIMIT</code> y <code>OFFSET</code> y siempre acompaño con <code>ORDER BY</code>.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p>💻 En el <strong>editor SQL de Supabase</strong> (o en papel si aun no tienes acceso), escribe un <code>INNER JOIN</code> que traiga el <code>titulo</code> de cada fase junto con el <code>nombre</code> de su proyecto en <strong>Faro</strong>. Usa alias <code>p</code> y <code>f</code>.</p>
+</li>
+<li>
+<p>💻 Convierte el ejercicio 1 en un <code>LEFT JOIN</code> partiendo de <code>proyectos</code>. Despues añade <code>WHERE f.id IS NULL</code> para encontrar los <strong>proyectos sin ninguna fase</strong>. Explica con tus palabras por que aparece <code>NULL</code>.</p>
+</li>
+<li>
+<p>💻 En <strong>RachaSimple</strong>, escribe una consulta que traiga los <code>nombre</code> <strong>unicos</strong> (con <code>DISTINCT</code>) de los habitos que tienen al menos un registro, usando un <code>JOIN</code> entre <code>registros</code> y <code>habitos</code>.</p>
+</li>
+<li>
+<p>Sin computadora: reescribe el ejercicio 3 usando <code>EXISTS</code> en lugar de <code>JOIN</code>. Pista: la subconsulta debe comparar <code>r.habito_id = h.id</code>. ¿Cual de las dos versiones te resulta mas clara?</p>
+</li>
+<li>
+<p>💻 Escribe una consulta paginada sobre los <code>registros</code> de <strong>RachaSimple</strong>: ordena por <code>fecha DESC</code> y trae la <strong>pagina 2</strong> con paginas de 5 filas. ¿Que <code>LIMIT</code> y que <code>OFFSET</code> necesitas?</p>
+</li>
+<li>
+<p>Reto: en <strong>Faro</strong>, combina todo en una sola consulta — trae proyecto y fase con un <code>LEFT JOIN</code>, filtra proyectos cuyo <code>estado</code> este <code>IN ('activo','pausado')</code>, ordena por <code>p.nombre ASC, f.titulo ASC</code> y limita a las primeras 10 filas. Compara tu respuesta con la consulta de la seccion 12.</p>
+</li>
+</ol>
+<blockquote>
+<p>¡Lo lograste! Has pasado de mirar una tabla a cruzar varias como un detective de datos. Los <code>JOIN</code> parecen magia al principio, pero ya viste que son solo "pega esta tabla con aquella donde los ids coincidan". Practica en el editor de Supabase, equivocate sin miedo, y nos vemos en el siguiente capitulo. — Bit 🪸</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

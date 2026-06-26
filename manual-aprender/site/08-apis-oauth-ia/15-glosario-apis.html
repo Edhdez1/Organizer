@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Glosario de APIs, OAuth e IA y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-apis-oauth-e-ia-y-mapa">Capitulo 15 — Glosario de APIs, OAuth e IA y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/08-apis-oauth-ia/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Llegaste al final del Modulo 08. Soy <strong>Bit</strong>, tu ajolote guia, y vengo con una libreta llena de palabras raras que fuimos soltando por el camino: <em>endpoint</em>, <em>Bearer</em>, <em>scope</em>, <em>temperature</em>... Si alguna te dio un escalofrio, tranquilo: aqui las ordenamos de la A a la Z, con definiciones cortitas, para que sirven y donde aparecen de verdad en nuestros repos (sobre todo <strong>Faro</strong> y <strong>tunal-digital</strong>). Este capitulo es tu diccionario de cabecera. No se memoriza de un tiron: se consulta. Vamos despacio y con la cola tranquila.</p>
+</blockquote>
+<p>Antes de empezar, un recordatorio que repetiremos como mantra de todo el modulo: <strong>las claves y los secretos viven en el servidor, nunca en el cliente</strong>. Es la regla de seguridad de Faro y la vas a ver subrayada varias veces. No es paranoia; es profesionalismo.</p>
+<hr />
+<h2 id="1-como-usar-este-glosario">1. Como usar este glosario</h2>
+<p>Cada termino viene en un recuadro con la misma estructura: que significa, para que sirve y donde lo usamos en un repo real. Los terminos estan agrupados por temas (la Web y HTTP, datos, autenticacion, IA, infraestructura) y dentro de cada grupo van en orden alfabetico. Al final hay un <strong>mapa mental</strong> que conecta todo, un repaso y como sigue el camino hacia el Modulo 09.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No leas esto como una novela. Leelo una vez para ubicarte y luego vuelve cada vez que una palabra te genere duda mientras programas. Un glosario sirve por consulta, no por memorizacion.</p>
+</blockquote>
+<hr />
+<h2 id="2-la-web-y-http">2. La Web y HTTP</h2>
+<blockquote class="def">
+<h3 id="que-significa-api">🟦 ¿Que significa? — <em>API</em></h3>
+<p><strong>API</strong> (Application Programming Interface, interfaz de programacion de aplicaciones) es un conjunto de reglas para que dos programas hablen entre si. Sirve para pedir datos o acciones a otro sistema sin saber como funciona por dentro. En <strong>Faro</strong> usamos la API de GitHub para leer tus repos y la API de OpenAI para generar el roadmap; en <strong>tunal-digital</strong> el chat habla con la API de Claude (Anthropic).</p>
+<h3 id="que-significa-rest">🟦 ¿Que significa? — <em>REST</em></h3>
+<p><strong>REST</strong> es un estilo para diseñar APIs sobre HTTP: cada cosa (un usuario, un proyecto) es un <em>recurso</em> con su direccion, y se opera con metodos HTTP. Sirve para tener APIs predecibles y ordenadas. La API de GitHub que consume <strong>Faro</strong> es REST: pides <code>GET /repos/usuario/proyecto</code> y te devuelve ese repo.</p>
+<h3 id="que-significa-endpoint">🟦 ¿Que significa? — <em>Endpoint</em></h3>
+<p>Un <strong>endpoint</strong> es una URL concreta de una API que hace una cosa especifica. Sirve para apuntar tu peticion al lugar correcto. En <strong>tunal-digital</strong>, el endpoint del chat es la ruta del Cloudflare Worker (por ejemplo <code>/api/chat</code>); en <strong>Faro</strong>, un endpoint propio podria ser <code>/api/analyze</code> que dispara el analisis del proyecto.</p>
+<h3 id="que-significa-http">🟦 ¿Que significa? — <em>HTTP</em></h3>
+<p><strong>HTTP</strong> (HyperText Transfer Protocol) es el idioma con el que el navegador y los servidores se piden y se envian cosas en la web. Sirve para que tu codigo pueda solicitar datos a una API por internet. Todas las llamadas de <strong>Faro</strong> y <strong>tunal-digital</strong> viajan sobre HTTP (en realidad HTTPS, su version cifrada).</p>
+<h3 id="que-significa-https">🟦 ¿Que significa? — <em>HTTPS</em></h3>
+<p><strong>HTTPS</strong> es HTTP con cifrado (la "S" es de <em>Secure</em>). Sirve para que nadie en el camino pueda leer ni alterar lo que envias, como tu token. Tanto <strong>Faro</strong> (desplegado en Vercel) como el Worker de <strong>tunal-digital</strong> solo aceptan HTTPS.</p>
+<h3 id="que-significa-metodo-http">🟦 ¿Que significa? — <em>Metodo HTTP</em></h3>
+<p>Un <strong>metodo</strong> (o <em>verbo</em>) HTTP indica que accion quieres: <code>GET</code> para leer, <code>POST</code> para crear o enviar, <code>PUT</code>/<code>PATCH</code> para actualizar, <code>DELETE</code> para borrar. Sirve para que el servidor sepa tu intencion. En <strong>tunal-digital</strong> el chat envia el mensaje con <code>POST</code>; en <strong>Faro</strong> leer tus repos es un <code>GET</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">// tunal-digital: enviar el mensaje del usuario al Worker con POST
+const respuesta = await fetch(&quot;/api/chat&quot;, {
+  method: &quot;POST&quot;,
+  headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+  body: JSON.stringify({ mensaje: textoDelUsuario }),
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-codigo-de-estado">🟦 ¿Que significa? — <em>Codigo de estado</em></h3>
+<p>Un <strong>codigo de estado</strong> es el numero que devuelve el servidor para decir como salio la peticion: <code>200</code> OK, <code>201</code> creado, <code>400</code> peticion mal hecha, <code>401</code> no autenticado, <code>403</code> sin permiso, <code>404</code> no existe, <code>429</code> demasiadas peticiones, <code>500</code> error del servidor. Sirve para reaccionar en tu codigo. En <strong>tunal-digital</strong>, si el Worker responde <code>429</code>, el chat avisa "espera un momento".</p>
+<h3 id="que-significa-header-cabecera">🟦 ¿Que significa? — <em>Header (cabecera)</em></h3>
+<p>Un <strong>header</strong> es un par dato:valor que acompaña a una peticion o respuesta con informacion extra (tipo de contenido, autenticacion, etc.). Sirve para configurar la llamada sin meter eso en el cuerpo. En <strong>Faro</strong>, el header <code>Authorization</code> lleva el token; el header <code>Content-Type: application/json</code> dice "te mando JSON".</p>
+<h3 id="que-significa-body-cuerpo">🟦 ¿Que significa? — <em>Body (cuerpo)</em></h3>
+<p>El <strong>body</strong> es el contenido principal de una peticion o respuesta, normalmente JSON. Sirve para enviar los datos de verdad (el mensaje del chat, el prompt). En <strong>tunal-digital</strong> el body del <code>POST</code> lleva <code>{ "mensaje": "..." }</code>.</p>
+<h3 id="que-significa-query-string-parametros-de-url">🟦 ¿Que significa? — <em>Query string (parametros de URL)</em></h3>
+<p>El <strong>query string</strong> es la parte de la URL despues del <code>?</code>, con pares <code>clave=valor</code> separados por <code>&amp;</code>. Sirve para filtrar o paginar sin usar el body. En <strong>Faro</strong>, pedir tus repos ordenados es algo como <code>GET /user/repos?sort=updated&amp;per_page=50</code>.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>No metas datos secretos (un token) en el query string. Las URLs quedan guardadas en historiales y registros de servidores. Los secretos van en el header <code>Authorization</code> y, mejor aun, manejados desde el servidor.</p>
+</blockquote>
+<hr />
+<h2 id="3-fetch-y-el-cliente">3. fetch y el cliente</h2>
+<blockquote class="def">
+<h3 id="que-significa-fetch">🟦 ¿Que significa? — <em>fetch</em></h3>
+<p><strong>fetch</strong> es la funcion de JavaScript del navegador para hacer peticiones HTTP. Sirve para pedir datos a una API desde tu codigo. La viste en el Modulo 03. En <strong>tunal-digital</strong>, todo el chat se mueve con <code>fetch</code> hacia el Worker; en <strong>Faro</strong> (React/Next.js) tambien se usa <code>fetch</code> para llamar a las rutas internas.</p>
+<h3 id="que-significa-promesa-promise">🟦 ¿Que significa? — <em>Promesa (Promise)</em></h3>
+<p>Una <strong>promesa</strong> es un objeto que representa un resultado que llegara despues (porque la red tarda). Sirve para no congelar la app mientras esperas. <code>fetch</code> devuelve una promesa; por eso usas <code>await</code>.</p>
+<h3 id="que-significa-async-await">🟦 ¿Que significa? — <em>async / await</em></h3>
+<p><strong>async</strong> marca una funcion que trabaja con promesas, y <strong>await</strong> pausa hasta que la promesa termina, sin bloquear el resto. Sirve para escribir codigo asincrono que se lee como si fuera de arriba a abajo. Todas las llamadas a APIs en nuestros repos usan <code>async/await</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">// tunal-digital: leer la respuesta del chat de forma asincrona
+async function preguntar(texto) {
+  const res = await fetch(&quot;/api/chat&quot;, {
+    method: &quot;POST&quot;,
+    headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+    body: JSON.stringify({ mensaje: texto }),
+  });
+  if (!res.ok) throw new Error(&quot;El chat fallo: &quot; + res.status);
+  const datos = await res.json();
+  return datos.respuesta;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-cliente-y-servidor">🟦 ¿Que significa? — <em>Cliente y servidor</em></h3>
+<p>El <strong>cliente</strong> es donde corre el codigo cerca del usuario (el navegador, la app de Flet en <strong>PolyPaw</strong>). El <strong>servidor</strong> es la maquina remota que guarda datos y secretos (el Worker de <strong>tunal-digital</strong>, las rutas de <strong>Faro</strong> en Vercel, Supabase). Sirve para separar lo publico de lo privado. Regla de oro: <strong>las claves viven en el servidor</strong>.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <strong>Faro</strong>, si un archivo esta dentro de <code>app/api/</code> (rutas de Next.js) o usa variables sin el prefijo <code>NEXT_PUBLIC_</code>, eso corre en el <strong>servidor</strong>: ahi puedes leer tokens. Si el componente lleva <code>"use client"</code> arriba, corre en el navegador: ahi <strong>nunca</strong> pongas secretos.</p>
+</blockquote>
+<hr />
+<h2 id="4-datos-json">4. Datos: JSON</h2>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p><strong>JSON</strong> (JavaScript Object Notation) es un formato de texto para representar datos con objetos <code>{}</code> y listas <code>[]</code>. Sirve para intercambiar datos entre cliente y servidor de forma universal. Es el formato del body en <strong>tunal-digital</strong> y <strong>Faro</strong>; ademas, <strong>PolyPaw</strong> guarda sus misiones en archivos <code>.json</code>.</p>
+</blockquote>
+<pre><code class="language-json">{
+  &quot;proyecto&quot;: &quot;Faro&quot;,
+  &quot;estado&quot;: &quot;en desarrollo&quot;,
+  &quot;progreso&quot;: 62,
+  &quot;roadmap&quot;: [&quot;Conectar Drive&quot;, &quot;Mejorar el resumen IA&quot;]
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-serializar-parsear">🟦 ¿Que significa? — <em>Serializar / parsear</em></h3>
+<p><strong>Serializar</strong> es convertir un objeto a texto JSON (<code>JSON.stringify</code>); <strong>parsear</strong> es convertir el texto JSON de vuelta a objeto (<code>JSON.parse</code> o <code>res.json()</code>). Sirve para enviar y recibir datos. En <strong>tunal-digital</strong> serializas el mensaje al enviarlo y parseas la respuesta al recibirla.</p>
+<h3 id="que-significa-content-type">🟦 ¿Que significa? — <em>Content-Type</em></h3>
+<p><strong>Content-Type</strong> es el header que dice en que formato va el contenido. Sirve para que el otro lado sepa como leerlo. Cuando envias JSON pones <code>Content-Type: application/json</code>, como en cada <code>POST</code> de <strong>tunal-digital</strong>.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Si olvidas el header <code>Content-Type: application/json</code>, el servidor puede no entender tu body y devolverte un <code>400</code>. Es uno de los errores mas comunes y mas faciles de pasar por alto.</p>
+</blockquote>
+<hr />
+<h2 id="5-autenticacion-tokens-api-keys-y-oauth">5. Autenticacion: tokens, API keys y OAuth</h2>
+<p>Aqui esta el corazon de la seguridad. Lee con calma, Bit te acompaña.</p>
+<blockquote class="def">
+<h3 id="que-significa-autenticacion-vs-autorizacion">🟦 ¿Que significa? — <em>Autenticacion vs autorizacion</em></h3>
+<p><strong>Autenticacion</strong> es probar quien eres (login); <strong>autorizacion</strong> es que tienes permiso de hacer. Sirve para distinguir "se que eres tu" de "puedes tocar esto". En <strong>RachaSimple</strong> y <strong>Faro</strong>, Supabase Auth te autentica; los <em>scopes</em> de OAuth deciden a que te autoriza.</p>
+<h3 id="que-significa-token">🟦 ¿Que significa? — <em>Token</em></h3>
+<p>Un <strong>token</strong> es una cadena secreta que prueba que ya te autenticaste, para no mandar tu contraseña en cada peticion. Sirve como "pase de entrada" temporal. <strong>Faro</strong> recibe un token de acceso de GitHub tras el OAuth y lo usa para leer tus repos.</p>
+<h3 id="que-significa-api-key">🟦 ¿Que significa? — <em>API key</em></h3>
+<p>Una <strong>API key</strong> es una clave fija que identifica a tu aplicacion ante un servicio. Sirve para que el servicio sepa quien llama y cobre/limite el uso. <strong>Faro</strong> usa la API key de OpenAI; <strong>tunal-digital</strong> usa la API key de Anthropic. Ambas viven <strong>solo en el servidor</strong>.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Diferencia clave: una <strong>API key</strong> suele identificar a <em>tu app</em> (es fija y muy secreta); un <strong>token</strong> suele identificar a <em>un usuario</em> tras un login (es temporal). Las dos son secretos. Ninguna se commitea ni se manda al navegador.</p>
+<h3 id="que-significa-bearer">🟦 ¿Que significa? — <em>Bearer</em></h3>
+<p><strong>Bearer</strong> ("portador") es el esquema mas comun para enviar un token: se pone en el header <code>Authorization: Bearer &lt;token&gt;</code>. Sirve para que el servidor lea tu credencial de forma estandar. Asi llama <strong>Faro</strong> a OpenAI y a GitHub desde el servidor.</p>
+</blockquote>
+<pre><code class="language-javascript">// Faro (lado SERVIDOR): llamar a OpenAI con la API key en Authorization: Bearer
+const res = await fetch(&quot;https://api.openai.com/v1/chat/completions&quot;, {
+  method: &quot;POST&quot;,
+  headers: {
+    &quot;Authorization&quot;: `Bearer ${process.env.OPENAI_API_KEY}`, // secreto del servidor
+    &quot;Content-Type&quot;: &quot;application/json&quot;,
+  },
+  body: JSON.stringify({ model: &quot;gpt-4o-mini&quot;, messages }),
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-oauth">🟦 ¿Que significa? — <em>OAuth</em></h3>
+<p><strong>OAuth</strong> es un protocolo para que una app acceda a tus datos en otro servicio <strong>sin que le des tu contraseña</strong>. Sirve para conceder permisos limitados y revocables. <strong>Faro</strong> usa OAuth (via Supabase Auth) para que tu autorices leer tus repos de <strong>GitHub</strong> y tus archivos de <strong>Google Drive</strong>.</p>
+<h3 id="que-significa-proveedor-de-identidad">🟦 ¿Que significa? — <em>Proveedor de identidad</em></h3>
+<p>Un <strong>proveedor de identidad</strong> es el servicio que confirma quien eres en un OAuth (GitHub, Google). Sirve para reutilizar una cuenta que ya tienes. En <strong>RachaSimple</strong> el login es con Supabase Auth; en <strong>Faro</strong>, GitHub y Google son los proveedores que autorizan el acceso a tus datos.</p>
+<h3 id="que-significa-scope-alcance">🟦 ¿Que significa? — <em>Scope (alcance)</em></h3>
+<p>Un <strong>scope</strong> es el permiso concreto que pides en un OAuth (por ejemplo "leer repos", "leer archivos de Drive"). Sirve para limitar a lo justo y necesario. <strong>Faro</strong> pide scopes de solo lectura: quiere <em>leer</em> tus proyectos para analizarlos, no modificarlos.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Pide siempre el <strong>scope minimo</strong>. Si solo necesitas leer, no pidas permiso de escritura. Menos permisos = menos daño posible si algo se filtra. Faro lo hace asi a proposito.</p>
+<h3 id="que-significa-callback-url-de-redireccion">🟦 ¿Que significa? — <em>Callback (URL de redireccion)</em></h3>
+<p>El <strong>callback</strong> es la URL a la que el proveedor te devuelve despues de aprobar el acceso, trayendo un codigo para canjear por el token. Sirve para cerrar el circulo del login. En <strong>Faro</strong>, tras aprobar en GitHub, vuelves a una ruta de callback que Supabase maneja para obtener el token.</p>
+<h3 id="que-significa-flujo-de-oauth-resumen">🟦 ¿Que significa? — <em>Flujo de OAuth (resumen)</em></h3>
+<p>El <strong>flujo</strong> es el orden de pasos: (1) tu app te manda al proveedor, (2) tu apruebas los scopes, (3) el proveedor te regresa al <em>callback</em> con un codigo, (4) el <strong>servidor</strong> canjea ese codigo por un token. Sirve para que el secreto final nunca pase por el navegador. Asi conecta <strong>Faro</strong> con GitHub y Drive.</p>
+<h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
+<p><strong>RLS</strong> es una funcion de la base de datos (Postgres/Supabase) que filtra por filas segun quien consulta, para que cada usuario solo vea lo suyo. Sirve para proteger datos a nivel de base. En <strong>Faro</strong>, la tabla <code>user_connections</code> (donde se guardan tokens) tiene RLS para que nadie acceda a las conexiones de otro.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En <strong>Faro</strong>, los tokens de GitHub y Drive se guardan en <code>user_connections</code> (servidor + RLS), nunca en <code>localStorage</code> del navegador. Si alguna vez ves un token en codigo del cliente, eso es un bug de seguridad que hay que corregir ya.</p>
+</blockquote>
+<hr />
+<h2 id="6-inteligencia-artificial-llm">6. Inteligencia Artificial (LLM)</h2>
+<blockquote class="def">
+<h3 id="que-significa-ia-llm">🟦 ¿Que significa? — <em>IA / LLM</em></h3>
+<p><strong>IA</strong> es inteligencia artificial; un <strong>LLM</strong> (Large Language Model, modelo grande de lenguaje) es el tipo de IA que entiende y genera texto. Sirve para escribir, resumir, clasificar o conversar. <strong>tunal-digital</strong> usa el LLM de Claude (Anthropic) para el chat; <strong>Faro</strong> usa los LLM de OpenAI para generar descripcion, estado y roadmap.</p>
+<h3 id="que-significa-modelo">🟦 ¿Que significa? — <em>Modelo</em></h3>
+<p>Un <strong>modelo</strong> es una version concreta de la IA, con su nombre y capacidades (por ejemplo un modelo de Claude o uno de OpenAI). Sirve para elegir el equilibrio entre calidad, velocidad y costo. En cada llamada indicas el modelo en el campo <code>model</code>.</p>
+<h3 id="que-significa-prompt">🟦 ¿Que significa? — <em>Prompt</em></h3>
+<p>Un <strong>prompt</strong> es el texto de instrucciones que le das al LLM. Sirve para decirle exactamente que quieres. En <strong>Faro</strong>, el prompt le pide a OpenAI: "con estos datos del repo, devuelve un JSON con descripcion, estado y roadmap"; en <strong>tunal-digital</strong>, el prompt incluye el mensaje del visitante.</p>
+<h3 id="que-significa-system-prompt">🟦 ¿Que significa? — <em>System prompt</em></h3>
+<p>El <strong>system prompt</strong> son instrucciones de fondo que fijan el papel y las reglas del modelo (su "personalidad" y limites). Sirve para mantener el tono y el comportamiento. En <strong>tunal-digital</strong> el system prompt define que el asistente hable de Tunal Digital y no se salga del tema.</p>
+<h3 id="que-significa-token-de-ia">🟦 ¿Que significa? — <em>Token de IA</em></h3>
+<p>Un <strong>token de IA</strong> es la unidad en que el modelo cuenta el texto (un trozo de palabra). Sirve para medir cuanto entra y sale, porque de eso depende el costo y el limite. ¡Ojo!: este "token" no es el mismo "token" de autenticacion de la seccion 5. Mismo nombre, mundo distinto.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>No confundas los dos "token": el de <strong>autenticacion</strong> es tu pase de seguridad; el de <strong>IA</strong> es una unidad para medir texto. Si lees "te quedaste sin tokens" en una factura de IA, hablan de los de texto, no de credenciales.</p>
+<h3 id="que-significa-temperature-temperatura">🟦 ¿Que significa? — <em>Temperature (temperatura)</em></h3>
+<p><strong>temperature</strong> es un numero (entre 0 y ~1) que regula que tan creativa o predecible es la IA: bajo = mas estable y repetible, alto = mas variado. Sirve para ajustar el estilo. En <strong>Faro</strong>, para generar un JSON ordenado conviene temperatura baja; en el chat creativo de <strong>tunal-digital</strong> se puede subir un poco.</p>
+<h3 id="que-significa-max_tokens">🟦 ¿Que significa? — <em>max_tokens</em></h3>
+<p><strong>max_tokens</strong> es el limite de cuanto texto puede generar el modelo en su respuesta. Sirve para controlar largo y costo. En <strong>tunal-digital</strong> se limita para que las respuestas del chat sean breves y baratas.</p>
+<h3 id="que-significa-salida-estructurada-json">🟦 ¿Que significa? — <em>Salida estructurada (JSON)</em></h3>
+<p>Una <strong>salida estructurada</strong> es pedirle al modelo que responda en un formato fijo, normalmente JSON, en vez de texto libre. Sirve para que tu programa pueda leer la respuesta sin adivinar. <strong>Faro</strong> le pide a OpenAI un JSON con campos exactos para guardar estado y progreso.</p>
+</blockquote>
+<pre><code class="language-json">{
+  &quot;descripcion&quot;: &quot;Organizador de proyectos que lee GitHub y Drive.&quot;,
+  &quot;estado&quot;: &quot;en desarrollo&quot;,
+  &quot;progreso&quot;: 62,
+  &quot;roadmap&quot;: [&quot;Mejorar deteccion de milestones&quot;, &quot;Conectar Drive&quot;]
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-alucinacion">🟦 ¿Que significa? — <em>Alucinacion</em></h3>
+<p>Una <strong>alucinacion</strong> es cuando la IA inventa algo que suena seguro pero es falso. Sirve saberlo para no confiar a ciegas. Por eso en <strong>Faro</strong> el progreso es <strong>hibrido</strong> (milestones reales + IA): los datos duros sujetan a la IA para que no se invente el avance.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Trata la salida de un LLM como un borrador inteligente, no como una verdad final. Valida el JSON que te devuelve (que tenga los campos esperados) antes de guardarlo en la base de datos.</p>
+</blockquote>
+<hr />
+<h2 id="7-infraestructura-cors-proxy-variables-de-entorno">7. Infraestructura: CORS, proxy, variables de entorno</h2>
+<blockquote class="def">
+<h3 id="que-significa-cors">🟦 ¿Que significa? — <em>CORS</em></h3>
+<p><strong>CORS</strong> (Cross-Origin Resource Sharing) es la regla del navegador que controla si una pagina puede llamar a una API de <strong>otro origen</strong> (otro dominio). Sirve para proteger al usuario. Si <strong>tunal-digital</strong> llamara directo a la API de Anthropic desde el navegador, CORS (y la seguridad de la clave) lo impedirian: por eso pasa por el Worker.</p>
+<h3 id="que-significa-origen-origin">🟦 ¿Que significa? — <em>Origen (origin)</em></h3>
+<p>Un <strong>origen</strong> es la combinacion de protocolo + dominio + puerto (por ejemplo <code>https://tunal.digital</code>). Sirve para que CORS sepa que es "lo mismo" y que es "otro". Llamar dentro del mismo origen no dispara CORS; cruzar de origen, si.</p>
+<h3 id="que-significa-proxy">🟦 ¿Que significa? — <em>Proxy</em></h3>
+<p>Un <strong>proxy</strong> es un intermediario en el servidor: tu cliente le habla a el, y el reenvia la peticion al servicio real añadiendo el secreto. Sirve para ocultar la clave y esquivar CORS. El <strong>Cloudflare Worker</strong> de <strong>tunal-digital</strong> es exactamente eso: un proxy entre el navegador y la API de Claude.</p>
+</blockquote>
+<pre><code class="language-javascript">// tunal-digital, Cloudflare Worker (SERVIDOR): el proxy que esconde la API key
+export default {
+  async fetch(request, env) {
+    const { mensaje } = await request.json();
+    const res = await fetch(&quot;https://api.anthropic.com/v1/messages&quot;, {
+      method: &quot;POST&quot;,
+      headers: {
+        &quot;x-api-key&quot;: env.ANTHROPIC_API_KEY, // secreto SOLO en el Worker
+        &quot;anthropic-version&quot;: &quot;2023-06-01&quot;,
+        &quot;Content-Type&quot;: &quot;application/json&quot;,
+      },
+      body: JSON.stringify({
+        model: &quot;claude-...&quot;,
+        max_tokens: 512,
+        messages: [{ role: &quot;user&quot;, content: mensaje }],
+      }),
+    });
+    return new Response(await res.text(), {
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+    });
+  },
+};
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-worker-cloudflare-worker">🟦 ¿Que significa? — <em>Worker (Cloudflare Worker)</em></h3>
+<p>Un <strong>Worker</strong> es una funcion que corre en el servidor (en la red de Cloudflare), sin que tu administres una maquina. Sirve para tener "un pedacito de backend" barato y rapido. En <strong>tunal-digital</strong> el Worker es el unico que conoce la API key de Claude.</p>
+<h3 id="que-significa-variable-de-entorno">🟦 ¿Que significa? — <em>Variable de entorno</em></h3>
+<p>Una <strong>variable de entorno</strong> es un valor de configuracion (a menudo un secreto) que se inyecta fuera del codigo, segun el ambiente. Sirve para no escribir claves en el codigo ni subirlas a git. En <strong>Faro</strong> son <code>OPENAI_API_KEY</code>, etc.; en el Worker es <code>env.ANTHROPIC_API_KEY</code>.</p>
+<h3 id="que-significa-env-y-gitignore">🟦 ¿Que significa? — <em>.env y .gitignore</em></h3>
+<p>El archivo <strong>.env</strong> guarda las variables de entorno en tu maquina; <strong>.gitignore</strong> le dice a git que <strong>no</strong> suba ese archivo. Sirve para que tus secretos nunca lleguen al repositorio. Revisa siempre que <code>.env</code> este en <code>.gitignore</code>.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>En Next.js (Faro), toda variable con el prefijo <code>NEXT_PUBLIC_</code> <strong>se incrusta en el navegador y es publica</strong>. Jamas pongas una API key con ese prefijo. Los secretos van en variables <strong>sin</strong> ese prefijo, que solo lee el servidor.</p>
+<h3 id="que-significa-rate-limit-limite-de-peticiones">🟦 ¿Que significa? — <em>Rate limit (limite de peticiones)</em></h3>
+<p>Un <strong>rate limit</strong> es el tope de peticiones que un servicio te permite en un tiempo. Sirve para evitar abuso y costos disparados; al pasarte recibes <code>429</code>. En <strong>tunal-digital</strong> conviene limitar el chat para que un visitante no agote tu cuota de Anthropic.</p>
+<h3 id="que-significa-webhook">🟦 ¿Que significa? — <em>Webhook</em></h3>
+<p>Un <strong>webhook</strong> es lo contrario a una llamada normal: en vez de que tu preguntes, el servicio te avisa enviando una peticion a una URL tuya cuando pasa algo. Sirve para reaccionar a eventos sin estar consultando. No es central en estos repos, pero es un termino que oiras seguido.</p>
+<h3 id="que-significa-sdk">🟦 ¿Que significa? — <em>SDK</em></h3>
+<p>Un <strong>SDK</strong> (Software Development Kit) es una libreria oficial que envuelve una API para que la uses sin armar las peticiones HTTP a mano. Sirve para escribir menos y equivocarte menos. En <strong>Faro</strong> podrias usar el SDK de OpenAI; en el Worker, llamar a Anthropic via SDK o con <code>fetch</code> directo.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Uses fetch crudo o un SDK, el principio de seguridad no cambia: la inicializacion con la API key ocurre en el <strong>servidor</strong>. El SDK no te exime de cuidar el secreto.</p>
+</blockquote>
+<hr />
+<h2 id="8-mapa-mental-del-modulo">8. Mapa mental del modulo</h2>
+<p>Asi se conecta todo lo que viste. Sigue las flechas como un mapa de metro:</p>
+<pre><code class="language-text">                 ┌────────────────── EL USUARIO ──────────────────┐
+                 │  navegador / app (CLIENTE)  — sin secretos      │
+                 └───────────────┬─────────────────────────────────┘
+                                 │ fetch (HTTP/HTTPS)
+                                 │ metodo + headers + body(JSON)
+                                 ▼
+        ┌────────────────── SERVIDOR (aqui viven los secretos) ──────────────────┐
+        │  Faro: rutas /api de Next.js (Vercel)                                   │
+        │  tunal-digital: Cloudflare Worker (proxy)                               │
+        │  variables de entorno: API key / tokens                                │
+        └───────┬───────────────────────┬───────────────────────┬───────────────┘
+                │ Bearer / x-api-key     │ OAuth (scopes,         │ Bearer
+                ▼                        │   callback, token)     ▼
+        ┌───────────────┐               ▼                ┌────────────────────┐
+        │  API de IA    │      ┌──────────────────┐      │  Base de datos     │
+        │  OpenAI(Faro) │      │  GitHub / Google  │      │  Supabase + RLS    │
+        │  Claude(tunal)│      │  Drive  (Faro)    │      │  user_connections  │
+        │  prompt,      │      │  leer repos /     │      │  guarda tokens     │
+        │  temperature, │      │  archivos         │      │  con seguridad     │
+        │  max_tokens   │      └──────────────────┘      └────────────────────┘
+        │  → JSON       │
+        └───────────────┘
+</code></pre>
+<p>Lee el mapa asi: el <strong>cliente</strong> nunca toca un secreto; siempre habla con <strong>tu servidor</strong> por <code>fetch</code>. Tu servidor, que si guarda las claves en <strong>variables de entorno</strong>, llama a las <strong>APIs de IA</strong> (con prompts y parametros como <code>temperature</code>), a <strong>GitHub/Drive</strong> (con <strong>OAuth</strong>, scopes y callback) y guarda lo necesario en <strong>Supabase</strong> con <strong>RLS</strong>. Si entiendes este dibujo, entiendes el modulo entero.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Explico que es una <strong>API</strong>, un <strong>endpoint</strong> y un <strong>metodo HTTP</strong> con mis palabras.</li>
+<li>[ ] Distingo los <strong>codigos de estado</strong> mas comunes (200, 400, 401, 403, 404, 429, 500).</li>
+<li>[ ] Se que son <strong>header</strong>, <strong>body</strong> y <strong>Content-Type</strong>, y cuando uso cada uno.</li>
+<li>[ ] Hago una peticion con <strong>fetch</strong> usando <strong>async/await</strong> y leo el <strong>JSON</strong> de respuesta.</li>
+<li>[ ] Diferencio <strong>token</strong> de <strong>API key</strong>, y se que es el esquema <strong>Bearer</strong>.</li>
+<li>[ ] Explico el <strong>flujo de OAuth</strong>: proveedor, <strong>scope</strong>, <strong>callback</strong> y canje del token.</li>
+<li>[ ] Entiendo por que <strong>Faro</strong> guarda tokens en <code>user_connections</code> con <strong>RLS</strong>.</li>
+<li>[ ] Se que es un <strong>LLM</strong>, un <strong>prompt</strong>, <strong>temperature</strong> y un <strong>token de IA</strong> (y no lo confundo con el de auth).</li>
+<li>[ ] Explico <strong>CORS</strong> y por que <strong>tunal-digital</strong> usa un <strong>proxy</strong> (Worker) para llamar a Claude.</li>
+<li>[ ] Tengo claro que las <strong>claves van en variables de entorno del servidor</strong>, nunca en el cliente ni en git.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Diccionario propio.</strong> Sin mirar el capitulo, escribe con tus palabras la definicion de seis terminos: <em>endpoint</em>, <em>Bearer</em>, <em>scope</em>, <em>callback</em>, <em>temperature</em> y <em>proxy</em>. Luego compara con el glosario y corrige lo que falte.</p>
+</li>
+<li>
+<p><strong>Caza al impostor.</strong> Aqui hay tres afirmaciones; di cuales son falsas y por que: (a) "una API key identifica a un usuario tras el login", (b) "el token de IA y el token de autenticacion son lo mismo", (c) "CORS protege al navegador de llamar a otro origen sin permiso".</p>
+</li>
+<li>
+<p>💻 <strong>Lee un estado.</strong> Con <code>fetch</code> a una API publica de prueba, haz una peticion que devuelva <code>404</code> a proposito (pidiendo algo que no existe) e imprime en consola <code>res.status</code> y <code>res.ok</code>. Confirma que entiendes la diferencia entre ambos.</p>
+</li>
+<li>
+<p>💻 <strong>Mismo origen, otro origen.</strong> En una pagina local, haz un <code>fetch</code> a una ruta del mismo origen y luego a una API de otro dominio que no permita CORS. Observa el error de CORS en la consola y explica en un comentario por que un <strong>proxy</strong> lo resolveria.</p>
+</li>
+<li>
+<p>💻 <strong>Secretos a su lugar.</strong> Crea un archivo <code>.env</code> con una variable <code>MI_API_KEY=demo123</code>, añadelo a <code>.gitignore</code> y verifica con <code>git status</code> que git <strong>no</strong> lo lista para subir. Escribe debajo, en un comentario, por que esto protege tu clave.</p>
+</li>
+<li>
+<p><strong>Mapa con tus repos.</strong> Dibuja (a mano o en un editor) tu propia version del mapa mental de la seccion 8, pero solo para <strong>tunal-digital</strong>: marca donde esta el cliente, donde el Worker, donde vive la API key y por donde viaja el prompt.</p>
+</li>
+</ol>
+<hr />
+<h2 id="como-sigue-modulo-09-nas-y-servidores">👉 Como sigue: Modulo 09 — NAS y servidores</h2>
+<p>Cerramos el Modulo 08 sabiendo pedir datos a otros (APIs), autorizar accesos sin regalar contraseñas (OAuth) y conversar con modelos de IA con la cabeza fria sobre la <strong>seguridad</strong>. Hasta ahora tu "servidor" fue de alguien mas: Vercel, Cloudflare, Supabase.</p>
+<p>En el <strong>Modulo 09</strong> das el salto a <strong>tu propio servidor en casa</strong>: un <strong>NAS</strong>. Lo veremos de la mano de <strong>polypaw-nas</strong> (Ubuntu + Samba para compartir archivos + Cockpit para administrarlo desde el navegador + Tailscale para llegar a el de forma segura desde fuera). Vas a entender que es una direccion IP, un puerto, un servicio que corre siempre, y como acceder a tus archivos desde cualquier lado sin abrir tu casa al mundo. Mucho de lo que aprendiste aqui (HTTP, headers, seguridad, variables de entorno) te va a sonar; ahora del otro lado del cable.</p>
+<blockquote>
+<p>Lo lograste, y se nota. Guarda este glosario cerquita: volveras a el mas seguido de lo que crees. Nos vemos en el Modulo 09 con las patitas listas para montar tu primer servidor. — Bit 🐾
+```</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
