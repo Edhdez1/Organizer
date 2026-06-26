@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 14 — Mini-proyecto: lista de tareas interactiva — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-mini-proyecto-lista-de-tareas-interactiva">Capitulo 14 — Mini-proyecto: lista de tareas interactiva</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>¡Hola de nuevo! Soy <strong>Bit</strong>, tu ajolote programador. Hoy es un dia especial: vamos a juntar TODO lo que aprendiste en el modulo de JavaScript (el DOM, los eventos, los arrays y el almacenamiento) para construir algo de verdad, algo que funciona y que puedes ensenarle a tu familia. Vamos a hacer una <strong>lista de tareas interactiva</strong>: escribes una tarea, la anades, la marcas como hecha, la borras... y lo mejor: aunque cierres el navegador, ¡tus tareas siguen ahi! Respira hondo. Lo vas a lograr paso a paso. Yo te acompano. 🐾</p>
+</blockquote>
+<h2 id="1-que-vamos-a-construir">1. ¿Que vamos a construir?</h2>
+<p>Imagina una libretita digital. Tiene una cajita donde escribes "Comprar pan", aprietas un boton y la tarea aparece en una lista. Si ya compraste el pan, le das clic y se tacha. Si te equivocaste, la borras. Y si cierras la pestana y vuelves manana, tus tareas siguen ahi esperandote.</p>
+<p>Eso es exactamente lo que harás hoy. Vamos a usar tres lenguajes juntos:</p>
+<ul>
+<li><strong>HTML</strong> para la estructura (la cajita, el boton, la lista vacia).</li>
+<li><strong>CSS</strong> para que se vea bonito.</li>
+<li><strong>JavaScript</strong> para que cobre vida: que reaccione a tus clics y recuerde tus datos.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-mini-proyecto">🟦 ¿Que significa? — <em>Mini-proyecto</em></h3>
+<p>Un mini-proyecto es un programa pequeno pero <strong>completo</strong>: tiene principio y fin, y hace algo util de verdad, no es solo un ejercicio suelto. Sirve para practicar uniendo varios temas a la vez, que es como funciona la programacion en la vida real. En <strong>tunal-digital</strong> (un sitio web hecho con HTML, CSS y JavaScript puro), todo el sitio es como un gran proyecto donde el archivo <code>main.js</code> une muchas piezas: el chat con IA, el formulario de contacto y las llamadas al servidor. Tu lista de tareas es tu primer "main.js" en miniatura.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>No intentes escribir todo el codigo de golpe. La forma profesional de trabajar es <strong>un pasito, probar, otro pasito, probar</strong>. Asi, si algo se rompe, sabes exactamente que linea fue. Bit lo hace asi todos los dias.</p>
+</blockquote>
+<h2 id="2-preparamos-el-escenario-el-html">2. Preparamos el escenario: el HTML</h2>
+<p>Abre tu editor de codigo y crea una carpeta nueva llamada <code>lista-tareas</code>. Dentro, crea un archivo llamado <code>index.html</code>. Este archivo es el <strong>esqueleto</strong> de nuestra pagina.</p>
+<blockquote class="def">
+<h3 id="que-significa-html">🟦 ¿Que significa? — <em>HTML</em></h3>
+<p>HTML (HyperText Markup Language) es el lenguaje que define <strong>la estructura</strong> de una pagina web: que hay un titulo aqui, una caja de texto alla, un boton mas abajo. No decide colores ni comportamiento, solo el "que cosas hay y en que orden". Sirve como el esqueleto de cualquier web. En <strong>tunal-digital</strong>, cada pagina empieza por un archivo HTML que dibuja los botones y formularios que luego el JavaScript hace funcionar.</p>
+</blockquote>
+<p>Escribe esto dentro de <code>index.html</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Mi lista de tareas&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;estilos.css&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;📝 Mi lista de tareas&lt;/h1&gt;
+
+  &lt;div class=&quot;caja&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;entrada&quot; placeholder=&quot;Escribe una tarea...&quot; /&gt;
+    &lt;button id=&quot;boton-anadir&quot;&gt;Anadir&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;ul id=&quot;lista&quot;&gt;&lt;/ul&gt;
+
+  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Fijate en tres cosas importantes que vamos a usar despues desde JavaScript:</p>
+<ul>
+<li>El <code>&lt;input&gt;</code> tiene <code>id="entrada"</code>: ahi escribira el usuario.</li>
+<li>El <code>&lt;button&gt;</code> tiene <code>id="boton-anadir"</code>: el boton que dispara la accion.</li>
+<li>El <code>&lt;ul&gt;</code> tiene <code>id="lista"</code>: la lista (por ahora vacia) donde apareceran las tareas.</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-id-identificador">🟦 ¿Que significa? — <em>id (identificador)</em></h3>
+<p>Un <code>id</code> es un <strong>nombre unico</strong> que le pones a un elemento del HTML para poder encontrarlo despues desde JavaScript. Como ponerle nombre a una mascota: solo puede haber un "entrada" en toda la pagina. Sirve para que tu codigo diga "agarra ESE elemento exacto". En <strong>tunal-digital</strong>, el <code>main.js</code> usa ids para encontrar el formulario de contacto y la caja del chat antes de hacerlos funcionar.</p>
+<h3 id="que-significa-input">🟦 ¿Que significa? — <em>input</em></h3>
+<p>Un <code>input</code> es una caja donde el usuario <strong>escribe o introduce datos</strong>. El tipo <code>type="text"</code> es para texto normal. Sirve para recoger lo que la persona quiere comunicarle al programa. En <strong>tunal-digital</strong>, el formulario de contacto usa varios <code>input</code> para que el visitante escriba su nombre y su correo.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>El <code>&lt;ul&gt;</code> esta vacio a proposito. Las tareas NO se escriben a mano en el HTML: las va a crear JavaScript automaticamente cada vez que el usuario anada una. Esa es la magia de una pagina "interactiva".</p>
+</blockquote>
+<h2 id="3-un-toque-de-estilo-el-css">3. Un toque de estilo: el CSS</h2>
+<p>Crea ahora <code>estilos.css</code> en la misma carpeta. No te preocupes por entenderlo todo, el CSS solo decora.</p>
+<blockquote class="def">
+<h3 id="que-significa-css">🟦 ¿Que significa? — <em>CSS</em></h3>
+<p>CSS (Cascading Style Sheets) es el lenguaje que decide <strong>como se ve</strong> la pagina: colores, tamanos, espacios, tipos de letra. Sirve para que algo que ya existe (gracias al HTML) se vea agradable. En <strong>tunal-digital</strong>, el CSS le da al sitio su aspecto de marca: los colores, los botones redondeados y los espacios.</p>
+</blockquote>
+<pre><code class="language-css">body {
+  font-family: sans-serif;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.caja { display: flex; gap: 8px; }
+#entrada { flex: 1; padding: 10px; }
+button { padding: 10px 16px; cursor: pointer; }
+ul { list-style: none; padding: 0; }
+li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+li.hecha span { text-decoration: line-through; color: gray; }
+</code></pre>
+<p>La ultima regla es la mas interesante para nosotros: cuando un <code>&lt;li&gt;</code> tenga la clase <code>hecha</code>, su texto aparecera <strong>tachado y gris</strong>. Lo activaremos desde JavaScript.</p>
+<blockquote class="def">
+<h3 id="que-significa-clase-class">🟦 ¿Que significa? — <em>clase (class)</em></h3>
+<p>Una clase es una <strong>etiqueta reutilizable</strong> que le pones a uno o varios elementos para darles un estilo o marcarlos. A diferencia del <code>id</code> (unico), muchos elementos pueden compartir la misma clase. Sirve para aplicar el mismo aspecto o comportamiento a un grupo. Aqui, <code>hecha</code> marcara todas las tareas completadas.</p>
+</blockquote>
+<h2 id="4-llega-javascript-conectamos-con-la-pagina">4. ¡Llega JavaScript! Conectamos con la pagina</h2>
+<p>Crea el archivo <code>app.js</code>. Aqui vive toda la inteligencia. Lo primero: que JavaScript <strong>encuentre</strong> los elementos del HTML.</p>
+<blockquote class="def">
+<h3 id="que-significa-javascript">🟦 ¿Que significa? — <em>JavaScript</em></h3>
+<p>JavaScript es el lenguaje que le da <strong>comportamiento</strong> a la pagina: hace que reaccione a clics, que cambie sola, que recuerde cosas. Si el HTML es el esqueleto y el CSS la piel, JavaScript es el sistema nervioso. En <strong>tunal-digital</strong>, el archivo <code>main.js</code> es JavaScript puro y se encarga de todo lo "vivo" del sitio.</p>
+<h3 id="que-significa-dom">🟦 ¿Que significa? — <em>DOM</em></h3>
+<p>El DOM (Document Object Model) es la forma en que JavaScript <strong>ve</strong> la pagina HTML: como una coleccion de objetos que puede leer y modificar. Gracias al DOM, tu codigo puede decir "agarra la caja de texto" o "crea un elemento nuevo en la lista". Sirve de puente entre tu codigo y lo que el usuario ve. En <strong>tunal-digital</strong>, el <code>main.js</code> usa el DOM constantemente para mostrar y ocultar partes del sitio.</p>
+</blockquote>
+<pre><code class="language-javascript">// Buscamos los elementos del HTML por su id
+const entrada = document.getElementById(&quot;entrada&quot;);
+const botonAnadir = document.getElementById(&quot;boton-anadir&quot;);
+const lista = document.getElementById(&quot;lista&quot;);
+
+// Aqui guardaremos todas las tareas en memoria
+let tareas = [];
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-documentgetelementbyid">🟦 ¿Que significa? — <em>document.getElementById</em></h3>
+<p>Es una funcion del DOM que <strong>busca un elemento por su id</strong> y te lo entrega para trabajar con el. El nombre se lee facil: "del documento, dame el elemento con este id". Sirve para conectar una variable de JavaScript con algo real de la pagina. En <strong>tunal-digital</strong>, <code>main.js</code> define funciones de atajo justo para hacer mas corto este tipo de busquedas, porque se usan muchisimo.</p>
+<h3 id="que-significa-variable">🟦 ¿Que significa? — <em>variable</em></h3>
+<p>Una variable es una <strong>cajita con nombre</strong> donde guardas un dato para usarlo despues. Con <code>const</code> guardas algo que no cambiara (como la referencia a la caja de texto) y con <code>let</code> algo que si cambiara (como nuestra lista de tareas, que crecera). Sirven para que tu programa recuerde cosas mientras trabaja.</p>
+<h3 id="que-significa-array-arreglo">🟦 ¿Que significa? — <em>array (arreglo)</em></h3>
+<p>Un array es una <strong>lista ordenada de datos</strong> dentro de una sola variable. Lo escribes con corchetes <code>[]</code>. Aqui, <code>tareas</code> sera un array donde cada elemento es una tarea. Sirve para guardar muchas cosas del mismo tipo juntas y recorrerlas. En <strong>PolyPaw</strong> (una app hecha en Python con Flet) los datos del juego se guardan en estructuras tipo lista dentro de archivos JSON, una idea muy parecida a un array.</p>
+</blockquote>
+<h2 id="5-anadir-una-tarea">5. Anadir una tarea</h2>
+<p>Ahora la primera accion real: cuando el usuario haga clic en "Anadir", queremos tomar el texto, guardarlo y mostrarlo.</p>
+<pre><code class="language-javascript">function anadirTarea() {
+  const texto = entrada.value.trim();
+  if (texto === &quot;&quot;) return; // si esta vacio, no hacemos nada
+
+  // Creamos un objeto que representa la tarea
+  const tarea = { texto: texto, hecha: false };
+  tareas.push(tarea);
+
+  entrada.value = &quot;&quot;;   // limpiamos la caja
+  pintarLista();        // volvemos a dibujar la lista
+}
+
+botonAnadir.addEventListener(&quot;click&quot;, anadirTarea);
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-funcion">🟦 ¿Que significa? — <em>funcion</em></h3>
+<p>Una funcion es un <strong>bloque de codigo con nombre</strong> que agrupa varias instrucciones para reutilizarlas. La defines una vez con <code>function</code> y la llamas cuando la necesitas. Sirve para no repetir codigo y mantener todo ordenado. En <strong>tunal-digital</strong>, el <code>main.js</code> esta lleno de funciones, incluidas funciones de atajo que envuelven tareas comunes.</p>
+<h3 id="que-significa-objeto">🟦 ¿Que significa? — <em>objeto</em></h3>
+<p>Un objeto es una caja que guarda <strong>varios datos relacionados con sus nombres</strong>, escrito con llaves <code>{}</code>. Nuestra tarea es un objeto con dos datos: <code>texto</code> (lo que dice) y <code>hecha</code> (si esta completada o no). Sirve para representar "cosas" con varias propiedades. En <strong>RachaSimple</strong> (app en React con TypeScript), cada habito del usuario es un objeto con sus propios datos.</p>
+<h3 id="que-significa-push">🟦 ¿Que significa? — <em>.push()</em></h3>
+<p><code>.push()</code> es una funcion de los arrays que <strong>agrega un elemento al final</strong> de la lista. Aqui mete la nueva tarea dentro del array <code>tareas</code>. Sirve para hacer crecer una lista poco a poco.</p>
+<h3 id="que-significa-trim">🟦 ¿Que significa? — <em>.trim()</em></h3>
+<p><code>.trim()</code> <strong>quita los espacios en blanco</strong> del principio y el final de un texto. Asi, si el usuario escribe solo espacios, lo detectamos como vacio. Sirve para limpiar lo que la persona escribe antes de usarlo.</p>
+<h3 id="que-significa-value">🟦 ¿Que significa? — <em>.value</em></h3>
+<p><code>.value</code> es <strong>el contenido actual de una caja de texto</strong> (<code>input</code>). Al leerlo (<code>entrada.value</code>) sabemos que escribio el usuario; al asignarlo (<code>entrada.value = ""</code>) lo cambiamos, por ejemplo para vaciar la caja despues de anadir. Sirve de puente entre lo que la persona teclea y tu codigo. En <strong>tunal-digital</strong>, el formulario de contacto lee el <code>.value</code> de cada campo antes de enviar el mensaje.</p>
+<h3 id="que-significa-operador-comparacion">🟦 ¿Que significa? — <em>operador === (comparacion)</em></h3>
+<p>El triple igual <code>===</code> <strong>compara dos valores y responde verdadero o falso</strong> segun si son iguales. La linea <code>texto === ""</code> pregunta "¿el texto esta vacio?". No confundir con un solo <code>=</code>, que sirve para <em>guardar</em> un valor, no para comparar. Sirve para tomar decisiones en tu codigo.</p>
+<h3 id="que-significa-return">🟦 ¿Que significa? — <em>return</em></h3>
+<p><code>return</code> <strong>corta la funcion en ese punto</strong> y no ejecuta lo que viene despues. Aqui, si el texto esta vacio, <code>return</code> hace que <code>anadirTarea</code> termine de inmediato sin guardar nada. Sirve para salir temprano cuando no tiene sentido seguir.</p>
+<h3 id="que-significa-evento">🟦 ¿Que significa? — <em>evento</em></h3>
+<p>Un evento es <strong>algo que ocurre</strong> en la pagina: un clic, una tecla, mover el raton. JavaScript puede "escuchar" esos eventos y reaccionar. Sirve para que tu programa responda al usuario. En <strong>tunal-digital</strong>, <code>main.js</code> escucha el evento de enviar el formulario de contacto para procesarlo.</p>
+<h3 id="que-significa-addeventlistener">🟦 ¿Que significa? — <em>addEventListener</em></h3>
+<p><code>addEventListener</code> es la funcion que <strong>conecta un evento con una accion</strong>. Se lee: "al elemento, anadele un escuchador del evento 'click' que ejecute esta funcion". Aqui, al hacer clic en el boton, se ejecuta <code>anadirTarea</code>. Sirve para definir como reacciona la pagina.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Fijate que NO escribimos <code>anadirTarea()</code> con parentesis dentro del <code>addEventListener</code>, sino solo <code>anadirTarea</code>. Con parentesis, JavaScript ejecutaria la funcion de inmediato; sin parentesis, solo le pasamos el nombre para que la guarde y la ejecute "cuando ocurra el clic". Es un error muy comun al empezar.</p>
+</blockquote>
+<h2 id="6-pintar-la-lista-en-pantalla">6. Pintar la lista en pantalla</h2>
+<p>Mencionamos <code>pintarLista()</code> pero aun no existe. Esta funcion es el corazon visual: borra la lista y la vuelve a dibujar desde el array. Asi siempre lo que ves coincide con lo que hay guardado.</p>
+<pre><code class="language-javascript">function pintarLista() {
+  lista.innerHTML = &quot;&quot;; // vaciamos lo que hubiera
+
+  tareas.forEach(function (tarea, indice) {
+    const li = document.createElement(&quot;li&quot;);
+    if (tarea.hecha) li.classList.add(&quot;hecha&quot;);
+
+    const span = document.createElement(&quot;span&quot;);
+    span.textContent = tarea.texto;
+
+    const botonBorrar = document.createElement(&quot;button&quot;);
+    botonBorrar.textContent = &quot;🗑️&quot;;
+
+    li.appendChild(span);
+    li.appendChild(botonBorrar);
+    lista.appendChild(li);
+  });
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-foreach">🟦 ¿Que significa? — <em>.forEach()</em></h3>
+<p><code>.forEach()</code> es una funcion de los arrays que <strong>recorre uno por uno</strong> todos los elementos y ejecuta codigo para cada uno. Aqui, por cada tarea creamos su <code>&lt;li&gt;</code>. Nos da tambien el <code>indice</code> (la posicion: 0, 1, 2...). Sirve para procesar listas completas sin escribir lo mismo muchas veces.</p>
+<h3 id="que-significa-documentcreateelement">🟦 ¿Que significa? — <em>document.createElement</em></h3>
+<p>Crea un <strong>elemento HTML nuevo desde JavaScript</strong>, sin escribirlo a mano en el archivo HTML. Aqui creamos <code>&lt;li&gt;</code>, <code>&lt;span&gt;</code> y <code>&lt;button&gt;</code> en el momento. Sirve para construir partes de la pagina dinamicamente.</p>
+<h3 id="que-significa-appendchild">🟦 ¿Que significa? — <em>.appendChild()</em></h3>
+<p>"Append child" significa <strong>anadir un hijo</strong>: mete un elemento dentro de otro. Aqui metemos el texto y el boton dentro del <code>&lt;li&gt;</code>, y el <code>&lt;li&gt;</code> dentro de la lista. Sirve para armar la estructura visual pieza por pieza.</p>
+<h3 id="que-significa-textcontent">🟦 ¿Que significa? — <em>.textContent</em></h3>
+<p><code>.textContent</code> es <strong>el texto que muestra un elemento</strong>. Al asignarle un valor, cambiamos lo que se lee en pantalla. Sirve para mostrar datos al usuario de forma segura.</p>
+<h3 id="que-significa-innerhtml">🟦 ¿Que significa? — <em>.innerHTML</em></h3>
+<p><code>.innerHTML</code> es <strong>todo el contenido HTML de un elemento</strong>. Aqui lo ponemos en <code>""</code> (vacio) para limpiar la lista antes de redibujarla. Sirve para vaciar o reemplazar contenido completo.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Vaciar con <code>innerHTML = ""</code> y redibujar desde el array es facil de entender, pero ojo: significa que la "fuente de la verdad" es SIEMPRE el array <code>tareas</code>, no lo que ves en pantalla. Primero cambiamos el array, luego pintamos. Nunca al reves. Si te confundes y modificas la pantalla sin tocar el array, al redibujar perderas el cambio.</p>
+</blockquote>
+<h2 id="7-marcar-como-hecha-y-borrar">7. Marcar como hecha y borrar</h2>
+<p>Ahora hagamos que esos elementos reaccionen. Modificamos el <code>forEach</code> para anadir eventos al texto (marcar/desmarcar) y al boton de la basura (borrar). Reemplaza el interior del <code>forEach</code> por esto:</p>
+<pre><code class="language-javascript">tareas.forEach(function (tarea, indice) {
+  const li = document.createElement(&quot;li&quot;);
+  if (tarea.hecha) li.classList.add(&quot;hecha&quot;);
+
+  const span = document.createElement(&quot;span&quot;);
+  span.textContent = tarea.texto;
+  // Al hacer clic en el texto, alternamos &quot;hecha&quot;
+  span.addEventListener(&quot;click&quot;, function () {
+    tareas[indice].hecha = !tareas[indice].hecha;
+    pintarLista();
+    guardar();
+  });
+
+  const botonBorrar = document.createElement(&quot;button&quot;);
+  botonBorrar.textContent = &quot;🗑️&quot;;
+  // Al hacer clic en la basura, quitamos esa tarea
+  botonBorrar.addEventListener(&quot;click&quot;, function () {
+    tareas.splice(indice, 1);
+    pintarLista();
+    guardar();
+  });
+
+  li.appendChild(span);
+  li.appendChild(botonBorrar);
+  lista.appendChild(li);
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-classlistadd">🟦 ¿Que significa? — <em>.classList.add()</em></h3>
+<p><code>.classList</code> es la lista de clases de un elemento, y <code>.add()</code> le <strong>agrega una clase</strong>. Aqui anadimos la clase <code>hecha</code> para que el CSS tache el texto. Existe tambien <code>.remove()</code> para quitarla. Sirve para cambiar el aspecto segun el estado.</p>
+<h3 id="que-significa-operador-negacion">🟦 ¿Que significa? — <em>operador ! (negacion)</em></h3>
+<p>El signo <code>!</code> <strong>invierte un valor verdadero/falso</strong>: si era <code>true</code> lo vuelve <code>false</code> y viceversa. La linea <code>!tareas[indice].hecha</code> significa "lo contrario de como estaba": si estaba hecha, la desmarcamos; si no, la marcamos. Sirve para alternar estados con un clic.</p>
+<h3 id="que-significa-splice">🟦 ¿Que significa? — <em>.splice()</em></h3>
+<p><code>.splice()</code> es una funcion de los arrays que <strong>quita (o inserta) elementos</strong> en una posicion. <code>tareas.splice(indice, 1)</code> significa "desde esa posicion, elimina 1 elemento". Sirve para borrar una tarea concreta de la lista.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Cada accion (marcar, borrar) hace tres cosas en orden: cambia el array, llama a <code>pintarLista()</code> para refrescar la pantalla, y llama a <code>guardar()</code> para no perder los datos. Ese trio se repite a proposito. En el siguiente paso creamos <code>guardar()</code>.</p>
+</blockquote>
+<h2 id="8-la-memoria-guardar-en-localstorage">8. La memoria: guardar en localStorage</h2>
+<p>Hasta ahora, si recargas la pagina, ¡todo desaparece! El array <code>tareas</code> vive solo en la memoria temporal. Vamos a darle memoria de verdad con <strong>localStorage</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-localstorage">🟦 ¿Que significa? — <em>localStorage</em></h3>
+<p><code>localStorage</code> es un pequeno <strong>almacen dentro del navegador</strong> donde tu pagina puede guardar datos que sobreviven aunque cierres la pestana o apagues la computadora. Sirve para recordar preferencias o, como aqui, una lista de tareas. Es como una libreta que el navegador guarda solo para tu pagina. (Recuerda: NO sirve para datos secretos; en proyectos como <strong>Faro/Organizer</strong>, los tokens y secretos jamas se guardan en el navegador, solo en el servidor.)</p>
+</blockquote>
+<p><code>localStorage</code> solo guarda <strong>texto</strong>, no objetos ni arrays directamente. Por eso usamos dos traductores: <code>JSON.stringify</code> (objeto → texto) y <code>JSON.parse</code> (texto → objeto).</p>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p>JSON es un <strong>formato de texto</strong> para representar datos (listas y objetos) de forma que cualquier programa los entienda. Sirve para guardar y transportar informacion. En <strong>PolyPaw</strong>, los datos del juego viven en archivos JSON; en <strong>RachaSimple</strong>, los datos viajan como JSON entre la app y Supabase.</p>
+<h3 id="que-significa-jsonstringify">🟦 ¿Que significa? — <em>JSON.stringify</em></h3>
+<p>Convierte un objeto o array de JavaScript en <strong>texto JSON</strong>. Lo necesitamos porque <code>localStorage</code> solo guarda texto. Sirve para "empaquetar" datos antes de guardarlos.</p>
+<h3 id="que-significa-jsonparse">🟦 ¿Que significa? — <em>JSON.parse</em></h3>
+<p>Hace lo contrario: convierte <strong>texto JSON de vuelta en un objeto o array</strong> real de JavaScript. Sirve para "desempaquetar" lo que habiamos guardado y volver a usarlo.</p>
+</blockquote>
+<pre><code class="language-javascript">function guardar() {
+  localStorage.setItem(&quot;tareas&quot;, JSON.stringify(tareas));
+}
+
+function cargar() {
+  const guardado = localStorage.getItem(&quot;tareas&quot;);
+  if (guardado) {
+    tareas = JSON.parse(guardado);
+    pintarLista();
+  }
+}
+
+cargar(); // se ejecuta al abrir la pagina
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-setitem-y-getitem">🟦 ¿Que significa? — <em>.setItem() y .getItem()</em></h3>
+<p><code>setItem("nombre", valor)</code> <strong>guarda</strong> un dato en localStorage bajo una etiqueta. <code>getItem("nombre")</code> lo <strong>recupera</strong> despues. Son como guardar y sacar algo de un cajon con su etiqueta. Sirven para escribir y leer la memoria del navegador.</p>
+</blockquote>
+<p>No olvides anadir la llamada a <code>guardar()</code> tambien dentro de <code>anadirTarea</code>, justo despues del <code>push</code>:</p>
+<pre><code class="language-javascript">function anadirTarea() {
+  const texto = entrada.value.trim();
+  if (texto === &quot;&quot;) return;
+  tareas.push({ texto: texto, hecha: false });
+  entrada.value = &quot;&quot;;
+  pintarLista();
+  guardar(); // ¡no se nos olvide guardar!
+}
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Si abres tu <code>index.html</code> directamente con doble clic, localStorage funciona igual. Pero si algun dia cambias el codigo y ves errores raros, revisa que el nombre de la etiqueta (<code>"tareas"</code>) sea siempre el mismo en <code>setItem</code> y <code>getItem</code>. Un nombre mal escrito y la pagina "olvida" todo.</p>
+</blockquote>
+<h2 id="9-un-detalle-amable-anadir-con-la-tecla-enter">9. Un detalle amable: anadir con la tecla Enter</h2>
+<p>Apretar el boton funciona, pero seria mas comodo poder pulsar <strong>Enter</strong> tras escribir. Anade esto al final de tu <code>app.js</code>:</p>
+<pre><code class="language-javascript">entrada.addEventListener(&quot;keydown&quot;, function (evento) {
+  if (evento.key === &quot;Enter&quot;) {
+    anadirTarea();
+  }
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-evento-keydown">🟦 ¿Que significa? — <em>evento keydown</em></h3>
+<p><code>keydown</code> es el evento que ocurre cuando el usuario <strong>presiona una tecla</strong>. El objeto <code>evento</code> que recibimos tiene la propiedad <code>.key</code> con el nombre de la tecla (aqui buscamos <code>"Enter"</code>). Sirve para responder al teclado, no solo al raton.</p>
+<h3 id="tip_2">💡 Tip</h3>
+<p>Estos detalles pequenos (responder a Enter, limpiar la caja al anadir, ignorar tareas vacias) se llaman <strong>experiencia de usuario</strong>. No cambian lo que el programa hace, pero hacen que se sienta agradable. Los buenos programas estan llenos de estos mimos.</p>
+</blockquote>
+<h2 id="10-probamos-todo-junto">10. Probamos todo junto</h2>
+<p>¡Momento de la verdad! Abre <code>index.html</code> en tu navegador (doble clic sobre el archivo) y comprueba:</p>
+<ol>
+<li>Escribe "Estudiar JavaScript" y pulsa Anadir. Debe aparecer en la lista.</li>
+<li>Haz clic sobre el texto. Debe tacharse en gris.</li>
+<li>Haz clic de nuevo. Debe destacharse.</li>
+<li>Pulsa la 🗑️. Debe desaparecer.</li>
+<li>Anade dos o tres tareas y <strong>recarga la pagina</strong> (F5). ¡Deben seguir ahi!</li>
+</ol>
+<p>Si algo no funciona, abre la consola del navegador (tecla F12, pestana "Console") y lee los mensajes de error. Te diran en que linea esta el problema.</p>
+<blockquote class="def">
+<h3 id="que-significa-consola-del-navegador">🟦 ¿Que significa? — <em>consola del navegador</em></h3>
+<p>La consola es una ventanita donde el navegador <strong>muestra mensajes y errores</strong> de tu JavaScript. Sirve para descubrir por que algo no funciona. Es la mejor amiga de quien programa. Puedes escribir <code>console.log("hola")</code> en tu codigo para imprimir mensajes ahi.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>Con apenas tres archivos (<code>index.html</code>, <code>estilos.css</code>, <code>app.js</code>) construiste una app interactiva con memoria. Eso es exactamente el patron de <strong>tunal-digital</strong>: HTML para la estructura, CSS para el estilo y un <code>main.js</code> que conecta eventos y maneja los datos. Cambia la escala, no la idea: proyectos como <strong>Faro/Organizer</strong> (Next.js + React) o <strong>RachaSimple</strong> (React + TypeScript) hacen lo mismo, solo que con herramientas mas grandes que organizan estas piezas cuando la app crece.</p>
+</blockquote>
+<h2 id="11-lo-lograste">11. ¡Lo lograste! 🎉</h2>
+<p>Para. Mira lo que hiciste. Tomaste una pagina vacia y la convertiste en una aplicacion <strong>real</strong> que:</p>
+<ul>
+<li>Lee lo que el usuario escribe (DOM e inputs).</li>
+<li>Reacciona a clics y al teclado (eventos).</li>
+<li>Guarda muchas tareas y las recorre (arrays y objetos).</li>
+<li>Recuerda todo aunque cierres el navegador (localStorage).</li>
+</ul>
+<p>Eso, mi querido aprendiz, es <strong>programar de verdad</strong>. No memorizaste comandos sueltos: uniste piezas para resolver un problema. Asi se construyen todas las apps que usas, desde la mas pequena hasta las gigantes. Bit esta dando saltitos de orgullo en su pecera. 🐾✨</p>
+<p>Guarda tu proyecto. Ensenaselo a alguien. Te lo ganaste.</p>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que HTML es la estructura, CSS el estilo y JavaScript el comportamiento.</li>
+<li>[ ] Se buscar un elemento de la pagina con <code>document.getElementById</code>.</li>
+<li>[ ] Se escuchar un clic con <code>addEventListener</code>.</li>
+<li>[ ] Puedo guardar datos en un array y agregarlos con <code>.push()</code>.</li>
+<li>[ ] Se recorrer un array con <code>.forEach()</code>.</li>
+<li>[ ] Puedo crear elementos nuevos con <code>document.createElement</code> y <code>.appendChild()</code>.</li>
+<li>[ ] Se borrar un elemento del array con <code>.splice()</code>.</li>
+<li>[ ] Entiendo que <code>localStorage</code> guarda texto que sobrevive al recargar.</li>
+<li>[ ] Se traducir datos con <code>JSON.stringify</code> y <code>JSON.parse</code>.</li>
+<li>[ ] Comprendo que el array es la "fuente de la verdad" y la pantalla se redibuja desde el.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>💻 Contador de pendientes.</strong> Anade debajo de la lista un texto que diga "Tienes N tareas pendientes". Pista: cuenta cuantas tareas tienen <code>hecha: false</code> dentro de <code>pintarLista()</code> y muestralo con <code>.textContent</code>.</p>
+</li>
+<li>
+<p><strong>💻 Boton de borrar todo.</strong> Agrega un boton "Borrar todo" que vacie el array (<code>tareas = []</code>), repinte y guarde. Pregunta al usuario antes con <code>confirm("¿Seguro?")</code>.</p>
+</li>
+<li>
+<p><strong>💻 Evitar duplicados.</strong> Antes de hacer <code>push</code>, comprueba si ya existe una tarea con el mismo texto y, si existe, no la anadas. Pista: investiga el metodo <code>.some()</code> de los arrays.</p>
+</li>
+<li>
+<p><strong>💻 Color segun estado.</strong> En el CSS, haz que las tareas pendientes tengan un pequeno punto de color a la izquierda y las hechas no. Tendras que anadir/quitar una clase desde JavaScript.</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> En papel, dibuja el "viaje" de una tarea desde que el usuario la escribe hasta que se guarda en localStorage. Nombra cada paso (input, array, pintar, guardar).</p>
+</li>
+<li>
+<p><strong>💻 Reto final.</strong> Permite <strong>editar</strong> una tarea: al hacer doble clic en el texto, que se pueda cambiar. Pista: el evento es <code>dblclick</code> y puedes usar <code>prompt("Nuevo texto:", tarea.texto)</code> para pedir el nuevo valor. ¡Bit confia en ti!</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

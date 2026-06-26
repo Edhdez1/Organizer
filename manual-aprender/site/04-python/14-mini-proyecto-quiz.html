@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 14 — Mini-proyecto: un quiz de vocabulario con Flet — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-14-mini-proyecto-un-quiz-de-vocabulario-con-flet">Capitulo 14 — Mini-proyecto: un quiz de vocabulario con Flet</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap14.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>¡Llegaste al gran momento, aprendiz! Bit, el ajolote, infla las branquias de la emocion: hoy NO vamos a aprender una pieza suelta, vamos a unir TODAS las piezas. Funciones, diccionarios, archivos, clases y Flet se juntan en una sola app que de verdad corre en tu computadora. Vas a construir un quiz de vocabulario, igualito al espiritu de PolyPaw (la app de aprender idiomas hecha enteramente en Python). El usuario vera una pregunta, elegira una respuesta, sumara aciertos y al final guardaremos su puntaje en un archivo JSON. Respira hondo: vas a terminar este capitulo con una app que puedes mostrarle a quien quieras. 🦎</p>
+</blockquote>
+<h2 id="1-que-vamos-a-construir-y-por-que">1. Que vamos a construir (y por que)</h2>
+<p>Imagina una mini-version de PolyPaw. PolyPaw es una app real de aprendizaje de idiomas hecha <strong>integramente en Python</strong> con el framework <strong>Flet</strong>, y guarda sus datos (las misiones, el progreso) en archivos JSON, no en una base de datos pesada. Archivos como <code>main.py</code>, <code>database_manager.py</code> y la carpeta <code>missions/*.json</code> forman su corazon.</p>
+<p>Nosotros vamos a hacer algo mucho mas pequeno, pero con el mismo ADN:</p>
+<ol>
+<li><strong>Leeremos preguntas</strong> desde un archivo JSON (como PolyPaw lee sus misiones).</li>
+<li><strong>Mostraremos cada pregunta</strong> con Flet, con botones para responder.</li>
+<li><strong>Contaremos aciertos</strong> mientras el usuario juega.</li>
+<li><strong>Guardaremos el puntaje</strong> en otro archivo JSON al terminar.</li>
+</ol>
+<p>Cada parte usa algo que ya viste en capitulos anteriores. Hoy lo amarramos todo.</p>
+<blockquote class="def">
+<h3 id="que-significa-mini-proyecto">🟦 ¿Que significa? — <em>Mini-proyecto</em></h3>
+<p>Un proyecto pequeno pero <strong>completo</strong>: tiene principio, mitad y final, y produce algo que funciona de verdad. No es un ejercicio de una linea; es una app entera en miniatura.
+<strong>Para que sirve:</strong> para practicar como se combinan los conceptos en la vida real, donde nada vive solo.
+<strong>Donde se usa en un repo real:</strong> PolyPaw empezo siendo un mini-proyecto en Python antes de crecer; la idea de "una app chiquita que corre" es exactamente esto.</p>
+<h3 id="tip">💡 Tip</h3>
+<p>No intentes escribir todo el archivo de golpe. Vamos seccion por seccion. Al final juntamos todo. Asi, si algo falla, sabes exactamente que pieza revisar.</p>
+</blockquote>
+<h2 id="2-preparar-la-carpeta-del-proyecto">2. Preparar la carpeta del proyecto 💻</h2>
+<p>Vamos a crear una carpeta para nuestro quiz. Abre tu terminal y escribe:</p>
+<pre><code class="language-python"># Esto NO es Python; son comandos de terminal. Los pongo para que sigas el paso.
+# mkdir quiz-vocabulario
+# cd quiz-vocabulario
+</code></pre>
+<p>Dentro de esa carpeta tendremos tres archivos:</p>
+<ul>
+<li><code>preguntas.json</code> — las preguntas del quiz (los <strong>datos</strong>).</li>
+<li><code>quiz.py</code> — la <strong>logica</strong> (clases y funciones que manejan el juego).</li>
+<li><code>main.py</code> — la <strong>interfaz</strong> con Flet (lo que el usuario ve).</li>
+</ul>
+<blockquote class="def">
+<h3 id="que-significa-separar-datos-logica-e-interfaz">🟦 ¿Que significa? — <em>Separar datos, logica e interfaz</em></h3>
+<p>Es dividir tu app en tres responsabilidades: los <strong>datos</strong> (la informacion), la <strong>logica</strong> (las reglas y operaciones) y la <strong>interfaz</strong> (lo que se ve y se toca).
+<strong>Para que sirve:</strong> para que cada parte sea facil de leer y cambiar sin romper las demas. Si quieres mas preguntas, tocas solo el JSON. Si quieres cambiar colores, tocas solo la interfaz.
+<strong>Donde se usa en un repo real:</strong> PolyPaw separa sus misiones (<code>missions/*.json</code>, datos), su <code>database_manager.py</code> (logica de guardado) y <code>main.py</code> (interfaz Flet). Nosotros copiamos esa misma idea a escala mini.</p>
+<h3 id="tip_1">💡 Tip</h3>
+<p>Si ya instalaste Flet en un capitulo anterior, ¡genial! Si no, en tu terminal: <code>pip install flet</code>. Solo se hace una vez por computadora.</p>
+</blockquote>
+<h2 id="3-las-preguntas-en-json">3. Las preguntas en JSON</h2>
+<p>Empecemos por los datos. Crea el archivo <code>preguntas.json</code> con este contenido:</p>
+<pre><code class="language-json">[
+  {
+    &quot;palabra&quot;: &quot;Hola&quot;,
+    &quot;opciones&quot;: [&quot;Hello&quot;, &quot;Goodbye&quot;, &quot;Please&quot;],
+    &quot;correcta&quot;: &quot;Hello&quot;
+  },
+  {
+    &quot;palabra&quot;: &quot;Gracias&quot;,
+    &quot;opciones&quot;: [&quot;Sorry&quot;, &quot;Thanks&quot;, &quot;Yes&quot;],
+    &quot;correcta&quot;: &quot;Thanks&quot;
+  },
+  {
+    &quot;palabra&quot;: &quot;Perro&quot;,
+    &quot;opciones&quot;: [&quot;Cat&quot;, &quot;Dog&quot;, &quot;Bird&quot;],
+    &quot;correcta&quot;: &quot;Dog&quot;
+  }
+]
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p>JSON (JavaScript Object Notation) es un formato de texto para guardar datos organizados con llaves <code>{}</code> y corchetes <code>[]</code>. Es como una lista de fichas, cada una con sus campos.
+<strong>Para que sirve:</strong> para guardar informacion de forma que tanto humanos como programas la entiendan facil. Es legible y ligero.
+<strong>Donde se usa en un repo real:</strong> PolyPaw guarda TODAS sus misiones en archivos JSON dentro de <code>missions/</code>. Si abres uno, veras esta misma estructura de llaves y corchetes.</p>
+</blockquote>
+<p>Fijate en la forma: el archivo entero es una <strong>lista</strong> (los corchetes <code>[]</code>), y dentro hay tres <strong>objetos</strong> (las llaves <code>{}</code>), uno por pregunta. Cada objeto tiene tres campos: <code>palabra</code>, <code>opciones</code> y <code>correcta</code>.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>Cuando Python lea este JSON, la lista <code>[]</code> se convertira en una <strong>lista de Python</strong> y cada <code>{}</code> en un <strong>diccionario</strong>. ¡Justo lo que practicaste en los capitulos de listas y diccionarios! No es casualidad: por eso esos temas eran tan importantes.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>En JSON las comillas SIEMPRE son dobles (<code>"</code>), nunca simples (<code>'</code>). Y no se permite una coma despues del ultimo elemento. Si Python se queja al leer el archivo, casi siempre es una coma de mas o una comilla mal puesta.</p>
+</blockquote>
+<h2 id="4-leer-el-json-desde-python">4. Leer el JSON desde Python</h2>
+<p>Ahora, en <code>quiz.py</code>, escribiremos una funcion que lea ese archivo y nos devuelva la lista de preguntas.</p>
+<pre><code class="language-python">import json
+
+
+def cargar_preguntas(ruta):
+    &quot;&quot;&quot;Lee un archivo JSON y devuelve la lista de preguntas.&quot;&quot;&quot;
+    with open(ruta, &quot;r&quot;, encoding=&quot;utf-8&quot;) as archivo:
+        datos = json.load(archivo)
+    return datos
+</code></pre>
+<p>Vamos despacio, linea por linea.</p>
+<blockquote class="def">
+<h3 id="que-significa-import-json">🟦 ¿Que significa? — <em>import json</em></h3>
+<p><code>import</code> trae un <strong>modulo</strong> (una caja de herramientas ya hecha) a tu programa. <code>json</code> es el modulo que sabe leer y escribir el formato JSON.
+<strong>Para que sirve:</strong> para no tener que escribir tu mismo el codigo que entiende JSON; Python ya lo trae listo.
+<strong>Donde se usa en un repo real:</strong> el <code>database_manager.py</code> de PolyPaw importa <code>json</code> para leer y guardar el progreso del jugador.</p>
+<h3 id="que-significa-funcion">🟦 ¿Que significa? — <em>Funcion</em></h3>
+<p>Una funcion es un bloque de codigo con nombre que hace una tarea y (a veces) devuelve un resultado. Se define con <code>def</code> y se ejecuta cuando la "llamas" por su nombre.
+<strong>Para que sirve:</strong> para reutilizar codigo sin repetirlo y para darle un nombre claro a cada tarea.
+<strong>Donde se usa en un repo real:</strong> todo PolyPaw esta hecho de funciones; cada accion (cargar una mision, marcar un acierto) es una funcion con su nombre.</p>
+<h3 id="que-significa-with-open">🟦 ¿Que significa? — <em>with open(...)</em></h3>
+<p><code>open</code> abre un archivo. La palabra <code>with</code> se encarga de <strong>cerrarlo solo</strong> cuando terminas, aunque ocurra un error.
+<strong>Para que sirve:</strong> para leer o escribir archivos sin olvidarte de cerrarlos (un descuido comun que causa errores).
+<strong>Donde se usa en un repo real:</strong> cada vez que PolyPaw lee una mision desde <code>missions/</code>, usa este mismo patron <code>with open(...)</code>.</p>
+<h3 id="que-significa-encodingutf-8">🟦 ¿Que significa? — <em>encoding="utf-8"</em></h3>
+<p>Le dice a Python con que "alfabeto" leer el archivo. UTF-8 entiende tildes, la ñ y emojis.
+<strong>Para que sirve:</strong> para que palabras como "corazon" o "ñandu" no se rompan al leerse.
+<strong>Donde se usa en un repo real:</strong> PolyPaw maneja varios idiomas, asi que el <code>utf-8</code> es obligatorio para no romper caracteres especiales.</p>
+</blockquote>
+<p><code>json.load(archivo)</code> toma el texto del archivo y lo convierte en estructuras de Python: nuestra lista de diccionarios. Eso lo guardamos en <code>datos</code> y lo devolvemos con <code>return</code>.</p>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Si vienes del modulo de JavaScript: <code>json.load()</code> en Python es el primo de <code>JSON.parse()</code> en JS. Misma idea (texto → datos), distinta sintaxis.</p>
+</blockquote>
+<h2 id="5-una-clase-para-llevar-el-juego">5. Una clase para llevar el juego</h2>
+<p>Aqui entra algo poderoso: una <strong>clase</strong>. Vamos a crear una clase <code>Quiz</code> que recuerde las preguntas, en cual vamos y cuantos aciertos llevamos.</p>
+<pre><code class="language-python">class Quiz:
+    &quot;&quot;&quot;Lleva el estado del juego: preguntas, posicion y aciertos.&quot;&quot;&quot;
+
+    def __init__(self, preguntas):
+        self.preguntas = preguntas
+        self.indice = 0
+        self.aciertos = 0
+
+    def pregunta_actual(self):
+        return self.preguntas[self.indice]
+
+    def responder(self, opcion_elegida):
+        &quot;&quot;&quot;Compara la opcion con la correcta y suma si acierta.&quot;&quot;&quot;
+        correcta = self.pregunta_actual()[&quot;correcta&quot;]
+        if opcion_elegida == correcta:
+            self.aciertos += 1
+            acerto = True
+        else:
+            acerto = False
+        self.indice += 1
+        return acerto
+
+    def hay_mas_preguntas(self):
+        return self.indice &lt; len(self.preguntas)
+
+    def total(self):
+        return len(self.preguntas)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-clase">🟦 ¿Que significa? — <em>Clase</em></h3>
+<p>Una clase es un <strong>molde</strong> para crear objetos que guardan datos y saben hacer cosas. Define que recuerda (atributos) y que puede hacer (metodos).
+<strong>Para que sirve:</strong> para agrupar datos relacionados con las acciones que los manejan. Aqui, el <code>Quiz</code> guarda el progreso Y sabe responder preguntas.
+<strong>Donde se usa en un repo real:</strong> en apps como PolyPaw, las clases organizan cosas como una mision o el estado del jugador en un solo lugar ordenado.</p>
+<h3 id="que-significa-init-y-self">🟦 ¿Que significa? — <em><strong>init</strong> y self</em></h3>
+<p><code>__init__</code> es el metodo que se ejecuta al <strong>crear</strong> un objeto; sirve para darle sus valores iniciales. <code>self</code> es "yo mismo": la forma en que el objeto se refiere a sus propios datos.
+<strong>Para que sirve:</strong> <code>__init__</code> prepara el objeto recien nacido; <code>self</code> permite que cada objeto guarde sus propios valores sin mezclarse con otros.
+<strong>Donde se usa en un repo real:</strong> cualquier clase de cualquier app Python (incluida PolyPaw) usa <code>__init__</code> para arrancar con datos limpios.</p>
+<h3 id="que-significa-metodo">🟦 ¿Que significa? — <em>Metodo</em></h3>
+<p>Un metodo es una funcion que vive <strong>dentro</strong> de una clase. Se llama sobre un objeto, por ejemplo <code>mi_quiz.responder("Dog")</code>.
+<strong>Para que sirve:</strong> para que el objeto sepa "hacer cosas" con sus propios datos.
+<strong>Donde se usa en un repo real:</strong> los metodos son las acciones de cada objeto; en PolyPaw, un metodo podria marcar una mision como completada.</p>
+<h3 id="que-significa-atributo">🟦 ¿Que significa? — <em>Atributo</em></h3>
+<p>Un atributo es un dato guardado dentro de un objeto, como <code>self.aciertos</code>. Es la "memoria" del objeto.
+<strong>Para que sirve:</strong> para que el objeto recuerde su estado entre una accion y otra (cuantos aciertos llevas, en que pregunta vas).
+<strong>Donde se usa en un repo real:</strong> el progreso del jugador en PolyPaw vive en atributos antes de guardarse en JSON.</p>
+</blockquote>
+<p>Mira el metodo <code>responder</code>: saca la respuesta correcta del <strong>diccionario</strong> de la pregunta actual con <code>["correcta"]</code>, la compara con lo que eligio el usuario, y si coincide suma uno a <code>self.aciertos</code>. Luego avanza el <code>self.indice</code>. ¡Diccionarios, clases y funciones trabajando juntos!</p>
+<blockquote class="def">
+<h3 id="que-significa-len">🟦 ¿Que significa? — <em>len()</em></h3>
+<p><code>len()</code> es una funcion de Python que te dice <strong>cuantos</strong> elementos tiene algo (una lista, un texto). <code>len(self.preguntas)</code> devuelve cuantas preguntas hay en total.
+<strong>Para que sirve:</strong> para contar el tamano de una lista sin recorrerla a mano; por ejemplo, saber cuantas preguntas quedan.
+<strong>Donde se usa en un repo real:</strong> PolyPaw usa <code>len()</code> para saber cuantas misiones tiene un pack y mostrar el avance ("3 de 10").</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>Si vienes de JavaScript, una clase en Python se parece mucho a una de JS, pero aqui usas <code>self</code> donde alla usabas <code>this</code>, y el constructor se llama <code>__init__</code> en lugar de <code>constructor</code>.</p>
+</blockquote>
+<h2 id="6-guardar-el-puntaje-en-json">6. Guardar el puntaje en JSON</h2>
+<p>Cuando el juego termine, queremos guardar el resultado. Volvemos a <code>quiz.py</code> y agregamos una funcion para escribir:</p>
+<pre><code class="language-python">from datetime import datetime
+
+
+def guardar_puntaje(ruta, aciertos, total):
+    &quot;&quot;&quot;Anade el puntaje de esta partida a un archivo JSON de historial.&quot;&quot;&quot;
+    nuevo = {
+        &quot;aciertos&quot;: aciertos,
+        &quot;total&quot;: total,
+        &quot;fecha&quot;: datetime.now().strftime(&quot;%Y-%m-%d %H:%M&quot;),
+    }
+
+    try:
+        with open(ruta, &quot;r&quot;, encoding=&quot;utf-8&quot;) as archivo:
+            historial = json.load(archivo)
+    except FileNotFoundError:
+        historial = []
+
+    historial.append(nuevo)
+
+    with open(ruta, &quot;w&quot;, encoding=&quot;utf-8&quot;) as archivo:
+        json.dump(historial, archivo, ensure_ascii=False, indent=2)
+</code></pre>
+<p>Esta funcion hace tres cosas: arma el registro nuevo, lee el historial que ya exista (o empieza vacio si el archivo aun no existe) y guarda todo de vuelta.</p>
+<blockquote class="def">
+<h3 id="que-significa-datetime-y-strftime">🟦 ¿Que significa? — <em>datetime y strftime</em></h3>
+<p><code>datetime</code> es un modulo de Python para trabajar con fechas y horas. <code>datetime.now()</code> te da el momento exacto de ahora mismo, y <code>.strftime("%Y-%m-%d %H:%M")</code> lo convierte en texto con el formato que tu elijas (ano-mes-dia hora:minuto).
+<strong>Para que sirve:</strong> para guardar CUANDO ocurrio algo, como la fecha de cada partida, en un texto ordenado y legible.
+<strong>Donde se usa en un repo real:</strong> PolyPaw guarda marcas de tiempo asi para saber cuando el jugador completo cada mision.</p>
+<h3 id="que-significa-append">🟦 ¿Que significa? — <em>append</em></h3>
+<p><code>append</code> es un metodo de las listas que <strong>agrega</strong> un elemento al final. <code>historial.append(nuevo)</code> mete el registro nuevo al final de la lista de partidas.
+<strong>Para que sirve:</strong> para hacer crecer una lista de a un elemento, sin borrar lo que ya tenia.
+<strong>Donde se usa en un repo real:</strong> PolyPaw usa <code>append</code> para ir sumando misiones completadas a la lista de progreso del jugador.</p>
+<h3 id="que-significa-jsondump">🟦 ¿Que significa? — <em>json.dump</em></h3>
+<p>Es lo contrario de <code>json.load</code>: toma datos de Python (listas, diccionarios) y los <strong>escribe</strong> como texto JSON en un archivo.
+<strong>Para que sirve:</strong> para guardar resultados de forma permanente, que sobrevivan al cerrar el programa.
+<strong>Donde se usa en un repo real:</strong> el <code>database_manager.py</code> de PolyPaw usa esta idea para guardar el avance del jugador despues de cada mision.</p>
+<h3 id="que-significa-modo-w-vs-r">🟦 ¿Que significa? — <em>Modo "w" vs "r"</em></h3>
+<p>Al abrir un archivo, <code>"r"</code> es <strong>read</strong> (leer) y <code>"w"</code> es <strong>write</strong> (escribir). El modo <code>"w"</code> reemplaza el contenido entero del archivo.
+<strong>Para que sirve:</strong> <code>"r"</code> para mirar datos sin tocarlos; <code>"w"</code> para guardar datos nuevos.
+<strong>Donde se usa en un repo real:</strong> toda app que persiste datos en archivos alterna entre estos dos modos.</p>
+<h3 id="que-significa-try-except">🟦 ¿Que significa? — <em>try / except</em></h3>
+<p>Es una forma de "intentar" algo que podria fallar y tener un plan B si falla. <code>try</code> intenta; <code>except</code> captura el error y reacciona.
+<strong>Para que sirve:</strong> para que tu programa no se caiga ante problemas previsibles, como un archivo que todavia no existe.
+<strong>Donde se usa en un repo real:</strong> cualquier codigo serio que lea archivos usa <code>try/except</code> por si el archivo no esta.</p>
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>El modo <code>"w"</code> <strong>borra</strong> lo que habia en el archivo. Por eso primero LEEMOS el historial, le agregamos el nuevo registro con <code>append</code>, y solo entonces escribimos. Si escribieras directo con <code>"w"</code> sin leer antes, perderias las partidas anteriores.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p><code>ensure_ascii=False</code> hace que las tildes y la ñ se guarden bonitas en lugar de como codigos raros. Y <code>indent=2</code> deja el JSON ordenado y legible, con sangrias.</p>
+</blockquote>
+<h2 id="7-la-interfaz-con-flet">7. La interfaz con Flet</h2>
+<p>Ahora lo visual. En <code>main.py</code> construimos la pantalla con <strong>Flet</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-flet">🟦 ¿Que significa? — <em>Flet</em></h3>
+<p>Flet es un framework de Python para crear interfaces graficas (botones, textos, ventanas) sin saber HTML ni JavaScript. Escribes solo Python y Flet dibuja la pantalla.
+<strong>Para que sirve:</strong> para hacer apps de escritorio, web o movil con un unico lenguaje: Python.
+<strong>Donde se usa en un repo real:</strong> PolyPaw esta hecho <strong>integramente</strong> con Flet; toda su pantalla, sus botones y misiones se dibujan asi.</p>
+<h3 id="que-significa-framework">🟦 ¿Que significa? — <em>Framework</em></h3>
+<p>Un framework es una estructura ya armada que te da piezas y reglas para construir mas rapido. Tu pones tu logica; el framework pone los cimientos.
+<strong>Para que sirve:</strong> para no reinventar lo basico (ventanas, botones, eventos) en cada proyecto.
+<strong>Donde se usa en un repo real:</strong> Flet es el framework de PolyPaw; en el modulo de JavaScript viste que React es un framework para la web. Misma idea, distintos mundos.</p>
+</blockquote>
+<p>Aqui esta el archivo <code>main.py</code> completo:</p>
+<pre><code class="language-python">import flet as ft
+
+from quiz import cargar_preguntas, guardar_puntaje, Quiz
+
+
+def main(pagina):
+    pagina.title = &quot;Quiz de vocabulario&quot;
+    pagina.window_width = 400
+    pagina.window_height = 400
+
+    preguntas = cargar_preguntas(&quot;preguntas.json&quot;)
+    juego = Quiz(preguntas)
+
+    texto_palabra = ft.Text(size=28, weight=&quot;bold&quot;)
+    mensaje = ft.Text()
+    columna_opciones = ft.Column()
+
+    def mostrar_pregunta():
+        actual = juego.pregunta_actual()
+        texto_palabra.value = f&quot;Traduce: {actual['palabra']}&quot;
+        mensaje.value = f&quot;Pregunta {juego.indice + 1} de {juego.total()}&quot;
+        columna_opciones.controls.clear()
+        for opcion in actual[&quot;opciones&quot;]:
+            boton = ft.ElevatedButton(
+                text=opcion,
+                on_click=lambda e, op=opcion: al_responder(op),
+            )
+            columna_opciones.controls.append(boton)
+        pagina.update()
+
+    def al_responder(opcion):
+        juego.responder(opcion)
+        if juego.hay_mas_preguntas():
+            mostrar_pregunta()
+        else:
+            mostrar_final()
+
+    def mostrar_final():
+        guardar_puntaje(&quot;puntajes.json&quot;, juego.aciertos, juego.total())
+        texto_palabra.value = &quot;¡Quiz terminado! 🎉&quot;
+        mensaje.value = f&quot;Aciertos: {juego.aciertos} de {juego.total()}&quot;
+        columna_opciones.controls.clear()
+        pagina.update()
+
+    pagina.add(texto_palabra, mensaje, columna_opciones)
+    mostrar_pregunta()
+
+
+ft.app(target=main)
+</code></pre>
+<p>Vamos a desmenuzarlo, porque aqui se junta TODO.</p>
+<blockquote class="def">
+<h3 id="que-significa-ftapptargetmain">🟦 ¿Que significa? — <em>ft.app(target=main)</em></h3>
+<p>Es la linea que <strong>arranca</strong> la app de Flet. Le decimos que use nuestra funcion <code>main</code> para construir la pantalla.
+<strong>Para que sirve:</strong> para encender la aplicacion y abrir la ventana.
+<strong>Donde se usa en un repo real:</strong> el <code>main.py</code> de PolyPaw termina con una llamada parecida que enciende toda la app.</p>
+<h3 id="que-significa-la-pagina-page">🟦 ¿Que significa? — <em>La pagina (page)</em></h3>
+<p>El objeto <code>pagina</code> representa la ventana de la app. Le agregas controles con <code>pagina.add(...)</code> y refrescas la vista con <code>pagina.update()</code>.
+<strong>Para que sirve:</strong> es el lienzo donde colocas todo lo que el usuario vera.
+<strong>Donde se usa en un repo real:</strong> en PolyPaw, la pagina es el contenedor de cada pantalla de mision.</p>
+<h3 id="que-significa-control-text-elevatedbutton-column">🟦 ¿Que significa? — <em>Control (Text, ElevatedButton, Column)</em></h3>
+<p>Un control es una pieza visual: un texto (<code>ft.Text</code>), un boton (<code>ft.ElevatedButton</code>), una columna que apila cosas (<code>ft.Column</code>).
+<strong>Para que sirve:</strong> para construir la pantalla juntando piezas como bloques de lego.
+<strong>Donde se usa en un repo real:</strong> PolyPaw arma sus pantallas combinando estos mismos controles de Flet.</p>
+<h3 id="que-significa-f-string">🟦 ¿Que significa? — <em>f-string</em></h3>
+<p>Un f-string es un texto que empieza con <code>f"..."</code> y permite meter valores dentro usando llaves <code>{}</code>. Por ejemplo <code>f"Traduce: {actual['palabra']}"</code> arma el texto pegando la palabra de la pregunta.
+<strong>Para que sirve:</strong> para construir mensajes que mezclan texto fijo con datos que cambian, de forma corta y clara.
+<strong>Donde se usa en un repo real:</strong> PolyPaw usa f-strings por todas partes para mostrar textos como "Mision 3 de 10" con numeros que cambian.</p>
+<h3 id="que-significa-evento-on_click">🟦 ¿Que significa? — <em>Evento on_click</em></h3>
+<p><code>on_click</code> dice "cuando hagan clic en este boton, ejecuta esta funcion". Es como reaccionar a lo que hace el usuario.
+<strong>Para que sirve:</strong> para que la app responda a clics, no solo muestre cosas.
+<strong>Donde se usa en un repo real:</strong> cada boton de respuesta en PolyPaw usa un evento parecido para registrar lo que el jugador toca.</p>
+<h3 id="que-significa-lambda">🟦 ¿Que significa? — <em>lambda</em></h3>
+<p>Una <code>lambda</code> es una mini-funcion sin nombre, escrita en una sola linea. Aqui la usamos para "recordar" que opcion corresponde a cada boton.
+<strong>Para que sirve:</strong> para crear funciones cortas al vuelo, sobre todo en eventos.
+<strong>Donde se usa en un repo real:</strong> Flet (y PolyPaw) usa lambdas para conectar cada boton con su accion exacta.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Fijate en <code>lambda e, op=opcion: al_responder(op)</code>. Ese <code>op=opcion</code> es clave: <strong>captura</strong> el valor de la opcion en ese momento del bucle. Si escribieras solo <code>lambda e: al_responder(opcion)</code>, todos los botones terminarian usando la ULTIMA opcion del bucle. Es un error clasico; el <code>op=opcion</code> lo evita.</p>
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>Mira como todo se conecta: <code>cargar_preguntas</code> (archivos + JSON) llena el <code>Quiz</code> (clase). <code>mostrar_pregunta</code> lee un <strong>diccionario</strong> y crea <strong>controles</strong> de Flet. <code>al_responder</code> llama al <strong>metodo</strong> <code>responder</code> de la clase. Y al final, <code>guardar_puntaje</code> escribe en JSON. ¡Cada concepto del modulo aparece aqui!</p>
+</blockquote>
+<h2 id="8-probar-la-app">8. Probar la app 💻</h2>
+<p>Con los tres archivos en la misma carpeta, abre la terminal en esa carpeta y corre:</p>
+<pre><code class="language-python"># En la terminal (no es Python):
+# python main.py
+</code></pre>
+<p>Deberia abrirse una ventana mostrando "Traduce: Hola" con tres botones. Haz clic en uno y avanzaras a la siguiente pregunta. Al terminar veras tus aciertos, y en la carpeta aparecera un archivo nuevo: <code>puntajes.json</code>. ¡Abrelo! Veras tu partida guardada.</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>¿No se abre nada? Revisa que los tres archivos esten en la MISMA carpeta y que <code>preguntas.json</code> no tenga errores de comas o comillas. La consola te dira la linea exacta del problema.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Si ves un error que dice <code>ModuleNotFoundError: No module named 'flet'</code>, significa que Flet no esta instalado en tu entorno. Vuelve al paso 2 y corre <code>pip install flet</code>.</p>
+</blockquote>
+<h2 id="9-como-se-ve-el-resultado-guardado">9. Como se ve el resultado guardado</h2>
+<p>Despues de jugar una vez, tu <code>puntajes.json</code> se vera asi:</p>
+<pre><code class="language-json">[
+  {
+    &quot;aciertos&quot;: 2,
+    &quot;total&quot;: 3,
+    &quot;fecha&quot;: &quot;2026-06-25 14:30&quot;
+  }
+]
+</code></pre>
+<p>Y si juegas otra vez, se <strong>agregara</strong> un segundo registro a la lista, sin borrar el primero. Eso es gracias al <code>append</code> que pusimos antes de escribir. Acabas de construir un historial persistente, ¡como el progreso de un jugador en PolyPaw!</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>Este archivo de puntajes es exactamente la idea de los <code>missions/*.json</code> de PolyPaw: una lista de objetos JSON que crece con el tiempo y que tu programa lee y escribe. Lo que hiciste en chiquito es lo mismo que hacen las apps de verdad.</p>
+</blockquote>
+<h2 id="10-ideas-para-crecer-tu-quiz">10. Ideas para crecer tu quiz</h2>
+<p>Tu mini-proyecto ya funciona, pero puede crecer. Algunas direcciones:</p>
+<ul>
+<li>Agregar mas preguntas: solo editas <code>preguntas.json</code>, ¡sin tocar el codigo!</li>
+<li>Mostrar un color verde o rojo segun si acertaste (mas controles de Flet).</li>
+<li>Barajar las preguntas con el modulo <code>random</code> para que cada partida sea distinta.</li>
+<li>Mostrar el mejor puntaje historico leyendo <code>puntajes.json</code> al inicio.</li>
+</ul>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>Cada mejora usa una pieza que ya conoces. Crecer una app es agregar piezas pequenas, una a la vez. Asi crecio PolyPaw: empezo simple y fue sumando.</p>
+</blockquote>
+<h2 id="11-lo-que-lograste">11. Lo que lograste</h2>
+<p>Para de un momento y mira lo que hiciste, aprendiz. Combinaste:</p>
+<ul>
+<li><strong>Archivos y JSON</strong> para leer y guardar datos.</li>
+<li><strong>Funciones</strong> para organizar cada tarea.</li>
+<li><strong>Diccionarios y listas</strong> para mover la informacion.</li>
+<li><strong>Clases</strong> para llevar el estado del juego.</li>
+<li><strong>Flet</strong> para una interfaz real con la que el usuario interactua.</li>
+</ul>
+<p>Eso ya no es "estudiar Python". Eso es <strong>construir software</strong>. Bit mueve la cola con orgullo: pasaste de aprender piezas sueltas a ensamblar una app completa que corre, responde y recuerda. Pocas personas que empiezan a programar llegan a juntar tantas piezas en un solo proyecto que funciona. Tu lo hiciste. 🦎🎉</p>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo por que separamos datos (<code>preguntas.json</code>), logica (<code>quiz.py</code>) e interfaz (<code>main.py</code>).</li>
+<li>[ ] Se leer un archivo JSON con <code>json.load</code> y <code>with open(...)</code>.</li>
+<li>[ ] Se que una clase guarda estado en atributos (<code>self.aciertos</code>) y actua con metodos (<code>responder</code>).</li>
+<li>[ ] Entiendo como un metodo lee un diccionario con <code>["correcta"]</code> para comparar respuestas.</li>
+<li>[ ] Se guardar datos en JSON con <code>json.dump</code>, leyendo antes para no borrar el historial.</li>
+<li>[ ] Entiendo que hace <code>ft.app(target=main)</code> y como agrego controles a la pagina.</li>
+<li>[ ] Se por que un boton usa <code>on_click</code> y por que la <code>lambda</code> lleva <code>op=opcion</code>.</li>
+<li>[ ] Logre correr <code>python main.py</code> y ver mi puntaje guardado en <code>puntajes.json</code>.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Sin computadora.</strong> En tus palabras, explica que hace cada uno de los tres archivos del proyecto (<code>preguntas.json</code>, <code>quiz.py</code>, <code>main.py</code>) y por que estan separados.</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> Mira el metodo <code>responder</code> de la clase <code>Quiz</code>. Si el usuario elige una opcion incorrecta, ¿cambia <code>self.aciertos</code>? ¿Avanza igual el <code>self.indice</code>? Razona tu respuesta leyendo el codigo.</p>
+</li>
+<li>
+<p><strong>💻 Mas preguntas.</strong> Agrega dos preguntas nuevas a <code>preguntas.json</code> (por ejemplo "Casa" → "House", "Agua" → "Water"). Vuelve a correr la app y comprueba que ahora el quiz tiene cinco preguntas. No deberias tocar ningun archivo <code>.py</code>.</p>
+</li>
+<li>
+<p><strong>💻 Mensaje de acierto.</strong> Modifica <code>al_responder</code> para que, antes de avanzar, ponga en <code>mensaje.value</code> el texto "¡Correcto!" o "Casi..." segun lo que devuelva <code>juego.responder(opcion)</code>. Pista: el metodo <code>responder</code> ya devuelve <code>True</code> o <code>False</code>.</p>
+</li>
+<li>
+<p><strong>💻 Mejor puntaje.</strong> Al iniciar la app, lee <code>puntajes.json</code> (si existe) y muestra arriba el mejor numero de aciertos historico. Usa un <code>try/except</code> por si el archivo aun no existe.</p>
+</li>
+<li>
+<p><strong>💻 Barajar.</strong> Importa el modulo <code>random</code> y usa <code>random.shuffle(preguntas)</code> justo despues de cargarlas, para que cada partida tenga las preguntas en distinto orden. Comprueba que el quiz sigue funcionando.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

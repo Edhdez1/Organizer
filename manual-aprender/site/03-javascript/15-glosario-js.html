@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 15 — Glosario de JavaScript y mapa — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-15-glosario-de-javascript-y-mapa">Capitulo 15 — Glosario de JavaScript y mapa</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/03-javascript/cap15.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola otra vez. Soy <strong>Bit</strong>, tu ajolote guia, y este es el capitulo donde respiramos hondo. No vamos a aprender nada nuevo: vamos a <strong>ordenar</strong> todo lo que ya vimos en el modulo de JavaScript. Piensa en este capitulo como el cajon de tu escritorio: aqui guardamos cada palabra rara que aparecio, le ponemos una etiqueta clara y la dejamos lista para cuando la necesites. Si en algun capitulo te perdiste con una palabra, este es el sitio para volver. Lo usaremos con el ejemplo estrella del modulo: el <code>main.js</code> del sitio <strong>tunal-digital</strong>. Vamos despacio, que ningun termino se quede sin definir.</p>
+</blockquote>
+<h2 id="1-como-usar-este-glosario">1. Como usar este glosario</h2>
+<p>Este capitulo es distinto a los demas. No hay un proyecto que construir paso a paso: hay un <strong>diccionario</strong> ordenado alfabeticamente. Cada palabra tecnica vive en su propio recuadro azul, con tres cosas:</p>
+<ol>
+<li><strong>Que significa</strong> en palabras simples.</li>
+<li><strong>Para que sirve</strong> (por que existe).</li>
+<li><strong>Donde se usa en un repo real</strong> de los que ya conoces.</li>
+</ol>
+<p>Antes del glosario, mira el mapa mental para tener la foto completa. Despues del glosario, hay un repaso final y, al cierre, unos ejercicios cortos para fijar todo.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>No leas el glosario de corrido como una novela. Leelo a saltos: cuando estes programando y veas una palabra que no recuerdes, ven aqui, buscala y vuelve a tu codigo. Asi se usa un diccionario de verdad.</p>
+</blockquote>
+<h2 id="2-el-mapa-mental-de-javascript">2. El mapa mental de JavaScript</h2>
+<p>Antes de las definiciones, aqui tienes el <strong>mapa</strong>: como se conectan las piezas grandes del modulo. Lo dibujamos con texto (un esquema con sangrias) para que lo puedas copiar a tu cuaderno.</p>
+<pre><code>JAVASCRIPT
+│
+├── 1. GUARDAR DATOS
+│     ├── variable (let, const, var)
+│     ├── tipo de dato (string, number, boolean, null, undefined)
+│     ├── array  → lista ordenada [ ]
+│     └── objeto → ficha con etiquetas { }
+│
+├── 2. HACER COSAS
+│     ├── funcion        → receta reutilizable
+│     ├── parametro/argumento → lo que le pasas a la receta
+│     ├── return         → lo que la receta devuelve
+│     ├── scope          → donde vive cada variable
+│     └── closure        → funcion que recuerda su entorno
+│
+├── 3. DECIDIR Y REPETIR
+│     ├── condicional (if / else)
+│     ├── operador (===, &amp;&amp;, ||, +)
+│     └── bucle (for, forEach, map)
+│
+├── 4. LA PAGINA WEB (navegador)
+│     ├── DOM            → el arbol de la pagina
+│     ├── selector       → como encuentras un elemento
+│     ├── evento         → click, submit, scroll...
+│     └── listener       → &quot;quedate atento a este evento&quot;
+│
+└── 5. HABLAR CON INTERNET (asincronia)
+      ├── callback       → &quot;llamame cuando termines&quot;
+      ├── promesa        → un pagare de un resultado futuro
+      ├── async / await  → esperar sin trabarse
+      ├── fetch          → pedir datos a un servidor
+      └── JSON           → el idioma de los datos que viajan
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Fijate que el mapa va de <strong>lo mas simple</strong> (guardar un dato) a <strong>lo mas avanzado</strong> (hablar con internet). Ese es justo el orden en que crece tu codigo: primero guardas, luego haces, luego decides, luego pintas la pagina y al final pides datos de afuera.</p>
+</blockquote>
+<p>En el <code>main.js</code> de <strong>tunal-digital</strong> estan casi todas las ramas a la vez: hay variables y funciones de atajo (rama 1 y 2), hay seleccion de elementos y eventos del formulario y del chat (rama 4) y hay <code>fetch</code> al Worker de IA con <code>async/await</code> y <code>JSON</code> (rama 5). Por eso es nuestro ejemplo principal: cabe casi todo el mapa en un archivo.</p>
+<h2 id="3-glosario-alfabetico">3. Glosario alfabetico</h2>
+<p>Aqui van los terminos, de la A a la Z. Cada uno con su recuadro.</p>
+<blockquote class="def">
+<h3 id="que-significa-argumento">🟦 ¿Que significa? — <em>Argumento</em></h3>
+<p>El <strong>valor concreto</strong> que le pasas a una funcion cuando la llamas. Sirve para darle a la funcion el dato real con el que va a trabajar. En <strong>tunal-digital</strong>, cuando llamas a una funcion de atajo como <code>$('#chat')</code>, el texto <code>'#chat'</code> es el argumento.</p>
+<h3 id="que-significa-array">🟦 ¿Que significa? — <em>Array</em></h3>
+<p>Una <strong>lista ordenada</strong> de valores, escrita entre corchetes <code>[ ]</code>. Sirve para guardar muchas cosas bajo un solo nombre y recorrerlas. En <strong>tunal-digital</strong> se usa, por ejemplo, para guardar la lista de mensajes del chat antes de pintarlos.</p>
+</blockquote>
+<pre><code class="language-javascript">const mensajes = [&quot;Hola&quot;, &quot;Soy el bot&quot;, &quot;Cuentame de tu negocio&quot;];
+mensajes.forEach(function (texto) {
+  console.log(texto); // imprime cada mensaje, uno por uno
+});
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-async-palabra-clave">🟦 ¿Que significa? — <em>async (palabra clave)</em></h3>
+<p>Una etiqueta que pones antes de una funcion para avisar: "esta funcion hace cosas que tardan, podra usar <code>await</code>". Sirve para escribir codigo que espera resultados de internet sin enredarse. En <strong>tunal-digital</strong>, la funcion que envia el mensaje al chat de IA es <code>async</code> porque adentro espera la respuesta del Worker.</p>
+<h3 id="que-significa-await-palabra-clave">🟦 ¿Que significa? — <em>await (palabra clave)</em></h3>
+<p>Le dice a JavaScript: "espera aqui a que esta promesa termine antes de seguir". Solo funciona dentro de una funcion <code>async</code>. Sirve para leer un resultado que tarda como si fuera normal. En <strong>tunal-digital</strong> se usa <code>await fetch(...)</code> para esperar la respuesta del servidor de IA.</p>
+</blockquote>
+<pre><code class="language-javascript">async function enviarMensaje(texto) {
+  const respuesta = await fetch(&quot;/api/chat&quot;, { method: &quot;POST&quot;, body: texto });
+  const datos = await respuesta.json();
+  return datos.reply;
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-booleano-boolean">🟦 ¿Que significa? — <em>Booleano (boolean)</em></h3>
+<p>Un tipo de dato que solo puede valer <code>true</code> (verdadero) o <code>false</code> (falso). Sirve para responder preguntas de si/no y controlar decisiones. En <strong>tunal-digital</strong>, una variable booleana como <code>enviando</code> indica si el formulario ya esta procesando un envio.</p>
+<h3 id="que-significa-bucle-loop">🟦 ¿Que significa? — <em>Bucle (loop)</em></h3>
+<p>Una estructura que <strong>repite</strong> un bloque de codigo varias veces (<code>for</code>, <code>forEach</code>, <code>map</code>). Sirve para no escribir lo mismo una y otra vez. En <strong>tunal-digital</strong> se recorre la lista de mensajes con un bucle para pintarlos todos en pantalla.</p>
+<h3 id="que-significa-callback">🟦 ¿Que significa? — <em>Callback</em></h3>
+<p>Una funcion que le entregas a otra funcion para que la llame <strong>cuando termine</strong> algo. Sirve para reaccionar a eventos o a tareas que tardan. En <strong>tunal-digital</strong>, la funcion que reacciona al <code>submit</code> del formulario es un callback: el navegador la llama cuando el usuario envia.</p>
+</blockquote>
+<pre><code class="language-javascript">boton.addEventListener(&quot;click&quot;, function () {
+  // este es el callback: corre solo cuando hacen click
+  console.log(&quot;Hiciste click&quot;);
+});
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Un callback no se ejecuta cuando lo escribes, sino <strong>mas tarde</strong>, cuando ocurre el evento. Por eso ves logs en un orden que parece "fuera de lugar": es normal, el callback espero su turno.</p>
+<h3 id="que-significa-closure-clausura">🟦 ¿Que significa? — <em>Closure (clausura)</em></h3>
+<p>Una funcion que <strong>recuerda</strong> las variables del lugar donde nacio, aunque ese lugar ya haya terminado. Sirve para guardar un estado privado sin variables globales. En <strong>tunal-digital</strong>, una funcion de atajo que "recuerda" un contador interno entre llamadas usa una closure.</p>
+</blockquote>
+<pre><code class="language-javascript">function crearContador() {
+  let cuenta = 0; // vive dentro, pero la closure la recuerda
+  return function () {
+    cuenta = cuenta + 1;
+    return cuenta;
+  };
+}
+const siguiente = crearContador();
+siguiente(); // 1
+siguiente(); // 2  (recordo el valor anterior)
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-condicional-if-else">🟦 ¿Que significa? — <em>Condicional (if / else)</em></h3>
+<p>Una bifurcacion: "si pasa esto, haz A; si no, haz B". Sirve para que el programa tome decisiones. En <strong>tunal-digital</strong>, un <code>if</code> revisa si el campo del formulario esta vacio antes de enviar.</p>
+<h3 id="que-significa-const">🟦 ¿Que significa? — <em>const</em></h3>
+<p>Una forma de declarar una variable cuyo <strong>nombre no se reasigna</strong> a otro valor. Sirve para datos que no deben cambiar de referencia, dando mas seguridad. En <strong>tunal-digital</strong>, los elementos de la pagina se guardan con <code>const</code> porque apuntan siempre al mismo nodo.</p>
+<h3 id="que-significa-consolelog">🟦 ¿Que significa? — <em>console.log</em></h3>
+<p>Una orden que <strong>escribe un mensaje</strong> en la consola del navegador. Sirve para ver que esta pasando y depurar errores. En <strong>tunal-digital</strong> se usa durante el desarrollo para revisar que el <code>fetch</code> devolvio lo esperado.</p>
+<h3 id="que-significa-dom-document-object-model">🟦 ¿Que significa? — <em>DOM (Document Object Model)</em></h3>
+<p>El <strong>arbol</strong> que el navegador arma con tu pagina HTML: cada etiqueta es una rama que JavaScript puede leer y cambiar. Sirve para que tu codigo modifique lo que se ve. En <strong>tunal-digital</strong>, escribir la respuesta del bot en el chat es cambiar el DOM.</p>
+</blockquote>
+<pre><code class="language-javascript">const caja = document.querySelector(&quot;#chat&quot;);
+caja.textContent = &quot;Hola desde JavaScript&quot;; // cambiamos el DOM
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-elemento">🟦 ¿Que significa? — <em>Elemento</em></h3>
+<p>Cada pieza del DOM que corresponde a una etiqueta HTML (un <code>&lt;button&gt;</code>, un <code>&lt;form&gt;</code>, un <code>&lt;div&gt;</code>). Sirve como el "objeto" sobre el que actuas en la pagina. En <strong>tunal-digital</strong>, el formulario de contacto es un elemento que seleccionas y al que le pones un listener.</p>
+<h3 id="que-significa-evento">🟦 ¿Que significa? — <em>Evento</em></h3>
+<p>Algo que <strong>pasa</strong> en la pagina: un click, un envio de formulario, mover el raton, escribir una tecla. Sirve para que tu programa reaccione al usuario. En <strong>tunal-digital</strong>, el evento <code>submit</code> del formulario dispara el envio del mensaje.</p>
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En el <code>main.js</code> de <strong>tunal-digital</strong> busca la linea con <code>addEventListener("submit", ...)</code>. Ese es el corazon del formulario: ahi conectas un <strong>evento</strong> (submit) con un <strong>callback</strong> que decide que hacer cuando el usuario manda sus datos.</p>
+<h3 id="que-significa-fetch">🟦 ¿Que significa? — <em>fetch</em></h3>
+<p>Una funcion del navegador que <strong>pide datos a un servidor</strong> por internet y devuelve una promesa. Sirve para traer o enviar informacion sin recargar la pagina. En <strong>tunal-digital</strong>, <code>fetch</code> llama al Worker de Cloudflare que conecta con la IA del chat.</p>
+</blockquote>
+<pre><code class="language-javascript">const respuesta = await fetch(&quot;https://mi-worker.workers.dev/chat&quot;);
+const datos = await respuesta.json();
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>fetch</code> no falla automaticamente cuando el servidor responde con un error tipo 404 o 500: te entrega la respuesta igual. Revisa <code>respuesta.ok</code> antes de confiar en los datos.</p>
+<h3 id="que-significa-foreach">🟦 ¿Que significa? — <em>forEach</em></h3>
+<p>Un metodo de los arrays que <strong>recorre cada elemento</strong> y ejecuta una funcion con el. Sirve para hacer algo con cada item de una lista. En <strong>tunal-digital</strong> se usa para pintar cada mensaje del chat en pantalla.</p>
+<h3 id="que-significa-funcion">🟦 ¿Que significa? — <em>Funcion</em></h3>
+<p>Una <strong>receta reutilizable</strong>: un bloque de codigo con nombre que puedes llamar cuando quieras. Sirve para no repetir codigo y para organizar tareas. En <strong>tunal-digital</strong>, las "funciones de atajo" (como un <code>$</code> que envuelve <code>querySelector</code>) son funciones que usas en todo el archivo.</p>
+</blockquote>
+<pre><code class="language-javascript">function saludar(nombre) {
+  return &quot;Hola, &quot; + nombre;
+}
+saludar(&quot;Bit&quot;); // &quot;Hola, Bit&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-funcion-flecha-arrow-function">🟦 ¿Que significa? — <em>Funcion flecha (arrow function)</em></h3>
+<p>Una forma corta de escribir funciones con <code>=&gt;</code>. Sirve para que los callbacks queden mas breves y legibles. En <strong>tunal-digital</strong> se usan funciones flecha como callbacks de eventos y dentro de <code>forEach</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">const doble = (n) =&gt; n * 2;
+doble(4); // 8
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-global-ambito-global">🟦 ¿Que significa? — <em>Global (ambito global)</em></h3>
+<p>El espacio "de afuera de todo", donde una variable es visible desde cualquier parte del archivo. Sirve para datos compartidos, pero conviene usarlo poco. En <strong>tunal-digital</strong>, casi nada es global a proposito: cada cosa vive dentro de su funcion para evitar choques.</p>
+<h3 id="que-significa-json-javascript-object-notation">🟦 ¿Que significa? — <em>JSON (JavaScript Object Notation)</em></h3>
+<p>Un <strong>formato de texto</strong> para representar datos (objetos y listas) que viaja facil por internet. Sirve para que el navegador y el servidor se entiendan. En <strong>tunal-digital</strong>, la respuesta del Worker de IA llega como JSON y se convierte con <code>.json()</code>.</p>
+</blockquote>
+<pre><code class="language-javascript">// Esto es JSON (texto): el servidor te lo manda asi
+{ &quot;reply&quot;: &quot;Hola, soy el asistente&quot;, &quot;ok&quot;: true }
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>JSON aparece en mas de un repo de tu lista. En <strong>PolyPaw</strong> (Python/Flet) las misiones se guardan en archivos <code>.json</code>. En <strong>tunal-digital</strong> el JSON llega por la red desde el Worker. Mismo formato, dos usos: uno en disco, otro viajando por internet.</p>
+<h3 id="que-significa-let">🟦 ¿Que significa? — <em>let</em></h3>
+<p>Una forma de declarar una variable que <strong>si puede cambiar</strong> de valor mas adelante. Sirve para datos que evolucionan, como un contador o un estado. En <strong>tunal-digital</strong>, una bandera como <code>let enviando = false</code> usa <code>let</code> porque cambia mientras se manda el formulario.</p>
+<h3 id="que-significa-listener-escuchador-de-eventos">🟦 ¿Que significa? — <em>Listener (escuchador de eventos)</em></h3>
+<p>El "vigilante" que pones con <code>addEventListener</code> para quedarte atento a un evento. Sirve para conectar un evento con la funcion que debe reaccionar. En <strong>tunal-digital</strong>, hay un listener en el formulario y otro en el boton de enviar del chat.</p>
+<h3 id="que-significa-map-metodo">🟦 ¿Que significa? — <em>map (metodo)</em></h3>
+<p>Un metodo de los arrays que <strong>crea una lista nueva</strong> transformando cada elemento. Sirve para convertir datos sin tocar el array original. En <strong>tunal-digital</strong> se puede usar para convertir una lista de textos en una lista de elementos HTML del chat.</p>
+</blockquote>
+<pre><code class="language-javascript">const numeros = [1, 2, 3];
+const dobles = numeros.map((n) =&gt; n * 2); // [2, 4, 6]
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-null">🟦 ¿Que significa? — <em>null</em></h3>
+<p>Un valor especial que significa "aqui, a proposito, no hay nada". Sirve para decir "vacio intencional". En <strong>tunal-digital</strong>, si <code>querySelector</code> no encuentra un elemento, devuelve <code>null</code>, y conviene revisarlo antes de usarlo.</p>
+<h3 id="que-significa-number-numero">🟦 ¿Que significa? — <em>Number (numero)</em></h3>
+<p>El tipo de dato para los <strong>numeros</strong> (enteros y decimales). Sirve para contar, medir y calcular. En <strong>tunal-digital</strong>, un contador de caracteres del mensaje del chat es un Number.</p>
+<h3 id="que-significa-objeto">🟦 ¿Que significa? — <em>Objeto</em></h3>
+<p>Una <strong>ficha</strong> con pares etiqueta-valor, escrita entre llaves <code>{ }</code>. Sirve para agrupar datos relacionados bajo nombres claros. En <strong>tunal-digital</strong>, las opciones que le pasas a <code>fetch</code> (<code>{ method: "POST", body: ... }</code>) son un objeto.</p>
+</blockquote>
+<pre><code class="language-javascript">const usuario = {
+  nombre: &quot;Edwar&quot;,
+  negocio: &quot;Tunal Digital&quot;,
+  activo: true,
+};
+console.log(usuario.nombre); // &quot;Edwar&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-operador">🟦 ¿Que significa? — <em>Operador</em></h3>
+<p>Un simbolo que <strong>combina o compara</strong> valores: <code>+</code> suma, <code>===</code> compara, <code>&amp;&amp;</code> es "y", <code>||</code> es "o". Sirve para hacer calculos y decisiones. En <strong>tunal-digital</strong>, un <code>if (texto === "")</code> usa el operador <code>===</code> para ver si el campo esta vacio.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Usa siempre <code>===</code> (triple) para comparar, no <code>==</code> (doble). El doble hace conversiones raras (por ejemplo <code>0 == ""</code> da <code>true</code>) y te mete bichos dificiles de encontrar.</p>
+<h3 id="que-significa-parametro">🟦 ¿Que significa? — <em>Parametro</em></h3>
+<p>El <strong>nombre</strong> que escribes entre parentesis al definir una funcion, como hueco que se llenara al llamarla. Sirve para que la funcion reciba datos. En <strong>tunal-digital</strong>, en <code>function saludar(nombre)</code>, <code>nombre</code> es el parametro; el texto que pasas al llamar es el argumento.</p>
+<h3 id="que-significa-promesa-promise">🟦 ¿Que significa? — <em>Promesa (Promise)</em></h3>
+<p>Un <strong>pagare</strong>: un objeto que representa un resultado que llegara despues (o un error). Sirve para manejar tareas que tardan, como pedir datos. En <strong>tunal-digital</strong>, <code>fetch</code> devuelve una promesa que se resuelve cuando el Worker responde.</p>
+</blockquote>
+<pre><code class="language-javascript">fetch(&quot;/api/chat&quot;)
+  .then((respuesta) =&gt; respuesta.json())
+  .then((datos) =&gt; console.log(datos))
+  .catch((error) =&gt; console.log(&quot;Algo fallo&quot;, error));
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Una promesa tiene tres estados: <strong>pendiente</strong> (esperando), <strong>cumplida</strong> (llego el dato) y <strong>rechazada</strong> (hubo error). <code>await</code> te da el dato cuando se cumple; el <code>.catch</code> o el <code>try/catch</code> atrapan el rechazo.</p>
+<h3 id="que-significa-queryselector">🟦 ¿Que significa? — <em>querySelector</em></h3>
+<p>Un metodo del documento que <strong>busca el primer elemento</strong> que coincide con un selector CSS. Sirve para encontrar la pieza del DOM con la que vas a trabajar. En <strong>tunal-digital</strong>, las funciones de atajo en <code>main.js</code> envuelven <code>querySelector</code> para escribir menos.</p>
+<h3 id="que-significa-return">🟦 ¿Que significa? — <em>return</em></h3>
+<p>La palabra que hace que una funcion <strong>devuelva un valor</strong> y termine. Sirve para que la receta entregue su resultado a quien la llamo. En <strong>tunal-digital</strong>, una funcion de atajo hace <code>return document.querySelector(sel)</code> para entregarte el elemento.</p>
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Despues de <code>return</code>, la funcion se detiene: el codigo escrito debajo no se ejecuta. Si pusiste algo importante despues de un <code>return</code>, nunca correra.</p>
+<h3 id="que-significa-scope-ambito">🟦 ¿Que significa? — <em>Scope (ambito)</em></h3>
+<p>La <strong>zona donde vive</strong> una variable y donde se la puede ver. Sirve para mantener el codigo ordenado y evitar que unas variables pisen a otras. En <strong>tunal-digital</strong>, una variable declarada dentro del callback del formulario solo existe dentro de ese callback.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>Si en <strong>tunal-digital</strong> declaras una variable con <code>let</code> dentro de la funcion del chat, no podras leerla desde el formulario: tienen <strong>scopes distintos</strong>. Para compartir un dato entre ambos, lo declaras un nivel mas arriba.</p>
+<h3 id="que-significa-selector">🟦 ¿Que significa? — <em>Selector</em></h3>
+<p>Una <strong>cadena de texto</strong> (como <code>#chat</code> o <code>.boton</code>) que describe que elemento del DOM quieres. Sirve para apuntar a la pieza correcta de la pagina. En <strong>tunal-digital</strong>, los selectores <code>#</code> (por id) y <code>.</code> (por clase) se pasan a las funciones de atajo.</p>
+<h3 id="que-significa-string-cadena-de-texto">🟦 ¿Que significa? — <em>String (cadena de texto)</em></h3>
+<p>El tipo de dato para <strong>texto</strong>, escrito entre comillas. Sirve para guardar nombres, mensajes y cualquier letra. En <strong>tunal-digital</strong>, el mensaje que el usuario escribe en el chat es un string.</p>
+</blockquote>
+<pre><code class="language-javascript">const saludo = &quot;Hola&quot;;
+const nombre = &quot;Bit&quot;;
+console.log(saludo + &quot;, &quot; + nombre); // &quot;Hola, Bit&quot;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-template-literal-plantilla">🟦 ¿Que significa? — <em>Template literal (plantilla)</em></h3>
+<p>Una forma de escribir texto con <strong>acentos graves</strong> y huecos <code>${ }</code> para meter variables. Sirve para armar mensajes sin pegar trozos con <code>+</code>. En <strong>tunal-digital</strong> se usan para construir el HTML de cada burbuja del chat.</p>
+</blockquote>
+<pre><code class="language-javascript">const nombre = &quot;Edwar&quot;;
+const mensaje = `Hola, ${nombre}, bienvenido a Tunal`;
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-tipo-de-dato">🟦 ¿Que significa? — <em>Tipo de dato</em></h3>
+<p>La <strong>categoria</strong> de un valor: string, number, boolean, null, undefined, objeto o array. Sirve para saber que puedes hacer con un dato. En <strong>tunal-digital</strong>, antes de enviar el formulario revisas que el texto sea un string y no este vacio.</p>
+<h3 id="que-significa-try-catch">🟦 ¿Que significa? — <em>try / catch</em></h3>
+<p>Un bloque para <strong>intentar</strong> algo riesgoso (<code>try</code>) y <strong>atrapar</strong> el error si falla (<code>catch</code>), sin que se caiga toda la pagina. Sirve para manejar fallos con elegancia. En <strong>tunal-digital</strong>, el <code>fetch</code> al Worker va dentro de un <code>try/catch</code> por si la red falla.</p>
+</blockquote>
+<pre><code class="language-javascript">try {
+  const r = await fetch(&quot;/api/chat&quot;);
+  const datos = await r.json();
+} catch (error) {
+  console.log(&quot;No se pudo conectar:&quot;, error);
+}
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-undefined">🟦 ¿Que significa? — <em>undefined</em></h3>
+<p>El valor que tiene una variable que <strong>existe pero aun no tiene contenido</strong>. Sirve para detectar "todavia no le di valor a esto". En <strong>tunal-digital</strong>, si lees una propiedad que no existe en la respuesta JSON, obtienes <code>undefined</code>.</p>
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p><code>null</code> y <code>undefined</code> parecen lo mismo pero no lo son. <code>undefined</code> es "nunca le di valor"; <code>null</code> es "le di valor vacio a proposito". Confundirlos es fuente clasica de errores.</p>
+<h3 id="que-significa-var">🟦 ¿Que significa? — <em>var</em></h3>
+<p>La forma <strong>antigua</strong> de declarar variables, anterior a <code>let</code> y <code>const</code>. Sirve... cada vez menos: se recomienda evitarla porque su scope es confuso. En <strong>tunal-digital</strong> no se usa <code>var</code>: todo es <code>let</code> o <code>const</code>, que es la practica moderna.</p>
+<h3 id="que-significa-variable">🟦 ¿Que significa? — <em>Variable</em></h3>
+<p>Una <strong>caja con nombre</strong> donde guardas un valor para usarlo despues. Sirve como la base de todo: sin variables no hay datos que mover. En <strong>tunal-digital</strong>, cada elemento del DOM, cada bandera y cada mensaje vive en una variable.</p>
+</blockquote>
+<pre><code class="language-javascript">let mensaje = &quot;Hola&quot;;     // puede cambiar
+const limite = 280;       // no se reasigna
+</code></pre>
+<h2 id="4-terminos-que-cruzan-con-otros-modulos">4. Terminos que cruzan con otros modulos</h2>
+<p>JavaScript no vive solo. Algunas palabras del modulo aparecen tambien en tus otros repos. Aqui las anclamos para que las reconozcas en cualquier sitio.</p>
+<blockquote class="def">
+<h3 id="que-significa-componente">🟦 ¿Que significa? — <em>Componente</em></h3>
+<p>En frameworks como React, un <strong>trozo de interfaz reutilizable</strong> que es, en el fondo, una funcion que devuelve lo que se ve. Sirve para construir pantallas por piezas. En <strong>RachaSimple</strong> (React + TypeScript) cada tarjeta de racha es un componente.</p>
+<h3 id="que-significa-estado-state">🟦 ¿Que significa? — <em>Estado (state)</em></h3>
+<p>Datos que <strong>cambian con el tiempo</strong> dentro de una app y que, al cambiar, redibujan la pantalla. Sirve para apps que reaccionan al usuario. En <strong>RachaSimple</strong> y en <strong>Faro/Organizer</strong> (Next.js + React) el estado guarda lo que el usuario ve y edita.</p>
+<h3 id="que-significa-typescript">🟦 ¿Que significa? — <em>TypeScript</em></h3>
+<p>Un JavaScript con <strong>etiquetas de tipo</strong>: avisa errores antes de ejecutar. Sirve para escribir codigo mas seguro en proyectos grandes. <strong>RachaSimple</strong> y <strong>Faro/Organizer</strong> usan TypeScript; <strong>tunal-digital</strong> usa JavaScript "vanilla" (sin framework).</p>
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>El salto natural despues de dominar el <code>main.js</code> de <strong>tunal-digital</strong> es entender <strong>RachaSimple</strong>: alli el mismo JavaScript se escribe con TypeScript, dentro de componentes de React, y los datos viajan con TanStack Query a Supabase. Las palabras de este glosario (funcion, objeto, array, fetch, promesa, async) siguen siendo las mismas; solo cambia el envoltorio.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>No todo lo de tu lista es JavaScript. <strong>PolyPaw</strong> es Python con Flet y JSON; <strong>polypaw-nas</strong> es servidor (Ubuntu, Samba, Cockpit, Tailscale), nada de JS. Saber donde NO aplica un concepto es tan util como saber donde si.</p>
+</blockquote>
+<h2 id="5-repaso-final-en-vez-de-teoria-nueva">5. Repaso final (en vez de teoria nueva)</h2>
+<p>Cerremos el modulo armando la historia completa, usando solo palabras del glosario. Lee esto despacio; si una palabra no te suena, vuelve arriba y buscala.</p>
+<ol>
+<li>Abres la pagina de <strong>tunal-digital</strong>. El navegador construye el <strong>DOM</strong> a partir del HTML.</li>
+<li>Tu <code>main.js</code> usa <strong>funciones</strong> de atajo (que por dentro llaman a <code>querySelector</code>) para tomar <strong>elementos</strong>: el <strong>formulario</strong> y la caja del <strong>chat</strong>. Cada uno se guarda en una <strong>variable</strong> declarada con <code>const</code>.</li>
+<li>Pones un <strong>listener</strong> con <code>addEventListener</code> al <strong>evento</strong> <code>submit</code>. Le entregas un <strong>callback</strong>.</li>
+<li>Cuando el usuario envia, el callback corre. Dentro, un <strong>condicional</strong> (<code>if</code>) revisa con el <strong>operador</strong> <code>===</code> que el <strong>string</strong> del mensaje no este vacio.</li>
+<li>Si todo bien, una funcion <code>async</code> hace <code>await fetch(...)</code> al Worker. <code>fetch</code> devuelve una <strong>promesa</strong>; <code>await</code> espera el resultado.</li>
+<li>La respuesta llega como <strong>JSON</strong>; con <code>.json()</code> la conviertes en un <strong>objeto</strong> de JavaScript y lees su propiedad <code>reply</code> (un <strong>string</strong>).</li>
+<li>Recorres los mensajes con un <strong>bucle</strong> (<code>forEach</code>) y, con un <strong>template literal</strong>, escribes cada burbuja en el <strong>DOM</strong>.</li>
+<li>Si la red falla, el <strong>try/catch</strong> atrapa el error y muestra un aviso amable en vez de romper la pagina.</li>
+</ol>
+<p>Eso es JavaScript de principio a fin: <strong>guardar</strong> (variables, tipos), <strong>hacer</strong> (funciones, scope), <strong>decidir</strong> (condicionales, operadores), <strong>pintar</strong> (DOM, eventos) y <strong>conectar</strong> (fetch, promesas, async, JSON). Todo el mapa del inicio, vivo en un solo flujo.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_4">🔎 En tu codigo</h3>
+<p>Reto de cierre: abre el <code>main.js</code> real de <strong>tunal-digital</strong> y, con lapiz en mano, marca al lado de cada bloque que termino del glosario aparece. Veras que el archivo entero es este mismo recorrido. Si reconoces las ocho etapas, ya dominas el modulo.</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se explicar con mis palabras que es una <strong>variable</strong> y la diferencia entre <code>let</code> y <code>const</code>.</li>
+<li>[ ] Distingo los <strong>tipos de dato</strong>: string, number, boolean, null, undefined.</li>
+<li>[ ] Se que es una <strong>funcion</strong>, y la diferencia entre <strong>parametro</strong> y <strong>argumento</strong>.</li>
+<li>[ ] Entiendo que es un <strong>array</strong> y que es un <strong>objeto</strong>, y cuando usar cada uno.</li>
+<li>[ ] Puedo explicar <strong>scope</strong> y dar una idea de que es un <strong>closure</strong>.</li>
+<li>[ ] Se que es el <strong>DOM</strong>, un <strong>evento</strong>, un <strong>listener</strong> y un <strong>selector</strong>.</li>
+<li>[ ] Distingo <strong>callback</strong>, <strong>promesa</strong> y <strong>async/await</strong>.</li>
+<li>[ ] Se para que sirve <strong>fetch</strong> y que es <strong>JSON</strong>.</li>
+<li>[ ] Reconozco estas palabras en el <code>main.js</code> de <strong>tunal-digital</strong>.</li>
+<li>[ ] Se cuales conceptos NO son JavaScript (PolyPaw es Python; polypaw-nas es servidor).</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>El diccionario al reves.</strong> Sin mirar el glosario, escribe en tu cuaderno la definicion (1-2 lineas) de: <em>variable, funcion, array, objeto, evento, fetch, promesa, JSON</em>. Luego compara con los recuadros y corrige lo que falle.</p>
+</li>
+<li>
+<p><strong>Caza-palabras (clasificacion).</strong> Toma estos terminos: <code>string</code>, <code>componente</code>, <code>Samba</code>, <code>forEach</code>, <code>Tailscale</code>, <code>closure</code>, <code>JSON</code>. Clasificalos en tres columnas: <em>es de JavaScript</em>, <em>es de otro framework de JS</em> (React/Next), <em>no es de JavaScript</em>. Pista: dos no son de JS.</p>
+</li>
+<li>
+<p><strong>💻 Marca el mapa en codigo.</strong> Abre el <code>main.js</code> de <strong>tunal-digital</strong>. Pon comentarios <code>// EVENTO</code>, <code>// CALLBACK</code>, <code>// FETCH</code>, <code>// JSON</code>, <code>// DOM</code> junto a las lineas donde reconozcas cada concepto. No cambies la logica, solo anota.</p>
+</li>
+<li>
+<p><strong>💻 Mini-objeto y array.</strong> En la consola del navegador, crea un <strong>objeto</strong> <code>bit</code> con las propiedades <code>nombre</code>, <code>tipo</code> y <code>nivel</code>. Luego crea un <strong>array</strong> <code>mensajes</code> con tres strings y recorrelo con <code>forEach</code> imprimiendo cada uno. Verifica que <code>bit.nombre</code> te devuelve lo correcto.</p>
+</li>
+<li>
+<p><strong>💻 Promesa controlada.</strong> Escribe una funcion <code>async</code> llamada <code>probar()</code> que haga <code>await fetch("https://example.com")</code> dentro de un <code>try/catch</code>. Si funciona, imprime <code>respuesta.ok</code>; si falla, imprime un mensaje propio. Observa el orden en que aparecen los <code>console.log</code>.</p>
+</li>
+<li>
+<p><strong>Explicaselo a alguien.</strong> Elige tres palabras del glosario que mas te costaron y explicalas en voz alta a otra persona (o a tu mascota, Bit no juzga) sin leer el recuadro. Si logras explicarlas, ya son tuyas.</p>
+</li>
+</ol>
+<blockquote>
+<p>Y con esto cerramos el modulo de JavaScript. Lo hiciste muy bien: pasaste de "estas palabras me marean" a tener un mapa y un diccionario propios. Guarda este capitulo cerca; volveras a el mas de lo que crees. Nos vemos en el siguiente modulo, donde el mismo JavaScript se pone su traje de React. Un abrazo con aleta. — <strong>Bit</strong> 🐾
+```</p>
+</blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

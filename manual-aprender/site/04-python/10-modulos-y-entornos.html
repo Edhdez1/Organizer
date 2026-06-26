@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 10 — Módulos, paquetes y entornos virtuales — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-10-modulos-paquetes-y-entornos-virtuales">Capitulo 10 — Módulos, paquetes y entornos virtuales</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap10.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hola de nuevo, soy <strong>Bit</strong>, tu ajolote favorito. 🐾 Hasta ahora escribiste todo tu código en un solo archivo, como quien guarda toda la ropa en una sola maleta enorme. En este capítulo aprenderás a repartir tu código en varios archivos (módulos), a usar herramientas que otras personas ya escribieron (la biblioteca estándar y los paquetes de <code>pip</code>), y a crear una "burbuja" para tu proyecto (un entorno virtual) para que no se mezclen las cosas. Es exactamente lo que hace <strong>PolyPaw</strong>, la app de aprendizaje de idiomas hecha enteramente en Python, así que la usaremos de ejemplo todo el rato. ¡Vamos!</p>
+</blockquote>
+<h2 id="1-por-que-partir-el-codigo-en-varios-archivos">1. ¿Por qué partir el código en varios archivos?</h2>
+<p>Imagina que <strong>PolyPaw</strong> tuviera TODO en un único archivo de 5000 líneas: la pantalla, las misiones, el acceso a los datos, los puntos del usuario... Buscar algo ahí sería una pesadilla. 😱</p>
+<p>La solución es separar el código en <strong>archivos <code>.py</code></strong> según lo que hace cada uno. Cada archivo <code>.py</code> es un <strong>módulo</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-modulo">🟦 ¿Que significa? — <em>Módulo</em></h3>
+<p>Un <strong>módulo</strong> es simplemente un archivo de Python (<code>.py</code>) que contiene código (funciones, variables, clases) y que puede ser usado desde otro archivo. Sirve para <strong>organizar</strong> y <strong>reutilizar</strong> código sin copiarlo y pegarlo.
+<strong>Dónde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, el archivo <code>database_manager.py</code> es un módulo que se encarga de leer y guardar los datos; <code>main.py</code> es otro módulo que arranca la app. <code>main.py</code> <em>usa</em> a <code>database_manager.py</code>.</p>
+</blockquote>
+<p>En <strong>JavaScript</strong> (que viste en el módulo 03) hacías algo parecido con <code>import</code> y <code>export</code> entre archivos. En Python la idea es la misma, pero la palabra clave y las reglas cambian un poco. Eso es justo lo que veremos ahora.</p>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>Una buena regla para principiantes: <strong>un archivo, una responsabilidad</strong>. Si un archivo empieza a hacer demasiadas cosas distintas, probablemente toca partirlo en dos módulos.</p>
+</blockquote>
+<h2 id="2-import-traer-un-modulo-completo">2. <code>import</code>: traer un módulo completo</h2>
+<p>Para usar el código de otro módulo, lo <strong>importas</strong>. La palabra clave es <code>import</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-import">🟦 ¿Que significa? — <em><code>import</code></em></h3>
+<p><code>import</code> es la instrucción que <strong>trae</strong> un módulo a tu archivo actual para poder usar su código. Sirve para no reinventar la rueda: aprovechas funciones que ya existen.
+<strong>Dónde se usa en un repo real:</strong> en <code>main.py</code> de <strong>PolyPaw</strong> se importa el framework con <code>import flet</code> para poder dibujar la interfaz.</p>
+<h3 id="que-significa-framework">🟦 ¿Que significa? — <em>Framework</em></h3>
+<p>Un <strong>framework</strong> es un paquete grande que te da una estructura y herramientas ya hechas para construir cierto tipo de programa (por ejemplo, interfaces de usuario), de modo que tú solo escribes la parte propia de tu app y no todo desde cero. Sirve para avanzar más rápido apoyándote en una base sólida que otros mantienen.
+<strong>Dónde se usa en un repo real:</strong> <strong>Flet</strong> es el framework con el que está construido <strong>PolyPaw</strong>: él se encarga de dibujar botones, textos y pantallas, y tú solo le dices qué mostrar.</p>
+</blockquote>
+<p>Veamos un ejemplo con un módulo que ya viene incluido en Python, <code>random</code> (sirve para generar cosas al azar):</p>
+<pre><code class="language-python">import random
+
+# Elegir una palabra al azar de una lista de vocabulario
+vocabulario = [&quot;perro&quot;, &quot;gato&quot;, &quot;casa&quot;, &quot;agua&quot;]
+palabra = random.choice(vocabulario)
+print(&quot;Practica esta palabra:&quot;, palabra)
+</code></pre>
+<p>Fíjate en el patrón: primero <code>import random</code>, y luego usas sus funciones poniendo el <strong>nombre del módulo, un punto, y la función</strong>: <code>random.choice(...)</code>. Ese punto significa "dame <code>choice</code>, que está <em>dentro</em> de <code>random</code>".</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>En <strong>PolyPaw</strong>, una misión podría elegir al azar qué pregunta mostrar primero. Con <code>random.shuffle(preguntas)</code> se "barajan" las preguntas como si fueran cartas, para que cada repaso se sienta distinto.</p>
+</blockquote>
+<h2 id="3-from-import-traer-solo-una-parte">3. <code>from ... import</code>: traer solo una parte</h2>
+<p>A veces no quieres todo el módulo, solo una función concreta. Para eso existe <code>from ... import</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-from-import">🟦 ¿Que significa? — <em><code>from ... import</code></em></h3>
+<p><code>from MODULO import NOMBRE</code> trae <strong>solo una pieza</strong> (una función, una clase o una variable) de un módulo, en vez de todo el módulo. Sirve para escribir menos y dejar más claro qué estás usando.
+<strong>Dónde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, <code>main.py</code> usa cosas como <code>from database_manager import DatabaseManager</code> para traer solo esa clase del módulo de datos.</p>
+</blockquote>
+<p>Compara las dos formas con el módulo <code>random</code>:</p>
+<pre><code class="language-python"># Forma 1: importar todo el módulo
+import random
+palabra = random.choice(vocabulario)
+
+# Forma 2: importar solo lo que necesito
+from random import choice
+palabra = choice(vocabulario)   # ¡ya no escribo &quot;random.&quot; delante!
+</code></pre>
+<p>Las dos hacen lo mismo. La diferencia es que con <code>from random import choice</code> ya puedes escribir <code>choice(...)</code> directo, sin el prefijo <code>random.</code>.</p>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Si solo usas una o dos funciones de un módulo, <code>from ... import</code> queda más limpio. Si usas muchas, <code>import modulo</code> completo evita confusiones sobre de dónde salió cada función.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Evita escribir <code>from random import *</code> (el asterisco trae <strong>todo</strong> de golpe). Parece cómodo, pero después es imposible saber de qué módulo vino cada nombre, y dos módulos pueden tener funciones que se llamen igual y se "pisen". Importa solo lo que necesitas, por su nombre.</p>
+<h3 id="que-significa-importar-con-alias-as">🟦 ¿Que significa? — <em>Importar con alias (<code>as</code>)</em></h3>
+<p>Puedes renombrar lo que importas con la palabra <code>as</code>, por ejemplo <code>import datetime as dt</code>. Sirve para acortar nombres largos o evitar choques de nombres.
+<strong>Dónde se usa en un repo real:</strong> es muy común en proyectos Python; en <strong>PolyPaw</strong> podrías ver algo como <code>import flet as ft</code> para escribir <code>ft.Text(...)</code> en vez de <code>flet.Text(...)</code>.</p>
+</blockquote>
+<pre><code class="language-python">import flet as ft   # ahora &quot;ft&quot; es un apodo de &quot;flet&quot;
+
+# En PolyPaw, crear un texto en pantalla queda más corto:
+titulo = ft.Text(&quot;¡Bienvenido a PolyPaw!&quot;)
+</code></pre>
+<h2 id="4-la-biblioteca-estandar-pilas-incluidas">4. La biblioteca estándar: pilas incluidas 🔋</h2>
+<p>Python viene con un montón de módulos <strong>ya instalados</strong>, listos para usar. A ese conjunto se le llama la <strong>biblioteca estándar</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-biblioteca-estandar">🟦 ¿Que significa? — <em>Biblioteca estándar</em></h3>
+<p>La <strong>biblioteca estándar</strong> es el grupo de módulos que vienen incluidos con Python desde que lo instalas, sin tener que descargar nada extra. Sirve para tareas comunes: fechas, archivos, azar, leer datos en formato JSON, etc.
+<strong>Dónde se usa en un repo real:</strong> <strong>PolyPaw</strong> guarda sus misiones en archivos como <code>missions/*.json</code>, y para leerlos usa el módulo <code>json</code> de la biblioteca estándar.</p>
+</blockquote>
+<p>Vamos a conocer cuatro módulos muy útiles que verás todo el tiempo.</p>
+<h3 id="41-json-leer-y-escribir-datos-estructurados">4.1 <code>json</code> — leer y escribir datos estructurados</h3>
+<blockquote class="def">
+<h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
+<p><strong>JSON</strong> (JavaScript Object Notation) es un formato de texto para guardar datos organizados en pares "clave: valor" y listas. Sirve para que un programa guarde datos y los vuelva a leer fácilmente. Es legible tanto para máquinas como para humanos.
+<strong>Dónde se usa en un repo real:</strong> TODAS las misiones de <strong>PolyPaw</strong> viven en archivos <code>.json</code> dentro de la carpeta <code>missions/</code>. El programa los lee para saber qué preguntas mostrar.</p>
+</blockquote>
+<p>Si vienes de <strong>JavaScript</strong>, JSON te sonará muchísimo: ¡el nombre viene precisamente de los objetos de JavaScript! La buena noticia es que en Python un objeto JSON se convierte en un diccionario (que viste en capítulos anteriores).</p>
+<pre><code class="language-python">import json
+
+# Leer un archivo de misión, como hace PolyPaw
+with open(&quot;missions/saludos.json&quot;, encoding=&quot;utf-8&quot;) as archivo:
+    mision = json.load(archivo)   # convierte el texto JSON en un diccionario de Python
+
+print(mision[&quot;titulo&quot;])           # acceder como cualquier diccionario
+print(&quot;Preguntas:&quot;, len(mision[&quot;preguntas&quot;]))
+</code></pre>
+<ul>
+<li><code>json.load(archivo)</code> lee un archivo y lo convierte en datos de Python (diccionarios y listas).</li>
+<li><code>json.dump(datos, archivo)</code> hace lo contrario: guarda datos de Python en un archivo JSON.</li>
+</ul>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En <strong>PolyPaw</strong>, cuando se crea una misión nueva, el contenido se escribe como un archivo <code>.json</code> en <code>missions/</code>. Así el contenido (las preguntas) queda <strong>separado del código</strong> (<code>main.py</code>): puedes añadir misiones sin tocar la lógica del programa. 👏</p>
+</blockquote>
+<h3 id="42-os-hablar-con-el-sistema-operativo">4.2 <code>os</code> — hablar con el sistema operativo</h3>
+<blockquote class="def">
+<h3 id="que-significa-os">🟦 ¿Que significa? — <em><code>os</code></em></h3>
+<p>El módulo <strong><code>os</code></strong> te deja interactuar con el sistema operativo: ver carpetas, listar archivos, construir rutas, leer variables de entorno. Sirve para que tu programa encuentre y maneje archivos sin importar en qué computadora corra.
+<strong>Dónde se usa en un repo real:</strong> <strong>PolyPaw</strong> necesita recorrer la carpeta <code>missions/</code> para encontrar todos los <code>.json</code> disponibles; eso se hace con <code>os</code>.</p>
+</blockquote>
+<pre><code class="language-python">import os
+
+# Listar todos los archivos de misiones en la carpeta &quot;missions&quot;
+for nombre in os.listdir(&quot;missions&quot;):
+    if nombre.endswith(&quot;.json&quot;):
+        print(&quot;Misión encontrada:&quot;, nombre)
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p>Para unir partes de una ruta (carpeta + archivo), usa <code>os.path.join("missions", "saludos.json")</code> en vez de pegar textos con <code>"missions/" + nombre</code>. ¿Por qué? Porque Windows usa <code>\</code> y Linux/Mac usan <code>/</code>. <code>os.path.join</code> pone el separador correcto según el sistema, y así tu código funciona en cualquier lado (incluido el servidor <strong>polypaw-nas</strong> con Ubuntu).</p>
+</blockquote>
+<h3 id="43-random-el-azar">4.3 <code>random</code> — el azar</h3>
+<p>Ya lo usamos arriba, pero démosle su recuadro oficial.</p>
+<blockquote class="def">
+<h3 id="que-significa-random">🟦 ¿Que significa? — <em><code>random</code></em></h3>
+<p>El módulo <strong><code>random</code></strong> genera resultados al azar: números aleatorios, elegir un elemento de una lista, barajar elementos. Sirve para añadir variedad o sorpresa.
+<strong>Dónde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, para mostrar las preguntas de una misión en orden distinto cada vez y que el repaso no sea siempre igual.</p>
+</blockquote>
+<pre><code class="language-python">import random
+
+print(random.randint(1, 6))        # un número entero entre 1 y 6 (como un dado)
+print(random.choice([&quot;A&quot;, &quot;B&quot;]))   # elige uno al azar
+
+preguntas = [&quot;p1&quot;, &quot;p2&quot;, &quot;p3&quot;]
+random.shuffle(preguntas)          # baraja la lista &quot;en su sitio&quot;
+print(preguntas)
+</code></pre>
+<h3 id="44-datetime-fechas-y-horas">4.4 <code>datetime</code> — fechas y horas</h3>
+<blockquote class="def">
+<h3 id="que-significa-datetime">🟦 ¿Que significa? — <em><code>datetime</code></em></h3>
+<p>El módulo <strong><code>datetime</code></strong> maneja fechas y horas: saber qué día es hoy, cuánto tiempo pasó, dar formato a una fecha. Sirve para registrar cuándo ocurrió algo.
+<strong>Dónde se usa en un repo real:</strong> en <strong>PolyPaw</strong>, para registrar la fecha en que el usuario completó una misión y poder calcular su racha de días seguidos.</p>
+</blockquote>
+<pre><code class="language-python">from datetime import datetime
+
+ahora = datetime.now()                 # fecha y hora de este momento
+print(ahora)                           # ej. 2026-06-25 14:30:05.123456
+
+# Darle un formato bonito
+print(ahora.strftime(&quot;%d/%m/%Y&quot;))      # 25/06/2026
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>La idea de "racha de días seguidos" no es exclusiva de PolyPaw: el proyecto <strong>RachaSimple</strong> (hecho en React + TypeScript + Supabase) gira justo alrededor de eso. Aunque esté en otro lenguaje, el concepto de comparar fechas con <code>datetime</code> es el mismo razonamiento.</p>
+</blockquote>
+<h2 id="5-paquetes-cuando-agrupas-varios-modulos">5. Paquetes: cuando agrupas varios módulos</h2>
+<blockquote class="def">
+<h3 id="que-significa-paquete">🟦 ¿Que significa? — <em>Paquete</em></h3>
+<p>Un <strong>paquete</strong> es una carpeta que agrupa varios módulos relacionados, para organizarlos juntos. Sirve para que proyectos grandes no sean un montón de archivos sueltos, sino carpetas con sentido.
+<strong>Dónde se usa en un repo real:</strong> <code>flet</code>, el framework con el que está construido <strong>PolyPaw</strong>, es un paquete: por dentro tiene muchísimos módulos (textos, botones, columnas...), pero tú lo usas con un solo <code>import flet</code>.</p>
+</blockquote>
+<p>No te preocupes por crear paquetes complejos todavía. Por ahora basta con que sepas: <strong>módulo = un archivo</strong>, <strong>paquete = una carpeta de módulos</strong>. Cuando instalas algo con <code>pip</code> (lo vemos ahora), normalmente instalas un paquete.</p>
+<h2 id="6-pip-instalar-codigo-que-otros-escribieron">6. <code>pip</code>: instalar código que otros escribieron</h2>
+<p>La biblioteca estándar es genial, pero no trae <em>todo</em>. Por ejemplo, <strong>Flet</strong> (el framework de interfaces de PolyPaw) <strong>no</strong> viene incluido en Python. Hay que instalarlo. Para eso existe <code>pip</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-pip">🟦 ¿Que significa? — <em><code>pip</code></em></h3>
+<p><strong><code>pip</code></strong> es el instalador de paquetes de Python. Sirve para descargar e instalar paquetes que otras personas publicaron (en un repositorio público llamado PyPI) para que los uses en tu proyecto.
+<strong>Dónde se usa en un repo real:</strong> para que <strong>PolyPaw</strong> funcione, lo primero que se hace es instalar su framework con <code>pip install flet</code>.</p>
+</blockquote>
+<p>Se usa desde la <strong>terminal</strong> (no dentro de un archivo <code>.py</code>):</p>
+<pre><code class="language-python"># Esto se escribe en la TERMINAL, no en un archivo Python.
+# Instalar el framework de PolyPaw:
+pip install flet
+
+# Instalar una versión concreta:
+pip install flet==0.21.0
+
+# Ver qué tienes instalado:
+pip list
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_3">💡 Tip</h3>
+<p>Si vienes del módulo 03 de <strong>JavaScript</strong>, <code>pip</code> es el equivalente de <code>npm</code> (el que usan <strong>RachaSimple</strong> y <strong>Faro/Organizer</strong> con sus paquetes). <code>pip install flet</code> se parece a <code>npm install</code>: bajas código que alguien ya escribió y lo usas. Mismo concepto, distinto ecosistema.</p>
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Cuando instalas un paquete con <code>pip</code>, lo descargas de internet y va a correr en tu máquina. Instala solo paquetes conocidos y bien mantenidos. Revisa que el nombre esté bien escrito: a veces hay paquetes falsos con nombres parecidos a los populares. 🕵️</p>
+</blockquote>
+<h2 id="7-entornos-virtuales-una-burbuja-por-proyecto">7. Entornos virtuales: una burbuja por proyecto</h2>
+<p>Aquí viene un problema real. Imagina que tienes <strong>PolyPaw</strong>, que necesita <code>flet</code> versión 0.21, y otro proyecto que necesita <code>flet</code> versión 0.10. Si instalas todo "globalmente" en tu computadora, una versión pisa a la otra y algo se rompe. 💥</p>
+<p>La solución es el <strong>entorno virtual</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-entorno-virtual">🟦 ¿Que significa? — <em>Entorno virtual</em></h3>
+<p>Un <strong>entorno virtual</strong> es una carpeta aislada que contiene su propia copia de Python y sus propios paquetes, separada del resto del sistema. Sirve para que cada proyecto tenga <strong>sus</strong> dependencias en <strong>sus</strong> versiones, sin chocar con otros proyectos.
+<strong>Dónde se usa en un repo real:</strong> <strong>PolyPaw</strong> se desarrolla dentro de su propio entorno virtual, donde se instala <code>flet</code> sin afectar a nada más de la computadora.</p>
+<h3 id="que-significa-dependencia">🟦 ¿Que significa? — <em>Dependencia</em></h3>
+<p>Una <strong>dependencia</strong> es un paquete externo que tu proyecto <strong>necesita</strong> para funcionar. Sirve para reutilizar trabajo ya hecho. Si falta una dependencia, el programa no arranca.
+<strong>Dónde se usa en un repo real:</strong> <code>flet</code> es la dependencia principal de <strong>PolyPaw</strong>: sin ella, no hay interfaz.</p>
+<h3 id="que-significa-venv">🟦 ¿Que significa? — <em><code>venv</code></em></h3>
+<p><strong><code>venv</code></strong> es la herramienta incluida en Python para crear entornos virtuales. Sirve para generar esa "burbuja" aislada con un solo comando.
+<strong>Dónde se usa en un repo real:</strong> cualquier proyecto Python serio (como <strong>PolyPaw</strong>) empieza creando un <code>venv</code>.</p>
+</blockquote>
+<p>Así se crea y se usa, paso a paso, desde la terminal:</p>
+<pre><code class="language-python"># 1) Crear el entorno virtual (crea una carpeta llamada &quot;venv&quot;)
+python -m venv venv
+
+# 2) Activarlo en Linux o Mac:
+source venv/bin/activate
+
+#    Activarlo en Windows:
+venv\Scripts\activate
+
+# 3) Ya activado, instalar las dependencias DENTRO de la burbuja:
+pip install flet
+
+# 4) Cuando termines, salir de la burbuja:
+deactivate
+</code></pre>
+<p>Cuando el entorno está activado, normalmente verás <code>(venv)</code> al inicio de la línea de tu terminal. Eso te avisa: "estás dentro de la burbuja". Todo lo que instales con <code>pip</code> ahí dentro <strong>solo</strong> existe en ese proyecto.</p>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>La carpeta <code>venv</code> <strong>no se sube</strong> al repositorio de GitHub. Ocupa mucho y es específica de tu máquina. En su lugar se sube una <strong>lista</strong> de lo que hay que instalar (lo vemos en la siguiente sección). Por eso los proyectos incluyen un archivo <code>.gitignore</code> que ignora la carpeta <code>venv</code>.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>La burbuja del entorno virtual es a tu proyecto lo que el aislamiento de red de <strong>polypaw-nas</strong> (con Tailscale) es a tu servidor casero: cada cosa en su lugar, sin que se mezcle con lo de afuera. Aislar = menos sorpresas.</p>
+</blockquote>
+<h2 id="8-requirementstxt-la-lista-de-la-compra">8. <code>requirements.txt</code>: la lista de la compra 🛒</h2>
+<p>Si no subimos la carpeta <code>venv</code>, ¿cómo sabe otra persona (¡o tú en otra computadora!) qué instalar? Con un archivo de lista llamado <code>requirements.txt</code>.</p>
+<blockquote class="def">
+<h3 id="que-significa-requirementstxt">🟦 ¿Que significa? — <em><code>requirements.txt</code></em></h3>
+<p><strong><code>requirements.txt</code></strong> es un archivo de texto que lista todas las dependencias del proyecto y sus versiones, una por línea. Sirve para que cualquiera pueda recrear el mismo entorno con un solo comando.
+<strong>Dónde se usa en un repo real:</strong> en la raíz de <strong>PolyPaw</strong> vive su <code>requirements.txt</code>, donde aparece <code>flet</code> con su versión. Quien clone el proyecto solo tiene que instalar esa lista.</p>
+</blockquote>
+<p>Un <code>requirements.txt</code> se ve así de simple:</p>
+<pre><code class="language-python"># Contenido de requirements.txt (PolyPaw)
+flet==0.21.0
+</code></pre>
+<p>Y para usarlo, dos comandos clave en la terminal:</p>
+<pre><code class="language-python"># Generar el archivo a partir de lo que tienes instalado:
+pip freeze &gt; requirements.txt
+
+# Instalar TODO lo de la lista de golpe (al clonar el proyecto):
+pip install -r requirements.txt
+</code></pre>
+<p>Es como una <strong>lista de la compra</strong>: <code>pip freeze</code> la escribe anotando lo que tienes, y <code>pip install -r</code> la lee y compra todo lo que falta.</p>
+<blockquote class="tip">
+<h3 id="tip_5">💡 Tip</h3>
+<p>Si vienes de JavaScript, <code>requirements.txt</code> cumple el mismo papel que el <code>package.json</code> de <strong>Faro/Organizer</strong> o <strong>RachaSimple</strong>: declarar qué necesita el proyecto para funcionar. El comando <code>pip install -r requirements.txt</code> es el primo de <code>npm install</code>.</p>
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>El flujo completo para alguien que clona <strong>PolyPaw</strong> desde cero sería: <code>python -m venv venv</code> → <code>source venv/bin/activate</code> → <code>pip install -r requirements.txt</code> → <code>python main.py</code>. Cuatro pasos y la app arranca. Sin entorno virtual ni <code>requirements.txt</code>, ese proceso sería un caos de versiones. 🐾</p>
+</blockquote>
+<h2 id="9-como-encaja-todo-en-polypaw">9. Cómo encaja todo en PolyPaw</h2>
+<p>Pongamos las piezas juntas. <strong>PolyPaw</strong> está hecho <strong>enteramente en Python</strong> con el framework <strong>Flet</strong>, y su código está repartido en varios módulos. Una versión simplificada de su organización:</p>
+<pre><code class="language-python"># main.py  — arranca la app y usa los demás módulos
+import flet as ft
+from database_manager import DatabaseManager
+
+def main(page: ft.Page):
+    db = DatabaseManager()                 # usa el módulo de datos
+    misiones = db.cargar_misiones()        # lee los .json de missions/
+    page.add(ft.Text(f&quot;Tienes {len(misiones)} misiones disponibles&quot;))
+
+ft.app(target=main)                        # Flet pone todo en marcha
+</code></pre>
+<pre><code class="language-python"># database_manager.py  — se encarga SOLO de los datos
+import os
+import json
+
+class DatabaseManager:
+    def cargar_misiones(self):
+        misiones = []
+        carpeta = &quot;missions&quot;
+        for nombre in os.listdir(carpeta):          # módulo os
+            if nombre.endswith(&quot;.json&quot;):
+                ruta = os.path.join(carpeta, nombre)
+                with open(ruta, encoding=&quot;utf-8&quot;) as f:
+                    misiones.append(json.load(f))   # módulo json
+        return misiones
+</code></pre>
+<p>Mira cuántas ideas de este capítulo aparecen juntas:</p>
+<ul>
+<li><code>import flet as ft</code> → importar un <strong>paquete</strong> instalado con <code>pip</code>, con <strong>alias</strong>.</li>
+<li><code>from database_manager import DatabaseManager</code> → importar una clase de <strong>otro módulo</strong> propio.</li>
+<li><code>import os</code> y <code>import json</code> → módulos de la <strong>biblioteca estándar</strong>.</li>
+<li><code>missions/*.json</code> → datos separados del código, leídos con <code>json</code>.</li>
+</ul>
+<p>Cada archivo tiene <strong>una responsabilidad clara</strong>: <code>main.py</code> arma la pantalla, <code>database_manager.py</code> maneja los datos, y las misiones viven como datos en <code>missions/*.json</code>. Esa separación es lo que hace que un proyecto crezca sin volverse un nudo.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
+<p>Compara con <strong>tunal-digital</strong>, que es un sitio en HTML/CSS/JS vanilla: ahí no hay <code>pip</code>, ni <code>venv</code>, ni <code>requirements.txt</code>, porque no es Python. Cada stack tiene sus herramientas. Lo que aprendiste aquí (<code>import</code>, biblioteca estándar, <code>pip</code>, <code>venv</code>, <code>requirements.txt</code>) es el "kit de organización" propio del mundo Python, y es exactamente el que sostiene a <strong>PolyPaw</strong>. 🐾</p>
+</blockquote>
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Entiendo que un <strong>módulo</strong> es un archivo <code>.py</code> y un <strong>paquete</strong> es una carpeta de módulos.</li>
+<li>[ ] Sé la diferencia entre <code>import modulo</code> y <code>from modulo import algo</code>.</li>
+<li>[ ] Sé renombrar lo que importo con <code>as</code> (por ejemplo <code>import flet as ft</code>).</li>
+<li>[ ] Conozco para qué sirven <code>json</code>, <code>os</code>, <code>random</code> y <code>datetime</code> de la biblioteca estándar.</li>
+<li>[ ] Entiendo que <code>pip install</code> descarga paquetes externos (como <code>flet</code>).</li>
+<li>[ ] Sé qué es un <strong>entorno virtual</strong> y por qué aísla las dependencias de cada proyecto.</li>
+<li>[ ] Sé crear y activar un <code>venv</code> (<code>python -m venv venv</code> y <code>source venv/bin/activate</code>).</li>
+<li>[ ] Entiendo qué hace <code>requirements.txt</code> y los comandos <code>pip freeze</code> y <code>pip install -r</code>.</li>
+<li>[ ] Entiendo cómo <strong>PolyPaw</strong> separa <code>main.py</code>, <code>database_manager.py</code> y <code>missions/*.json</code>.</li>
+</ul>
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>Sin computadora.</strong> Explica con tus palabras la diferencia entre <code>import random</code> y <code>from random import choice</code>. ¿En cuál tienes que escribir <code>random.</code> delante y en cuál no?</p>
+</li>
+<li>
+<p><strong>Sin computadora.</strong> Tu amiga te pasa un proyecto Python sin la carpeta <code>venv</code> pero con un <code>requirements.txt</code>. Escribe, en orden, los comandos que usarías para dejarlo funcionando en tu máquina.</p>
+</li>
+<li>
+<p>💻 Crea dos archivos. En <code>saludos.py</code> escribe una función <code>saludar(nombre)</code> que devuelva <code>"Hola, " + nombre</code>. En <code>main.py</code> haz <code>from saludos import saludar</code> y muestra por pantalla <code>saludar("Bit")</code>. Ejecuta <code>python main.py</code> y comprueba que imprime <code>Hola, Bit</code>.</p>
+</li>
+<li>
+<p>💻 Usando el módulo <code>json</code>, crea un archivo <code>mision.json</code> (a mano o desde Python) con una clave <code>"titulo"</code> y una lista <code>"preguntas"</code>. Luego, en un script de Python, ábrelo con <code>json.load</code> y muestra el título y cuántas preguntas tiene. (Es justo lo que hace PolyPaw con <code>missions/*.json</code>.)</p>
+</li>
+<li>
+<p>💻 Crea un entorno virtual con <code>python -m venv venv</code>, actívalo, instala <code>flet</code> con <code>pip install flet</code> y luego ejecuta <code>pip freeze &gt; requirements.txt</code>. Abre el <code>requirements.txt</code> y observa qué quedó escrito dentro.</p>
+</li>
+<li>
+<p>💻 Usando <code>os</code> y <code>random</code>: lista los archivos de una carpeta con <code>os.listdir</code>, filtra solo los que terminan en <code>.json</code>, y elige uno al azar con <code>random.choice</code>. Imprime cuál salió elegido. ¡Acabas de simular cómo PolyPaw podría escoger una misión sorpresa! 🐾</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

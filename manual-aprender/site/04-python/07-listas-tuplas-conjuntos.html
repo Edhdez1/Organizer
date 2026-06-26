@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitulo 07 — Listas, tuplas y conjuntos a fondo — Manuales de Aprendizaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@600;800&family=Press+Start+2P&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div id="progreso"></div>
+<nav class="barra">
+  <a href="../index.html">🏠 Inicio</a>
+  <a href="index.html">📚 Índice del módulo</a>
+  <span class="marca">🦎 BIT · MANUAL</span>
+</nav>
+<main class="contenedor">
+<h1 id="capitulo-07-listas-tuplas-y-conjuntos-a-fondo">Capitulo 07 — Listas, tuplas y conjuntos a fondo</h1>
+<p align="center">
+  <img src="../../recursos/imagenes/04-python/cap07.png" alt="Ilustración del capítulo (pixel art con Bit)" width="640">
+</p>
+
+<blockquote>
+<p>Hasta ahora guardaste datos de uno en uno: una variable, un numero, un texto. Pero un programa real casi nunca trabaja con cosas sueltas. PolyPaw no guarda <em>una</em> mision: guarda <em>muchas</em>. No guarda <em>una</em> palabra para aprender: guarda <em>listas enteras</em> de palabras. En este capitulo aprenderemos las tres formas mas importantes que tiene Python para guardar <em>colecciones</em> de cosas: las <strong>listas</strong>, las <strong>tuplas</strong> y los <strong>conjuntos</strong>. Y de paso conoceremos un truco precioso que en JavaScript ni existia con esta elegancia: las <em>comprensiones de lista</em>. Bit, nuestro ajolote, ya tiene su libreta lista para anotar misiones. Vamos.</p>
+</blockquote>
+<hr />
+<h2 id="1-que-es-una-coleccion-y-por-que-la-necesitas">1. Que es una coleccion (y por que la necesitas)</h2>
+<p>Imagina que quieres guardar las tres primeras misiones de PolyPaw. Sin colecciones harias algo asi:</p>
+<pre><code class="language-python">mision_1 = &quot;Saludos basicos&quot;
+mision_2 = &quot;Numeros del 1 al 10&quot;
+mision_3 = &quot;Colores&quot;
+</code></pre>
+<p>Funciona... hasta que tienes 50 misiones. ¿Vas a escribir <code>mision_50</code>? ¿Y como recorres todas? Es un caos. Para eso existen las colecciones: guardan <em>muchos</em> valores dentro de <em>un solo</em> nombre.</p>
+<blockquote class="def">
+<h3 id="que-significa-coleccion">🟦 ¿Que significa? — <em>Coleccion</em></h3>
+<p>Una <strong>coleccion</strong> es una variable que guarda varios valores juntos, dentro de un mismo recipiente. En vez de tener 50 cajas separadas, tienes una caja grande con 50 cosas adentro.
+<strong>Para que sirve:</strong> agrupar datos relacionados (todas las misiones, todas las palabras de una leccion) y recorrerlos con un solo bucle.
+<strong>Donde se usa en un repo real:</strong> en PolyPaw, el archivo <code>database_manager.py</code> carga las misiones desde <code>missions/*.json</code> y las guarda en una lista para mostrarlas en pantalla.</p>
+</blockquote>
+<p>En Python las tres colecciones que veremos son: <strong>lista</strong>, <strong>tupla</strong> y <strong>conjunto</strong>. Cada una sirve para algo distinto. Empecemos por la mas usada.</p>
+<hr />
+<h2 id="2-listas-la-coleccion-estrella">2. Listas: la coleccion estrella</h2>
+<p>Una lista es una secuencia de valores en <em>orden</em>, que puedes <em>modificar</em> cuando quieras.</p>
+<blockquote class="def">
+<h3 id="que-significa-lista-list">🟦 ¿Que significa? — <em>Lista (<code>list</code>)</em></h3>
+<p>Una <strong>lista</strong> es una coleccion ordenada de elementos que puedes cambiar: agregar, quitar o reordenar. Se escribe entre corchetes <code>[ ]</code> y los elementos se separan con comas.
+<strong>Para que sirve:</strong> guardar cosas que crecen o cambian con el tiempo (las misiones que el usuario va desbloqueando, las palabras de una leccion).
+<strong>Donde se usa en un repo real:</strong> PolyPaw guarda en una lista las misiones disponibles; cada vez que se agrega un <code>.json</code> nuevo en <code>missions/</code>, ese elemento entra a la lista.</p>
+</blockquote>
+<p>Asi se crea una lista:</p>
+<pre><code class="language-python">misiones = [&quot;Saludos basicos&quot;, &quot;Numeros del 1 al 10&quot;, &quot;Colores&quot;]
+print(misiones)        # ['Saludos basicos', 'Numeros del 1 al 10', 'Colores']
+print(len(misiones))   # 3  (len = cuantos elementos tiene)
+</code></pre>
+<p>Si vienes del modulo de JavaScript, esto te sonara: en JS escribias <code>let misiones = [...]</code>. La idea es identica; cambia que aqui no hay <code>let</code> ni <code>const</code>, y los corchetes funcionan igual.</p>
+<h3 id="21-acceder-a-un-elemento-por-su-indice">2.1 Acceder a un elemento por su indice</h3>
+<p>Cada elemento tiene una posicion numerada llamada <strong>indice</strong>.</p>
+<blockquote class="def">
+<h3 id="que-significa-indice">🟦 ¿Que significa? — <em>Indice</em></h3>
+<p>El <strong>indice</strong> es el numero de posicion de un elemento dentro de la lista. <strong>Python empieza a contar desde 0</strong>, no desde 1. Asi que el primer elemento es el indice <code>0</code>, el segundo el <code>1</code>, y asi.
+<strong>Para que sirve:</strong> sacar un elemento concreto de la lista sin recorrerla entera.
+<strong>Donde se usa en un repo real:</strong> cuando PolyPaw muestra "la mision actual", usa un indice para saber en cual va el usuario.</p>
+</blockquote>
+<pre><code class="language-python">misiones = [&quot;Saludos basicos&quot;, &quot;Numeros del 1 al 10&quot;, &quot;Colores&quot;]
+print(misiones[0])    # Saludos basicos   (el primero)
+print(misiones[2])    # Colores           (el tercero)
+print(misiones[-1])   # Colores           (-1 = el ultimo, contando hacia atras)
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip">💡 Tip</h3>
+<p>El indice <code>-1</code> siempre es el ultimo elemento, <code>-2</code> el penultimo, y asi. Es comodisimo cuando no sabes cuantos elementos hay pero quieres el final.</p>
+<h3 id="cuidado">⚠️ Cuidado</h3>
+<p>Si pides un indice que no existe (por ejemplo <code>misiones[10]</code> cuando solo hay 3), Python lanza un error <code>IndexError: list index out of range</code>. Siempre revisa con <code>len()</code> antes de pedir indices altos.</p>
+</blockquote>
+<h3 id="22-agregar-elementos-append-e-insert">2.2 Agregar elementos: <code>append</code> e <code>insert</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-append">🟦 ¿Que significa? — <em><code>append</code></em></h3>
+<p><code>append</code> es un metodo que agrega un elemento <em>al final</em> de la lista. Se escribe <code>lista.append(valor)</code>.
+<strong>Para que sirve:</strong> ir sumando cosas una por una (por ejemplo, cada palabra que el usuario va acertando).
+<strong>Donde se usa en un repo real:</strong> al cargar <code>missions/*.json</code>, PolyPaw recorre los archivos y hace <code>append</code> de cada mision a la lista de misiones.</p>
+</blockquote>
+<pre><code class="language-python">misiones = [&quot;Saludos basicos&quot;, &quot;Numeros del 1 al 10&quot;]
+misiones.append(&quot;Colores&quot;)
+print(misiones)   # ['Saludos basicos', 'Numeros del 1 al 10', 'Colores']
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-insert">🟦 ¿Que significa? — <em><code>insert</code></em></h3>
+<p><code>insert</code> agrega un elemento en una <em>posicion concreta</em>, empujando los demas hacia la derecha. Se escribe <code>lista.insert(indice, valor)</code>.
+<strong>Para que sirve:</strong> meter algo en medio, no solo al final.
+<strong>Donde se usa en un repo real:</strong> si PolyPaw quisiera poner una mision de bienvenida siempre al principio, usaria <code>insert(0, ...)</code>.</p>
+</blockquote>
+<pre><code class="language-python">misiones = [&quot;Numeros&quot;, &quot;Colores&quot;]
+misiones.insert(0, &quot;Saludos&quot;)   # lo mete en la posicion 0 (al inicio)
+print(misiones)   # ['Saludos', 'Numeros', 'Colores']
+</code></pre>
+<p>En JavaScript usabas <code>push()</code> para agregar al final; en Python se llama <code>append()</code>. Es lo mismo, solo cambia el nombre.</p>
+<h3 id="23-quitar-elementos-pop-y-remove">2.3 Quitar elementos: <code>pop</code> y <code>remove</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-pop">🟦 ¿Que significa? — <em><code>pop</code></em></h3>
+<p><code>pop</code> <em>saca y devuelve</em> un elemento por su indice. Sin indice, saca el ultimo. Se escribe <code>lista.pop()</code> o <code>lista.pop(indice)</code>.
+<strong>Para que sirve:</strong> quitar un elemento y, al mismo tiempo, quedarte con el para usarlo.
+<strong>Donde se usa en un repo real:</strong> una "cola" de palabras por repasar: sacas la siguiente con <code>pop(0)</code> y la muestras.</p>
+</blockquote>
+<pre><code class="language-python">palabras = [&quot;hola&quot;, &quot;adios&quot;, &quot;gracias&quot;]
+ultima = palabras.pop()      # saca &quot;gracias&quot; y lo guarda
+print(ultima)                # gracias
+print(palabras)              # ['hola', 'adios']
+</code></pre>
+<blockquote class="def">
+<h3 id="que-significa-remove">🟦 ¿Que significa? — <em><code>remove</code></em></h3>
+<p><code>remove</code> borra el <em>primer</em> elemento que tenga el valor que le indicas (no por indice, sino por contenido). Se escribe <code>lista.remove(valor)</code>.
+<strong>Para que sirve:</strong> quitar algo cuando sabes <em>que</em> es pero no <em>donde</em> esta.
+<strong>Donde se usa en un repo real:</strong> si el usuario ya domina la palabra "hola", PolyPaw podria sacarla de la lista de repaso con <code>remove("hola")</code>.</p>
+</blockquote>
+<pre><code class="language-python">palabras = [&quot;hola&quot;, &quot;adios&quot;, &quot;gracias&quot;]
+palabras.remove(&quot;adios&quot;)
+print(palabras)   # ['hola', 'gracias']
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_1">⚠️ Cuidado</h3>
+<p><code>remove</code> falla con error si el valor no esta en la lista. Si no estas seguro de que exista, comprueba antes con <code>if "adios" in palabras:</code>.</p>
+</blockquote>
+<h3 id="24-ordenar-sort">2.4 Ordenar: <code>sort</code></h3>
+<blockquote class="def">
+<h3 id="que-significa-sort">🟦 ¿Que significa? — <em><code>sort</code></em></h3>
+<p><code>sort</code> reordena los elementos de la lista <em>en su lugar</em> (modifica la lista original). Por defecto ordena de menor a mayor, o alfabeticamente para textos.
+<strong>Para que sirve:</strong> mostrar las cosas ordenadas (palabras de la A a la Z, puntajes de mayor a menor).
+<strong>Donde se usa en un repo real:</strong> PolyPaw podria ordenar alfabeticamente el vocabulario de una leccion antes de mostrarlo.</p>
+</blockquote>
+<pre><code class="language-python">palabras = [&quot;gato&quot;, &quot;ardilla&quot;, &quot;zorro&quot;, &quot;buho&quot;]
+palabras.sort()
+print(palabras)   # ['ardilla', 'buho', 'gato', 'zorro']
+
+numeros = [5, 1, 9, 3]
+numeros.sort(reverse=True)   # reverse=True ordena de mayor a menor
+print(numeros)   # [9, 5, 3, 1]
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_1">💡 Tip</h3>
+<p>Si quieres una copia ordenada <em>sin</em> tocar la original, usa la funcion <code>sorted(lista)</code> en vez del metodo <code>lista.sort()</code>. La primera devuelve una lista nueva; la segunda modifica la que tienes.</p>
+</blockquote>
+<h3 id="25-slicing-rebanar-una-lista">2.5 Slicing: rebanar una lista</h3>
+<blockquote class="def">
+<h3 id="que-significa-slicing-rebanado">🟦 ¿Que significa? — <em>Slicing (rebanado)</em></h3>
+<p>El <strong>slicing</strong> es sacar un <em>trozo</em> de la lista usando <code>lista[inicio:fin]</code>. Toma desde el indice <code>inicio</code> hasta <em>justo antes</em> del indice <code>fin</code>. El <code>fin</code> no se incluye.
+<strong>Para que sirve:</strong> quedarte con una parte (las primeras 3 misiones, las palabras de la 5 a la 10).
+<strong>Donde se usa en un repo real:</strong> PolyPaw podria mostrar solo las primeras 5 misiones en la pantalla de inicio con <code>misiones[0:5]</code>.</p>
+</blockquote>
+<pre><code class="language-python">misiones = [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;]
+print(misiones[0:3])   # ['A', 'B', 'C']   (del 0 al 2; el 3 NO entra)
+print(misiones[2:])    # ['C', 'D', 'E']   (del 2 hasta el final)
+print(misiones[:2])    # ['A', 'B']        (desde el inicio hasta el 1)
+print(misiones[-2:])   # ['D', 'E']        (los ultimos dos)
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_2">💡 Tip</h3>
+<p>Piensa el slicing como una regla con marcas <em>entre</em> los elementos. <code>[1:3]</code> corta despues de la marca 1 y antes de la marca 3. Por eso el numero de la derecha nunca entra: marca donde <em>parar</em>.</p>
+</blockquote>
+<p>Bit dice que el slicing es como cortar una barra de chocolate: eliges donde empieza el pedazo y donde termina, y te quedas con ese trozo sin destruir la barra.</p>
+<hr />
+<h2 id="3-tuplas-listas-que-no-se-pueden-cambiar">3. Tuplas: listas que NO se pueden cambiar</h2>
+<p>A veces tienes datos que <em>no deberian</em> cambiar nunca. Para eso existe la tupla.</p>
+<blockquote class="def">
+<h3 id="que-significa-tupla-tuple">🟦 ¿Que significa? — <em>Tupla (<code>tuple</code>)</em></h3>
+<p>Una <strong>tupla</strong> es como una lista, pero <strong>inmutable</strong>: una vez creada, no puedes agregar, quitar ni cambiar sus elementos. Se escribe con parentesis <code>( )</code> en vez de corchetes.
+<strong>Para que sirve:</strong> guardar datos fijos que no deben modificarse por accidente (un par de coordenadas, una configuracion que no cambia).
+<strong>Donde se usa en un repo real:</strong> los colores de la marca PolyPaw (por ejemplo, los componentes RGB de un color) podrian guardarse en una tupla porque nunca cambian.</p>
+<h3 id="que-significa-inmutable">🟦 ¿Que significa? — <em>Inmutable</em></h3>
+<p>Algo <strong>inmutable</strong> es algo que no se puede modificar despues de crearlo. Lo contrario es <strong>mutable</strong> (modificable), como las listas.
+<strong>Para que sirve:</strong> proteger datos de cambios accidentales; Python te avisa con un error si intentas tocarlos.
+<strong>Donde se usa en un repo real:</strong> valores constantes de configuracion en cualquier proyecto serio.</p>
+</blockquote>
+<pre><code class="language-python">color_polypaw = (124, 58, 237)   # un color RGB, no deberia cambiar
+print(color_polypaw[0])          # 124  (se accede igual que una lista)
+
+# Pero si intentas cambiarlo...
+color_polypaw[0] = 200           # ❌ TypeError: 'tuple' object does not support item assignment
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_2">⚠️ Cuidado</h3>
+<p>Una tupla de un solo elemento <em>necesita</em> una coma: <code>(5,)</code> es una tupla, pero <code>(5)</code> es solo el numero 5 entre parentesis. La coma es lo que la convierte en tupla.</p>
+<h3 id="tip_3">💡 Tip</h3>
+<p>¿Cuando usar tupla y cuando lista? Regla simple: si los datos van a cambiar (crecer, ordenarse, borrarse), usa <strong>lista</strong>. Si son fijos para siempre, usa <strong>tupla</strong>. La tupla tambien es un poco mas rapida y le dice a quien lea tu codigo "esto no se toca".</p>
+</blockquote>
+<p>En JavaScript no habia tuplas de verdad; lo mas parecido era un array marcado como <code>const</code>, pero ese array igual se podia modificar por dentro. La tupla de Python si te bloquea de verdad.</p>
+<hr />
+<h2 id="4-conjuntos-sin-duplicados-por-diseno">4. Conjuntos: sin duplicados, por diseno</h2>
+<p>A veces lo unico que te importa es <em>que cosas tienes</em>, sin repetir y sin que importe el orden. Ahi brilla el conjunto.</p>
+<blockquote class="def">
+<h3 id="que-significa-conjunto-set">🟦 ¿Que significa? — <em>Conjunto (<code>set</code>)</em></h3>
+<p>Un <strong>conjunto</strong> es una coleccion que <strong>no permite elementos repetidos</strong> y <strong>no tiene orden</strong>. Se escribe con llaves <code>{ }</code>.
+<strong>Para que sirve:</strong> llevar registro de cosas unicas (que palabras ya aprendio el usuario, que misiones completo) sin preocuparte por duplicados.
+<strong>Donde se usa en un repo real:</strong> PolyPaw podria usar un set para las palabras que el usuario ya domina: aunque acierte la misma palabra dos veces, en el set solo aparece una vez.</p>
+</blockquote>
+<pre><code class="language-python">palabras_aprendidas = {&quot;hola&quot;, &quot;gracias&quot;, &quot;adios&quot;}
+palabras_aprendidas.add(&quot;hola&quot;)    # ya estaba: el set lo ignora
+palabras_aprendidas.add(&quot;buenos dias&quot;)
+print(palabras_aprendidas)
+# {'hola', 'gracias', 'adios', 'buenos dias'}  (sin &quot;hola&quot; repetido)
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_3">⚠️ Cuidado</h3>
+<p>Un conjunto <strong>no tiene orden garantizado</strong>, asi que <code>conjunto[0]</code> da error: no puedes pedir "el primero" porque no hay primero. Si necesitas orden o posiciones, usa una lista.</p>
+<h3 id="tip_4">💡 Tip</h3>
+<p>Truco clasico: para quitar duplicados de una lista, conviertela a set y de vuelta a lista. <code>list(set(mi_lista))</code> te deja solo valores unicos (aunque puede cambiar el orden).</p>
+</blockquote>
+<h3 id="41-union-e-interseccion">4.1 Union e interseccion</h3>
+<p>Los conjuntos brillan cuando comparas dos grupos.</p>
+<blockquote class="def">
+<h3 id="que-significa-union">🟦 ¿Que significa? — <em>Union</em></h3>
+<p>La <strong>union</strong> de dos conjuntos es un conjunto nuevo con <em>todos</em> los elementos de ambos, sin repetir. Se hace con <code>|</code> o con <code>.union()</code>.
+<strong>Para que sirve:</strong> juntar dos grupos en uno (todas las palabras de la leccion 1 mas las de la leccion 2).
+<strong>Donde se usa en un repo real:</strong> PolyPaw podria unir el vocabulario de varias misiones para armar un repaso general.</p>
+<h3 id="que-significa-interseccion">🟦 ¿Que significa? — <em>Interseccion</em></h3>
+<p>La <strong>interseccion</strong> es un conjunto con solo los elementos que estan en <em>ambos</em> conjuntos a la vez. Se hace con <code>&amp;</code> o con <code>.intersection()</code>.
+<strong>Para que sirve:</strong> encontrar lo que dos grupos tienen en comun.
+<strong>Donde se usa en un repo real:</strong> PolyPaw podria ver que palabras aparecen tanto en la mision de "Saludos" como en la de "Frases comunes".</p>
+</blockquote>
+<pre><code class="language-python">mision_a = {&quot;hola&quot;, &quot;gracias&quot;, &quot;adios&quot;}
+mision_b = {&quot;gracias&quot;, &quot;buenos dias&quot;, &quot;hola&quot;}
+
+print(mision_a | mision_b)
+# {'hola', 'gracias', 'adios', 'buenos dias'}   (union: todo, sin repetir)
+
+print(mision_a &amp; mision_b)
+# {'hola', 'gracias'}                            (interseccion: lo comun)
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo">🔎 En tu codigo</h3>
+<p>Si en PolyPaw quisieras saber cuantas palabras <em>distintas</em> hay en todo el curso, podrias hacer la union de los sets de cada mision y medir su tamano con <code>len()</code>. El set se encarga solo de no contar duplicados.</p>
+</blockquote>
+<hr />
+<h2 id="5-comprensiones-de-lista-list-comprehensions-con-calma">5. Comprensiones de lista (list comprehensions), con calma</h2>
+<p>Esta es una de las cosas mas bonitas y mas usadas de Python. Vamos despacio porque al principio asusta un poco.</p>
+<blockquote class="def">
+<h3 id="que-significa-comprension-de-lista-list-comprehension">🟦 ¿Que significa? — <em>Comprension de lista (list comprehension)</em></h3>
+<p>Una <strong>comprension de lista</strong> es una forma corta de crear una lista nueva a partir de otra, en una sola linea. La forma es: <code>[expresion for elemento in coleccion]</code>.
+<strong>Para que sirve:</strong> transformar o filtrar una lista sin escribir un bucle largo de varias lineas.
+<strong>Donde se usa en un repo real:</strong> en PolyPaw, sacar solo los <em>titulos</em> de una lista de misiones, o solo las misiones de cierto nivel.</p>
+</blockquote>
+<p>Primero, la forma "larga" que ya conoces con un bucle normal:</p>
+<pre><code class="language-python">titulos = [&quot;hola&quot;, &quot;gracias&quot;, &quot;adios&quot;]
+mayusculas = []
+for palabra in titulos:
+    mayusculas.append(palabra.upper())
+print(mayusculas)   # ['HOLA', 'GRACIAS', 'ADIOS']
+</code></pre>
+<p>Cuatro lineas. Ahora lo mismo con una comprension de lista:</p>
+<pre><code class="language-python">titulos = [&quot;hola&quot;, &quot;gracias&quot;, &quot;adios&quot;]
+mayusculas = [palabra.upper() for palabra in titulos]
+print(mayusculas)   # ['HOLA', 'GRACIAS', 'ADIOS']
+</code></pre>
+<p>Una sola linea, y se lee casi como ingles: "pon <code>palabra.upper()</code> por cada <code>palabra</code> en <code>titulos</code>". Leela de derecha a izquierda al principio: primero el <code>for ... in ...</code> (de donde saco cada cosa), luego la expresion de la izquierda (que hago con cada cosa).</p>
+<h3 id="51-con-filtro-if">5.1 Con filtro (<code>if</code>)</h3>
+<p>Tambien puedes quedarte solo con algunos elementos agregando un <code>if</code> al final:</p>
+<pre><code class="language-python">numeros = [1, 2, 3, 4, 5, 6]
+pares = [n for n in numeros if n % 2 == 0]
+print(pares)   # [2, 4, 6]
+</code></pre>
+<p>Esto dice: "pon <code>n</code> por cada <code>n</code> en <code>numeros</code>, <em>pero solo si</em> <code>n</code> es par". El <code>if</code> filtra.</p>
+<blockquote class="code">
+<h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
+<p>En PolyPaw, si cada mision fuera un diccionario con un campo <code>nivel</code>, podrias sacar solo las faciles asi:
+<code>python
+faciles = [m["titulo"] for m in misiones if m["nivel"] == "principiante"]</code>
+En una linea filtras <em>y</em> extraes el titulo. Sin comprension necesitarias un bucle con <code>if</code> y <code>append</code> adentro.</p>
+<h3 id="tip_5">💡 Tip</h3>
+<p>No te obsesiones con meter todo en una comprension. Si la linea se vuelve tan larga que no la entiendes de un vistazo, usa el bucle normal de varias lineas. El codigo claro siempre gana al codigo corto.</p>
+</blockquote>
+<p>En JavaScript hacias esto con <code>.map()</code> y <code>.filter()</code>. La comprension de lista de Python combina ambas ideas en una sola expresion mas compacta.</p>
+<hr />
+<h2 id="6-enumerate-el-indice-y-el-valor-a-la-vez">6. <code>enumerate</code>: el indice y el valor a la vez</h2>
+<p>Cuando recorres una lista, a veces necesitas <em>tambien</em> saber en que posicion vas.</p>
+<blockquote class="def">
+<h3 id="que-significa-enumerate">🟦 ¿Que significa? — <em><code>enumerate</code></em></h3>
+<p><code>enumerate</code> es una funcion que, al recorrer una coleccion, te da <em>dos cosas</em> en cada vuelta: el indice (la posicion) y el valor. Se usa asi: <code>for indice, valor in enumerate(lista):</code>.
+<strong>Para que sirve:</strong> numerar elementos al mostrarlos, o saber en que posicion estas sin llevar la cuenta a mano.
+<strong>Donde se usa en un repo real:</strong> PolyPaw puede mostrar "Mision 1, Mision 2, Mision 3..." numerando la lista de misiones automaticamente.</p>
+</blockquote>
+<pre><code class="language-python">misiones = [&quot;Saludos&quot;, &quot;Numeros&quot;, &quot;Colores&quot;]
+for indice, mision in enumerate(misiones):
+    print(indice, &quot;-&gt;&quot;, mision)
+# 0 -&gt; Saludos
+# 1 -&gt; Numeros
+# 2 -&gt; Colores
+</code></pre>
+<p>¿Quieres que empiece a contar desde 1 en vez de 0? Pasale un segundo argumento:</p>
+<pre><code class="language-python">for numero, mision in enumerate(misiones, start=1):
+    print(f&quot;Mision {numero}: {mision}&quot;)
+# Mision 1: Saludos
+# Mision 2: Numeros
+# Mision 3: Colores
+</code></pre>
+<blockquote class="tip">
+<h3 id="tip_6">💡 Tip</h3>
+<p>En JavaScript hacias <code>misiones.forEach((mision, indice) =&gt; ...)</code>. <code>enumerate</code> es el equivalente de Python, pero ojo: en JS el valor venia primero y el indice despues; en Python con <code>enumerate</code> el indice viene <em>primero</em>.</p>
+</blockquote>
+<hr />
+<h2 id="7-zip-recorrer-dos-listas-en-paralelo">7. <code>zip</code>: recorrer dos listas en paralelo</h2>
+<p>¿Y si tienes dos listas relacionadas, una con palabras y otra con sus traducciones, y quieres emparejarlas?</p>
+<blockquote class="def">
+<h3 id="que-significa-zip">🟦 ¿Que significa? — <em><code>zip</code></em></h3>
+<p><code>zip</code> une dos (o mas) listas elemento por elemento, como el cierre de una chaqueta que junta los dos lados diente con diente. En cada vuelta te entrega un elemento de cada lista, emparejados.
+<strong>Para que sirve:</strong> recorrer a la vez listas que van juntas (una palabra y su traduccion, una pregunta y su respuesta).
+<strong>Donde se usa en un repo real:</strong> PolyPaw empareja la palabra en el idioma original con su traduccion para mostrarlas juntas en una tarjeta.</p>
+</blockquote>
+<pre><code class="language-python">palabras = [&quot;hola&quot;, &quot;gracias&quot;, &quot;adios&quot;]
+traducciones = [&quot;hello&quot;, &quot;thanks&quot;, &quot;bye&quot;]
+
+for palabra, traduccion in zip(palabras, traducciones):
+    print(f&quot;{palabra} = {traduccion}&quot;)
+# hola = hello
+# gracias = thanks
+# adios = bye
+</code></pre>
+<blockquote class="warn">
+<h3 id="cuidado_4">⚠️ Cuidado</h3>
+<p>Si las listas tienen distinto tamano, <code>zip</code> se detiene en la mas corta y deja fuera lo que sobra de la mas larga. Asegurate de que ambas listas correspondan bien, o perderas datos sin darte cuenta.</p>
+<h3 id="tip_7">💡 Tip</h3>
+<p><code>zip</code> y <code>enumerate</code> se combinan de maravilla con las comprensiones de lista. Por ejemplo, armar una lista de frases:
+<code>python
+tarjetas = [f"{p} = {t}" for p, t in zip(palabras, traducciones)]</code></p>
+</blockquote>
+<hr />
+<h2 id="8-juntandolo-todo-una-mini-leccion-de-polypaw">8. Juntandolo todo: una mini-leccion de PolyPaw</h2>
+<p>Veamos un ejemplo que mezcla casi todo lo del capitulo, parecido a lo que hace <code>database_manager.py</code> al preparar el vocabulario de una mision cargada desde <code>missions/*.json</code>:</p>
+<pre><code class="language-python"># Vocabulario de una mision (en PolyPaw vendria de un archivo JSON)
+palabras = [&quot;hola&quot;, &quot;gracias&quot;, &quot;adios&quot;, &quot;hola&quot;]   # ojo: &quot;hola&quot; repetida
+traducciones = [&quot;hello&quot;, &quot;thanks&quot;, &quot;bye&quot;, &quot;hello&quot;]
+
+# 1. Quitar palabras duplicadas con un conjunto
+palabras_unicas = set(palabras)
+print(&quot;Palabras distintas:&quot;, len(palabras_unicas))   # 3
+
+# 2. Armar tarjetas emparejando palabra y traduccion con zip
+tarjetas = [f&quot;{p} = {t}&quot; for p, t in zip(palabras, traducciones)]
+
+# 3. Mostrarlas numeradas con enumerate
+for numero, tarjeta in enumerate(tarjetas, start=1):
+    print(f&quot;Tarjeta {numero}: {tarjeta}&quot;)
+
+# 4. Quedarnos solo con las 2 primeras (slicing) para un repaso corto
+repaso = tarjetas[:2]
+print(&quot;Repaso rapido:&quot;, repaso)
+</code></pre>
+<blockquote class="code">
+<h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
+<p>En PolyPaw de verdad, cada mision en <code>missions/*.json</code> trae sus palabras y <code>database_manager.py</code> las carga en listas de Python. Desde ahi, todo lo que viste aqui (filtrar, ordenar, emparejar, numerar, quitar duplicados) es exactamente lo que el codigo usa para preparar lo que ves en pantalla con Flet.</p>
+</blockquote>
+<p>Bit asiente con sus branquias: con listas, tuplas y conjuntos ya tienes los recipientes; con comprensiones, <code>enumerate</code> y <code>zip</code> ya tienes las herramientas para llenarlos y recorrerlos como un profesional.</p>
+<hr />
+<h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
+<ul>
+<li>[ ] Se crear una lista y acceder a un elemento por su indice (recordando que empieza en 0).</li>
+<li>[ ] Puedo agregar con <code>append</code> e <code>insert</code>, y quitar con <code>pop</code> y <code>remove</code>.</li>
+<li>[ ] Se ordenar una lista con <code>sort</code> (y entiendo la diferencia con <code>sorted</code>).</li>
+<li>[ ] Entiendo el slicing <code>lista[inicio:fin]</code> y que el <code>fin</code> no se incluye.</li>
+<li>[ ] Se que una tupla es inmutable y cuando me conviene usarla en vez de una lista.</li>
+<li>[ ] Entiendo que un conjunto no tiene duplicados ni orden, y se hacer union (<code>|</code>) e interseccion (<code>&amp;</code>).</li>
+<li>[ ] Puedo leer y escribir una comprension de lista simple, con y sin <code>if</code>.</li>
+<li>[ ] Se usar <code>enumerate</code> para obtener indice y valor a la vez.</li>
+<li>[ ] Se usar <code>zip</code> para recorrer dos listas en paralelo.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">🧪 Ejercicios</h2>
+<ol>
+<li>
+<p><strong>En papel.</strong> Dada la lista <code>colores = ["rojo", "verde", "azul", "amarillo"]</code>, escribe que imprime cada una de estas lineas <em>sin</em> ejecutarlas: <code>colores[0]</code>, <code>colores[-1]</code>, <code>colores[1:3]</code>, <code>colores[:2]</code>. Luego comprueba.</p>
+</li>
+<li>
+<p>💻 <strong>Misiones de PolyPaw.</strong> Crea una lista con 4 nombres de misiones. Agrega una al final con <code>append</code>, inserta una al inicio con <code>insert(0, ...)</code>, elimina una por su nombre con <code>remove</code> y muestra la lista final ordenada alfabeticamente con <code>sort</code>.</p>
+</li>
+<li>
+<p>💻 <strong>Sin duplicados.</strong> Tienes la lista <code>["hola", "adios", "hola", "gracias", "adios"]</code>. Conviertela en un conjunto para quitar duplicados, imprime cuantas palabras distintas hay con <code>len</code>, y vuelve a convertirla en lista.</p>
+</li>
+<li>
+<p>💻 <strong>Tarjetas con zip.</strong> Crea dos listas: una con 3 palabras y otra con sus 3 traducciones. Usa <code>zip</code> dentro de una comprension de lista para crear una lista de cadenas con el formato <code>"palabra -&gt; traduccion"</code>. Imprimela.</p>
+</li>
+<li>
+<p>💻 <strong>Numerando con enumerate.</strong> Recorre tu lista de misiones del ejercicio 2 con <code>enumerate(..., start=1)</code> e imprime cada una como <code>"Mision 1: ..."</code>, <code>"Mision 2: ..."</code>, etc.</p>
+</li>
+<li>
+<p>💻 <strong>Reto: filtrar con comprension.</strong> Dada la lista de numeros <code>[3, 8, 1, 9, 4, 7, 2]</code>, usa una comprension de lista con <code>if</code> para crear una lista nueva solo con los numeros mayores que 5. Pista: <code>[n for n in numeros if n &gt; 5]</code>.</p>
+</li>
+</ol><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+</main>
+<button id="arriba" title="Subir" aria-label="Subir">▲</button>
+<script>
+(function () {
+  // Barra de progreso de lectura
+  var prog = document.getElementById('progreso');
+  var arriba = document.getElementById('arriba');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = pct + '%';
+    if (arriba) arriba.classList.toggle('visible', h.scrollTop > 400);
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (arriba) arriba.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // Botón "copiar" en cada bloque de código
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-copiar';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var texto = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(texto).then(function () {
+        btn.textContent = '¡Copiado!';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
