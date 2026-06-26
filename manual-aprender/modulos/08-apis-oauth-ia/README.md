@@ -42,7 +42,17 @@ Drive, OpenAI, Claude. Es el módulo que convierte una app en algo realmente pod
 | 03 | [OAuth: login con terceros](03-oauth.md) | El flujo, tokens, Google/GitHub en Faro |
 | 04 | [Integrar IA](04-integrar-ia.md) | Llamar a Claude/OpenAI, prompts, el chat de tu sitio |
 | 05 | [Construir y proteger una API](05-construir-y-proteger.md) | Rutas Next.js, Workers, secretos, límites |
+| 06 | [HTTP a fondo](06-http-a-fondo.md) | Métodos, códigos de estado, cabeceras, body |
+| 07 | [APIs REST y JSON a fondo](07-rest-y-json-a-fondo.md) | Recursos, endpoints, query params, paginación |
+| 08 | [fetch a fondo y errores](08-fetch-y-errores.md) | `response.ok`, errores de red, reintentos, timeouts |
+| 09 | [Autenticación: claves y tokens](09-autenticacion-y-claves.md) | API keys, Bearer, secretos en el servidor |
+| 10 | [OAuth a fondo](10-oauth-a-fondo.md) | Flujo de código, scopes, callback, refresco |
+| 11 | [Integrar IA a fondo](11-integrar-ia-a-fondo.md) | LLM, roles de mensajes, tokens, parámetros |
+| 12 | [Prompting y respuestas estructuradas](12-prompting-y-datos.md) | Buenos prompts, salida JSON, alucinaciones |
+| 13 | [Construir tu propia API](13-construir-tu-api.md) | Route handlers, Workers, validar, CORS, proxy |
+| 14 | [Mini-proyecto: tu proxy de IA](14-mini-proyecto-proxy-ia.md) | Un backend que esconde tu clave secreta |
+| 15 | [Glosario de APIs, OAuth e IA](15-glosario-apis.md) | Todos los términos + mapa mental |
 
-> Se publican por tandas. Empieza por el 01.
+> ✅ **Módulo 08 — versión ampliada (capítulos 01–15, ~100 páginas).**
 
 ➡️ Empieza por **[Capítulo 01 — ¿Qué es una API?](01-que-es-una-api.md)**.
