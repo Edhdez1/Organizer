@@ -19,53 +19,57 @@
 <main class="contenedor">
 <h1 id="capitulo-04-supabase-postgres-en-la-nube">Capítulo 04 — Supabase: Postgres en la nube</h1>
 <blockquote>
-<p>Ya sabes SQL y qué es Postgres. Pero ¿quién aloja esa base de datos para que tu app la use
-desde internet, con login de usuarios y todo listo? En tus proyectos, <strong>Supabase</strong>. Aquí
-entiendes qué es y cómo tus apps hablan con él.</p>
+<p>Ya sabes SQL y qué es Postgres. Pero queda una pregunta práctica: ¿quién aloja esa base de datos
+para que tu app la use desde internet, con login de usuarios y todo listo para funcionar? En tus
+proyectos, la respuesta es <strong>Supabase</strong>. En este capítulo verás qué es y cómo tus apps se
+comunican con él.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-que-resuelve-supabase">1. El problema que resuelve Supabase</h2>
-<p>Tener una base de datos Postgres "de verdad" implica: instalar un servidor, mantenerlo seguro,
-hacer copias de seguridad, programar el sistema de login… mucho trabajo de infraestructura.
-Supabase te da todo eso <strong>hecho</strong>, en la nube, gratis para empezar.</p>
+<p>Montar una base de datos Postgres "de verdad" no es solo crear tablas. Tienes que instalar un
+servidor, mantenerlo seguro, hacer copias de seguridad por si algo se rompe, programar el sistema
+de login… Es un montón de trabajo de infraestructura que poco tiene que ver con tu app. Supabase te
+da todo eso ya <strong>hecho</strong>, en la nube, y gratis para empezar.</p>
 <blockquote class="def">
 <h3 id="que-significa-supabase">🟦 ¿Qué significa? — <em>Supabase</em></h3>
-<p><strong>Supabase</strong> es una <strong>plataforma</strong> que te da, listos para usar: una base de datos <strong>Postgres</strong>
-en la nube, un sistema de <strong>autenticación</strong> (login), almacenamiento de archivos, y una <strong>API
-automática</strong> para que tu app lea y escriba datos sin montar un servidor propio. Se describe como
-una alternativa de código abierto a Firebase.</p>
+<p><strong>Supabase</strong> es una <strong>plataforma</strong> que te entrega, listos para usar, varios servicios que tendrías
+que montar por tu cuenta: una base de datos <strong>Postgres</strong> en la nube, un sistema de
+<strong>autenticación</strong> (login), almacenamiento de archivos y una <strong>API automática</strong> para que tu app lea
+y escriba datos sin que tú levantes ningún servidor. Suele presentarse como la alternativa de
+código abierto a Firebase.</p>
 <h3 id="que-significa-backend-as-a-service-baas">🟦 ¿Qué significa? — <em>Backend-as-a-Service (BaaS)</em></h3>
-<p>Supabase es un <strong>BaaS</strong>: "backend como servicio". Recuerda del Módulo 00 que el <strong>backend</strong> es
-la parte de servidor (datos, login, lógica). Un BaaS te <strong>alquila</strong> ese backend ya montado, así
-tú te concentras en el <strong>frontend</strong> (tu app) sin programar ni mantener servidores. Por eso una
-persona sola (como tú) puede tener apps con base de datos real y login: Supabase hace el trabajo
-pesado.</p>
+<p>Supabase es un <strong>BaaS</strong>, o "backend como servicio". Recuerda del Módulo 00 que el <strong>backend</strong> es la
+parte de servidor: los datos, el login, la lógica que el usuario no ve. Un BaaS te <strong>alquila</strong> ese
+backend ya montado, de modo que tú puedes dedicarte solo al <strong>frontend</strong> (tu app) sin programar ni
+mantener servidores. Gracias a esto, una persona sola —tú, sin un equipo detrás— puede tener apps
+con base de datos real y login funcionando. Supabase carga con todo el trabajo pesado.</p>
 </blockquote>
 <hr />
 <h2 id="2-las-piezas-de-supabase-que-usan-tus-apps">2. Las piezas de Supabase que usan tus apps</h2>
 <blockquote class="def">
 <h3 id="que-significa-las-partes-principales">🟦 ¿Qué significa? — <em>Las partes principales</em></h3>
 <ul>
-<li><strong>Database</strong>: la base de datos Postgres, con tus tablas (<code>habitos</code>, <code>usuarios</code>…). Tiene un
-  <strong>Table Editor</strong> (como una hoja de cálculo) y un <strong>SQL Editor</strong> (para escribir SQL directo).</li>
-<li><strong>Auth</strong>: el sistema de <strong>autenticación</strong> (registro/login con correo, Google, GitHub…). Crea y
+<li><strong>Database</strong>: la base de datos Postgres con tus tablas (<code>habitos</code>, <code>usuarios</code>…). Trae un
+  <strong>Table Editor</strong> que se ve y se usa como una hoja de cálculo, y un <strong>SQL Editor</strong> para escribir
+  SQL directo cuando lo necesites.</li>
+<li><strong>Auth</strong>: el sistema de <strong>autenticación</strong> (registro y login con correo, Google, GitHub…). Crea y
   gestiona los usuarios por ti.</li>
-<li><strong>API autogenerada</strong>: por cada tabla, Supabase crea automáticamente una forma de leerla y
+<li><strong>API autogenerada</strong>: por cada tabla, Supabase genera automáticamente una forma de leerla y
   escribirla desde tu app, sin que programes el servidor.</li>
-<li><strong>Storage</strong>: para guardar archivos (imágenes, etc.).</li>
+<li><strong>Storage</strong>: el lugar donde guardas archivos, como imágenes.</li>
 </ul>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>El <code>README.md</code> de RachaSimple muestra sus dos datos de conexión a Supabase: una <strong>URL</strong> del
-proyecto y una <strong>clave pública</strong> (<code>anon key</code>). Con esos dos valores, la app sabe a qué Supabase
-hablar. Faro usa lo mismo, más OAuth de Google/GitHub (Módulo 08).</p>
+<p>El <code>README.md</code> de RachaSimple muestra los dos datos de conexión a Supabase: la <strong>URL</strong> del
+proyecto y una <strong>clave pública</strong> (<code>anon key</code>). Con esos dos valores, la app ya sabe a qué Supabase
+tiene que hablarle. Faro usa lo mismo, y le añade OAuth de Google y GitHub (Módulo 08).</p>
 </blockquote>
 <hr />
 <h2 id="3-como-se-conecta-la-app-el-cliente-de-supabase">3. Cómo se conecta la app: el cliente de Supabase</h2>
 <blockquote class="def">
 <h3 id="que-significa-el-cliente-de-supabase">🟦 ¿Qué significa? — <em>El cliente de Supabase</em></h3>
-<p>El <strong>cliente</strong> es una librería de JavaScript (<code>@supabase/supabase-js</code>) que tu app usa para
-hablar con Supabase. Se "crea" una vez con la URL y la clave, y luego ofrece métodos cómodos
-para el CRUD (que por debajo es SQL, como viste):
+<p>El <strong>cliente</strong> es una librería de JavaScript (<code>@supabase/supabase-js</code>) que tu app usa para hablar
+con Supabase. Lo "creas" una sola vez, pasándole la URL y la clave, y a partir de ahí te ofrece
+métodos cómodos para el CRUD. Por debajo todo eso sigue siendo SQL, como ya viste:
 ```ts
 import { createClient } from '@supabase/supabase-js';
 const supabase = createClient(URL, CLAVE_PUBLICA);</p>
@@ -75,28 +79,30 @@ const { data, error } = await supabase
   .select('<em>')
   .eq('usuario_id', 7);
 <code>``
-Fíjate: devuelve</code>data<code>(los datos) y</code>error<code>(si algo falló) — y usa</code>await`, porque hablar
-con la nube es </em><em>asíncrono</em>* (Módulo 03). Ya reconoces todas las piezas.</p>
+Fíjate en dos detalles. Devuelve</code>data<code>(los datos que pediste) y</code>error<code>(que te avisa si algo
+falló). Y usa</code>await`, porque hablar con la nube es </em><em>asíncrono</em>* (Módulo 03): la respuesta no es
+instantánea. Ya reconoces todas las piezas.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En RachaSimple, <code>src/lib/supabase.ts</code> crea ese cliente, y <code>src/repositories/*.ts</code> lo usan para
-el CRUD de cada tabla. Es el "patrón repositorio": una capa que aísla el acceso a datos, para
-que el resto de la app no sepa los detalles de Supabase (y se pueda cambiar de base de datos en
-el futuro sin reescribir todo).</p>
+<p>En RachaSimple, el archivo <code>src/lib/supabase.ts</code> crea ese cliente, y los <code>src/repositories/*.ts</code> lo
+usan para el CRUD de cada tabla. Eso es el "patrón repositorio": una capa que aísla el acceso a los
+datos, de modo que el resto de la app no necesita conocer los detalles de Supabase. Si algún día
+quieres cambiar de base de datos, tocas esa capa y no tienes que reescribir media app.</p>
 </blockquote>
 <hr />
 <h2 id="4-la-clave-publica-y-la-seguridad-puente-al-capitulo-05">4. La clave pública y la seguridad (puente al capítulo 05)</h2>
 <blockquote class="def">
 <h3 id="que-significa-la-clave-publica-anon-key">🟦 ¿Qué significa? — <em>La clave pública (anon key)</em></h3>
-<p>La <code>anon key</code> (clave anónima/pública) es una clave que <strong>va en el frontend</strong> y, por tanto,
-<strong>cualquiera puede ver</strong> (está en el navegador del usuario). Entonces… ¿no es peligroso? Aquí
-viene lo importante: esa clave <strong>por sí sola no da acceso a los datos de otros</strong>. Lo que protege
-tus datos es <strong>RLS</strong> (la seguridad por filas), que es el tema del próximo capítulo.</p>
+<p>La <code>anon key</code> (clave anónima o pública) es la clave que <strong>va en el frontend</strong> y que, por estar ahí,
+<strong>cualquiera puede ver</strong>: está en el navegador del usuario, a la vista. Entonces… ¿no es peligroso?
+Aquí está lo importante: esa clave <strong>por sí sola no da acceso a los datos de otros</strong>. Lo que de
+verdad protege tus datos es <strong>RLS</strong>, la seguridad por filas, que es justo el tema del próximo
+capítulo.</p>
 <h3 id="cuidado-clave-publica-si-clave-secreta-no">⚠️ Cuidado — Clave pública sí, clave secreta NO</h3>
-<p>Supabase también tiene una <strong>clave de servicio</strong> (<code>service_role</code>) que <strong>salta</strong> toda la
-seguridad. Esa <strong>JAMÁS</strong> va en el frontend ni se sube a GitHub: solo en el servidor, en
-variables de entorno (<code>.env.local</code>, que el <code>.gitignore</code> excluye). Lo recalca el <code>CLAUDE.md</code> de
-Faro: <em>"Tokens y secretos solo en el servidor… nunca commitearlas."</em> Es justo lo que viste en
-el Módulo 00 sobre no subir secretos.</p>
+<p>Supabase también tiene una <strong>clave de servicio</strong> (<code>service_role</code>) que se <strong>salta</strong> toda la
+seguridad. Esa clave <strong>JAMÁS</strong> va en el frontend ni se sube a GitHub: vive solo en el servidor, en
+variables de entorno (<code>.env.local</code>, que el <code>.gitignore</code> deja fuera del repo). El <code>CLAUDE.md</code> de
+Faro lo recalca: <em>"Tokens y secretos solo en el servidor… nunca commitearlas."</em> Es exactamente lo
+que viste en el Módulo 00 sobre no subir secretos.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

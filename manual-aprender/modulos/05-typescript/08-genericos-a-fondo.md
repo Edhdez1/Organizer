@@ -6,21 +6,21 @@
 
 
 > Llegamos al tema que más asusta de TypeScript: los **genéricos**, esos `<T>` con
-> picos que aparecen por todos lados. Bit, nuestro ajolote, los miraba de reojo como
-> quien mira una araña en la pared. Pero respira: un genérico es solo una **forma de
-> escribir un tipo que todavía no conoces** y dejar que TypeScript lo descubra cuando
-> usas la función. No hay magia negra por ningún lado. Aquí los vamos a desarmar con
-> calma, pieza por pieza: funciones genéricas, interfaces y tipos genéricos,
-> restricciones con `extends`, valores por defecto, arrays y promesas. Y para el final
-> vas a entender por qué `useState<T>` y `useQuery<T>` de RachaSimple **necesitan** un
-> genérico para hacer su trabajo. Ten siempre presente una cosa: TypeScript es
-> JavaScript con tipos. Lo único que añadimos aquí es un hueco con nombre.
+> picos que aparecen por todas partes. Bit, nuestro ajolote, los miraba de reojo, como
+> quien vigila una araña en la pared. Pero tranquilo: un genérico no es más que una
+> **forma de escribir un tipo que todavía no conoces** y dejar que TypeScript lo
+> averigüe cuando usas la función. No hay magia negra en ningún rincón. Aquí los vamos
+> a desarmar con calma, pieza por pieza: funciones genéricas, interfaces y tipos
+> genéricos, restricciones con `extends`, valores por defecto, arrays y promesas. Y al
+> final entenderás por qué `useState<T>` y `useQuery<T>` de RachaSimple **necesitan** un
+> genérico para hacer su trabajo. Quédate con una idea de fondo: TypeScript es
+> JavaScript con tipos. Lo único que sumamos aquí es un hueco con nombre.
 
 ---
 
 ## 1. El problema que resuelven los genéricos
 
-Empecemos por una función bien sencilla en JavaScript, una que devuelve el primer elemento de una lista:
+Arranquemos con una función bien sencilla en JavaScript, una que devuelve el primer elemento de una lista:
 
 ```typescript
 function primero(lista) {
@@ -29,7 +29,7 @@ function primero(lista) {
 ```
 
 En JavaScript esto traga lo que sea: números, textos, proyectos de Faro. Pero en cuanto
-intentas tiparla en TypeScript te asalta la duda: ¿de qué tipo es la lista? ¿Y qué
+intentas tiparla en TypeScript aparece la duda: ¿de qué tipo es la lista? ¿Y qué
 devuelve?
 
 El primer intento, un poco torpe, sería tirar de `any` (el "tipo comodín que apaga las revisiones"):
@@ -40,11 +40,12 @@ function primero(lista: any[]): any {
 }
 ```
 
-Funciona, sí, pero **tira a la basura** todo lo que TypeScript sabía. Si le pasas una
-lista de `Project` y guardas el resultado, TypeScript ya no sabe que es un `Project`: te
-deja escribir `proyecto.cualquierTonteria` sin protestar. Adiós a la red de seguridad.
+Funciona, sí, pero a cambio **tira a la basura** todo lo que TypeScript sabía. Si le pasas
+una lista de `Project` y guardas el resultado, TypeScript ya no recuerda que es un
+`Project`: te deja escribir `proyecto.cualquierTonteria` sin rechistar. Adiós a la red de
+seguridad.
 
-El otro camino sería escribir una función distinta por cada tipo: `primeroProyecto`,
+El otro camino sería escribir una función distinta para cada tipo: `primeroProyecto`,
 `primeroFuente`, `primeroNumero`... Aburrido, repetitivo y un imán para los errores.
 
 Los genéricos son la salida elegante: una **sola** función que conserva el tipo, sea cual sea.
@@ -69,14 +70,14 @@ function primero<T>(lista: T[]): T {
 }
 ```
 
-Vamos a leerlo por partes, sin prisa:
+Leámoslo por partes, sin prisa:
 
 - `<T>` justo después del nombre → "voy a usar un tipo al que llamo `T`, todavía sin
   decidir cuál".
 - `lista: T[]` → "el parámetro es un **array de ese tipo `T`**".
 - `: T` después de los paréntesis → "y **devuelvo un valor de ese mismo tipo `T`**".
 
-Y lo bonito: TypeScript **rellena `T` solo** según lo que le pases.
+Y aquí está lo bonito: TypeScript **rellena `T` por su cuenta** según lo que le pases.
 
 ```typescript
 const numeros = [10, 20, 30];
@@ -117,13 +118,13 @@ con el hook `useState`. Mira esta línea, de las que ves a diario:
 const [habitos, setHabitos] = useState<Habito[]>([]);
 ```
 
-¿Por qué el `<Habito[]>`? Para entenderlo, métete dentro de `useState`. El hook recibe
+¿Por qué el `<Habito[]>`? Para entenderlo, asómate dentro de `useState`. El hook recibe
 un **valor inicial** y te devuelve dos cosas: el valor actual y una función para
-cambiarlo. El problema es que aquí el valor inicial es `[]`, un **array vacío**.
+cambiarlo. El detalle es que aquí el valor inicial es `[]`, un **array vacío**.
 
 Un array vacío no le cuenta a TypeScript nada sobre lo que vendrá dentro. ¿Será un array
-de hábitos? ¿De números? ¿De textos? Mirando solo `[]`, TypeScript no tiene cómo
-adivinarlo: lo más que deduce es `never[]` (un array que no admite nada útil). Y entonces
+de hábitos? ¿De números? ¿De textos? Mirando solo `[]`, TypeScript no tiene de dónde
+agarrarse: lo más que deduce es `never[]` (un array que no admite nada útil). Y entonces
 esto, más adelante, reventaría:
 
 ```typescript
@@ -132,7 +133,7 @@ setHabitos([{ id: "1", nombre: "Leer" }]);       // ❌ no encaja con never[]
 ```
 
 Al escribir `useState<Habito[]>([])` le das tú el dato que le faltaba: "este estado es un
-**array de `Habito`**, aunque ahora mismo esté vacío". A partir de ahí todo encaja:
+**array de `Habito`**, aunque ahora mismo esté vacío". A partir de ahí todo cuadra:
 `habitos` es `Habito[]` y `setHabitos` solo acepta arrays de `Habito`.
 
 > ### 🔎 En tu código — La firma de `useState` por dentro
@@ -155,7 +156,7 @@ Al escribir `useState<Habito[]>([])` le das tú el dato que le faltaba: "este es
 
 ## 4. Interfaces y tipos genéricos
 
-Los genéricos no son cosa solo de funciones. También una **interface** o un **type**
+Los genéricos no son cosa solo de funciones. Una **interface** o un **type** también
 pueden tener su hueco `<T>`. Esto viene de perlas para describir "una caja que envuelve
 algún tipo".
 
@@ -202,8 +203,8 @@ duplicar la interface entera por cada tipo de `data`.
 
 ## 5. Restricciones con `extends`
 
-A veces `T` no puede ser *cualquier* cosa. Quieres aceptar muchos tipos, vale, pero todos
-deben **tener algo en común**. Para eso está `extends` dentro de los picos.
+A veces `T` no puede ser *cualquier* cosa. Quieres aceptar muchos tipos, de acuerdo, pero
+todos deben **tener algo en común**. Para eso está `extends` dentro de los picos.
 
 Imagina una función que ordena cualquier lista de objetos que tengan `sort_order`, como
 los proyectos de Faro:
@@ -215,9 +216,8 @@ function ordenar<T extends { sort_order: number }>(items: T[]): T[] {
 ```
 
 Lee `T extends { sort_order: number }` así: "`T` puede ser cualquier tipo **siempre que
-tenga al menos** una propiedad `sort_order` de tipo número". Eso es justo lo que te
-permite escribir `a.sort_order` dentro con tranquilidad, porque la restricción lo
-garantiza.
+tenga al menos** una propiedad `sort_order` de tipo número". Eso es justo lo que te deja
+escribir `a.sort_order` ahí dentro con tranquilidad, porque la restricción lo garantiza.
 
 ```typescript
 ordenar(proyectos);                       // ✅ Project tiene sort_order
@@ -266,15 +266,15 @@ interface Respuesta<T = unknown> {
 }
 ```
 
-Ahora, si usas `Respuesta` **sin** decir el tipo, `T` cae a `unknown`:
+Ahora, si usas `Respuesta` **sin** indicar el tipo, `T` cae a `unknown`:
 
 ```typescript
 type R1 = Respuesta;            // data es unknown (usó el valor por defecto)
 type R2 = Respuesta<Project[]>; // data es Project[] (lo especificaste)
 ```
 
-Esto es comodísimo cuando la mayoría de las veces te sirve un tipo, pero quieres dejar la
-puerta abierta a afinarlo.
+Esto resulta comodísimo cuando la mayoría de las veces te sirve un tipo, pero quieres
+dejar la puerta abierta a afinarlo.
 
 > ### 🟦 ¿Qué significa? — *Valor por defecto de tipo*
 > Es el tipo que toma un parámetro genérico **cuando no se lo das tú**, escrito con
@@ -293,7 +293,7 @@ puerta abierta a afinarlo.
 ## 7. Genéricos en arrays y promesas
 
 Aquí viene una revelación que tranquiliza: **ya llevas capítulos usando genéricos sin
-enterarte**. Los arrays y las promesas son genéricos por dentro.
+darte cuenta**. Los arrays y las promesas son genéricos por dentro.
 
 ### Arrays
 
@@ -368,7 +368,7 @@ const { data, isLoading, error } = useQuery<Habito[]>({
 ```
 
 ¿Por qué el `<Habito[]>`? Por la misma razón que en `useState`, pero un nivel más arriba.
-`useQuery` no tiene forma de saber qué va a devolver tu `queryFn` con solo mirar la clave
+`useQuery` no tiene manera de saber qué va a devolver tu `queryFn` con solo mirar la clave
 `["habitos"]`. El genérico se lo aclara: "lo que esta consulta traerá es un **array de
 `Habito`**".
 

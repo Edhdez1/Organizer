@@ -23,10 +23,10 @@
 </p>
 
 <blockquote>
-<p>¡Hola de nuevo! Soy Bit, tu ajolote acompañante. 🦎 En los capítulos anteriores aprendiste a apuntar a los elementos por su etiqueta, su clase y su <code>id</code>. Eso ya te da mucho poder, pero a veces te pasa algo frustrante: escribes una regla de CSS, recargas el navegador… ¡y no cambia nada! O peor: cambia algo que tú no querías tocar. Tranquilo, no estás roto. Lo que ocurre es que el navegador tiene reglas muy concretas para decidir <strong>quién manda</strong> cuando dos estilos chocan. Eso se llama <em>especificidad</em>, y hoy la vamos a domesticar. También vas a aprender a apuntar con muchísima más precisión usando <em>selectores avanzados</em>. Al terminar, vas a entender por qué tu CSS hace lo que hace, en vez de adivinar a ciegas. Vamos despacio y con ejemplos de tus propios proyectos.</p>
+<p>¡Hola de nuevo! Soy Bit, tu ajolote acompañante. 🦎 En los capítulos anteriores aprendiste a apuntar a los elementos por su etiqueta, su clase y su <code>id</code>. Con eso ya haces bastante, pero seguro te ha pasado algo que saca de quicio: escribes una regla de CSS, recargas el navegador… y no cambia nada. O al revés: cambia algo que no querías ni tocar. Tranquilo, no se te rompió nada. Lo que pasa es que el navegador sigue unas reglas muy concretas para decidir <strong>quién manda</strong> cuando dos estilos chocan. A eso se le llama <em>especificidad</em>, y hoy le vamos a perder el miedo. De paso, vas a aprender a apuntar con mucha más puntería usando <em>selectores avanzados</em>. Cuando terminemos, vas a entender por qué tu CSS hace lo que hace, en lugar de ir probando a ciegas. Iremos sin prisa y con ejemplos sacados de tus propios proyectos.</p>
 </blockquote>
 <h2 id="1-recordatorio-rapido-que-es-un-selector">1. Recordatorio rápido: ¿qué es un selector?</h2>
-<p>Antes de meternos en lo nuevo, refresquemos la base. Cuando escribes CSS, cada regla tiene dos partes: el <strong>selector</strong> (a quién apunto) y el <strong>bloque de declaraciones</strong> (qué le hago).</p>
+<p>Antes de entrar en lo nuevo, repasemos la base. Cada regla de CSS tiene dos partes: el <strong>selector</strong> (a quién apunto) y el <strong>bloque de declaraciones</strong> (qué le hago).</p>
 <pre><code class="language-css">/* &quot;h1&quot; es el selector; lo de las llaves son las declaraciones */
 h1 {
   color: #1f2937;
@@ -43,9 +43,9 @@ h1 {
 <li>Por <strong>clase</strong>: <code>.boton</code>, <code>.tarjeta</code> (apunta a los que tengan ese <code>class</code>).</li>
 <li>Por <strong>id</strong>: <code>#menu</code>, <code>#hero</code> (apunta al único elemento con ese <code>id</code>).</li>
 </ul>
-<p>Hoy sumamos formas nuevas de combinarlos para apuntar con precisión de cirujano. Y, sobre todo, vamos a entender qué pasa cuando varios selectores apuntan al mismo elemento.</p>
+<p>Hoy le sumamos maneras nuevas de combinarlos para apuntar con precisión de cirujano. Y, sobre todo, vamos a entender qué pasa cuando varios selectores apuntan al mismo elemento.</p>
 <h2 id="2-combinadores-relaciones-entre-elementos">2. Combinadores: relaciones entre elementos</h2>
-<p>Los <strong>combinadores</strong> son símbolos que ponemos <em>entre</em> dos selectores para decir: "no quiero cualquier elemento, quiero uno que esté en cierta <strong>relación</strong> con otro". Para entenderlos, piensa en tu HTML como un árbol familiar: hay elementos padres, hijos, nietos y hermanos.</p>
+<p>Los <strong>combinadores</strong> son símbolos que ponemos <em>entre</em> dos selectores para decir algo como: "no quiero cualquier elemento, quiero uno que tenga cierta <strong>relación</strong> con otro". Para que se vea claro, piensa en tu HTML como un árbol familiar: hay elementos padres, hijos, nietos y hermanos.</p>
 <blockquote class="def">
 <h3 id="que-significa-combinador">🟦 ¿Qué significa? — <em>Combinador</em></h3>
 <p>Un combinador es un símbolo (un espacio, <code>&gt;</code>, <code>+</code> o <code>~</code>) que se coloca entre dos selectores para describir cómo deben estar <strong>relacionados</strong> los elementos en el HTML. Sirve para apuntar a algo según su posición respecto a otro elemento, sin necesidad de ponerle una clase a cada cosa. En el <code>styles.css</code> de <code>tunal-digital</code> lo usas cada vez que escribes algo como <code>nav a</code> (los enlaces <em>dentro</em> de la navegación).</p>
@@ -60,7 +60,7 @@ h1 {
 &lt;/nav&gt;
 </code></pre>
 <h3 id="21-combinador-descendiente-un-espacio">2.1 Combinador descendiente (un espacio)</h3>
-<p>El más común. Un <strong>espacio</strong> entre dos selectores significa "el segundo está en cualquier nivel <em>dentro</em> del primero, no importa qué tan profundo".</p>
+<p>Es el más común. Un <strong>espacio</strong> entre dos selectores significa "el segundo está en cualquier nivel <em>dentro</em> del primero, no importa qué tan hondo".</p>
 <pre><code class="language-css">/* Cualquier &lt;a&gt; que esté dentro de .menu, a cualquier profundidad */
 .menu a {
   text-decoration: none;
@@ -71,9 +71,9 @@ h1 {
 <h3 id="que-significa-descendiente">🟦 ¿Qué significa? — <em>Descendiente</em></h3>
 <p>Un descendiente es un elemento que está contenido dentro de otro, sin importar cuántos niveles haya en medio (hijo, nieto, bisnieto…). Sirve para aplicar estilos a todo lo que vive "dentro de" una sección. En <code>tunal-digital</code> lo usas para, por ejemplo, dar estilo a todos los enlaces dentro del <code>&lt;footer&gt;</code> con <code>footer a { ... }</code>.</p>
 </blockquote>
-<p>En el HTML de arriba, <code>.menu a</code> apunta a <strong>los tres</strong> enlaces: los dos dentro del <code>&lt;ul&gt;&lt;li&gt;</code> y también el de "Contáctanos", porque todos están en algún punto dentro de <code>.menu</code>.</p>
+<p>En el HTML de arriba, <code>.menu a</code> apunta a <strong>los tres</strong> enlaces: los dos que están dentro del <code>&lt;ul&gt;&lt;li&gt;</code> y también el de "Contáctanos", porque todos viven en algún punto dentro de <code>.menu</code>.</p>
 <h3 id="22-combinador-de-hijo-directo">2.2 Combinador de hijo directo (<code>&gt;</code>)</h3>
-<p>El símbolo <code>&gt;</code> es más estricto: solo apunta al <strong>hijo directo</strong>, es decir, el que está exactamente un nivel adentro, no los nietos.</p>
+<p>El símbolo <code>&gt;</code> es más estricto: solo apunta al <strong>hijo directo</strong>, o sea, al que está exactamente un nivel adentro, sin contar a los nietos.</p>
 <pre><code class="language-css">/* Solo los &lt;a&gt; que sean hijos DIRECTOS de .menu */
 .menu &gt; a {
   font-weight: bold;
@@ -83,7 +83,7 @@ h1 {
 <h3 id="que-significa-hijo-directo">🟦 ¿Qué significa? — <em>Hijo directo</em></h3>
 <p>Un hijo directo es un elemento que está exactamente un nivel dentro de otro, sin nada en medio. Sirve cuando quieres afectar solo el primer nivel y dejar en paz lo que esté más adentro. Útil en menús anidados, listas dentro de listas, o componentes con varios niveles.</p>
 </blockquote>
-<p>Con <code>.menu &gt; a</code>, en nuestro ejemplo solo se afecta el enlace "Contáctanos", porque es hijo directo de <code>.menu</code>. Los otros dos enlaces están dentro de <code>&lt;li&gt;</code>, que está dentro de <code>&lt;ul&gt;</code>: son nietos, no hijos directos.</p>
+<p>Con <code>.menu &gt; a</code>, en nuestro ejemplo solo cambia el enlace "Contáctanos", porque es hijo directo de <code>.menu</code>. Los otros dos están dentro de un <code>&lt;li&gt;</code>, que a su vez está dentro de un <code>&lt;ul&gt;</code>: son nietos, no hijos directos.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
 <p>¿Cómo distinguir el espacio del <code>&gt;</code>? Lee el espacio como "en algún lugar dentro de" y el <code>&gt;</code> como "justo dentro de, sin escalones intermedios". El <code>&gt;</code> es tu amigo cuando un descendiente normal afecta de más.</p>
@@ -101,7 +101,7 @@ h2 + p {
 <p>Un hermano adyacente es el elemento que aparece justo a continuación de otro, ambos con el mismo padre y pegados (sin nada en medio). Sirve para estilos que dependen de "lo que viene después de". Por ejemplo, separar menos un párrafo que sigue directamente a un título, como en las secciones de contenido de <code>tunal-digital</code>.</p>
 </blockquote>
 <h3 id="24-combinador-de-hermanos-generales">2.4 Combinador de hermanos generales (<code>~</code>)</h3>
-<p>El <code>~</code> es como el <code>+</code>, pero apunta a <strong>todos</strong> los hermanos que vengan después, no solo al de al lado.</p>
+<p>El <code>~</code> se parece al <code>+</code>, pero apunta a <strong>todos</strong> los hermanos que vengan después, no solo al que tiene al lado.</p>
 <pre><code class="language-css">/* TODOS los &lt;p&gt; que vengan después de un &lt;h2&gt; (mismo padre) */
 h2 ~ p {
   line-height: 1.6;
@@ -116,7 +116,7 @@ h2 ~ p {
 <p>En <code>RachaSimple</code> y <code>Faro</code> usas <strong>Tailwind</strong>, donde casi no escribes combinadores a mano: pones clases directamente en cada elemento (<code>className="mt-0 text-gray-500"</code>). Pero los combinadores no desaparecen: Tailwind tiene variantes como <code>[&amp;&gt;*]</code> o <code>space-y-4</code> que por debajo generan exactamente reglas con combinadores (<code>&gt; * + *</code>). Entender el combinador te ayuda a leer qué hace Tailwind por debajo.</p>
 </blockquote>
 <h2 id="3-selectores-por-atributo">3. Selectores por atributo</h2>
-<p>A veces no quieres apuntar por clase ni etiqueta, sino por un <strong>atributo</strong> que tenga el elemento. Para eso usamos corchetes <code>[ ]</code>.</p>
+<p>A veces no quieres apuntar por clase ni por etiqueta, sino por un <strong>atributo</strong> que tenga el elemento. Para eso usamos corchetes <code>[ ]</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-selector-por-atributo">🟦 ¿Qué significa? — <em>Selector por atributo</em></h3>
 <p>Un selector por atributo apunta a los elementos que tengan cierto atributo HTML (y, opcionalmente, cierto valor). Sirve para estilizar cosas sin ponerles una clase, especialmente formularios y enlaces. En <code>tunal-digital</code>, un formulario de contacto tiene muchos <code>&lt;input&gt;</code> con distintos <code>type</code>, y por atributo puedes estilizarlos sin tocar el HTML.</p>
@@ -148,7 +148,7 @@ img[src$=&quot;.png&quot;] {
   border-radius: 8px;
 }
 </code></pre>
-<p>Los pequeños símbolos antes del <code>=</code> cambian el significado:</p>
+<p>Esos pequeños símbolos antes del <code>=</code> le cambian el significado al selector:</p>
 <ul>
 <li><code>[attr="x"]</code> → el valor es <strong>exactamente</strong> <code>x</code>.</li>
 <li><code>[attr^="x"]</code> → el valor <strong>empieza</strong> por <code>x</code> (la <code>^</code> recuerda al inicio).</li>
@@ -157,10 +157,10 @@ img[src$=&quot;.png&quot;] {
 </ul>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>El selector <code>a[href^="http"]</code> es un truco clásico para marcar enlaces externos de forma distinta, ya que los enlaces internos suelen empezar por <code>#</code> o <code>/</code>. Así, sin esfuerzo manual, todos tus enlaces que van "afuera" del sitio se ven diferentes.</p>
+<p>El selector <code>a[href^="http"]</code> es un truco clásico para marcar los enlaces externos de otra manera, ya que los enlaces internos suelen empezar por <code>#</code> o <code>/</code>. Así, sin tener que ir uno por uno a mano, todos tus enlaces que apuntan "afuera" del sitio se ven distintos.</p>
 </blockquote>
 <h2 id="4-agrupar-selectores-con-coma">4. Agrupar selectores con coma</h2>
-<p>Cuando varias reglas comparten exactamente los mismos estilos, no hace falta repetirlas. Las <strong>agrupas</strong> con una coma.</p>
+<p>Cuando varias reglas comparten exactamente los mismos estilos, no tiene sentido repetirlas. Las <strong>agrupas</strong> con una coma.</p>
 <blockquote class="def">
 <h3 id="que-significa-agrupar-selectores">🟦 ¿Qué significa? — <em>Agrupar selectores</em></h3>
 <p>Agrupar es escribir varios selectores separados por comas para aplicarles el mismo bloque de estilos de una sola vez. Sirve para no repetirte (principio "DRY": <em>Don't Repeat Yourself</em>) y mantener el CSS más corto. Muy útil al inicio de un <code>styles.css</code> para dar una base común a todos los títulos.</p>
@@ -179,7 +179,7 @@ h1, h2, h3 {
 <p>En el propio <code>estilos.css</code> de este manual usamos agrupación para los temas: una sola regla define las variables de color base, y luego agrupamos varios elementos de texto para que compartan tipografía. Eso mantiene el archivo ordenado aunque haya modo claro y modo oscuro.</p>
 </blockquote>
 <h2 id="5-la-cascada-el-apellido-de-css">5. La cascada: el apellido de "CSS"</h2>
-<p>La sigla CSS significa <em>Cascading Style Sheets</em>: "hojas de estilo <strong>en cascada</strong>". Esa palabra, cascada, es el corazón de todo lo de hoy.</p>
+<p>La sigla CSS significa <em>Cascading Style Sheets</em>: "hojas de estilo <strong>en cascada</strong>". Esa palabra, cascada, es el corazón de todo lo que vemos hoy.</p>
 <blockquote class="def">
 <h3 id="que-significa-cascada">🟦 ¿Qué significa? — <em>Cascada</em></h3>
 <p>La cascada es el conjunto de reglas que usa el navegador para decidir qué estilo gana cuando <strong>varias reglas distintas apuntan al mismo elemento y se contradicen</strong>. Sirve para que siempre haya una respuesta clara y predecible. Cada vez que en <code>tunal-digital</code> un color "no cambia" aunque escribiste la regla, la causa casi siempre es la cascada eligiendo otra regla por encima de la tuya.</p>
@@ -190,7 +190,7 @@ h1, h2, h3 {
 <li><strong>Especificidad</strong>: ¿qué selector es más "específico"? (la estrella del capítulo).</li>
 <li><strong>Orden de aparición</strong>: si todo lo demás empata, <strong>gana la última regla escrita</strong>.</li>
 </ol>
-<p>Empecemos por el más fácil de entender: el orden.</p>
+<p>Empecemos por el paso más sencillo: el orden.</p>
 <h3 id="51-el-orden-gana-el-ultimo">5.1 El orden: gana el último</h3>
 <p>Si dos reglas tienen la misma fuerza y apuntan a lo mismo, el navegador aplica <strong>la que esté más abajo</strong> en el archivo.</p>
 <pre><code class="language-css">.boton {
@@ -207,7 +207,7 @@ h1, h2, h3 {
 <p>Este principio explica por qué en <code>RachaSimple</code> y <code>Faro</code>, donde el CSS final lo arma Tailwind, <strong>el orden en que se cargan las hojas importa</strong>. Tu CSS personalizado normalmente se carga después del de Tailwind para poder ajustarlo.</p>
 </blockquote>
 <h2 id="6-especificidad-quien-manda-de-verdad">6. Especificidad: quién manda de verdad</h2>
-<p>Aquí está la parte que confunde a casi todo principiante, así que vamos con mucha calma. La <strong>especificidad</strong> es una "puntuación" que el navegador le da a cada selector. Cuando dos reglas chocan, <strong>gana la de mayor puntuación</strong>, sin importar el orden.</p>
+<p>Aquí llega la parte que confunde a casi todo el mundo cuando empieza, así que vamos con calma. La <strong>especificidad</strong> es una especie de "puntuación" que el navegador le da a cada selector. Cuando dos reglas chocan, <strong>gana la de mayor puntuación</strong>, sin importar el orden.</p>
 <blockquote class="def">
 <h3 id="que-significa-especificidad">🟦 ¿Qué significa? — <em>Especificidad</em></h3>
 <p>La especificidad es un valor numérico que el navegador calcula para cada selector según qué tan "preciso" es. A mayor especificidad, más fuerza tiene esa regla para imponerse sobre otras que apunten al mismo elemento. Sirve para resolver conflictos de estilo de forma consistente. Cuando en <code>tunal-digital</code> <code>.boton</code> no logra cambiar un color, casi siempre es porque otra regla más específica (por ejemplo <code>#hero .boton</code>) le está ganando.</p>
@@ -225,8 +225,8 @@ h1, h2, h3 {
 <h3 id="que-significa-pseudoelemento">🟦 ¿Qué significa? — <em>Pseudoelemento</em></h3>
 <p>Un pseudoelemento es una palabra que se añade a un selector con dos puntos dobles (<code>::</code>) para apuntar a una <strong>parte</strong> de un elemento que no existe como etiqueta propia en el HTML, o para crear contenido nuevo desde el CSS. Los más usados son <code>::before</code> y <code>::after</code> (que insertan algo antes o después del contenido) y <code>::first-line</code> (la primera línea de un párrafo). Sirve para decorar sin ensuciar el HTML, por ejemplo añadiendo un icono antes de un enlace. A efectos de especificidad, un pseudoelemento cuenta como una etiqueta (suma en la casilla <strong>C</strong>).</p>
 </blockquote>
-<p>Se comparan de izquierda a derecha, como si fueran números: primero los id; si empatan, las clases; si empatan, las etiquetas.</p>
-<p>Veamos ejemplos calculando la puntuación:</p>
+<p>Se comparan de izquierda a derecha, como si fueran números: primero los id; si empatan, las clases; si vuelven a empatar, las etiquetas.</p>
+<p>Veamos algunos ejemplos calculando la puntuación:</p>
 <pre><code class="language-css">p                 { } /* (0,0,1) → 1 etiqueta */
 .boton            { } /* (0,1,0) → 1 clase */
 nav a             { } /* (0,0,2) → 2 etiquetas */
@@ -235,7 +235,7 @@ input[type=&quot;text&quot;]{ } /* (0,1,1) → 1 etiqueta + 1 atributo */
 #hero             { } /* (1,0,0) → 1 id */
 #hero .boton      { } /* (1,1,0) → 1 id + 1 clase */
 </code></pre>
-<p>¿Quién gana entre <code>.boton</code> (0,1,0) y <code>#hero .boton</code> (1,1,0)? El segundo, porque tiene un <code>1</code> en la casilla de los id, que pesa más que cualquier cantidad de clases.</p>
+<p>¿Quién gana entre <code>.boton</code> (0,1,0) y <code>#hero .boton</code> (1,1,0)? El segundo, porque tiene un <code>1</code> en la casilla de los id, y eso pesa más que cualquier cantidad de clases.</p>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
 <p>Un solo <strong>id</strong> vence a <strong>cualquier</strong> cantidad de clases. Aunque escribas <code>.a.b.c.d.e</code> (cinco clases, puntuación (0,5,0)), un simple <code>#x</code> (1,0,0) le gana. Por eso muchos equipos evitan estilizar por <code>id</code> y prefieren clases: así la "guerra de especificidad" se mantiene tranquila y fácil de predecir.</p>
@@ -250,7 +250,7 @@ input[type=&quot;text&quot;]{ } /* (0,1,1) → 1 etiqueta + 1 atributo */
 .boton          { color: blue;  }  /* (0,1,0) */
 #hero .boton    { color: red;   }  /* (1,1,0) ✅ gana */
 </code></pre>
-<p>El texto será <strong>rojo</strong>. Aunque <code>button</code> y <code>.boton</code> están ahí, <code>#hero .boton</code> tiene un id y eso lo coloca por encima. Si quitaras esa última regla, ganaría <code>.boton</code> (azul), porque una clase (0,1,0) le gana a una etiqueta (0,0,1).</p>
+<p>El texto será <strong>rojo</strong>. Aunque <code>button</code> y <code>.boton</code> también están ahí, <code>#hero .boton</code> tiene un id, y eso lo deja por encima. Si quitaras esa última regla, ganaría <code>.boton</code> (azul), porque una clase (0,1,0) le gana a una etiqueta (0,0,1).</p>
 <blockquote class="def">
 <h3 id="que-significa-devtools">🟦 ¿Qué significa? — <em>DevTools</em></h3>
 <p>Las DevTools (herramientas de desarrollador) son un panel que todo navegador moderno trae incorporado y que abres con clic derecho → "Inspeccionar" (o con la tecla F12). Sirven para ver el HTML y el CSS reales de una página, probar cambios al vuelo y, sobre todo, entender qué regla ganó en un conflicto: el panel de estilos <strong>tacha</strong> las reglas perdedoras. Es tu mejor aliada para investigar la especificidad en vivo, por ejemplo en cualquier pantalla de <code>tunal-digital</code>.</p>
@@ -258,7 +258,7 @@ input[type=&quot;text&quot;]{ } /* (0,1,1) → 1 etiqueta + 1 atributo */
 <p>Este es el bug número uno de principiantes en <code>tunal-digital</code>: tienes <code>.boton { background: #2563eb }</code> pero el botón aparece de otro color. Abre las DevTools del navegador (clic derecho → "Inspeccionar"), selecciona el botón y mira el panel de estilos: el navegador <strong>tacha</strong> las reglas que perdieron y te muestra cuál ganó y por qué. Es la mejor herramienta para ver la especificidad en vivo.</p>
 </blockquote>
 <h3 id="63-y-los-estilos-en-linea-style">6.3 ¿Y los estilos en línea (<code>style=""</code>)?</h3>
-<p>Si pones estilos directamente en el HTML con el atributo <code>style</code>, esos ganan a casi todo lo que venga de tu hoja de CSS. En la cuenta de especificidad equivalen a una casilla aún más fuerte, por delante de los id.</p>
+<p>Si pones estilos directamente en el HTML con el atributo <code>style</code>, esos le ganan a casi todo lo que venga de tu hoja de CSS. En la cuenta de especificidad equivalen a una casilla todavía más fuerte, por delante de los id.</p>
 <blockquote class="def">
 <h3 id="que-significa-estilos-en-linea">🟦 ¿Qué significa? — <em>Estilos en línea</em></h3>
 <p>Los estilos en línea son los que se escriben dentro del propio HTML usando el atributo <code>style="..."</code> en una etiqueta concreta, en vez de en una hoja <code>.css</code> aparte. Afectan solo a ese elemento y tienen una fuerza muy alta en la cascada (por encima de los id). Sirven, en casos puntuales, para valores que cambian sobre la marcha. En <code>RachaSimple</code> y <code>Faro</code> aparecen cuando React calcula un valor dinámico (como el ancho de una barra de progreso), pero como estilo fijo conviene evitarlos porque son difíciles de sobrescribir y no se reutilizan.</p>
@@ -271,7 +271,7 @@ input[type=&quot;text&quot;]{ } /* (0,1,1) → 1 etiqueta + 1 atributo */
 <p>Por eso conviene <strong>evitar</strong> los estilos en línea salvo casos muy puntuales: son difíciles de sobrescribir desde el CSS, no se reutilizan y desordenan el HTML. En <code>RachaSimple</code> y <code>Faro</code>, React a veces usa <code>style={{ ... }}</code> para valores dinámicos (por ejemplo, una barra de progreso cuyo ancho depende de un dato); eso está bien porque es un valor que cambia, no un estilo fijo que debería vivir en el CSS.</p>
 </blockquote>
 <h2 id="7-important-el-boton-de-panico-que-casi-nunca-debes-pulsar">7. <code>!important</code>: el botón de pánico (que casi nunca debes pulsar)</h2>
-<p>Existe una palabra mágica que rompe todas las reglas anteriores: <code>!important</code>. Si la pones al final de una declaración, esa declaración gana <strong>sin importar la especificidad ni el orden</strong>.</p>
+<p>Hay una palabra mágica que rompe todas las reglas anteriores: <code>!important</code>. Si la pones al final de una declaración, esa declaración gana <strong>sin importar la especificidad ni el orden</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-important">🟦 ¿Qué significa? — <em>!important</em></h3>
 <p><code>!important</code> es una marca que se añade al final de una declaración CSS para forzar que ese valor gane por encima de cualquier otra regla normal, ignorando especificidad y orden. Sirve, en teoría, para casos de emergencia. En la práctica suele crear más problemas de los que resuelve, porque luego no puedes sobrescribirlo fácilmente.</p>
@@ -284,18 +284,18 @@ input[type=&quot;text&quot;]{ } /* (0,1,1) → 1 etiqueta + 1 atributo */
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
 <p>Usar <code>!important</code> es como gritar para ganar una discusión: funciona la primera vez, pero cuando <strong>otra</strong> regla también necesite gritar, tendrás dos <code>!important</code> peleando y nadie sabrá qué pasa. Cada <code>!important</code> que añades hace tu CSS más difícil de mantener. Trátalo como un extintor: solo en emergencias reales.</p>
 </blockquote>
-<p>¿Cuándo se justifica de verdad? Pocas veces. Por ejemplo, para sobrescribir estilos de una librería externa que no puedes editar y que ya viene con su propio <code>!important</code>. Antes de llegar ahí, <strong>casi siempre</strong> hay una solución mejor: subir un poquito tu especificidad de forma controlada (por ejemplo, añadir una clase extra) o reordenar tus reglas.</p>
+<p>¿Cuándo se justifica de verdad? Pocas veces. Por ejemplo, para sobrescribir estilos de una librería externa que no puedes editar y que ya viene con su propio <code>!important</code>. Pero antes de llegar ahí, <strong>casi siempre</strong> hay una salida mejor: subir un poquito tu especificidad de forma controlada (añadiendo una clase extra, por ejemplo) o reordenar tus reglas.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
 <p>En <code>RachaSimple</code> y <code>Faro</code> con Tailwind, si necesitas pisar una clase de utilidad puedes usar la variante <code>!</code> de Tailwind (por ejemplo <code>!bg-red-500</code>), que genera el <code>!important</code> por ti. Úsala con la misma prudencia: si te ves usándola seguido, probablemente haya un conflicto de orden o de configuración que conviene arreglar de raíz en vez de tapar.</p>
 </blockquote>
 <h2 id="8-estrategia-como-evitar-peleas-de-especificidad">8. Estrategia: cómo evitar peleas de especificidad</h2>
-<p>Ahora que entiendes el mecanismo, aquí va la filosofía sana para que tu CSS no se vuelva un campo de batalla:</p>
+<p>Ahora que entiendes el mecanismo, aquí va la filosofía sana para que tu CSS no se convierta en un campo de batalla:</p>
 <ul>
-<li><strong>Prefiere clases</strong> a los <code>id</code> para dar estilo. Las clases tienen una especificidad media y fácil de manejar; los id son demasiado fuertes y se vuelven un dolor de cabeza.</li>
-<li><strong>Mantén los selectores cortos</strong>. <code>.tarjeta-titulo</code> es más fácil de mantener que <code>.contenedor .tarjeta .cabecera h2 span</code>. Cuanto más largo el selector, más alto subes la especificidad sin querer.</li>
+<li><strong>Prefiere clases</strong> a los <code>id</code> para dar estilo. Las clases tienen una especificidad media y manejable; los id son demasiado fuertes y terminan dando dolores de cabeza.</li>
+<li><strong>Mantén los selectores cortos</strong>. <code>.tarjeta-titulo</code> es más fácil de mantener que <code>.contenedor .tarjeta .cabecera h2 span</code>. Cuanto más largo el selector, más alto subes la especificidad sin darte cuenta.</li>
 <li><strong>Evita <code>!important</code></strong> salvo emergencias documentadas.</li>
-<li><strong>Usa el orden a tu favor</strong>: pon tus estilos personalizados después de los de librerías, para poder ajustarlos sin trucos.</li>
+<li><strong>Usa el orden a tu favor</strong>: pon tus estilos personalizados después de los de las librerías, para poder ajustarlos sin trucos.</li>
 <li><strong>Nombra bien tus clases</strong>: una clase clara como <code>.boton--primario</code> te evita tener que usar combinadores y anidamientos profundos.</li>
 </ul>
 <blockquote class="tip">
@@ -377,7 +377,7 @@ input[type=&quot;email&quot;] {
 </li>
 </ol>
 <blockquote>
-<p>¡Lo lograste! 🦎 Hoy pasaste de "el CSS hace cosas raras" a "yo entiendo por qué el CSS hace lo que hace". La especificidad deja de ser magia y se vuelve una cuenta sencilla de tres casillas. La próxima vez que un estilo no se aplique, ya no vas a adivinar: vas a abrir las DevTools, mirar quién ganó y arreglarlo con calma. Nos vemos en el siguiente capítulo. — Bit</p>
+<p>¡Lo lograste! 🦎 Hoy pasaste de "el CSS hace cosas raras" a "ya entiendo por qué el CSS hace lo que hace". La especificidad deja de ser magia y se vuelve una cuenta sencilla de tres casillas. La próxima vez que un estilo no se aplique, ya no vas a adivinar: vas a abrir las DevTools, mirar quién ganó y arreglarlo con calma. Nos vemos en el siguiente capítulo. — Bit</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

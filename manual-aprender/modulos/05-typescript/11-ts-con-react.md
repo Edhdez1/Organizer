@@ -5,16 +5,16 @@
 </p>
 
 
-> Llevas diez capítulos tipando funciones, objetos y datos que llegan de afuera. Ahora viene
-> el momento que estabas esperando sin saberlo: **¿cómo se juntan TypeScript y React?** React
-> es la librería con la que están construidas RachaSimple (la app de hábitos) y Faro (tu
-> organizador de proyectos). Y resulta que React + TypeScript es una de las parejas más felices
-> de la programación moderna: cada **componente**, cada **prop**, cada **estado** puede llevar su
-> tipo, y el editor te avisa al instante si le pasas algo equivocado. Este capítulo es el
-> **puente al Módulo 06** (donde aprenderás React de verdad): aquí no vamos a enseñarte React
-> entero, sino a **leer y tipar** los pedazos de React que ya viven en tus repos reales. Bit, tu
-> ajolote, te recuerda algo que ya sabes: **TypeScript es JavaScript con tipos.** React con TS es
-> el mismo React de siempre, solo que con etiquetas que dicen qué forma tiene cada cosa. Vamos.
+> Llevas diez capítulos poniéndole tipos a funciones, objetos y datos que llegan de afuera. Ahora
+> toca lo que en el fondo venías esperando: **¿cómo encajan TypeScript y React?** React es la librería
+> con la que están hechas RachaSimple (la app de hábitos) y Faro (tu organizador de proyectos). Y la
+> verdad es que React con TypeScript forman una de las parejas que mejor se llevan en la programación
+> de hoy: cada **componente**, cada **prop**, cada **estado** puede llevar su tipo, y el editor te
+> avisa en el momento si le pasas algo que no cuadra. Este capítulo hace de **puente al Módulo 06**
+> (donde aprenderás React en serio): aquí no te vamos a enseñar React de cabo a rabo, sino a **leer y
+> tipar** los trozos de React que ya viven en tus repos reales. Bit, tu ajolote, te recuerda algo que
+> ya sabes: **TypeScript es JavaScript con tipos.** React con TS es el mismo React de siempre, solo que
+> con etiquetas que dicen qué forma tiene cada cosa. Empecemos.
 
 ---
 
@@ -35,14 +35,14 @@ export function PhaseBadge({ phase }: { phase: ProjectPhase }) {
 }
 ```
 
-Eso es todo: una función que recibe un dato (`phase`) y devuelve algo que se ve en pantalla
+Y ya está: una función que recibe un dato (`phase`) y devuelve algo que se ve en pantalla
 (`<Badge>...</Badge>`). Ese «algo que se ve» es **JSX**.
 
 > ### 🟦 ¿Qué significa? — *Componente*
 > Un **componente** es una función de JavaScript que devuelve interfaz (un trozo de pantalla).
 > **Para qué sirve:** dividir la app en piezas reutilizables, como ladrillos. **Dónde se usa:** en
 > RachaSimple, `HabitCard` dibuja una tarjeta de hábito; en Faro, `PhaseBadge` dibuja la etiqueta
-> de fase. Cada pantalla es muchos componentes anidados.
+> de fase. Cada pantalla es un montón de componentes anidados unos dentro de otros.
 
 > ### 🟦 ¿Qué significa? — *JSX / TSX*
 > **JSX** es una sintaxis que deja escribir «HTML dentro de JavaScript» (como `<Badge>...</Badge>`).
@@ -51,7 +51,7 @@ Eso es todo: una función que recibe un dato (`phase`) y devuelve algo que se ve
 > todos los archivos de pantalla en tus repos terminan en `.tsx` — `HabitCard.tsx`, `project-card.tsx`.
 
 > ### 💡 Tip
-> ¿Por qué `{ phase }` entre llaves? Es **desestructuración** (la viste en el Módulo 03). React le
+> ¿Y por qué `{ phase }` entre llaves? Es **desestructuración** (la viste en el Módulo 03). React le
 > pasa al componente un solo objeto con todas sus props, y tú sacas las que necesitas por nombre.
 > `{ phase }` significa «dame la propiedad `phase` de ese objeto».
 
@@ -59,9 +59,9 @@ Eso es todo: una función que recibe un dato (`phase`) y devuelve algo que se ve
 
 ## 2. Tipar las props con una `interface`
 
-Las **props** son los datos que un componente recibe de quien lo usa, como los argumentos de una
-función. Cuando son una o dos, puedes escribir el tipo en línea (como `{ phase }: { phase: ProjectPhase }`).
-Pero cuando son varias, lo limpio es declarar una `interface` (recuerda el Capítulo 03).
+Las **props** son los datos que un componente recibe de quien lo usa, igual que los argumentos de
+una función. Cuando son una o dos, puedes escribir el tipo en línea (como `{ phase }: { phase: ProjectPhase }`).
+Pero en cuanto son varias, lo limpio es declarar una `interface` (acuérdate del Capítulo 03).
 
 Mira `MetricCard` de RachaSimple, la tarjeta que muestra una métrica (por ejemplo «Racha actual: 7»):
 
@@ -105,8 +105,8 @@ Lee la `interface` como una lista de requisitos: «quien use `MetricCard` **tien
 > qué sirve:** que TypeScript revise que le pasas las props correctas y que el editor te las
 > autocomplete. **Dónde se ve:** en casi todos los componentes de RachaSimple y Faro.
 
-Lo bonito: si por error escribes `<MetricCard value={7} />` (olvidaste `label`), TypeScript te
-subraya en rojo **antes de abrir el navegador**: «falta la propiedad `label`». Es el mismo poder
+Lo bueno: si por error escribes `<MetricCard value={7} />` (te olvidaste de `label`), TypeScript te
+lo subraya en rojo **antes de abrir el navegador**: «falta la propiedad `label`». Es el mismo poder
 que ya conoces, ahora cuidando tu interfaz.
 
 > ### 🔎 En tu código
@@ -127,12 +127,12 @@ el Capítulo 03: marca una propiedad como **opcional**. Quien use `MetricCard` p
 > componentes flexibles que no obligan a llenar todo. **Dónde se ve:** en `MetricCard`, `caption`
 > e `icon` son opcionales; `label` y `value` son obligatorias.
 
-Cuando una prop es opcional, el componente debe protegerse por si llega `undefined`. Por eso
+Cuando una prop es opcional, el componente tiene que protegerse por si llega `undefined`. Por eso
 `MetricCard` escribe `{caption && <p>...</p>}`: «si hay `caption`, dibújalo; si no, nada». Es el
 mismo **estrechamiento** del Capítulo 06.
 
-A veces quieres que una prop opcional tenga un **valor por defecto** en lugar de quedar `undefined`.
-Eso se hace al desestructurar, igual que con argumentos de función. Mira el `Logo` de Faro:
+A veces prefieres que una prop opcional tenga un **valor por defecto** en lugar de quedar `undefined`.
+Eso se hace al desestructurar, igual que con los argumentos de una función. Mira el `Logo` de Faro:
 
 ```typescript
 export function Logo({
@@ -152,7 +152,7 @@ export function Logo({
 ```
 
 `showText = true` significa: «si no me pasan `showText`, vale `true`». Así `<Logo />` muestra el
-texto, y `<Logo showText={false} />` muestra solo el dibujo. Lo mismo con `size = 28`.
+texto, y `<Logo showText={false} />` muestra solo el dibujo. Lo mismo pasa con `size = 28`.
 
 > ### 🟦 ¿Qué significa? — *Valor por defecto*
 > Un **valor por defecto** es el que toma una prop cuando no se la pasan, escrito con `=` en la
@@ -161,13 +161,13 @@ texto, y `<Logo showText={false} />` muestra solo el dibujo. Lo mismo con `size 
 > valores listos.
 
 > ### ⚠️ Cuidado
-> El `?` en la `interface` y el `= valor` en la desestructuración son **dos cosas distintas pero
-> complementarias.** El `?` le dice a TS «esta prop se puede omitir». El `= 28` decide **qué pasa**
+> El `?` en la `interface` y el `= valor` en la desestructuración son **dos cosas distintas, aunque
+> se complementan.** El `?` le dice a TS «esta prop se puede omitir». El `= 28` decide **qué pasa**
 > cuando la omiten. Si pones valor por defecto, casi siempre marcas la prop opcional con `?` también,
 > para que TS no la exija al usarla.
 
 > ### 💡 Tip
-> ¿Notaste el truco `icon: Icon` en `MetricCard`? Eso **renombra** al desestructurar: la prop se
+> ¿Te fijaste en el truco `icon: Icon` de `MetricCard`? Eso **renombra** al desestructurar: la prop se
 > llama `icon`, pero dentro del componente la usamos como `Icon` (con mayúscula). React exige que
 > los componentes empiecen con mayúscula para distinguirlos de las etiquetas HTML normales.
 
@@ -243,7 +243,7 @@ function Seccion({ titulo, children }: SeccionProps) {
 ```
 
 > ### 🔎 En tu código
-> En `SoftCard.tsx` de RachaSimple no aparece la palabra `children` en una `interface` propia: el
+> En `SoftCard.tsx` de RachaSimple no verás la palabra `children` en una `interface` propia: el
 > componente extiende `HTMLAttributes<HTMLDivElement>`, un tipo de React que **ya incluye** `children`
 > y todos los atributos de un `<div>` (como `className` y `style`). Es un truco avanzado que verás a
 > fondo en el Módulo 06; por ahora basta con saber que `children` siempre es del tipo `ReactNode`.
@@ -275,9 +275,9 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
 }
 ```
 
-Fíjate en dos cosas. Primero, `onChange` es una prop **función**: su tipo es
+Fíjate en dos cosas. La primera: `onChange` es una prop **función**, y su tipo es
 `(color: string | null) => void` (el `=> void` lo viste en el Capítulo 04: «no devuelve nada útil»).
-Segundo, `onClick={() => onChange(c.id)}` es lo que se ejecuta al hacer clic en ese botón.
+La segunda: `onClick={() => onChange(c.id)}` es lo que se ejecuta al hacer clic en ese botón.
 
 > ### 🟦 ¿Qué significa? — *Evento*
 > Un **evento** es algo que ocurre en la interfaz: un clic, una tecla, un cambio de texto. **Para
@@ -300,9 +300,9 @@ Cuando necesitas leer **lo que el usuario escribió** en un input, el manejador 
 />
 ```
 
-Aquí `e` es el evento. `e.target.value` es el texto que el usuario tiene en el input. ¿De qué tipo
+Aquí `e` es el evento, y `e.target.value` es el texto que el usuario tiene en el input. ¿De qué tipo
 es `e`? En este caso React lo **deduce solo**, porque el `<input>` es un elemento HTML que React ya
-conoce: `e` es del tipo `ChangeEvent<HTMLInputElement>`. No tienes que escribirlo.
+conoce: `e` es del tipo `ChangeEvent<HTMLInputElement>`. No tienes que escribirlo tú.
 
 > ### 🟦 ¿Qué significa? — *`ChangeEvent`*
 > **`ChangeEvent<HTMLInputElement>`** es el tipo del evento que dispara un input al cambiar su valor.
@@ -310,8 +310,8 @@ conoce: `e` es del tipo `ChangeEvent<HTMLInputElement>`. No tienes que escribirl
 > `e.target.value` esté tipado como texto y el editor sepa qué propiedades tiene `e`. **Dónde se
 > usa:** en `ReminderCard` y en la pantalla de login de RachaSimple, al leer lo que se escribe.
 
-A veces sí necesitas escribir el tipo del evento tú mismo: cuando defines el manejador **aparte**
-del JSX. Ahí React no puede deducirlo y se lo dices a mano:
+Hay veces en que sí tienes que escribir el tipo del evento tú mismo: cuando defines el manejador
+**aparte** del JSX. Ahí React no puede deducirlo y se lo dices a mano:
 
 ```typescript
 import type { ChangeEvent } from 'react';
@@ -339,7 +339,7 @@ eligió, si un menú está abierto. Eso es el **estado**, y se guarda con el hoo
 > ### 🟦 ¿Qué significa? — *Hook*
 > Un **hook** es una función especial de React cuyo nombre empieza por `use` (`useState`, `useRef`,
 > `useEffect`). Da «superpoderes» a un componente: memoria, acceso al DOM, efectos. **Para qué sirve:**
-> manejar estado y comportamiento. **Dónde se ve:** RachaSimple los usa en todas partes; los verás a
+> manejar estado y comportamiento. **Dónde se ve:** RachaSimple los usa por todos lados; los verás a
 > fondo en el Módulo 06.
 
 > ### 🟦 ¿Qué significa? — *Estado (state)*
@@ -347,8 +347,8 @@ eligió, si un menú está abierto. Eso es el **estado**, y se guarda con el hoo
 > la pantalla. **Para qué sirve:** recordar y reaccionar (un contador, un campo de texto). **Dónde se
 > ve:** en `ReminderCard` el estado guarda la hora del recordatorio.
 
-`useState` devuelve dos cosas en un array: el valor actual y una función para cambiarlo. Mira un
-caso real de `ReferralCard` de RachaSimple:
+`useState` devuelve dos cosas dentro de un array: el valor actual y una función para cambiarlo. Mira
+un caso real de `ReferralCard` de RachaSimple:
 
 ```typescript
 const [count, setCount] = useState<number | null>(null);
@@ -382,7 +382,7 @@ como las del Capítulo 06) y arranca en `'default'`.
 > es `null` y te impediría guardarle un número. Por eso `ReferralCard` lo escribe explícito.
 
 > ### 💡 Tip
-> El nombre del cambiador es por convención `set` + el nombre del estado: `count` → `setCount`,
+> El nombre del cambiador es, por convención, `set` + el nombre del estado: `count` → `setCount`,
 > `time` → `setTime`. No es obligatorio, pero todo el ecosistema lo hace y se lee solo.
 
 Y así se conecta todo lo de este capítulo. En el login de RachaSimple, el estado y el evento bailan
@@ -395,14 +395,14 @@ const [email, setEmail] = useState<string>('');
 ```
 
 El input muestra `email`; cuando escribes, el evento `e` trae el nuevo texto y `setEmail` lo guarda;
-React redibuja. Estado tipado + evento tipado, trabajando en equipo.
+React redibuja. Estado tipado y evento tipado, trabajando en equipo.
 
 ---
 
 ## 7. Tipar `useRef`
 
 A veces no quieres «memoria que redibuja la pantalla», sino una referencia a un **elemento del DOM**
-real (para enfocar un input, medir su tamaño, hacer scroll). Eso es `useRef`.
+real (para enfocar un input, medir su tamaño, hacer scroll). Para eso está `useRef`.
 
 > ### 🟦 ¿Qué significa? — *`useRef`*
 > **`useRef<T>(inicial)`** crea una «caja» que guarda un valor entre redibujos **sin** provocar
@@ -450,7 +450,7 @@ opcional del Capítulo 06) antes de `.focus()`.
 
 ## 8. Juntándolo todo: leer un componente real
 
-Ya tienes las piezas. Mira de nuevo `ColorPicker` con ojos nuevos y nómbralas tú:
+Ya tienes todas las piezas. Mira de nuevo `ColorPicker` con ojos nuevos y nómbralas tú:
 
 ```typescript
 interface ColorPickerProps {           // 1. interface de props
@@ -474,7 +474,7 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {  // 4. dese
 }
 ```
 
-Esto es React + TypeScript de verdad, el mismo que escribirás en el Módulo 06. Nada mágico: una
+Esto es React con TypeScript de verdad, el mismo que escribirás en el Módulo 06. Nada de magia: una
 función, props tipadas con `interface`, eventos manejados con funciones tipadas. TypeScript es
 JavaScript con tipos, y React con TypeScript es React con etiquetas. Bit te aplaude con sus
 branquias: ya puedes **leer** la interfaz de tus apps, y eso es el 80% del camino para escribirla.

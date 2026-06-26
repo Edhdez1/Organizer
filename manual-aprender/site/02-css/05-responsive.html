@@ -20,41 +20,41 @@
 <h1 id="capitulo-05-diseno-responsive">Capítulo 05 — Diseño responsive</h1>
 <blockquote>
 <p>Tu sitio lo abre gente desde un teléfono pequeño, una tablet, una laptop y un monitor enorme.
-¿Cómo logras que se vea bien en <strong>todos</strong>? Con <strong>diseño responsive</strong>. Cerramos el módulo de
-CSS con la pieza que hace tu web profesional en cualquier pantalla. (Tú mismo estás leyendo
-esto desde el teléfono: esto es justo lo que lo hace posible.)</p>
+¿Cómo haces que se vea bien en <strong>todos</strong>? Con <strong>diseño responsive</strong>. Cerramos el módulo de
+CSS justo con la pieza que hace que tu web se vea profesional en cualquier pantalla. (De hecho,
+tú mismo estás leyendo esto desde el teléfono: esto es exactamente lo que lo hace posible.)</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-el-diseno-responsive">1. Qué es el diseño responsive</h2>
 <blockquote class="def">
 <h3 id="que-significa-diseno-responsive-adaptable">🟦 ¿Qué significa? — <em>Diseño responsive (adaptable)</em></h3>
-<p>El <strong>diseño responsive</strong> ("que responde") es construir una página que <strong>se adapta
-automáticamente</strong> al tamaño de la pantalla: en el teléfono el contenido se apila en una
-columna; en el escritorio se reparte en varias columnas. No haces una web "para móvil" y otra
-"para escritorio": haces <strong>una sola</strong> que se reacomoda.</p>
+<p>El <strong>diseño responsive</strong> ("que responde") consiste en construir una página que <strong>se adapta
+sola</strong> al tamaño de la pantalla: en el teléfono el contenido se apila en una columna; en el
+escritorio se reparte en varias. No haces una web "para móvil" y otra distinta "para escritorio":
+haces <strong>una sola</strong> que se reacomoda según el espacio que tenga.</p>
 <h3 id="tip-por-que-importa-tanto">💡 Tip — Por qué importa tanto</h3>
-<p>Más de la mitad del tráfico web mundial es desde móvil. Una página que en el teléfono se ve
-diminuta o descuadrada <strong>pierde clientes</strong>. Google incluso penaliza en sus resultados a los
-sitios que no son responsive. Para tu negocio, esto es dinero.</p>
+<p>Más de la mitad del tráfico web del mundo viene del móvil. Una página que en el teléfono se ve
+diminuta o descuadrada <strong>pierde clientes</strong>, así de simple. Google incluso baja en sus resultados
+a los sitios que no son responsive. Para tu negocio, esto se traduce en dinero.</p>
 </blockquote>
 <hr />
 <h2 id="2-el-cimiento-la-etiqueta-viewport-repaso-del-modulo-01">2. El cimiento: la etiqueta viewport (repaso del módulo 01)</h2>
 <blockquote class="def">
 <h3 id="que-significa-la-meta-etiqueta-viewport">🟦 ¿Qué significa? — <em>La meta-etiqueta viewport</em></h3>
 <p>Sin esta línea en el <code>&lt;head&gt;</code>, el móvil "miente" sobre su ancho y muestra la página como una
-versión diminuta de escritorio. La línea le dice "usa el ancho real del dispositivo":
+versión encogida de escritorio. La línea le dice "usa el ancho real del dispositivo":
 <code>html
 &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code>
 Es <strong>el requisito número uno</strong> del responsive. Sin ella, nada de lo demás funciona en móvil.
-Tu sitio la tiene; revísala con <code>F12</code>.</p>
+Tu sitio ya la tiene; compruébalo con <code>F12</code>.</p>
 </blockquote>
 <hr />
 <h2 id="3-la-herramienta-estrella-las-media-queries">3. La herramienta estrella: las media queries</h2>
 <blockquote class="def">
 <h3 id="que-significa-media-query-consulta-de-medios">🟦 ¿Qué significa? — <em>Media query (consulta de medios)</em></h3>
 <p>Una <strong>media query</strong> es una regla CSS que <strong>solo se aplica si se cumple una condición</strong> sobre
-la pantalla, típicamente su ancho. Es como decir "si la pantalla mide menos de 600px, aplica
-<em>estos</em> estilos".
+la pantalla, normalmente su ancho. Viene a ser como decir "si la pantalla mide menos de 600px,
+aplica <em>estos</em> estilos".
 ```css
 /<em> Estilos normales (para pantallas grandes) </em>/
 .galeria { display: flex; gap: 16px; }</p>
@@ -63,20 +63,20 @@ la pantalla, típicamente su ancho. Es como decir "si la pantalla mide menos de 
   .galeria { flex-direction: column; }
 }
 <code>``
-La parte</code>@media (max-width: 600px)` es la condición; las reglas dentro de sus llaves solo
-aplican cuando se cumple.</p>
+La parte</code>@media (max-width: 600px)` es la condición; las reglas que van dentro de sus llaves
+solo se activan cuando esa condición se cumple.</p>
 <h3 id="que-significa-breakpoint-punto-de-quiebre">🟦 ¿Qué significa? — <em>Breakpoint (punto de quiebre)</em></h3>
 <p>Un <strong>breakpoint</strong> es el ancho en el que tu diseño "cambia de forma" (por ejemplo, 600px). No
-hay valores mágicos universales; se eligen según dónde <em>tu</em> diseño empieza a verse mal.
-Valores comunes de referencia: ~600px (móvil/tablet), ~900px (tablet/escritorio).</p>
+existen valores mágicos que sirvan para todo; los eliges según dónde <em>tu</em> diseño empieza a verse
+mal. Como referencia, se suelen usar ~600px (móvil/tablet) y ~900px (tablet/escritorio).</p>
 </blockquote>
 <hr />
 <h2 id="4-la-estrategia-recomendada-mobile-first">4. La estrategia recomendada: mobile-first</h2>
 <blockquote class="def">
 <h3 id="que-significa-mobile-first-primero-el-movil">🟦 ¿Qué significa? — <em>Mobile-first ("primero el móvil")</em></h3>
-<p>Es una forma de trabajar: <strong>escribe primero los estilos para móvil</strong> (el caso más simple, una
-columna) y luego, con media queries de <code>min-width</code>, <strong>añade</strong> complejidad para pantallas
-grandes.
+<p>Es una forma de trabajar: <strong>escribe primero los estilos para móvil</strong> (el caso más sencillo, todo
+en una columna) y después, con media queries de <code>min-width</code>, <strong>vas añadiendo</strong> complejidad para
+las pantallas grandes.
 ```css
 /<em> Base: móvil. Todo en una columna. </em>/
 .galeria { display: flex; flex-direction: column; gap: 16px; }</p>
@@ -85,36 +85,36 @@ grandes.
   .galeria { flex-direction: row; }
 }
 ```
-<strong>¿Por qué mobile-first?</strong> Porque es más fácil <em>añadir</em> lujo para pantallas grandes que
-<em>quitarlo</em> para las pequeñas. Además, te obliga a priorizar lo esencial. Es el estándar de la
-industria; tu sitio y tus apps lo siguen.</p>
+<strong>¿Por qué mobile-first?</strong> Porque cuesta menos <em>añadir</em> lujo para pantallas grandes que
+<em>quitarlo</em> para las pequeñas. De paso, te obliga a decidir qué es lo esencial. Es el estándar de
+la industria, y tanto tu sitio como tus apps lo siguen.</p>
 <h3 id="que-significa-max-width-vs-min-width">🟦 ¿Qué significa? — <em><code>max-width</code> vs. <code>min-width</code></em></h3>
 <ul>
-<li><code>@media (max-width: 600px)</code> → "de 600px <strong>hacia abajo</strong>" (pantallas pequeñas). Típico del
+<li><code>@media (max-width: 600px)</code> → "de 600px <strong>hacia abajo</strong>" (pantallas pequeñas). Es lo típico del
   enfoque "escritorio primero".</li>
-<li><code>@media (min-width: 700px)</code> → "de 700px <strong>hacia arriba</strong>" (pantallas grandes). Típico del
+<li><code>@media (min-width: 700px)</code> → "de 700px <strong>hacia arriba</strong>" (pantallas grandes). Es lo típico del
   enfoque "mobile-first".
-Elige uno y sé consistente. Mobile-first usa principalmente <code>min-width</code>.</li>
+Elige uno y mantente fiel a él. En mobile-first usarás sobre todo <code>min-width</code>.</li>
 </ul>
 </blockquote>
 <hr />
 <h2 id="5-imagenes-y-medidas-flexibles">5. Imágenes y medidas flexibles</h2>
-<p>Dos hábitos que hacen responsive casi cualquier cosa, sin media queries:</p>
+<p>Hay dos hábitos que vuelven responsive casi cualquier cosa, y ni siquiera necesitan media queries:</p>
 <blockquote class="tip">
 <h3 id="tip-imagenes-que-nunca-se-desbordan">💡 Tip — Imágenes que nunca se desbordan</h3>
-<p>Esta regla hace que ninguna imagen sea más ancha que su contenedor (clave en móvil):
+<p>Esta regla hace que ninguna imagen sea más ancha que su contenedor (algo clave en móvil):
 <code>css
 img {
   max-width: 100%;
   height: auto;   /* mantiene la proporción */
 }</code></p>
 <h3 id="tip-mide-en-relativo-no-en-absoluto">💡 Tip — Mide en relativo, no en absoluto</h3>
-<p>Si pones <code>width: 1000px</code> a un bloque, en un teléfono de 360px se desborda. Mejor usa medidas
-relativas (<code>%</code>, o un <code>max-width</code> con <code>width: 100%</code>):
+<p>Si le pones <code>width: 1000px</code> a un bloque, en un teléfono de 360px se desborda sin remedio. Mejor
+usa medidas relativas (<code>%</code>, o un <code>max-width</code> junto a <code>width: 100%</code>):
 <code>css
 .contenedor { width: 100%; max-width: 1000px; margin: 0 auto; }</code>
-Así ocupa hasta 1000px en pantallas grandes, pero se encoge solo en las pequeñas, y <code>margin:
-0 auto</code> lo centra. Esta es la base del layout de casi cualquier sitio (incluida la hoja de
+Así ocupa hasta 1000px en pantallas grandes, pero se encoge solo en las pequeñas, y el <code>margin:
+0 auto</code> lo deja centrado. Esta es la base del layout de casi cualquier sitio (incluida la hoja de
 estilos de este manual, con su <code>.contenedor</code>).</p>
 </blockquote>
 <hr />
@@ -122,9 +122,9 @@ estilos de este manual, con su <code>.contenedor</code>).</p>
 <blockquote class="tip">
 <h3 id="tip-el-modo-dispositivo-de-las-devtools">💡 Tip — El modo dispositivo de las DevTools</h3>
 <p>En tu computadora, abre <code>F12</code> y busca el icono de <strong>móvil/tablet</strong> (suele estar arriba a la
-izquierda del panel). Activa el "modo dispositivo": puedes simular distintos tamaños de
-pantalla y ver cómo responde tu página, sin necesidad de un teléfono real. Es como tendrás que
-revisar tus diseños siempre.</p>
+izquierda del panel). Al activar el "modo dispositivo" puedes simular distintos tamaños de
+pantalla y ver cómo responde tu página, sin necesidad de un teléfono real. Así es como vas a
+revisar tus diseños de aquí en adelante.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

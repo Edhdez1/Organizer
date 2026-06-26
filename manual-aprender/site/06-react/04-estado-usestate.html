@@ -19,10 +19,10 @@
 <main class="contenedor">
 <h1 id="capitulo-04-estado-con-usestate">Capítulo 04 — Estado con useState</h1>
 <blockquote>
-<p>Las props son datos que <strong>llegan de afuera</strong> y no cambian. Pero una app viva necesita datos
-que <strong>cambian con el tiempo</strong>: un contador que sube, un campo que el usuario escribe, un menú
-que se abre. Eso es el <strong>estado</strong>, y se maneja con tu primer <strong>hook</strong>: <code>useState</code>. Es el
-concepto que hace que React sea "reactivo".</p>
+<p>Las props son datos que <strong>llegan de afuera</strong> y se quedan quietos. Pero una app viva necesita
+datos que <strong>cambian con el tiempo</strong>: un contador que sube, un campo que el usuario va llenando,
+un menú que se abre y se cierra. A eso lo llamamos <strong>estado</strong>, y se maneja con tu primer
+<strong>hook</strong>: <code>useState</code>. Es justo lo que hace que React sea "reactivo".</p>
 </blockquote>
 <p align="center">
   <img src="../../recursos/imagenes/06-react/estado-rerender.png" alt="Bit pulsa un botón y el contador en pantalla cambia de 2 a 3: la interfaz se redibuja al cambiar el estado" width="640">
@@ -34,23 +34,24 @@ concepto que hace que React sea "reactivo".</p>
 <h3 id="que-significa-estado-state">🟦 ¿Qué significa? — <em>Estado (state)</em></h3>
 <p>El <strong>estado</strong> son los <strong>datos que cambian con el tiempo</strong> dentro de un componente y que, al
 cambiar, hacen que la interfaz se <strong>vuelva a dibujar</strong> para reflejarlos. Si las props son "lo
-que me dan desde afuera (no lo toco)", el estado es "lo mío, que evoluciona aquí adentro".
-Ejemplos: el número de un contador, si un menú está abierto, lo que hay escrito en un input.</p>
+que me dan desde afuera y no toco", el estado es "lo mío, lo que evoluciona aquí dentro".
+Por ejemplo: el número de un contador, si un menú está abierto o cerrado, o lo que hay escrito
+en un input.</p>
 <h3 id="que-significa-re-render-volver-a-renderizar">🟦 ¿Qué significa? — <em>Re-render (volver a renderizar)</em></h3>
 <p><strong>Renderizar</strong> es "dibujar" el componente en pantalla. Cuando el estado cambia, React
-<strong>vuelve a ejecutar</strong> la función del componente y actualiza solo lo que cambió en la pantalla.
-A eso se le llama <strong>re-render</strong>. Esta es la magia declarativa del Módulo 06-cap.01: tú cambias
-el dato, React redibuja; no tocas el DOM a mano.</p>
+<strong>vuelve a ejecutar</strong> la función del componente y actualiza solo lo que cambió. A eso le
+decimos <strong>re-render</strong>. Es la misma magia declarativa del Módulo 06-cap.01: tú cambias el dato y
+React redibuja; no tocas el DOM a mano.</p>
 </blockquote>
 <hr />
 <h2 id="2-usestate-tu-primer-hook">2. <code>useState</code>: tu primer hook</h2>
 <blockquote class="def">
 <h3 id="que-significa-hook">🟦 ¿Qué significa? — <em>Hook</em></h3>
 <p>Un <strong>hook</strong> ("gancho") es una <strong>función especial de React</strong> cuyo nombre empieza por <code>use...</code> y
-que le da "superpoderes" a un componente (recordar datos, ejecutar efectos…). El primero y más
-importante es <code>useState</code>.</p>
+que le da "superpoderes" a un componente: recordar datos, ejecutar efectos, y más. El primero y
+el que más vas a usar es <code>useState</code>.</p>
 <h3 id="que-significa-usestate">🟦 ¿Qué significa? — <em><code>useState</code></em></h3>
-<p><code>useState</code> crea una variable de <strong>estado</strong> dentro de un componente. Devuelve <strong>dos cosas</strong> en
+<p><code>useState</code> crea una variable de <strong>estado</strong> dentro de un componente. Te devuelve <strong>dos cosas</strong> en
 un array: el <strong>valor actual</strong> y una <strong>función para cambiarlo</strong>.
 ```tsx
 import { useState } from "react";</p>
@@ -63,15 +64,15 @@ import { useState } from "react";</p>
   );
 }
 <code>``
--</code>cuenta<code>→ el valor actual del estado (empieza en</code>0<code>).
+-</code>cuenta<code>→ el valor actual del estado (arranca en</code>0<code>).
 -</code>setCuenta<code>→ la función que lo cambia. **Siempre** se usa esta función para cambiarlo, nunca</code>cuenta = cuenta + 1<code>directamente.
--</code>useState(0)<code>→ el</code>0<code>es el valor inicial.
-Cada vez que pulsas el botón,</code>setCuenta` actualiza el estado, React <strong>re-renderiza</strong>, y el
-número en pantalla sube. Sin tocar el DOM. Eso es React.</p>
+-</code>useState(0)<code>→ ese</code>0<code>es el valor inicial.
+Cada vez que pulsas el botón,</code>setCuenta` actualiza el estado, React <strong>re-renderiza</strong> y el
+número en pantalla sube. Todo sin tocar el DOM. Eso es React.</p>
 <h3 id="que-significa-la-desestructuracion-valor-setvalor">🟦 ¿Qué significa? — <em>La desestructuración <code>[valor, setValor]</code></em></h3>
-<p><code>const [cuenta, setCuenta] = useState(0)</code> usa <strong>desestructuración de array</strong> (saca dos cosas de
-la lista que devuelve <code>useState</code>, por su posición). Convención: la función se llama igual que
-el estado con <code>set</code> delante (<code>cuenta</code> → <code>setCuenta</code>).</p>
+<p><code>const [cuenta, setCuenta] = useState(0)</code> usa <strong>desestructuración de array</strong>: saca dos cosas de
+la lista que devuelve <code>useState</code>, una por posición. Hay una convención cómoda: la función se
+llama igual que el estado pero con <code>set</code> delante (<code>cuenta</code> → <code>setCuenta</code>).</p>
 </blockquote>
 <hr />
 <h2 id="3-la-regla-de-oro-nunca-cambies-el-estado-directamente">3. La regla de oro: nunca cambies el estado directamente</h2>
@@ -83,33 +84,35 @@ cuenta = cuenta + 1;</p>
 <p>// ✅ BIEN: avisa a React, que re-renderiza
 setCuenta(cuenta + 1);
 <code>``
-¿Por qué? Porque la función</code>set...` es la que le <strong>avisa a React</strong> que algo cambió para que
-redibuje. Si modificas la variable a mano, React no se entera y la pantalla se queda igual. Es
-el error nº 1 al empezar con estado.</p>
+¿Por qué? Porque la función</code>set...` es la que le <strong>avisa a React</strong> de que algo cambió, y por eso
+redibuja. Si modificas la variable a mano, React ni se entera y la pantalla se queda igual. Este
+es el error número uno cuando uno empieza con estado.</p>
 <h3 id="tip-estado-basado-en-el-anterior">💡 Tip — Estado basado en el anterior</h3>
-<p>Cuando el nuevo valor depende del actual, pásale a <code>set...</code> una función:
+<p>Cuando el nuevo valor depende del que ya tienes, pásale a <code>set...</code> una función:
 <code>tsx
 setCuenta((anterior) =&gt; anterior + 1);</code>
-Es la forma segura cuando haces varios cambios seguidos. Por ahora, reconócela; la verás mucho.</p>
+Es la forma segura cuando haces varios cambios seguidos. Por ahora solo apréndela de vista; la
+vas a ver muchísimo.</p>
 </blockquote>
 <hr />
 <h2 id="4-eventos-en-react">4. Eventos en React</h2>
-<p>Para que el estado cambie, normalmente respondes a un <strong>evento</strong> del usuario (un clic, escribir).
-Es como el <code>addEventListener</code> del Módulo 03, pero más directo.</p>
+<p>Para que el estado cambie, casi siempre respondes a un <strong>evento</strong> del usuario: un clic, una tecla.
+Es parecido al <code>addEventListener</code> del Módulo 03, pero más directo y cómodo.</p>
 <blockquote class="def">
 <h3 id="que-significa-manejadores-de-eventos-en-jsx">🟦 ¿Qué significa? — <em>Manejadores de eventos en JSX</em></h3>
-<p>En JSX, los eventos se ponen como props con <code>on...</code> y reciben una función:
+<p>En JSX, los eventos se ponen como props que empiezan por <code>on...</code> y reciben una función:
 <code>tsx
 &lt;button onClick={() =&gt; setAbierto(!abierto)}&gt;Abrir/cerrar&lt;/button&gt;
 &lt;input onChange={(e) =&gt; setTexto(e.target.value)} /&gt;</code>
 - <code>onClick</code> → al hacer clic.
-- <code>onChange</code> → al cambiar un campo (escribir). <code>e.target.value</code> es lo que el usuario escribió.
-Fíjate: se pasa <strong>una función</strong> (<code>() =&gt; ...</code>), no se ejecuta en el momento. (Camel-case:
-<code>onClick</code>, no <code>onclick</code>.)</p>
+- <code>onChange</code> → al cambiar un campo, es decir, al escribir. <code>e.target.value</code> es lo que el usuario
+  tecleó.
+Fíjate en un detalle: le pasas <strong>una función</strong> (<code>() =&gt; ...</code>), no la ejecutas ahí mismo. Y va en
+camel-case: <code>onClick</code>, no <code>onclick</code>.</p>
 </blockquote>
 <hr />
 <h2 id="5-un-formulario-controlado-caso-real">5. Un formulario controlado (caso real)</h2>
-<p>Juntando estado + eventos, así se maneja un campo de texto en React:</p>
+<p>Ahora juntemos estado y eventos. Así se maneja un campo de texto en React:</p>
 <pre><code class="language-tsx">function Saludo() {
   const [nombre, setNombre] = useState(&quot;&quot;);
 
@@ -127,13 +130,15 @@ Fíjate: se pasa <strong>una función</strong> (<code>() =&gt; ...</code>), no s
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-componenteinput-controlado">🟦 ¿Qué significa? — <em>Componente/input controlado</em></h3>
-<p>Un <strong>input controlado</strong> es uno cuyo valor <strong>lo gobierna el estado de React</strong> (<code>value={nombre}</code>),
-y cada tecla actualiza ese estado (<code>onChange</code>). Así, la "fuente de la verdad" de lo que hay en
-el campo es tu estado, no el DOM. Es como RachaSimple maneja sus formularios (crear hábito,
-check-in). El <code>&lt;p&gt;</code> de abajo se actualiza <strong>en vivo</strong> mientras escribes: estado → re-render.</p>
+<p>Un <strong>input controlado</strong> es aquel cuyo valor <strong>lo gobierna el estado de React</strong> (<code>value={nombre}</code>),
+y donde cada tecla actualiza ese estado (<code>onChange</code>). Así, la "fuente de la verdad" de lo que hay
+en el campo es tu estado, no el DOM. Es como RachaSimple maneja sus formularios (crear hábito,
+check-in). El <code>&lt;p&gt;</code> de abajo se actualiza <strong>en vivo</strong> mientras escribes: cambia el estado, viene
+el re-render.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Cada vez que en RachaSimple escribes el nombre de un hábito o eliges su color, hay un
-<code>useState</code> detrás guardando ese valor y re-renderizando la vista previa. Ya entiendes el motor.</p>
+<p>Cada vez que en RachaSimple escribes el nombre de un hábito o eliges su color, hay un <code>useState</code>
+detrás guardando ese valor y volviendo a renderizar la vista previa. Ya conoces el motor que lo
+mueve.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

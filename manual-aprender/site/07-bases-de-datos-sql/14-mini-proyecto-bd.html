@@ -23,49 +23,49 @@
 </p>
 
 <blockquote>
-<p>¡Llegaste al gran momento! Hasta aquí aprendiste tablas, tipos, claves y consultas por separado. Hoy juntamos todo y diseñamos, desde cero, la base de datos completa de una mini app de hábitos al estilo de <strong>RachaSimple</strong>. Vamos a crear las tablas de usuarios, hábitos y registros, las conectaremos con claves, escribiremos una consulta de estadísticas con <code>JOIN</code> y <code>GROUP BY</code>, y al final protegeremos los datos con RLS. Todo se puede pegar y ejecutar en el editor SQL de Supabase 💻. Bit, nuestro ajolote, viene con casco de obrero: hoy construimos. 🪼🚧</p>
+<p>Este es el capítulo que estabas esperando. Hasta ahora viste tablas, tipos, claves y consultas cada una por su lado, como piezas sueltas. Hoy las juntamos y armamos, desde cero, la base de datos completa de una pequeña app de hábitos parecida a <strong>RachaSimple</strong>. Crearemos las tablas de usuarios, hábitos y registros, las uniremos con claves, escribiremos una consulta de estadísticas con <code>JOIN</code> y <code>GROUP BY</code>, y para terminar blindaremos los datos con RLS. Todo lo puedes pegar y ejecutar en el editor SQL de Supabase 💻. Bit, nuestro ajolote, hoy viene con casco de obrero: toca construir. 🪼🚧</p>
 </blockquote>
 <hr />
 <h2 id="1-que-vamos-a-construir">1. ¿Qué vamos a construir?</h2>
-<p>Imagina una app sencilla: el usuario crea hábitos (por ejemplo, "Beber agua" o "Leer 10 minutos") y cada día marca si los cumplió. La app le muestra su <strong>racha</strong>: cuántos días seguidos lo ha logrado. Esa es exactamente la idea de <strong>RachaSimple</strong>.</p>
-<p>Para que eso funcione necesitamos guardar tres cosas:</p>
+<p>Piensa en una app sencilla: la persona crea hábitos (por ejemplo, "Beber agua" o "Leer 10 minutos") y cada día marca si los cumplió. La app le muestra su <strong>racha</strong>, es decir, cuántos días seguidos lo ha logrado. Esa es justo la idea detrás de <strong>RachaSimple</strong>.</p>
+<p>Para que algo así funcione tenemos que guardar tres cosas:</p>
 <ol>
 <li><strong>Quién</strong> es cada persona (usuarios / perfiles).</li>
 <li><strong>Qué hábitos</strong> tiene cada persona.</li>
 <li><strong>Qué días</strong> marcó cada hábito (los registros).</li>
 </ol>
-<p>Antes de tocar SQL, comparemos dos formas de guardar esto, porque elegir bien es la mitad del diseño.</p>
+<p>Antes de tocar una sola línea de SQL, vale la pena comparar dos formas de guardar esto, porque elegir bien es ya media batalla del diseño.</p>
 <blockquote class="def">
 <h3 id="que-significa-base-de-datos-relacional">🟦 ¿Que significa? — <em>Base de datos relacional</em></h3>
-<p>Es una forma de guardar información en <strong>tablas</strong> (como hojas de cálculo) que se <strong>relacionan</strong> entre sí mediante claves. "Relacional" porque una fila de una tabla puede apuntar a una fila de otra. Sirve para tener datos ordenados, sin repetir y fáciles de consultar. En <strong>RachaSimple</strong> y en <strong>Faro</strong> los datos viven en una base de datos relacional Postgres dentro de Supabase.</p>
+<p>Es una forma de guardar información en <strong>tablas</strong> (parecidas a hojas de cálculo) que se <strong>relacionan</strong> entre sí mediante claves. Se llama "relacional" porque una fila de una tabla puede apuntar a una fila de otra. Te sirve para tener los datos ordenados, sin repetirlos y fáciles de consultar. En <strong>RachaSimple</strong> y en <strong>Faro</strong> los datos viven en una base de datos relacional Postgres dentro de Supabase.</p>
 <h3 id="que-significa-postgres">🟦 ¿Que significa? — <em>Postgres</em></h3>
-<p>Es el motor de base de datos (el programa que guarda y consulta los datos) que usa Supabase por debajo. Es gratuito, muy robusto y entiende SQL. Sirve para almacenar tus tablas y ejecutar tus consultas. Tanto <strong>RachaSimple</strong> como <strong>Faro/Organizer</strong> corren sobre Postgres gestionado por Supabase.</p>
+<p>Es el motor de base de datos (el programa que guarda y consulta los datos) que Supabase usa por debajo. Es gratuito, muy sólido y entiende SQL. Su trabajo es almacenar tus tablas y ejecutar tus consultas. Tanto <strong>RachaSimple</strong> como <strong>Faro/Organizer</strong> corren sobre Postgres gestionado por Supabase.</p>
 <h3 id="que-significa-supabase">🟦 ¿Que significa? — <em>Supabase</em></h3>
-<p>Es una plataforma que te da una base de datos Postgres lista para usar, más login de usuarios, API automática y un <strong>editor SQL</strong> en el navegador. Sirve para no montar un servidor a mano. <strong>RachaSimple</strong> y <strong>Faro</strong> la usan para guardar datos y autenticar personas.</p>
+<p>Es una plataforma que te entrega una base de datos Postgres lista para usar, además de login de usuarios, una API automática y un <strong>editor SQL</strong> en el navegador. Te ahorra tener que montar un servidor a mano. <strong>RachaSimple</strong> y <strong>Faro</strong> la usan para guardar datos y autenticar personas.</p>
 </blockquote>
 <h3 id="el-contraste-polypaw-no-usa-base-de-datos-relacional">El contraste: PolyPaw no usa base de datos relacional</h3>
 <p>No toda app necesita Postgres. <strong>PolyPaw</strong> (la app educativa en Python/Flet) guarda sus datos en <strong>archivos JSON</strong> sueltos, no en tablas relacionadas.</p>
 <blockquote class="def">
 <h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
-<p>Es un formato de texto para guardar datos como listas y pares "clave: valor", por ejemplo <code>{"nombre": "Bit", "edad": 3}</code>. Sirve para datos sencillos y portables. <strong>PolyPaw</strong> guarda sus misiones y progreso en archivos <code>.json</code>, sin un motor de base de datos detrás.</p>
+<p>Es un formato de texto para guardar datos como listas y pares "clave: valor", por ejemplo <code>{"nombre": "Bit", "edad": 3}</code>. Va bien para datos sencillos y portables. <strong>PolyPaw</strong> guarda sus misiones y su progreso en archivos <code>.json</code>, sin ningún motor de base de datos detrás.</p>
 </blockquote>
-<p>Eso funciona para PolyPaw porque sus datos son pocos y casi no cambian a la vez. Pero para una app de hábitos con muchos usuarios marcando registros al mismo tiempo, los archivos JSON se quedan cortos: no sabes buscar rápido "todos los registros de María en mayo" ni evitar que dos personas se pisen. Ahí brilla lo relacional.</p>
+<p>Para PolyPaw eso funciona porque sus datos son pocos y casi nunca cambian al mismo tiempo. Pero en una app de hábitos con muchos usuarios marcando registros a la vez, los archivos JSON se quedan cortos: no hay manera fácil de buscar "todos los registros de María en mayo" ni de evitar que dos personas se pisen al escribir. Ahí es donde lo relacional saca ventaja.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Regla de bolsillo: si tus datos son <strong>pocos, locales y de un solo usuario</strong>, un JSON basta (como PolyPaw). Si son <strong>muchos, compartidos o necesitas buscar y cruzar</strong>, usa una base de datos relacional (como RachaSimple y Faro).</p>
+<p>Regla de bolsillo: si tus datos son <strong>pocos, locales y de un solo usuario</strong>, con un JSON basta (es el caso de PolyPaw). Si son <strong>muchos, compartidos o necesitas buscar y cruzar información</strong>, usa una base de datos relacional (como hacen RachaSimple y Faro).</p>
 </blockquote>
 <hr />
 <h2 id="2-disenar-en-papel-antes-de-escribir-sql">2. Diseñar en papel antes de escribir SQL</h2>
-<p>Bit insiste: piensa primero, teclea después. Vamos a dibujar las tres tablas y sus columnas. Cada tabla guarda un tipo de cosa, y cada <strong>columna</strong> guarda un dato de esa cosa.</p>
+<p>Bit insiste en algo: primero piensa, después teclea. Vamos a dibujar las tres tablas con sus columnas. Cada tabla guarda un tipo de cosa, y cada <strong>columna</strong> guarda un dato de esa cosa.</p>
 <blockquote class="def">
 <h3 id="que-significa-tabla">🟦 ¿Que significa? — <em>Tabla</em></h3>
-<p>Es una colección de datos del mismo tipo, organizada en filas y columnas, como una hoja de cálculo. Cada fila es un elemento (un usuario, un hábito) y cada columna un atributo. Sirve para agrupar información parecida. En <strong>Faro</strong> existe la tabla <code>projects</code> (un proyecto por fila) y en <strong>RachaSimple</strong> la tabla de hábitos (un hábito por fila).</p>
+<p>Es una colección de datos del mismo tipo, organizada en filas y columnas, igual que una hoja de cálculo. Cada fila es un elemento (un usuario, un hábito) y cada columna un atributo. Sirve para agrupar información parecida. En <strong>Faro</strong> existe la tabla <code>projects</code> (un proyecto por fila) y en <strong>RachaSimple</strong> la tabla de hábitos (un hábito por fila).</p>
 <h3 id="que-significa-columna">🟦 ¿Que significa? — <em>Columna</em></h3>
 <p>Es cada "campo" de una tabla: nombre, fecha, etc. Define qué dato se guarda y de qué tipo. Sirve para que cada pieza de información tenga su lugar. La tabla de hábitos de <strong>RachaSimple</strong> tiene columnas como <code>nombre</code> y <code>created_at</code>.</p>
 <h3 id="que-significa-fila-registro">🟦 ¿Que significa? — <em>Fila (registro)</em></h3>
 <p>Es una entrada concreta dentro de una tabla: un usuario específico, un hábito específico. También se le llama "registro". Sirve para representar un elemento real. En <strong>Faro</strong>, cada fila de <code>projects</code> es un proyecto que el usuario conectó.</p>
 </blockquote>
-<p>Nuestro diseño en palabras:</p>
+<p>El diseño, dicho en palabras:</p>
 <ul>
 <li><strong>profiles</strong> (perfiles): una fila por persona. Guarda su id y su nombre visible.</li>
 <li><strong>habits</strong> (hábitos): una fila por hábito. Sabe a qué persona pertenece.</li>
@@ -77,30 +77,30 @@
 </blockquote>
 <hr />
 <h2 id="3-las-claves-como-se-identifican-y-se-conectan-las-filas">3. Las claves: cómo se identifican y se conectan las filas</h2>
-<p>Para que las tablas "se hablen" necesitamos dos tipos de claves.</p>
+<p>Para que las tablas "se hablen" entre sí necesitamos dos tipos de claves.</p>
 <blockquote class="def">
 <h3 id="que-significa-clave-primaria-primary-key">🟦 ¿Que significa? — <em>Clave primaria (primary key)</em></h3>
-<p>Es la columna que identifica de forma única a cada fila, como un número de cédula. No se repite ni queda vacía. Sirve para señalar sin confusión "esta fila y no otra". En <strong>Faro</strong>, cada tabla tiene una columna <code>id</code> que es su clave primaria.</p>
+<p>Es la columna que identifica de forma única a cada fila, como un número de cédula. Ni se repite ni queda vacía. Sirve para señalar sin ninguna duda "esta fila y no otra". En <strong>Faro</strong>, cada tabla tiene una columna <code>id</code> que es su clave primaria.</p>
 <h3 id="que-significa-clave-foranea-foreign-key">🟦 ¿Que significa? — <em>Clave foránea (foreign key)</em></h3>
-<p>Es una columna que apunta a la clave primaria de <strong>otra</strong> tabla, creando la relación. Sirve para conectar datos: "este hábito pertenece a este usuario". En <strong>RachaSimple</strong>, los registros apuntan al hábito al que pertenecen mediante una clave foránea.</p>
+<p>Es una columna que apunta a la clave primaria de <strong>otra</strong> tabla y crea así la relación. Sirve para conectar datos: "este hábito pertenece a este usuario". En <strong>RachaSimple</strong>, los registros apuntan al hábito al que pertenecen mediante una clave foránea.</p>
 <h3 id="que-significa-uuid">🟦 ¿Que significa? — <em>UUID</em></h3>
-<p>Es un identificador larguísimo y único, como <code>a1b2c3d4-...</code>, prácticamente imposible de repetir. Sirve como clave primaria difícil de adivinar (mejor que un simple 1, 2, 3 para apps con login). <strong>Supabase</strong> usa UUID para los ids de usuario en su sistema de autenticación, y <strong>Faro</strong> los usa en sus tablas.</p>
+<p>Es un identificador larguísimo y único, del estilo <code>a1b2c3d4-...</code>, que en la práctica es imposible que se repita. Sirve como clave primaria difícil de adivinar (mejor que un simple 1, 2, 3 cuando la app tiene login). <strong>Supabase</strong> usa UUID para los ids de usuario en su sistema de autenticación, y <strong>Faro</strong> los usa en sus tablas.</p>
 <h3 id="que-significa-authusers">🟦 ¿Que significa? — <em>auth.users</em></h3>
-<p>Es una tabla especial que Supabase crea sola para guardar las cuentas (correo, contraseña, etc.) cuando alguien se registra. No la creas tú. Sirve como fuente oficial de "quién está logueado". En <strong>RachaSimple</strong> y <strong>Faro</strong>, los perfiles se enlazan a <code>auth.users</code> por el id del usuario.</p>
+<p>Es una tabla especial que Supabase crea por su cuenta para guardar las cuentas (correo, contraseña, etc.) cuando alguien se registra. No la creas tú. Funciona como la fuente oficial de "quién está logueado". En <strong>RachaSimple</strong> y <strong>Faro</strong>, los perfiles se enlazan a <code>auth.users</code> por el id del usuario.</p>
 </blockquote>
-<p>La idea de conexión es esta cadena:</p>
+<p>La conexión es esta cadena:</p>
 <pre><code>auth.users  →  profiles  →  habits  →  habit_logs
  (Supabase)   (tu perfil)  (tus hábitos) (tus días marcados)
 </code></pre>
-<p>Cada flecha es una clave foránea. Así, desde un registro puedes "subir" hasta saber de qué hábito es y de qué usuario.</p>
+<p>Cada flecha es una clave foránea. Gracias a eso, partiendo de un registro puedes "subir" hasta saber de qué hábito es y de qué usuario.</p>
 <hr />
 <h2 id="4-tipos-de-datos-decirle-a-cada-columna-que-guarda">4. Tipos de datos: decirle a cada columna qué guarda</h2>
-<p>Antes de escribir las tablas, elegimos el <strong>tipo</strong> de cada columna.</p>
+<p>Antes de escribir las tablas, hay que elegir el <strong>tipo</strong> de cada columna.</p>
 <blockquote class="def">
 <h3 id="que-significa-tipo-de-dato">🟦 ¿Que significa? — <em>Tipo de dato</em></h3>
-<p>Es la categoría de información que una columna acepta: texto, número, fecha, verdadero/falso... Sirve para que la base de datos valide y guarde correctamente (no dejará meter texto donde va una fecha). En <strong>Faro</strong>, la columna <code>progress</code> es numérica y <code>description</code> es de texto.</p>
+<p>Es la categoría de información que una columna acepta: texto, número, fecha, verdadero/falso... Sirve para que la base de datos valide y guarde bien (no te dejará meter texto donde va una fecha). En <strong>Faro</strong>, la columna <code>progress</code> es numérica y <code>description</code> es de texto.</p>
 </blockquote>
-<p>Los tipos que usaremos hoy:</p>
+<p>Estos son los tipos que usaremos hoy:</p>
 <blockquote class="def">
 <h3 id="que-significa-text">🟦 ¿Que significa? — <em>text</em></h3>
 <p>Tipo para cadenas de texto de cualquier largo: nombres, descripciones. Sirve para guardar palabras y frases. El <code>nombre</code> de un hábito en <strong>RachaSimple</strong> es <code>text</code>.</p>
@@ -111,14 +111,14 @@
 <h3 id="que-significa-timestamptz">🟦 ¿Que significa? — <em>timestamptz</em></h3>
 <p>Tipo para fecha <strong>y</strong> hora con zona horaria, como "2026-06-26 14:30 GMT-5". Sirve para registrar el momento exacto en que algo ocurrió. <strong>Faro</strong> y <strong>RachaSimple</strong> usan <code>timestamptz</code> en su columna <code>created_at</code> ("creado el...").</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Diferencia clave: usa <code>date</code> cuando solo importa el <strong>día</strong> (ej. "marqué el hábito el 26"). Usa <code>timestamptz</code> cuando importa el <strong>instante</strong> exacto (ej. "esta fila se creó a tal hora"). Mezclarlos confunde tus consultas más tarde.</p>
+<p>La diferencia que conviene tener clara: usa <code>date</code> cuando solo importa el <strong>día</strong> (ej. "marqué el hábito el 26") y <code>timestamptz</code> cuando importa el <strong>instante</strong> exacto (ej. "esta fila se creó a tal hora"). Mezclarlos te complica las consultas más adelante.</p>
 </blockquote>
 <hr />
 <h2 id="5-creando-la-tabla-de-perfiles">5. Creando la tabla de perfiles 💻</h2>
-<p>¡A teclear! Abre tu proyecto en Supabase, ve a <strong>SQL Editor</strong> y pega esto.</p>
+<p>¡A teclear! Abre tu proyecto en Supabase, entra a <strong>SQL Editor</strong> y pega esto.</p>
 <blockquote class="def">
 <h3 id="que-significa-editor-sql-de-supabase">🟦 ¿Que significa? — <em>Editor SQL de Supabase</em></h3>
-<p>Es una pantalla dentro de Supabase donde escribes consultas SQL y las ejecutas con un botón. Sirve para crear tablas, insertar datos o probar consultas sin programar nada más. Es donde ejecutarás todo este capítulo.</p>
+<p>Es una pantalla dentro de Supabase donde escribes consultas SQL y las ejecutas con un botón. Sirve para crear tablas, insertar datos o probar consultas sin programar nada más. Es justo donde ejecutarás todo este capítulo.</p>
 <h3 id="que-significa-create-table">🟦 ¿Que significa? — <em>CREATE TABLE</em></h3>
 <p>Es la instrucción SQL que crea una tabla nueva con sus columnas y tipos. Sirve para definir dónde se guardarán los datos. Cada tabla de <strong>Faro</strong> nació de un <code>CREATE TABLE</code>.</p>
 </blockquote>
@@ -128,27 +128,27 @@
   created_at timestamptz default now()
 );
 </code></pre>
-<p>Desmenucemos línea por línea:</p>
+<p>Vamos línea por línea:</p>
 <ul>
 <li><code>id uuid primary key</code>: la clave primaria del perfil es un UUID.</li>
 <li><code>references auth.users (id)</code>: ese id <strong>es</strong> el id del usuario en Supabase. Aquí nace la clave foránea hacia <code>auth.users</code>.</li>
-<li><code>on delete cascade</code>: si se borra la cuenta, su perfil se borra solito (no queda basura).</li>
+<li><code>on delete cascade</code>: si se borra la cuenta, su perfil se borra solo (no deja basura atrás).</li>
 <li><code>nombre text</code>: el nombre visible, texto libre.</li>
 <li><code>created_at timestamptz default now()</code>: la fecha-hora de creación, que se rellena sola.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-references">🟦 ¿Que significa? — <em>references</em></h3>
-<p>Es la palabra SQL que declara una clave foránea: dice "esta columna apunta a la clave primaria de tal tabla". Sirve para enlazar tablas. En <strong>RachaSimple</strong>, la tabla de registros usa <code>references</code> para apuntar a la tabla de hábitos.</p>
+<p>Es la palabra de SQL que declara una clave foránea: viene a decir "esta columna apunta a la clave primaria de tal tabla". Sirve para enlazar tablas. En <strong>RachaSimple</strong>, la tabla de registros usa <code>references</code> para apuntar a la tabla de hábitos.</p>
 <h3 id="que-significa-on-delete-cascade">🟦 ¿Que significa? — <em>on delete cascade</em></h3>
 <p>Es una regla que dice "si borras la fila padre, borra también las filas hijas que dependen de ella". Sirve para no dejar datos huérfanos. Si en <strong>Faro</strong> borras un proyecto, sus fases se van con él gracias a <code>on delete cascade</code>.</p>
 <h3 id="que-significa-default-now">🟦 ¿Que significa? — <em>default now()</em></h3>
 <p><code>default</code> da un valor automático cuando no escribes ninguno; <code>now()</code> devuelve la fecha-hora actual. Juntos rellenan solos el "creado el...". Las columnas <code>created_at</code> de <strong>Faro</strong> usan exactamente este truco.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>El orden importa. No puedes crear <code>habits</code> antes que <code>profiles</code> si <code>habits</code> apunta a <code>profiles</code>: la tabla a la que apuntas debe existir primero. Ejecuta los <code>CREATE TABLE</code> en orden: perfiles, luego hábitos, luego registros.</p>
+<p>El orden importa. No puedes crear <code>habits</code> antes que <code>profiles</code> si <code>habits</code> apunta a <code>profiles</code>: la tabla a la que apuntas tiene que existir primero. Ejecuta los <code>CREATE TABLE</code> en este orden: perfiles, luego hábitos y al final registros.</p>
 </blockquote>
 <hr />
 <h2 id="6-creando-la-tabla-de-habitos">6. Creando la tabla de hábitos 💻</h2>
-<p>Cada hábito pertenece a un usuario. Por eso lleva una clave foránea a <code>auth.users</code>.</p>
+<p>Cada hábito pertenece a un usuario, así que lleva una clave foránea a <code>auth.users</code>.</p>
 <pre><code class="language-sql">create table habits (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -156,17 +156,17 @@
   created_at timestamptz default now()
 );
 </code></pre>
-<p>Novedades respecto a la tabla anterior:</p>
+<p>Lo que cambia respecto a la tabla anterior:</p>
 <ul>
-<li><code>default gen_random_uuid()</code>: como aquí el id no viene de <code>auth.users</code>, le pedimos a Postgres que genere un UUID nuevo automáticamente.</li>
-<li><code>user_id ... not null</code>: el dueño del hábito. <code>not null</code> obliga a que siempre haya dueño.</li>
-<li><code>nombre text not null</code>: el hábito siempre debe tener nombre.</li>
+<li><code>default gen_random_uuid()</code>: como aquí el id no viene de <code>auth.users</code>, le pedimos a Postgres que genere un UUID nuevo de forma automática.</li>
+<li><code>user_id ... not null</code>: el dueño del hábito. El <code>not null</code> obliga a que siempre haya un dueño.</li>
+<li><code>nombre text not null</code>: un hábito siempre tiene que tener nombre.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-gen_random_uuid">🟦 ¿Que significa? — <em>gen_random_uuid()</em></h3>
-<p>Es una función de Postgres que inventa un UUID nuevo y único cada vez. Sirve para generar claves primarias sin pensarlas tú. Las tablas de <strong>Faro</strong> que no heredan el id de un usuario usan esta función como <code>default</code>.</p>
+<p>Es una función de Postgres que inventa un UUID nuevo y único cada vez. Sirve para generar claves primarias sin tener que pensarlas tú. Las tablas de <strong>Faro</strong> que no heredan el id de un usuario usan esta función como <code>default</code>.</p>
 <h3 id="que-significa-not-null">🟦 ¿Que significa? — <em>not null</em></h3>
-<p>Es una regla que prohíbe dejar una columna vacía. Sirve para garantizar datos obligatorios (un hábito sin nombre no tiene sentido). En <strong>Faro</strong>, columnas como el nombre del proyecto son <code>not null</code>.</p>
+<p>Es una regla que prohíbe dejar una columna vacía. Sirve para garantizar datos obligatorios (un hábito sin nombre no tendría sentido). En <strong>Faro</strong>, columnas como el nombre del proyecto son <code>not null</code>.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
 <p>En <strong>RachaSimple</strong>, la tabla de hábitos real sigue este mismo esqueleto: un <code>id</code> propio, un <code>user_id</code> que enlaza con el dueño y un <code>nombre</code>. Es el corazón de la app.</p>
 </blockquote>
@@ -182,33 +182,33 @@
   created_at timestamptz default now()
 );
 </code></pre>
-<p>Lo nuevo:</p>
+<p>Lo nuevo aquí:</p>
 <ul>
-<li><code>habit_id ... references habits (id)</code>: la clave foránea al hábito. Esta es la conexión central de la app.</li>
-<li>Repetimos <code>user_id</code> por comodidad: así una consulta sabe de quién es el registro sin tener que pasar por la tabla de hábitos. (Es una decisión de diseño habitual.)</li>
+<li><code>habit_id ... references habits (id)</code>: la clave foránea al hábito. Esta es la conexión central de toda la app.</li>
+<li>Repetimos <code>user_id</code> por comodidad: así una consulta sabe de quién es el registro sin tener que pasar por la tabla de hábitos. (Es una decisión de diseño bastante habitual.)</li>
 <li><code>fecha date</code>: el día marcado.</li>
-<li><code>completado boolean default true</code>: por defecto, si hay registro, asumimos que sí se cumplió.</li>
+<li><code>completado boolean default true</code>: por defecto, si existe el registro, damos por hecho que sí se cumplió.</li>
 </ul>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Guardar <code>user_id</code> también en <code>habit_logs</code> (aunque ya esté en <code>habits</code>) se llama "desnormalizar un poquito". Lo hacemos para que las políticas de seguridad y las consultas sean más simples y rápidas. Es un truco común en apps Supabase como RachaSimple.</p>
+<p>Guardar <code>user_id</code> también en <code>habit_logs</code> (aunque ya esté en <code>habits</code>) se llama "desnormalizar un poquito". Lo hacemos para que las políticas de seguridad y las consultas salgan más simples y rápidas. Es un truco común en apps Supabase como RachaSimple.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Sin una restricción extra, nada impide marcar dos veces el <strong>mismo hábito el mismo día</strong>. Si quieres evitarlo, puedes añadir una clave única sobre <code>(habit_id, fecha)</code>. Lo dejamos como ejercicio para que no te abrumes hoy.</p>
+<p>Tal cual está, nada impide marcar dos veces el <strong>mismo hábito el mismo día</strong>. Si quieres evitarlo, puedes añadir una clave única sobre <code>(habit_id, fecha)</code>. Lo dejamos como ejercicio para no abrumarte hoy.</p>
 </blockquote>
 <p>Con estas tres tablas, ¡tu base de datos ya existe! Bit hace una voltereta. 🪼</p>
 <hr />
 <h2 id="8-metiendo-datos-de-prueba">8. Metiendo datos de prueba 💻</h2>
-<p>Una base vacía no se puede consultar. Insertemos algo.</p>
+<p>Una base vacía no da mucho para consultar. Insertemos algo.</p>
 <blockquote class="def">
 <h3 id="que-significa-insert">🟦 ¿Que significa? — <em>INSERT</em></h3>
 <p>Es la instrucción SQL que agrega filas nuevas a una tabla. Sirve para meter datos. Cada vez que en <strong>RachaSimple</strong> marcas un hábito, por debajo corre un <code>INSERT</code> en la tabla de registros.</p>
 </blockquote>
-<p>Primero un par de hábitos (reemplaza el UUID por el de tu usuario, que ves en la sección Authentication de Supabase):</p>
+<p>Empecemos con un par de hábitos (cambia el UUID por el de tu usuario, que ves en la sección Authentication de Supabase):</p>
 <pre><code class="language-sql">insert into habits (user_id, nombre) values
   ('TU-UUID-AQUI', 'Beber agua'),
   ('TU-UUID-AQUI', 'Leer 10 minutos');
 </code></pre>
-<p>Luego unos registros de ejemplo. Aquí usamos una subconsulta para no copiar a mano el id del hábito:</p>
+<p>Ahora unos registros de ejemplo. Para no copiar a mano el id del hábito, usamos una subconsulta:</p>
 <pre><code class="language-sql">insert into habit_logs (habit_id, user_id, fecha)
 select id, user_id, '2026-06-24'
 from habits
@@ -221,20 +221,20 @@ where nombre = 'Beber agua';
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-subconsulta">🟦 ¿Que significa? — <em>Subconsulta</em></h3>
-<p>Es una consulta metida dentro de otra; el resultado de la interna alimenta a la externa. Sirve para buscar un valor "al vuelo" (aquí, el id del hábito "Beber agua"). Evita tener que copiar ids a mano.</p>
+<p>Es una consulta metida dentro de otra; el resultado de la interna alimenta a la externa. Sirve para buscar un valor al vuelo (aquí, el id del hábito "Beber agua"). Te evita andar copiando ids a mano.</p>
 </blockquote>
 <hr />
 <h2 id="9-la-consulta-estrella-estadisticas-con-join-y-group-by">9. La consulta estrella: estadísticas con JOIN y GROUP BY 💻</h2>
-<p>Llegó lo bonito. Queremos una tabla que diga, por cada hábito, <strong>cuántos días se ha cumplido</strong>. Para eso necesitamos juntar la tabla de hábitos con la de registros.</p>
+<p>Llegamos a la parte bonita. Queremos una tabla que diga, hábito por hábito, <strong>cuántos días se ha cumplido</strong>. Para eso hay que juntar la tabla de hábitos con la de registros.</p>
 <blockquote class="def">
 <h3 id="que-significa-select">🟦 ¿Que significa? — <em>SELECT</em></h3>
-<p>Es la instrucción SQL que <strong>lee</strong> datos: elige qué columnas y filas quieres ver. Sirve para consultar sin modificar nada. En <strong>Faro</strong>, mostrar la lista de proyectos del usuario es un <code>SELECT</code>.</p>
+<p>Es la instrucción SQL que <strong>lee</strong> datos: eliges qué columnas y filas quieres ver. Sirve para consultar sin modificar nada. En <strong>Faro</strong>, mostrar la lista de proyectos del usuario es un <code>SELECT</code>.</p>
 <h3 id="que-significa-join">🟦 ¿Que significa? — <em>JOIN</em></h3>
-<p>Es la operación que <strong>combina filas de dos tablas</strong> según una condición (normalmente una clave foránea coincidiendo con una primaria). Sirve para ver datos relacionados juntos, como el nombre del hábito al lado de sus registros. <strong>Faro</strong> usa <code>JOIN</code> para mostrar un proyecto junto con sus fases.</p>
+<p>Es la operación que <strong>combina filas de dos tablas</strong> según una condición (normalmente una clave foránea que coincide con una primaria). Sirve para ver datos relacionados juntos, como el nombre del hábito al lado de sus registros. <strong>Faro</strong> usa <code>JOIN</code> para mostrar un proyecto junto con sus fases.</p>
 <h3 id="que-significa-group-by">🟦 ¿Que significa? — <em>GROUP BY</em></h3>
-<p>Es la cláusula que <strong>agrupa</strong> filas que comparten un valor para resumirlas (contar, sumar, promediar). Sirve para sacar estadísticas: "cuántos registros por hábito". Sin él no podrías hacer totales por grupo.</p>
+<p>Es la cláusula que <strong>agrupa</strong> filas que comparten un valor para resumirlas (contar, sumar, promediar). Sirve para sacar estadísticas: "cuántos registros hay por hábito". Sin ella no podrías sacar totales por grupo.</p>
 <h3 id="que-significa-count">🟦 ¿Que significa? — <em>COUNT</em></h3>
-<p>Es una función que <strong>cuenta filas</strong>. Junto a <code>GROUP BY</code> cuenta cuántas hay en cada grupo. Sirve para preguntas tipo "¿cuántos días marqué este hábito?".</p>
+<p>Es una función que <strong>cuenta filas</strong>. Junto a <code>GROUP BY</code> cuenta cuántas hay en cada grupo. Sirve para responder preguntas tipo "¿cuántos días marqué este hábito?".</p>
 </blockquote>
 <p>La consulta completa:</p>
 <pre><code class="language-sql">select
@@ -246,7 +246,7 @@ where l.completado = true
 group by h.nombre
 order by dias_cumplidos desc;
 </code></pre>
-<p>Léela como una frase: "Por cada <strong>nombre</strong> de hábito (<code>group by h.nombre</code>), cuenta sus registros completados (<code>count</code>), combinando hábitos con sus registros (<code>join</code>), y ordénalos de más a menos". El resultado sería algo así:</p>
+<p>Léela como si fuera una frase: "Por cada <strong>nombre</strong> de hábito (<code>group by h.nombre</code>), cuenta sus registros completados (<code>count</code>), combinando hábitos con sus registros (<code>join</code>), y ordénalos de más a menos". El resultado se vería más o menos así:</p>
 <pre><code>nombre          | dias_cumplidos
 ----------------+----------------
 Beber agua      | 2
@@ -254,33 +254,33 @@ Leer 10 minutos | 0
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-alias-as">🟦 ¿Que significa? — <em>Alias (AS)</em></h3>
-<p>Es un apodo temporal para una tabla o columna. <code>habits h</code> llama <code>h</code> a la tabla; <code>count(...) as dias_cumplidos</code> nombra la columna del resultado. Sirve para escribir consultas cortas y legibles. Es práctica común en las consultas de <strong>Faro</strong>.</p>
+<p>Es un apodo temporal para una tabla o columna. <code>habits h</code> llama <code>h</code> a la tabla; <code>count(...) as dias_cumplidos</code> le pone nombre a la columna del resultado. Sirve para escribir consultas más cortas y legibles. Es práctica común en las consultas de <strong>Faro</strong>.</p>
 <h3 id="que-significa-order-by">🟦 ¿Que significa? — <em>ORDER BY</em></h3>
-<p>Es la cláusula que <strong>ordena</strong> el resultado por una columna, ascendente o descendente (<code>desc</code>). Sirve para mostrar primero lo más relevante. Aquí pone arriba el hábito con más días cumplidos.</p>
+<p>Es la cláusula que <strong>ordena</strong> el resultado por una columna, de menor a mayor o al revés (<code>desc</code>). Sirve para mostrar primero lo más relevante. Aquí pone arriba el hábito con más días cumplidos.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Si un hábito tiene cero registros y aún así quieres verlo en la lista (como "Leer 10 minutos" arriba), cambia <code>join</code> por <code>left join</code>. El <code>left join</code> conserva todas las filas de la tabla izquierda aunque no tengan pareja a la derecha.</p>
+<p>Si un hábito no tiene registros y aun así quieres verlo en la lista (como "Leer 10 minutos" arriba), cambia <code>join</code> por <code>left join</code>. El <code>left join</code> conserva todas las filas de la tabla izquierda aunque no tengan pareja a la derecha.</p>
 </blockquote>
 <hr />
 <h2 id="10-seguridad-politicas-rls-basicas">10. Seguridad: políticas RLS básicas 💻</h2>
-<p>Tu base ya funciona... pero hay un problema enorme: <strong>cualquiera podría leer los hábitos de cualquiera</strong>. Necesitamos que cada quien vea solo lo suyo. Eso es RLS.</p>
+<p>Tu base ya funciona... pero arrastra un problema enorme: <strong>cualquiera podría leer los hábitos de cualquiera</strong>. Lo que queremos es que cada quien vea solo lo suyo. De eso se encarga RLS.</p>
 <blockquote class="def">
 <h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
 <p>"Seguridad a nivel de fila": reglas que deciden <strong>qué filas puede ver o tocar cada usuario</strong>, no la tabla entera. Sirve para que María solo acceda a los datos de María. Tanto <strong>RachaSimple</strong> como <strong>Faro/Organizer</strong> protegen TODAS sus tablas con RLS; es una regla de seguridad del proyecto.</p>
 <h3 id="que-significa-politica-policy">🟦 ¿Que significa? — <em>Política (policy)</em></h3>
 <p>Es una regla RLS concreta que dice, para una acción (leer, insertar...), qué filas se permiten. Sirve para expresar "solo puedes ver tus propias filas". Las tablas de <strong>Faro</strong> tienen políticas que comparan el dueño de la fila con el usuario logueado.</p>
 <h3 id="que-significa-authuid">🟦 ¿Que significa? — <em>auth.uid()</em></h3>
-<p>Es una función de Supabase que devuelve el <strong>id del usuario que está logueado</strong> en este momento. Sirve para comparar "¿esta fila es tuya?". Es la pieza central de casi toda política RLS en <strong>RachaSimple</strong> y <strong>Faro</strong>.</p>
+<p>Es una función de Supabase que devuelve el <strong>id del usuario que está logueado</strong> en ese momento. Sirve para comparar "¿esta fila es tuya?". Es la pieza central de casi toda política RLS en <strong>RachaSimple</strong> y <strong>Faro</strong>.</p>
 </blockquote>
-<p>Primero activamos RLS en cada tabla (mientras no la actives, las políticas no se aplican):</p>
+<p>Primero activamos RLS en cada tabla (mientras no la actives, las políticas ni se aplican):</p>
 <pre><code class="language-sql">alter table profiles    enable row level security;
 alter table habits      enable row level security;
 alter table habit_logs  enable row level security;
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Activar RLS sin crear políticas <strong>bloquea todo</strong>: nadie verá nada (ni siquiera tú desde la app). Es seguro, pero inútil. Siempre crea políticas después de activar RLS.</p>
+<p>Activar RLS sin crear políticas <strong>bloquea todo</strong>: nadie verá nada, ni siquiera tú desde la app. Es seguro, pero inútil. Crea siempre las políticas después de activar RLS.</p>
 </blockquote>
-<p>Ahora las políticas. Cada usuario solo gestiona sus hábitos:</p>
+<p>Vamos con las políticas. Cada usuario gestiona solo sus hábitos:</p>
 <pre><code class="language-sql">create policy &quot;Ver mis habitos&quot;
 on habits for select
 using (auth.uid() = user_id);
@@ -300,29 +300,29 @@ with check (auth.uid() = user_id);
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-using-vs-with-check">🟦 ¿Que significa? — <em>using vs with check</em></h3>
-<p>En una política, <code>using</code> filtra qué filas <strong>existentes</strong> puedes leer o modificar; <code>with check</code> valida qué filas <strong>nuevas</strong> puedes crear. Sirven para controlar lectura y escritura por separado. Ambas comparan <code>auth.uid()</code> con el dueño de la fila.</p>
+<p>En una política, <code>using</code> filtra qué filas <strong>existentes</strong> puedes leer o modificar; <code>with check</code> valida qué filas <strong>nuevas</strong> puedes crear. Sirven para controlar lectura y escritura por separado. Las dos comparan <code>auth.uid()</code> con el dueño de la fila.</p>
 </blockquote>
-<p>Lee la política en voz alta: "permite el <code>select</code> en <code>habits</code> <strong>usando</strong> la condición de que el id del usuario logueado sea igual al dueño de la fila". Magia: la misma consulta del paso 9 ahora devuelve solo TUS hábitos, sin que cambies una sola línea de la consulta.</p>
+<p>Lee la política en voz alta: "permite el <code>select</code> en <code>habits</code> <strong>usando</strong> la condición de que el id del usuario logueado sea igual al dueño de la fila". Lo bonito: la misma consulta del paso 9 ahora devuelve solo TUS hábitos, y no cambiaste ni una línea de la consulta.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>En <strong>Faro/Organizer</strong>, la tabla <code>user_connections</code> (que guarda los tokens de GitHub y Google Drive) vive protegida por RLS con este mismo patrón <code>auth.uid() = user_id</code>. Por eso los secretos de un usuario jamás se filtran a otro. Es parte de la regla de seguridad del proyecto: tokens solo en el servidor, tablas con RLS.</p>
+<p>En <strong>Faro/Organizer</strong>, la tabla <code>user_connections</code> (la que guarda los tokens de GitHub y Google Drive) vive protegida por RLS con este mismo patrón <code>auth.uid() = user_id</code>. Por eso los secretos de un usuario nunca se filtran a otro. Es parte de la regla de seguridad del proyecto: tokens solo en el servidor, tablas con RLS.</p>
 </blockquote>
 <hr />
 <h2 id="11-y-como-lo-lee-la-app-el-cliente-de-supabase">11. ¿Y cómo lo lee la app? El cliente de Supabase</h2>
-<p>Tu base ya está blindada. Desde el código de la app (en <strong>RachaSimple</strong> se usa React con TanStack Query) no escribes SQL crudo: usas el cliente de Supabase, que arma la consulta por ti y respeta el RLS automáticamente.</p>
+<p>Tu base ya está blindada. Desde el código de la app (en <strong>RachaSimple</strong> se usa React con TanStack Query) no escribes SQL crudo: usas el cliente de Supabase, que arma la consulta por ti y respeta el RLS de forma automática.</p>
 <blockquote class="def">
 <h3 id="que-significa-cliente-de-supabase">🟦 ¿Que significa? — <em>Cliente de Supabase</em></h3>
 <p>Es una librería de JavaScript/TypeScript que habla con tu base de datos desde la app. Sirve para leer y escribir datos con funciones cómodas en vez de SQL a mano. <strong>RachaSimple</strong> y <strong>Faro</strong> lo usan para todas sus consultas.</p>
 <h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
 <p>Es una librería que pide datos al servidor, los guarda en memoria (caché) y los refresca cuando hace falta. Sirve para que la app sea rápida y no recargue de más. <strong>RachaSimple</strong> la usa para traer y mantener frescos los hábitos y registros.</p>
 </blockquote>
-<p>Así se vería leer los hábitos desde el cliente (en TypeScript):</p>
+<p>Leer los hábitos desde el cliente se vería así (en TypeScript):</p>
 <pre><code class="language-ts">const { data: habitos } = await supabase
   .from(&quot;habits&quot;)
   .select(&quot;id, nombre&quot;)
   .order(&quot;created_at&quot;, { ascending: false });
 </code></pre>
-<p>Fíjate: <strong>no escribes</strong> <code>where user_id = ...</code>. No hace falta. El RLS del paso 10 ya filtra en el servidor y solo devuelve tus filas. La seguridad vive en la base de datos, no en el cliente: aunque alguien manipulara la app, no podría ver datos ajenos.</p>
+<p>Fíjate: <strong>no escribes</strong> <code>where user_id = ...</code>. No hace falta. El RLS del paso 10 ya filtra en el servidor y solo te devuelve tus filas. La seguridad vive en la base de datos, no en el cliente: aunque alguien manipulara la app, no podría ver datos ajenos.</p>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
 <p>Esta es la gran lección de seguridad: <strong>nunca confíes solo en el código del cliente</strong> para proteger datos. El cliente se puede trucar; el RLS en Postgres, no. Por eso RachaSimple y Faro ponen el candado en la base de datos.</p>
@@ -364,7 +364,7 @@ with check (auth.uid() = user_id);
 </li>
 </ol>
 <hr />
-<p>¡Lo lograste! 🎉 Diseñaste, creaste, llenaste, consultaste y <strong>protegiste</strong> una base de datos real, la misma arquitectura que sostiene a RachaSimple y a Faro. Eso ya no es teoría: es ingeniería de datos de verdad. Bit infla los cachetes de orgullo y te choca la patita. 🪼✨ En el próximo módulo daremos el siguiente salto. Por hoy, celebra: pasaste de "no sé qué es una tabla" a diseñar el esquema completo de una app con seguridad por fila. Enorme. 🚀</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+<p>¡Lo lograste! 🎉 Diseñaste, creaste, llenaste, consultaste y <strong>protegiste</strong> una base de datos real, la misma arquitectura que sostiene a RachaSimple y a Faro. Eso ya dejó de ser teoría: es ingeniería de datos de verdad. Bit infla los cachetes de orgullo y te choca la patita. 🪼✨ En el próximo módulo daremos el siguiente salto. Por hoy, celebra: pasaste de "no sé qué es una tabla" a diseñar el esquema completo de una app con seguridad por fila. Enorme. 🚀</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>
 <script>

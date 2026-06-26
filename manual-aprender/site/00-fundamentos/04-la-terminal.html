@@ -19,60 +19,63 @@
 <main class="contenedor">
 <h1 id="capitulo-04-la-terminal">Capítulo 04 — La terminal</h1>
 <blockquote>
-<p>La terminal asusta al principio (esa pantalla negra de las películas de "hackers"), pero es
-una de las herramientas más poderosas y, una vez entendida, <strong>más simple</strong> que existen. La
-vas a necesitar para Git, para Python, para tu NAS y para casi todo. Vamos paso a paso.</p>
+<p>La terminal intimida al principio (es esa pantalla negra que sale en las películas de
+"hackers"), pero la verdad es que resulta mucho <strong>más simple</strong> de lo que parece, y a la vez
+es de las herramientas que más rinden. La vas a usar para Git, para Python, para tu NAS y para
+casi todo lo demás. Vamos despacio, paso a paso.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-la-terminal-y-por-que-existe">1. ¿Qué es la terminal y por qué existe?</h2>
 <blockquote class="def">
 <h3 id="que-significa-terminal-o-linea-de-comandos">🟦 ¿Qué significa? — <em>Terminal (o línea de comandos)</em></h3>
 <p>La <strong>terminal</strong> es un programa donde <strong>le das órdenes a la computadora escribiéndolas con el
-teclado</strong>, en lugar de hacer clics con el ratón. Escribes un <strong>comando</strong> (una orden), pulsas
-Enter, y la computadora lo ejecuta y te responde con texto.
-También se le llama <em>línea de comandos</em>, <em>consola</em> o <em>CLI</em> (<em>Command-Line Interface</em>,
+teclado</strong>, en vez de hacer clics con el ratón. Escribes un <strong>comando</strong> (una orden), pulsas
+Enter, y la computadora lo ejecuta y te contesta con texto.
+También se le dice <em>línea de comandos</em>, <em>consola</em> o <em>CLI</em> (<em>Command-Line Interface</em>,
 "interfaz de línea de comandos").</p>
 <h3 id="que-significa-interfaz-grafica-gui-vs-cli">🟦 ¿Qué significa? — <em>Interfaz gráfica (GUI) vs. CLI</em></h3>
-<p>La forma normal de usar una computadora —ventanas, íconos, ratón— se llama <strong>GUI</strong>
-(<em>Graphical User Interface</em>, "interfaz gráfica de usuario"). La terminal es lo contrario:
-solo texto (<strong>CLI</strong>). Las dos sirven para lo mismo (dar órdenes), pero de forma distinta.</p>
+<p>La manera de siempre de usar una computadora —ventanas, íconos, ratón— se llama <strong>GUI</strong>
+(<em>Graphical User Interface</em>, "interfaz gráfica de usuario"). La terminal es justo lo
+contrario: solo texto (<strong>CLI</strong>). Las dos sirven para lo mismo, dar órdenes, pero cada una a
+su modo.</p>
 </blockquote>
-<p><strong>¿Por qué usar texto si hay ratón?</strong> Tres razones de peso:</p>
+<p><strong>¿Para qué usar texto teniendo ratón?</strong> Por tres motivos que pesan:</p>
 <ol>
-<li><strong>Precisión:</strong> un comando hace <em>exactamente</em> una cosa, sin ambigüedad.</li>
-<li><strong>Velocidad y repetición:</strong> puedes hacer en una línea lo que con el ratón serían 50 clics,
-   y <strong>automatizar</strong> tareas (repetirlas solas).</li>
+<li><strong>Precisión:</strong> un comando hace <em>exactamente</em> una cosa, sin lugar a dudas.</li>
+<li><strong>Velocidad y repetición:</strong> en una sola línea haces lo que con el ratón te costaría 50 clics,
+   y además puedes <strong>automatizar</strong> tareas (que se repitan solas).</li>
 <li><strong>Servidores sin pantalla:</strong> tu NAS no tiene monitor ni ratón conectados; se administra
-   <strong>por terminal</strong> (de hecho, así corre Ubuntu Server). Sin terminal, no hay servidor.</li>
+   <strong>por terminal</strong> (así es como corre Ubuntu Server, de hecho). Sin terminal, no hay servidor.</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-shell">🟦 ¿Qué significa? — <em>Shell</em></h3>
 <p>El <strong>shell</strong> ("caparazón") es el <strong>programa que interpreta</strong> lo que escribes en la terminal y
-se lo ordena al sistema. Es la diferencia entre la <em>ventana</em> (terminal) y el <em>cerebro</em> que
-entiende los comandos (shell). Los más comunes son <strong>bash</strong> y <strong>zsh</strong> en Linux/macOS, y
-<strong>PowerShell</strong> en Windows. No te preocupes por el nombre todavía: solo sé que "shell" = el
-que entiende tus comandos.</p>
+se lo traslada al sistema. Piensa en la diferencia entre la <em>ventana</em> (la terminal) y el
+<em>cerebro</em> que entiende los comandos (el shell). Los más comunes son <strong>bash</strong> y <strong>zsh</strong> en
+Linux/macOS, y <strong>PowerShell</strong> en Windows. Por ahora no te líes con los nombres: quédate con
+que "shell" = el que entiende tus comandos.</p>
 </blockquote>
 <hr />
 <h2 id="2-como-abrir-la-terminal-en-tu-computadora">2. Cómo abrir la terminal (en tu computadora)</h2>
 <ul>
-<li><strong>Windows:</strong> busca "PowerShell" o "Terminal" en el menú Inicio. (Para practicar comandos al
-  estilo Linux, más adelante puedes instalar "WSL", pero no es necesario ahora.)</li>
-<li><strong>macOS:</strong> abre "Terminal" (está en Aplicaciones → Utilidades, o búscala con Spotlight).</li>
-<li><strong>Linux / tu NAS:</strong> la terminal <em>es</em> la forma principal de uso. A tu NAS te conectarás de
-  forma remota (lo verás en el módulo 09).</li>
+<li><strong>Windows:</strong> busca "PowerShell" o "Terminal" en el menú Inicio. (Si más adelante quieres
+  practicar comandos al estilo Linux, puedes instalar "WSL", pero ahora mismo no hace falta.)</li>
+<li><strong>macOS:</strong> abre "Terminal" (la encuentras en Aplicaciones → Utilidades, o búscala con
+  Spotlight).</li>
+<li><strong>Linux / tu NAS:</strong> aquí la terminal <em>es</em> la forma principal de trabajar. A tu NAS te
+  conectarás de forma remota (eso lo verás en el módulo 09).</li>
 </ul>
-<p>Al abrirla verás algo como <code>usuario@maquina:~$</code> y un cursor parpadeando. Eso se llama el
+<p>Al abrirla te aparecerá algo parecido a <code>usuario@maquina:~$</code> y un cursor parpadeando. Eso es el
 <strong>prompt</strong>: la terminal te está diciendo "estoy lista, escribe una orden".</p>
 <blockquote class="def">
 <h3 id="que-significa-directorio-de-trabajo-actual">🟦 ¿Qué significa? — <em>Directorio de trabajo actual</em></h3>
-<p>La terminal siempre está "parada" dentro de <strong>una carpeta</strong> (un <em>directorio</em>). Es tu
-<strong>ubicación actual</strong>. Muchos comandos actúan sobre esa carpeta. El símbolo <code>~</code> significa "tu
+<p>La terminal siempre está "parada" dentro de <strong>una carpeta</strong> (un <em>directorio</em>). Esa es tu
+<strong>ubicación actual</strong>, y muchos comandos actúan sobre ella. El símbolo <code>~</code> significa "tu
 carpeta personal" (la de tu usuario).</p>
 </blockquote>
 <hr />
 <h2 id="3-los-comandos-para-sobrevivir-moverte-y-mirar">3. Los comandos para sobrevivir (moverte y mirar)</h2>
-<p>Estos son los que usarás el 80% del tiempo. Pruébalos en orden cuando tengas tu computadora.</p>
+<p>Estos los usarás el 80% del tiempo. Cuando tengas tu computadora a mano, pruébalos en orden.</p>
 <table>
 <thead>
 <tr>
@@ -141,63 +144,64 @@ carpeta personal" (la de tu usuario).</p>
 </table>
 <blockquote class="warn">
 <h3 id="cuidado-rm-no-tiene-papelera">⚠️ Cuidado — <code>rm</code> no tiene papelera</h3>
-<p>En la terminal, <code>rm</code> <strong>borra de verdad</strong>, sin pasar por la papelera de reciclaje. No hay
-"deshacer". Ten especial cuidado con <code>rm -r</code> (borra una carpeta y <em>todo</em> lo que contiene).
-Antes de borrar, usa <code>ls</code> para confirmar que estás donde crees.</p>
+<p>En la terminal, <code>rm</code> <strong>borra de verdad</strong>: no pasa por la papelera de reciclaje y no hay
+"deshacer". Ojo sobre todo con <code>rm -r</code>, que borra una carpeta entera con <em>todo</em> lo que tenga
+dentro. Antes de borrar nada, lanza un <code>ls</code> para confirmar que estás donde crees que estás.</p>
 <h3 id="que-significa-argumento-y-opcion-flag">🟦 ¿Qué significa? — <em>Argumento y opción (flag)</em></h3>
-<p>Un comando puede recibir extras:
+<p>Un comando puede llevar extras:
 - Un <strong>argumento</strong> es <em>sobre qué</em> actúa: en <code>cd Documentos</code>, <code>Documentos</code> es el argumento.
-- Una <strong>opción</strong> o <strong>flag</strong> modifica <em>cómo</em> actúa, y suele empezar con <code>-</code>: en <code>ls -l</code>, la
-  opción <code>-l</code> pide el listado "largo" (con detalles). En <code>rm -r</code>, la <code>-r</code> significa
+- Una <strong>opción</strong> o <strong>flag</strong> cambia <em>cómo</em> actúa, y casi siempre empieza con <code>-</code>: en <code>ls -l</code>,
+  la opción <code>-l</code> pide el listado "largo" (con detalles). En <code>rm -r</code>, la <code>-r</code> significa
   "recursivo" (incluye subcarpetas).
 <strong>¿Dónde lo viste ya?</strong> En este manual aparecieron comandos como <code>git push -u origin ...</code>:
-ahí <code>-u</code> es una opción y <code>origin ...</code> son argumentos. Pronto lo entenderás del todo.</p>
+ahí <code>-u</code> es una opción y <code>origin ...</code> son argumentos. Pronto le agarrarás el hilo del todo.</p>
 </blockquote>
 <hr />
 <h2 id="4-anatomia-de-un-comando">4. Anatomía de un comando</h2>
-<p>Casi todos los comandos siguen este patrón:</p>
+<p>Casi todos los comandos siguen el mismo patrón:</p>
 <pre><code>nombre   [opciones]   [argumentos]
   │           │            │
   ls          -l        Documentos
 &quot;lista&quot;   &quot;en formato   &quot;esta
           detallado&quot;    carpeta&quot;
 </code></pre>
-<p>Leído en español: <em>"lista, en formato detallado, la carpeta Documentos"</em>. Una vez ves este
-patrón, los comandos dejan de parecer jeroglíficos.</p>
+<p>Leído en español: <em>"lista, en formato detallado, la carpeta Documentos"</em>. En cuanto reconoces
+este patrón, los comandos dejan de parecer jeroglíficos.</p>
 <blockquote class="tip">
 <h3 id="tip-la-tecla-tab-es-tu-mejor-amiga">💡 Tip — La tecla Tab es tu mejor amiga</h3>
 <p>Empieza a escribir el nombre de un archivo o carpeta y pulsa <strong>Tab</strong>: la terminal lo
-<strong>autocompleta</strong>. Ahorra tiempo y evita errores de tipeo. Si hay varias opciones, pulsa Tab
-dos veces para verlas.</p>
+<strong>autocompleta</strong> por ti. Te ahorra tiempo y te quita errores de tipeo de encima. Si hay
+varias opciones posibles, pulsa Tab dos veces para verlas todas.</p>
 <h3 id="tip-las-flechas-repiten-comandos">💡 Tip — Las flechas ↑ ↓ repiten comandos</h3>
-<p>Pulsa la flecha <strong>arriba</strong> para traer el comando anterior (y volver a ejecutarlo o editarlo).
-No reescribas comandos largos: recíclalos.</p>
+<p>Pulsa la flecha <strong>arriba</strong> y traes de vuelta el comando anterior, listo para ejecutarlo otra
+vez o editarlo. No te pongas a reescribir comandos largos a mano: recíclalos.</p>
 </blockquote>
 <hr />
 <h2 id="5-pedir-ayuda-y-leer-errores">5. Pedir ayuda y leer errores</h2>
-<p>Nadie memoriza todas las opciones. Para casi cualquier comando:</p>
+<p>Nadie se sabe de memoria todas las opciones, así que para casi cualquier comando tienes:</p>
 <ul>
-<li><code>comando --help</code> → muestra un resumen de cómo se usa. Ej.: <code>ls --help</code>.</li>
+<li><code>comando --help</code> → te da un resumen de cómo se usa. Ej.: <code>ls --help</code>.</li>
 <li><code>man comando</code> → abre el <em>manual</em> completo (en Linux/macOS). Ej.: <code>man ls</code>. Para salir,
   pulsa <code>q</code>.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-mensaje-de-error-en-terminal">🟦 ¿Qué significa? — <em>Mensaje de error en terminal</em></h3>
-<p>Cuando algo falla, la terminal <strong>te dice qué pasó</strong>. Por ejemplo:
-<code>cd: no such file or directory: Documantos</code> significa "no existe una carpeta llamada
-<em>Documantos</em>" (escribiste mal el nombre). <strong>Leer el error literalmente</strong> resuelve la mayoría
-de los problemas: casi siempre es un nombre mal escrito o estar en la carpeta equivocada.</p>
+<p>Cuando algo sale mal, la terminal <strong>te dice qué pasó</strong>. Por ejemplo:
+<code>cd: no such file or directory: Documantos</code> quiere decir "no existe ninguna carpeta llamada
+<em>Documantos</em>" (escribiste mal el nombre). <strong>Leer el error tal cual está escrito</strong> resuelve la
+mayoría de los problemas: casi siempre es un nombre mal tecleado o que estás en la carpeta
+equivocada.</p>
 </blockquote>
 <hr />
 <h2 id="6-por-que-esto-te-acerca-a-tu-nas">6. Por qué esto te acerca a tu NAS</h2>
 <p>Tu NAS <code>polypaw-nas</code> corre <strong>Ubuntu Server</strong>, que <strong>no tiene escritorio</strong>: se administra
-escribiendo comandos. Cuando en el módulo 09 te conectes a él, harás cosas como:</p>
+escribiendo comandos. Cuando en el módulo 09 te conectes a él, harás cosas como estas:</p>
 <pre><code>cd /srv/nas        # entrar a la carpeta de datos del NAS
 ls -l              # ver qué archivos hay, con permisos y tamaños
 df -h              # ver cuánto espacio libre queda en los discos
 </code></pre>
-<p>Todo lo que aprendas aquí —moverte, listar, leer— es <strong>exactamente</strong> lo que usarás para
-administrar tu servidor. La terminal no es un tema aparte: es la llave de todo lo demás.</p>
+<p>Todo lo que aprendas aquí —moverte, listar, leer— es <strong>exactamente</strong> lo mismo que usarás para
+administrar tu servidor. La terminal no es un tema suelto: es la llave que abre todo lo demás.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

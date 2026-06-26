@@ -19,27 +19,29 @@
 <main class="contenedor">
 <h1 id="capitulo-03-interfaces-y-tipos-propios">Capítulo 03 — Interfaces y tipos propios</h1>
 <blockquote>
-<p>Los tipos básicos están bien para una variable suelta. Pero tus datos reales son <strong>objetos con
-forma</strong>: un usuario tiene nombre, edad y correo; un hábito tiene nombre, meta y color. Aquí
-aprendes a <strong>describir esa forma</strong> con <code>interface</code> y <code>type</code>. Es lo más usado de TypeScript en
-tus apps.</p>
+<p>Los tipos básicos te sacan del apuro cuando tienes una variable suelta. Pero los datos de verdad
+casi nunca vienen sueltos: son <strong>objetos con forma</strong>. Un usuario tiene nombre, edad y correo; un
+hábito tiene nombre, meta y color. En este capítulo vas a aprender a <strong>describir esa forma</strong> con
+<code>interface</code> y <code>type</code>. Es, con diferencia, lo que más vas a escribir en TypeScript en tus apps.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-describir-la-forma-de-un-objeto">1. El problema: describir la "forma" de un objeto</h2>
-<p>En el Módulo 03 viste los objetos de JavaScript (<code>{ nombre: "Edwar", edad: 25 }</code>). El problema:
-nada impide escribir mal una propiedad o ponerle el tipo equivocado. TypeScript nos deja
-<strong>declarar la forma</strong> que debe tener un objeto.</p>
+<p>En el Módulo 03 trabajaste con los objetos de JavaScript, esos <code>{ nombre: "Edwar", edad: 25 }</code> de
+toda la vida. El problema es que nada te frena: puedes escribir mal el nombre de una propiedad o
+meterle el tipo que no es, y nadie te avisa hasta que algo revienta. TypeScript te deja
+<strong>declarar de antemano la forma</strong> que ese objeto debería tener.</p>
 <blockquote class="def">
 <h3 id="que-significa-interface-interfaz">🟦 ¿Qué significa? — <em><code>interface</code> (interfaz)</em></h3>
-<p>Una <strong>interface</strong> describe la <strong>forma</strong> que debe tener un objeto: qué propiedades tiene y de
-qué tipo es cada una. Es como una "plantilla" o "ficha" de datos:
+<p>Una <strong>interface</strong> describe la <strong>forma</strong> que debe tener un objeto: qué propiedades lleva y de
+qué tipo es cada una. Piénsalo como una "ficha" o una plantilla de datos:
 <code>typescript
 interface Usuario {
   nombre: string;
   edad: number;
   activo: boolean;
 }</code>
-Luego declaras que un objeto es de ese tipo, y TypeScript <strong>vigila</strong> que cumpla la forma:
+Después le dices a un objeto que es de ese tipo, y a partir de ahí TypeScript <strong>se encarga de
+vigilar</strong> que cumpla la forma:
 ```typescript
 const edwar: Usuario = {
   nombre: "Edwar",
@@ -49,14 +51,15 @@ const edwar: Usuario = {
 <p>const malo: Usuario = { nombre: "Ana" };   // ❌ faltan 'edad' y 'activo'
 ```</p>
 <h3 id="tip-convencion-de-nombres">💡 Tip — Convención de nombres</h3>
-<p>Las interfaces se nombran en <strong>PascalCase</strong> (como <code>camelCase</code> pero con la primera letra
-también en mayúscula): <code>Usuario</code>, <code>Habito</code>, <code>DailyCheckin</code>. Así se distinguen de las variables.</p>
+<p>Las interfaces se escriben en <strong>PascalCase</strong>: igual que <code>camelCase</code>, pero con la primera letra
+también en mayúscula. Así: <code>Usuario</code>, <code>Habito</code>, <code>DailyCheckin</code>. De un vistazo las distingues de
+las variables normales.</p>
 </blockquote>
 <hr />
 <h2 id="2-propiedades-opcionales-y-de-solo-lectura">2. Propiedades opcionales y de solo lectura</h2>
 <blockquote class="def">
 <h3 id="que-significa-propiedad-opcional">🟦 ¿Qué significa? — <em>Propiedad opcional (<code>?</code>)</em></h3>
-<p>Una propiedad seguida de <code>?</code> <strong>puede o no estar</strong>:
+<p>Cuando una propiedad lleva un <code>?</code> detrás, significa que <strong>puede estar o no estar</strong>:
 <code>typescript
 interface Usuario {
   nombre: string;
@@ -65,8 +68,8 @@ interface Usuario {
 const a: Usuario = { nombre: "Edwar" };               // ✅ válido sin teléfono
 const b: Usuario = { nombre: "Ana", telefono: "..." }; // ✅ también</code></p>
 <h3 id="que-significa-propiedad-de-solo-lectura-readonly">🟦 ¿Qué significa? — <em>Propiedad de solo lectura (<code>readonly</code>)</em></h3>
-<p><code>readonly</code> marca una propiedad que <strong>no se puede cambiar</strong> después de crear el objeto (como una
-<code>const</code> para propiedades). Típico para los <code>id</code>:
+<p><code>readonly</code> marca una propiedad que <strong>no se puede cambiar</strong> una vez creado el objeto; viene a ser
+como una <code>const</code>, pero para propiedades. Lo típico es usarlo en los <code>id</code>:
 <code>typescript
 interface Usuario {
   readonly id: string;   // no se reasigna
@@ -75,7 +78,8 @@ interface Usuario {
 </blockquote>
 <hr />
 <h2 id="3-anidar-y-combinar-tipos">3. Anidar y combinar tipos</h2>
-<p>Las interfaces pueden contener otras interfaces y listas, reflejando datos reales:</p>
+<p>Las interfaces pueden contener otras interfaces y listas, así que reflejan datos reales sin
+problema:</p>
 <pre><code class="language-typescript">interface Habito {
   readonly id: string;
   nombre: string;
@@ -89,38 +93,39 @@ interface Usuario {
   habitos: Habito[];        // una lista de hábitos
 }
 </code></pre>
-<p>Aquí un <code>Usuario</code> tiene una lista de <code>Habito</code>, y cada <code>Habito</code> solo admite ciertas categorías.
-Con esto, TypeScript <strong>conoce la forma completa</strong> de tus datos y te autocompleta y corrige en
-todo momento.</p>
+<p>Fíjate en lo que pasa aquí: un <code>Usuario</code> tiene una lista de <code>Habito</code>, y cada <code>Habito</code> solo acepta
+unas categorías concretas. Con esto, TypeScript <strong>conoce la forma completa</strong> de tus datos, así que
+te autocompleta y te corrige sobre la marcha.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Abre <code>RachaSimple/src/types/database.ts</code>: es justamente un archivo lleno de interfaces que
-describen <code>UserProfile</code>, <code>Habit</code>, <code>DailyCheckin</code>, <code>RescuePlan</code>, etc. Esa es la "fuente de la
+<p>Abre <code>RachaSimple/src/types/database.ts</code>. Es justamente eso: un archivo lleno de interfaces que
+describen <code>UserProfile</code>, <code>Habit</code>, <code>DailyCheckin</code>, <code>RescuePlan</code> y demás. Ahí está la "fuente de la
 verdad" sobre cómo son los datos de la app. Cuando un componente usa un hábito, TypeScript ya
-sabe que tiene <code>nombre</code>, <code>meta</code>, <code>color</code>… y avisa si te equivocas. Es como un mapa que mantiene
-a todo el equipo (y a la IA) sincronizado sobre la forma de los datos.</p>
+sabe que ese hábito tiene <code>nombre</code>, <code>meta</code>, <code>color</code>… y te avisa en cuanto te equivocas. Funciona
+como un mapa que mantiene a todo el equipo (y a la IA) de acuerdo sobre la forma de los datos.</p>
 </blockquote>
 <hr />
 <h2 id="4-type-la-otra-forma-de-crear-tipos">4. <code>type</code>: la otra forma de crear tipos</h2>
 <blockquote class="def">
 <h3 id="que-significa-type-alias-de-tipo">🟦 ¿Qué significa? — <em><code>type</code> (alias de tipo)</em></h3>
-<p><code>type</code> también crea tipos propios. Para objetos, es casi intercambiable con <code>interface</code>:
+<p><code>type</code> también sirve para crear tipos propios. Para objetos es casi intercambiable con
+<code>interface</code>:
 <code>typescript
 type Usuario = {
   nombre: string;
   edad: number;
 };</code>
-La diferencia práctica para empezar: <code>type</code> es más flexible para cosas que <strong>no</strong> son objetos,
-como dar nombre a una unión:
+La diferencia que vas a notar al empezar es que <code>type</code> se mueve mejor con cosas que <strong>no</strong> son
+objetos. Por ejemplo, ponerle nombre a una unión:
 <code>typescript
 type EstadoCheckin = "completed" | "minimum" | "recovery" | "no_done";</code>
-Ahora puedes usar <code>EstadoCheckin</code> en muchos sitios sin repetir la lista.</p>
+A partir de ahí usas <code>EstadoCheckin</code> donde quieras sin tener que repetir la lista entera cada vez.</p>
 <h3 id="tip-interface-o-type">💡 Tip — ¿<code>interface</code> o <code>type</code>?</h3>
-<p>Regla simple para empezar:
-- Para <strong>describir la forma de un objeto</strong> → usa <code>interface</code>.
-- Para <strong>uniones, alias o tipos no-objeto</strong> → usa <code>type</code>.
-En la práctica ambos funcionan para objetos; muchos equipos eligen uno por consistencia. No te
-agobies: lo importante es <strong>describir tus datos</strong>, con cualquiera de los dos.</p>
+<p>Una regla sencilla para arrancar:
+- Si vas a <strong>describir la forma de un objeto</strong> → tira de <code>interface</code>.
+- Si es una <strong>unión, un alias o algo que no es un objeto</strong> → tira de <code>type</code>.
+En la práctica los dos sirven para objetos, y muchos equipos eligen uno solo por consistencia. No
+le des más vueltas: lo que importa es <strong>describir tus datos</strong>, y eso lo logras con cualquiera.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

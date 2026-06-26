@@ -23,46 +23,46 @@
 </p>
 
 <blockquote>
-<p>Hola, soy Bit, tu ajolote guia. Hasta ahora hablamos de SQL y de Postgres como si vivieran en una computadora misteriosa muy lejana. En este capitulo le ponemos cara a esa computadora: <strong>Supabase</strong>. Es la herramienta que <strong>RachaSimple</strong> y <strong>Faro</strong> usan para guardar habitos, rachas, proyectos y fases. Vamos a ver que es, como se habla con ella desde el navegador y por que hay dos llaves que NUNCA debes confundir. Respira hondo: esto es mas amigable de lo que parece.</p>
+<p>Hola, soy Bit, tu ajolote guia. Hasta ahora hablamos de SQL y de Postgres como si vivieran en una computadora misteriosa y lejana. En este capitulo le ponemos cara a esa computadora: <strong>Supabase</strong>. Es lo que <strong>RachaSimple</strong> y <strong>Faro</strong> usan para guardar habitos, rachas, proyectos y fases. Veremos que es, como se habla con ella desde el navegador y por que hay dos llaves que jamas debes confundir. Tranquilo: esto es mucho mas amigable de lo que suena.</p>
 </blockquote>
 <h2 id="1-que-es-supabase">1. ¿Que es Supabase?</h2>
-<p>Imagina que Postgres (la base de datos que ya conoces) es un almacen enorme con estanterias muy ordenadas. El problema es que un almacen, por si solo, no atiende clientes: necesitas puertas, mostradores, guardias de seguridad y un telefono para pedir cosas. <strong>Supabase</strong> es todo ese servicio alrededor del almacen, ya montado y listo para usar.</p>
+<p>Piensa en Postgres, la base de datos que ya conoces, como un almacen enorme con estanterias muy ordenadas. El detalle es que un almacen, por si solo, no atiende a nadie: hace falta puertas, mostradores, guardias y un telefono para pedir cosas. <strong>Supabase</strong> es justamente todo ese servicio alrededor del almacen, ya montado y listo para usar.</p>
 <blockquote class="def">
 <h3 id="que-significa-supabase">🟦 ¿Que significa? — <em>Supabase</em></h3>
-<p>Una plataforma que te da una base de datos <strong>Postgres</strong> ya instalada y administrada (no tienes que mantener el servidor tu mismo) y, ademas, una serie de <strong>APIs</strong> automaticas para leer y escribir esos datos desde tu aplicacion. Tambien incluye login de usuarios, almacenamiento de archivos y mas.
-<strong>Para que sirve:</strong> te ahorra montar y cuidar un servidor de base de datos; tu te concentras en tu app.
+<p>Una plataforma que te entrega una base de datos <strong>Postgres</strong> ya instalada y administrada (no tienes que mantener tu el servidor) y, encima, una serie de <strong>APIs</strong> automaticas para leer y escribir esos datos desde tu aplicacion. Tambien trae login de usuarios, almacenamiento de archivos y mas.
+<strong>Para que sirve:</strong> te quita de encima montar y cuidar un servidor de base de datos; tu te dedicas a tu app.
 <strong>Donde se usa en un repo real:</strong> <strong>RachaSimple</strong> guarda sus habitos y rachas en Supabase; <strong>Faro</strong> guarda proyectos, fases y conexiones de usuario en Supabase.</p>
 <h3 id="que-significa-postgres-gestionado">🟦 ¿Que significa? — <em>Postgres gestionado</em></h3>
-<p>"Gestionado" quiere decir que alguien mas (en este caso Supabase) se encarga de las copias de seguridad, las actualizaciones y de que el servidor siga encendido. Tu solo usas la base de datos.
-<strong>Para que sirve:</strong> tener Postgres de verdad sin ser experto en administrar servidores.
+<p>"Gestionado" significa que otra persona (aqui, Supabase) se encarga de las copias de seguridad, las actualizaciones y de que el servidor siga encendido. Tu te limitas a usar la base de datos.
+<strong>Para que sirve:</strong> tener Postgres de verdad sin necesidad de ser experto en administrar servidores.
 <strong>Donde se usa en un repo real:</strong> tanto <strong>RachaSimple</strong> como <strong>Faro</strong> corren sobre Postgres gestionado por Supabase.</p>
 <h3 id="que-significa-api">🟦 ¿Que significa? — <em>API</em></h3>
-<p>Siglas de <em>Application Programming Interface</em>. Es un conjunto de "puertas" con reglas claras por donde tu programa pide datos o envia datos a otro sistema. Como el mostrador de un restaurante: pides por el menu, no entras a la cocina.
-<strong>Para que sirve:</strong> que tu app (el navegador) pueda pedirle a Supabase "dame los habitos de este usuario" sin tocar Postgres directamente.
+<p>Siglas de <em>Application Programming Interface</em>. Es un conjunto de "puertas" con reglas claras por donde tu programa pide o envia datos a otro sistema. Es como el mostrador de un restaurante: pides por el menu, no entras a la cocina.
+<strong>Para que sirve:</strong> que tu app (el navegador) pueda decirle a Supabase "dame los habitos de este usuario" sin tocar Postgres directamente.
 <strong>Donde se usa en un repo real:</strong> el frontend de <strong>RachaSimple</strong> llama a la API de Supabase para traer las rachas.</p>
 <h3 id="que-significa-frontend">🟦 ¿Que significa? — <em>frontend</em></h3>
-<p>La parte de la app con la que el usuario interactua directamente: lo que se ve y se toca en el navegador (botones, listas, pantallas). Se opone al <em>servidor</em> (la parte oculta que guarda secretos y hace tareas pesadas).
+<p>La parte de la app con la que el usuario trata de forma directa: lo que se ve y se toca en el navegador (botones, listas, pantallas). Es lo contrario del <em>servidor</em>, la parte oculta que guarda secretos y hace el trabajo pesado.
 <strong>Para que sirve:</strong> mostrar los datos y recoger las acciones del usuario.
 <strong>Donde se usa en un repo real:</strong> el frontend de <strong>RachaSimple</strong> y de <strong>Faro</strong> corre en el navegador y usa la llave <code>anon</code>; lo secreto se queda en el servidor.</p>
 </blockquote>
-<p>Para contrastar: <strong>PolyPaw</strong> NO usa nada de esto. PolyPaw guarda sus datos en <strong>archivos JSON</strong> dentro del propio programa (Python/Flet). No hay un almacen central ni un mostrador: cada quien lee y escribe su archivo. Funciona para una app de escritorio, pero no sirve cuando muchas personas necesitan ver y actualizar los mismos datos al mismo tiempo. Para eso brilla Supabase.</p>
+<p>Para que se vea el contraste: <strong>PolyPaw</strong> NO usa nada de esto. PolyPaw guarda sus datos en <strong>archivos JSON</strong> dentro del propio programa (Python/Flet). No hay un almacen central ni un mostrador: cada quien lee y escribe su archivo. Eso funciona de maravilla para una app de escritorio, pero se queda corto cuando muchas personas necesitan ver y actualizar los mismos datos a la vez. Ahi es donde Supabase brilla.</p>
 <blockquote class="def">
 <h3 id="que-significa-json">🟦 ¿Que significa? — <em>JSON</em></h3>
-<p>Un formato de texto para guardar datos organizados en parejas "nombre: valor" y listas, facil de leer tanto para personas como para programas. Un archivo JSON es solo texto: se abre, se lee y se escribe sin necesidad de un servidor.
+<p>Un formato de texto para guardar datos organizados en parejas "nombre: valor" y en listas, facil de leer tanto para personas como para programas. Un archivo JSON es solo texto: se abre, se lee y se escribe sin necesidad de un servidor.
 <strong>Para que sirve:</strong> guardar o intercambiar datos estructurados de forma sencilla.
 <strong>Donde se usa en un repo real:</strong> <strong>PolyPaw</strong> guarda sus misiones y su progreso en archivos JSON locales, sin base de datos ni servidor.</p>
 <h3 id="que-significa-python-flet">🟦 ¿Que significa? — <em>Python / Flet</em></h3>
-<p><strong>Python</strong> es un lenguaje de programacion muy legible, popular para apps de escritorio y para tareas de datos. <strong>Flet</strong> es una herramienta que permite construir interfaces graficas (ventanas, botones) usando Python.
-<strong>Para que sirve:</strong> crear una app de escritorio con su propia ventana sin tener que ser un navegador web.
+<p><strong>Python</strong> es un lenguaje de programacion muy legible, muy usado para apps de escritorio y para tareas de datos. <strong>Flet</strong> es una herramienta que te deja construir interfaces graficas (ventanas, botones) escribiendo Python.
+<strong>Para que sirve:</strong> crear una app de escritorio con su propia ventana sin tener que pasar por un navegador web.
 <strong>Donde se usa en un repo real:</strong> <strong>PolyPaw</strong> esta hecho en Python con Flet, y por eso guarda sus datos en archivos locales en vez de en Supabase.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>Una buena regla mental: si tus datos viven en un <strong>archivo</strong> que se abre con el programa (como en PolyPaw), tienes "datos locales". Si viven en un <strong>servidor</strong> al que muchos clientes se conectan (como en RachaSimple y Faro), tienes "datos en base de datos". Supabase es lo segundo.</p>
+<p>Una regla mental que ayuda: si tus datos viven en un <strong>archivo</strong> que se abre junto con el programa (como en PolyPaw), tienes "datos locales". Si viven en un <strong>servidor</strong> al que muchos clientes se conectan (como en RachaSimple y Faro), tienes "datos en base de datos". Supabase es lo segundo.</p>
 </blockquote>
 <h2 id="2-el-cliente-supabase-js">2. El cliente supabase-js</h2>
 <p>Para hablar con Supabase desde JavaScript o TypeScript usamos una libreria oficial.</p>
 <blockquote class="def">
 <h3 id="que-significa-javascript-typescript">🟦 ¿Que significa? — <em>JavaScript / TypeScript</em></h3>
-<p><strong>JavaScript</strong> es el lenguaje de programacion que corre en los navegadores y da vida a las paginas web. <strong>TypeScript</strong> es JavaScript con "etiquetas de tipo" añadidas (texto, numero, etc.) que ayudan a detectar errores antes de ejecutar; al final se convierte en JavaScript normal.
+<p><strong>JavaScript</strong> es el lenguaje que corre en los navegadores y le da vida a las paginas web. <strong>TypeScript</strong> es JavaScript con "etiquetas de tipo" añadidas (texto, numero, etc.) que ayudan a cazar errores antes de ejecutar; al final se convierte en JavaScript normal.
 <strong>Para que sirve:</strong> escribir la logica de la app web, tanto en el frontend como en el servidor.
 <strong>Donde se usa en un repo real:</strong> <strong>RachaSimple</strong> y <strong>Faro</strong> estan escritos en TypeScript; <strong>PolyPaw</strong>, en cambio, usa Python.</p>
 <h3 id="que-significa-supabase-js">🟦 ¿Que significa? — <em>supabase-js</em></h3>
@@ -70,8 +70,8 @@
 <strong>Para que sirve:</strong> traer y guardar datos desde el navegador con codigo corto y legible.
 <strong>Donde se usa en un repo real:</strong> <strong>RachaSimple</strong> y <strong>Faro</strong> importan <code>@supabase/supabase-js</code> para hablar con sus tablas.</p>
 <h3 id="que-significa-cliente-de-supabase">🟦 ¿Que significa? — <em>cliente (de Supabase)</em></h3>
-<p>El objeto que creas una vez con tu URL y tu llave, y que luego usas para todas tus consultas. Es como el telefono ya configurado: marcas y del otro lado contesta tu base de datos.
-<strong>Para que sirve:</strong> centralizar la conexion para no repetir configuracion en cada pantalla.
+<p>El objeto que creas una sola vez con tu URL y tu llave, y que luego reutilizas en todas tus consultas. Es como un telefono ya configurado: marcas y del otro lado contesta tu base de datos.
+<strong>Para que sirve:</strong> centralizar la conexion para no repetir la configuracion en cada pantalla.
 <strong>Donde se usa en un repo real:</strong> Faro crea un cliente de Supabase y lo reutiliza en sus pantallas de Next.js.</p>
 </blockquote>
 <p>Asi se crea el cliente:</p>
@@ -85,18 +85,18 @@ const supabase = createClient(
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-variables-de-entorno">🟦 ¿Que significa? — <em>variables de entorno</em></h3>
-<p>Valores de configuracion (como una URL o una llave) que NO se escriben dentro del codigo, sino que se guardan aparte, fuera del programa, y este los lee al arrancar. Asi el mismo codigo funciona en tu maquina y en el servidor sin tocar nada, y los secretos no terminan dentro del codigo que se sube a GitHub.
+<p>Valores de configuracion (como una URL o una llave) que NO se escriben dentro del codigo, sino que se guardan aparte, fuera del programa, y este los lee al arrancar. Asi el mismo codigo funciona en tu maquina y en el servidor sin cambiar nada, y los secretos no terminan dentro del codigo que se sube a GitHub.
 <strong>Para que sirve:</strong> separar los secretos y la configuracion del codigo, para no exponerlos ni repetirlos.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> lee la URL de Supabase, la llave <code>anon</code> y la llave de OpenAI desde variables de entorno; las publicas llevan el prefijo <code>NEXT_PUBLIC_</code> y las secretas no.</p>
 <h3 id="que-significa-nextjs">🟦 ¿Que significa? — <em>Next.js</em></h3>
-<p>Un marco de trabajo (framework) construido sobre <strong>React</strong> para crear aplicaciones web que corren parte en el navegador y parte en un servidor. Trae reglas listas para rutas, paginas y manejo de secretos.
+<p>Un marco de trabajo (framework) construido sobre <strong>React</strong> para crear aplicaciones web que corren en parte en el navegador y en parte en un servidor. Trae reglas listas para rutas, paginas y manejo de secretos.
 <strong>Para que sirve:</strong> levantar una app web moderna con frontend y servidor en un solo proyecto.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> esta hecho en Next.js; por eso usa el prefijo <code>NEXT_PUBLIC_</code> para marcar que variables puede ver el navegador.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En <strong>Faro</strong> (Next.js) las variables que empiezan con <code>NEXT_PUBLIC_</code> son las unicas que el navegador puede ver. La URL del proyecto y la llave <code>anon</code> van con ese prefijo justamente porque son seguras de exponer. Cualquier secreto de verdad (como la llave de OpenAI o la <code>service_role</code>) NO lleva ese prefijo y se queda en el servidor.</p>
+<p>En <strong>Faro</strong> (Next.js) las variables que empiezan con <code>NEXT_PUBLIC_</code> son las unicas que el navegador llega a ver. La URL del proyecto y la llave <code>anon</code> llevan ese prefijo precisamente porque es seguro exponerlas. Cualquier secreto de verdad (como la llave de OpenAI o la <code>service_role</code>) NO lleva ese prefijo y se queda en el servidor.</p>
 </blockquote>
 <h2 id="3-leer-datos-fromselect">3. Leer datos: .from().select()</h2>
-<p>Toda consulta empieza eligiendo una tabla con <code>.from(...)</code> y luego diciendo que columnas quieres con <code>.select(...)</code>.</p>
+<p>Toda consulta arranca eligiendo una tabla con <code>.from(...)</code> y luego diciendo que columnas quieres con <code>.select(...)</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-from">🟦 ¿Que significa? — <em>.from()</em></h3>
 <p>Metodo que indica sobre <strong>que tabla</strong> vas a trabajar. El nombre entre comillas es el nombre real de la tabla en Postgres.
@@ -112,41 +112,41 @@ const { data, error } = await supabase
   .from('habitos')
   .select('*')
 </code></pre>
-<p>Fijate en <code>{ data, error }</code>: Supabase siempre devuelve un objeto con esos dos campos. Si todo salio bien, <code>data</code> trae tus filas y <code>error</code> es <code>null</code>. Si algo fallo, <code>error</code> trae el problema y <code>data</code> es <code>null</code>. Revisa SIEMPRE el error.</p>
+<p>Fijate en <code>{ data, error }</code>: Supabase siempre te devuelve un objeto con esos dos campos. Si todo salio bien, <code>data</code> trae tus filas y <code>error</code> queda en <code>null</code>. Si algo fallo, es al reves: <code>error</code> trae el problema y <code>data</code> queda en <code>null</code>. Por eso revisa SIEMPRE el error.</p>
 <blockquote class="def">
 <h3 id="que-significa-fila">🟦 ¿Que significa? — <em>fila</em></h3>
-<p>Cada registro de una tabla: un habito, una racha, un proyecto. Si la tabla es una hoja de calculo, una fila es un renglon.
+<p>Cada registro de una tabla: un habito, una racha, un proyecto. Si imaginas la tabla como una hoja de calculo, una fila es un renglon.
 <strong>Para que sirve:</strong> representar una "cosa" individual de tu app.
 <strong>Donde se usa en un repo real:</strong> en RachaSimple, cada fila de <code>habitos</code> es un habito concreto como "Leer 20 minutos".</p>
 </blockquote>
-<p>Si lo tradujeramos al SQL puro que esa consulta ejecuta por debajo, seria algo asi:</p>
+<p>Si tradujeramos al SQL puro que esa consulta ejecuta por debajo, quedaria algo asi:</p>
 <pre><code class="language-sql">select * from habitos;
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>El cliente <code>supabase-js</code> no reemplaza al SQL: lo <strong>traduce</strong>. Cada cadena de metodos que escribes se convierte en una consulta SQL real contra Postgres. Por eso vale la pena entender SQL: te ayuda a saber que esta pasando "del otro lado del telefono".</p>
+<p>El cliente <code>supabase-js</code> no sustituye al SQL: lo <strong>traduce</strong>. Cada cadena de metodos que escribes acaba convertida en una consulta SQL real contra Postgres. Por eso vale la pena entender SQL: te ayuda a saber que esta pasando "del otro lado del telefono".</p>
 </blockquote>
 <h2 id="4-filtros-afinar-lo-que-pides">4. Filtros: afinar lo que pides</h2>
-<p>Casi nunca quieres TODAS las filas. Quieres las de un usuario, las completadas hoy, las mas recientes. Para eso estan los filtros, que encadenas despues del <code>.select()</code>.</p>
+<p>Casi nunca quieres TODAS las filas. Quieres las de un usuario, las completadas hoy, las mas recientes. Para eso estan los filtros, que vas encadenando despues del <code>.select()</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-eq">🟦 ¿Que significa? — <em>.eq()</em></h3>
 <p>Filtro de igualdad: "donde tal columna sea <strong>igual a</strong> tal valor". <code>eq</code> viene de <em>equal</em>.
-<strong>Para que sirve:</strong> quedarte solo con las filas que coinciden exactamente (por ejemplo, de un solo usuario).
+<strong>Para que sirve:</strong> quedarte solo con las filas que coinciden exactamente (por ejemplo, las de un solo usuario).
 <strong>Donde se usa en un repo real:</strong> Faro usa <code>.eq('proyecto_id', id)</code> para traer solo las fases de un proyecto concreto.</p>
 <h3 id="que-significa-gt">🟦 ¿Que significa? — <em>.gt()</em></h3>
-<p>Filtro "mayor que" (<em>greater than</em>). Tambien existen <code>.gte</code> (mayor o igual), <code>.lt</code> (menor que) y <code>.lte</code> (menor o igual).
+<p>Filtro "mayor que" (<em>greater than</em>). Tambien tienes <code>.gte</code> (mayor o igual), <code>.lt</code> (menor que) y <code>.lte</code> (menor o igual).
 <strong>Para que sirve:</strong> filtrar por rangos, como rachas mayores a cierto numero de dias.
 <strong>Donde se usa en un repo real:</strong> en RachaSimple podrias listar registros con <code>.gt('dias_seguidos', 7)</code> para ver rachas de mas de una semana.</p>
 <h3 id="que-significa-order">🟦 ¿Que significa? — <em>.order()</em></h3>
 <p>Ordena los resultados por una columna. Con <code>{ ascending: false }</code> los pones de mayor a menor (o de mas nuevo a mas viejo).
-<strong>Para que sirve:</strong> mostrar lo mas reciente o lo mas alto primero.
+<strong>Para que sirve:</strong> mostrar primero lo mas reciente o lo mas alto.
 <strong>Donde se usa en un repo real:</strong> RachaSimple ordena los registros de racha por fecha para mostrar los ultimos arriba.</p>
 <h3 id="que-significa-limit">🟦 ¿Que significa? — <em>.limit()</em></h3>
 <p>Limita cuantas filas te devuelve. <code>.limit(5)</code> trae como mucho 5.
 <strong>Para que sirve:</strong> no traer miles de filas cuando solo necesitas unas pocas (mas rapido y mas barato).
 <strong>Donde se usa en un repo real:</strong> Faro puede limitar cuantos proyectos recientes muestra en el panel.</p>
 </blockquote>
-<p>Un ejemplo encadenando varios filtros, sobre los registros de racha de RachaSimple:</p>
+<p>Veamos un ejemplo encadenando varios filtros, sobre los registros de racha de RachaSimple:</p>
 <pre><code class="language-ts">// Ultimos 10 registros de racha de un usuario, del mas nuevo al mas viejo
 const { data, error } = await supabase
   .from('registros_racha')
@@ -166,17 +166,17 @@ limit 10;
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>Nota como el orden de los metodos en <code>supabase-js</code> (primero <code>.eq</code>, luego <code>.gt</code>, luego <code>.order</code>, luego <code>.limit</code>) se corresponde con las clausulas de SQL (<code>where</code>, <code>order by</code>, <code>limit</code>). No es casualidad: cada metodo agrega una pieza a la misma consulta.</p>
+<p>Mira como el orden de los metodos en <code>supabase-js</code> (primero <code>.eq</code>, luego <code>.gt</code>, luego <code>.order</code>, luego <code>.limit</code>) calca las clausulas de SQL (<code>where</code>, <code>order by</code>, <code>limit</code>). No es casualidad: cada metodo le va sumando una pieza a la misma consulta.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Si te olvidas de un filtro como <code>.eq('usuario_id', ...)</code>, podrias pedir filas que no son tuyas. En RachaSimple y Faro eso no rompe la seguridad porque hay <strong>RLS</strong> (lo vemos en la seccion 8), pero igual es mala costumbre traer mas de lo necesario. Pide poco y especifico.</p>
+<p>Si se te olvida un filtro como <code>.eq('usuario_id', ...)</code>, podrias estar pidiendo filas que no son tuyas. En RachaSimple y Faro eso no rompe la seguridad porque hay <strong>RLS</strong> (lo vemos en la seccion 8), pero aun asi es mala costumbre traer mas de lo que necesitas. Pide poco y especifico.</p>
 </blockquote>
 <h2 id="5-single-cuando-esperas-una-sola-fila">5. .single(): cuando esperas una sola fila</h2>
 <p>A veces no quieres una lista, sino UN solo registro: un perfil, un proyecto por su id.</p>
 <blockquote class="def">
 <h3 id="que-significa-single">🟦 ¿Que significa? — <em>.single()</em></h3>
-<p>Metodo que le dice a Supabase "espero exactamente una fila". En vez de devolverte una lista con un elemento, te devuelve directamente el objeto. Si hay cero filas o mas de una, te da un error.
+<p>Metodo que le avisa a Supabase "espero exactamente una fila". En lugar de devolverte una lista con un elemento dentro, te entrega directo el objeto. Si hay cero filas o mas de una, te da un error.
 <strong>Para que sirve:</strong> trabajar comodo con <code>data.nombre</code> en lugar de <code>data[0].nombre</code>.
-<strong>Donde se usa en un repo real:</strong> RachaSimple lo usa al traer el <strong>perfil</strong> del usuario actual, que es siempre uno solo.</p>
+<strong>Donde se usa en un repo real:</strong> RachaSimple lo usa al traer el <strong>perfil</strong> del usuario actual, que siempre es uno solo.</p>
 </blockquote>
 <pre><code class="language-ts">// Traer el perfil del usuario actual en RachaSimple
 const { data: perfil, error } = await supabase
@@ -189,14 +189,14 @@ const { data: perfil, error } = await supabase
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Existe tambien <code>.maybeSingle()</code>. Es como <code>.single()</code> pero <strong>no</strong> da error si no hay ninguna fila: simplemente te devuelve <code>null</code>. Util cuando no estas seguro de que el registro exista todavia (por ejemplo, un perfil que aun no se ha creado).</p>
+<p>Tambien existe <code>.maybeSingle()</code>. Funciona como <code>.single()</code>, pero <strong>no</strong> da error si no hay ninguna fila: simplemente te devuelve <code>null</code>. Es util cuando no tienes la certeza de que el registro exista todavia (por ejemplo, un perfil que aun no se ha creado).</p>
 </blockquote>
 <h2 id="6-escribir-datos-insert-update-y-delete">6. Escribir datos: insert, update y delete</h2>
-<p>Leer es la mitad. La otra mitad es crear, modificar y borrar.</p>
+<p>Leer es la mitad del trabajo. La otra mitad es crear, modificar y borrar.</p>
 <blockquote class="def">
 <h3 id="que-significa-insert">🟦 ¿Que significa? — <em>.insert()</em></h3>
 <p>Metodo para <strong>crear</strong> filas nuevas. Le pasas un objeto (o una lista de objetos) con los valores de cada columna.
-<strong>Para que sirve:</strong> guardar algo nuevo: un habito, un registro de racha de hoy, un proyecto.
+<strong>Para que sirve:</strong> guardar algo nuevo: un habito, el registro de racha de hoy, un proyecto.
 <strong>Donde se usa en un repo real:</strong> RachaSimple hace <code>.insert(...)</code> cuando el usuario marca un habito como cumplido y se crea un registro de racha.</p>
 </blockquote>
 <pre><code class="language-ts">// Crear un nuevo habito en RachaSimple
@@ -207,9 +207,9 @@ const { data, error } = await supabase
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-update">🟦 ¿Que significa? — <em>.update()</em></h3>
-<p>Metodo para <strong>modificar</strong> filas que ya existen. Casi siempre va acompañado de un filtro (como <code>.eq</code>) para decir CUALES filas cambiar.
+<p>Metodo para <strong>modificar</strong> filas que ya existen. Casi siempre va con un filtro (como <code>.eq</code>) para decir CUALES filas cambiar.
 <strong>Para que sirve:</strong> editar datos: renombrar un habito, cambiar el estado de un proyecto.
-<strong>Donde se usa en un repo real:</strong> Faro usa <code>.update(...)</code> para cambiar el estado o el progreso de un proyecto tras un analisis.</p>
+<strong>Donde se usa en un repo real:</strong> Faro usa <code>.update(...)</code> para cambiar el estado o el progreso de un proyecto despues de un analisis.</p>
 </blockquote>
 <pre><code class="language-ts">// Actualizar el progreso de un proyecto en Faro
 const { error } = await supabase
@@ -231,7 +231,7 @@ const { error } = await supabase
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Un <code>.update()</code> o un <code>.delete()</code> <strong>sin filtro</strong> afecta a TODAS las filas de la tabla. Imagina borrar todos los habitos de todos los usuarios de un solo golpe. Siempre, siempre acompaña update y delete con un <code>.eq(...)</code> (u otro filtro). Bit ha visto ajolotes llorar por olvidar el <code>where</code>.</p>
+<p>Un <code>.update()</code> o un <code>.delete()</code> <strong>sin filtro</strong> afecta a TODAS las filas de la tabla. Imagina borrar de un golpe los habitos de todos los usuarios. Por eso, siempre, siempre acompaña update y delete con un <code>.eq(...)</code> (u otro filtro). Bit ha visto ajolotes llorar por olvidar el <code>where</code>.</p>
 </blockquote>
 <p>En SQL puro, esas tres operaciones se ven asi:</p>
 <pre><code class="language-sql">insert into habitos (nombre, usuario_id) values ('Leer 20 minutos', '...');
@@ -241,42 +241,42 @@ update proyectos set progreso = 60, estado = 'en curso' where id = '...';
 delete from habitos where id = '...';
 </code></pre>
 <h2 id="7-tanstack-query-leer-y-escribir-sin-que-la-pantalla-se-atore">7. TanStack Query: leer y escribir sin que la pantalla se atore</h2>
-<p>RachaSimple no llama a Supabase "a pelo" en cada pantalla. Usa una libreria que organiza las llamadas.</p>
+<p>RachaSimple no llama a Supabase "a pelo" en cada pantalla. Se apoya en una libreria que pone orden en esas llamadas.</p>
 <blockquote class="def">
 <h3 id="que-significa-react">🟦 ¿Que significa? — <em>React</em></h3>
 <p>Una libreria de JavaScript para construir interfaces de usuario por piezas reutilizables llamadas "componentes" (un boton, una lista, una pantalla). Cuando los datos cambian, React vuelve a dibujar solo lo necesario.
 <strong>Para que sirve:</strong> armar el frontend de una app web de forma ordenada y que se actualice solo cuando cambian los datos.
 <strong>Donde se usa en un repo real:</strong> <strong>RachaSimple</strong> y <strong>Faro</strong> (vía Next.js) usan React para sus pantallas; sobre React montan TanStack Query.</p>
 <h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
-<p>Una libreria de React que gestiona los datos que vienen de un servidor: los guarda en memoria (cache), sabe cuando estan "viejos" y los vuelve a pedir, y maneja los estados de "cargando" y "error" por ti.
-<strong>Para que sirve:</strong> evitar pedir lo mismo mil veces y mostrar spinners y errores sin escribir tanto codigo.
+<p>Una libreria de React que se ocupa de los datos que vienen de un servidor: los guarda en memoria (cache), sabe cuando estan "viejos" y los vuelve a pedir, y maneja por ti los estados de "cargando" y "error".
+<strong>Para que sirve:</strong> no pedir lo mismo mil veces y mostrar spinners y errores sin escribir tanto codigo.
 <strong>Donde se usa en un repo real:</strong> RachaSimple envuelve sus consultas a Supabase con TanStack Query para que la lista de habitos se refresque sola y no parpadee.</p>
 <h3 id="que-significa-cache">🟦 ¿Que significa? — <em>cache</em></h3>
-<p>Una copia temporal de datos que ya pediste, guardada cerca para no volver a pedirla. Como tener una foto de la pizarra en vez de ir a la pizarra cada vez.
+<p>Una copia temporal de datos que ya pediste, guardada cerca para no tener que volver a pedirla. Es como tener una foto de la pizarra en vez de ir a la pizarra cada vez.
 <strong>Para que sirve:</strong> que la app se sienta instantanea y gaste menos llamadas a Supabase.
 <strong>Donde se usa en un repo real:</strong> TanStack Query cachea los habitos en RachaSimple; al volver a la pantalla, se ven al instante.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>En RachaSimple, un "query" de TanStack Query envuelve un <code>await supabase.from('habitos').select('*')</code>. La idea: TanStack Query se encarga del <em>cuando</em> y <em>como guardar</em>; Supabase se encarga del <em>de donde vienen</em> los datos. Trabajan en equipo.</p>
+<p>En RachaSimple, un "query" de TanStack Query envuelve un <code>await supabase.from('habitos').select('*')</code>. La reparticion es clara: TanStack Query se ocupa del <em>cuando</em> y del <em>como guardar</em>; Supabase se ocupa del <em>de donde vienen</em> los datos. Trabajan en equipo.</p>
 </blockquote>
 <h2 id="8-seguridad-las-llaves-anon-y-service_role-y-rls">8. Seguridad: las llaves anon y service_role, y RLS</h2>
 <p>Aqui viene lo mas importante de todo el capitulo. Presta atencion, ajolote.</p>
 <blockquote class="def">
 <h3 id="que-significa-llave-anon-anon-key">🟦 ¿Que significa? — <em>llave anon (anon key)</em></h3>
-<p>La llave "publica" de tu proyecto Supabase. Es la que puede vivir en el navegador. Por si sola NO da permisos especiales: cualquiera que la tenga solo puede hacer lo que tus reglas de seguridad permitan.
+<p>La llave "publica" de tu proyecto Supabase. Es la que puede vivir en el navegador. Por si sola NO da permisos especiales: quien la tenga solo puede hacer lo que tus reglas de seguridad le permitan.
 <strong>Para que sirve:</strong> que el frontend se conecte a Supabase de forma segura, sin abrir la puerta a todo.
 <strong>Donde se usa en un repo real:</strong> Faro y RachaSimple usan la llave <code>anon</code> en el navegador para todas las consultas normales del usuario.</p>
 <h3 id="que-significa-llave-service_role">🟦 ¿Que significa? — <em>llave service_role</em></h3>
 <p>La llave "maestra" que se <strong>salta</strong> todas las reglas de seguridad y puede leer y escribir cualquier fila de cualquier usuario. Es peligrosisima.
-<strong>Para que sirve:</strong> tareas de servidor que necesitan permisos totales (por ejemplo, un proceso administrativo).
+<strong>Para que sirve:</strong> tareas de servidor que de verdad necesitan permisos totales (por ejemplo, un proceso administrativo).
 <strong>Donde se usa en un repo real:</strong> en Faro vive SOLO en el servidor, en variables de entorno sin <code>NEXT_PUBLIC_</code>. Nunca llega al navegador.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>NUNCA pongas la llave <code>service_role</code> en codigo del navegador ni la subas a GitHub. Si se filtra, cualquiera puede leer y borrar todos los datos de todos tus usuarios. La regla de seguridad de Faro lo dice claro: tokens y secretos solo en el servidor, jamas en el cliente ni commiteados.</p>
+<p>NUNCA pongas la llave <code>service_role</code> en codigo del navegador ni la subas a GitHub. Si se filtra, cualquiera puede leer y borrar todos los datos de todos tus usuarios. La regla de seguridad de Faro lo deja clarisimo: tokens y secretos solo en el servidor, jamas en el cliente ni commiteados.</p>
 </blockquote>
 <p>Pero si la llave <code>anon</code> esta en el navegador y cualquiera puede verla, ¿que impide que un curioso lea los habitos de otra persona? La respuesta es <strong>RLS</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-rls-row-level-security">🟦 ¿Que significa? — <em>RLS (Row Level Security)</em></h3>
 <p>"Seguridad a nivel de fila". Son reglas que Postgres aplica para decidir, fila por fila, si un usuario puede verla o tocarla. La regla tipica: "solo puedes ver las filas donde <code>usuario_id</code> sea igual a tu propio id".
-<strong>Para que sirve:</strong> que aunque todos compartan la misma llave <code>anon</code>, cada quien solo acceda a SUS datos.
+<strong>Para que sirve:</strong> que aunque todos compartan la misma llave <code>anon</code>, cada quien acceda solo a SUS datos.
 <strong>Donde se usa en un repo real:</strong> RachaSimple protege habitos, registros de racha y perfiles con RLS; Faro protege proyectos, fases y conexiones de usuario con RLS.</p>
 <h3 id="que-significa-autenticacion-supabase-auth">🟦 ¿Que significa? — <em>autenticacion (Supabase Auth)</em></h3>
 <p>El sistema de login de Supabase. Cuando un usuario inicia sesion (por ejemplo con OAuth de Google o GitHub), Supabase sabe quien es y le entrega una identidad que RLS usa para decidir que filas le tocan.
@@ -287,11 +287,11 @@ delete from habitos where id = '...';
 <strong>Para que sirve:</strong> que el usuario entre con "Iniciar sesion con Google" y que la app reciba permiso para leer ciertos datos sin conocer su contraseña.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> usa OAuth (a traves de Supabase Auth) para conectarse a la cuenta de GitHub y Google Drive del usuario y leer sus proyectos.</p>
 <h3 id="que-significa-token">🟦 ¿Que significa? — <em>token</em></h3>
-<p>Una "ficha" temporal que un servicio te entrega tras un login con OAuth. Sirve de permiso: la presentas en cada peticion para demostrar quien eres, y se puede vencer o revocar. No es tu contraseña.
-<strong>Para que sirve:</strong> permitir que la app actue en tu nombre por un rato, sin guardar tu contraseña.
+<p>Una "ficha" temporal que un servicio te entrega tras un login con OAuth. Funciona como permiso: la presentas en cada peticion para demostrar quien eres, y puede vencer o revocarse. No es tu contraseña.
+<strong>Para que sirve:</strong> dejar que la app actue en tu nombre por un rato, sin guardar tu contraseña.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> guarda los tokens de GitHub y Google Drive solo en el servidor, en la tabla <code>conexiones_usuario</code> protegida con RLS, nunca en el navegador.</p>
 </blockquote>
-<p>Una politica de RLS, en SQL, se ve asi (ejemplo del estilo que protege los proyectos de Faro):</p>
+<p>Una politica de RLS, en SQL, se ve asi (este es el estilo de regla que protege los proyectos de Faro):</p>
 <pre><code class="language-sql">-- Solo el dueño puede ver sus propios proyectos
 create policy &quot;leer mis proyectos&quot;
 on proyectos
@@ -301,24 +301,24 @@ using ( auth.uid() = usuario_id );
 <blockquote class="def">
 <h3 id="que-significa-authuid">🟦 ¿Que significa? — <em>auth.uid()</em></h3>
 <p>Una funcion de Supabase que, dentro de una consulta, devuelve el id del usuario que esta autenticado en ese momento. RLS la compara contra la columna <code>usuario_id</code> de cada fila.
-<strong>Para que sirve:</strong> escribir reglas como "esta fila es tuya si tu id coincide con su dueño".
+<strong>Para que sirve:</strong> escribir reglas como "esta fila es tuya si tu id coincide con el de su dueño".
 <strong>Donde se usa en un repo real:</strong> las politicas de RachaSimple y Faro comparan <code>auth.uid()</code> con <code>usuario_id</code> para dejar pasar solo lo propio.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Piensa en la llave <code>anon</code> como la llave de la entrada de un edificio de apartamentos: te deja entrar al edificio, pero no a cualquier apartamento. RLS es la cerradura de cada apartamento: solo abre el tuyo. La <code>service_role</code> seria la llave maestra del conserje, que abre todo... por eso la guardas bajo siete llaves.</p>
+<p>Piensa en la llave <code>anon</code> como la llave de la entrada de un edificio de apartamentos: te deja pasar al edificio, pero no a cualquier apartamento. RLS es la cerradura de cada apartamento: solo abre el tuyo. La <code>service_role</code> seria la llave maestra del conserje, que abre todo... y por eso la guardas bajo siete llaves.</p>
 </blockquote>
 <h2 id="9-realtime-y-storage-a-grandes-rasgos">9. Realtime y Storage, a grandes rasgos</h2>
-<p>Supabase ofrece dos extras que conviene conocer aunque no entremos a fondo.</p>
+<p>Supabase ofrece dos extras que conviene conocer, aunque no entremos en detalle.</p>
 <blockquote class="def">
 <h3 id="que-significa-realtime">🟦 ¿Que significa? — <em>Realtime</em></h3>
-<p>Una funcion que avisa a tu app <strong>en el momento</strong> en que un dato cambia en la base, sin que tengas que preguntar una y otra vez. Te "suscribes" a una tabla y Supabase te empuja los cambios.
+<p>Una funcion que avisa a tu app <strong>en el momento</strong> en que un dato cambia en la base, sin que tengas que estar preguntando una y otra vez. Te "suscribes" a una tabla y Supabase te empuja los cambios.
 <strong>Para que sirve:</strong> que dos personas vean lo mismo actualizado al instante, o que una pantalla refleje cambios sin recargar.
-<strong>Donde se usa en un repo real:</strong> RachaSimple podria usar Realtime para que una racha registrada en el telefono aparezca al toque en otra pantalla. (En la practica, gran parte del refresco lo resuelve TanStack Query.)</p>
+<strong>Donde se usa en un repo real:</strong> RachaSimple podria usar Realtime para que una racha registrada en el telefono aparezca al toque en otra pantalla. (En la practica, buena parte del refresco lo resuelve TanStack Query.)</p>
 <h3 id="que-significa-storage">🟦 ¿Que significa? — <em>Storage</em></h3>
 <p>El servicio de Supabase para guardar <strong>archivos</strong> (imagenes, PDFs) en vez de filas de texto y numeros. Es como un Google Drive pegado a tu base de datos, con sus propias reglas de acceso.
 <strong>Para que sirve:</strong> subir avatares, fotos o documentos sin meterlos dentro de las tablas.
 <strong>Donde se usa en un repo real:</strong> un avatar de perfil en RachaSimple es un buen candidato a vivir en Storage, mientras la tabla <code>perfiles</code> guarda solo la URL.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>Faro tiene su propia filosofia de "refresco bajo demanda": el usuario dispara el analisis cuando quiere. Por eso no abusa de Realtime; prefiere pedir datos cuando hace falta. Conocer la herramienta no obliga a usarla siempre: cada proyecto elige.</p>
+<p>Faro tiene su propia filosofia de "refresco bajo demanda": el usuario dispara el analisis cuando quiere. Por eso no abusa de Realtime; prefiere pedir datos cuando hacen falta. Conocer una herramienta no te obliga a usarla siempre: cada proyecto elige.</p>
 </blockquote>
 <h2 id="10-juntando-todo-el-viaje-de-un-dato">10. Juntando todo: el viaje de un dato</h2>
 <p>Recapitulemos con el caso de Faro cuando muestra un proyecto:</p>
@@ -327,7 +327,7 @@ using ( auth.uid() = usuario_id );
 <li>El navegador, usando la llave <strong>anon</strong> y el cliente <strong>supabase-js</strong>, pide <code>from('proyectos').select('*')</code>.</li>
 <li>Postgres recibe la consulta y, antes de responder, aplica <strong>RLS</strong>: solo deja pasar las filas donde <code>auth.uid() = usuario_id</code>.</li>
 <li>Vuelve <code>{ data, error }</code>. Faro pinta los proyectos del usuario, y de NADIE mas.</li>
-<li>Si el usuario edita el estado, el navegador hace <code>.update(...).eq('id', ...)</code>, RLS vuelve a verificar que sea su fila, y Postgres guarda el cambio.</li>
+<li>Si el usuario edita el estado, el navegador hace <code>.update(...).eq('id', ...)</code>, RLS vuelve a comprobar que sea su fila, y Postgres guarda el cambio.</li>
 <li>Para tareas con permisos totales (como un proceso de servidor con OpenAI), Faro usa la llave <strong>service_role</strong>, que vive solo en el servidor.</li>
 </ol>
 <blockquote class="def">
@@ -336,10 +336,10 @@ using ( auth.uid() = usuario_id );
 <strong>Para que sirve:</strong> añadir funciones de IA a una app, como generar una descripcion o un resumen automatico.
 <strong>Donde se usa en un repo real:</strong> <strong>Faro</strong> llama a la API de OpenAI (desde el servidor, con su llave secreta) para generar la descripcion, el estado, el progreso y el roadmap de cada proyecto.</p>
 </blockquote>
-<p>Y PolyPaw, mientras tanto, sigue feliz leyendo su archivo JSON local, sin llaves, sin RLS, sin servidor. Cada herramienta para su mundo.</p>
+<p>Y PolyPaw, mientras tanto, sigue tan feliz leyendo su archivo JSON local: sin llaves, sin RLS, sin servidor. Cada herramienta para su mundo.</p>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>Si solo te llevas una idea de este capitulo, que sea esta: <strong>anon + RLS</strong> es la pareja que mantiene seguro el frontend; <strong>service_role</strong> se queda en el servidor y nunca sale. Confundir esas llaves es el error de seguridad numero uno con Supabase.</p>
+<p>Si de este capitulo te llevas una sola idea, que sea esta: <strong>anon + RLS</strong> es la pareja que mantiene seguro el frontend; <strong>service_role</strong> se queda en el servidor y no sale de ahi nunca. Confundir esas dos llaves es el error de seguridad numero uno con Supabase.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

@@ -23,42 +23,42 @@
 </p>
 
 <blockquote>
-<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote programador. 🐾 ¿Te acuerdas de la lista de tareas que construiste en el Módulo 03 con JavaScript puro? Aquella libretita digital donde escribías "Comprar pan", la marcabas como hecha y la borrabas. Hoy vamos a hacer algo precioso: <strong>la vamos a reescribir con TypeScript</strong>. No para empezar de cero, sino para ponerle "etiquetas de seguridad" a cada pieza. Vas a ver con tus propios ojos el momento exacto en que TypeScript te salva de un error <em>antes</em> de ejecutar el programa. Y al final vamos a poner las dos versiones lado a lado —la de JavaScript sin tipos y la nueva con tipos— para que sientas en carne propia qué aportan los tipos. Recuerda el lema de todo el módulo: <strong>TypeScript es JavaScript con tipos</strong>. Todo lo que ya sabes sigue valiendo; solo le sumamos avisos. Respira. Esto lo vas a disfrutar.</p>
+<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote programador. 🐾 ¿Te acuerdas de la lista de tareas que armaste en el Módulo 03 con JavaScript puro? Aquella libretita digital donde escribías "Comprar pan", la marcabas como hecha y la borrabas. Hoy vamos a hacer algo bonito: <strong>la vamos a reescribir con TypeScript</strong>. No para empezar de cero, sino para ponerle "etiquetas de seguridad" a cada pieza. Vas a ver con tus propios ojos el momento exacto en que TypeScript te salva de un error <em>antes</em> de ejecutar el programa. Y al final pondremos las dos versiones lado a lado —la de JavaScript sin tipos y la nueva con tipos— para que sientas por ti mismo qué aportan los tipos. Recuerda el lema de todo el módulo: <strong>TypeScript es JavaScript con tipos</strong>. Todo lo que ya sabes sigue valiendo; solo le sumamos avisos. Respira. Esto lo vas a disfrutar.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-vamos-a-construir-otra-vez">1. ¿Qué vamos a construir (otra vez)?</h2>
-<p>La misma lista de tareas de siempre: una caja para escribir, un botón para añadir, una lista donde aparecen las tareas, clic para marcarlas como hechas y un botón para borrarlas. <strong>El comportamiento no cambia.</strong> Lo que cambia es que ahora cada dato va a tener un <strong>tipo</strong> que le dice a TypeScript (y a tu editor) qué forma tiene.</p>
-<p>La pregunta honesta que quizá tengas es: <em>"Si la versión de JavaScript ya funcionaba, ¿para qué complicarme?"</em>. La respuesta corta: para que el editor te avise de los errores mientras escribes, en vez de que se rompa cuando un usuario lo usa. La respuesta larga es todo este capítulo.</p>
+<p>La misma lista de tareas de siempre: una caja para escribir, un botón para añadir, una lista donde aparecen las tareas, clic para marcarlas como hechas y un botón para borrarlas. <strong>El comportamiento no cambia.</strong> Lo que cambia es que ahora cada dato lleva un <strong>tipo</strong> que le dice a TypeScript (y a tu editor) qué forma tiene.</p>
+<p>Quizá tengas una duda muy razonable: <em>"Si la versión de JavaScript ya funcionaba, ¿para qué complicarme?"</em>. La respuesta corta: para que el editor te avise de los errores mientras escribes, y no cuando se rompa en manos de un usuario. La respuesta larga es todo este capítulo.</p>
 <blockquote class="def">
 <h3 id="que-significa-typescript">🟦 ¿Qué significa? — <em>TypeScript</em></h3>
 <p>TypeScript es <strong>JavaScript con tipos</strong>: el mismo lenguaje que ya conoces, más una capa que te deja decir de qué tipo es cada dato (texto, número, verdadero/falso, objeto con tal forma...). Sirve para que tu editor te avise de errores <strong>antes</strong> de ejecutar el programa. Donde se usa de verdad: <strong>RachaSimple</strong> (app de hábitos en React + TypeScript) y <strong>Faro/Organizer</strong> (Next.js + React + TypeScript) están escritas enteras en TypeScript; cada archivo termina en <code>.ts</code> o <code>.tsx</code>.</p>
 <h3 id="que-significa-tipo">🟦 ¿Qué significa? — <em>tipo</em></h3>
 <p>Un tipo es una <strong>etiqueta que describe qué forma tiene un dato</strong>: si es texto (<code>string</code>), número (<code>number</code>), verdadero/falso (<code>boolean</code>), una lista, un objeto con ciertas propiedades... Sirve para que TypeScript sepa qué puedes hacer con cada dato y te frene si te equivocas. En <strong>Faro</strong>, el archivo <code>src/lib/types.ts</code> está dedicado por completo a definir los tipos del proyecto.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>No tienes que tirar la versión de JavaScript del Módulo 03. Lo ideal es tener las dos carpetas abiertas y comparar. Verás que el 90% del código es <strong>idéntico</strong>. TypeScript no es un lenguaje nuevo que aprender de cero: es tu JavaScript de siempre con anotaciones.</p>
+<p>No tienes que tirar la versión de JavaScript del Módulo 03. Lo ideal es tener las dos carpetas abiertas y compararlas. Verás que el 90% del código es <strong>idéntico</strong>. TypeScript no es un lenguaje nuevo que aprender de cero: es tu JavaScript de siempre con unas cuantas anotaciones encima.</p>
 </blockquote>
 <h2 id="2-preparamos-el-proyecto">2. Preparamos el proyecto</h2>
-<p>En el Módulo 03 abrías el <code>index.html</code> con doble clic y listo. Con TypeScript hay un paso extra: el navegador <strong>no entiende</strong> TypeScript directamente, así que hay que <strong>traducirlo</strong> a JavaScript primero. A ese paso se le llama <strong>compilar</strong>.</p>
+<p>En el Módulo 03 abrías el <code>index.html</code> con doble clic y listo. Con TypeScript hay un paso de más: el navegador <strong>no entiende</strong> TypeScript directamente, así que primero hay que <strong>traducirlo</strong> a JavaScript. A ese paso se le llama <strong>compilar</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-compilar">🟦 ¿Qué significa? — <em>compilar</em></h3>
 <p>Compilar es <strong>traducir</strong> tu código de TypeScript (<code>.ts</code>) a JavaScript normal (<code>.js</code>) que el navegador sí entiende. Durante esa traducción, TypeScript revisa los tipos y te avisa si algo no cuadra. Sirve para tener dos beneficios: avisos de errores + un archivo que cualquier navegador puede ejecutar. En <strong>RachaSimple</strong> y <strong>Faro</strong>, esa traducción la hace la herramienta de construcción (Vite en uno, Next.js en el otro) cada vez que corres <code>npm run build</code>.</p>
 </blockquote>
-<p>Para este mini-proyecto vamos a usar la forma más sencilla posible. Crea una carpeta <code>lista-tareas-ts</code> y dentro un archivo <code>app.ts</code>. Si quieres compilar a mano, instala TypeScript una vez con <code>npm install -g typescript</code> y luego, dentro de la carpeta, ejecuta:</p>
+<p>Para este mini-proyecto vamos a usar la forma más sencilla que hay. Crea una carpeta <code>lista-tareas-ts</code> y dentro un archivo <code>app.ts</code>. Si quieres compilar a mano, instala TypeScript una sola vez con <code>npm install -g typescript</code> y luego, dentro de la carpeta, ejecuta:</p>
 <pre><code class="language-typescript">// En la terminal (no es código TypeScript, es un comando):
 // tsc app.ts
 // Eso genera app.js, que es el que carga tu index.html con &lt;script src=&quot;app.js&quot;&gt;
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Si esto te suena a mucho lío, tranquilo: en proyectos reales nunca compilas a mano; las herramientas (Vite, Next.js) lo hacen solas mientras programas. Aquí lo hacemos manual una vez para ver la "cocina" por dentro. Lo importante de este capítulo son los <strong>tipos</strong>, no la compilación.</p>
+<p>Si esto te suena a mucho lío, tranquilo: en proyectos reales nunca compilas a mano; las herramientas (Vite, Next.js) lo hacen solas mientras programas. Aquí lo hacemos manual una vez para echar un vistazo a la "cocina" por dentro. Lo que importa en este capítulo son los <strong>tipos</strong>, no la compilación.</p>
 </blockquote>
-<p>El <code>index.html</code> y el <code>estilos.css</code> son <strong>exactamente los mismos</strong> del Módulo 03. Lo único que cambia es que el <code>&lt;script&gt;</code> apunta a <code>app.js</code> (el archivo traducido, no a <code>app.ts</code>).</p>
+<p>El <code>index.html</code> y el <code>estilos.css</code> son <strong>exactamente los mismos</strong> del Módulo 03. Lo único que cambia es que el <code>&lt;script&gt;</code> apunta a <code>app.js</code> (el archivo ya traducido, no a <code>app.ts</code>).</p>
 <h2 id="3-el-corazon-del-capitulo-el-type-tarea">3. El corazón del capítulo: el <code>type Tarea</code></h2>
-<p>Aquí está la gran diferencia. En JavaScript, una tarea era simplemente:</p>
+<p>Aquí está la gran diferencia. En JavaScript, una tarea era simplemente esto:</p>
 <pre><code class="language-typescript">// Versión JavaScript del Módulo 03: un objeto suelto, sin describir su forma
 const tarea = { texto: &quot;Comprar pan&quot;, hecha: false };
 </code></pre>
-<p>Funcionaba, pero JavaScript no sabía nada sobre esa tarea. Si por error escribías <code>tarea.echa</code> (sin la "h") o le ponías <code>tarea.hecha = "sí"</code> (un texto donde debía ir verdadero/falso), nadie te avisaba. El programa fallaba <em>después</em>, cuando ya era tarde.</p>
+<p>Funcionaba, pero JavaScript no sabía absolutamente nada sobre esa tarea. Si por error escribías <code>tarea.echa</code> (sin la "h") o le ponías <code>tarea.hecha = "sí"</code> (un texto donde debía ir verdadero/falso), nadie te avisaba. El programa fallaba <em>después</em>, cuando ya era tarde.</p>
 <p>En TypeScript, <strong>primero describimos la forma</strong> de una tarea con un <code>type</code>:</p>
 <pre><code class="language-typescript">type Tarea = {
   texto: string;
@@ -68,25 +68,25 @@ const tarea = { texto: &quot;Comprar pan&quot;, hecha: false };
 <p>Léelo en voz alta: "una <code>Tarea</code> es un objeto que tiene un <code>texto</code> que es un <code>string</code> y un <code>hecha</code> que es un <code>boolean</code>". Ya está. Acabas de crear un molde.</p>
 <blockquote class="def">
 <h3 id="que-significa-type-alias-de-tipo">🟦 ¿Qué significa? — <em>type (alias de tipo)</em></h3>
-<p>Un <code>type</code> es un <strong>molde con nombre</strong> que describe la forma exacta de un dato. Aquí, <code>Tarea</code> dice "un objeto con <code>texto</code> (texto) y <code>hecha</code> (verdadero/falso)". Sirve para reutilizar esa forma en todo tu programa sin repetirla. En <strong>RachaSimple</strong>, el archivo <code>src/types/database.ts</code> usa <code>type</code> para muchas cosas, por ejemplo <code>type UserPlan = 'free' | 'pro'</code> (un usuario es gratis o pro, nada más).</p>
+<p>Un <code>type</code> es un <strong>molde con nombre</strong> que describe la forma exacta de un dato. Aquí, <code>Tarea</code> dice "un objeto con <code>texto</code> (texto) y <code>hecha</code> (verdadero/falso)". Sirve para reutilizar esa forma en todo tu programa sin tener que repetirla. En <strong>RachaSimple</strong>, el archivo <code>src/types/database.ts</code> usa <code>type</code> para muchas cosas, por ejemplo <code>type UserPlan = 'free' | 'pro'</code> (un usuario es gratis o pro, nada más).</p>
 <h3 id="que-significa-string">🟦 ¿Qué significa? — <em>string</em></h3>
 <p><code>string</code> es el tipo de los <strong>textos</strong>: palabras, frases, cualquier cosa entre comillas. El <code>texto</code> de una tarea es un <code>string</code> porque es lo que el usuario escribe. Sirve para que TypeScript sepa que ahí va texto y te deje usar funciones de texto como <code>.trim()</code>. En <strong>Faro</strong>, en <code>src/lib/types.ts</code>, el <code>name</code> de un proyecto es un <code>string</code>.</p>
 <h3 id="que-significa-boolean">🟦 ¿Qué significa? — <em>boolean</em></h3>
 <p><code>boolean</code> es el tipo de los valores <strong>verdadero/falso</strong> (<code>true</code> o <code>false</code>), nada más. El <code>hecha</code> de una tarea es un <code>boolean</code>: o está hecha (<code>true</code>) o no (<code>false</code>). Sirve para representar interruptores: encendido/apagado, sí/no. En <strong>Faro</strong>, cada paso del roadmap tiene <code>done: boolean</code> (hecho o no hecho).</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>Fíjate que en RachaSimple y Faro hay un archivo <strong>dedicado solo a tipos</strong> (<code>types/database.ts</code> y <code>lib/types.ts</code>). No es casualidad: definir las formas de tus datos en un solo sitio y reutilizarlas es una de las costumbres más sanas de TypeScript. Tu <code>type Tarea</code> es la versión de juguete de esos archivos.</p>
+<p>Fíjate que en RachaSimple y Faro hay un archivo <strong>dedicado solo a tipos</strong> (<code>types/database.ts</code> y <code>lib/types.ts</code>). No es casualidad: definir las formas de tus datos en un único sitio y reutilizarlas es una de las costumbres más sanas de TypeScript. Tu <code>type Tarea</code> es la versión de juguete de esos archivos.</p>
 <h3 id="tip-type-o-interface">💡 Tip — ¿<code>type</code> o <code>interface</code>?</h3>
 <p>En el Capítulo 03 viste que también existe <code>interface</code>, que hace casi lo mismo para describir objetos. RachaSimple y Faro usan <code>interface</code> para sus objetos grandes (<code>interface Habit</code>, <code>interface Project</code>) y <code>type</code> para las uniones de opciones. Para nuestra tarea, <code>type Tarea = { ... }</code> o <code>interface Tarea { ... }</code> darían igual. Elige uno y sé consistente.</p>
 </blockquote>
 <h2 id="4-un-estado-tipado-el-array-de-tareas">4. Un estado tipado: el array de tareas</h2>
-<p>En JavaScript tenías esto para guardar todas las tareas:</p>
+<p>En JavaScript guardabas todas las tareas así:</p>
 <pre><code class="language-typescript">// JavaScript: un array, pero ¿un array de qué? Nadie lo sabe.
 let tareas = [];
 </code></pre>
-<p>El problema: ese <code>[]</code> está vacío y JavaScript no tiene idea de qué meterás dentro. Podrías meter tareas, números, texto suelto, lo que sea, y nadie protestaría. En TypeScript le decimos <strong>qué contiene</strong> el array:</p>
+<p>El problema: ese <code>[]</code> está vacío y JavaScript no tiene ni idea de qué meterás dentro. Podrías meter tareas, números, texto suelto, lo que se te ocurra, y nadie protestaría. En TypeScript le decimos <strong>qué contiene</strong> el array:</p>
 <pre><code class="language-typescript">let tareas: Tarea[] = [];
 </code></pre>
-<p>Eso <code>: Tarea[]</code> significa "un array de <code>Tarea</code>". Ahora TypeScript sabe que dentro solo van tareas con su <code>texto</code> y su <code>hecha</code>. Si intentas hacer <code>tareas.push(42)</code>, el editor se pone rojo de inmediato.</p>
+<p>Ese <code>: Tarea[]</code> significa "un array de <code>Tarea</code>". Ahora TypeScript sabe que dentro solo van tareas con su <code>texto</code> y su <code>hecha</code>. Si intentas hacer <code>tareas.push(42)</code>, el editor se pone rojo en el acto.</p>
 <blockquote class="def">
 <h3 id="que-significa-anotacion-de-tipo-tipo">🟦 ¿Qué significa? — <em>anotación de tipo (<code>: Tipo</code>)</em></h3>
 <p>Una anotación de tipo son los <strong>dos puntos seguidos de un tipo</strong> que le pones a una variable para decir qué guarda: <code>tareas: Tarea[]</code>. Sirve para que TypeScript revise que solo metas ahí lo que corresponde. En <strong>Faro</strong>, verás anotaciones por todas partes, como <code>roadmap: RoadmapStep[]</code> (una lista de pasos del roadmap).</p>
@@ -95,10 +95,10 @@ let tareas = [];
 <h3 id="que-significa-estado">🟦 ¿Qué significa? — <em>estado</em></h3>
 <p>El estado son <strong>los datos que tu programa recuerda mientras funciona</strong>. Aquí, el array <code>tareas</code> es el estado: lo que el usuario ha ido añadiendo. Sirve como la "fuente de la verdad" del programa. En <strong>RachaSimple</strong>, el estado (la lista de hábitos) se maneja con TanStack Query, que también está tipado.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>Esa idea de "fuente de la verdad" que aprendiste en el Módulo 03 sigue intacta: el array <code>tareas</code> manda, la pantalla se redibuja desde él. TypeScript no cambia esa filosofía. Solo le pone un guardia en la puerta del array que dice: "aquí solo entran objetos con forma de <code>Tarea</code>".</p>
+<p>Esa idea de "fuente de la verdad" que aprendiste en el Módulo 03 sigue igual de viva: el array <code>tareas</code> manda, la pantalla se redibuja a partir de él. TypeScript no cambia esa filosofía. Solo le pone un guardia en la puerta del array que dice: "aquí solo entran objetos con forma de <code>Tarea</code>".</p>
 </blockquote>
 <h2 id="5-tipar-las-funciones-anadir-una-tarea">5. Tipar las funciones: añadir una tarea</h2>
-<p>Ahora la función de añadir. Compara las dos versiones con calma.</p>
+<p>Vamos con la función de añadir. Compara las dos versiones con calma.</p>
 <p><strong>Versión JavaScript (Módulo 03):</strong></p>
 <pre><code class="language-typescript">function anadirTarea() {
   const texto = entrada.value.trim();
@@ -121,7 +121,7 @@ let tareas = [];
   guardar();
 }
 </code></pre>
-<p>Casi idénticas, ¿verdad? Dos diferencias diminutas pero poderosas:</p>
+<p>Casi calcadas, ¿verdad? Solo cambian dos detalles diminutos, pero con mucha chicha:</p>
 <ol>
 <li><code>function anadirTarea(): void</code> — ese <code>: void</code> dice "esta función no devuelve nada".</li>
 <li><code>const tarea: Tarea = { texto, hecha: false }</code> — anotamos que <code>tarea</code> debe tener forma de <code>Tarea</code>. Si te equivocaras y escribieras <code>{ texto, echa: false }</code> (sin la "h"), TypeScript te marcaría el error <strong>al instante</strong>, subrayando la línea.</li>
@@ -135,22 +135,22 @@ let tareas = [];
 <p>En la versión TypeScript escribí <code>{ texto, hecha: false }</code> en lugar de <code>{ texto: texto, hecha: false }</code>. Cuando la propiedad y la variable se llaman igual, JavaScript (y por tanto TypeScript) te deja escribirlo una sola vez. Es JavaScript moderno, no algo exclusivo de TypeScript, pero verás esta forma corta por todos lados en RachaSimple y Faro.</p>
 </blockquote>
 <h2 id="6-tipar-la-funcion-de-pintar-y-el-peligroso-null">6. Tipar la función de pintar y el peligroso <code>null</code></h2>
-<p>Aquí llega el momento más jugoso del capítulo. En el Módulo 03 buscabas los elementos del HTML así:</p>
+<p>Aquí llega lo más jugoso del capítulo. En el Módulo 03 buscabas los elementos del HTML así:</p>
 <pre><code class="language-typescript">// JavaScript: confías en que el elemento existe... y rezas.
 const entrada = document.getElementById(&quot;entrada&quot;);
 const lista = document.getElementById(&quot;lista&quot;);
 </code></pre>
-<p>El problema escondido: <code>document.getElementById</code> <strong>puede no encontrar el elemento</strong> (si te equivocas en el <code>id</code>, o si el HTML aún no cargó). En ese caso devuelve <code>null</code>, que significa "aquí no hay nada". En JavaScript esto explotaba en tiempo de ejecución con el temido error <em>"Cannot read properties of null"</em>. En TypeScript, el editor te <strong>obliga</strong> a tener en cuenta esa posibilidad.</p>
+<p>El problema escondido: <code>document.getElementById</code> <strong>puede no encontrar el elemento</strong> (si te equivocas en el <code>id</code>, o si el HTML aún no cargó). En ese caso devuelve <code>null</code>, que significa "aquí no hay nada". En JavaScript esto reventaba en tiempo de ejecución con el temido error <em>"Cannot read properties of null"</em>. En TypeScript, el editor te <strong>obliga</strong> a contemplar esa posibilidad.</p>
 <blockquote class="def">
 <h3 id="que-significa-null">🟦 ¿Qué significa? — <em>null</em></h3>
 <p><code>null</code> es un valor especial que significa <strong>"aquí no hay nada"</strong> a propósito. <code>document.getElementById</code> devuelve <code>null</code> cuando no encuentra el elemento. Sirve para representar la ausencia de un valor. En <strong>Faro</strong>, muchos campos pueden ser <code>null</code>: por ejemplo <code>description: string | null</code> (un proyecto puede tener descripción... o no tener todavía).</p>
 <h3 id="que-significa-union-con-null-tipo-null">🟦 ¿Qué significa? — <em>unión con null (<code>Tipo | null</code>)</em></h3>
-<p><code>string | null</code> significa "esto es un texto <strong>o</strong> está vacío (null)". Esa barrita <code>|</code> se lee "o". Es la forma de TypeScript de decir "ojo, este valor podría no existir, tenlo en cuenta". Sirve para que no se te olvide manejar el caso "no hay nada". En <strong>Faro</strong>, <code>next_action: string | null</code> es justo esto: o hay una próxima acción, o no la hay.</p>
+<p><code>string | null</code> significa "esto es un texto <strong>o</strong> está vacío (null)". Esa barrita <code>|</code> se lee "o". Es la forma que tiene TypeScript de decir "ojo, este valor podría no existir, tenlo en cuenta". Sirve para que no se te olvide manejar el caso "no hay nada". En <strong>Faro</strong>, <code>next_action: string | null</code> es justo esto: o hay una próxima acción, o no la hay.</p>
 </blockquote>
 <p>Cuando escribes en TypeScript:</p>
 <pre><code class="language-typescript">const entrada = document.getElementById(&quot;entrada&quot;);
 </code></pre>
-<p>TypeScript sabe que <code>entrada</code> es del tipo <code>HTMLElement | null</code>. Y en cuanto intentes hacer <code>entrada.value</code>, te subrayará: <em>"<code>entrada</code> es posiblemente null"</em>. ¡Te está protegiendo! La forma segura de manejarlo es comprobar primero:</p>
+<p>TypeScript sabe que <code>entrada</code> es del tipo <code>HTMLElement | null</code>. Y en cuanto intentes hacer <code>entrada.value</code>, te lo subrayará: <em>"<code>entrada</code> es posiblemente null"</em>. ¡Te está protegiendo! La forma segura de manejarlo es comprobar primero:</p>
 <pre><code class="language-typescript">const entrada = document.getElementById(&quot;entrada&quot;) as HTMLInputElement | null;
 const lista = document.getElementById(&quot;lista&quot;);
 
@@ -159,16 +159,16 @@ if (!entrada || !lista) {
 }
 // A partir de aquí, TypeScript ya sabe que entrada y lista existen de verdad.
 </code></pre>
-<p>Después de ese <code>if</code>, TypeScript hace algo mágico llamado <strong>estrechamiento</strong>: como ya descartamos el <code>null</code>, a partir de esa línea trata a <code>entrada</code> y <code>lista</code> como elementos que <strong>sí existen</strong>. Ya no te molesta más con avisos.</p>
+<p>Después de ese <code>if</code>, TypeScript hace algo casi mágico que se llama <strong>estrechamiento</strong>: como ya descartamos el <code>null</code>, de esa línea en adelante trata a <code>entrada</code> y <code>lista</code> como elementos que <strong>sí existen</strong>. Y deja de molestarte con avisos.</p>
 <blockquote class="def">
 <h3 id="que-significa-manejo-seguro-de-null">🟦 ¿Qué significa? — <em>manejo seguro de null</em></h3>
 <p>Manejar <code>null</code> con seguridad es <strong>comprobar si un valor existe antes de usarlo</strong>, en vez de dar por hecho que está. Aquí, el <code>if (!entrada || !lista)</code> corta el programa con un error claro si falta algo. Sirve para evitar que la app explote a mitad de camino. En <strong>RachaSimple</strong>, el repositorio devuelve <code>Habit | null</code> y el código que lo usa siempre comprueba antes de tocar el dato.</p>
 <h3 id="que-significa-estrechamiento-narrowing">🟦 ¿Qué significa? — <em>estrechamiento (narrowing)</em></h3>
-<p>Estrechar es cuando TypeScript, gracias a un <code>if</code>, <strong>descarta posibilidades</strong> y afina el tipo. Antes del <code>if</code>, <code>entrada</code> era "elemento o null"; después, TypeScript sabe que es "elemento" a secas. Sirve para que, tras comprobar, puedas usar el valor sin más avisos. Lo viste a fondo en el Capítulo 06.</p>
+<p>Estrechar es cuando TypeScript, gracias a un <code>if</code>, <strong>descarta posibilidades</strong> y afina el tipo. Antes del <code>if</code>, <code>entrada</code> era "elemento o null"; después, TypeScript sabe que es "elemento" a secas. Sirve para que, una vez comprobado, puedas usar el valor sin más avisos. Lo viste a fondo en el Capítulo 06.</p>
 <h3 id="que-significa-asercion-de-tipo-as">🟦 ¿Qué significa? — <em>aserción de tipo (<code>as</code>)</em></h3>
 <p><code>as HTMLInputElement</code> es decirle a TypeScript "confía en mí, <strong>esto es</strong> un campo de texto". Lo usamos porque <code>getElementById</code> devuelve un elemento genérico, pero nosotros sabemos que <code>entrada</code> es un <code>&lt;input&gt;</code> con <code>.value</code>. Sirve para precisar el tipo cuando tú sabes algo que TypeScript no puede deducir solo. En <strong>RachaSimple</strong>, el repositorio usa <code>as Habit[]</code> para afinar lo que llega de Supabase.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>El <code>as</code> es una promesa tuya: le dices a TypeScript "confía en mí". Si te equivocas y eso <strong>no</strong> era un <code>&lt;input&gt;</code>, TypeScript ya no te protege y el error vuelve en tiempo de ejecución. Úsalo solo cuando de verdad sepas la forma del dato. No es una varita para callar avisos molestos: es una afirmación seria.</p>
+<p>El <code>as</code> es una promesa tuya: le dices a TypeScript "confía en mí". Si te equivocas y eso <strong>no</strong> era un <code>&lt;input&gt;</code>, TypeScript ya no te cubre y el error vuelve en tiempo de ejecución. Úsalo solo cuando de verdad sepas la forma del dato. No es una varita para callar avisos molestos: es una afirmación seria.</p>
 </blockquote>
 <p>Ahora la función de pintar, tipada. El cambio clave está en el parámetro:</p>
 <pre><code class="language-typescript">function pintarLista(): void {
@@ -206,10 +206,10 @@ if (!entrada || !lista) {
 <h3 id="que-significa-number">🟦 ¿Qué significa? — <em>number</em></h3>
 <p><code>number</code> es el tipo de los <strong>números</strong>: enteros o decimales, da igual. El <code>indice</code> (la posición 0, 1, 2...) es un <code>number</code>. Sirve para que TypeScript sepa que ahí van números y te deje sumar, comparar, etc. En <strong>Faro</strong>, <code>progress_pct: number | null</code> es el porcentaje de progreso (un número, o null si aún no se calculó).</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>¿Notaste que dentro del <code>forEach</code>, al escribir <code>tarea.</code>, tu editor te ofrece automáticamente <code>texto</code> y <code>hecha</code>? Eso se llama <strong>autocompletado</strong>, y es uno de los regalos de tipar tus datos. En RachaSimple, cuando alguien escribe <code>habit.</code>, el editor sugiere las 20+ propiedades de <code>Habit</code> sin que haya que recordarlas de memoria. Tipar es también escribir más rápido y con menos errores de dedo.</p>
+<p>¿Notaste que dentro del <code>forEach</code>, al escribir <code>tarea.</code>, tu editor te ofrece solito <code>texto</code> y <code>hecha</code>? Eso se llama <strong>autocompletado</strong>, y es uno de los regalos de tipar tus datos. En RachaSimple, cuando alguien escribe <code>habit.</code>, el editor sugiere las 20+ propiedades de <code>Habit</code> sin que tengas que recordarlas de memoria. Tipar es también escribir más rápido y con menos errores de dedo.</p>
 </blockquote>
 <h2 id="7-guardar-y-cargar-el-viaje-de-ida-y-vuelta-a-texto">7. Guardar y cargar: el viaje de ida y vuelta a texto</h2>
-<p><code>localStorage</code> solo guarda <strong>texto</strong>, igual que en el Módulo 03. Usamos los mismos traductores <code>JSON.stringify</code> y <code>JSON.parse</code>. La diferencia en TypeScript aparece al <strong>cargar</strong>:</p>
+<p><code>localStorage</code> solo guarda <strong>texto</strong>, igual que en el Módulo 03. Usamos los mismos traductores de siempre, <code>JSON.stringify</code> y <code>JSON.parse</code>. La diferencia en TypeScript asoma al <strong>cargar</strong>:</p>
 <pre><code class="language-typescript">function guardar(): void {
   localStorage.setItem(&quot;tareas&quot;, JSON.stringify(tareas));
 }
@@ -224,12 +224,12 @@ function cargar(): void {
 
 cargar();
 </code></pre>
-<p>Fíjate en dos cosas. Primero, <code>localStorage.getItem</code> devuelve <code>string | null</code> (puede no haber nada guardado todavía), por eso el <code>if (guardado)</code> antes de usarlo: es manejo seguro de null otra vez. Segundo, <code>JSON.parse</code> devuelve un tipo "cualquiera" porque no puede adivinar la forma del texto guardado, así que con <code>as Tarea[]</code> le decimos "lo que sale de aquí son tareas".</p>
+<p>Fíjate en dos cosas. Primero, <code>localStorage.getItem</code> devuelve <code>string | null</code> (puede que todavía no haya nada guardado), por eso el <code>if (guardado)</code> antes de usarlo: es manejo seguro de null otra vez. Segundo, <code>JSON.parse</code> devuelve un tipo "cualquiera" porque no puede adivinar la forma del texto guardado, así que con <code>as Tarea[]</code> le decimos "lo que sale de aquí son tareas".</p>
 <blockquote class="def">
 <h3 id="que-significa-jsonparse-y-los-datos-de-fuera">🟦 ¿Qué significa? — <em>JSON.parse y los datos de fuera</em></h3>
-<p><code>JSON.parse</code> convierte texto en datos, pero TypeScript <strong>no puede saber</strong> qué forma tienen esos datos hasta que se lo dices. Por eso usamos <code>as Tarea[]</code>. Sirve para tipar datos que vienen de "fuera" (archivos, almacenamiento, internet). En <strong>Faro</strong>, los datos que llegan de GitHub se guardan en tipos como <code>GithubSnapshot</code> justo por esta razón: lo de afuera hay que tiparlo a mano.</p>
+<p><code>JSON.parse</code> convierte texto en datos, pero TypeScript <strong>no puede saber</strong> qué forma tienen esos datos hasta que se lo dices. Por eso usamos <code>as Tarea[]</code>. Sirve para tipar datos que vienen de "fuera" (archivos, almacenamiento, internet). En <strong>Faro</strong>, los datos que llegan de GitHub se guardan en tipos como <code>GithubSnapshot</code> justo por esto: lo de afuera hay que tiparlo a mano.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>El <code>as Tarea[]</code> confía en que lo guardado de verdad sean tareas. Si alguien manipula el <code>localStorage</code> a mano y mete basura, TypeScript no lo detecta (recuerda: los tipos solo existen mientras programas, desaparecen al compilar). En apps serias como RachaSimple se <strong>valida</strong> lo que llega de fuera antes de confiar en ello. Para tu mini-proyecto, el <code>as</code> está bien; solo que sepas que no es magia infalible.</p>
+<p>El <code>as Tarea[]</code> confía en que lo guardado sean tareas de verdad. Si alguien manipula el <code>localStorage</code> a mano y mete basura, TypeScript no lo detecta (recuerda: los tipos solo existen mientras programas, desaparecen al compilar). En apps serias como RachaSimple se <strong>valida</strong> lo que llega de fuera antes de fiarse de ello. Para tu mini-proyecto, el <code>as</code> está bien; solo que sepas que no es magia infalible.</p>
 </blockquote>
 <h2 id="8-las-dos-versiones-cara-a-cara-que-aportan-los-tipos">8. Las dos versiones, cara a cara: ¿qué aportan los tipos?</h2>
 <p>Llegó el momento de la verdad. Pongamos un error típico y veamos qué pasa en cada versión.</p>
@@ -238,12 +238,12 @@ cargar();
 const tarea = { texto: texto, echa: &quot;no&quot; };
 tareas.push(tarea);
 </code></pre>
-<p><strong>En la versión JavaScript del Módulo 03:</strong> no pasa <em>nada</em> al escribirlo. El programa arranca tan feliz. Luego, cuando <code>pintarLista</code> intenta leer <code>tarea.hecha</code>, encuentra <code>undefined</code>, y la tarea nunca se tacha bien. Pasas media hora buscando el error sin saber dónde está. 😵</p>
+<p><strong>En la versión JavaScript del Módulo 03:</strong> no pasa <em>nada</em> al escribirlo. El programa arranca tan feliz. Luego, cuando <code>pintarLista</code> intenta leer <code>tarea.hecha</code>, se encuentra con <code>undefined</code>, y la tarea nunca se tacha bien. Te pasas media hora buscando el error sin saber por dónde anda. 😵</p>
 <p><strong>En la versión TypeScript:</strong> en cuanto escribes esa línea, el editor subraya en rojo: <em>"El tipo <code>{ texto: string; echa: string }</code> no es asignable al tipo <code>Tarea</code>."</em> El error te salta <strong>a la cara, en el segundo en que lo escribes</strong>, señalando la línea exacta. Lo arreglas en 5 segundos y sigues.</p>
-<p><strong>Ese</strong> es el valor de los tipos. No hacen tu app más rápida ni más bonita. Hacen que <strong>tú</strong> cometas menos errores y los encuentres antes. Es como tener a Bit mirando por encima de tu hombro todo el rato, diciendo "oye, eso no cuadra". 🐾</p>
+<p><strong>Ese</strong> es el valor de los tipos. No hacen tu app más rápida ni más bonita. Hacen que <strong>tú</strong> cometas menos errores y los pilles antes. Es como tener a Bit mirando por encima de tu hombro todo el rato, soltando un "oye, eso no cuadra". 🐾</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>En proyectos pequeños el ahorro parece poco. Pero RachaSimple tiene decenas de archivos y Faro maneja datos de GitHub, Google Drive, OpenAI y Supabase a la vez. Sin tipos, un cambio en la forma de un dato rompería cosas en diez sitios sin avisar. Con tipos, el editor marca los diez sitios al instante. Cuanto más grande el proyecto, más te salvan los tipos. Por eso ambas apps están escritas enteras en TypeScript.</p>
+<p>En proyectos pequeños el ahorro parece poca cosa. Pero RachaSimple tiene decenas de archivos y Faro maneja datos de GitHub, Google Drive, OpenAI y Supabase a la vez. Sin tipos, un cambio en la forma de un dato rompería cosas en diez sitios sin avisar. Con tipos, el editor te marca los diez sitios al instante. Cuanto más grande el proyecto, más te salvan los tipos. Por eso ambas apps están escritas enteras en TypeScript.</p>
 <h3 id="tip_2">💡 Tip</h3>
 <p>Una forma bonita de pensarlo: en JavaScript, los errores aparecen <strong>cuando el usuario usa la app</strong> (tarde y caro). En TypeScript, aparecen <strong>cuando tú escribes el código</strong> (temprano y barato). Tipar es mover los errores hacia atrás en el tiempo, a donde son fáciles de arreglar.</p>
 </blockquote>
@@ -256,7 +256,7 @@ tareas.push(tarea);
 <li>Manejaste <code>null</code> con seguridad, comprobando antes de usar.</li>
 <li>Viste con tus propios ojos cómo TypeScript atrapa un error que JavaScript dejaba pasar.</li>
 </ul>
-<p>Y lo más importante: te diste cuenta de que <strong>no aprendiste un lenguaje nuevo</strong>. Reusaste todo tu JavaScript del Módulo 03 y le sumaste etiquetas de seguridad. Eso es exactamente lo que hacen, a gran escala, RachaSimple y Faro: el mismo JavaScript de siempre, pero con un guardia de tipos que vela por que todo encaje.</p>
+<p>Y lo más importante: te diste cuenta de que <strong>no aprendiste un lenguaje nuevo</strong>. Reutilizaste todo tu JavaScript del Módulo 03 y le sumaste etiquetas de seguridad. Eso es exactamente lo que hacen, a gran escala, RachaSimple y Faro: el mismo JavaScript de siempre, pero con un guardia de tipos que vela por que todo encaje.</p>
 <p>Bit está dando saltitos de orgullo en su pecera. 🐾✨ Guarda tu proyecto. Abre tu editor, escribe <code>tarea.</code> y disfruta del autocompletado. Te lo ganaste.</p>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

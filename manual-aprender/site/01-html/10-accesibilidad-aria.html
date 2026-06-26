@@ -23,53 +23,53 @@
 </p>
 
 <blockquote>
-<p>En el capítulo anterior aprendiste a construir páginas con HTML semántico. Ahora vamos a dar un paso más: hacer que tus páginas funcionen para <strong>todas</strong> las personas, incluyendo quienes no ven la pantalla, no usan el ratón o tienen dificultades para distinguir colores. Bit, nuestro ajolote pixel art, te lo dice claro: una web bonita que solo funciona para algunos no está terminada. La accesibilidad no es un "extra" para el final; es parte de hacer las cosas bien. En este capítulo conocerás los lectores de pantalla, los roles ARIA, el foco del teclado, las "live regions" y el contraste de colores. Y descubrirás una regla de oro que te ahorrará mucho trabajo: si el HTML ya hace el trabajo, no uses ARIA.</p>
+<p>En el capítulo anterior aprendiste a construir páginas con HTML semántico. Ahora vamos a por algo más: que tus páginas funcionen para <strong>todas</strong> las personas, también para quienes no ven la pantalla, no usan el ratón o no distinguen bien los colores. Bit, nuestro ajolote pixel art, lo resume sin rodeos: una web bonita que solo sirve para algunos no está terminada. La accesibilidad no es un adorno que se deja para el final; es parte de hacer bien tu trabajo. En las próximas páginas vas a conocer los lectores de pantalla, los roles ARIA, el foco del teclado, las "live regions" y el contraste de colores. Y vas a descubrir una regla de oro que te ahorrará un montón de líneas: si el HTML ya hace el trabajo, no uses ARIA.</p>
 </blockquote>
 <h2 id="1-para-quien-hacemos-las-paginas-accesibles">1. ¿Para quién hacemos las páginas accesibles?</h2>
-<p>Cuando programas una página, es fácil imaginar a una sola persona usándola: alguien con buena vista, con ratón, mirando una pantalla grande. Pero la realidad es mucho más variada. Hay personas que:</p>
+<p>Cuando programas, es fácil imaginar a una sola persona usando tu página: alguien con buena vista, con ratón, frente a una pantalla grande. Pero la realidad es mucho más variada que eso. Hay personas que:</p>
 <ul>
-<li>No ven la pantalla y escuchan la página con un programa que lee en voz alta.</li>
+<li>No ven la pantalla y escuchan la página con un programa que la lee en voz alta.</li>
 <li>Ven poco y necesitan letras grandes o mucho contraste.</li>
 <li>No pueden usar el ratón y navegan <strong>solo con el teclado</strong>.</li>
-<li>No distinguen ciertos colores (por ejemplo, rojo y verde).</li>
-<li>Usan el teléfono con una mano, en la calle, con sol fuerte sobre la pantalla.</li>
+<li>No distinguen ciertos colores (por ejemplo, el rojo y el verde).</li>
+<li>Usan el teléfono con una mano, en la calle, con el sol pegando de lleno en la pantalla.</li>
 </ul>
-<p>La buena noticia: casi todo lo que hace tu página accesible para una persona con discapacidad <strong>también la mejora para todos los demás</strong>.</p>
+<p>Y aquí va la buena noticia: casi todo lo que hace tu página accesible para alguien con una discapacidad <strong>acaba mejorándola para el resto también</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-accesibilidad-a11y">🟦 ¿Qué significa? — <em>Accesibilidad (a11y)</em></h3>
-<p>La <strong>accesibilidad</strong> es la práctica de construir páginas que cualquier persona pueda usar, sin importar sus capacidades o el dispositivo que tenga. A veces verás la abreviatura <strong>a11y</strong>: es la palabra "accessibility" en inglés, con 11 letras entre la "a" y la "y". Sirve para que tu producto llegue a más gente y, en muchos países, también es un requisito legal.
-<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>), tu sitio público lo puede visitar cualquier persona; hacerlo accesible significa que un cliente potencial que usa lector de pantalla también pueda leer tus servicios y contactarte.</p>
+<p>La <strong>accesibilidad</strong> consiste en construir páginas que cualquier persona pueda usar, sin importar sus capacidades ni el dispositivo que tenga delante. A veces verás la abreviatura <strong>a11y</strong>: es la palabra inglesa "accessibility", con sus 11 letras entre la "a" y la "y". Te sirve para llegar a más gente y, en muchos países, además es un requisito legal.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong> (<code>sitio-web/index.html</code>), tu sitio público lo puede visitar cualquiera; hacerlo accesible significa que un cliente potencial que usa lector de pantalla también pueda leer tus servicios y escribirte.</p>
 <h3 id="que-significa-lector-de-pantalla">🟦 ¿Qué significa? — <em>Lector de pantalla</em></h3>
-<p>Un <strong>lector de pantalla</strong> es un programa que lee en voz alta lo que hay en la pantalla, para personas ciegas o con baja visión. El usuario se mueve por la página con el teclado y el programa va anunciando: "encabezado nivel 1, Tunal Digital", "enlace, Contacto", "botón, Enviar". Ejemplos reales: <strong>VoiceOver</strong> (Mac/iPhone), <strong>NVDA</strong> y <strong>JAWS</strong> (Windows), <strong>TalkBack</strong> (Android).
-<strong>¿Dónde se usa en tu proyecto?</strong> Cuando alguien usa un lector de pantalla en <strong>tunal-digital</strong>, el programa recorre tu <code>index.html</code> etiqueta por etiqueta. Si tu HTML está bien escrito, la experiencia es ordenada; si no, la persona escucha un revoltijo.</p>
+<p>Un <strong>lector de pantalla</strong> es un programa que lee en voz alta lo que hay en la pantalla, pensado para personas ciegas o con baja visión. La persona se mueve por la página con el teclado y el programa va anunciando lo que encuentra: "encabezado nivel 1, Tunal Digital", "enlace, Contacto", "botón, Enviar". Los más conocidos son <strong>VoiceOver</strong> (Mac/iPhone), <strong>NVDA</strong> y <strong>JAWS</strong> (Windows) y <strong>TalkBack</strong> (Android).
+<strong>¿Dónde se usa en tu proyecto?</strong> Cuando alguien abre <strong>tunal-digital</strong> con un lector de pantalla, el programa recorre tu <code>index.html</code> etiqueta por etiqueta. Si tu HTML está bien escrito, todo suena ordenado; si no, la persona escucha un revoltijo.</p>
 <h3 id="tip-pruebalo-tu-mismo">💡 Tip — Pruébalo tú mismo</h3>
-<p>No necesitas instalar nada raro para empezar. En Mac, activa <strong>VoiceOver</strong> con <code>Cmd + F5</code>. En Windows, <strong>NVDA</strong> es gratuito. Cierra los ojos un minuto y navega tu propia página solo con el teclado y el oído. Te sorprenderá lo que descubres.</p>
+<p>No hace falta instalar nada raro para empezar. En Mac, activas <strong>VoiceOver</strong> con <code>Cmd + F5</code>. En Windows, <strong>NVDA</strong> es gratuito. Cierra los ojos un minuto y recorre tu propia página solo con el teclado y el oído. Te vas a sorprender de lo que sale a la luz.</p>
 </blockquote>
 <h2 id="2-el-arbol-de-accesibilidad-lo-que-ve-el-lector-de-pantalla">2. El árbol de accesibilidad: lo que "ve" el lector de pantalla</h2>
-<p>Tu navegador no solo dibuja la página en pantalla. También construye, en paralelo, una versión "para programas de ayuda": una lista ordenada de elementos con su <strong>nombre</strong>, su <strong>rol</strong> y su <strong>estado</strong>. Eso es el <strong>árbol de accesibilidad</strong>.</p>
+<p>Tu navegador no se limita a dibujar la página. A la vez, construye una versión pensada para los programas de ayuda: una lista ordenada de elementos, cada uno con su <strong>nombre</strong>, su <strong>rol</strong> y su <strong>estado</strong>. Eso es el <strong>árbol de accesibilidad</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-arbol-de-accesibilidad">🟦 ¿Qué significa? — <em>Árbol de accesibilidad</em></h3>
-<p>El <strong>árbol de accesibilidad</strong> es la representación de tu página que el navegador entrega a los lectores de pantalla. De cada elemento guarda tres cosas: su <strong>rol</strong> (qué es: botón, enlace, encabezado), su <strong>nombre accesible</strong> (cómo se llama: "Enviar", "Contacto") y su <strong>estado</strong> (cómo está: marcado, deshabilitado, expandido). Sirve para que el lector de pantalla pueda anunciar cada elemento correctamente.</p>
+<p>El <strong>árbol de accesibilidad</strong> es la versión de tu página que el navegador le entrega a los lectores de pantalla. De cada elemento guarda tres cosas: su <strong>rol</strong> (qué es: botón, enlace, encabezado), su <strong>nombre accesible</strong> (cómo se llama: "Enviar", "Contacto") y su <strong>estado</strong> (cómo está: marcado, deshabilitado, expandido). Con esa información el lector de pantalla puede anunciar cada elemento como toca.</p>
 </blockquote>
-<p>La clave: el lector de pantalla <strong>no lee tu CSS bonito</strong>. Lee este árbol. Por eso un <code>&lt;div&gt;</code> que parece un botón (porque le pusiste color y bordes con CSS) no es un botón para el árbol de accesibilidad: es solo "un grupo de texto". Y aquí empieza a tener sentido ARIA.</p>
+<p>La clave está aquí: el lector de pantalla <strong>no lee tu CSS bonito</strong>. Lee este árbol. Por eso un <code>&lt;div&gt;</code> que parece un botón, porque le pusiste color y bordes con CSS, no es un botón para el árbol de accesibilidad: para él es solo "un grupo de texto". Y justo ahí empieza a cobrar sentido ARIA.</p>
 <blockquote class="def">
 <h3 id="que-significa-rol">🟦 ¿Qué significa? — <em>Rol</em></h3>
-<p>El <strong>rol</strong> es la palabra que describe qué función cumple un elemento: botón, enlace, encabezado, lista, casilla de verificación, etc. Muchos elementos HTML ya tienen un rol "de fábrica": <code>&lt;button&gt;</code> tiene rol de botón, <code>&lt;a href&gt;</code> tiene rol de enlace, <code>&lt;h1&gt;</code> tiene rol de encabezado. Sirve para que el lector de pantalla anuncie correctamente "botón" o "enlace".</p>
+<p>El <strong>rol</strong> es la palabra que describe qué función cumple un elemento: botón, enlace, encabezado, lista, casilla de verificación, etc. Muchas etiquetas HTML ya traen un rol de serie: <code>&lt;button&gt;</code> tiene rol de botón, <code>&lt;a href&gt;</code> tiene rol de enlace y <code>&lt;h1&gt;</code> tiene rol de encabezado. Gracias a eso el lector de pantalla puede anunciar "botón" o "enlace" sin que tú hagas nada.</p>
 <h3 id="que-significa-nombre-accesible">🟦 ¿Qué significa? — <em>Nombre accesible</em></h3>
-<p>El <strong>nombre accesible</strong> es el texto con el que el lector de pantalla identifica un elemento en voz alta. En un botón, suele ser su texto: <code>&lt;button&gt;Enviar&lt;/button&gt;</code> se anuncia como "Enviar, botón". En una imagen, el nombre viene del atributo <code>alt</code>. Sirve para que el usuario sepa qué hace cada cosa sin verla.</p>
+<p>El <strong>nombre accesible</strong> es el texto con el que el lector de pantalla identifica un elemento al leerlo en voz alta. En un botón suele ser su propio texto: <code>&lt;button&gt;Enviar&lt;/button&gt;</code> se anuncia como "Enviar, botón". En una imagen, el nombre sale del atributo <code>alt</code>. Sirve para que la persona sepa qué hace cada cosa sin necesidad de verla.</p>
 </blockquote>
 <h2 id="3-aria-que-es-y-la-regla-de-oro">3. ARIA: qué es y la regla de oro</h2>
 <blockquote class="def">
 <h3 id="que-significa-aria">🟦 ¿Qué significa? — <em>ARIA</em></h3>
-<p><strong>ARIA</strong> significa "Accessible Rich Internet Applications" (Aplicaciones de Internet Ricas y Accesibles). Es un conjunto de atributos especiales que puedes añadir a tus etiquetas HTML para darle información extra al árbol de accesibilidad: por ejemplo, <code>role="button"</code>, <code>aria-label="Cerrar"</code> o <code>aria-hidden="true"</code>. Sirve para describir componentes que el HTML solo no alcanza a explicar.</p>
+<p><strong>ARIA</strong> son las siglas de "Accessible Rich Internet Applications" (Aplicaciones de Internet Ricas y Accesibles). Es un conjunto de atributos especiales que añades a tus etiquetas HTML para darle información extra al árbol de accesibilidad: por ejemplo <code>role="button"</code>, <code>aria-label="Cerrar"</code> o <code>aria-hidden="true"</code>. Sirve para describir componentes que el HTML por sí solo no alcanza a explicar.</p>
 </blockquote>
-<p>ARIA es poderoso, pero tiene una trampa: <strong>ARIA no cambia cómo se ve ni cómo se comporta tu página; solo cambia lo que se le anuncia al lector de pantalla</strong>. Si pones <code>role="button"</code> en un <code>&lt;div&gt;</code>, el lector dirá "botón"… pero ese div no responderá a la tecla Enter ni se podrá enfocar con el teclado, a menos que tú lo programes a mano. Has prometido un botón y entregado un disfraz.</p>
+<p>ARIA tiene mucha fuerza, pero también una trampa que conviene tener clara: <strong>ARIA no cambia cómo se ve ni cómo se comporta tu página; solo cambia lo que se le anuncia al lector de pantalla</strong>. Si le pones <code>role="button"</code> a un <code>&lt;div&gt;</code>, el lector dirá "botón"… pero ese div no responderá a la tecla Enter ni se podrá enfocar con el teclado, salvo que tú lo programes a mano. Prometiste un botón y entregaste un disfraz.</p>
 <p>Por eso existe la regla más importante de toda la accesibilidad web:</p>
 <blockquote class="warn">
 <h3 id="cuidado-la-primera-regla-de-aria-no-uses-aria">⚠️ Cuidado — La primera regla de ARIA: no uses ARIA</h3>
-<p>Suena raro, pero es literal: <strong>si existe un elemento HTML que ya hace lo que necesitas, úsalo en vez de inventarlo con ARIA</strong>. Un <code>&lt;button&gt;</code> de verdad ya es enfocable, responde a Enter y Espacio, y se anuncia como botón, todo gratis. Un <code>&lt;div role="button"&gt;</code> te obliga a reconstruir todo eso a mano, y casi siempre sale peor. ARIA es para cuando el HTML <strong>no</strong> tiene una solución, no para reemplazar al HTML que sí la tiene.</p>
+<p>Suena a chiste, pero es literal: <strong>si ya existe un elemento HTML que hace lo que necesitas, úsalo en lugar de inventarlo con ARIA</strong>. Un <code>&lt;button&gt;</code> de verdad ya es enfocable, ya responde a Enter y a Espacio y ya se anuncia como botón; todo eso, gratis. Un <code>&lt;div role="button"&gt;</code> te obliga a reconstruir cada una de esas piezas a mano, y casi siempre acaba saliendo peor. ARIA es para cuando el HTML <strong>no</strong> tiene una solución, no para sustituir al HTML que sí la tiene.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <strong>tunal-digital</strong>, si en <code>main.js</code> o <code>index.html</code> tienes algo como <code>&lt;div class="boton" onclick="..."&gt;</code>, cámbialo por <code>&lt;button type="button"&gt;</code>. Ganas accesibilidad de teclado sin escribir una línea de ARIA. Misma idea en <strong>RachaSimple</strong>: en tus componentes <code>.tsx</code>, prefiere <code>&lt;button&gt;</code> antes que un <code>&lt;div&gt;</code> con <code>onClick</code>.</p>
+<p>En <strong>tunal-digital</strong>, si en <code>main.js</code> o en <code>index.html</code> te encuentras algo como <code>&lt;div class="boton" onclick="..."&gt;</code>, cámbialo por <code>&lt;button type="button"&gt;</code>. Ganas accesibilidad de teclado sin escribir una sola línea de ARIA. La misma idea vale para <strong>RachaSimple</strong>: en tus componentes <code>.tsx</code>, prefiere <code>&lt;button&gt;</code> antes que un <code>&lt;div&gt;</code> con <code>onClick</code>.</p>
 </blockquote>
 <p>Un ejemplo de qué NO hacer y qué SÍ hacer:</p>
 <pre><code class="language-html">&lt;!-- ❌ Mal: un div disfrazado de botón --&gt;
@@ -78,16 +78,16 @@
 &lt;!-- ✅ Bien: el HTML ya lo resuelve todo --&gt;
 &lt;button type=&quot;button&quot; onclick=&quot;enviar()&quot;&gt;Enviar&lt;/button&gt;
 </code></pre>
-<p>Entonces, ¿cuándo SÍ usamos ARIA? Cuando construimos cosas que el HTML no tiene de fábrica (pestañas, ventanas emergentes, menús complejos) o cuando un elemento necesita un nombre que no aparece como texto visible. Veámoslo.</p>
+<p>Entonces, ¿cuándo sí toca usar ARIA? Cuando construyes cosas que el HTML no trae de serie (pestañas, ventanas emergentes, menús complejos), o cuando un elemento necesita un nombre que no aparece como texto visible. Vamos a verlo.</p>
 <h2 id="4-dar-nombre-a-las-cosas-aria-label-aria-labelledby-aria-describedby">4. Dar nombre a las cosas: aria-label, aria-labelledby, aria-describedby</h2>
-<p>A veces un control no tiene texto visible. El caso clásico: un botón con solo un icono.</p>
+<p>A veces un control no tiene texto visible. El caso de manual: un botón con solo un icono.</p>
 <pre><code class="language-html">&lt;!-- Un botón de cerrar con una &quot;X&quot; --&gt;
 &lt;button type=&quot;button&quot;&gt;✕&lt;/button&gt;
 </code></pre>
-<p>El lector de pantalla anunciaría "equis, botón" o incluso nada útil. Necesitamos darle un nombre claro.</p>
+<p>El lector de pantalla anunciaría "equis, botón", o directamente nada útil. Hace falta darle un nombre claro.</p>
 <blockquote class="def">
 <h3 id="que-significa-aria-label">🟦 ¿Qué significa? — <em>aria-label</em></h3>
-<p><code>aria-label</code> es un atributo que le pone un <strong>nombre accesible directamente, escrito por ti</strong>, a un elemento. No se ve en pantalla; solo lo escucha el lector de pantalla. Sirve para botones de solo icono, enlaces sin texto o controles donde el texto visible no basta.
+<p><code>aria-label</code> es un atributo que le pone a un elemento un <strong>nombre accesible escrito por ti, directamente</strong>. No se ve en pantalla; solo lo oye el lector de pantalla. Es perfecto para botones de solo icono, enlaces sin texto o controles donde el texto visible no es suficiente.
 <strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, si tienes un icono de menú "hamburguesa" (las tres rayitas) que abre la navegación, ponle <code>aria-label="Abrir menú"</code> para que el lector lo anuncie con sentido.</p>
 </blockquote>
 <pre><code class="language-html">&lt;!-- ✅ Ahora el lector dice &quot;Cerrar, botón&quot; --&gt;
@@ -95,7 +95,7 @@
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-aria-labelledby">🟦 ¿Qué significa? — <em>aria-labelledby</em></h3>
-<p><code>aria-labelledby</code> toma el nombre accesible de <strong>otro elemento que ya está en la página</strong>, indicándolo por su <code>id</code>. En vez de escribir el texto otra vez, "apuntas" a un texto que ya existe. Sirve para no repetir contenido y mantener el nombre sincronizado con lo que se ve.</p>
+<p><code>aria-labelledby</code> toma el nombre accesible de <strong>otro elemento que ya está en la página</strong>, señalándolo por su <code>id</code>. En vez de volver a escribir el texto, "apuntas" a uno que ya existe. Así no repites contenido y el nombre se mantiene en sintonía con lo que se ve en pantalla.</p>
 </blockquote>
 <pre><code class="language-html">&lt;!-- El nombre de la sección viene del h2 con id=&quot;titulo-servicios&quot; --&gt;
 &lt;section aria-labelledby=&quot;titulo-servicios&quot;&gt;
@@ -105,22 +105,22 @@
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-aria-describedby">🟦 ¿Qué significa? — <em>aria-describedby</em></h3>
-<p><code>aria-describedby</code> añade una <strong>descripción extra</strong> (no el nombre, sino una explicación adicional) que apunta al <code>id</code> de otro elemento. Sirve, por ejemplo, para asociar a un campo de formulario el texto que explica su formato o un mensaje de error.</p>
+<p><code>aria-describedby</code> añade una <strong>descripción extra</strong>; no el nombre, sino una explicación de apoyo que apunta al <code>id</code> de otro elemento. Viene de perlas para asociar a un campo de formulario el texto que explica su formato o un mensaje de error.</p>
 </blockquote>
 <pre><code class="language-html">&lt;label for=&quot;email&quot;&gt;Correo&lt;/label&gt;
 &lt;input id=&quot;email&quot; type=&quot;email&quot; aria-describedby=&quot;ayuda-email&quot; /&gt;
 &lt;p id=&quot;ayuda-email&quot;&gt;Usaremos tu correo solo para responderte.&lt;/p&gt;
 </code></pre>
-<p>Cuando el usuario llega al campo, el lector anuncia: "Correo, campo de texto, Usaremos tu correo solo para responderte". El nombre viene del <code>&lt;label&gt;</code>; la descripción, del <code>aria-describedby</code>.</p>
+<p>Cuando la persona llega al campo, el lector anuncia: "Correo, campo de texto, Usaremos tu correo solo para responderte". El nombre viene del <code>&lt;label&gt;</code>; la descripción, del <code>aria-describedby</code>.</p>
 <blockquote class="tip">
 <h3 id="tip-diferencia-rapida">💡 Tip — Diferencia rápida</h3>
-<p><code>aria-label</code> = escribes el nombre a mano. <code>aria-labelledby</code> = el nombre lo da otro elemento de la página. <code>aria-describedby</code> = información adicional, no el nombre principal. Si dudas entre label y labelledby, recuerda: si el texto ya está visible en la página, prefiere <code>labelledby</code> para no duplicarlo.</p>
+<p><code>aria-label</code> = escribes el nombre a mano. <code>aria-labelledby</code> = el nombre lo pone otro elemento de la página. <code>aria-describedby</code> = información de apoyo, no el nombre principal. Y si dudas entre label y labelledby, quédate con esto: si el texto ya está visible en la página, tira de <code>labelledby</code> para no duplicarlo.</p>
 </blockquote>
 <h2 id="5-esconder-cosas-del-lector-aria-hidden">5. Esconder cosas del lector: aria-hidden</h2>
-<p>A veces quieres que algo se vea en pantalla pero que el lector de pantalla lo <strong>ignore</strong>. El caso más común: iconos decorativos que no aportan información.</p>
+<p>A veces quieres que algo se vea en pantalla pero que el lector de pantalla lo <strong>ignore</strong>. El caso más habitual: iconos decorativos que no aportan ninguna información.</p>
 <blockquote class="def">
 <h3 id="que-significa-aria-hidden">🟦 ¿Qué significa? — <em>aria-hidden</em></h3>
-<p><code>aria-hidden="true"</code> le dice al lector de pantalla: "ignora este elemento y todo lo que tenga dentro". El elemento <strong>sigue viéndose</strong> en la pantalla; simplemente no se anuncia. Sirve para iconos decorativos o textos duplicados que solo añadirían ruido para quien escucha.</p>
+<p><code>aria-hidden="true"</code> le dice al lector de pantalla: "ignora este elemento y todo lo que lleve dentro". El elemento <strong>se sigue viendo</strong> en la pantalla; simplemente no se anuncia. Es ideal para iconos decorativos o para textos duplicados que solo añadirían ruido a quien escucha.</p>
 </blockquote>
 <pre><code class="language-html">&lt;!-- El emoji es decorativo; el texto ya lo explica --&gt;
 &lt;button type=&quot;button&quot;&gt;
@@ -128,30 +128,30 @@
   Lanzar proyecto
 &lt;/button&gt;
 </code></pre>
-<p>Aquí el lector dice solo "Lanzar proyecto, botón", sin intentar describir el cohete.</p>
+<p>Aquí el lector dice solo "Lanzar proyecto, botón", sin pararse a describir el cohete.</p>
 <blockquote class="warn">
 <h3 id="cuidado-nunca-escondas-algo-que-el-usuario-necesita">⚠️ Cuidado — Nunca escondas algo que el usuario necesita</h3>
-<p>No pongas <code>aria-hidden="true"</code> en un botón, un enlace o un campo de formulario que sí sirve. Si lo haces, las personas que usan lector de pantalla <strong>no podrán usarlo</strong>: para ellas, simplemente no existe. Otra trampa: nunca pongas <code>aria-hidden="true"</code> en un elemento que contenga algo enfocable con el teclado, porque crea una situación confusa (el teclado llega ahí, pero el lector dice que no hay nada).</p>
+<p>No le pongas <code>aria-hidden="true"</code> a un botón, un enlace o un campo de formulario que sí cumple una función. Si lo haces, las personas que usan lector de pantalla <strong>no podrán usarlo</strong>: para ellas, sencillamente no existe. Y ojo con otra trampa: nunca pongas <code>aria-hidden="true"</code> en un elemento que contenga algo enfocable con el teclado, porque se crea una situación de lo más confusa (el teclado llega ahí, pero el lector insiste en que no hay nada).</p>
 </blockquote>
 <h2 id="6-foco-y-orden-de-tabulacion">6. Foco y orden de tabulación</h2>
 <blockquote class="def">
 <h3 id="que-significa-foco">🟦 ¿Qué significa? — <em>Foco</em></h3>
-<p>El <strong>foco</strong> es el elemento que está "seleccionado" en este momento y que recibirá lo que escribas o la tecla que pulses. Cuando navegas con el teclado, el foco salta de un control a otro. Normalmente se ve con un borde o resaltado alrededor del elemento. Sirve para saber dónde estás dentro de la página sin usar el ratón.</p>
+<p>El <strong>foco</strong> es el elemento que está "seleccionado" ahora mismo y que recibirá lo que escribas o la tecla que pulses. Cuando navegas con el teclado, el foco va saltando de un control a otro. Normalmente se reconoce por un borde o un resaltado alrededor del elemento. Te sirve para saber dónde estás dentro de la página sin tocar el ratón.</p>
 <h3 id="que-significa-orden-de-tabulacion">🟦 ¿Qué significa? — <em>Orden de tabulación</em></h3>
-<p>El <strong>orden de tabulación</strong> es la secuencia en la que el foco salta cada vez que pulsas la tecla <strong>Tab</strong>. Por defecto sigue el orden en que escribiste los elementos en el HTML, de arriba hacia abajo. Sirve para que la navegación con teclado sea lógica y predecible.</p>
+<p>El <strong>orden de tabulación</strong> es la secuencia en la que el foco va saltando cada vez que pulsas la tecla <strong>Tab</strong>. Por defecto sigue el orden en que escribiste los elementos en el HTML, de arriba abajo. Gracias a él, la navegación con teclado resulta lógica y previsible.</p>
 </blockquote>
-<p>La prueba más rápida de accesibilidad: pulsa <strong>Tab</strong> varias veces en tu página y observa. ¿El foco va de un sitio lógico al siguiente? ¿Se ve claramente dónde está? ¿Puedes llegar a todos los botones y enlaces?</p>
+<p>La prueba de accesibilidad más rápida que existe: pulsa <strong>Tab</strong> varias veces en tu página y mira con atención. ¿El foco salta de un sitio lógico al siguiente? ¿Se ve con claridad dónde está? ¿Llegas a todos los botones y enlaces?</p>
 <blockquote class="def">
 <h3 id="que-significa-tabindex">🟦 ¿Qué significa? — <em>tabindex</em></h3>
-<p><code>tabindex</code> es un atributo que controla si un elemento puede recibir foco con el teclado y en qué orden. Sus valores útiles son: <code>tabindex="0"</code> (el elemento entra en el orden normal de tabulación) y <code>tabindex="-1"</code> (no se llega con Tab, pero puedes enfocarlo desde JavaScript). Sirve para casos especiales; con HTML bien hecho casi no lo necesitas.</p>
+<p><code>tabindex</code> es un atributo que controla si un elemento puede recibir foco con el teclado y en qué orden. Sus dos valores útiles son <code>tabindex="0"</code> (el elemento entra en el orden normal de tabulación) y <code>tabindex="-1"</code> (no se llega con Tab, pero sí puedes enfocarlo desde JavaScript). Es para casos especiales; con un HTML bien hecho, casi nunca lo vas a necesitar.</p>
 <h3 id="cuidado-huye-de-tabindex-con-numeros-positivos">⚠️ Cuidado — Huye de tabindex con números positivos</h3>
-<p>Verás por ahí cosas como <code>tabindex="3"</code>. <strong>Evítalas.</strong> Los números positivos fuerzan un orden artificial que casi siempre rompe la lógica natural de la página y es muy difícil de mantener. Si necesitas otro orden, reordena tu HTML. Solo usa <code>tabindex="0"</code> o <code>tabindex="-1"</code>.</p>
+<p>Por ahí te toparás con cosas como <code>tabindex="3"</code>. <strong>Esquívalas.</strong> Los números positivos imponen un orden artificial que casi siempre rompe la lógica natural de la página y luego es un infierno de mantener. Si necesitas otro orden, reordena el HTML. Limítate a <code>tabindex="0"</code> o <code>tabindex="-1"</code>.</p>
 <h3 id="que-significa-focus-visible">🟦 ¿Qué significa? — <em>:focus-visible</em></h3>
-<p><code>:focus-visible</code> es un "selector" de CSS (una forma de apuntar a elementos para darles estilo) que aplica solo cuando el navegador cree que mostrar el foco <strong>ayuda de verdad</strong>: típicamente cuando la persona navega con teclado, y no cuando hace clic con el ratón. Sirve para dibujar un borde de foco bonito y claro para quien usa teclado, sin que aparezca un recuadro "molesto" cada vez que alguien hace clic con el ratón. Es la forma moderna y recomendada de estilizar el foco.</p>
+<p><code>:focus-visible</code> es un "selector" de CSS (una forma de apuntar a elementos para darles estilo) que se aplica solo cuando el navegador considera que mostrar el foco <strong>ayuda de verdad</strong>: normalmente cuando la persona navega con teclado, y no cuando hace clic con el ratón. Sirve para dibujar un borde de foco claro y bonito para quien usa teclado, sin que aparezca un recuadro "molesto" cada vez que alguien hace clic. Es la forma moderna y recomendada de estilizar el foco.</p>
 <h3 id="que-significa-outline-contorno">🟦 ¿Qué significa? — <em>outline (contorno)</em></h3>
-<p>El <strong>outline</strong> ("contorno" en inglés) es una línea que el navegador dibuja <strong>alrededor</strong> de un elemento cuando recibe el foco. Es justo la pista visual que le dice a quien usa teclado "estás aquí". Por defecto suele ser un borde azul o punteado. Es distinto de <code>border</code>: el outline no ocupa espacio ni mueve el resto de la página. Sirve, sobre todo, para marcar el foco; por eso nunca debes hacerlo desaparecer sin poner otra cosa en su lugar.</p>
+<p>El <strong>outline</strong> ("contorno" en inglés) es una línea que el navegador dibuja <strong>alrededor</strong> de un elemento cuando recibe el foco. Es justo esa pista visual que le dice a quien usa teclado "estás aquí". Por defecto suele ser un borde azul o punteado. No lo confundas con <code>border</code>: el outline no ocupa espacio ni desplaza el resto de la página. Su trabajo principal es marcar el foco; por eso nunca debes hacerlo desaparecer sin poner otra cosa en su lugar.</p>
 <h3 id="tip-no-borres-el-contorno-del-foco">💡 Tip — No borres el contorno del foco</h3>
-<p>En CSS es tentador escribir <code>outline: none</code> porque el borde azul "afea" el botón. Si lo haces, dejas a la gente del teclado sin saber dónde está el foco. Si no te gusta el estilo por defecto, <strong>reemplázalo</strong> por uno bonito (con <code>:focus-visible</code>), no lo elimines. En <strong>tunal-digital</strong>, revisa tu <code>styles.css</code> por si hay algún <code>outline: none</code> huérfano.</p>
+<p>En CSS es tentador escribir <code>outline: none</code> porque el borde azul "afea" el botón. Pero si lo haces, dejas a quien navega con teclado sin pista alguna de dónde está el foco. Si no te gusta el estilo por defecto, <strong>cámbialo</strong> por uno bonito (con <code>:focus-visible</code>); no lo elimines. En <strong>tunal-digital</strong>, échale un ojo a tu <code>styles.css</code> por si se ha colado algún <code>outline: none</code> huérfano.</p>
 </blockquote>
 <pre><code class="language-css">/* En tu styles.css de tunal-digital: un foco visible y con estilo */
 :focus-visible {
@@ -160,11 +160,11 @@
 }
 </code></pre>
 <h2 id="7-skip-links-saltar-lo-repetitivo">7. Skip links: saltar lo repetitivo</h2>
-<p>Imagina que tu página tiene un menú con 10 enlaces arriba, igual en todas las secciones. Una persona con lector de pantalla tendría que escuchar esos 10 enlaces <strong>en cada página</strong> antes de llegar al contenido. Agotador. La solución es un <strong>enlace de salto</strong>.</p>
+<p>Imagina que tu página tiene arriba un menú con 10 enlaces, repetido en todas las secciones. Una persona con lector de pantalla tendría que escuchar esos 10 enlaces <strong>en cada página</strong> antes de llegar al contenido. Agotador. La solución es un <strong>enlace de salto</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-skip-link-enlace-de-salto">🟦 ¿Qué significa? — <em>Skip link (enlace de salto)</em></h3>
-<p>Un <strong>skip link</strong> es un enlace, normalmente el primero de la página, que permite <strong>saltar directamente al contenido principal</strong> sin recorrer el menú. Suele estar oculto y aparece solo cuando recibe el foco con Tab. Sirve a quienes navegan con teclado o lector de pantalla para ahorrarse la navegación repetitiva.
-<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, añadir un skip link al principio de <code>index.html</code> hace que un visitante con teclado llegue a tus servicios en un solo Tab, en vez de recorrer todo el encabezado.</p>
+<p>Un <strong>skip link</strong> es un enlace, casi siempre el primero de la página, que permite <strong>saltar directo al contenido principal</strong> sin recorrer el menú. Suele estar oculto y solo aparece cuando recibe el foco con Tab. Les ahorra la navegación repetitiva a quienes se mueven con teclado o con lector de pantalla.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, añadir un skip link al principio de <code>index.html</code> hace que un visitante con teclado llegue a tus servicios en un solo Tab, en lugar de recorrer todo el encabezado.</p>
 </blockquote>
 <pre><code class="language-html">&lt;body&gt;
   &lt;a class=&quot;skip-link&quot; href=&quot;#contenido&quot;&gt;Saltar al contenido&lt;/a&gt;
@@ -189,13 +189,13 @@
   top: 1rem;
 }
 </code></pre>
-<p>Fíjate en un detalle importante: el skip link apunta a <code>#contenido</code>, y ese <code>id="contenido"</code> está en <code>&lt;main&gt;</code>. El destino del salto debe existir, o el enlace no lleva a ningún sitio.</p>
+<p>Fíjate en un detalle que importa: el skip link apunta a <code>#contenido</code>, y ese <code>id="contenido"</code> vive en <code>&lt;main&gt;</code>. El destino del salto tiene que existir; si no, el enlace no lleva a ninguna parte.</p>
 <h2 id="8-live-regions-anunciar-cambios-sin-recargar">8. Live regions: anunciar cambios sin recargar</h2>
-<p>Aquí entramos en lo "rico" de ARIA, lo que el HTML solo no resuelve. Imagina que en tunal-digital pulsas "Enviar" en un formulario de contacto y, gracias a JavaScript, aparece un mensaje "Mensaje enviado con éxito" sin recargar la página. Una persona que ve, lo lee. Pero una persona con lector de pantalla… no se entera, porque su foco sigue en el botón. El cambio ocurrió en otra parte de la pantalla y nadie se lo anunció.</p>
+<p>Aquí entramos en la parte "rica" de ARIA, la que el HTML por sí solo no resuelve. Imagina que en tunal-digital pulsas "Enviar" en el formulario de contacto y, gracias a JavaScript, aparece un mensaje "Mensaje enviado con éxito" sin que la página se recargue. Quien ve, lo lee al instante. Pero quien usa un lector de pantalla… no se entera, porque su foco sigue parado en el botón. El cambio ocurrió en otra zona de la pantalla y nadie se lo anunció.</p>
 <blockquote class="def">
 <h3 id="que-significa-live-region-region-dinamica">🟦 ¿Qué significa? — <em>Live region (región dinámica)</em></h3>
-<p>Una <strong>live region</strong> es una zona de la página marcada con <code>aria-live</code> para que el lector de pantalla <strong>anuncie automáticamente</strong> cualquier cambio de texto que ocurra dentro de ella, sin que el usuario tenga que ir a buscarlo. Sirve para mensajes que aparecen solos: confirmaciones, errores, notificaciones, resultados de una búsqueda.
-<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, cuando <code>main.js</code> muestra "Mensaje enviado", una live region hace que el lector lo diga en voz alta. En <strong>Faro</strong> (Organizer), cuando el análisis con IA termina y aparece "Análisis completado", una live region avisa sin que el usuario tenga que rastrear el cambio.</p>
+<p>Una <strong>live region</strong> es una zona de la página marcada con <code>aria-live</code> para que el lector de pantalla <strong>anuncie por su cuenta</strong> cualquier cambio de texto que ocurra dentro de ella, sin que la persona tenga que ir a buscarlo. Es la pieza ideal para mensajes que aparecen solos: confirmaciones, errores, notificaciones, resultados de una búsqueda.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, cuando <code>main.js</code> muestra "Mensaje enviado", una live region hace que el lector lo lea en voz alta. En <strong>Faro</strong> (Organizer), cuando termina el análisis con IA y aparece "Análisis completado", una live region avisa sin que el usuario tenga que andar rastreando el cambio.</p>
 </blockquote>
 <pre><code class="language-html">&lt;!-- Esta zona empieza vacía; JavaScript escribirá dentro --&gt;
 &lt;p id=&quot;estado-form&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
@@ -206,33 +206,33 @@ document.getElementById(&quot;estado-form&quot;).textContent = &quot;Mensaje env
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-aria-live">🟦 ¿Qué significa? — <em>aria-live</em></h3>
-<p><code>aria-live</code> es el atributo que convierte una zona normal de la página en una <strong>live region</strong>. Lo escribes con un valor que indica la urgencia: <code>aria-live="polite"</code> o <code>aria-live="assertive"</code>. A partir de ahí, cada vez que cambie el texto dentro de esa zona, el lector de pantalla lo anunciará solo. Sirve para que las personas que no ven la pantalla se enteren de mensajes que aparecen sin recargar la página.</p>
+<p><code>aria-live</code> es el atributo que convierte una zona normal de la página en una <strong>live region</strong>. Lo escribes con un valor que indica la urgencia: <code>aria-live="polite"</code> o <code>aria-live="assertive"</code>. A partir de ahí, cada vez que cambie el texto dentro de esa zona, el lector de pantalla lo anunciará por su cuenta. Así, quienes no ven la pantalla se enteran de los mensajes que aparecen sin recargar.</p>
 </blockquote>
-<p>El valor de <code>aria-live</code> define la urgencia:</p>
+<p>El valor de <code>aria-live</code> marca la urgencia:</p>
 <ul>
-<li><code>aria-live="polite"</code>: el lector lo dice <strong>cuando termine</strong> lo que estaba diciendo. Ideal para confirmaciones y la mayoría de los casos.</li>
-<li><code>aria-live="assertive"</code>: el lector <strong>interrumpe</strong> lo que estaba diciendo para anunciarlo ya. Resérvalo para errores urgentes.</li>
+<li><code>aria-live="polite"</code>: el lector lo dice <strong>cuando termine</strong> lo que estaba diciendo. Es lo ideal para confirmaciones y para la mayoría de los casos.</li>
+<li><code>aria-live="assertive"</code>: el lector <strong>interrumpe</strong> lo que estaba diciendo para anunciarlo ya mismo. Resérvalo para errores urgentes.</li>
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado-assertive-con-moderacion">⚠️ Cuidado — assertive con moderación</h3>
-<p>Usar <code>assertive</code> para todo es como gritar siempre: cansa y confunde. Interrumpir al usuario constantemente es molesto. Usa <code>polite</code> casi siempre; deja <code>assertive</code> solo para errores que de verdad no pueden esperar.</p>
+<p>Usar <code>assertive</code> para todo es como hablar siempre a gritos: cansa y confunde. Interrumpir al usuario una y otra vez resulta molesto. Tira de <code>polite</code> casi siempre y deja <code>assertive</code> solo para esos errores que de verdad no pueden esperar.</p>
 <h3 id="tip-la-region-debe-existir-desde-el-principio">💡 Tip — La región debe existir desde el principio</h3>
-<p>La live region tiene que estar <strong>ya en el HTML</strong> (aunque vacía) antes de que cambies su contenido. Si creas el <code>&lt;p aria-live&gt;</code> y le metes texto en el mismo instante, muchos lectores no lo anuncian. El truco: deja el contenedor vacío en tu HTML y luego solo escribe dentro de él.</p>
+<p>La live region tiene que estar <strong>ya en el HTML</strong> (aunque sea vacía) antes de que cambies su contenido. Si creas el <code>&lt;p aria-live&gt;</code> y le metes texto en el mismo instante, muchos lectores no llegan a anunciarlo. El truco: deja el contenedor vacío en tu HTML y luego escribe dentro de él.</p>
 </blockquote>
 <h2 id="9-formularios-accesibles">9. Formularios accesibles</h2>
-<p>Los formularios son donde más se nota una buena (o mala) accesibilidad, porque el usuario tiene que entender qué le piden y qué se equivocó. Tres reglas que cubren casi todo:</p>
-<p><strong>1. Toda entrada necesita su <code>&lt;label&gt;</code>.</strong> Ya lo viste en el capítulo de formularios, pero aquí es vital. El <code>&lt;label&gt;</code> con <code>for</code> conectado al <code>id</code> del campo es lo que da el nombre accesible.</p>
+<p>Los formularios son donde más se nota una accesibilidad buena (o mala), porque la persona tiene que entender qué le piden y en qué se equivocó. Con tres reglas cubres casi todo:</p>
+<p><strong>1. Toda entrada necesita su <code>&lt;label&gt;</code>.</strong> Ya lo viste en el capítulo de formularios, pero aquí es de vida o muerte. El <code>&lt;label&gt;</code> con su <code>for</code> conectado al <code>id</code> del campo es lo que da el nombre accesible.</p>
 <pre><code class="language-html">&lt;label for=&quot;nombre&quot;&gt;Tu nombre&lt;/label&gt;
 &lt;input id=&quot;nombre&quot; type=&quot;text&quot; /&gt;
 </code></pre>
-<p><strong>2. Marca lo obligatorio de forma clara, no solo con un asterisco rojo.</strong> El color por sí solo no basta (recuerda a quien no distingue colores). Usa el atributo <code>required</code>, que además el lector anuncia.</p>
+<p><strong>2. Marca lo obligatorio de forma clara, no solo con un asterisco rojo.</strong> El color por sí solo no basta (acuérdate de quien no distingue colores). Usa el atributo <code>required</code>, que de paso el lector anuncia.</p>
 <pre><code class="language-html">&lt;label for=&quot;correo&quot;&gt;Correo (obligatorio)&lt;/label&gt;
 &lt;input id=&quot;correo&quot; type=&quot;email&quot; required /&gt;
 </code></pre>
-<p><strong>3. Los errores deben asociarse al campo.</strong> No basta con poner el error en rojo arriba. Conéctalo con <code>aria-describedby</code> y, si quieres, marca el campo como inválido con <code>aria-invalid</code>.</p>
+<p><strong>3. Los errores deben ir pegados al campo.</strong> No vale con poner el error en rojo arriba del todo. Conéctalo con <code>aria-describedby</code> y, si quieres, marca el campo como inválido con <code>aria-invalid</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-aria-invalid">🟦 ¿Qué significa? — <em>aria-invalid</em></h3>
-<p><code>aria-invalid="true"</code> marca un campo de formulario como <strong>incorrecto</strong>. El lector de pantalla lo anuncia ("entrada inválida") para que el usuario sepa que ese campo concreto tiene un problema. Sirve para conectar el error con el campo exacto, no solo con un mensaje suelto.</p>
+<p><code>aria-invalid="true"</code> marca un campo de formulario como <strong>incorrecto</strong>. El lector de pantalla lo anuncia ("entrada inválida") para que la persona sepa que ese campo concreto tiene un problema. Sirve para enlazar el error con el campo exacto, y no dejarlo como un mensaje suelto por ahí.</p>
 </blockquote>
 <pre><code class="language-html">&lt;label for=&quot;tel&quot;&gt;Teléfono&lt;/label&gt;
 &lt;input id=&quot;tel&quot; type=&quot;tel&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;error-tel&quot; /&gt;
@@ -240,23 +240,23 @@ document.getElementById(&quot;estado-form&quot;).textContent = &quot;Mensaje env
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <strong>RachaSimple</strong> (componentes <code>.tsx</code>) y en <strong>Faro</strong>, donde tengas formularios de inicio de sesión o de datos, asegúrate de que cada <code>&lt;input&gt;</code> tenga su <code>&lt;label&gt;</code> real y de que los mensajes de error se conecten con <code>aria-describedby</code>. Es uno de los cambios de accesibilidad con más impacto y menos esfuerzo.</p>
+<p>En <strong>RachaSimple</strong> (componentes <code>.tsx</code>) y en <strong>Faro</strong>, donde tengas formularios de inicio de sesión o de datos, asegúrate de que cada <code>&lt;input&gt;</code> lleve su <code>&lt;label&gt;</code> real y de que los mensajes de error se conecten con <code>aria-describedby</code>. Es de los cambios de accesibilidad con más impacto y menos esfuerzo que existen.</p>
 </blockquote>
 <h2 id="10-contraste-wcag-que-el-texto-se-pueda-leer">10. Contraste WCAG: que el texto se pueda leer</h2>
-<p>De nada sirve un texto perfecto si nadie puede leerlo porque es gris claro sobre fondo blanco. El contraste es la diferencia de luz entre el texto y su fondo.</p>
+<p>De nada sirve un texto perfecto si nadie lo puede leer porque es gris claro sobre fondo blanco. El contraste es la diferencia de luz entre el texto y su fondo.</p>
 <blockquote class="def">
 <h3 id="que-significa-wcag">🟦 ¿Qué significa? — <em>WCAG</em></h3>
-<p><strong>WCAG</strong> significa "Web Content Accessibility Guidelines" (Pautas de Accesibilidad para el Contenido Web). Es el estándar internacional que define cómo hacer la web accesible: incluye reglas medibles sobre contraste, teclado, textos alternativos y más. Sirve como referencia oficial; cuando alguien dice "cumple WCAG AA", se refiere a este estándar.</p>
+<p><strong>WCAG</strong> son las siglas de "Web Content Accessibility Guidelines" (Pautas de Accesibilidad para el Contenido Web). Es el estándar internacional que define cómo hacer la web accesible: incluye reglas medibles sobre contraste, teclado, textos alternativos y mucho más. Es la referencia oficial; cuando alguien dice "cumple WCAG AA", se refiere a este estándar.</p>
 <h3 id="que-significa-ratio-de-contraste">🟦 ¿Qué significa? — <em>Ratio de contraste</em></h3>
-<p>El <strong>ratio de contraste</strong> es un número que mide cuánto se diferencia el texto de su fondo. Va desde 1:1 (texto invisible, mismo color que el fondo) hasta 21:1 (negro puro sobre blanco puro). WCAG pide al menos <strong>4.5:1</strong> para texto normal y <strong>3:1</strong> para texto grande. Sirve para garantizar que el texto se lea bajo el sol, con poca vista o en una pantalla barata.
-<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, revisa en <code>styles.css</code> los colores de texto sobre los fondos de color de marca; algún gris "elegante" puede quedar por debajo de 4.5:1 y costarte lectores reales.</p>
+<p>El <strong>ratio de contraste</strong> es un número que mide cuánto se diferencia el texto de su fondo. Va desde 1:1 (texto invisible, del mismo color que el fondo) hasta 21:1 (negro puro sobre blanco puro). WCAG pide al menos <strong>4.5:1</strong> para texto normal y <strong>3:1</strong> para texto grande. Es lo que garantiza que el texto se lea bajo el sol, con poca vista o en una pantalla barata.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>tunal-digital</strong>, repasa en <code>styles.css</code> los colores del texto sobre los fondos de color de marca; algún gris "elegante" puede quedarse por debajo de 4.5:1 y costarte lectores de verdad.</p>
 <h3 id="tip-como-medir-el-contraste">💡 Tip — Cómo medir el contraste</h3>
-<p>No lo adivines. Las herramientas de desarrollo del navegador (clic derecho → Inspeccionar) te muestran el ratio de contraste de cualquier texto. También hay verificadores en línea donde pegas los dos colores y te dicen si pasa AA. Apunta a 4.5:1 o más para texto de tamaño normal.</p>
+<p>No lo adivines. Las herramientas de desarrollo del navegador (clic derecho → Inspeccionar) te muestran el ratio de contraste de cualquier texto. También hay verificadores en línea donde pegas los dos colores y te dicen si pasa AA. Apunta a 4.5:1 o más para el texto de tamaño normal.</p>
 <h3 id="cuidado-el-color-no-puede-ser-la-unica-pista">⚠️ Cuidado — El color no puede ser la única pista</h3>
-<p>Si un enlace solo se distingue del texto normal porque es azul, quien no ve bien los colores no lo notará. Añade siempre una segunda señal: subrayado en los enlaces, un icono junto al error, la palabra "obligatorio" además del asterisco. La regla: <strong>no comuniques nada solo con color</strong>.</p>
+<p>Si un enlace solo se distingue del texto normal porque es azul, quien no ve bien los colores no lo notará. Añade siempre una segunda señal: subrayado en los enlaces, un icono junto al error, la palabra "obligatorio" además del asterisco. La regla es simple: <strong>no comuniques nada solo con color</strong>.</p>
 </blockquote>
 <h2 id="11-juntando-todo-un-fragmento-accesible-de-tunal-digital">11. Juntando todo: un fragmento accesible de tunal-digital</h2>
-<p>Veamos cómo se ve un trozo de <code>index.html</code> aplicando casi todo lo del capítulo:</p>
+<p>Veamos cómo queda un trozo de <code>index.html</code> aplicando casi todo lo del capítulo:</p>
 <pre><code class="language-html">&lt;body&gt;
   &lt;a class=&quot;skip-link&quot; href=&quot;#contenido&quot;&gt;Saltar al contenido&lt;/a&gt;
 
@@ -292,7 +292,7 @@ document.getElementById(&quot;estado-form&quot;).textContent = &quot;Mensaje env
   &lt;/main&gt;
 &lt;/body&gt;
 </code></pre>
-<p>Fíjate en cuántas cosas trabajan juntas: skip link, <code>nav</code> con nombre, botón de icono etiquetado, emoji oculto al lector, sección nombrada por su título, labels reales, ayuda asociada y una live region lista para anunciar el resultado. Y casi todo es HTML normal: muy poco ARIA, justo donde el HTML no llegaba.</p>
+<p>Fíjate en cuántas piezas están trabajando juntas: skip link, <code>nav</code> con nombre, botón de icono etiquetado, emoji oculto al lector, sección nombrada por su título, labels reales, ayuda asociada y una live region lista para anunciar el resultado. Y casi todo es HTML normal y corriente: muy poco ARIA, justo en los puntos donde el HTML no llegaba.</p>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
 <li>[ ] Entiendo qué hace un lector de pantalla y qué es el árbol de accesibilidad.</li>

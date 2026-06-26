@@ -19,63 +19,65 @@
 <main class="contenedor">
 <h1 id="capitulo-05-seguridad-rls-y-autenticacion">Capítulo 05 — Seguridad: RLS y autenticación</h1>
 <blockquote>
-<p>Si la clave pública de Supabase está a la vista de cualquiera, ¿qué impide que un usuario lea
-los hábitos de otro? La respuesta es <strong>RLS</strong>, y es uno de los conceptos de seguridad más
-importantes que aprenderás. Cerramos el módulo entendiendo cómo tus datos se mantienen privados.</p>
+<p>Si la clave pública de Supabase la puede ver cualquiera, ¿qué impide que un usuario lea
+los hábitos de otro? La respuesta tiene nombre: <strong>RLS</strong>. Es una de las ideas de seguridad
+que más te van a servir, así que cerramos el módulo viendo con calma cómo tus datos se
+quedan donde tienen que quedarse: en privado.</p>
 </blockquote>
 <hr />
 <h2 id="1-autenticacion-quien-eres">1. Autenticación: ¿quién eres?</h2>
 <blockquote class="def">
 <h3 id="que-significa-autenticacion-auth">🟦 ¿Qué significa? — <em>Autenticación (auth)</em></h3>
-<p>La <strong>autenticación</strong> es el proceso de <strong>comprobar quién es</strong> un usuario (que es quien dice
-ser): el <strong>login</strong>. Tras autenticarse (con correo y contraseña, o con Google/GitHub), Supabase
-sabe qué usuario es y le da una <strong>sesión</strong>.</p>
+<p>La <strong>autenticación</strong> es comprobar <strong>quién es</strong> un usuario, es decir, que de verdad es quien
+dice ser. Es el <strong>login</strong> de toda la vida. Cuando te autenticas (con correo y contraseña, o
+entrando con Google o GitHub), Supabase ya sabe quién eres y te abre una <strong>sesión</strong>.</p>
 <h3 id="que-significa-autenticacion-vs-autorizacion">🟦 ¿Qué significa? — <em>Autenticación vs. autorización</em></h3>
-<p>Dos palabras que se confunden:
-- <strong>Autenticación</strong> = <em>¿quién eres?</em> (login).
-- <strong>Autorización</strong> = <em>¿qué tienes permitido hacer?</em> (permisos).
-Primero te autenticas (demuestras tu identidad), luego el sistema decide qué estás autorizado a
-ver/hacer. RLS (lo que sigue) es <strong>autorización</strong>: una vez sé quién eres, decido qué filas
-puedes tocar.</p>
+<p>Son dos palabras que se confunden todo el tiempo:
+- <strong>Autenticación</strong> = <em>¿quién eres?</em> (el login).
+- <strong>Autorización</strong> = <em>¿qué tienes permitido hacer?</em> (los permisos).
+El orden importa: primero te autenticas, demuestras tu identidad, y solo después el sistema
+decide qué puedes ver o hacer. RLS, que viene justo a continuación, es <strong>autorización</strong>: una
+vez que sé quién eres, decido qué filas te dejo tocar.</p>
 <h3 id="que-significa-sesion-y-token">🟦 ¿Qué significa? — <em>Sesión y token</em></h3>
-<p>Al iniciar sesión, Supabase te entrega un <strong>token</strong>: una credencial temporal (un texto cifrado)
-que tu app envía en cada petición para demostrar "soy el usuario 7, ya autenticado". La
-<strong>sesión</strong> es ese estado de "estás dentro". El token caduca y se renueva solo. Por eso no
-tienes que poner la contraseña en cada clic.</p>
+<p>Cuando inicias sesión, Supabase te entrega un <strong>token</strong>: una credencial temporal, un texto
+cifrado que tu app manda en cada petición para decir "soy el usuario 7, ya autenticado". La
+<strong>sesión</strong> es ese estado de "estás dentro". El token caduca cada cierto tiempo y se renueva
+solo, sin que te enteres. Por eso no tienes que escribir la contraseña en cada clic.</p>
 </blockquote>
 <hr />
 <h2 id="2-el-concepto-estrella-row-level-security-rls">2. El concepto estrella: Row-Level Security (RLS)</h2>
 <blockquote class="def">
 <h3 id="que-significa-rls-seguridad-a-nivel-de-fila">🟦 ¿Qué significa? — <em>RLS (seguridad a nivel de fila)</em></h3>
-<p><strong>RLS</strong> (<em>Row-Level Security</em>, "seguridad a nivel de fila") es una característica de Postgres
-que decide, <strong>fila por fila</strong>, quién puede verla o modificarla. En vez de "este usuario puede
-entrar a la tabla habitos", dice: "este usuario solo puede ver las <strong>filas</strong> de la tabla
+<p><strong>RLS</strong> (<em>Row-Level Security</em>, "seguridad a nivel de fila") es una función de Postgres que
+decide, <strong>fila por fila</strong>, quién puede verla o cambiarla. No dice "este usuario puede entrar
+a la tabla habitos"; afina mucho más: "este usuario solo puede ver las <strong>filas</strong> de la tabla
 habitos <strong>cuyo <code>usuario_id</code> sea el suyo</strong>".
-Es lo que hace que, aunque todos usen la misma clave pública y la misma tabla, <strong>cada quien solo
-vea lo suyo</strong>. Sin RLS bien puesta, cualquiera podría leer los datos de todos: es el error de
-seguridad más grave (y común) en apps con Supabase.</p>
+Eso es lo que hace que, aunque todos compartan la misma clave pública y la misma tabla, <strong>cada
+quien vea únicamente lo suyo</strong>. Si la RLS no está bien puesta, cualquiera podría leer los datos
+de todos. Es el fallo de seguridad más grave que se ve en apps con Supabase, y también el más
+frecuente.</p>
 <h3 id="que-significa-politica-policy">🟦 ¿Qué significa? — <em>Política (policy)</em></h3>
-<p>Una <strong>política</strong> es una <strong>regla SQL</strong> que define el permiso. Se lee casi como una condición
-<code>WHERE</code> que la base de datos añade <strong>automáticamente</strong> a cada consulta de ese usuario. Ejemplo:
+<p>Una <strong>política</strong> es una <strong>regla SQL</strong> que define el permiso. Funciona casi como una condición
+<code>WHERE</code> que la base de datos le pega <strong>sola</strong> a cada consulta de ese usuario. Mira el ejemplo:
 <code>sql
 -- "Un usuario solo puede LEER sus propios hábitos"
 CREATE POLICY "ver_mis_habitos"
 ON habitos FOR SELECT
 USING ( usuario_id = auth.uid() );</code>
-- <code>auth.uid()</code> → el <code>id</code> del usuario <strong>actualmente autenticado</strong> (lo da Supabase).
-- <code>USING ( usuario_id = auth.uid() )</code> → la condición que cada fila debe cumplir para ser
-  visible. Si no la cumple, <strong>para ese usuario es como si la fila no existiera</strong>.
-Se crean políticas para cada acción (SELECT, INSERT, UPDATE, DELETE).</p>
+- <code>auth.uid()</code> → el <code>id</code> del usuario <strong>que está autenticado ahora mismo</strong> (lo aporta Supabase).
+- <code>USING ( usuario_id = auth.uid() )</code> → la condición que cada fila tiene que cumplir para ser
+  visible. Si no la cumple, <strong>para ese usuario es como si la fila ni existiera</strong>.
+Se escribe una política por cada acción: SELECT, INSERT, UPDATE y DELETE.</p>
 <h3 id="cuidado-rls-hay-que-activarla">⚠️ Cuidado — RLS hay que ACTIVARLA</h3>
-<p>En Postgres/Supabase, RLS está <strong>apagada</strong> por defecto en una tabla nueva. Hay que activarla
-explícitamente y escribir las políticas. Una tabla con RLS apagada y clave pública = datos de
-todos expuestos. Activar RLS y revisar las políticas es lo <strong>primero</strong> que se audita en una app
-Supabase. Supabase incluso te avisa con "advisors" (avisos de seguridad) si una tabla quedó sin
-proteger.</p>
+<p>En Postgres y en Supabase, la RLS viene <strong>apagada</strong> por defecto en una tabla nueva. Tienes que
+encenderla a mano y escribir las políticas. Una tabla con RLS apagada y clave pública expuesta
+equivale a dejar los datos de todo el mundo al aire. Por eso, encender RLS y revisar las
+políticas es lo <strong>primero</strong> que se audita en una app de Supabase. De hecho, Supabase te lo
+recuerda con sus "advisors" (avisos de seguridad) cuando detecta una tabla sin proteger.</p>
 </blockquote>
 <hr />
 <h2 id="3-como-encaja-todo-junto">3. Cómo encaja todo junto</h2>
-<p>El viaje completo de una petición segura en RachaSimple:</p>
+<p>Así es el recorrido completo de una petición segura en RachaSimple:</p>
 <pre><code>1. Te logueas        → Supabase Auth comprueba tu identidad y te da una sesión + token.
 2. Pides tus hábitos → el cliente envía: &quot;SELECT * FROM habitos&quot; + tu token.
 3. RLS entra en acción→ Postgres añade en automático: &quot;...WHERE usuario_id = auth.uid()&quot;.
@@ -83,15 +85,17 @@ proteger.</p>
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>La carpeta <code>supabase/migrations/</code> de Faro contiene el SQL que <strong>crea las tablas Y sus políticas
-RLS</strong>. Por eso, aunque la clave pública esté en el navegador, tus proyectos en Faro y tus
-hábitos en RachaSimple son privados: la base de datos misma los protege fila por fila. Es
-seguridad <strong>en el lugar correcto</strong> (el servidor/BD), no confiando en el frontend.</p>
+<p>La carpeta <code>supabase/migrations/</code> de Faro guarda el SQL que <strong>crea las tablas Y sus políticas
+RLS</strong> a la vez. Por eso, aunque la clave pública ande suelta en el navegador, tus proyectos en
+Faro y tus hábitos en RachaSimple siguen siendo privados: es la propia base de datos la que los
+protege fila por fila. Seguridad <strong>donde tiene que estar</strong> (en el servidor y la BD), sin
+depender de que el frontend se porte bien.</p>
 <h3 id="tip-la-regla-de-seguridad-que-te-llevas">💡 Tip — La regla de seguridad que te llevas</h3>
-<p><em>Nunca confíes en el frontend para la seguridad.</em> El navegador es del usuario; puede
-manipularlo. La verdad y los permisos viven en el <strong>servidor/base de datos</strong> (RLS, validación
-en el backend). El frontend valida por <strong>comodidad</strong> (avisar rápido), el backend por
-<strong>seguridad</strong> (de verdad). Lo viste con los formularios (Módulo 01) y aquí se confirma.</p>
+<p><em>Nunca confíes en el frontend para la seguridad.</em> El navegador es del usuario y el usuario puede
+manipularlo a su antojo. La verdad y los permisos viven en el <strong>servidor y la base de datos</strong>
+(RLS, validaciones en el backend). El frontend valida por <strong>comodidad</strong>, para avisar rápido si
+algo está mal; el backend valida por <strong>seguridad</strong>, que es lo que cuenta de verdad. Ya lo viste
+con los formularios en el Módulo 01, y aquí se confirma.</p>
 </blockquote>
 <hr />
 <h2 id="4-cierre-del-modulo">4. Cierre del módulo</h2>
@@ -102,9 +106,9 @@ en el backend). El frontend valida por <strong>comodidad</strong> (avisar rápid
 ├── Supabase: Postgres en la nube, el cliente, BaaS        (cap. 04)
 └── Seguridad: autenticación, RLS y políticas             (cap. 05)
 </code></pre>
-<p>Ya sabes <strong>dónde viven los datos</strong> de tus apps y cómo se mantienen privados. Te falta una pieza
-para cerrar el círculo de cómo se comunican las apps con el mundo: las <strong>APIs</strong> (y cómo se
-integran servicios externos como la IA). Ese es el siguiente módulo.</p>
+<p>Ya sabes <strong>dónde viven los datos</strong> de tus apps y cómo se mantienen en privado. Te falta una pieza
+para cerrar el círculo: cómo hablan tus apps con el resto del mundo. Eso son las <strong>APIs</strong> (y de
+paso, cómo se enchufan servicios externos como la IA). De eso trata el siguiente módulo.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

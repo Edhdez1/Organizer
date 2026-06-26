@@ -23,26 +23,26 @@
 </p>
 
 <blockquote>
-<p>Ya escribiste tus primeras funciones en el Capitulo 03. Sabes que una funcion es una "maquinita" con nombre que hace una tarea. Pero en un programa real las funciones son mucho mas ricas: reciben datos de varias formas, devuelven resultados, tienen sus propias variables privadas, e incluso pueden caber en una sola linea. PolyPaw, nuestra app de idiomas hecha enteramente en Python, vive de funciones: cada vez que pierdes una vida, compras un escudo o subes de nivel, por debajo se llama a una funcion de <code>database_manager.py</code>. En este capitulo abrimos esa caja y vemos como estan construidas de verdad. Bit, nuestro ajolote, se ha puesto los lentes de mecanico: vamos a desarmar el motor.</p>
+<p>Tus primeras funciones ya las escribiste en el Capitulo 03, asi que la idea de fondo te suena: una funcion es una "maquinita" con nombre que hace una tarea. Lo que pasa es que en un programa de verdad las funciones dan mucho mas de si. Reciben datos de varias maneras, devuelven resultados, manejan sus propias variables privadas y, cuando hace falta, caben en una sola linea. PolyPaw, nuestra app de idiomas escrita por completo en Python, se sostiene sobre funciones: cada vez que pierdes una vida, compras un escudo o subes de nivel, por debajo se esta llamando a una funcion de <code>database_manager.py</code>. En este capitulo destapamos esa caja y miramos como estan hechas por dentro. Bit, nuestro ajolote, se calzo los lentes de mecanico: hoy desarmamos el motor pieza por pieza.</p>
 </blockquote>
 <hr />
 <h2 id="1-def-a-fondo-anatomia-de-una-funcion">1. <code>def</code> a fondo: anatomia de una funcion</h2>
-<p>Recordemos la forma basica. Una funcion se <em>define</em> con la palabra <code>def</code>, se le da un nombre, parentesis con sus entradas, y un bloque indentado debajo.</p>
+<p>Empecemos por refrescar la forma basica. Una funcion se <em>define</em> con la palabra <code>def</code>, le das un nombre, abres parentesis para sus entradas y debajo va un bloque indentado.</p>
 <pre><code class="language-python">def perder_vida():
     print(&quot;¡Perdiste una vida!&quot;)
 </code></pre>
-<p>Esa es la version mas simple posible. Pero hay vocabulario que conviene fijar bien, porque lo usaremos todo el capitulo.</p>
+<p>Mas simple que eso, imposible. Pero antes de avanzar conviene fijar algo de vocabulario, porque lo vamos a usar durante todo el capitulo.</p>
 <blockquote class="def">
 <h3 id="que-significa-definir-vs-llamar-una-funcion">🟦 ¿Que significa? — <em>Definir vs. llamar una funcion</em></h3>
-<p><strong>Definir</strong> una funcion es escribir su receta con <code>def</code>: le dices a Python <em>como</em> se hace la tarea, pero no la ejecutas todavia. <strong>Llamar</strong> (o invocar) una funcion es usarla de verdad, escribiendo su nombre con parentesis: <code>perder_vida()</code>.
+<p><strong>Definir</strong> una funcion es escribir su receta con <code>def</code>: le explicas a Python <em>como</em> se hace la tarea, pero todavia no la ejecutas. <strong>Llamar</strong> (o invocar) una funcion es usarla de verdad, escribiendo su nombre con parentesis: <code>perder_vida()</code>.
 <strong>Para que sirve:</strong> separar el <em>escribir una vez</em> (definir) del <em>usar muchas veces</em> (llamar). Defines una sola vez y llamas donde quieras.
-<strong>Donde se usa en un repo real:</strong> en PolyPaw, <code>perder_vida()</code> se <em>define</em> una vez en <code>database_manager.py</code>, pero se <em>llama</em> cada vez que el usuario falla un ejercicio en cualquier pantalla.</p>
+<strong>Donde se usa en un repo real:</strong> en PolyPaw, <code>perder_vida()</code> se <em>define</em> una sola vez en <code>database_manager.py</code>, pero se <em>llama</em> cada vez que el usuario falla un ejercicio, sin importar la pantalla.</p>
 <h3 id="que-significa-parametro-y-argumento">🟦 ¿Que significa? — <em>Parametro y argumento</em></h3>
-<p>Un <strong>parametro</strong> es el nombre que aparece dentro de los parentesis cuando <em>defines</em> la funcion: es como un hueco vacio esperando un valor. Un <strong>argumento</strong> es el valor concreto que pones cuando la <em>llamas</em> y rellenas ese hueco.
-<strong>Para que sirve:</strong> los parametros permiten que una misma funcion trabaje con datos distintos cada vez.
+<p>Un <strong>parametro</strong> es el nombre que aparece entre los parentesis cuando <em>defines</em> la funcion: piensalo como un hueco vacio esperando un valor. Un <strong>argumento</strong> es el valor concreto que pones al <em>llamarla</em> y que rellena ese hueco.
+<strong>Para que sirve:</strong> los parametros permiten que una misma funcion trabaje con datos distintos en cada llamada.
 <strong>Donde se usa en un repo real:</strong> en <code>gastar_gemas(cantidad)</code>, <code>cantidad</code> es el parametro; cuando la tienda llama <code>gastar_gemas(50)</code>, el <code>50</code> es el argumento.</p>
 </blockquote>
-<p>Mira la funcion real <code>gastar_gemas</code> de PolyPaw, recortada:</p>
+<p>Asi se ve la funcion real <code>gastar_gemas</code> de PolyPaw, recortada:</p>
 <pre><code class="language-python">def gastar_gemas(cantidad):       # &quot;cantidad&quot; es un parametro (hueco vacio)
     u = _usuario_mutable()
     gemas = int(u.get(&quot;gemas&quot;, 0))
@@ -52,24 +52,24 @@
     _persistir(u)
     return True                    # alcanzo: gemas descontadas
 </code></pre>
-<p>Y asi se llama desde la tienda:</p>
+<p>Y desde la tienda se llama asi:</p>
 <pre><code class="language-python">gastar_gemas(50)   # 50 es el argumento que entra en &quot;cantidad&quot;
 </code></pre>
-<p>Si vienes del modulo de JavaScript, esto te sonara: alla escribias <code>function gastarGemas(cantidad) { ... }</code>. La idea es la misma; en Python cambias <code>function</code> por <code>def</code>, las llaves <code>{ }</code> por dos puntos <code>:</code> y la indentacion.</p>
+<p>Si vienes del modulo de JavaScript, esto te va a resultar familiar: alla escribias <code>function gastarGemas(cantidad) { ... }</code>. El concepto es identico; en Python cambias <code>function</code> por <code>def</code>, las llaves <code>{ }</code> por dos puntos <code>:</code> y dejas que la indentacion marque el bloque.</p>
 <hr />
 <h2 id="2-parametros-posicionales-y-por-nombre-keyword">2. Parametros posicionales y por nombre (keyword)</h2>
-<p>Hay dos maneras de pasarle argumentos a una funcion. Por <em>posicion</em> o por <em>nombre</em>.</p>
+<p>Hay dos formas de pasarle argumentos a una funcion: por <em>posicion</em> o por <em>nombre</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-argumento-posicional">🟦 ¿Que significa? — <em>Argumento posicional</em></h3>
-<p>Un <strong>argumento posicional</strong> se entrega segun su <em>orden</em>: el primer valor va al primer parametro, el segundo al segundo, y asi. Python los empareja por posicion, no por nombre.
-<strong>Para que sirve:</strong> es la forma mas corta y comun de pasar datos cuando el orden es obvio.
-<strong>Donde se usa en un repo real:</strong> <code>save_user("Spanish", 25)</code> en PolyPaw: <code>"Spanish"</code> va a <code>l1_language</code> y <code>25</code> va a <code>age</code>, solo por el orden.</p>
+<p>Un <strong>argumento posicional</strong> se entrega segun su <em>orden</em>: el primer valor va al primer parametro, el segundo al segundo, y asi sucesivamente. Python los empareja por posicion, no por nombre.
+<strong>Para que sirve:</strong> es la forma mas corta y comun de pasar datos cuando el orden se entiende solo.
+<strong>Donde se usa en un repo real:</strong> <code>save_user("Spanish", 25)</code> en PolyPaw: <code>"Spanish"</code> va a <code>l1_language</code> y <code>25</code> va a <code>age</code>, unicamente por el orden.</p>
 <h3 id="que-significa-argumento-por-nombre-keyword">🟦 ¿Que significa? — <em>Argumento por nombre (keyword)</em></h3>
-<p>Un <strong>argumento por nombre</strong> (en ingles <em>keyword argument</em>) se entrega diciendo explicitamente a que parametro pertenece, con la forma <code>nombre=valor</code>. Asi el orden ya no importa.
-<strong>Para que sirve:</strong> hacer el codigo mas legible y evitar confundir el orden cuando hay muchos parametros.
-<strong>Donde se usa en un repo real:</strong> PolyPaw llama <code>establecer_perfil("teen", edad_estimada=15)</code>: el <code>edad_estimada=15</code> deja clarisimo que ese 15 es la edad.</p>
+<p>Un <strong>argumento por nombre</strong> (en ingles <em>keyword argument</em>) se entrega diciendo de forma explicita a que parametro pertenece, con la forma <code>nombre=valor</code>. Asi el orden deja de importar.
+<strong>Para que sirve:</strong> hacer el codigo mas legible y evitar liarte con el orden cuando hay muchos parametros.
+<strong>Donde se usa en un repo real:</strong> PolyPaw llama <code>establecer_perfil("teen", edad_estimada=15)</code>: ese <code>edad_estimada=15</code> deja clarisimo que el 15 es la edad.</p>
 </blockquote>
-<p>Veamos la funcion real <code>save_user</code>:</p>
+<p>Miremos la funcion real <code>save_user</code>:</p>
 <pre><code class="language-python">def save_user(l1_language, age):
     ...
 
@@ -80,16 +80,16 @@ save_user(l1_language=&quot;Spanish&quot;, age=25)       # ambos por nombre
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Una regla comoda: usa argumentos posicionales cuando son pocos y obvios (<code>perder_vida()</code>), y por nombre cuando un valor suelto no se explica solo. <code>comprar_cosmetico("sombrero_rojo", 200)</code> es menos claro que <code>comprar_cosmetico("sombrero_rojo", precio_gemas=200)</code>.</p>
+<p>Una regla comoda: usa argumentos posicionales cuando son pocos y obvios (<code>perder_vida()</code>), y por nombre cuando un valor suelto no se explica por si mismo. <code>comprar_cosmetico("sombrero_rojo", 200)</code> cuesta mas de leer que <code>comprar_cosmetico("sombrero_rojo", precio_gemas=200)</code>.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Si mezclas los dos estilos en una llamada, <strong>los posicionales van siempre primero</strong>. Esto es valido: <code>save_user("Spanish", age=25)</code>. Esto es un error: <code>save_user(l1_language="Spanish", 25)</code> — Python se queja con <code>SyntaxError</code>.</p>
+<p>Si mezclas los dos estilos en una misma llamada, <strong>los posicionales van siempre primero</strong>. Esto es valido: <code>save_user("Spanish", age=25)</code>. Esto es un error: <code>save_user(l1_language="Spanish", 25)</code> — Python se queja con <code>SyntaxError</code>.</p>
 </blockquote>
 <hr />
 <h2 id="3-valores-por-defecto-parametros-que-ya-vienen-rellenos">3. Valores por defecto: parametros que ya vienen rellenos</h2>
-<p>A veces quieres que un parametro tenga un valor "de fabrica" si quien llama no lo especifica.</p>
+<p>A veces quieres que un parametro traiga un valor "de fabrica" cuando quien llama no lo especifica.</p>
 <blockquote class="def">
 <h3 id="que-significa-valor-por-defecto">🟦 ¿Que significa? — <em>Valor por defecto</em></h3>
-<p>Un <strong>valor por defecto</strong> es un valor que un parametro toma automaticamente cuando la llamada no le pasa argumento. Se escribe en la definicion con <code>parametro=valor</code>.
+<p>Un <strong>valor por defecto</strong> es el valor que un parametro toma de forma automatica cuando la llamada no le pasa argumento. Se escribe en la definicion con <code>parametro=valor</code>.
 <strong>Para que sirve:</strong> hacer parametros opcionales. Quien llama solo escribe lo que de verdad quiere cambiar.
 <strong>Donde se usa en un repo real:</strong> en PolyPaw, <code>save_onboarding_inicial(...)</code> tiene <code>target_lang=None</code>: si no se indica el idioma a aprender, queda en <code>None</code> y la funcion no lo toca.</p>
 </blockquote>
@@ -103,7 +103,7 @@ saludar(&quot;Bit&quot;)              # ¡Hola, Bit!     (usa el idioma por defe
 saludar(&quot;Bit&quot;, &quot;en&quot;)        # Hello, Bit!     (sobrescribe el defecto)
 saludar(&quot;Bit&quot;, idioma=&quot;en&quot;) # Hello, Bit!     (igual, pero por nombre)
 </code></pre>
-<p>En PolyPaw esto aparece en firmas reales como esta (recortada):</p>
+<p>En PolyPaw esto se ve en firmas reales como esta (recortada):</p>
 <pre><code class="language-python">def save_onboarding_inicial(l1_language, age, target_lang=None):
     u = _usuario_mutable()
     u[&quot;l1_language&quot;] = l1_language
@@ -114,26 +114,26 @@ saludar(&quot;Bit&quot;, idioma=&quot;en&quot;) # Hello, Bit!     (igual, pero p
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p><strong>Nunca pongas una lista o un diccionario vacios como valor por defecto</strong> (<code>def f(items=[])</code>). Python crea esa lista <em>una sola vez</em> y la comparte entre todas las llamadas: se va llenando sin que lo esperes. El truco correcto es poner <code>items=None</code> y crear la lista dentro:
+<p><strong>Nunca pongas una lista o un diccionario vacios como valor por defecto</strong> (<code>def f(items=[])</code>). Python crea esa lista <em>una sola vez</em> y la comparte entre todas las llamadas: se va llenando a tus espaldas. El truco correcto es poner <code>items=None</code> y crear la lista dentro:
 <code>python
 def f(items=None):
     if items is None:
         items = []
     ...</code>
-Por eso en <code>database_manager.py</code> veras <code>target_lang=None</code> y nunca <code>target_lang=[]</code>.</p>
+Por eso en <code>database_manager.py</code> veras <code>target_lang=None</code> y jamas <code>target_lang=[]</code>.</p>
 <h3 id="que-significa-parametros-solo-por-nombre-el-suelto">🟦 ¿Que significa? — <em>Parametros solo por nombre (el <code>*</code> suelto)</em></h3>
-<p>Cuando ves un <code>*</code> solo (sin nombre) en la lista de parametros, todo lo que venga <em>despues</em> de el debe pasarse obligatoriamente por nombre, nunca por posicion.
-<strong>Para que sirve:</strong> forzar llamadas claras cuando hay muchos opcionales parecidos, para no confundirlos.
-<strong>Donde se usa en un repo real:</strong> <code>save_onboarding_inicial(l1_language, age, target_lang=None, *, pais=None, conexion_tipo=None, ...)</code>. El <code>*</code> obliga a escribir <code>pais="CO"</code> y no solo <code>"CO"</code>, evitando que confundas pais con tipo de conexion.</p>
+<p>Cuando ves un <code>*</code> solo (sin nombre) en la lista de parametros, todo lo que venga <em>despues</em> de el hay que pasarlo obligatoriamente por nombre, nunca por posicion.
+<strong>Para que sirve:</strong> forzar llamadas claras cuando hay muchos opcionales parecidos, para que no se confundan entre si.
+<strong>Donde se usa en un repo real:</strong> <code>save_onboarding_inicial(l1_language, age, target_lang=None, *, pais=None, conexion_tipo=None, ...)</code>. El <code>*</code> obliga a escribir <code>pais="CO"</code> y no solo <code>"CO"</code>, asi no confundes el pais con el tipo de conexion.</p>
 </blockquote>
 <hr />
 <h2 id="4-args-y-kwargs-recibir-una-cantidad-indefinida">4. <code>*args</code> y <code>**kwargs</code>: recibir una cantidad indefinida</h2>
 <p>¿Y si no sabes cuantos argumentos te van a pasar? Para eso existen dos sintaxis con asteriscos.</p>
 <blockquote class="def">
 <h3 id="que-significa-args">🟦 ¿Que significa? — <em><code>*args</code></em></h3>
-<p><code>*args</code> (un asterisco) recoge <em>todos los argumentos posicionales sobrantes</em> y los mete en una <strong>tupla</strong>. El nombre <code>args</code> es convencion; lo que manda es el <code>*</code>.
-<strong>Para que sirve:</strong> escribir funciones que aceptan "uno o muchos" valores sin obligar a empaquetarlos en una lista a mano.
-<strong>Donde se usa en un repo real:</strong> util para utilidades de logging de PolyPaw, donde quieres imprimir cualquier cantidad de mensajes en una sola llamada.</p>
+<p><code>*args</code> (un asterisco) recoge <em>todos los argumentos posicionales sobrantes</em> y los mete en una <strong>tupla</strong>. El nombre <code>args</code> es una convencion; lo que de verdad manda es el <code>*</code>.
+<strong>Para que sirve:</strong> escribir funciones que aceptan "uno o muchos" valores sin obligarte a empaquetarlos en una lista a mano.
+<strong>Donde se usa en un repo real:</strong> viene de perlas para utilidades de logging en PolyPaw, cuando quieres imprimir cualquier cantidad de mensajes en una sola llamada.</p>
 </blockquote>
 <pre><code class="language-python">def registrar(*args):
     # args es una tupla con todo lo que entro
@@ -162,17 +162,17 @@ crear_perfil(&quot;Bit&quot;, edad=3, pais=&quot;CO&quot;, nivel=&quot;A1&quot;)
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>El orden en la definicion es siempre: parametros normales, luego <code>*args</code>, luego <code>**kwargs</code>. Asi: <code>def f(a, b, *args, **kwargs)</code>. Memorizalo: "primero lo fijo, despues el monton posicional, al final el monton con nombre".</p>
+<p>El orden en la definicion siempre es el mismo: parametros normales, luego <code>*args</code>, luego <code>**kwargs</code>. Asi: <code>def f(a, b, *args, **kwargs)</code>. Memorizalo con una frase: "primero lo fijo, despues el monton posicional, al final el monton con nombre".</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En JavaScript usabas <code>function f(...args)</code> (rest) para lo mismo que <code>*args</code>, y para <code>**kwargs</code> solias pasar un objeto de opciones (<code>function f(opts)</code>). Python separa los dos casos con <code>*</code> y <code>**</code>, lo que suele dejar las firmas mas explicitas.</p>
+<p>En JavaScript usabas <code>function f(...args)</code> (rest) para lo mismo que <code>*args</code>, y para <code>**kwargs</code> solias pasar un objeto de opciones (<code>function f(opts)</code>). Python separa los dos casos con <code>*</code> y <code>**</code>, y eso suele dejar las firmas mas explicitas.</p>
 </blockquote>
 <hr />
 <h2 id="5-el-return-lo-que-la-funcion-te-devuelve">5. El <code>return</code>: lo que la funcion te devuelve</h2>
-<p>Una funcion puede <em>imprimir</em> cosas, pero lo verdaderamente potente es que <em>devuelva</em> un valor para que tu sigas usandolo.</p>
+<p>Una funcion puede <em>imprimir</em> cosas, claro, pero lo realmente util es que <em>devuelva</em> un valor para que tu sigas usandolo.</p>
 <blockquote class="def">
 <h3 id="que-significa-return">🟦 ¿Que significa? — <em><code>return</code></em></h3>
 <p><code>return</code> es la palabra que hace que una funcion <em>entregue</em> un valor a quien la llamo y termine ahi mismo. Lo que escribas despues de <code>return</code> en esa rama ya no se ejecuta.
-<strong>Para que sirve:</strong> que el resultado de una funcion alimente otra parte del programa (una condicion, otra funcion, la pantalla).
+<strong>Para que sirve:</strong> que el resultado de una funcion alimente otra parte del programa: una condicion, otra funcion, la pantalla.
 <strong>Donde se usa en un repo real:</strong> <code>puede_iniciar_leccion()</code> en PolyPaw hace <code>return int(u.get("vidas", 0)) &gt; 0</code>: devuelve <code>True</code> o <code>False</code>, y la app decide si deja entrar al usuario.</p>
 </blockquote>
 <pre><code class="language-python">def puede_iniciar_leccion():
@@ -185,7 +185,7 @@ if puede_iniciar_leccion():
 else:
     print(&quot;Sin vidas. Espera o compra un refill.&quot;)
 </code></pre>
-<p>Una funcion puede tener <strong>varios <code>return</code></strong> en distintos caminos. <code>gastar_gemas</code> lo hace: devuelve <code>False</code> si no alcanza, <code>True</code> si pago.</p>
+<p>Una funcion puede tener <strong>varios <code>return</code></strong> en distintos caminos. <code>gastar_gemas</code> es un buen ejemplo: devuelve <code>False</code> si no alcanza y <code>True</code> si pago.</p>
 <blockquote class="def">
 <h3 id="que-significa-devolver-una-tupla-varios-valores-a-la-vez">🟦 ¿Que significa? — <em>Devolver una tupla (varios valores a la vez)</em></h3>
 <p>Una funcion puede devolver <strong>mas de un valor</strong> separandolos con comas tras el <code>return</code>; Python los empaqueta en una <strong>tupla</strong> y quien llama puede desempacarlos en varias variables.
@@ -209,20 +209,20 @@ if not exito and razon == &quot;no_gemas&quot;:
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Si una funcion no tiene <code>return</code> (o tiene un <code>return</code> pelado), devuelve <code>None</code>, que significa "nada". Por eso <code>perder_vida()</code> <em>si</em> hace <code>return v</code> (te da las vidas que quedan), pero <code>guardar_nivel(nivel)</code> no devuelve nada: solo guarda. Cuidado con escribir <code>x = guardar_nivel("B1")</code>: <code>x</code> quedaria en <code>None</code>.</p>
+<p>Si una funcion no tiene <code>return</code> (o tiene un <code>return</code> pelado), devuelve <code>None</code>, que viene a significar "nada". Por eso <code>perder_vida()</code> <em>si</em> hace <code>return v</code> (te da las vidas que quedan), pero <code>guardar_nivel(nivel)</code> no devuelve nada: solo guarda. Ojo con escribir <code>x = guardar_nivel("B1")</code>: <code>x</code> se quedaria en <code>None</code>.</p>
 </blockquote>
 <hr />
 <h2 id="6-ambito-scope-variables-locales-vs-globales">6. Ambito (scope): variables locales vs. globales</h2>
-<p>Aqui viene un concepto que confunde a muchos al principio, pero que es la base de funciones limpias.</p>
+<p>Aqui aparece un concepto que confunde a mucha gente al principio, pero que es la base de unas funciones limpias.</p>
 <blockquote class="def">
 <h3 id="que-significa-ambito-scope">🟦 ¿Que significa? — <em>Ambito (scope)</em></h3>
-<p>El <strong>ambito</strong> (en ingles <em>scope</em>) es la zona del programa donde una variable existe y se puede usar. Una variable creada <em>dentro</em> de una funcion solo vive ahi; afuera no existe.
+<p>El <strong>ambito</strong> (en ingles <em>scope</em>) es la zona del programa donde una variable existe y se puede usar. Una variable creada <em>dentro</em> de una funcion solo vive ahi; fuera no existe.
 <strong>Para que sirve:</strong> evitar que las variables de una funcion choquen con las de otra. Cada funcion tiene su propio "cuarto privado".
-<strong>Donde se usa en un repo real:</strong> en cada funcion de <code>database_manager.py</code>, la variable <code>u</code> (el usuario) es local: nace al cargar al usuario y muere al terminar la funcion, sin contaminar al resto.</p>
+<strong>Donde se usa en un repo real:</strong> en cada funcion de <code>database_manager.py</code>, la variable <code>u</code> (el usuario) es local: nace al cargar al usuario y muere al terminar la funcion, sin contaminar nada del resto.</p>
 <h3 id="que-significa-variable-local">🟦 ¿Que significa? — <em>Variable local</em></h3>
 <p>Una <strong>variable local</strong> es la que se crea dentro de una funcion. Solo existe mientras esa funcion corre y solo se ve ahi adentro.
 <strong>Para que sirve:</strong> guardar resultados temporales sin afectar al resto del programa.
-<strong>Donde se usa en un repo real:</strong> <code>gemas = int(u.get("gemas", 0))</code> dentro de <code>gastar_gemas</code>: esa <code>gemas</code> es local y desaparece al salir.</p>
+<strong>Donde se usa en un repo real:</strong> <code>gemas = int(u.get("gemas", 0))</code> dentro de <code>gastar_gemas</code>: esa <code>gemas</code> es local y desaparece en cuanto sales.</p>
 <h3 id="que-significa-variable-global">🟦 ¿Que significa? — <em>Variable global</em></h3>
 <p>Una <strong>variable global</strong> es la que se define <em>fuera</em> de toda funcion, en el nivel principal del archivo. Cualquier funcion del archivo puede <em>leerla</em>.
 <strong>Para que sirve:</strong> guardar constantes compartidas que no cambian: precios, limites, rutas.
@@ -236,25 +236,25 @@ def comprar_escudo():
         return False, &quot;no_gemas&quot;
     ...
 </code></pre>
-<p>Fijate: dentro de la funcion <em>leemos</em> <code>PRECIO_ESCUDO</code> sin problema, pero <code>usuario</code> es local y afuera no existe. Si intentaras <code>print(usuario)</code> despues de la funcion, Python diria <code>NameError: name 'usuario' is not defined</code>.</p>
+<p>Fijate en el contraste: dentro de la funcion <em>leemos</em> <code>PRECIO_ESCUDO</code> sin problema, pero <code>usuario</code> es local y afuera no existe. Si intentaras <code>print(usuario)</code> despues de la funcion, Python te soltaria <code>NameError: name 'usuario' is not defined</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-la-palabra-global">🟦 ¿Que significa? — <em>La palabra <code>global</code></em></h3>
 <p><code>global nombre</code> dentro de una funcion le dice a Python: "no crees una variable local; quiero <em>modificar</em> la global con ese nombre". Sin esto, asignar a una variable dentro de una funcion siempre crea una local nueva.
-<strong>Para que sirve:</strong> cambiar una global desde dentro de una funcion. Se usa poco a proposito.
-<strong>Donde se usa en un repo real:</strong> PolyPaw <em>evita</em> <code>global</code>: en vez de cambiar variables sueltas, guarda todo el estado en el JSON con <code>_persistir(u)</code>. Esa decision hace el codigo mas seguro.</p>
+<strong>Para que sirve:</strong> cambiar una global desde dentro de una funcion. Se usa poco, y a proposito.
+<strong>Donde se usa en un repo real:</strong> PolyPaw <em>evita</em> <code>global</code>: en lugar de cambiar variables sueltas, guarda todo el estado en el JSON con <code>_persistir(u)</code>. Esa decision hace el codigo mas seguro.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Abusar de <code>global</code> lleva a bugs muy dificiles: cualquier funcion puede cambiar la variable y nunca sabes quien lo hizo. Por eso las constantes globales de PolyPaw (<code>PRECIO_ESCUDO</code>) solo se <em>leen</em>, jamas se reasignan dentro de funciones. Si necesitas que una funcion "recuerde" algo entre llamadas, mejor devuelvelo con <code>return</code> o guardalo en disco, como hace PolyPaw.</p>
+<p>Abusar de <code>global</code> lleva a bugs durisimos de cazar: cualquier funcion puede cambiar la variable y nunca sabes quien fue. Por eso las constantes globales de PolyPaw (<code>PRECIO_ESCUDO</code>) solo se <em>leen</em>, nunca se reasignan dentro de funciones. Si necesitas que una funcion "recuerde" algo entre llamadas, mejor devuelvelo con <code>return</code> o guardalo en disco, tal como hace PolyPaw.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En JavaScript ya viviste algo parecido con <code>let</code>/<code>const</code> y el scope de bloque. La gran diferencia: en Python, asignar dentro de una funcion crea automaticamente una variable <em>local</em>, aunque exista una global con el mismo nombre, salvo que declares <code>global</code>.</p>
+<p>En JavaScript ya viviste algo parecido con <code>let</code>/<code>const</code> y el scope de bloque. La gran diferencia: en Python, asignar dentro de una funcion crea de forma automatica una variable <em>local</em>, aunque exista una global con el mismo nombre, salvo que declares <code>global</code>.</p>
 </blockquote>
 <hr />
 <h2 id="7-funciones-lambda-funciones-de-una-sola-linea">7. Funciones lambda: funciones de una sola linea</h2>
-<p>A veces necesitas una funcion tan pequeña que ponerle nombre con <code>def</code> parece exagerado. Para eso esta <code>lambda</code>.</p>
+<p>A veces necesitas una funcion tan pequeña que ponerle nombre con <code>def</code> parece demasiado. Para esos casos esta <code>lambda</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-lambda">🟦 ¿Que significa? — <em>Funcion lambda</em></h3>
-<p>Una <strong>funcion lambda</strong> es una funcion anonima (sin nombre) que cabe en una sola linea. Se escribe <code>lambda parametros: expresion</code>, y el resultado de la expresion es lo que devuelve.
-<strong>Para que sirve:</strong> dar una mini-funcion "al vuelo" a otra funcion que la necesita, sobre todo para ordenar o filtrar.
-<strong>Donde se usa en un repo real:</strong> para ordenar la lista de logros de PolyPaw por su color o nombre, podrias pasar una <code>lambda</code> a <code>sorted(...)</code> sin definir una funcion aparte.</p>
+<p>Una <strong>funcion lambda</strong> es una funcion anonima (sin nombre) que cabe en una sola linea. Se escribe <code>lambda parametros: expresion</code>, y lo que devuelve es el resultado de esa expresion.
+<strong>Para que sirve:</strong> entregar una mini-funcion "al vuelo" a otra funcion que la necesita, sobre todo para ordenar o filtrar.
+<strong>Donde se usa en un repo real:</strong> para ordenar la lista de logros de PolyPaw por su color o su nombre, podrias pasarle una <code>lambda</code> a <code>sorted(...)</code> sin definir una funcion aparte.</p>
 </blockquote>
 <pre><code class="language-python"># Una lambda guardada en una variable (didactico):
 doble = lambda n: n * 2
@@ -264,7 +264,7 @@ print(doble(21))      # 42
 def doble(n):
     return n * 2
 </code></pre>
-<p>Donde de verdad brilla es como argumento de <code>sorted</code>, para decir <em>por que campo</em> ordenar:</p>
+<p>Donde de verdad se luce es como argumento de <code>sorted</code>, para indicar <em>por que campo</em> ordenar:</p>
 <pre><code class="language-python">logros = [
     {&quot;id&quot;: &quot;acumulador&quot;, &quot;color&quot;: &quot;#06B6D4&quot;},
     {&quot;id&quot;: &quot;dedicado&quot;,   &quot;color&quot;: &quot;#10B981&quot;},
@@ -275,23 +275,23 @@ def doble(n):
 ordenados = sorted(logros, key=lambda x: x[&quot;id&quot;])
 print([a[&quot;id&quot;] for a in ordenados])   # ['acumulador', 'constante', 'dedicado']
 </code></pre>
-<p>Ese <code>key=lambda x: x["id"]</code> significa: "para comparar dos logros, mira su campo <code>id</code>". La lambda recibe un logro (<code>x</code>) y devuelve el valor por el cual ordenar.</p>
+<p>Ese <code>key=lambda x: x["id"]</code> se lee asi: "para comparar dos logros, fijate en su campo <code>id</code>". La lambda recibe un logro (<code>x</code>) y devuelve el valor por el que se va a ordenar.</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Si tu lambda empieza a tener <code>if</code> largos o varias lineas, ya no es trabajo para una lambda: define una funcion normal con <code>def</code>. Las lambdas son para una expresion corta y nada mas.</p>
+<p>Si tu lambda empieza a llenarse de <code>if</code> largos o de varias lineas, ya no es trabajo para una lambda: define una funcion normal con <code>def</code>. Las lambdas son para una expresion corta y nada mas.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>En JavaScript usabas las <em>arrow functions</em>: <code>array.sort((a, b) =&gt; a.id - b.id)</code>. La <code>lambda</code> de Python es el equivalente directo para casos cortos, y la pasas a <code>sorted(..., key=...)</code>.</p>
+<p>En JavaScript usabas las <em>arrow functions</em>: <code>array.sort((a, b) =&gt; a.id - b.id)</code>. La <code>lambda</code> de Python es el equivalente directo para casos cortos, y se la pasas a <code>sorted(..., key=...)</code>.</p>
 </blockquote>
 <hr />
 <h2 id="8-type-hints-anotaciones-de-tipo-basicas">8. Type hints: anotaciones de tipo basicas</h2>
-<p>Si abriste <code>database_manager.py</code>, viste cosas como <code>def gastar_gemas(cantidad: int) -&gt; bool:</code>. Esos <code>: int</code> y <code>-&gt; bool</code> son <em>type hints</em>.</p>
+<p>Si abriste <code>database_manager.py</code>, te habras topado con cosas como <code>def gastar_gemas(cantidad: int) -&gt; bool:</code>. Esos <code>: int</code> y <code>-&gt; bool</code> son <em>type hints</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-type-hint-anotacion-de-tipo">🟦 ¿Que significa? — <em>Type hint (anotacion de tipo)</em></h3>
-<p>Un <strong>type hint</strong> es una nota que escribes en la firma de una funcion para indicar <em>que tipo</em> de dato esperas en cada parametro (<code>cantidad: int</code>) y que tipo devuelve la funcion (<code>-&gt; bool</code>). Son <strong>opcionales</strong> y Python <em>no</em> los obliga en tiempo de ejecucion: son ayuda para ti y para el editor.
-<strong>Para que sirve:</strong> documentar la funcion, ayudar al editor a autocompletar y avisar de errores antes de correr el programa.
+<p>Un <strong>type hint</strong> es una nota que escribes en la firma de una funcion para indicar <em>que tipo</em> de dato esperas en cada parametro (<code>cantidad: int</code>) y que tipo devuelve la funcion (<code>-&gt; bool</code>). Son <strong>opcionales</strong> y Python <em>no</em> los obliga en tiempo de ejecucion: son una ayuda para ti y para el editor.
+<strong>Para que sirve:</strong> documentar la funcion, ayudar al editor a autocompletar y avisarte de errores antes de correr el programa.
 <strong>Donde se usa en un repo real:</strong> casi todas las funciones de <code>database_manager.py</code> los usan, por ejemplo <code>def perder_vida() -&gt; int:</code> (devuelve las vidas restantes) y <code>def save_user(l1_language: str, age: int) -&gt; None:</code>.</p>
 </blockquote>
-<p>Compara la version con y sin anotaciones:</p>
+<p>Compara la version con anotaciones y sin ellas:</p>
 <pre><code class="language-python"># Sin type hints:
 def gastar_gemas(cantidad):
     ...
@@ -306,20 +306,20 @@ def gastar_gemas(cantidad: int) -&gt; bool:
 <blockquote class="def">
 <h3 id="que-significa-optional-y-el-tipo-none">🟦 ¿Que significa? — <em><code>Optional</code> y el tipo <code>None</code></em></h3>
 <p><code>Optional[str]</code> (o la forma moderna <code>str | None</code>) anuncia que un valor puede ser un texto <em>o</em> <code>None</code> (ausente). <code>None</code> es el valor especial de Python para "nada / vacio".
-<strong>Para que sirve:</strong> dejar claro que un parametro o resultado a veces no trae dato.
+<strong>Para que sirve:</strong> dejar claro que un parametro o un resultado a veces no trae dato.
 <strong>Donde se usa en un repo real:</strong> <code>target_lang: str | None = None</code> en <code>save_onboarding_inicial</code>: el idioma a aprender puede venir o no.</p>
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>Los type hints <strong>no validan nada por si solos</strong>. Si declaras <code>cantidad: int</code> y alguien llama <code>gastar_gemas("hola")</code>, Python <em>no</em> se queja al correr; el error saltara mas adentro. Por eso PolyPaw, ademas de anotar, <em>convierte de verdad</em> con <code>int(...)</code> dentro de la funcion. La anotacion documenta; la conversion protege.</p>
+<p>Los type hints <strong>no validan nada por si solos</strong>. Si declaras <code>cantidad: int</code> y alguien llama <code>gastar_gemas("hola")</code>, Python <em>no</em> protesta al correr; el error saltara mas adentro. Por eso PolyPaw, ademas de anotar, <em>convierte de verdad</em> con <code>int(...)</code> dentro de la funcion. La anotacion documenta; la conversion protege.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Veras al principio de <code>database_manager.py</code> la linea <code>from typing import Any, Optional</code>. Eso importa los nombres <code>Any</code> (cualquier tipo) y <code>Optional</code> para poder usarlos en las anotaciones. Es normal y no cambia como corre el programa.</p>
+<p>Al principio de <code>database_manager.py</code> veras la linea <code>from typing import Any, Optional</code>. Eso importa los nombres <code>Any</code> (cualquier tipo) y <code>Optional</code> para poder usarlos en las anotaciones. Es de lo mas normal y no cambia en nada como corre el programa.</p>
 </blockquote>
 <hr />
 <h2 id="9-funciones-puras-el-secreto-de-un-codigo-confiable">9. Funciones puras: el secreto de un codigo confiable</h2>
-<p>Llegamos a una idea que parece teorica pero que en la practica te ahorra horas de bugs.</p>
+<p>Llegamos a una idea que suena teorica pero que, en la practica, te ahorra horas de bugs.</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-pura">🟦 ¿Que significa? — <em>Funcion pura</em></h3>
 <p>Una <strong>funcion pura</strong> cumple dos reglas: (1) con las mismas entradas devuelve <em>siempre</em> la misma salida, y (2) no cambia nada de fuera de ella (no escribe archivos, no toca variables globales, no imprime). Solo recibe, calcula y devuelve.
-<strong>Para que sirve:</strong> son faciles de probar, faciles de entender y nunca te sorprenden, porque su resultado depende solo de lo que les pasas.
+<strong>Para que sirve:</strong> son faciles de probar, faciles de entender y nunca te dan sorpresas, porque su resultado depende solo de lo que les pasas.
 <strong>Donde se usa en un repo real:</strong> <code>calcular_age_tier(age)</code> en PolyPaw es casi pura: le das una edad y te devuelve <code>"teen"</code>, <code>"adult"</code> o <code>"senior"</code>, sin tocar nada mas.</p>
 </blockquote>
 <pre><code class="language-python">def calcular_age_tier(age):
@@ -333,14 +333,14 @@ def gastar_gemas(cantidad: int) -&gt; bool:
         return &quot;senior&quot;
     return &quot;adult&quot;
 </code></pre>
-<p>Llamala mil veces con <code>15</code> y siempre devuelve <code>"teen"</code>. No guarda nada, no imprime, no depende del disco. Eso es una funcion pura, y es facilisima de probar:</p>
+<p>Llamala mil veces con <code>15</code> y siempre te devuelve <code>"teen"</code>. No guarda nada, no imprime, no depende del disco. Eso es una funcion pura, y resulta facilisima de probar:</p>
 <pre><code class="language-python">print(calcular_age_tier(15))   # teen
 print(calcular_age_tier(70))   # senior
 print(calcular_age_tier(30))   # adult
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-efecto-secundario">🟦 ¿Que significa? — <em>Efecto secundario</em></h3>
-<p>Un <strong>efecto secundario</strong> es cualquier cosa que una funcion hace <em>ademas</em> de devolver un valor: escribir un archivo, imprimir, cambiar una variable global o un dato compartido. No son malos; pero conviene saber cuales funciones los tienen.
+<p>Un <strong>efecto secundario</strong> es cualquier cosa que una funcion hace <em>ademas</em> de devolver un valor: escribir un archivo, imprimir, cambiar una variable global o un dato compartido. No son malos; pero conviene tener claro cuales funciones los tienen.
 <strong>Para que sirve:</strong> distinguir las funciones que solo calculan (puras) de las que cambian el mundo (con efectos), para razonar mejor sobre el programa.
 <strong>Donde se usa en un repo real:</strong> <code>guardar_nivel(nivel)</code> <em>tiene</em> efecto secundario: escribe en el disco con <code>_persistir(u)</code>. <code>calcular_age_tier(age)</code> <em>no</em> tiene ninguno.</p>
 </blockquote>
@@ -358,11 +358,11 @@ def perder_vida():
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>Una receta que usa PolyPaw sin decirlo: <em>separa el calculo del guardado</em>. Las funciones puras como <code>calcular_age_tier</code> o <code>canonizar_nivel_cefr_almacenado</code> deciden el "que"; funciones como <code>perder_vida</code> o <code>guardar_nivel</code> se encargan del "guardar". Mantener esa frontera hace que puedas probar la logica sin tocar el disco.</p>
+<p>Hay una receta que PolyPaw aplica sin anunciarlo: <em>separa el calculo del guardado</em>. Las funciones puras como <code>calcular_age_tier</code> o <code>canonizar_nivel_cefr_almacenado</code> deciden el "que"; funciones como <code>perder_vida</code> o <code>guardar_nivel</code> se ocupan del "guardar". Mantener esa frontera te deja probar la logica sin tocar el disco.</p>
 </blockquote>
 <hr />
 <h2 id="10-un-recorrido-por-database_managerpy">10. Un recorrido por <code>database_manager.py</code></h2>
-<p>Ya tienes el vocabulario. Demos una vuelta por funciones reales del archivo y nombremos lo que vemos.</p>
+<p>Ya tienes el vocabulario en la mochila. Demos una vuelta por funciones reales del archivo y vayamos poniendo nombre a lo que aparece.</p>
 <pre><code class="language-python">def comprar_refill_vidas() -&gt; bool:
     u = _usuario_mutable()                 # variable LOCAL
     gemas = int(u.get(&quot;gemas&quot;, 0))         # variable LOCAL
@@ -375,8 +375,8 @@ def perder_vida():
     _persistir(u)                          # EFECTO SECUNDARIO: guarda en disco
     return True                            # segundo RETURN: compra exitosa
 </code></pre>
-<p>En esas pocas lineas estan casi todos los conceptos del capitulo: variables locales (<code>u</code>, <code>gemas</code>, <code>mx</code>), lectura de globales (<code>PRECIO_REFILL_VIDAS</code>, <code>VIDAS_MAX_DEFAULT</code>), varios <code>return</code> y un efecto secundario claro (<code>_persistir</code>).</p>
-<p>Otra, con type hints y devolucion de tupla:</p>
+<p>En esas pocas lineas se asoman casi todos los conceptos del capitulo: variables locales (<code>u</code>, <code>gemas</code>, <code>mx</code>), lectura de globales (<code>PRECIO_REFILL_VIDAS</code>, <code>VIDAS_MAX_DEFAULT</code>), varios <code>return</code> y un efecto secundario bien visible (<code>_persistir</code>).</p>
+<p>Otra, esta con type hints y devolucion de tupla:</p>
 <pre><code class="language-python">def comprar_una_vida() -&gt; tuple[bool, str]:
     u = _usuario_mutable()
     vidas = int(u.get(&quot;vidas&quot;, 0))
@@ -391,10 +391,10 @@ def perder_vida():
     _persistir(u)
     return True, &quot;ok&quot;
 </code></pre>
-<p>El <code>-&gt; tuple[bool, str]</code> te dice de un vistazo: "devuelvo dos cosas, un booleano y un texto". Quien llama hace <code>exito, razon = comprar_una_vida()</code> y ya sabe que paso <em>y</em> por que. Esta es la elegancia de las funciones bien diseñadas de PolyPaw: la firma cuenta la historia antes de leer el cuerpo.</p>
+<p>El <code>-&gt; tuple[bool, str]</code> te lo cuenta de un vistazo: "devuelvo dos cosas, un booleano y un texto". Quien llama hace <code>exito, razon = comprar_una_vida()</code> y ya sabe que paso <em>y</em> por que. Ahi esta la elegancia de las funciones bien diseñadas de PolyPaw: la firma cuenta la historia antes de que leas el cuerpo.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>Date cuenta de un patron: muchas funciones de PolyPaw empiezan con <code>u = _usuario_mutable()</code> y terminan con <code>_persistir(u)</code>. Es la receta "carga el estado, modificalo en una variable local, guardalo". Reconocer ese sandwich te ayuda a leer cualquier funcion del archivo en segundos.</p>
+<p>Fijate en un patron: muchas funciones de PolyPaw arrancan con <code>u = _usuario_mutable()</code> y terminan con <code>_persistir(u)</code>. Es la receta de siempre: "carga el estado, modificalo en una variable local, guardalo". Reconocer ese sandwich te deja leer cualquier funcion del archivo en segundos.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -433,7 +433,7 @@ def perder_vida():
 </li>
 </ol>
 <hr />
-<p>Con esto las funciones dejaron de ser cajas negras. Sabes como entran los datos (posicion, nombre, defaults, <code>*args</code>, <code>**kwargs</code>), como salen (<code>return</code>, tuplas), donde viven las variables (scope) y por que las funciones puras son tus mejores amigas. Bit guarda los lentes de mecanico, satisfecho: ya entiendes el motor de PolyPaw por dentro. En el proximo capitulo subiremos un escalon mas.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
+<p>Con esto las funciones dejaron de ser cajas negras para ti. Sabes como entran los datos (posicion, nombre, defaults, <code>*args</code>, <code>**kwargs</code>), como salen (<code>return</code>, tuplas), donde viven las variables (scope) y por que las funciones puras son tus mejores amigas. Bit guarda los lentes de mecanico, satisfecho: ya entiendes el motor de PolyPaw por dentro. En el proximo capitulo subimos un escalon mas.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>
 <script>

@@ -19,97 +19,106 @@
 <main class="contenedor">
 <h1 id="capitulo-03-modificar-y-relacionar">Capítulo 03 — Modificar y relacionar</h1>
 <blockquote>
-<p>Ya sabes <strong>leer</strong> datos. Ahora aprendes a <strong>crear, cambiar y borrar</strong> filas, y a <strong>combinar
-tablas relacionadas</strong> con <code>JOIN</code>. Con esto cierras las cuatro operaciones básicas de cualquier
-base de datos, conocidas como <strong>CRUD</strong>.</p>
+<p>Ya sabes <strong>leer</strong> datos. Toca el otro lado: <strong>crear, cambiar y borrar</strong> filas, y también
+<strong>combinar tablas relacionadas</strong> con <code>JOIN</code>. Cuando termines este capítulo habrás visto las
+cuatro operaciones básicas que hace cualquier base de datos, las que se conocen como <strong>CRUD</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="1-crud-las-cuatro-operaciones">1. CRUD: las cuatro operaciones</h2>
 <blockquote class="def">
 <h3 id="que-significa-crud">🟦 ¿Qué significa? — <em>CRUD</em></h3>
-<p><strong>CRUD</strong> son las iniciales de las cuatro cosas que se hacen con datos:
+<p><strong>CRUD</strong> son las iniciales de las cuatro cosas que puedes hacer con datos:
 - <strong>C</strong>reate (crear) → <code>INSERT</code>
-- <strong>R</strong>ead (leer) → <code>SELECT</code> (capítulo anterior)
+- <strong>R</strong>ead (leer) → <code>SELECT</code> (lo viste en el capítulo anterior)
 - <strong>U</strong>pdate (actualizar) → <code>UPDATE</code>
 - <strong>D</strong>elete (borrar) → <code>DELETE</code>
-Toda app de datos, en el fondo, hace CRUD. RachaSimple crea hábitos, los lee, los actualiza y
-los borra: CRUD puro.</p>
+Rasca cualquier app que maneje datos y, debajo, solo encontrarás CRUD. RachaSimple crea hábitos,
+los lee, los actualiza y los borra. No hay más misterio: CRUD puro.</p>
 </blockquote>
 <hr />
 <h2 id="2-insert-crear-filas">2. <code>INSERT</code>: crear filas</h2>
 <blockquote class="def">
 <h3 id="que-significa-insert-into">🟦 ¿Qué significa? — <em><code>INSERT INTO</code></em></h3>
-<p>Agrega una fila nueva a una tabla:
+<p>Mete una fila nueva en una tabla:
 <code>sql
 INSERT INTO habitos (nombre, meta, color, usuario_id)
 VALUES ('Caminar', 25, '#2BB673', 7);</code>
-Primero las <strong>columnas</strong>, luego los <strong>valores</strong> en el mismo orden. El <code>id</code> normalmente <strong>no</strong> se
-pone: la base de datos lo asigna sola (clave primaria autoincremental).</p>
+Primero nombras las <strong>columnas</strong> y después pasas los <strong>valores</strong> en ese mismo orden. El <code>id</code>
+casi nunca lo escribes tú: la base de datos lo asigna sola, porque es una clave primaria que se
+autoincrementa.</p>
 </blockquote>
 <hr />
 <h2 id="3-update-cambiar-filas">3. <code>UPDATE</code>: cambiar filas</h2>
 <blockquote class="def">
 <h3 id="que-significa-update-set-where">🟦 ¿Qué significa? — <em><code>UPDATE ... SET ... WHERE</code></em></h3>
-<p>Cambia datos de filas existentes. <code>SET</code> indica qué columnas cambiar; <code>WHERE</code> <strong>a cuáles filas</strong>:
+<p>Modifica datos de filas que ya existen. Con <code>SET</code> dices qué columnas cambiar; con <code>WHERE</code>, <strong>en
+qué filas</strong>:
 <code>sql
 UPDATE habitos SET meta = 30 WHERE id = 1;</code>
-"En la tabla habitos, pon meta = 30, en la fila cuyo id sea 1."</p>
+Léelo tal cual suena: "en la tabla habitos, pon meta = 30 en la fila cuyo id sea 1."</p>
 <h3 id="cuidado-nunca-olvides-el-where-en-updatedelete">⚠️ Cuidado — ¡NUNCA olvides el <code>WHERE</code> en UPDATE/DELETE!</h3>
-<p>Esto es <strong>crítico</strong>. Si escribes <code>UPDATE habitos SET meta = 30;</code> <strong>sin <code>WHERE</code></strong>, cambias la
-meta de <strong>TODAS</strong> las filas de la tabla. Lo mismo con <code>DELETE</code>. Es un error famoso que ha
-borrado bases de datos enteras en empresas reales. Regla de oro: <strong>antes de un UPDATE/DELETE,
-escribe primero el <code>WHERE</code></strong>, y si dudas, pruébalo como <code>SELECT</code> para ver a qué filas afectará.</p>
+<p>Esto es de lo más serio del capítulo. Si escribes <code>UPDATE habitos SET meta = 30;</code> <strong>sin <code>WHERE</code></strong>,
+le cambias la meta a <strong>TODAS</strong> las filas de la tabla, no solo a la que querías. Con <code>DELETE</code> pasa
+igual, pero peor: borras todo. Es un error famoso, de los que han vaciado bases de datos enteras
+en empresas de verdad. Quédate con la regla de oro: <strong>antes de un UPDATE o un DELETE, escribe
+primero el <code>WHERE</code></strong>. Y si tienes la menor duda de a qué filas vas a afectar, pruébalo como
+<code>SELECT</code> y míralo con tus propios ojos antes de tocar nada.</p>
 </blockquote>
 <hr />
 <h2 id="4-delete-borrar-filas">4. <code>DELETE</code>: borrar filas</h2>
 <blockquote class="def">
 <h3 id="que-significa-delete-from-where">🟦 ¿Qué significa? — <em><code>DELETE FROM ... WHERE</code></em></h3>
-<p>Borra filas que cumplen una condición:
+<p>Borra las filas que cumplen una condición:
 <code>sql
 DELETE FROM habitos WHERE id = 3;</code>
-"Borra de habitos la fila cuyo id sea 3." (Recuerda el aviso de arriba: sin <code>WHERE</code>, borra todo.)</p>
+"Borra de habitos la fila cuyo id sea 3." Y recuerda el aviso de arriba: sin <code>WHERE</code>, se va todo.</p>
 <h3 id="tip-borrado-suave-soft-delete">💡 Tip — Borrado "suave" (soft delete)</h3>
-<p>Muchas apps <strong>no borran de verdad</strong>: marcan la fila como inactiva (una columna <code>archivado = true</code>)
-para poder recuperarla. Es lo que hace RachaSimple para "no perder" tu progreso al pausar un
-hábito. Un <code>UPDATE</code> disfrazado de borrado, más seguro que un <code>DELETE</code>.</p>
+<p>Muchas apps <strong>no borran nada de verdad</strong>. En vez de eso, marcan la fila como inactiva (una columna
+<code>archivado = true</code>) para poder recuperarla más adelante. Es justo lo que hace RachaSimple cuando
+pausas un hábito: así no pierdes el progreso. En el fondo es un <code>UPDATE</code> disfrazado de borrado, y
+resulta mucho más seguro que un <code>DELETE</code> de verdad.</p>
 </blockquote>
 <hr />
 <h2 id="5-relacionar-tablas-join">5. Relacionar tablas: <code>JOIN</code></h2>
-<p>Aquí brilla lo "relacional". Recuerda: la tabla <code>habitos</code> guarda <code>usuario_id</code>, no el nombre del
-usuario. Para mostrar "Leer — de Edwar", hay que <strong>combinar</strong> las dos tablas.</p>
+<p>Aquí es donde lo "relacional" cobra sentido. Acuérdate de que la tabla <code>habitos</code> guarda el
+<code>usuario_id</code>, no el nombre del usuario. Así que para mostrar algo como "Leer — de Edwar" no te
+queda otra que <strong>combinar</strong> las dos tablas.</p>
 <blockquote class="def">
 <h3 id="que-significa-join-combinar-tablas">🟦 ¿Qué significa? — <em><code>JOIN</code> (combinar tablas)</em></h3>
-<p><code>JOIN</code> une filas de dos tablas <strong>emparejándolas por una columna en común</strong> (la clave foránea
-con la primaria). 
+<p><code>JOIN</code> une filas de dos tablas <strong>emparejándolas por una columna que tienen en común</strong> (la clave
+foránea de una con la primaria de la otra).
 <code>sql
 SELECT habitos.nombre, usuarios.nombre
 FROM habitos
 JOIN usuarios ON habitos.usuario_id = usuarios.id;</code>
 "Dame el nombre del hábito y el nombre del usuario, combinando habitos con usuarios donde el
-<code>usuario_id</code> del hábito coincida con el <code>id</code> del usuario." El resultado mezcla datos de ambas
-tablas en una sola respuesta.</p>
+<code>usuario_id</code> del hábito coincida con el <code>id</code> del usuario." En una sola respuesta te llegan datos
+mezclados de las dos tablas.</p>
 <h3 id="que-significa-la-clausula-on">🟦 ¿Qué significa? — <em>La cláusula <code>ON</code></em></h3>
-<p>El <code>ON</code> dice <strong>cómo emparejar</strong> las filas: la condición de coincidencia (normalmente
-<code>tablaA.clave_foranea = tablaB.clave_primaria</code>). Es el "pegamento" del JOIN.</p>
+<p>El <code>ON</code> es donde explicas <strong>cómo emparejar</strong> las filas: la condición de coincidencia, que casi
+siempre tiene la forma <code>tablaA.clave_foranea = tablaB.clave_primaria</code>. Piensa en él como el
+pegamento que mantiene unido al JOIN.</p>
 <h3 id="tip-por-que-no-se-duplican-los-datos">💡 Tip — Por qué no se duplican los datos</h3>
-<p>Sin relaciones, tendrías que escribir el nombre del usuario en <strong>cada</strong> hábito; si cambia su
-nombre, tendrías que actualizarlo en mil sitios. Con relaciones + JOIN, el nombre vive <strong>en un
-solo lugar</strong> (la tabla usuarios) y lo "traes" cuando lo necesitas. Eso es <strong>normalización</strong>:
-guardar cada dato una sola vez. Una de las grandes ventajas de las bases de datos relacionales.</p>
+<p>Si no hubiera relaciones, tendrías que copiar el nombre del usuario en <strong>cada</strong> hábito. Y el día
+que esa persona cambie de nombre, te tocaría corregirlo en mil sitios a la vez. Con relaciones más
+JOIN, el nombre vive <strong>en un único lugar</strong> (la tabla usuarios) y lo "traes" solo cuando lo
+necesitas. A eso se le llama <strong>normalización</strong>: guardar cada dato una sola vez. Es una de las
+grandes razones por las que existen las bases de datos relacionales.</p>
 </blockquote>
 <hr />
 <h2 id="6-crud-en-tus-apps">6. CRUD en tus apps</h2>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>El cliente de Supabase de RachaSimple expone el CRUD así (y por debajo es SQL):
+<p>El cliente de Supabase de RachaSimple te ofrece el CRUD con esta pinta (y por debajo no es más
+que SQL):
 | Acción | Cliente Supabase | SQL equivalente |
 |---|---|---|
 | Crear | <code>.insert({...})</code> | <code>INSERT INTO ...</code> |
 | Leer | <code>.select('*')</code> | <code>SELECT * FROM ...</code> |
 | Actualizar | <code>.update({...}).eq('id', 1)</code> | <code>UPDATE ... WHERE id = 1</code> |
 | Borrar | <code>.delete().eq('id', 3)</code> | <code>DELETE ... WHERE id = 3</code> |
-En la carpeta <code>RachaSimple/src/repositories/</code> cada archivo (<code>habits.ts</code>, <code>checkins.ts</code>)
-encapsula el CRUD de una tabla. Ahora entiendes qué hace cada uno por dentro.</p>
+En la carpeta <code>RachaSimple/src/repositories/</code>, cada archivo (<code>habits.ts</code>, <code>checkins.ts</code>)
+se encarga del CRUD de una tabla. Ahora que sabes SQL, entiendes qué hace cada uno por dentro.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

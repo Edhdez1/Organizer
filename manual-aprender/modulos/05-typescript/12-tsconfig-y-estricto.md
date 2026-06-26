@@ -5,15 +5,16 @@
 </p>
 
 
-> Hasta ahora escribías tipos y, por arte de magia, el editor te corregía. Pero ¿quién decide
-> **qué tan estricto** es TypeScript contigo? ¿Quién le dice «mira en esta carpeta», «este código
-> es para un navegador moderno» o «no me dejes pasar ni un solo `null` despistado»? La respuesta
-> es un archivo pequeño y muy poderoso: **`tsconfig.json`**. Es el panel de control de TypeScript.
-> En este capítulo lo vamos a abrir tornillo por tornillo usando los `tsconfig.json` **reales** de
-> RachaSimple (la app de hábitos) y de Faro (tu organizador de proyectos). Verás qué hace cada
-> opción, por qué el **modo estricto** es tu mejor amigo aunque al principio parezca un profe muy
-> exigente, y cómo **leer los errores del compilador** sin entrar en pánico. Bit, tu ajolote, te
-> recuerda algo: TypeScript es JavaScript con tipos, y `tsconfig.json` es solo el reglamento que
+> Hasta ahora escribías tipos y el editor te corregía como si supiera lo que hacías. Pero ¿quién
+> decide **qué tan estricto** es TypeScript contigo? ¿Quién le dice «mira en esta carpeta», «este
+> código es para un navegador moderno» o «no me dejes pasar ni un `null` despistado»? Todo eso lo
+> manda un archivo pequeño que pesa más de lo que parece: **`tsconfig.json`**. Es el panel de control
+> de TypeScript. En este capítulo lo vamos a abrir tornillo por tornillo, y no con ejemplos
+> inventados, sino con los `tsconfig.json` **reales** de RachaSimple (la app de hábitos) y de Faro
+> (tu organizador de proyectos). Verás qué hace cada opción, por qué el **modo estricto** acaba
+> siendo tu mejor amigo aunque al principio parezca un profe demasiado exigente, y cómo **leer los
+> errores del compilador** sin que te dé un vuelco el estómago. Bit, tu ajolote, te recuerda una cosa
+> sencilla: TypeScript es JavaScript con tipos, y `tsconfig.json` no es más que el reglamento que
 > dice **cómo** se revisan esos tipos. Nada que no puedas dominar. Vamos.
 
 ---
@@ -22,8 +23,8 @@
 
 Cada proyecto de TypeScript tiene en su raíz un archivo llamado `tsconfig.json`. Cuando ejecutas el
 compilador (la herramienta que revisa y traduce tu código), lo primero que hace es **buscar este
-archivo** y leer sus instrucciones. Sin él, TypeScript no sabría qué carpetas mirar ni con qué
-reglas trabajar.
+archivo** y leer sus instrucciones. Sin él, TypeScript estaría a ciegas: no sabría qué carpetas mirar
+ni con qué reglas trabajar.
 
 > ### 🟦 ¿Qué significa? — *Compilador (`tsc`)*
 > El **compilador** de TypeScript es el programa que **revisa tus tipos** y **traduce** tu `.ts`/`.tsx`
@@ -39,8 +40,8 @@ reglas trabajar.
 > (`/Organizer/tsconfig.json`) y de RachaSimple (`/RachaSimple/tsconfig.json`). Cada repo tiene el
 > suyo.
 
-Recuerda del Módulo 03: un archivo `.json` es solo datos en pares «clave: valor». Aquí la clave más
-importante es `compilerOptions`, que agrupa todos los ajustes del compilador.
+Te acordarás del Módulo 03: un archivo `.json` no es más que datos en pares «clave: valor». Aquí la
+clave que de verdad importa es `compilerOptions`, que agrupa todos los ajustes del compilador.
 
 ```typescript
 // Estructura mínima de un tsconfig.json
@@ -54,9 +55,9 @@ importante es `compilerOptions`, que agrupa todos los ajustes del compilador.
 ```
 
 > ### 💡 Tip
-> No tienes que memorizar las opciones. Casi siempre el `tsconfig.json` lo genera la herramienta que
-> usas (Vite en RachaSimple, Next.js en Faro) y tú solo lo **ajustas**. Lo importante es saber
-> **leerlo**.
+> No hace falta que te memorices las opciones. Casi siempre el `tsconfig.json` lo genera la
+> herramienta que usas (Vite en RachaSimple, Next.js en Faro) y tú solo lo **ajustas**. Lo que de
+> verdad importa es saber **leerlo**.
 
 ---
 
@@ -76,7 +77,7 @@ que viven fuera de `compilerOptions`.
 > revisando código que no es tuyo. **Dónde se usa:** Faro pone `"exclude": ["node_modules"]` para no
 > revisar las librerías descargadas (¡miles de archivos que no escribiste tú!).
 
-Mira los dos repos lado a lado. Faro (Next.js):
+Pon los dos repos lado a lado. Faro (Next.js):
 
 ```typescript
 // Faro: /Organizer/tsconfig.json (final del archivo)
@@ -133,14 +134,14 @@ funciones del lenguaje** puedes usar.
 ```
 
 > ### 💡 Tip
-> Regla mental sencilla: **`target` = a qué JavaScript traduzco**, **`lib` = qué tipos doy por
-> existentes**, **`module` = cómo conecto los archivos entre sí**. Tres preguntas distintas, tres
-> opciones distintas.
+> Una regla mental que cuesta poco recordar: **`target` = a qué JavaScript traduzco**, **`lib` = qué
+> tipos doy por existentes**, **`module` = cómo conecto los archivos entre sí**. Tres preguntas
+> distintas, tres opciones distintas.
 
 > ### ⚠️ Cuidado
 > Si pones `"lib"` sin `"DOM"` y luego usas `document.getElementById`, el compilador te dirá que
 > `document` no existe. No es que tu código esté mal: es que le quitaste al compilador la «lista de
-> cosas conocidas» del navegador. En RachaSimple y Faro nunca falta `DOM` por eso.
+> cosas conocidas» del navegador. Por eso en RachaSimple y Faro nunca falta `DOM`.
 
 ---
 
@@ -161,7 +162,7 @@ opciones gobiernan esa búsqueda.
 > usa:** ambos repos definen el alias `@/*`. En el Capítulo 11 viste `import { Badge } from
 > "@/components/ui"` en Faro: ese `@` es exactamente este atajo.
 
-Los dos repos usan el **mismo** alias `@`, solo que apuntando a su propia carpeta `src`:
+Los dos repos usan el **mismo** alias `@`, solo que cada uno lo hace apuntar a su propia carpeta `src`:
 
 ```typescript
 // Faro
@@ -183,8 +184,8 @@ Los dos repos usan el **mismo** alias `@`, solo que apuntando a su propia carpet
 
 > ### 🔎 En tu código
 > Gracias a estos `paths`, cuando un archivo de RachaSimple necesita el hook de hábitos puede
-> escribir `import { useHabits } from "@/hooks/useHabits"` desde **cualquier** carpeta, sin contar
-> cuántos `../` necesita. El alias siempre apunta al mismo lugar.
+> escribir `import { useHabits } from "@/hooks/useHabits"` desde **cualquier** carpeta, sin pararse a
+> contar cuántos `../` le hacen falta. El alias siempre apunta al mismo lugar.
 
 ---
 
@@ -205,8 +206,8 @@ protege TypeScript.
 ```
 
 Poner `"strict": true` es como encender **varios interruptores a la vez**. Cada uno tiene su propio
-nombre, y vale la pena conocer los dos más importantes, porque son los que más errores te van a
-mostrar al principio.
+nombre, y vale la pena conocer los dos más importantes, porque son los que más errores te van a sacar
+al principio.
 
 > ### 🟦 ¿Qué significa? — *`strictNullChecks`*
 > Una revisión (incluida en `strict`) que **separa `null` y `undefined`** del resto de tipos. Sin
@@ -222,26 +223,26 @@ mostrar al principio.
 > un error**. **Para qué sirve:** que no queden huecos sin tipar por descuido. **Dónde se usa:** en
 > los hooks tipados de RachaSimple, obliga a que cada parámetro de cada función diga qué tipo recibe.
 
-Recuerda del Módulo 03 y de capítulos anteriores: `null` es «vacío a propósito», `undefined` es «no
-existe todavía», y `any` es «cualquier cosa, sin revisar». El modo estricto vigila precisamente esas
-tres trampas.
+Recupera lo del Módulo 03 y de capítulos anteriores: `null` es «vacío a propósito», `undefined` es
+«no existe todavía», y `any` es «cualquier cosa, sin revisar». El modo estricto vigila justamente
+esas tres trampas.
 
 > ### 💡 Tip
-> Hay otras revisiones dentro de `strict` (como `strictFunctionTypes` o `strictBindCallApply`), pero
-> las dos que de verdad notarás como principiante son `strictNullChecks` y `noImplicitAny`. Si
-> entiendes esas dos, entiendes el 90% del modo estricto.
+> Dentro de `strict` hay más revisiones (como `strictFunctionTypes` o `strictBindCallApply`), pero las
+> dos que de verdad vas a notar como principiante son `strictNullChecks` y `noImplicitAny`. Si
+> entiendes esas dos, ya entiendes el 90% del modo estricto.
 
 ---
 
 ## 6. ¿Por qué el modo estricto te *protege* (y no te molesta)?
 
 Al principio el modo estricto se siente como un profe quisquilloso: marca errores donde tu código
-«parecía funcionar». Pero piénsalo así: cada error que `tsc` te muestra en tu editor es un error que
-**no le va a aparecer al usuario** de RachaSimple o Faro. Es un bug atrapado en la sala de ensayo, no
-en el escenario.
+«parecía funcionar». Pero dale la vuelta: cada error que `tsc` te muestra en el editor es un error
+que **no le va a aparecer al usuario** de RachaSimple o Faro. Es un bug atrapado en la sala de
+ensayo, no en pleno escenario.
 
-Veamos un caso concreto del tipo de dato que maneja Faro. Imagina un proyecto cuya descripción
-todavía no ha sido generada por la IA:
+Veamos un caso concreto con el tipo de dato que maneja Faro. Imagina un proyecto cuya descripción
+todavía no ha generado la IA:
 
 ```typescript
 type Project = {
@@ -256,9 +257,9 @@ function mostrarLargo(p: Project) {
 }
 ```
 
-Sin modo estricto, este código compilaría feliz... y luego **explotaría** en producción el día que un
-proyecto sin descripción llegara a esa función. Con `strictNullChecks`, TypeScript te detiene antes y
-te obliga a manejar el caso vacío:
+Sin modo estricto, este código compilaría tan tranquilo... y luego **explotaría** en producción el
+día que un proyecto sin descripción llegara a esa función. Con `strictNullChecks`, TypeScript te
+para antes y te obliga a manejar el caso vacío:
 
 ```typescript
 function mostrarLargo(p: Project) {
@@ -271,20 +272,21 @@ function mostrarLargo(p: Project) {
 
 > ### 🔎 En tu código
 > Este patrón —comprobar `null` antes de usar el dato— es exactamente lo que llamaste
-> **estrechamiento** en el Capítulo 06. El modo estricto y el estrechamiento son socios: el primero
-> te obliga a comprobar, el segundo es la técnica con la que compruebas.
+> **estrechamiento** en el Capítulo 06. El modo estricto y el estrechamiento van de la mano: el
+> primero te obliga a comprobar, el segundo es la técnica con la que compruebas.
 
 > ### ⚠️ Cuidado
-> La tentación del principiante es «apagar» el error con `any` o con el operador `!` (que dice «yo sé
-> que no es null, confía en mí»). Resiste. Apagar la alarma no apaga el incendio: solo lo escondes
-> hasta que el usuario lo encuentre. En RachaSimple y Faro se prefiere **comprobar** de verdad.
+> La tentación del principiante es «apagar» el error con `any` o con el operador `!` (ese que dice
+> «yo sé que no es null, confía en mí»). Resiste. Apagar la alarma no apaga el incendio: solo lo
+> esconde hasta que el usuario lo encuentre. En RachaSimple y Faro se prefiere **comprobar** de
+> verdad.
 
 ---
 
 ## 7. Las revisiones extra de RachaSimple
 
-Faro se queda con el `strict` que trae Next.js por defecto. RachaSimple es **aún más estricto**: su
-`tsconfig.json` añade revisiones que `strict` no incluye. Conocerlas te enseña qué tan lejos puede
+Faro se conforma con el `strict` que trae Next.js por defecto. RachaSimple va **aún más allá**: su
+`tsconfig.json` añade revisiones que `strict` no incluye. Conocerlas te enseña hasta dónde puede
 llegar la protección.
 
 ```typescript
@@ -331,15 +333,15 @@ if (primero !== undefined) {
 ```
 
 > ### 💡 Tip
-> No todos los proyectos usan estas cuatro. Son una decisión del equipo: RachaSimple eligió ser muy
-> riguroso. Si un día empiezas tu propio proyecto, puedes activarlas desde el día uno (es fácil) o
-> añadirlas después (puede dar muchos errores de golpe). Empezar estricto duele menos.
+> No todos los proyectos usan estas cuatro. Es una decisión del equipo: RachaSimple eligió ser muy
+> riguroso. Si un día arrancas tu propio proyecto, puedes activarlas desde el primer día (es fácil) o
+> añadirlas después (y entonces puede que te lluevan errores de golpe). Empezar estricto duele menos.
 
 ---
 
 ## 8. Otras opciones que verás en tus repos
 
-Hay varias claves más en tus `tsconfig.json` reales. No te asustes: aquí están las que faltan, en
+Quedan varias claves más en tus `tsconfig.json` reales. No te asustes: aquí van las que faltan, en
 versión corta.
 
 > ### 🟦 ¿Qué significa? — *`noEmit`*
@@ -371,15 +373,16 @@ versión corta.
 > **Dónde se usa:** los dos repos lo activan; es práctica estándar.
 
 > ### 💡 Tip
-> No necesitas dominar todas estas hoy. Con que sepas **buscar el nombre de la opción** cuando la
-> veas, vas sobradísimo. El `tsconfig.json` se lee, no se memoriza.
+> No tienes que dominar todas estas hoy. Con que sepas **buscar el nombre de la opción** cuando te la
+> cruces, vas sobradísimo. El `tsconfig.json` se lee, no se memoriza.
 
 ---
 
 ## 9. Cómo leer y resolver un error de `tsc`
 
 Los errores del compilador asustan al principio porque vienen en inglés y con códigos. Pero tienen
-**siempre la misma forma**, y una vez que la reconoces, son tu mejor herramienta de aprendizaje.
+**siempre la misma forma**, y en cuanto la reconoces, pasan de enemigos a ser tu mejor herramienta
+de aprendizaje.
 
 > ### 🟦 ¿Qué significa? — *Error de compilación*
 > Un mensaje de `tsc` que dice que tu código **rompe alguna regla de tipos**. Aparece en el editor
@@ -407,8 +410,8 @@ Léelo de izquierda a derecha, en cuatro pedazos:
 
 > ### 💡 Tip
 > El error casi siempre te dice **qué tipo esperaba** y **qué tipo le diste**. Cuando veas «Type 'X'
-> is not assignable to type 'Y'», traduce mentalmente: «le pasé una X donde se necesitaba una Y». La
-> mitad de los errores se resuelven con solo leer esa frase con calma.
+> is not assignable to type 'Y'», tradúcelo mentalmente: «le pasé una X donde se necesitaba una Y». La
+> mitad de los errores se resuelven solo con leer esa frase con calma.
 
 > ### ⚠️ Cuidado
 > No copies y pegues «soluciones» de internet que silencien el error con `any` o `// @ts-ignore` (un
@@ -417,16 +420,17 @@ Léelo de izquierda a derecha, en cuatro pedazos:
 > al mensajero.
 
 > ### 🔎 En tu código
-> Cuando hagas `npm run build` en Faro (la regla del proyecto dice que debe pasar antes de fusionar),
-> ese build corre `tsc` por dentro. Si ves errores rojos, son exactamente estos. Léelos con la receta
-> de los cuatro pedazos y resuélvelos uno a uno: archivo, línea, código, frase clave.
+> Cuando hagas `npm run build` en Faro (la regla del proyecto pide que pase antes de fusionar), ese
+> build corre `tsc` por dentro. Si ves errores rojos, son exactamente estos. Léelos con la receta de
+> los cuatro pedazos y resuélvelos uno a uno: archivo, línea, código, frase clave.
 
 ---
 
 ## 10. Un detalle de RachaSimple: archivos `tsconfig` múltiples
 
-Quizá notaste que RachaSimple tiene **dos** archivos: `tsconfig.json` y `tsconfig.node.json`. No es un
-error, es una técnica para separar **dos mundos** dentro del mismo proyecto.
+Quizá te llamó la atención que RachaSimple tenga **dos** archivos: `tsconfig.json` y
+`tsconfig.node.json`. No es un descuido, es una técnica para separar **dos mundos** dentro del mismo
+proyecto.
 
 > ### 🟦 ¿Qué significa? — *`references` (referencias de proyecto)*
 > Una forma de **enlazar varios `tsconfig.json`** dentro de un mismo repo, cada uno con sus propias
@@ -455,9 +459,9 @@ error, es una técnica para separar **dos mundos** dentro del mismo proyecto.
 > principal lo referencia.
 
 > ### 💡 Tip
-> No te preocupes por dominar las referencias de proyecto ahora. Solo recuerda la idea: el código de
-> la app y el de las herramientas de construcción a veces necesitan reglas distintas, y por eso hay
-> más de un `tsconfig`. Faro, al usar Next.js, se las arregla con uno solo.
+> No te agobies con las referencias de proyecto ahora. Quédate con la idea de fondo: el código de la
+> app y el de las herramientas de construcción a veces necesitan reglas distintas, y por eso hay más
+> de un `tsconfig`. Faro, al usar Next.js, se apaña con uno solo.
 
 ---
 
@@ -509,7 +513,7 @@ error, es una técnica para separar **dos mundos** dentro del mismo proyecto.
 ---
 
 > Bit cierra el cuaderno y mueve sus branquias con orgullo: ahora no solo escribes tipos, sino que
-> entiendes el **reglamento** que decide cómo se revisan. El `tsconfig.json` ya no es un archivo
+> entiendes el **reglamento** que decide cómo se revisan. El `tsconfig.json` deja de ser ese archivo
 > misterioso de la raíz del proyecto: es tu panel de control, y el modo estricto es el cinturón de
 > seguridad que te lleva a producción sin sustos. En el siguiente módulo darás el salto a React de
 > verdad, y todo lo que aprendiste aquí —tipos, estrechamiento, configuración estricta— va contigo.

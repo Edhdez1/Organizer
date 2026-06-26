@@ -23,21 +23,21 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote de confianza. Ya sabes crear arrays y recorrerlos con bucles. Pero JavaScript guarda un cofre lleno de <strong>metodos</strong> que hacen el trabajo pesado por ti: transformar, filtrar, buscar y resumir listas con una sola linea. En este capitulo abrimos ese cofre. Al terminar vas a mirar un <code>for</code> largo y pensar "esto cabe en un <code>map</code>". Vamos despacio, con muchos ejemplos del proyecto <strong>tunal-digital</strong> (sitio HTML/CSS/JS vanilla). Respira y sigueme.</p>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote de confianza. Ya sabes crear arrays y recorrerlos con bucles. Lo que quiza no sabes es que JavaScript trae de fabrica un monton de <strong>metodos</strong> que hacen el trabajo pesado por ti: transformar, filtrar, buscar y resumir listas, muchas veces en una sola linea. De eso va este capitulo. Cuando lleguemos al final vas a mirar un <code>for</code> de seis lineas y vas a pensar "esto en realidad es un <code>map</code>". Iremos despacio y con muchos ejemplos sacados del proyecto <strong>tunal-digital</strong> (un sitio en HTML/CSS/JS vanilla). Respira y sigueme.</p>
 </blockquote>
 <h2 id="1-antes-de-empezar-que-es-un-metodo-de-array">1. Antes de empezar: que es un metodo de array</h2>
-<p>Un array es una lista ordenada de valores. Lo que cambia en este capitulo es <strong>como</strong> trabajamos con esa lista: en vez de escribir bucles a mano, usamos funciones que ya vienen incluidas.</p>
+<p>Un array es una lista ordenada de valores; eso ya lo tienes. Lo que cambia aqui es <strong>como</strong> trabajas con esa lista. En vez de escribir bucles a mano una y otra vez, vas a apoyarte en funciones que ya vienen incluidas en el lenguaje.</p>
 <blockquote class="def">
 <h3 id="que-significa-metodo">🟦 ¿Que significa? — <em>Metodo</em></h3>
 <p>Un <strong>metodo</strong> es una funcion que "pertenece" a algo y se llama poniendo un punto despues de ese algo: <code>lista.map(...)</code>. La parte antes del punto (<code>lista</code>) es sobre lo que actua el metodo.
-<strong>Para que sirve:</strong> te da herramientas listas para usar sin reinventarlas.
-<strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, cuando se recogen los campos de un formulario o se procesan respuestas del Worker, se usan metodos de array para no escribir bucles repetidos.</p>
+<strong>Para que sirve:</strong> te da herramientas ya hechas para no tener que reinventarlas cada vez.
+<strong>Donde se usa en un repo real:</strong> en el <code>main.js</code> de <strong>tunal-digital</strong>, cuando se recogen los campos de un formulario o se procesan las respuestas del Worker, se usan metodos de array para evitar escribir el mismo bucle una y otra vez.</p>
 <h3 id="que-significa-callback">🟦 ¿Que significa? — <em>Callback</em></h3>
-<p>Un <strong>callback</strong> es una funcion que le pasas a otra funcion para que la llame por ti. En <code>lista.map(n =&gt; n * 2)</code>, la flecha <code>n =&gt; n * 2</code> es el callback: tu describes "que hacer con cada elemento" y <code>map</code> se encarga de recorrer.
+<p>Un <strong>callback</strong> es una funcion que le pasas a otra funcion para que la llame por ti. En <code>lista.map(n =&gt; n * 2)</code>, la flecha <code>n =&gt; n * 2</code> es el callback: tu describes "que hacer con cada elemento" y <code>map</code> se ocupa de recorrer.
 <strong>Para que sirve:</strong> separa el "que hacer" del "como recorrer".
 <strong>Donde se usa en un repo real:</strong> todos los metodos de este capitulo reciben un callback.</p>
 </blockquote>
-<p>Para los ejemplos usaremos esta lista de servicios imaginaria de <strong>tunal-digital</strong>:</p>
+<p>Para los ejemplos vamos a usar esta lista de servicios inventada de <strong>tunal-digital</strong>:</p>
 <pre><code class="language-javascript">const servicios = [
   { nombre: &quot;Sitio web&quot;, precio: 800, activo: true },
   { nombre: &quot;SEO local&quot;, precio: 300, activo: true },
@@ -46,7 +46,7 @@
 ];
 </code></pre>
 <h2 id="2-map-transformar-cada-elemento">2. map: transformar cada elemento</h2>
-<p><code>map</code> recorre la lista y devuelve <strong>una lista nueva</strong> del mismo tamano, donde cada elemento es el resultado de tu callback.</p>
+<p><code>map</code> recorre la lista y te devuelve <strong>una lista nueva</strong> del mismo tamano, en la que cada elemento es el resultado de tu callback.</p>
 <blockquote class="def">
 <h3 id="que-significa-map">🟦 ¿Que significa? — <em>map</em></h3>
 <p><strong>map</strong> (mapear) toma cada elemento, le aplica una transformacion y guarda el resultado en un array nuevo.
@@ -59,15 +59,15 @@
 const conIva = servicios.map((s) =&gt; s.precio * 1.21);
 // [968, 363, 605, 181.5]
 </code></pre>
-<p>Lo importante: <strong><code>map</code> no modifica el array original</strong>. Te entrega uno nuevo. <code>servicios</code> sigue intacto.</p>
+<p>Quedate con un detalle: <strong><code>map</code> no toca el array original</strong>. Te entrega uno nuevo y <code>servicios</code> se queda exactamente igual que antes.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Regla de oro: si la lista nueva tiene <strong>el mismo numero de elementos</strong> que la original, casi seguro quieres <code>map</code>. Si tiene <strong>menos</strong>, quieres <code>filter</code>. Si tiene <strong>uno solo</strong> (un total, un texto unico), quieres <code>reduce</code>.</p>
+<p>Una regla que casi nunca falla: si la lista nueva tiene <strong>el mismo numero de elementos</strong> que la original, lo que quieres es <code>map</code>. Si tiene <strong>menos</strong>, es <code>filter</code>. Y si lo que buscas es <strong>un solo valor</strong> (un total, un texto unico), es <code>reduce</code>.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p><code>map</code> siempre devuelve un array. Si dentro del callback <strong>no escribes <code>return</code></strong> (y no usas la flecha corta), obtendras una lista llena de <code>undefined</code>. Con <code>=&gt; s.nombre</code> el <code>return</code> es implicito; con llaves <code>=&gt; { ... }</code> debes escribir <code>return</code> tu mismo.</p>
+<p><code>map</code> siempre devuelve un array. Si dentro del callback <strong>no pones <code>return</code></strong> (y no usas la flecha corta), acabaras con una lista llena de <code>undefined</code>. Con <code>=&gt; s.nombre</code> el <code>return</code> es implicito; con llaves <code>=&gt; { ... }</code> tienes que escribir el <code>return</code> tu mismo.</p>
 </blockquote>
 <h2 id="3-filter-quedarte-solo-con-algunos">3. filter: quedarte solo con algunos</h2>
-<p><code>filter</code> recorre la lista y devuelve un array nuevo <strong>solo con los elementos que pasan una prueba</strong>.</p>
+<p><code>filter</code> recorre la lista y te devuelve un array nuevo <strong>solo con los elementos que pasan una prueba</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-filter">🟦 ¿Que significa? — <em>filter</em></h3>
 <p><strong>filter</strong> (filtrar) conserva los elementos cuyo callback devuelve <code>true</code> y descarta los que devuelven <code>false</code>.
@@ -82,12 +82,12 @@ const baratos = servicios.filter((s) =&gt; s.precio &lt; 400);
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-booleano">🟦 ¿Que significa? — <em>Booleano</em></h3>
-<p>Un <strong>booleano</strong> es un valor que solo puede ser <code>true</code> (verdadero) o <code>false</code> (falso). El callback de <code>filter</code> debe devolver un booleano: "¿este elemento se queda? si o no".
+<p>Un <strong>booleano</strong> es un valor que solo puede ser <code>true</code> (verdadero) o <code>false</code> (falso). El callback de <code>filter</code> tiene que devolver un booleano: "¿este elemento se queda? si o no".
 <strong>Para que sirve:</strong> representar decisiones de "si/no".
 <strong>Donde se usa en un repo real:</strong> el campo <code>activo</code> de cada servicio ya es un booleano.</p>
 </blockquote>
 <h2 id="4-reduce-convertir-la-lista-en-un-solo-valor">4. reduce: convertir la lista en un solo valor</h2>
-<p><code>reduce</code> es el mas potente y el que mas asusta al principio. Recorre la lista acumulando un resultado, y al final devuelve <strong>un solo valor</strong>.</p>
+<p><code>reduce</code> es el que mas musculo tiene y tambien el que mas intimida al principio. Recorre la lista acumulando un resultado y, al final, te devuelve <strong>un solo valor</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-reduce">🟦 ¿Que significa? — <em>reduce</em></h3>
 <p><strong>reduce</strong> (reducir) combina todos los elementos en uno solo, paso a paso. En cada vuelta recibe el <strong>acumulador</strong> (lo que llevas hasta ahora) y el elemento actual, y tu devuelves el nuevo acumulador.
@@ -97,7 +97,7 @@ const baratos = servicios.filter((s) =&gt; s.precio &lt; 400);
 <pre><code class="language-javascript">const total = servicios.reduce((suma, s) =&gt; suma + s.precio, 0);
 // 800 + 300 + 500 + 150 = 1750
 </code></pre>
-<p>Desmenuzemoslo:</p>
+<p>Vamos parte por parte:</p>
 <ul>
 <li><code>suma</code> es el <strong>acumulador</strong>.</li>
 <li><code>s</code> es el elemento actual.</li>
@@ -106,28 +106,28 @@ const baratos = servicios.filter((s) =&gt; s.precio &lt; 400);
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-acumulador">🟦 ¿Que significa? — <em>Acumulador</em></h3>
-<p>El <strong>acumulador</strong> es la "caja" donde <code>reduce</code> guarda el resultado parcial mientras recorre la lista. Empieza con el valor inicial y se va actualizando vuelta a vuelta.
+<p>El <strong>acumulador</strong> es la "caja" donde <code>reduce</code> va guardando el resultado parcial mientras recorre la lista. Empieza con el valor inicial y se actualiza vuelta a vuelta.
 <strong>Para que sirve:</strong> llevar la cuenta de lo que vas construyendo (una suma, un objeto, otra lista).
 <strong>Donde se usa en un repo real:</strong> sumar precios o agrupar tareas por estado.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p><strong>Casi siempre pon el valor inicial</strong> (<code>, 0</code> o <code>, {}</code> o <code>, []</code>). Si lo olvidas, <code>reduce</code> usa el primer elemento como acumulador, y eso da resultados raros con listas de objetos (o un error si la lista esta vacia).</p>
+<p><strong>Pon casi siempre el valor inicial</strong> (<code>, 0</code> o <code>, {}</code> o <code>, []</code>). Si te lo saltas, <code>reduce</code> usa el primer elemento como acumulador, y con listas de objetos eso da resultados raros (o directamente un error si la lista esta vacia).</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Si te cuesta <code>reduce</code>, recuerda: muchas cosas que la gente hace con <code>reduce</code> tambien se pueden hacer con un <code>for</code> normal. Empieza con <code>for</code>, y cuando te sientas comodo, traducelo a <code>reduce</code>. Bit tardo semanas en quererlo, no pasa nada.</p>
+<p>Si <code>reduce</code> se te resiste, recuerda esto: casi todo lo que la gente hace con <code>reduce</code> tambien se puede hacer con un <code>for</code> normal. Empieza con <code>for</code> y, cuando te sientas comodo, lo traduces a <code>reduce</code>. A Bit le costo semanas tomarle carino, asi que sin prisa.</p>
 </blockquote>
 <h2 id="5-find-some-y-every-buscar-y-preguntar">5. find, some y every: buscar y preguntar</h2>
-<p>Estos tres no transforman la lista; te dan <strong>una respuesta</strong>.</p>
+<p>Estos tres no transforman la lista; lo que te dan es <strong>una respuesta</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-find">🟦 ¿Que significa? — <em>find</em></h3>
-<p><strong>find</strong> (encontrar) devuelve el <strong>primer</strong> elemento que cumple la prueba, o <code>undefined</code> si ninguno cumple.
+<p><strong>find</strong> (encontrar) devuelve el <strong>primer</strong> elemento que cumple la prueba, o <code>undefined</code> si ninguno la cumple.
 <strong>Para que sirve:</strong> localizar un elemento concreto: el usuario con cierto id, el servicio con cierto nombre.
-<strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong> (Python/Flet/JSON) hay datos en listas; el equivalente en JS seria <code>find</code> para sacar la mision con cierto id.</p>
+<strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong> (Python/Flet/JSON) hay datos guardados en listas; el equivalente en JS seria un <code>find</code> para sacar la mision con cierto id.</p>
 </blockquote>
 <pre><code class="language-javascript">const chat = servicios.find((s) =&gt; s.nombre === &quot;Chat IA&quot;);
 // { nombre: &quot;Chat IA&quot;, precio: 500, activo: false }
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-undefined">🟦 ¿Que significa? — <em>undefined</em></h3>
-<p><strong>undefined</strong> ("indefinido") es el valor que JavaScript usa para decir "aqui no hay nada". <code>find</code> lo devuelve cuando no encuentra coincidencia.
+<p><strong>undefined</strong> ("indefinido") es el valor que usa JavaScript para decir "aqui no hay nada". <code>find</code> lo devuelve cuando no encuentra ninguna coincidencia.
 <strong>Para que sirve:</strong> representar la ausencia de un valor.
 <strong>Donde se usa en un repo real:</strong> siempre que buscas algo que podria no existir, conviene comprobar <code>if (resultado === undefined)</code>.</p>
 <h3 id="que-significa-some">🟦 ¿Que significa? — <em>some</em></h3>
@@ -135,7 +135,7 @@ const baratos = servicios.filter((s) =&gt; s.precio &lt; 400);
 <strong>Para que sirve:</strong> preguntar "¿hay alguno que...?".</p>
 <h3 id="que-significa-every">🟦 ¿Que significa? — <em>every</em></h3>
 <p><strong>every</strong> (todos) devuelve <code>true</code> si <strong>todos</strong> los elementos cumplen la prueba.
-<strong>Para que sirve:</strong> preguntar "¿todos cumplen...?". Util para validar formularios.
+<strong>Para que sirve:</strong> preguntar "¿todos cumplen...?". Va muy bien para validar formularios.
 <strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, antes de enviar el formulario al Worker, <code>every</code> sirve para comprobar que todos los campos obligatorios estan rellenos.</p>
 </blockquote>
 <pre><code class="language-javascript">const hayGratis = servicios.some((s) =&gt; s.precio === 0);   // false
@@ -143,7 +143,7 @@ const todosActivos = servicios.every((s) =&gt; s.activo);     // false (Chat IA 
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En el <code>main.js</code> de <strong>tunal-digital</strong>, el formulario recoge campos como nombre, email y mensaje. Validar con <code>campos.every((c) =&gt; c.value.trim() !== "")</code> es mas limpio que un <code>if</code> gigante. Si devuelve <code>false</code>, no hace <code>fetch</code> al Worker y muestra un aviso.</p>
+<p>En el <code>main.js</code> de <strong>tunal-digital</strong>, el formulario recoge campos como nombre, email y mensaje. Validarlos con <code>campos.every((c) =&gt; c.value.trim() !== "")</code> queda mucho mas limpio que un <code>if</code> gigante. Si devuelve <code>false</code>, no se hace <code>fetch</code> al Worker y se muestra un aviso.</p>
 </blockquote>
 <h2 id="6-includes-e-indexof-esta-este-valor">6. includes e indexOf: ¿esta este valor?</h2>
 <blockquote class="def">
@@ -162,10 +162,10 @@ etiquetas.indexOf(&quot;logo&quot;);   // -1  (no esta)
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p><code>includes</code> es mas legible cuando solo quieres saber "si o no". Usa <code>indexOf</code> cuando ademas necesites la posicion. Antiguamente solo existia <code>indexOf</code> y se escribia <code>indexOf(x) !== -1</code>; hoy <code>includes(x)</code> dice lo mismo de forma mas clara.</p>
+<p><code>includes</code> se lee mejor cuando solo te interesa el "si o no". Tira de <code>indexOf</code> cuando ademas necesites saber la posicion. Antes solo existia <code>indexOf</code> y se escribia <code>indexOf(x) !== -1</code>; hoy <code>includes(x)</code> dice lo mismo de forma mucho mas clara.</p>
 </blockquote>
 <h2 id="7-slice-y-splice-cortar-la-lista">7. slice y splice: cortar la lista</h2>
-<p>Cuidado con estos dos, se parecen en el nombre pero hacen cosas muy distintas.</p>
+<p>Ojo con estos dos: se parecen muchisimo en el nombre, pero hacen cosas bien distintas.</p>
 <blockquote class="def">
 <h3 id="que-significa-slice">🟦 ¿Que significa? — <em>slice</em></h3>
 <p><strong>slice</strong> (rebanada) devuelve una <strong>copia</strong> de un trozo del array, sin tocar el original. Recibe el indice de inicio y el de fin (este ultimo <strong>no</strong> se incluye).
@@ -177,7 +177,7 @@ etiquetas.indexOf(&quot;logo&quot;);   // -1  (no esta)
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-splice">🟦 ¿Que significa? — <em>splice</em></h3>
-<p><strong>splice</strong> (empalmar) <strong>modifica el array original</strong>: puede borrar elementos, insertar nuevos o ambas cosas. Recibe el indice donde empezar, cuantos borrar y, opcionalmente, que insertar.
+<p><strong>splice</strong> (empalmar) <strong>modifica el array original</strong>: puede borrar elementos, insertar nuevos o las dos cosas a la vez. Recibe el indice donde empezar, cuantos borrar y, si quieres, que insertar.
 <strong>Para que sirve:</strong> quitar o agregar elementos en mitad de la lista.
 <strong>Donde se usa en un repo real:</strong> quitar un item de una lista de tareas en memoria antes de redibujar la interfaz.</p>
 </blockquote>
@@ -187,10 +187,10 @@ items.splice(1, 2);   // borra desde el indice 1, dos elementos
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p><code>slice</code> <strong>no</strong> cambia el original (es seguro). <code>splice</code> <strong>si</strong> lo cambia (es destructivo). Truco para recordarlo: spli<strong>ce</strong> tiene una <strong>C</strong> de "Cambia". En React (como en <strong>RachaSimple</strong> o <strong>Faro</strong>) evita <code>splice</code> sobre el estado: alli prefieres copias con <code>slice</code>, <code>filter</code> o spread.</p>
+<p><code>slice</code> <strong>no</strong> cambia el original (es seguro). <code>splice</code> <strong>si</strong> lo cambia (es destructivo). Un truco para no liarte: spli<strong>ce</strong> lleva una <strong>C</strong> de "Cambia". En React (como en <strong>RachaSimple</strong> o <strong>Faro</strong>) evita <code>splice</code> sobre el estado: alli prefieres copias con <code>slice</code>, <code>filter</code> o spread.</p>
 </blockquote>
 <h2 id="8-encadenar-metodos">8. Encadenar metodos</h2>
-<p>Como <code>map</code>, <code>filter</code> y <code>slice</code> devuelven <strong>un array nuevo</strong>, puedes pegar un metodo tras otro con puntos. A esto se le llama <strong>encadenar</strong>.</p>
+<p>Como <code>map</code>, <code>filter</code> y <code>slice</code> devuelven <strong>un array nuevo</strong>, puedes pegar un metodo detras de otro con puntos. A eso se le llama <strong>encadenar</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-encadenar">🟦 ¿Que significa? — <em>Encadenar</em></h3>
 <p><strong>Encadenar</strong> es aplicar varios metodos en fila, donde la salida de uno es la entrada del siguiente: <code>lista.filter(...).map(...).reduce(...)</code>.
@@ -203,12 +203,12 @@ items.splice(1, 2);   // borra desde el indice 1, dos elementos
   .reduce((suma, p) =&gt; suma + p, 0); // los sumo
 // 800 + 300 + 150 = 1250
 </code></pre>
-<p>Leelo en voz alta: "de los servicios, filtra los activos, saca sus precios, sumalos". Cada linea es un paso claro.</p>
+<p>Leelo en voz alta: "de los servicios, filtra los activos, saca sus precios y sumalos". Cada linea es un paso, y se entiende de un vistazo.</p>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Pon <strong>cada metodo en su propia linea</strong>, como arriba. Es mucho mas facil de leer y de comentar paso a paso que una cadena larga en una sola linea.</p>
+<p>Pon <strong>cada metodo en su propia linea</strong>, como en el ejemplo de arriba. Se lee mucho mejor y puedes comentar paso a paso, mejor que meter toda la cadena en una sola linea kilometrica.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Cada metodo de la cadena recorre la lista entera otra vez. Para listas de unos cientos de elementos no importa nada. Solo en listas enormes (decenas de miles) conviene pensar si se puede hacer en un solo <code>reduce</code>. Para casi todo lo que haras al empezar, la claridad gana.</p>
+<p>Cada metodo de la cadena vuelve a recorrer la lista entera. Para listas de unos cientos de elementos esto no importa lo mas minimo. Solo en listas enormes (decenas de miles) merece la pena plantearse si todo cabe en un solo <code>reduce</code>. Para casi todo lo que haras al principio, gana la claridad.</p>
 </blockquote>
 <h2 id="9-sort-ordenar">9. sort: ordenar</h2>
 <blockquote class="def">
@@ -222,14 +222,14 @@ items.splice(1, 2);   // borra desde el indice 1, dos elementos
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>Dos trampas con <code>sort</code>:
-1. <strong>Modifica el array original.</strong> Por eso arriba hacemos primero una copia con <code>[...servicios]</code> (lo veras en la seccion del spread).
-2. <strong>Sin callback, ordena como texto.</strong> Es decir, <code>[10, 2, 1].sort()</code> da <code>[1, 10, 2]</code> porque compara caracteres. Para numeros, pasa siempre <code>(a, b) =&gt; a - b</code>.</p>
+<p><code>sort</code> tiene dos trampas que conviene tener fichadas:
+1. <strong>Modifica el array original.</strong> Por eso en el ejemplo de arriba hacemos primero una copia con <code>[...servicios]</code> (lo veras en la seccion del spread).
+2. <strong>Sin callback, ordena como texto.</strong> Es decir, <code>[10, 2, 1].sort()</code> da <code>[1, 10, 2]</code> porque compara caracteres uno a uno. Para numeros, pasa siempre <code>(a, b) =&gt; a - b</code>.</p>
 </blockquote>
 <h2 id="10-el-spread-expandir-un-array">10. El spread (...): expandir un array</h2>
 <blockquote class="def">
 <h3 id="que-significa-spread">🟦 ¿Que significa? — <em>Spread</em></h3>
-<p>El <strong>spread</strong> (esparcir), escrito con tres puntos <code>...</code>, "desempaca" los elementos de un array (o las propiedades de un objeto) y los suelta donde lo pongas.
+<p>El <strong>spread</strong> (esparcir), escrito con tres puntos <code>...</code>, "desempaca" los elementos de un array (o las propiedades de un objeto) y los suelta donde tu lo pongas.
 <strong>Para que sirve:</strong> copiar arrays, juntar varios, o anadir elementos sin modificar el original.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong>, para actualizar el estado de React sin mutarlo: <code>setLista([...lista, nuevo])</code>.</p>
 </blockquote>
@@ -242,22 +242,22 @@ const masUno = [...a, 99];   // [1, 2, 99]
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>El spread crea una <strong>copia superficial</strong>: el array nuevo es independiente, pero si dentro hay objetos, esos objetos siguen siendo compartidos. Para listas de numeros o textos, es exactamente lo que necesitas.</p>
+<p>El spread hace una <strong>copia superficial</strong>: el array nuevo es independiente, pero si dentro hay objetos, esos objetos se siguen compartiendo. Para listas de numeros o textos, es justo lo que necesitas.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>Cuando en la seccion 9 escribimos <code>[...servicios].sort(...)</code>, el spread hace una copia y <code>sort</code> ordena la copia. Asi <code>servicios</code> no se desordena. Este patron "copiar y luego transformar" es clave en React, donde nunca debes mutar el estado directamente.</p>
+<p>Cuando en la seccion 9 escribimos <code>[...servicios].sort(...)</code>, el spread hace una copia y <code>sort</code> ordena esa copia. Asi <code>servicios</code> no se desordena. Este patron de "copiar y luego transformar" es la base de trabajar con React, donde nunca debes mutar el estado directamente.</p>
 </blockquote>
 <h2 id="11-desestructuracion-de-arrays">11. Desestructuracion de arrays</h2>
 <blockquote class="def">
 <h3 id="que-significa-desestructuracion">🟦 ¿Que significa? — <em>Desestructuracion</em></h3>
 <p>La <strong>desestructuracion</strong> te deja sacar valores de un array y meterlos en variables con nombre, en una sola linea, segun su posicion.
-<strong>Para que sirve:</strong> dar nombres claros a los elementos sin escribir <code>lista[0]</code>, <code>lista[1]</code>...
+<strong>Para que sirve:</strong> dar nombres claros a los elementos sin tener que escribir <code>lista[0]</code>, <code>lista[1]</code>...
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong>, el hook <code>useState</code> de React devuelve un array de dos elementos que se desestructura: <code>const [valor, setValor] = useState(...)</code>.</p>
 </blockquote>
 <pre><code class="language-javascript">const punto = [40.4, -3.7];
 const [lat, lng] = punto;
 // lat = 40.4, lng = -3.7
 </code></pre>
-<p>Puedes saltarte posiciones con comas, y recoger "el resto" con spread:</p>
+<p>Puedes saltarte posiciones dejando una coma vacia, y recoger "el resto" con spread:</p>
 <pre><code class="language-javascript">const [primero, , tercero] = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
 // primero = &quot;a&quot;, tercero = &quot;c&quot;
 
@@ -266,10 +266,10 @@ const [cabeza, ...resto] = [1, 2, 3, 4];
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>Cada vez que en <strong>RachaSimple</strong> escribes <code>const [data, setData] = useState([])</code>, estas desestructurando el array que devuelve <code>useState</code>. El primer hueco es el valor; el segundo, la funcion para cambiarlo. Es el mismo <code>[a, b] = array</code> de arriba.</p>
+<p>Cada vez que en <strong>RachaSimple</strong> escribes <code>const [data, setData] = useState([])</code>, estas desestructurando el array que devuelve <code>useState</code>. El primer hueco es el valor; el segundo, la funcion para cambiarlo. Es exactamente el mismo <code>[a, b] = array</code> de arriba.</p>
 </blockquote>
 <h2 id="12-un-ejemplo-completo-de-datos-crudos-a-html">12. Un ejemplo completo: de datos crudos a HTML</h2>
-<p>Juntemos varias piezas como lo harias en <strong>tunal-digital</strong> para pintar tarjetas de servicios activos, ordenados por precio:</p>
+<p>Vamos a juntar varias piezas, tal como lo harias en <strong>tunal-digital</strong> para pintar tarjetas con los servicios activos, ordenados por precio:</p>
 <pre><code class="language-javascript">const html = servicios
   .filter((s) =&gt; s.activo)                       // solo activos
   .sort((a, b) =&gt; a.precio - b.precio)           // del mas barato al mas caro
@@ -280,11 +280,11 @@ const [cabeza, ...resto] = [1, 2, 3, 4];
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-join">🟦 ¿Que significa? — <em>join</em></h3>
-<p><strong>join</strong> (unir) convierte un array en un solo texto, pegando los elementos con el separador que le indiques (aqui <code>""</code>, sin separador).
+<p><strong>join</strong> (unir) convierte un array en un solo texto, pegando los elementos con el separador que le indiques (aqui <code>""</code>, o sea sin separador).
 <strong>Para que sirve:</strong> pasar de una lista de fragmentos HTML a una sola cadena lista para <code>innerHTML</code>.
-<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, <code>main.js</code> construye trozos de HTML con <code>map</code> y los une con <code>join</code> antes de insertarlos en la pagina.</p>
+<strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong>, <code>main.js</code> construye trozos de HTML con <code>map</code> y los une con <code>join</code> antes de meterlos en la pagina.</p>
 <h3 id="cuidado_5">⚠️ Cuidado</h3>
-<p>Insertar texto del usuario directo en <code>innerHTML</code> puede ser peligroso (codigo malicioso). Para datos tuyos de confianza, como esta lista fija de servicios, esta bien. Cuando muestres lo que escribe un visitante, hay que escapar el texto. Lo veremos mas adelante; por ahora, recuerdalo.</p>
+<p>Meter texto del usuario directo en <code>innerHTML</code> puede ser peligroso (alguien podria colar codigo malicioso). Para datos tuyos de confianza, como esta lista fija de servicios, no hay problema. Cuando muestres lo que escribe un visitante, hay que escapar el texto. Lo veremos mas adelante; por ahora basta con que te suene.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -321,7 +321,7 @@ const [cabeza, ...resto] = [1, 2, 3, 4];
 </li>
 </ol>
 <blockquote>
-<p>Lo lograste. Si algun metodo todavia se te enreda, escribe el ejercicio con un <code>for</code> normal primero y luego traducelo al metodo. Yo, Bit, sigo confundiendo <code>slice</code> y <code>splice</code> de vez en cuando, asi que estas en buena compania. Nos vemos en el Capitulo 09.</p>
+<p>Lo lograste. Si algun metodo todavia se te enreda, escribe el ejercicio con un <code>for</code> normal primero y luego traducelo al metodo. Yo, Bit, sigo confundiendo <code>slice</code> y <code>splice</code> cada dos por tres, asi que estas en muy buena compania. Nos vemos en el Capitulo 09.</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

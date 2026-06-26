@@ -23,157 +23,157 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guía. Hasta ahora hemos escrito tablas, filas y consultas, y todo ha funcionado rapidito porque teníamos pocos datos. Pero imagina que RachaSimple crece y de pronto hay 2 millones de registros de racha. Si cada vez que abres la app la base de datos tiene que <em>leer fila por fila</em> para encontrar las tuyas, la cosa se pone lenta y triste. En este capítulo vamos a aprender el truco que evita ese drama: los <strong>índices</strong>. Te prometo que es más sencillo de lo que suena, y al final vas a entender por qué casi todas las tablas de RachaSimple y Faro tienen un índice en la columna <code>usuario_id</code>. Vamos despacio y con muchos ejemplos. 🪼</p>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guía. Hasta ahora hemos creado tablas, llenado filas y escrito consultas, y todo respondió rapidísimo porque teníamos cuatro datos contados. El detalle es que las apps crecen. Imagina que RachaSimple se vuelve popular y un día tienes 2 millones de registros de racha guardados. Si cada vez que alguien abre la app la base de datos tiene que <em>leer fila por fila</em> hasta encontrar las suyas, la app se arrastra y nadie quiere eso. En este capítulo aprendemos el truco que evita ese drama: los <strong>índices</strong>. Suena técnico, pero te aseguro que es bastante sencillo, y al terminar vas a entender por qué casi todas las tablas de RachaSimple y Faro llevan un índice en la columna <code>usuario_id</code>. Lo vemos con calma y con hartos ejemplos. 🪼</p>
 </blockquote>
 <h2 id="1-el-problema-buscar-sin-indice-es-como-buscar-sin-glosario">1. El problema: buscar sin índice es como buscar sin glosario</h2>
-<p>Antes de hablar de la solución, necesitamos <em>sentir</em> el problema.</p>
-<p>Piensa en un libro de cocina de 800 páginas, sin índice al final. Quieres la receta de “tamales”. ¿Qué te toca hacer? Abrir página por página hasta encontrarla. Eso es lento. Ahora imagina que el libro <strong>sí</strong> trae un índice alfabético: vas directo a la “T”, lees “tamales… página 512”, y saltas ahí. Eso es rápido.</p>
-<p>Una base de datos relacional sufre exactamente lo mismo. Cuando le pides:</p>
+<p>Antes de presentar la solución, conviene <em>sentir</em> el problema en carne propia.</p>
+<p>Piensa en un libro de cocina de 800 páginas que no trae índice al final. Quieres la receta de “tamales”. ¿Qué te toca? Pasar página tras página hasta dar con ella. Un suplicio. Ahora imagina que el mismo libro <strong>sí</strong> trae un índice alfabético: vas directo a la “T”, lees “tamales… página 512” y saltas ahí de un brinco. Eso es otra cosa.</p>
+<p>Una base de datos relacional vive exactamente la misma diferencia. Cuando le pides algo como esto:</p>
 <pre><code class="language-sql">select * from registros_racha where usuario_id = 'a1b2c3';
 </code></pre>
-<p>…si no hay nada que la ayude, la base de datos hace un <strong>escaneo secuencial</strong>: revisa una por una <em>todas</em> las filas de la tabla para ver cuáles cumplen la condición. Con 50 filas no lo notas. Con 2 millones, sí.</p>
+<p>…si no tiene ninguna ayuda, hace un <strong>escaneo secuencial</strong>: revisa una por una <em>todas</em> las filas de la tabla para ver cuáles cumplen la condición. Con 50 filas ni te enteras. Con 2 millones, lo sufres.</p>
 <blockquote class="def">
 <h3 id="que-significa-escaneo-secuencial-sequential-scan">🟦 ¿Que significa? — <em>Escaneo secuencial (sequential scan)</em></h3>
-<p>Es cuando la base de datos lee <strong>todas</strong> las filas de una tabla, de principio a fin, para encontrar las que cumplen tu condición. <strong>Para qué sirve:</strong> es la forma más simple de buscar, y a veces es la mejor cuando la tabla es chiquita. <strong>Dónde aparece:</strong> en RachaSimple, si consultaras <code>registros_racha</code> por una columna sin índice, Postgres haría un escaneo secuencial de toda la tabla.</p>
+<p>Es cuando la base de datos lee <strong>todas</strong> las filas de una tabla, de la primera a la última, para quedarse con las que cumplen tu condición. <strong>Para qué sirve:</strong> es la forma más simple de buscar, y a veces hasta es la mejor cuando la tabla es chiquita. <strong>Dónde aparece:</strong> en RachaSimple, si consultaras <code>registros_racha</code> por una columna que no tiene índice, Postgres recorrería toda la tabla de un tirón.</p>
 <h3 id="que-significa-rendimiento-performance">🟦 ¿Que significa? — <em>Rendimiento (performance)</em></h3>
-<p>Es qué tan rápido y eficiente responde tu programa o tu base de datos. <strong>Para qué sirve:</strong> una buena performance significa que la app se siente ágil para el usuario. <strong>Dónde aparece:</strong> en Faro, cuando cargas el panel de proyectos, el rendimiento de las consultas a Postgres decide si la pantalla aparece al instante o se queda “pensando”.</p>
+<p>Es qué tan rápido y con qué pocos recursos responde tu programa o tu base de datos. <strong>Para qué sirve:</strong> un buen rendimiento se traduce en una app que se siente ágil para quien la usa. <strong>Dónde aparece:</strong> en Faro, cuando cargas el panel de proyectos, lo rápido que respondan las consultas a Postgres decide si la pantalla aparece al instante o se queda “pensando”.</p>
 </blockquote>
 <h2 id="2-la-solucion-que-es-un-indice">2. La solución: ¿qué es un índice?</h2>
-<p>Un <strong>índice</strong> es justamente eso: una estructura extra que la base de datos guarda <em>aparte</em> de la tabla, ordenada de tal forma que encontrar un valor sea casi instantáneo. Igual que el índice alfabético del libro de cocina.</p>
+<p>Un <strong>índice</strong> es justo eso que acabamos de imaginar: una estructura extra que la base de datos guarda <em>aparte</em> de la tabla, ordenada de tal forma que encontrar un valor sea casi instantáneo. El mismísimo índice alfabético del libro de cocina, pero para tus filas.</p>
 <blockquote class="def">
 <h3 id="que-significa-indice-index">🟦 ¿Que significa? — <em>Índice (index)</em></h3>
-<p>Es una estructura de datos que la base de datos mantiene aparte de la tabla para encontrar filas rápidamente según el valor de una o varias columnas. <strong>Para qué sirve:</strong> convierte una búsqueda de “revisar todo” en “ir directo al dato”. <strong>Dónde aparece:</strong> en RachaSimple y Faro, las columnas por las que se filtra mucho (como <code>usuario_id</code>) suelen tener un índice para que las consultas vuelen.</p>
+<p>Es una estructura de datos que la base de datos mantiene aparte de la tabla para encontrar filas rápido según el valor de una o varias columnas. <strong>Para qué sirve:</strong> convierte una búsqueda de “revisar todo” en “ir directo al dato”. <strong>Dónde aparece:</strong> en RachaSimple y Faro, las columnas por las que se filtra mucho (como <code>usuario_id</code>) suelen llevar un índice para que las consultas vuelen.</p>
 </blockquote>
-<p>¿Cómo se crea? Con la instrucción <code>CREATE INDEX</code>. Por ejemplo, en RachaSimple, para acelerar las búsquedas de los registros de racha de cada persona:</p>
+<p>¿Y cómo se crea? Con la instrucción <code>CREATE INDEX</code>. Por ejemplo, en RachaSimple, para acelerar las búsquedas de los registros de racha de cada persona:</p>
 <pre><code class="language-sql">create index idx_registros_racha_usuario_id
   on registros_racha (usuario_id);
 </code></pre>
-<p>Vamos a leer esto despacio:</p>
+<p>Leámoslo despacio, parte por parte:</p>
 <ul>
-<li><code>create index</code> → “oye Postgres, crea un índice”.</li>
-<li><code>idx_registros_racha_usuario_id</code> → el <strong>nombre</strong> del índice. Es buena costumbre que el nombre diga sobre qué tabla y qué columna es.</li>
+<li><code>create index</code> → “oye Postgres, créame un índice”.</li>
+<li><code>idx_registros_racha_usuario_id</code> → el <strong>nombre</strong> del índice. Conviene que el nombre diga de qué tabla y de qué columna es; así, meses después, sabes de un vistazo para qué sirve.</li>
 <li><code>on registros_racha (usuario_id)</code> → sobre la tabla <code>registros_racha</code>, usando la columna <code>usuario_id</code>.</li>
 </ul>
-<p>A partir de ese momento, cuando filtres por <code>usuario_id</code>, Postgres puede usar el índice para saltar directo a las filas que te interesan, sin leer las demás.</p>
+<p>De ahí en adelante, cuando filtres por <code>usuario_id</code>, Postgres puede apoyarse en el índice para saltar directo a las filas que te interesan, sin tocar las demás.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>El nombre del índice no cambia cómo escribes tus consultas. Tú sigues haciendo <code>select ... where usuario_id = ...</code> igual que siempre. El índice trabaja <strong>detrás de cámaras</strong>; la base de datos decide sola si lo usa. Tú solo lo creas una vez.</p>
+<p>El nombre del índice no cambia para nada cómo escribes tus consultas. Tú sigues haciendo <code>select ... where usuario_id = ...</code> igual que siempre. El índice trabaja <strong>detrás de cámaras</strong>; es la base de datos la que decide sola si lo usa. Tú solo lo creas una vez y te olvidas.</p>
 <h3 id="que-significa-estructura-de-datos">🟦 ¿Que significa? — <em>Estructura de datos</em></h3>
-<p>Es una forma organizada de guardar información para que ciertas operaciones (buscar, ordenar, insertar) sean más eficientes. <strong>Para qué sirve:</strong> elegir la estructura correcta hace la diferencia entre algo lento y algo rápido. <strong>Dónde aparece:</strong> un índice de Postgres por dentro suele ser un “árbol B” (una estructura de datos pensada para buscar ordenadamente); tú no la programas, Postgres la administra por ti.</p>
+<p>Es una forma organizada de guardar información para que ciertas operaciones (buscar, ordenar, insertar) salgan más eficientes. <strong>Para qué sirve:</strong> elegir la estructura correcta es la diferencia entre algo lento y algo veloz. <strong>Dónde aparece:</strong> por dentro, un índice de Postgres suele ser un “árbol B” (una estructura pensada para buscar en orden); no la programas tú, Postgres la administra solo.</p>
 </blockquote>
 <h3 id="por-que-un-indice-es-tan-rapido">¿Por qué un índice es tan rápido?</h3>
-<p>Sin entrar en matemáticas pesadas: un índice está <strong>ordenado</strong>. Buscar en algo ordenado es como buscar una palabra en el diccionario; no lees página por página, abres por la mitad, ves si te pasaste o te quedaste corto, y vuelves a partir a la mitad. En unos pocos saltos llegas. Por eso un índice puede encontrar una fila entre millones en una fracción de segundo, mientras que el escaneo secuencial tendría que mirarlas todas.</p>
+<p>Sin meternos en matemáticas pesadas: un índice está <strong>ordenado</strong>. Y buscar en algo ordenado es como buscar una palabra en el diccionario. No vas página por página: abres por la mitad, ves si te pasaste o te quedaste corto, y vuelves a partir lo que quedó por la mitad. En unos pocos saltos llegaste. Por eso un índice encuentra una fila entre millones en una fracción de segundo, mientras que el escaneo secuencial tendría que mirarlas todas, una por una.</p>
 <h2 id="3-las-claves-ya-vienen-con-indice-de-regalo">3. Las claves ya vienen con índice de regalo</h2>
-<p>Aquí viene una noticia que te va a gustar: <strong>no todos los índices hay que crearlos a mano</strong>. Algunos aparecen solos.</p>
+<p>Y ahora una noticia que te va a caer bien: <strong>no todos los índices hay que crearlos a mano</strong>. Algunos aparecen solitos.</p>
 <blockquote class="def">
 <h3 id="que-significa-clave-primaria-primary-key">🟦 ¿Que significa? — <em>Clave primaria (primary key)</em></h3>
-<p>Es la columna (o columnas) que identifica de forma única a cada fila de una tabla; no se puede repetir ni quedar vacía. <strong>Para qué sirve:</strong> garantizar que cada fila tenga una “matrícula” única para no confundirla con otra. <strong>Dónde aparece:</strong> en Faro, la tabla <code>proyectos</code> tiene una columna <code>id</code> como clave primaria; cada proyecto tiene su propio <code>id</code> irrepetible.</p>
+<p>Es la columna (o columnas) que identifica de forma única a cada fila de una tabla; no se puede repetir ni quedar vacía. <strong>Para qué sirve:</strong> darle a cada fila una “matrícula” única para no confundirla con ninguna otra. <strong>Dónde aparece:</strong> en Faro, la tabla <code>proyectos</code> usa una columna <code>id</code> como clave primaria; cada proyecto tiene su <code>id</code> irrepetible.</p>
 </blockquote>
-<p>Cuando declaras una columna como clave primaria, Postgres <strong>crea automáticamente un índice</strong> sobre ella. Tiene sentido: para asegurarse de que un <code>id</code> no se repita, Postgres necesita poder buscar rápido si ese valor ya existe. Y de paso, esa búsqueda rápida queda disponible para tus consultas.</p>
+<p>Cuando declaras una columna como clave primaria, Postgres <strong>crea automáticamente un índice</strong> sobre ella. Y tiene toda la lógica: para asegurar que un <code>id</code> nunca se repita, Postgres necesita poder buscar rápido si ese valor ya existe. De paso, esa búsqueda veloz queda disponible también para tus consultas. Dos por uno sin que muevas un dedo.</p>
 <pre><code class="language-sql">create table proyectos (
   id uuid primary key default gen_random_uuid(),
   nombre text not null,
   usuario_id uuid not null
 );
 </code></pre>
-<p>En esa tabla, <code>id</code> ya tiene un índice sin que tú escribas <code>create index</code>. Pero ojo: <code>usuario_id</code> <strong>no</strong>. Esa la tendrías que indexar tú si filtras por ella (y en Faro, sí filtras por ella todo el tiempo).</p>
+<p>En esa tabla, <code>id</code> ya trae índice sin que escribas <code>create index</code>. Pero ojo con <code>usuario_id</code>: esa <strong>no</strong>. Si filtras por ella, tendrás que indexarla tú. Y en Faro, créeme, filtras por <code>usuario_id</code> a todas horas.</p>
 <blockquote class="def">
 <h3 id="que-significa-clave-foranea-foreign-key">🟦 ¿Que significa? — <em>Clave foránea (foreign key)</em></h3>
-<p>Es una columna que apunta a la clave primaria de <strong>otra</strong> tabla, para conectar datos entre ellas. <strong>Para qué sirve:</strong> mantener relaciones (este registro de racha pertenece a este hábito) y evitar datos “huérfanos”. <strong>Dónde aparece:</strong> en RachaSimple, la tabla <code>registros_racha</code> tiene una clave foránea <code>habito_id</code> que apunta al <code>id</code> de la tabla <code>habitos</code>.</p>
+<p>Es una columna que apunta a la clave primaria de <strong>otra</strong> tabla, para conectar datos entre las dos. <strong>Para qué sirve:</strong> mantener relaciones (este registro de racha pertenece a este hábito) y evitar datos “huérfanos” sin dueño. <strong>Dónde aparece:</strong> en RachaSimple, la tabla <code>registros_racha</code> tiene una clave foránea <code>habito_id</code> que apunta al <code>id</code> de la tabla <code>habitos</code>.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>A diferencia de la clave primaria, una <strong>clave foránea NO crea un índice automáticamente</strong> en Postgres. Mucha gente lo asume y luego se sorprende de que sus consultas que unen tablas vayan lentas. Si filtras o haces <code>join</code> por una clave foránea (como <code>habito_id</code> en RachaSimple), créale tú su índice.</p>
+<p>A diferencia de la clave primaria, una <strong>clave foránea NO crea un índice automáticamente</strong> en Postgres. Mucha gente lo da por hecho y después se rasca la cabeza porque sus consultas que unen tablas van lentas. Si filtras o haces <code>join</code> por una clave foránea (como <code>habito_id</code> en RachaSimple), créale tú su índice a mano.</p>
 </blockquote>
 <h2 id="4-indices-unicos-rapido-y-sin-duplicados">4. Índices únicos: rápido <em>y</em> sin duplicados</h2>
-<p>A veces no solo quieres buscar rápido, sino también <strong>prohibir valores repetidos</strong>. Para eso existe el índice único.</p>
+<p>A veces no solo quieres buscar rápido, sino además <strong>prohibir valores repetidos</strong>. Para ese par de cosas existe el índice único.</p>
 <blockquote class="def">
 <h3 id="que-significa-indice-unico-unique-index">🟦 ¿Que significa? — <em>Índice único (unique index)</em></h3>
-<p>Es un índice que, además de acelerar búsquedas, impide que dos filas tengan el mismo valor en esa columna. <strong>Para qué sirve:</strong> garantizar que algo no se repita (un correo, un nombre de usuario). <strong>Dónde aparece:</strong> en RachaSimple, la tabla <code>perfiles</code> podría tener un índice único en <code>username</code> para que no haya dos personas con el mismo nombre de usuario.</p>
+<p>Es un índice que, además de acelerar las búsquedas, impide que dos filas tengan el mismo valor en esa columna. <strong>Para qué sirve:</strong> garantizar que algo no se repita (un correo, un nombre de usuario). <strong>Dónde aparece:</strong> en RachaSimple, la tabla <code>perfiles</code> podría tener un índice único en <code>username</code> para que no haya dos personas con el mismo nombre de usuario.</p>
 </blockquote>
 <pre><code class="language-sql">create unique index idx_perfiles_username_unico
   on perfiles (username);
 </code></pre>
-<p>Si alguien intenta registrar un <code>username</code> que ya existe, Postgres <strong>rechaza</strong> la inserción con un error. Dos pájaros de un tiro: búsquedas veloces por <code>username</code> y la garantía de que es único.</p>
+<p>Si alguien intenta registrar un <code>username</code> que ya existe, Postgres <strong>rechaza</strong> la inserción con un error y no lo deja pasar. Otra vez dos pájaros de un tiro: búsquedas veloces por <code>username</code> y la garantía de que cada uno es único.</p>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Una clave primaria es, por debajo, un índice único: por eso no se repite. La diferencia es que puedes tener <strong>varios</strong> índices únicos en una tabla (uno en <code>username</code>, otro en <code>email</code>), pero solo <strong>una</strong> clave primaria.</p>
+<p>Una clave primaria es, por debajo, un índice único: justo por eso nunca se repite. La diferencia está en la cantidad: puedes tener <strong>varios</strong> índices únicos en una misma tabla (uno en <code>username</code>, otro en <code>email</code>), pero solo <strong>una</strong> clave primaria.</p>
 </blockquote>
 <h2 id="5-no-todo-es-gratis-el-costo-en-escritura">5. No todo es gratis: el costo en escritura</h2>
-<p>Llegamos a la parte que separa a quien “oyó hablar de índices” de quien “los entiende de verdad”. Los índices tienen un precio.</p>
-<p>Piénsalo así: un índice es una copia ordenada de cierta información. Cada vez que <strong>agregas, modificas o borras</strong> una fila, Postgres tiene que actualizar <strong>también</strong> todos los índices de esa tabla para mantenerlos al día. Si tu tabla tiene 5 índices, cada inserción hace 1 trabajo en la tabla + 5 actualizaciones de índices.</p>
+<p>Llegamos a la parte que separa a quien “oyó hablar de índices” de quien “los entiende de verdad”. Porque los índices, por buenos que sean, tienen su precio.</p>
+<p>Piénsalo así: un índice es una copia ordenada de cierta información. Cada vez que <strong>agregas, modificas o borras</strong> una fila, Postgres tiene que actualizar <strong>también</strong> todos los índices de esa tabla para que no queden desfasados. Si tu tabla tiene 5 índices, cada inserción supone 1 trabajo en la tabla más 5 actualizaciones de índices. Se suma rápido.</p>
 <blockquote class="def">
 <h3 id="que-significa-operacion-de-escritura-insert-update-delete">🟦 ¿Que significa? — <em>Operación de escritura (INSERT / UPDATE / DELETE)</em></h3>
-<p>Es cualquier consulta que <strong>cambia</strong> los datos: insertar una fila nueva, modificar una existente o borrarla. <strong>Para qué sirve:</strong> mantener la base de datos al día con lo que pasa en la app. <strong>Dónde aparece:</strong> en RachaSimple, cada vez que marcas un hábito como hecho, se hace un <code>insert</code> en <code>registros_racha</code>.</p>
+<p>Es cualquier consulta que <strong>cambia</strong> los datos: insertar una fila nueva, modificar una que ya existe o borrarla. <strong>Para qué sirve:</strong> mantener la base de datos al día con lo que va pasando en la app. <strong>Dónde aparece:</strong> en RachaSimple, cada vez que marcas un hábito como hecho se dispara un <code>insert</code> en <code>registros_racha</code>.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Más índices = búsquedas (lecturas) más rápidas, pero escrituras más lentas y más espacio en disco. No es gratis crear índices “por si acaso”. Crea un índice cuando tengas una razón real: una consulta que se ejecuta seguido y filtra por esa columna.</p>
+<p>Más índices = búsquedas (lecturas) más rápidas, pero escrituras más lentas y más espacio en disco gastado. Crear índices “por si acaso” no sale gratis. Crea un índice cuando tengas una razón concreta: una consulta que corres seguido y que filtra por esa columna.</p>
 </blockquote>
-<p>Esto nos da una regla de oro muy práctica:</p>
+<p>De aquí sale una regla de oro muy fácil de recordar:</p>
 <ul>
-<li>¿La tabla se <strong>lee</strong> mucho y por la misma columna? → buen candidato a índice.</li>
-<li>¿La tabla se <strong>escribe</strong> muchísimo pero casi no se consulta por esa columna? → quizá el índice estorba más de lo que ayuda.</li>
+<li>¿La tabla se <strong>lee</strong> mucho y siempre por la misma columna? → buen candidato a índice.</li>
+<li>¿La tabla se <strong>escribe</strong> un montón pero casi nunca la consultas por esa columna? → puede que el índice estorbe más de lo que ayude.</li>
 </ul>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>En RachaSimple, <code>registros_racha</code> se escribe seguido (cada vez que cumples un hábito), pero también se lee muchísimo (cada vez que ves tu progreso, filtrando por <code>usuario_id</code>). Como las lecturas pesan tanto, el índice en <code>usuario_id</code> vale totalmente la pena pese al pequeño costo de escritura.</p>
+<p>En RachaSimple, <code>registros_racha</code> se escribe seguido (cada vez que cumples un hábito), pero también se lee muchísimo (cada vez que miras tu progreso, filtrando por <code>usuario_id</code>). Como las lecturas pesan tanto en el día a día, el índice en <code>usuario_id</code> vale por completo la pena, aun con su pequeño costo de escritura.</p>
 </blockquote>
 <h2 id="6-cuando-crear-un-indice-una-guia-sencilla">6. ¿Cuándo crear un índice? Una guía sencilla</h2>
-<p>No hay que adivinar. Estas son las pistas típicas de que una columna se beneficia de un índice:</p>
+<p>No hace falta adivinar. Estas son las señales típicas de que una columna se beneficia de un índice:</p>
 <ol>
 <li><strong>Aparece mucho en <code>WHERE</code>.</strong> Si filtras seguido por <code>usuario_id</code>, indéxala.</li>
-<li><strong>Se usa en <code>JOIN</code>.</strong> Las columnas que conectan tablas (claves foráneas como <code>habito_id</code>) suelen necesitar índice.</li>
-<li><strong>Se usa en <code>ORDER BY</code>.</strong> Si ordenas a menudo por <code>created_at</code>, un índice puede acelerar el ordenamiento.</li>
-<li><strong>La tabla es grande.</strong> En tablas con pocas filas el escaneo secuencial es tan rápido que el índice ni se nota.</li>
+<li><strong>Se usa en <code>JOIN</code>.</strong> Las columnas que conectan tablas (claves foráneas como <code>habito_id</code>) casi siempre piden índice.</li>
+<li><strong>Se usa en <code>ORDER BY</code>.</strong> Si ordenas a menudo por <code>created_at</code>, un índice puede acelerar ese ordenamiento.</li>
+<li><strong>La tabla es grande.</strong> En tablas con pocas filas, el escaneo secuencial es tan veloz que el índice ni se nota.</li>
 </ol>
-<p>Y las pistas de que <strong>no</strong> conviene:</p>
+<p>Y estas son las señales de que <strong>no</strong> conviene:</p>
 <ul>
-<li>La tabla es pequeña (decenas o pocas cientos de filas).</li>
+<li>La tabla es pequeña (decenas o unos pocos cientos de filas).</li>
 <li>La columna casi nunca se usa para filtrar.</li>
-<li>La columna tiene poquísimos valores distintos (por ejemplo, una columna <code>activo</code> que solo es <code>true</code> o <code>false</code>); ahí el índice ayuda poco.</li>
+<li>La columna tiene poquísimos valores distintos (por ejemplo, una columna <code>activo</code> que solo vale <code>true</code> o <code>false</code>); ahí el índice aporta muy poco.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-join">🟦 ¿Que significa? — <em>JOIN</em></h3>
-<p>Es una operación que combina filas de dos tablas relacionadas usando una columna en común. <strong>Para qué sirve:</strong> juntar datos que viven en tablas separadas (un hábito y sus registros de racha). <strong>Dónde aparece:</strong> en RachaSimple, para mostrar “cuántas veces cumpliste cada hábito” se hace un <code>join</code> entre <code>habitos</code> y <code>registros_racha</code> por <code>habito_id</code>.</p>
+<p>Es una operación que combina filas de dos tablas relacionadas usando una columna que tienen en común. <strong>Para qué sirve:</strong> juntar datos que viven en tablas separadas (un hábito y sus registros de racha). <strong>Dónde aparece:</strong> en RachaSimple, para mostrar “cuántas veces cumpliste cada hábito” se hace un <code>join</code> entre <code>habitos</code> y <code>registros_racha</code> por <code>habito_id</code>.</p>
 </blockquote>
 <h2 id="7-explain-pedirle-a-la-base-de-datos-que-te-cuente-su-plan">7. EXPLAIN: pedirle a la base de datos que te cuente su plan</h2>
-<p>¿Cómo sabes si tu índice se está usando o si la consulta hace un escaneo secuencial? No adivines: <strong>pregúntale a Postgres</strong> con <code>EXPLAIN</code>.</p>
+<p>¿Y cómo sabes si tu índice se está usando o si la consulta sigue haciendo escaneo secuencial? No lo adivines: <strong>pregúntale a Postgres</strong> directamente con <code>EXPLAIN</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-explain">🟦 ¿Que significa? — <em>EXPLAIN</em></h3>
-<p>Es una instrucción que le pide a la base de datos que te muestre el <strong>plan</strong> que usará para responder una consulta, sin ejecutarla del todo. <strong>Para qué sirve:</strong> ver si usará un índice o un escaneo secuencial, y entender por qué una consulta va lenta. <strong>Dónde aparece:</strong> en el editor SQL de Supabase (que usan RachaSimple y Faro) puedes escribir <code>explain</code> antes de tu <code>select</code> y leer el plan.</p>
+<p>Es una instrucción que le pide a la base de datos que te muestre el <strong>plan</strong> que piensa seguir para responder una consulta, sin llegar a ejecutarla del todo. <strong>Para qué sirve:</strong> ver si usará un índice o un escaneo secuencial, y entender por qué una consulta va lenta. <strong>Dónde aparece:</strong> en el editor SQL de Supabase (que usan RachaSimple y Faro) puedes anteponer <code>explain</code> a tu <code>select</code> y leer el plan que sale.</p>
 <h3 id="que-significa-plan-de-ejecucion-query-plan">🟦 ¿Que significa? — <em>Plan de ejecución (query plan)</em></h3>
-<p>Es la “receta” paso a paso que la base de datos decide seguir para resolver tu consulta. <strong>Para qué sirve:</strong> la base de datos tiene varias formas de obtener el resultado y elige la que cree más rápida; el plan te muestra cuál eligió. <strong>Dónde aparece:</strong> lo ves cuando ejecutas <code>EXPLAIN</code> en el editor SQL de Supabase de Faro o RachaSimple.</p>
+<p>Es la “receta” paso a paso que la base de datos decide seguir para resolver tu consulta. <strong>Para qué sirve:</strong> la base de datos tiene varias maneras de obtener el mismo resultado y elige la que cree más rápida; el plan te enseña cuál eligió. <strong>Dónde aparece:</strong> lo ves cuando ejecutas <code>EXPLAIN</code> en el editor SQL de Supabase de Faro o RachaSimple.</p>
 </blockquote>
-<p>Se usa así:</p>
+<p>Se usa así de fácil:</p>
 <pre><code class="language-sql">explain
 select * from registros_racha where usuario_id = 'a1b2c3';
 </code></pre>
-<p>Postgres te devuelve un texto con su plan. No necesitas entender cada palabra; busca dos cosas clave:</p>
+<p>Postgres te devuelve un texto con su plan. No necesitas entender cada palabra de ahí; basta con cazar dos cosas clave:</p>
 <ul>
-<li><strong><code>Seq Scan</code></strong> (escaneo secuencial) → está leyendo toda la tabla. Si la tabla es grande, esto es una bandera roja.</li>
-<li><strong><code>Index Scan</code></strong> (escaneo por índice) → está usando un índice. ¡Bien!</li>
+<li><strong><code>Seq Scan</code></strong> (escaneo secuencial) → está leyendo la tabla entera. Si la tabla es grande, esto es una bandera roja.</li>
+<li><strong><code>Index Scan</code></strong> (escaneo por índice) → está usando un índice. ¡Esa es la buena!</li>
 </ul>
-<p>Si ves <code>Seq Scan</code> en una consulta que corres muchísimo sobre una tabla grande, esa es tu señal para crear un índice en la columna del <code>WHERE</code>.</p>
+<p>Si ves <code>Seq Scan</code> en una consulta que corres muchísimo sobre una tabla grande, ahí tienes tu señal para crear un índice en la columna del <code>WHERE</code>.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>Abre el <strong>editor SQL de Supabase</strong> de RachaSimple y corre <code>explain select * from registros_racha where usuario_id = '&lt;un id real&gt;';</code>. Mira si dice <code>Seq Scan</code> o <code>Index Scan</code>. Luego crea el índice en <code>usuario_id</code>, vuelve a correr el <code>explain</code> y compara. Vas a ver el cambio con tus propios ojos. 👀</p>
+<p>Abre el <strong>editor SQL de Supabase</strong> de RachaSimple y corre <code>explain select * from registros_racha where usuario_id = '&lt;un id real&gt;';</code>. Fíjate si dice <code>Seq Scan</code> o <code>Index Scan</code>. Después crea el índice en <code>usuario_id</code>, vuelve a correr el <code>explain</code> y compara los dos resultados. Vas a ver el cambio con tus propios ojos. 👀</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Existe <code>EXPLAIN ANALYZE</code>, que además <strong>ejecuta</strong> la consulta y te dice el tiempo real que tardó. Es muy útil, pero ten cuidado: como ejecuta de verdad, no lo uses con <code>UPDATE</code> o <code>DELETE</code> a la ligera, porque sí cambiará tus datos.</p>
+<p>Existe también <code>EXPLAIN ANALYZE</code>, que además de mostrar el plan <strong>ejecuta</strong> la consulta y te dice el tiempo real que tardó. Es utilísimo, pero ten cuidado: como ejecuta de verdad, no lo uses a la ligera con <code>UPDATE</code> o <code>DELETE</code>, porque sí va a cambiar tus datos.</p>
 </blockquote>
 <h2 id="8-el-caso-estrella-por-que-usuario_id-casi-siempre-se-indexa">8. El caso estrella: por qué <code>usuario_id</code> casi siempre se indexa</h2>
-<p>Ya tienes todas las piezas para entender por qué RachaSimple y Faro indexan tanto la columna <code>usuario_id</code>. Hay <strong>dos</strong> razones que se juntan.</p>
-<p><strong>Razón 1: cada usuario solo ve lo suyo.</strong> En estas apps, prácticamente toda consulta es del tipo “dame los datos <strong>de este usuario</strong>”. En RachaSimple: tus hábitos, tus registros de racha, tu perfil. En Faro: tus proyectos, tus fases, tus conexiones. Eso significa que <code>usuario_id</code> aparece en el <code>WHERE</code> <em>constantemente</em>. Y ya sabemos: columna muy usada en <code>WHERE</code> = candidata perfecta a índice.</p>
+<p>Ya tienes todas las piezas para entender por qué RachaSimple y Faro indexan tanto la columna <code>usuario_id</code>. En realidad son <strong>dos</strong> razones que se juntan y se refuerzan.</p>
+<p><strong>Razón 1: cada usuario solo ve lo suyo.</strong> En estas apps, prácticamente toda consulta es del tipo “dame los datos <strong>de este usuario</strong>”. En RachaSimple: tus hábitos, tus registros de racha, tu perfil. En Faro: tus proyectos, tus fases, tus conexiones. O sea que <code>usuario_id</code> aparece en el <code>WHERE</code> <em>todo el tiempo</em>. Y ya lo sabes: columna muy usada en <code>WHERE</code> = candidata perfecta a índice.</p>
 <p><strong>Razón 2: la seguridad a nivel de fila también filtra por usuario.</strong> Aquí entra un concepto importante de Supabase.</p>
 <blockquote class="def">
 <h3 id="que-significa-rls-row-level-security-seguridad-a-nivel-de-fila">🟦 ¿Que significa? — <em>RLS (Row Level Security / Seguridad a nivel de fila)</em></h3>
-<p>Es una característica de Postgres que aplica reglas para decidir, fila por fila, qué puede ver o tocar cada usuario. <strong>Para qué sirve:</strong> que un usuario solo acceda a SUS filas aunque la consulta no lo pida explícitamente; la base de datos lo impone sola. <strong>Dónde aparece:</strong> RachaSimple y Faro usan RLS en sus tablas para que cada persona solo lea sus propios hábitos, proyectos y conexiones.</p>
+<p>Es una característica de Postgres que aplica reglas para decidir, fila por fila, qué puede ver o tocar cada usuario. <strong>Para qué sirve:</strong> que un usuario solo acceda a SUS filas aunque la consulta no lo pida en voz alta; la base de datos lo impone por su cuenta. <strong>Dónde aparece:</strong> RachaSimple y Faro usan RLS en sus tablas para que cada persona lea únicamente sus propios hábitos, proyectos y conexiones.</p>
 </blockquote>
-<p>Una política de RLS típica dice, en palabras simples: “solo deja pasar las filas donde <code>usuario_id</code> sea igual al id de quien está conectado”. Esa comparación por <code>usuario_id</code> se aplica <strong>a cada consulta, automáticamente</strong>, en cada tabla protegida. O sea: aunque tu <code>select</code> no mencione <code>usuario_id</code>, la RLS sí lo hace por debajo.</p>
-<p>Resultado: <code>usuario_id</code> se usa para filtrar <strong>dos veces</strong> (una por tu <code>WHERE</code>, otra por la RLS) en casi todas las consultas. Tener un índice ahí no es un lujo, es lo que mantiene la app rápida.</p>
+<p>Una política de RLS típica dice, en cristiano: “solo deja pasar las filas donde <code>usuario_id</code> sea igual al id de quien está conectado”. Esa comparación por <code>usuario_id</code> se aplica <strong>a cada consulta, de forma automática</strong>, en cada tabla protegida. Es decir: aunque tu <code>select</code> ni mencione <code>usuario_id</code>, la RLS sí lo hace por debajo, sin que la veas.</p>
+<p>¿El resultado? <code>usuario_id</code> se usa para filtrar <strong>dos veces</strong> (una por tu <code>WHERE</code>, otra por la RLS) en casi todas las consultas. Tener un índice ahí no es ningún lujo: es lo que mantiene la app rápida.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En Faro revisa las tablas <code>proyectos</code>, <code>fases</code> y <code>user_connections</code>. Todas tienen una columna que ata cada fila a un usuario y políticas de RLS que filtran por ella. Esa columna es justamente la que merece un índice. Confirma cuáles ya lo tienen con la lista de índices de la tabla en Supabase.</p>
+<p>En Faro revisa las tablas <code>proyectos</code>, <code>fases</code> y <code>user_connections</code>. Todas tienen una columna que ata cada fila a un usuario, y políticas de RLS que filtran por ella. Esa columna es justo la que merece un índice. Confirma cuáles ya lo tienen mirando la lista de índices de la tabla en Supabase.</p>
 <h3 id="que-significa-cliente-de-supabase">🟦 ¿Que significa? — <em>Cliente de Supabase</em></h3>
-<p>Es la librería que tu app usa para hablar con la base de datos sin escribir SQL a mano; tú llamas funciones en TypeScript y ella arma la consulta. <strong>Para qué sirve:</strong> consultar y modificar datos desde el código de la app de forma cómoda y segura. <strong>Dónde aparece:</strong> en Faro (Next.js) y RachaSimple, el frontend usa el cliente de Supabase para leer datos.</p>
+<p>Es la librería que tu app usa para hablar con la base de datos sin escribir SQL a mano; tú llamas funciones en TypeScript y ella arma la consulta por ti. <strong>Para qué sirve:</strong> consultar y modificar datos desde el código de la app de forma cómoda y segura. <strong>Dónde aparece:</strong> en Faro (Next.js) y RachaSimple, el frontend usa el cliente de Supabase para leer datos.</p>
 </blockquote>
-<p>Así se ve una consulta de RachaSimple desde el cliente. Fíjate cómo filtra por <code>usuario_id</code>: justo la columna que conviene indexar.</p>
+<p>Así se ve una consulta de RachaSimple hecha desde el cliente. Fíjate cómo filtra por <code>usuario_id</code>: precisamente la columna que conviene indexar.</p>
 <pre><code class="language-ts">// RachaSimple: traer los registros de racha del usuario actual
 const { data, error } = await supabase
   .from(&quot;registros_racha&quot;)
@@ -185,24 +185,24 @@ const { data, error } = await supabase
 <h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
 <p>Es una librería del frontend que pide datos al servidor, los guarda en una memoria temporal (caché) y evita volver a pedir lo mismo una y otra vez. <strong>Para qué sirve:</strong> que la app no repita consultas innecesarias y se sienta veloz. <strong>Dónde aparece:</strong> RachaSimple usa TanStack Query para manejar los datos que trae del cliente de Supabase.</p>
 <h3 id="tip_4">💡 Tip</h3>
-<p>Los índices y un buen caché como TanStack Query son <strong>aliados</strong>, no rivales. El índice hace que <em>cada</em> consulta a Postgres sea rápida; TanStack Query hace que <em>no tengas que repetir</em> la consulta. Juntos, la app vuela.</p>
+<p>Los índices y un buen caché como TanStack Query son <strong>aliados</strong>, no rivales. El índice hace que <em>cada</em> consulta a Postgres salga rápida; TanStack Query hace que <em>no tengas que repetir</em> la consulta. Juntos, la app vuela.</p>
 </blockquote>
 <h2 id="9-buenas-practicas-para-consultas-rapidas">9. Buenas prácticas para consultas rápidas</h2>
-<p>Los índices ayudan, pero también importa <strong>cómo</strong> escribes tus consultas. Bit te deja sus consejos favoritos:</p>
-<p><strong>a) Pide solo las columnas que necesitas.</strong> <code>select *</code> trae todo, incluso lo que no vas a usar. Si solo necesitas la fecha y el hábito, pídelos:</p>
+<p>Los índices ayudan un montón, pero también importa <strong>cómo</strong> escribes tus consultas. Bit te deja aquí sus consejos favoritos:</p>
+<p><strong>a) Pide solo las columnas que necesitas.</strong> <code>select *</code> trae todo, incluso lo que no vas a mirar. Si solo necesitas la fecha y el hábito, pídelos y ya:</p>
 <pre><code class="language-sql">select habito_id, created_at
 from registros_racha
 where usuario_id = 'a1b2c3';
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p><code>select *</code> es cómodo para probar, pero en producción puede traer columnas pesadas que no usas y gastar ancho de banda. En Faro, donde algunas filas guardan textos largos generados por IA, pedir solo lo necesario marca diferencia.</p>
+<p><code>select *</code> es comodísimo para probar, pero en producción puede arrastrar columnas pesadas que ni usas y desperdiciar ancho de banda. En Faro, donde algunas filas guardan textos largos generados por IA, pedir solo lo necesario marca una diferencia real.</p>
 </blockquote>
-<p><strong>b) Filtra del lado de la base de datos, no en el código.</strong> No traigas 10.000 filas para luego quedarte con 10 en JavaScript. Deja que el <code>WHERE</code> (y el índice) hagan el filtrado:</p>
+<p><strong>b) Filtra del lado de la base de datos, no en el código.</strong> No traigas 10.000 filas para luego quedarte con 10 a punta de JavaScript. Deja que el <code>WHERE</code> (y el índice) hagan el filtrado donde corresponde:</p>
 <pre><code class="language-sql">-- bien: el filtro lo hace Postgres usando el índice
 select * from proyectos where usuario_id = 'a1b2c3' and archivado = false;
 </code></pre>
-<p><strong>c) Limita los resultados.</strong> Si solo muestras 20 registros, pide 20:</p>
+<p><strong>c) Limita los resultados.</strong> Si en pantalla solo muestras 20 registros, pide 20, no mil:</p>
 <pre><code class="language-sql">select * from registros_racha
 where usuario_id = 'a1b2c3'
 order by created_at desc
@@ -210,31 +210,31 @@ limit 20;
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-limit">🟦 ¿Que significa? — <em>LIMIT</em></h3>
-<p>Es una cláusula que le dice a la consulta cuántas filas como máximo quieres recibir. <strong>Para qué sirve:</strong> evitar traer datos de más y hacer la consulta más liviana. <strong>Dónde aparece:</strong> en RachaSimple, para mostrar “tus últimos 20 registros” se usa <code>limit 20</code>.</p>
+<p>Es una cláusula que le dice a la consulta cuántas filas como máximo quieres recibir. <strong>Para qué sirve:</strong> evitar traer datos de más y dejar la consulta más liviana. <strong>Dónde aparece:</strong> en RachaSimple, para mostrar “tus últimos 20 registros” se usa <code>limit 20</code>.</p>
 </blockquote>
-<p><strong>d) Cuidado con transformar la columna indexada.</strong> Si envuelves la columna del <code>WHERE</code> en una función, el índice puede dejar de servir:</p>
+<p><strong>d) Cuidado con transformar la columna indexada.</strong> Si envuelves la columna del <code>WHERE</code> dentro de una función, el índice puede dejar de servirte:</p>
 <pre><code class="language-sql">-- esto puede IGNORAR el índice de usuario_id:
 select * from registros_racha where lower(usuario_id::text) = 'a1b2c3';
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Cuando aplicas una función sobre la columna indexada (como <code>lower(...)</code>), Postgres a menudo ya no puede usar el índice normal y vuelve al escaneo secuencial. Procura comparar la columna “tal cual” siempre que puedas.</p>
+<p>Cuando aplicas una función sobre la columna indexada (como <code>lower(...)</code>), Postgres a menudo ya no puede usar el índice normal y se devuelve al escaneo secuencial. Procura comparar la columna “tal cual”, sin envolverla, siempre que puedas.</p>
 </blockquote>
 <h2 id="10-polypaw-el-contraste-sin-base-de-datos">10. PolyPaw: el contraste sin base de datos</h2>
-<p>Para que aprecies todo esto, miremos un proyecto que <strong>no</strong> usa nada de lo anterior: <strong>PolyPaw</strong>, hecho en Python con Flet, guarda sus datos en <strong>archivos JSON</strong>.</p>
+<p>Para que aprecies de verdad todo esto, miremos un proyecto que <strong>no</strong> usa nada de lo anterior: <strong>PolyPaw</strong>, hecho en Python con Flet, guarda sus datos en <strong>archivos JSON</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-json-archivo-de-datos">🟦 ¿Que significa? — <em>JSON (archivo de datos)</em></h3>
-<p>Es un formato de texto para guardar datos estructurados (listas, objetos con campos). <strong>Para qué sirve:</strong> almacenar información de forma simple en un archivo, sin necesidad de un servidor de base de datos. <strong>Dónde aparece:</strong> PolyPaw guarda su información (como el progreso de misiones) en archivos JSON dentro del propio proyecto.</p>
+<p>Es un formato de texto para guardar datos estructurados (listas, objetos con campos). <strong>Para qué sirve:</strong> almacenar información de forma simple en un archivo, sin montar un servidor de base de datos. <strong>Dónde aparece:</strong> PolyPaw guarda su información (como el progreso de misiones) en archivos JSON dentro del propio proyecto.</p>
 </blockquote>
-<p>En PolyPaw <strong>no hay índices, ni <code>CREATE INDEX</code>, ni <code>EXPLAIN</code>, ni RLS</strong>. ¿Por qué? Porque no hay base de datos relacional. Para encontrar un dato, el programa carga el archivo JSON completo en memoria y lo recorre con código Python. Eso funciona perfecto cuando los datos son pocos y caben en memoria.</p>
+<p>En PolyPaw <strong>no hay índices, ni <code>CREATE INDEX</code>, ni <code>EXPLAIN</code>, ni RLS</strong>. ¿Por qué? Porque sencillamente no hay una base de datos relacional. Para encontrar un dato, el programa carga el archivo JSON completo en memoria y lo recorre con código Python. Y eso funciona perfecto cuando los datos son pocos y caben sin problema en memoria.</p>
 <blockquote class="warn">
 <h3 id="cuidado_4">⚠️ Cuidado</h3>
-<p>El enfoque de PolyPaw (datos en JSON) es genial para apps pequeñas y locales, pero <strong>no escala</strong> igual que una base de datos. Sin índices, buscar entre cientos de miles de elementos sería lento, y no tienes RLS para separar datos por usuario en un servidor. Por eso RachaSimple y Faro, que sí necesitan multiusuario y crecer, eligieron Postgres en Supabase.</p>
+<p>El enfoque de PolyPaw (datos en JSON) es genial para apps pequeñas y locales, pero <strong>no escala</strong> igual que una base de datos. Sin índices, buscar entre cientos de miles de elementos se volvería lento, y tampoco tienes RLS para separar datos por usuario en un servidor. Por eso RachaSimple y Faro, que sí necesitan ser multiusuario y crecer, eligieron Postgres en Supabase.</p>
 </blockquote>
-<p>Esto te ayuda a ver que <strong>los índices son una herramienta de las bases de datos relacionales</strong>. No son magia universal; son la respuesta de Postgres al problema de “buscar rápido entre muchísimas filas, para muchos usuarios a la vez”. Proyectos como tunal-digital (un sitio en HTML/CSS/JS sin backend de datos) o polypaw-nas (un servidor casero con Samba y Cockpit) tampoco tienen índices SQL, sencillamente porque su trabajo no es ese.</p>
+<p>Esto te ayuda a ver una idea de fondo: <strong>los índices son una herramienta de las bases de datos relacionales</strong>. No son magia que sirva para todo; son la respuesta de Postgres al problema concreto de “buscar rápido entre muchísimas filas, para muchos usuarios a la vez”. Proyectos como tunal-digital (un sitio en HTML/CSS/JS sin backend de datos) o polypaw-nas (un servidor casero con Samba y Cockpit) tampoco tienen índices SQL, simplemente porque su trabajo no es ese.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>Compara mentalmente: en PolyPaw, “buscar la misión X” = leer el JSON y recorrerlo en Python. En RachaSimple, “buscar los registros del usuario X” = un <code>select</code> con <code>WHERE usuario_id = ...</code> que Postgres resuelve con un índice. Mismo objetivo, herramientas muy distintas según el tamaño del problema.</p>
+<p>Compara mentalmente los dos mundos: en PolyPaw, “buscar la misión X” = leer el JSON y recorrerlo en Python. En RachaSimple, “buscar los registros del usuario X” = un <code>select</code> con <code>WHERE usuario_id = ...</code> que Postgres resuelve con un índice. Mismo objetivo, herramientas muy distintas según el tamaño del problema.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

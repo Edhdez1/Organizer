@@ -5,19 +5,19 @@
 </p>
 
 
-> Hasta ahora dibujaste cosas **fijas**: un componente, un texto, un botón. Pero las apps
-> de verdad muestran **muchas** cosas que vienen de datos: la lista de hábitos de
-> **RachaSimple**, la lista de proyectos de **Faro**. En este capítulo aprendes a convertir
+> Hasta ahora pintaste cosas **fijas**: un componente, un texto, un botón. Pero las apps
+> de verdad muestran **muchas** cosas que salen de datos: la lista de hábitos de
+> **RachaSimple**, la lista de proyectos de **Faro**. En este capítulo vas a aprender a convertir
 > un array en pantalla con `.map()`, a darle a cada elemento su `key`, y a mostrar u ocultar
-> partes de la interfaz según condiciones (`&&`, el ternario, devolver `null`) y a agrupar sin
-> ensuciar el HTML con **fragmentos**. Bit, el ajolote, te acompaña: él odia repetir cosas a
-> mano, así que las listas son su parte favorita.
+> partes de la interfaz según condiciones (`&&`, el ternario, devolver `null`). También verás cómo
+> agrupar elementos sin meter etiquetas de más en el HTML usando **fragmentos**. Bit, el ajolote, va
+> contigo: él detesta repetir cosas a mano, así que las listas son lo que más le gusta.
 
 ---
 
 ## 1. El problema: tengo un array, quiero pintarlo
 
-Imagina que en RachaSimple tienes los hábitos del usuario guardados en un array, como aprendiste
+Pongamos que en RachaSimple tienes los hábitos del usuario guardados en un array, como viste
 en el módulo 03 de JavaScript:
 
 ```ts
@@ -28,15 +28,15 @@ const habitos = [
 ];
 ```
 
-No quieres escribir tres bloques de JSX a mano, porque mañana habrá cinco hábitos, o ninguno.
-Quieres una regla: **"por cada hábito del array, dibuja una tarjeta"**. Eso es justo lo que hace
-`.map()` dentro de JSX.
+No tiene sentido escribir tres bloques de JSX a mano, porque mañana habrá cinco hábitos, o ninguno.
+Lo que quieres es una regla: **"por cada hábito del array, dibuja una tarjeta"**. Y eso es exactamente
+lo que hace `.map()` dentro de JSX.
 
 > ### 🟦 ¿Qué significa? — *Renderizar una lista*
-> **Renderizar una lista** es transformar un array de datos en un array de elementos de interfaz
-> (una tarjeta, una fila, un `<li>`...), uno por cada dato. En vez de escribir el HTML repetido a
-> mano, le das a React el array y una "plantilla", y React dibuja tantos elementos como datos
-> haya. Es el patrón más común de toda app: en RachaSimple pinta los hábitos, en Faro pinta los
+> **Renderizar una lista** es convertir un array de datos en un array de elementos de interfaz
+> (una tarjeta, una fila, un `<li>`...), uno por cada dato. En lugar de escribir el HTML repetido a
+> mano, le pasas a React el array y una "plantilla", y React dibuja tantos elementos como datos
+> haya. Es el patrón más común de cualquier app: en RachaSimple pinta los hábitos, en Faro pinta los
 > proyectos.
 
 ---
@@ -47,12 +47,12 @@ Ya conoces `.map()` de JavaScript: recorre un array y devuelve un array **nuevo*
 elemento transformado. En React lo usamos para transformar **datos** en **JSX**.
 
 > ### 🟦 ¿Qué significa? — *`.map()` (recordatorio del módulo 03)*
-> `.map()` es un método de los arrays. Recibe una función y la aplica a cada elemento, devolviendo
-> un array nuevo con los resultados. `[1, 2, 3].map(n => n * 2)` da `[2, 4, 6]`. En React, la función
-> devuelve **un trozo de JSX** por cada elemento, así que terminas con un array de elementos que
+> `.map()` es un método de los arrays. Recibe una función y la aplica a cada elemento, y devuelve
+> un array nuevo con los resultados. `[1, 2, 3].map(n => n * 2)` da `[2, 4, 6]`. En React, esa función
+> devuelve **un trozo de JSX** por cada elemento, así que acabas con un array de elementos que
 > React sabe dibujar.
 
-Mira cómo se vería la lista de hábitos de RachaSimple. Recuerda que RachaSimple usa **React 18 +
+Mira cómo quedaría la lista de hábitos de RachaSimple. Recuerda que RachaSimple usa **React 18 +
 TypeScript**, así que cada componente es un archivo `.tsx`:
 
 ```tsx
@@ -77,36 +77,36 @@ function ListaHabitos() {
 
 Fíjate en tres cosas:
 
-1. El `.map()` va **dentro de llaves** `{ }`, porque es JavaScript metido en JSX (lo viste en el
+1. El `.map()` va **dentro de llaves** `{ }`, porque es JavaScript metido en JSX (eso lo viste en el
    capítulo 02).
-2. La función del `.map()` **devuelve JSX** (`<li>...</li>`). Aquí usamos paréntesis `( )` después
+2. La función del `.map()` **devuelve JSX** (`<li>...</li>`). Aquí ponemos paréntesis `( )` después
    de la flecha para devolver el JSX directamente, sin escribir `return`.
-3. Cada `<li>` tiene una prop rara llamada `key`. Esa `key` es tan importante que tiene su propia
+3. Cada `<li>` lleva una prop rara llamada `key`. Esa `key` es tan importante que tiene su propia
    sección entera más abajo.
 
 > ### 🟦 ¿Qué significa? — *La "plantilla" del map*
 > La **plantilla** es el trozo de JSX que escribes dentro del `.map()` y que se repite por cada
 > dato. Escribes la tarjeta **una sola vez** y React la clona con los datos de cada elemento. Si
-> mañana cambias el diseño de la tarjeta, lo cambias en un solo lugar.
+> mañana cambias el diseño de la tarjeta, lo tocas en un único lugar.
 
 > ### 💡 Tip — Paréntesis para "devolver sin return"
-> En una flecha, `(habito) => (<li>...</li>)` devuelve el `<li>` automáticamente. Si en cambio usas
-> llaves `(habito) => { ... }` estás abriendo un **cuerpo de función**, y entonces **sí** necesitas
-> escribir `return`. Olvidar el `return` cuando usas llaves es uno de los errores más comunes de
-> principiante: el map devuelve `undefined` y no aparece nada.
+> En una flecha, `(habito) => (<li>...</li>)` devuelve el `<li>` solo. Si en cambio usas
+> llaves `(habito) => { ... }`, estás abriendo un **cuerpo de función**, y entonces **sí** tienes que
+> escribir `return`. Olvidar el `return` cuando usas llaves es de los errores más comunes al
+> empezar: el map devuelve `undefined` y no aparece nada.
 
 > ### 🔎 En tu código
-> En RachaSimple casi todas las pantallas que listan algo (los hábitos del día, el historial)
+> En RachaSimple, casi todas las pantallas que listan algo (los hábitos del día, el historial)
 > nacen de un `.map()` sobre un array que viene de Supabase. En Faro, la cuadrícula de tarjetas de
-> proyectos es exactamente esto: un `.map()` sobre el array de proyectos del usuario.
+> proyectos es justo esto: un `.map()` sobre el array de proyectos del usuario.
 
 ---
 
 ## 3. La prop `key`: por qué React te la pide
 
-Si ejecutas un `.map()` sin `key`, React funciona... pero te grita en la consola con un aviso
+Si ejecutas un `.map()` sin `key`, React funciona... pero te avisa en la consola con un mensaje
 amarillo: *"Each child in a list should have a unique key prop"* ("cada hijo de una lista debería
-tener una prop key única"). No es un capricho.
+tener una prop key única"). No es un capricho suyo.
 
 > ### 🟦 ¿Qué significa? — *La prop `key`*
 > `key` es una prop especial que le das a cada elemento de una lista para que React pueda
@@ -114,15 +114,15 @@ tener una prop key única"). No es un capricho.
 > dentro. Sirve para que, cuando la lista cambie (se añade, se borra o se reordena algo), React
 > sepa **qué elemento es cuál** y actualice solo lo que cambió, en vez de redibujar todo.
 
-Piénsalo así: imagina que tienes tres hábitos y borras el del medio. Sin `key`, React ve "antes
-había 3, ahora hay 2" y no está seguro de **cuál** desapareció, así que puede confundirse y dejar
+Piénsalo así: tienes tres hábitos y borras el del medio. Sin `key`, React ve "antes
+había 3, ahora hay 2" y no sabe con certeza **cuál** desapareció, así que puede liarse y dejar
 datos viejos (por ejemplo, un checkbox marcado) en la tarjeta equivocada. Con `key`, React dice
-"ah, desapareció el de `key="a2"`, dejo intactos los otros dos". Rápido y sin errores.
+"ah, desapareció el de `key="a2"`, dejo intactos los otros dos". Rápido y sin sorpresas.
 
 > ### 🟦 ¿Qué significa? — *Una key "única y estable"*
-> - **Única**: dos elementos de la misma lista no pueden tener la misma `key`.
-> - **Estable**: la `key` de un elemento no debe cambiar entre renders. El mismo hábito debe tener
->   siempre la misma `key`.
+> - **Única**: dos elementos de la misma lista no pueden compartir la misma `key`.
+> - **Estable**: la `key` de un elemento no debe cambiar entre renders. El mismo hábito tiene que
+>   tener siempre la misma `key`.
 > El candidato perfecto es el **`id`** que ya viene de la base de datos. En RachaSimple cada hábito
 > tiene un `id` de Supabase; en Faro cada proyecto tiene su `id`. Úsalos.
 
@@ -134,8 +134,8 @@ datos viejos (por ejemplo, un checkbox marcado) en la tarjeta equivocada. Con `k
 
 > ### ⚠️ Cuidado — No uses el índice como key (casi nunca)
 > Es tentador escribir `habitos.map((habito, indice) => <li key={indice}>...)`. El `indice` es la
-> posición (0, 1, 2...). Funciona si la lista **nunca** se reordena ni se borra del medio. Pero en
-> cuanto borras o reordenas, los índices se "corren" y la `key` deja de ser estable: el elemento 1
+> posición (0, 1, 2...). Funciona mientras la lista **nunca** se reordene ni se borre del medio. Pero
+> en cuanto borras o reordenas, los índices se "corren" y la `key` deja de ser estable: el elemento 1
 > pasa a ser el 0, y React vuelve a confundirse. Resultado: bugs raros con inputs y checkboxes.
 > Regla simple: **si tienes un `id`, usa el `id`**. El índice es el último recurso.
 
@@ -153,8 +153,8 @@ datos viejos (por ejemplo, un checkbox marcado) en la tarjeta equivocada. Con `k
 ## 4. Renderizado condicional: mostrar u ocultar partes
 
 A veces no quieres dibujar algo **siempre**, sino **solo si** se cumple una condición. Por
-ejemplo: mostrar "¡Vas en racha!" solo si la racha es mayor que cero, o mostrar un mensaje de
-"todavía no tienes hábitos" solo si la lista está vacía.
+ejemplo: mostrar "¡Vas en racha!" únicamente si la racha es mayor que cero, o mostrar un mensaje de
+"todavía no tienes hábitos" únicamente si la lista está vacía.
 
 > ### 🟦 ¿Qué significa? — *Renderizado condicional*
 > **Renderizado condicional** es decidir, según una condición (un `if` disfrazado), **qué** se
@@ -168,7 +168,7 @@ Hay tres herramientas principales. Vamos una por una.
 > ### 🟦 ¿Qué significa? — *El operador `&&` en JSX*
 > `condicion && <Algo />` significa **"si `condicion` es verdadera, dibuja `<Algo />`; si no, no
 > dibujes nada"**. Funciona porque en JavaScript `&&` devuelve el segundo valor solo si el primero
-> es verdadero. React, cuando recibe `false`, simplemente no pinta nada.
+> es verdadero. Y React, cuando recibe `false`, no pinta nada.
 
 ```tsx
 function HabitCard({ habito }: { habito: { nombre: string; racha: number } }) {
@@ -181,14 +181,14 @@ function HabitCard({ habito }: { habito: { nombre: string; racha: number } }) {
 }
 ```
 
-Si `habito.racha` es 0, la condición es falsa y el `<span>` simplemente no aparece. Es el patrón
-perfecto para "muestra esto **solo cuando** haga falta", sin un "si no" alternativo.
+Si `habito.racha` es 0, la condición es falsa y el `<span>` no aparece. Es el patrón
+perfecto para "muestra esto **solo cuando** haga falta", sin una alternativa de "si no".
 
 > ### ⚠️ Cuidado — El bug del cero con `&&`
-> Hay una trampa famosa. Si escribes `{habito.racha && <span>...</span>}` y `racha` vale `0`,
+> Aquí hay una trampa famosa. Si escribes `{habito.racha && <span>...</span>}` y `racha` vale `0`,
 > JavaScript trata el `0` como falso... pero `&&` devuelve ese `0`, y React **lo dibuja como
-> texto**: aparece un "0" suelto en pantalla. Por eso conviene escribir una condición que dé un
-> verdadero/falso real: `habito.racha > 0 && ...`. Lo mismo pasa con listas: usa
+> texto**: te aparece un "0" suelto en pantalla. Por eso conviene escribir una condición que dé un
+> verdadero/falso de verdad: `habito.racha > 0 && ...`. Lo mismo pasa con las listas: usa
 > `habitos.length > 0 && ...`, no `habitos.length && ...`.
 
 ### 4.2 El operador ternario ("esto o aquello")
@@ -210,14 +210,14 @@ function EstadoRacha({ racha }: { racha: number }) {
 }
 ```
 
-Lo lees como una frase: *"si racha es mayor que cero, muestra los días; si no, muestra 'hoy
-empieza tu racha'"*. Es el patrón ideal para **cargando / cargado**, **vacío / con datos**,
+Se lee como una frase: *"si racha es mayor que cero, muestra los días; si no, muestra 'hoy
+empieza tu racha'"*. Es el patrón ideal para **cargando / cargado**, **vacío / con datos** o
 **logueado / invitado**.
 
 > ### 💡 Tip — `&&` vs ternario, ¿cuál uso?
 > - ¿Quieres mostrar algo **o nada**? Usa `&&`.
 > - ¿Quieres mostrar **una cosa u otra**? Usa el ternario `? :`.
-> Si te encuentras escribiendo `condicion ? <Algo /> : null`, eso es un `&&` disfrazado; mejor
+> Si te ves escribiendo `condicion ? <Algo /> : null`, eso es un `&&` disfrazado; mejor
 > `condicion && <Algo />`.
 
 ### 4.3 Devolver `null`: "no dibujes nada"
@@ -252,8 +252,8 @@ Un componente solo puede devolver **un** elemento raíz. Si quieres devolver dos
 > ### 🟦 ¿Qué significa? — *Fragmento (`<>...</>`)*
 > Un **fragmento** es un envoltorio **invisible**: agrupa varios elementos para devolverlos juntos,
 > pero **no genera ninguna etiqueta** en el HTML final. Se escribe con la sintaxis corta `<>` ...
-> `</>`. Sirve cuando necesitas devolver varios elementos hermanos pero no quieres meter un `<div>`
-> extra que ensucie el diseño (y que pueda romper tu CSS de Tailwind).
+> `</>`. Te sirve cuando necesitas devolver varios elementos hermanos pero no quieres meter un `<div>`
+> extra que ensucie el diseño (y que de paso te rompa el CSS de Tailwind).
 
 ```tsx
 function CabeceraHabito({ nombre, racha }: { nombre: string; racha: number }) {
@@ -266,9 +266,9 @@ function CabeceraHabito({ nombre, racha }: { nombre: string; racha: number }) {
 }
 ```
 
-Sin el fragmento, esto sería un error: *"JSX expressions must have one parent element"* ("las
+Sin el fragmento, esto daría error: *"JSX expressions must have one parent element"* ("las
 expresiones JSX deben tener un solo elemento padre"). Con `<>...</>` devuelves los dos como un
-grupo, y en el HTML final solo aparecen el `<h2>` y el `<p>`, sin envoltorio.
+grupo, y en el HTML final solo aparecen el `<h2>` y el `<p>`, sin envoltorio de por medio.
 
 > ### 🟦 ¿Qué significa? — *El fragmento con `key`*
 > La forma corta `<>...</>` no acepta props. Si necesitas un fragmento **con `key`** (por ejemplo,
@@ -276,35 +276,36 @@ grupo, y en el HTML final solo aparecen el `<h2>` y el `<p>`, sin envoltorio.
 > `<React.Fragment key={algo}>...</React.Fragment>`. Es el único caso donde no puedes usar `<>`.
 
 > ### 💡 Tip — ¿Div o fragmento?
-> Si vas a poner clases de Tailwind, un `onClick`, o cualquier estilo, necesitas un elemento real
+> Si vas a poner clases de Tailwind, un `onClick` o cualquier estilo, necesitas un elemento real
 > como `<div>`. Si **solo** quieres agrupar para cumplir la regla del "un solo padre" y no añadir
-> nada visual, usa un fragmento. Menos `<div>` basura = HTML más limpio.
+> nada visual, usa un fragmento. Menos `<div>` de relleno = HTML más limpio.
 
 ---
 
 ## 6. Juntándolo: una lista que viene de Supabase
 
-Aquí es donde todo se conecta. En la vida real, el array de hábitos no está escrito a mano: viene
+Aquí es donde todo encaja. En la vida real, el array de hábitos no está escrito a mano: viene
 de la base de datos. RachaSimple y Faro usan **Supabase** para guardar los datos, y los piden con
 un hook de **TanStack Query** (lo viste asomar en el capítulo de hooks). No te preocupes por los
-detalles de la consulta; concéntrate en cómo el componente reacciona a los tres estados:
+detalles de la consulta; fíjate en cómo el componente reacciona a los tres estados:
 **cargando**, **vacío** y **con datos**.
 
 > ### 🟦 ¿Qué significa? — *Supabase (recordatorio)*
 > **Supabase** es el servicio que guarda los datos de la app en una base de datos en la nube
-> (lo verás a fondo en los módulos 07 y 08). Por ahora basta saber que le pides una "tabla" (por
+> (lo verás a fondo en los módulos 07 y 08). Por ahora basta con saber que le pides una "tabla" (por
 > ejemplo `habits` o `projects`) y te devuelve un **array** de filas. Ese array es el que pintas
 > con `.map()`.
 
 > ### 🟦 ¿Qué significa? — *Los estados de una carga de datos*
-> Pedir datos a Supabase no es instantáneo. Mientras tanto, tu componente pasa por estados:
+> Pedir datos a Supabase no es instantáneo. Mientras llega la respuesta, tu componente pasa por varios
+> estados:
 > - **cargando** (`isLoading`): todavía esperando la respuesta.
 > - **con datos**: el array llegó y tiene elementos.
 > - **vacío**: el array llegó pero está vacío (el usuario aún no creó nada).
-> Tu interfaz debe manejar los tres. Esto se llama, informalmente, cubrir los "estados de
+> Tu interfaz tiene que manejar los tres. A esto se le llama, informalmente, cubrir los "estados de
 > carga, vacío y lleno".
 
-Así se ve la lista de hábitos de RachaSimple combinando todo lo del capítulo:
+Así queda la lista de hábitos de RachaSimple combinando todo lo del capítulo:
 
 ```tsx
 import { useQuery } from "@tanstack/react-query";
@@ -349,11 +350,11 @@ function ListaHabitos() {
 }
 ```
 
-Repasa lo que reconoces de este capítulo en ese componente:
+Repasa lo que ya reconoces de este capítulo en ese componente:
 
 - Dos **return tempranos** con `if` para cargando y vacío.
 - El `.map()` para la lista, con `key={habito.id}` (un `id` real de Supabase, único y estable).
-- Un `&&` para mostrar la racha **solo si** es mayor que cero (con `> 0`, evitando el bug del cero).
+- Un `&&` para mostrar la racha **solo si** es mayor que cero (con `> 0`, esquivando el bug del cero).
 
 > ### 🔎 En tu código
 > En RachaSimple, el componente que lista los hábitos del día sigue exactamente esta forma: pide a
@@ -413,7 +414,7 @@ function CuadriculaProyectos({ proyectos }: { proyectos: Proyecto[] }) {
 > ### 🟦 ¿Qué significa? — *Ternarios encadenados*
 > Cuando hay **más de dos** opciones (aquí: activo / pausado / archivado), puedes **encadenar**
 > ternarios: `A ? "x" : B ? "y" : "z"`. Se lee "si A, x; si no, si B, y; si no, z". Funciona, pero
-> si encadenas muchos se vuelve difícil de leer; en ese caso muchos prefieren una función aparte o
+> si encadenas muchos se vuelve difícil de leer; en ese caso mucha gente prefiere una función aparte o
 > un objeto que mapee estado → texto. Para dos o tres opciones, el ternario encadenado está bien.
 
 > ### 💡 Tip — Comentarios dentro de JSX
@@ -422,15 +423,15 @@ function CuadriculaProyectos({ proyectos }: { proyectos: Proyecto[] }) {
 > el render.
 
 > ### 🔎 En tu código
-> La diferencia entre RachaSimple (React 18) y Faro (React 19) **no afecta** nada de este capítulo:
+> La diferencia entre RachaSimple (React 18) y Faro (React 19) **no afecta** a nada de este capítulo:
 > `.map()`, `key`, `&&`, ternarios y fragmentos funcionan igual en ambas versiones. Es la base de
-> React, no cambia.
+> React, y eso no cambia.
 
 ---
 
 ## 8. Errores típicos (y cómo los detecta Bit)
 
-Bit el ajolote ya pisó todos estos charcos por ti. Memoriza la lista:
+Bit el ajolote ya pisó todos estos charcos por ti. Apréndete la lista:
 
 > ### ⚠️ Cuidado — Resumen de trampas
 > - **Olvidar `key`** → aviso amarillo en consola y bugs al borrar/reordenar. Usa el `id`.
@@ -441,7 +442,7 @@ Bit el ajolote ya pisó todos estos charcos por ti. Memoriza la lista:
 > - **`// comentario`** suelto dentro del JSX → usa `{/* ... */}`.
 
 > ### 💡 Tip — Cuando "no aparece nada"
-> Si tu lista no se dibuja, revisa en orden: (1) ¿el array tiene elementos? (haz un `console.log`),
+> Si tu lista no se dibuja, revisa en este orden: (1) ¿el array tiene elementos? (haz un `console.log`),
 > (2) ¿el `.map()` está dentro de llaves `{ }`?, (3) ¿devuelves el JSX (paréntesis) o te falta el
 > `return` (llaves)? El 90% de las veces es una de esas tres.
 

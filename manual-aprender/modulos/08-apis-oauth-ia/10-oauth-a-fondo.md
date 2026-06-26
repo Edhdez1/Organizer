@@ -5,84 +5,84 @@
 </p>
 
 
-> Hola de nuevo, soy **Bit**, tu ajolote guia. En el capitulo anterior viste como una app habla con otra usando peticiones HTTP. Hoy resolvemos un problema mas delicado: *como dejar que una app entre a tus datos de otro servicio (GitHub, Google Drive) sin darle tu contrasena*. Eso es **OAuth**. Tranqui: lo vamos a desarmar pieza por pieza, con calma, y veras como **Faro** lo usa de verdad para leer tus proyectos. Respira. Vamos paso a paso.
+> Hola de nuevo, soy **Bit**, tu ajolote guia. En el capitulo anterior viste como una app le habla a otra con peticiones HTTP. Hoy vamos por algo mas delicado: *como dejar que una app entre a tus datos de otro servicio (GitHub, Google Drive) sin entregarle tu contrasena*. Eso es **OAuth**. Tranqui, que lo vamos a desarmar pieza por pieza, con calma, y al final veras como **Faro** lo usa de verdad para leer tus proyectos. Respira hondo. Paso a paso.
 
 ---
 
 ## 1. El problema que OAuth resuelve
 
-Imagina que **Faro** (nuestro organizador de proyectos) quiere leer tus repositorios de GitHub para analizarlos con IA. La forma ingenua seria pedirte tu usuario y contrasena de GitHub y entrar con ellos. **Eso es una pesima idea** por tres razones:
+Imagina que **Faro** (nuestro organizador de proyectos) quiere leer tus repositorios de GitHub para analizarlos con IA. Lo mas obvio seria pedirte tu usuario y tu contrasena de GitHub y entrar con ellos. **Y es una pesima idea**, por tres motivos:
 
-1. Le estarias entregando a Faro la llave maestra de TODA tu cuenta de GitHub (borrar repos, cambiar tu correo, todo).
-2. Faro tendria que *guardar* tu contrasena en algun lado. Si alguien roba esa base de datos, roba tu contrasena.
-3. No podrias revocar el acceso sin cambiar tu contrasena en todas partes.
+1. Le estarias entregando a Faro la llave maestra de TODA tu cuenta de GitHub: borrar repos, cambiar tu correo, lo que sea.
+2. Faro tendria que *guardar* tu contrasena en algun sitio. Si alguien roba esa base de datos, se lleva tu contrasena.
+3. No podrias quitarle el acceso sin cambiar tu contrasena en todos lados.
 
-OAuth nace para arreglar esto. La idea central es: **en lugar de dar tu contrasena, das un permiso limitado y revocable**. Tu le dices a GitHub "autorizo a Faro a *leer* mis repos, nada mas", y GitHub le entrega a Faro una *llave temporal* (un token) que solo sirve para eso.
+OAuth existe justamente para resolver esto. La idea de fondo es sencilla: **en vez de dar tu contrasena, das un permiso limitado y que puedes retirar cuando quieras**. Tu le dices a GitHub "autorizo a Faro a *leer* mis repos, y nada mas", y GitHub le pasa a Faro una *llave temporal* (un token) que sirve solo para eso.
 
 > ### 🟦 ¿Que significa? — *OAuth*
 > **Definicion simple:** es un protocolo (un conjunto de reglas acordadas) que permite que una aplicacion acceda a tus datos en otro servicio **sin conocer tu contrasena**, usando permisos limitados.
-> **Para que sirve:** para conectar apps entre si de forma segura ("Inicia sesion con Google", "Conecta tu GitHub").
-> **Donde se usa en un repo real:** en **Faro/Organizer**, OAuth conecta tu cuenta con **GitHub** y **Google Drive** para que la app lea tus proyectos y archivos.
+> **Para que sirve:** para conectar apps entre si de forma segura, eso de "Inicia sesion con Google" o "Conecta tu GitHub".
+> **Donde se usa en un repo real:** en **Faro/Organizer**, OAuth conecta tu cuenta con **GitHub** y **Google Drive** para que la app pueda leer tus proyectos y archivos.
 
 > ### 💡 Tip
-> "OAuth" se lee "o-auth", y la version moderna que usamos hoy es **OAuth 2.0**. Cuando alguien dice solo "OAuth", casi siempre se refiere a la 2.0.
+> "OAuth" se lee "o-auth", y la version que usamos hoy es **OAuth 2.0**. Cuando alguien dice solo "OAuth", casi siempre habla de la 2.0.
 
 ---
 
 ## 2. Los roles: quien es quien
 
-OAuth es como una conversacion entre tres personajes. Si entiendes los roles, entiendes todo lo demas.
+OAuth funciona como una conversacion entre tres personajes. Si tienes claros los roles, el resto cae solo.
 
 > ### 🟦 ¿Que significa? — *Resource Owner (dueno del recurso)*
-> **Definicion simple:** eres **tu**, el usuario. Los "recursos" son tus datos (tus repos, tus archivos de Drive).
+> **Definicion simple:** eres **tu**, el usuario. Los "recursos" son tus datos: tus repos, tus archivos de Drive.
 > **Para que sirve:** eres quien da o niega el permiso. Sin tu "Si, autorizo", no hay acceso.
 > **Donde se usa en un repo real:** en **Faro**, el dueno del recurso es la persona que inicia sesion para que la app analice *sus* proyectos.
 
 > ### 🟦 ¿Que significa? — *Client (la aplicacion)*
 > **Definicion simple:** es la app que **quiere** acceder a tus datos. En nuestro caso, **Faro**.
-> **Para que sirve:** es quien pide el permiso y luego usa el token para leer los datos.
+> **Para que sirve:** es quien pide el permiso y despues usa el token para leer los datos.
 > **Donde se usa en un repo real:** **Faro/Organizer** es el cliente cuando pide acceso a GitHub o Drive.
 
 > ### 🟦 ¿Que significa? — *Authorization Server / Resource Server (el proveedor)*
-> **Definicion simple:** es el servicio que guarda tus datos y decide quien entra: **GitHub**, **Google**. A veces se separan en dos: el que autoriza (entrega tokens) y el que sirve los datos. Para principiantes piensalo como uno solo: **el proveedor**.
+> **Definicion simple:** es el servicio que guarda tus datos y decide quien entra: **GitHub**, **Google**. A veces se separan en dos piezas: la que autoriza (entrega tokens) y la que sirve los datos. Si estas empezando, piensalo como una sola cosa: **el proveedor**.
 > **Para que sirve:** verifica tu identidad, te muestra la pantalla de permisos y entrega los tokens.
 > **Donde se usa en un repo real:** en **Faro**, GitHub y Google son los proveedores; **Supabase Auth** orquesta la conexion.
 
-Resumen rapido en una frase: **Tu (dueno)** autorizas a **Faro (cliente)** a leer datos que guarda **GitHub (proveedor)**.
+Toda la trama en una frase: **tu (dueno)** autorizas a **Faro (cliente)** a leer datos que guarda **GitHub (proveedor)**.
 
 > ### 🔎 En tu codigo
-> En **RachaSimple** (React + TypeScript + Supabase) el login usa **Supabase Auth**. Ahi Supabase actua como intermediario: tu eres el dueno, RachaSimple es el cliente, y el proveedor de identidad puede ser un correo/contrasena o un proveedor OAuth como Google. La gracia es que RachaSimple **nunca ve tu contrasena del proveedor**.
+> En **RachaSimple** (React + TypeScript + Supabase) el login se apoya en **Supabase Auth**. Ahi Supabase hace de intermediario: tu eres el dueno, RachaSimple es el cliente, y el proveedor de identidad puede ser un correo/contrasena o un proveedor OAuth como Google. Lo bonito es que RachaSimple **nunca llega a ver tu contrasena del proveedor**.
 
 ---
 
 ## 3. El flujo de codigo de autorizacion, paso a paso
 
-El flujo mas comun y mas seguro se llama **authorization code flow** (flujo de codigo de autorizacion). Suena intimidante, pero son solo 6 pasos. Vamos despacio.
+El flujo mas comun y mas seguro se llama **authorization code flow** (flujo de codigo de autorizacion). El nombre asusta, pero al final son 6 pasos. Vamos despacio.
 
 > ### 🟦 ¿Que significa? — *Authorization Code Flow*
-> **Definicion simple:** es la "coreografia" estandar de OAuth 2.0 para apps con servidor. Primero obtienes un **codigo** temporal y luego, desde el servidor, lo cambias por un **token**.
-> **Para que sirve:** para que el token (la llave real) nunca pase por el navegador del usuario, donde podria espiarse.
-> **Donde se usa en un repo real:** es exactamente el flujo que **Faro** sigue al conectar GitHub o Google Drive.
+> **Definicion simple:** es la "coreografia" estandar de OAuth 2.0 para apps con servidor. Primero consigues un **codigo** temporal y luego, ya desde el servidor, lo cambias por un **token**.
+> **Para que sirve:** para que el token (la llave de verdad) nunca pase por el navegador del usuario, que es donde podrian espiarlo.
+> **Donde se usa en un repo real:** es justo el flujo que sigue **Faro** al conectar GitHub o Google Drive.
 
 ### Los 6 pasos
 
 **Paso 1 — Tu haces clic en "Conectar GitHub".**
-Faro te redirige al proveedor (GitHub) con una URL especial que incluye *quien pide* (el client_id) y *que permisos* (los scopes).
+Faro te redirige al proveedor (GitHub) con una URL especial que lleva *quien pide* (el client_id) y *que permisos* (los scopes).
 
 **Paso 2 — GitHub te muestra la pantalla de permisos.**
-Esa pantalla que dice "Faro quiere leer tus repositorios. Autorizar?". Aqui tu, el dueno, decides.
+Esa pantalla que dice "Faro quiere leer tus repositorios. Autorizar?". Aqui decides tu, el dueno.
 
 **Paso 3 — Tu apruebas.**
-GitHub te devuelve al sitio de Faro (a una direccion previamente registrada, el *callback*) y le pega un **codigo de autorizacion** temporal en la URL.
+GitHub te devuelve al sitio de Faro (a una direccion registrada de antemano, el *callback*) y le engancha un **codigo de autorizacion** temporal en la URL.
 
-**Paso 4 — Faro (en el servidor) intercambia el codigo por un token.**
-Faro toma ese codigo y, junto con su secreto, hace una peticion *de servidor a servidor* a GitHub para cambiarlo por un **access token**.
+**Paso 4 — Faro (en el servidor) cambia el codigo por un token.**
+Faro toma ese codigo y, junto con su secreto, hace una peticion *de servidor a servidor* a GitHub para canjearlo por un **access token**.
 
 **Paso 5 — GitHub entrega el token.**
-Ahora Faro tiene una llave temporal.
+Ya esta: Faro tiene una llave temporal.
 
 **Paso 6 — Faro usa el token para leer tus repos.**
-Cada peticion a la API de GitHub lleva el token en una cabecera.
+Cada peticion a la API de GitHub lleva ese token en una cabecera.
 
 Veamoslo como diagrama mental:
 
@@ -101,7 +101,7 @@ Tu  <──pantalla de permisos────────┘
 ```
 
 > ### 💡 Tip
-> Fijate que **el token nunca aparece en la URL del navegador**. Lo unico que pasa por el navegador es el *codigo*, que es de un solo uso y caduca en segundos. Por eso este flujo es seguro.
+> Fijate en que **el token nunca aparece en la URL del navegador**. Por el navegador solo pasa el *codigo*, que es de un solo uso y caduca en segundos. De ahi viene la seguridad de este flujo.
 
 ---
 
@@ -109,10 +109,10 @@ Tu  <──pantalla de permisos────────┘
 
 > ### 🟦 ¿Que significa? — *Scope (alcance / permiso)*
 > **Definicion simple:** una etiqueta que dice *que* puede hacer la app. Por ejemplo `repo` (leer repos) o `https://www.googleapis.com/auth/drive.readonly` (leer Drive en solo lectura).
-> **Para que sirve:** para limitar el acceso al minimo necesario. Si solo necesitas leer, no pidas permiso de escribir.
-> **Donde se usa en un repo real:** en **Faro**, al conectar Google Drive se piden scopes de **solo lectura**, porque la app unicamente *lee* tus proyectos para describirlos; nunca necesita modificarlos.
+> **Para que sirve:** para acotar el acceso al minimo que de verdad hace falta. Si solo necesitas leer, no pidas permiso de escribir.
+> **Donde se usa en un repo real:** en **Faro**, al conectar Google Drive se piden scopes de **solo lectura**, porque la app unicamente *lee* tus proyectos para describirlos; jamas necesita tocarlos.
 
-Cuando Faro arma la URL del Paso 1, incluye los scopes. Asi se ve, conceptualmente, para GitHub:
+Cuando Faro arma la URL del Paso 1, mete ahi los scopes. Para GitHub se ve, mas o menos, asi:
 
 ```
 https://github.com/login/oauth/authorize
@@ -122,19 +122,19 @@ https://github.com/login/oauth/authorize
   &state=xyz789aleatorio
 ```
 
-Cada pieza importa:
+Cada pieza cuenta:
 
 - `client_id`: identifica publicamente a Faro ante GitHub.
-- `redirect_uri`: a donde volver despues (el callback, que veremos ya).
+- `redirect_uri`: a donde volver despues (el callback, que vemos enseguida).
 - `scope`: los permisos pedidos, separados por espacio (`%20` es un espacio codificado en URL).
 - `state`: un valor aleatorio anti-fraude (lo explicamos en el recuadro de seguridad).
 
 > ### ⚠️ Cuidado
-> **Pide solo los scopes que de verdad necesitas.** Si Faro pidiera permiso de *borrar* repos sin razon, seria un riesgo enorme y los usuarios desconfiarian. La filosofia de Faro es de *minimo privilegio*: leer para analizar, nada mas.
+> **Pide solo los scopes que de verdad vas a usar.** Si Faro pidiera permiso para *borrar* repos sin venir a cuento, seria un riesgo enorme y la gente desconfiaria. La filosofia de Faro es de *minimo privilegio*: leer para analizar, y se acabo.
 
 > ### 🟦 ¿Que significa? — *Principio de minimo privilegio*
-> **Definicion simple:** dar a cada parte del sistema solo los permisos imprescindibles para su tarea.
-> **Para que sirve:** si algo se compromete, el dano posible es menor.
+> **Definicion simple:** darle a cada parte del sistema solo los permisos imprescindibles para su tarea.
+> **Para que sirve:** si algo se compromete, el dano que se puede hacer es menor.
 > **Donde se usa en un repo real:** en **Faro**, conectar Drive en solo lectura es minimo privilegio en accion.
 
 ---
@@ -142,13 +142,13 @@ Cada pieza importa:
 ## 5. El callback (redirect): la puerta de regreso
 
 > ### 🟦 ¿Que significa? — *Redirect URI / Callback*
-> **Definicion simple:** la direccion exacta a la que el proveedor envia al usuario de vuelta despues de aprobar. Suele ser una ruta en tu propio servidor.
+> **Definicion simple:** la direccion exacta a la que el proveedor manda al usuario de vuelta tras aprobar. Suele ser una ruta en tu propio servidor.
 > **Para que sirve:** es donde tu app *recibe* el codigo de autorizacion del Paso 3.
 > **Donde se usa en un repo real:** en **Faro** (Next.js), el callback es una **ruta de API** del servidor, por ejemplo `/api/auth/callback/github`, que recibe el codigo y dispara el intercambio.
 
-El callback debe estar **registrado de antemano** en el panel del proveedor (en los ajustes de la "OAuth App" de GitHub, por ejemplo). Si la `redirect_uri` que envias no coincide *exactamente* con la registrada, el proveedor rechaza la peticion. Esto evita que un atacante redirija el codigo a su propio sitio.
+El callback tiene que estar **registrado de antemano** en el panel del proveedor (en los ajustes de la "OAuth App" de GitHub, por ejemplo). Si la `redirect_uri` que envias no coincide *exactamente* con la que registraste, el proveedor rechaza la peticion. Asi se evita que un atacante desvie el codigo hacia su propio sitio.
 
-Asi se ve, simplificado, una ruta de callback en **Faro** (Next.js + TypeScript). Es codigo de **servidor**, no del navegador:
+Una ruta de callback en **Faro** (Next.js + TypeScript), simplificada, se ve asi. Es codigo de **servidor**, no del navegador:
 
 ```ts
 // app/api/auth/callback/github/route.ts  (ejecuta en el SERVIDOR)
@@ -171,13 +171,13 @@ export async function GET(req: NextRequest) {
 ```
 
 > ### 🔎 En tu codigo
-> En la practica, **Faro** delega buena parte de este baile a **Supabase Auth**, que ofrece el callback y guarda los tokens por ti. Pero entender que pasa por dentro te permite depurar cuando algo falla (un `redirect_uri` mal escrito es el error numero uno de los principiantes).
+> En la practica, **Faro** delega buena parte de este baile a **Supabase Auth**, que pone el callback y guarda los tokens por ti. Aun asi, entender lo que ocurre por dentro te sirve para depurar cuando algo falla (un `redirect_uri` mal escrito es el error numero uno de quien empieza).
 
 ---
 
 ## 6. El intercambio: codigo por token
 
-Este es el corazon del Paso 4. Faro toma el `code` y hace una peticion **POST de servidor a servidor** a GitHub. En esa peticion va el `client_secret`, que es **la contrasena de la app** y por eso **nunca, jamas, sale del servidor**.
+Aqui esta el corazon del Paso 4. Faro coge el `code` y lanza una peticion **POST de servidor a servidor** a GitHub. En esa peticion viaja el `client_secret`, que es **la contrasena de la app** y que por eso **nunca, jamas, sale del servidor**.
 
 ```ts
 // Sigue dentro del SERVIDOR (route.ts del callback)
@@ -201,16 +201,16 @@ const data = await tokenRes.json();
 ```
 
 > ### 🟦 ¿Que significa? — *Access Token*
-> **Definicion simple:** una cadena de texto (la "llave temporal") que prueba que tu autorizaste a la app. Caduca pronto (minutos u horas).
-> **Para que sirve:** se envia en cada peticion a la API para que el proveedor te deje leer los datos.
-> **Donde se usa en un repo real:** en **Faro**, el access token de GitHub se usa para pedir la lista de repos del usuario y analizarlos con IA.
+> **Definicion simple:** una cadena de texto (la "llave temporal") que demuestra que tu autorizaste a la app. Caduca pronto, en minutos u horas.
+> **Para que sirve:** se manda en cada peticion a la API para que el proveedor te deje leer los datos.
+> **Donde se usa en un repo real:** en **Faro**, el access token de GitHub sirve para pedir la lista de repos del usuario y analizarlos con IA.
 
 > ### 🟦 ¿Que significa? — *Client Secret*
 > **Definicion simple:** una clave privada que identifica a la app de forma confidencial ante el proveedor. Es como la contrasena de Faro, no la tuya.
-> **Para que sirve:** demuestra que quien intercambia el codigo es realmente Faro y no un impostor.
-> **Donde se usa en un repo real:** en **Faro** vive en variables de entorno del servidor; **nunca** se incluye en el *bundle* (el paquete de JavaScript que tu app empaqueta y envia al navegador) que llega al usuario.
+> **Para que sirve:** demuestra que quien intercambia el codigo es de verdad Faro y no un impostor.
+> **Donde se usa en un repo real:** en **Faro** vive en variables de entorno del servidor; **nunca** entra en el *bundle* (el paquete de JavaScript que tu app empaqueta y manda al navegador) que recibe el usuario.
 
-Una vez con el token, leer tus repos es un `fetch` normal con el token en la cabecera `Authorization`:
+Con el token ya en mano, leer tus repos es un `fetch` normal y corriente con el token en la cabecera `Authorization`:
 
 ```ts
 const repos = await fetch("https://api.github.com/user/repos", {
@@ -222,22 +222,22 @@ const repos = await fetch("https://api.github.com/user/repos", {
 ```
 
 > ### 🟦 ¿Que significa? — *Bearer token*
-> **Definicion simple:** "bearer" significa "portador". Quien *porte* el token puede usarlo. Por eso se cuida como una contrasena.
-> **Para que sirve:** es la forma estandar de mandar el access token: `Authorization: Bearer <token>`.
+> **Definicion simple:** "bearer" significa "portador". Quien *porte* el token puede usarlo. Por eso se cuida igual que una contrasena.
+> **Para que sirve:** es la manera estandar de mandar el access token: `Authorization: Bearer <token>`.
 > **Donde se usa en un repo real:** **Faro** lo usa en cada llamada a la API de GitHub.
 
 > ### ⚠️ Cuidado
-> Como **cualquiera que tenga el token puede usarlo**, un token filtrado es un token robado. Por eso los tokens caducan rapido y por eso jamas se mandan al navegador en una app de servidor.
+> Como **cualquiera que tenga el token puede usarlo**, un token filtrado es un token robado. Por eso los tokens caducan rapido, y por eso nunca se mandan al navegador en una app de servidor.
 
 ---
 
 ## 7. Refresco de token: la llave que se renueva sola
 
-Los access tokens caducan a proposito (asi un robo dura poco). Pero pedirte permiso de nuevo cada hora seria horrible. Solucion: el **refresh token**.
+Los access tokens caducan a proposito: asi, si alguien roba uno, le dura poco. Pero pedirte permiso otra vez cada hora seria insoportable. La solucion es el **refresh token**.
 
 > ### 🟦 ¿Que significa? — *Refresh Token*
-> **Definicion simple:** un token de larga duracion que sirve **solo** para pedir nuevos access tokens cuando el viejo caduca.
-> **Para que sirve:** para mantener la sesion sin molestar al usuario, y sin guardar un access token eterno (que seria peligroso).
+> **Definicion simple:** un token de larga duracion que sirve **solo** para pedir nuevos access tokens cuando el anterior caduca.
+> **Para que sirve:** para mantener la sesion sin estar molestando al usuario, y sin tener que guardar un access token eterno (que seria peligroso).
 > **Donde se usa en un repo real:** en **Faro**, cuando el token de Google Drive caduca, el servidor usa el refresh token para conseguir uno nuevo y seguir leyendo tus archivos.
 
 El refresco es otra peticion de servidor:
@@ -268,14 +268,14 @@ const refreshed = await fetch("https://oauth2.googleapis.com/token", {
 
 ## 8. Donde van los secretos: cliente vs servidor
 
-Esta seccion es la mas importante de todo el capitulo. Lee con atencion, Bit insiste.
+Esta seccion es la mas importante del capitulo entero. Leela con atencion, que Bit insiste.
 
 > ### 🟦 ¿Que significa? — *Cliente vs Servidor*
-> **Definicion simple:** el **cliente** es el codigo que corre en el navegador del usuario (cualquiera puede abrir las herramientas de desarrollo y verlo). El **servidor** es codigo que corre en tu maquina/hosting y el usuario nunca ve.
-> **Para que sirve:** todo lo secreto (client_secret, tokens, claves de API) va en el **servidor**. Lo que va al navegador es publico, sin excepcion.
+> **Definicion simple:** el **cliente** es el codigo que corre en el navegador del usuario (cualquiera puede abrir las herramientas de desarrollo y verlo). El **servidor** es codigo que corre en tu maquina o tu hosting, y el usuario nunca lo ve.
+> **Para que sirve:** todo lo secreto (client_secret, tokens, claves de API) va en el **servidor**. Lo que llega al navegador es publico, sin excepcion.
 > **Donde se usa en un repo real:** en **Faro**, las rutas `/api/...` de Next.js corren en el servidor; ahi viven los secretos. La interfaz React que ves es el cliente.
 
-Veamos un contraste con **tunal-digital**. Ahi hay un chat que llama a la **API de Claude (Anthropic)**. La clave de Anthropic es secreta. Si el JavaScript del navegador llamara directo a Anthropic, **la clave quedaria expuesta a cualquiera**. Por eso tunal-digital usa un **Cloudflare Worker**: el navegador habla con el Worker (servidor), y el Worker guarda la clave y habla con Anthropic.
+Veamoslo con **tunal-digital**. Ahi hay un chat que llama a la **API de Claude (Anthropic)**. La clave de Anthropic es secreta. Si el JavaScript del navegador llamara directo a Anthropic, **esa clave quedaria a la vista de cualquiera**. Por eso tunal-digital mete un **Cloudflare Worker** en medio: el navegador habla con el Worker (servidor), y el Worker, que es quien guarda la clave, habla con Anthropic.
 
 ```javascript
 // MAL — en el navegador (cliente). NUNCA hagas esto:
@@ -295,22 +295,22 @@ const res = await fetch("https://chat.tunal.workers.dev/api/chat", {
 ```
 
 > ### 🟦 ¿Que significa? — *Cloudflare Worker*
-> **Definicion simple:** un pequeno programa que corre en los servidores de Cloudflare, cerca del usuario. Funciona como un mini-backend sin tener que montar un servidor entero.
+> **Definicion simple:** un programa pequeno que corre en los servidores de Cloudflare, cerca del usuario. Hace de mini-backend sin que tengas que montar un servidor entero.
 > **Para que sirve:** entre otras cosas, para esconder claves de API y hacer llamadas seguras a servicios externos.
 > **Donde se usa en un repo real:** en **tunal-digital**, el Worker es el puente seguro entre el chat del navegador y la API de Claude.
 
 > ### ⚠️ Cuidado
-> Mismo principio en OAuth: el `client_secret` y los tokens **viven en el servidor de Faro o en Supabase con RLS**, nunca en el bundle de React ni en un repo publico. Esta es una **regla explicita de seguridad de Faro**: tokens y secretos solo en el servidor.
+> En OAuth aplica el mismo principio: el `client_secret` y los tokens **viven en el servidor de Faro o en Supabase con RLS**, nunca en el bundle de React ni en un repo publico. Esta es una **regla explicita de seguridad de Faro**: tokens y secretos solo en el servidor.
 
 > ### 💡 Tip
-> En Next.js, una variable que empieza con `NEXT_PUBLIC_` SI viaja al navegador (es publica). El `client_secret` jamas debe llevar ese prefijo. Si alguna vez ves `NEXT_PUBLIC_GITHUB_CLIENT_SECRET`, suena la alarma roja.
+> En Next.js, una variable que empieza por `NEXT_PUBLIC_` SI viaja al navegador (es publica). El `client_secret` no debe llevar ese prefijo bajo ningun concepto. Si algun dia ves `NEXT_PUBLIC_GITHUB_CLIENT_SECRET`, salta la alarma roja.
 
 ---
 
 ## 9. El parametro `state`: tu cinturon de seguridad anti-fraude
 
 > ### 🟦 ¿Que significa? — *state (parametro anti-CSRF)*
-> **Definicion simple:** un valor aleatorio que tu app genera al iniciar el flujo y verifica al recibir el callback. Si no coincide, se rechaza.
+> **Definicion simple:** un valor aleatorio que tu app genera al arrancar el flujo y comprueba al recibir el callback. Si no coinciden, se rechaza.
 > **Para que sirve:** evita un ataque llamado **CSRF** (Cross-Site Request Forgery, "falsificacion de peticion entre sitios"), donde alguien intenta colarte un codigo de autorizacion que tu nunca pediste.
 > **Donde se usa en un repo real:** en **Faro**, el `state` se genera al hacer clic en "Conectar" y se valida en la ruta de callback antes de intercambiar el codigo.
 
@@ -322,7 +322,7 @@ if (state !== cookieGuardado) {
 ```
 
 > ### 💡 Tip
-> Supabase Auth maneja el `state` por ti en muchos casos, pero saber que existe te salva cuando implementas OAuth a mano o depuras un "state mismatch" en los logs.
+> Supabase Auth se ocupa del `state` por ti en muchos casos, pero saber que existe te saca de un apuro cuando implementas OAuth a mano o cuando te toca depurar un "state mismatch" en los logs.
 
 ---
 
@@ -334,13 +334,13 @@ if (state !== cookieGuardado) {
 4. GitHub te devuelve al **callback** de Faro con un `code`.
 5. El **servidor** de Faro valida el `state` y cambia el `code` por un **access token** (usando el `client_secret`, que nunca sale del servidor).
 6. Faro guarda los tokens en `user_connections` (Supabase, con RLS).
-7. Faro usa el access token para **leer tus repos**, y luego pasa esa info a la **IA de OpenAI** para generar descripcion, estado, progreso y roadmap.
+7. Faro usa el access token para **leer tus repos**, y luego le pasa esa info a la **IA de OpenAI** para generar descripcion, estado, progreso y roadmap.
 8. Cuando el token de Drive caduca, el servidor lo **refresca** solito con el refresh token.
 
-Y asi, sin que tu contrasena de GitHub ni de Google tocara jamas a Faro, la app puede leer tus proyectos de forma segura, limitada y revocable. Eso es OAuth bien hecho.
+Y asi, sin que tu contrasena de GitHub ni la de Google rozaran nunca a Faro, la app puede leer tus proyectos de forma segura, limitada y reversible. Eso es OAuth bien hecho.
 
 > ### 🔎 En tu codigo
-> Compara los tres niveles que viste en el manual: **RachaSimple** usa Supabase Auth para *login* (saber quien eres). **Faro** usa OAuth para *acceder a datos de terceros* (GitHub, Drive). **tunal-digital** usa un Worker para *esconder una clave de API* (Anthropic). Tres usos distintos, un mismo principio: los secretos en el servidor.
+> Compara los tres niveles que has visto en el manual: **RachaSimple** usa Supabase Auth para *login* (saber quien eres). **Faro** usa OAuth para *acceder a datos de terceros* (GitHub, Drive). **tunal-digital** usa un Worker para *esconder una clave de API* (Anthropic). Tres usos distintos, un mismo principio de fondo: los secretos en el servidor.
 
 ---
 
@@ -375,4 +375,4 @@ Y asi, sin que tu contrasena de GitHub ni de Google tocara jamas a Faro, la app 
 
 ---
 
-> ¡Lo lograste! OAuth es uno de esos temas que parecen un nudo y, una vez que ves los tres roles y los 6 pasos, se desata solito. Recuerda la regla de oro que repetimos hasta el cansancio: **los secretos viven en el servidor**. Nos vemos en el siguiente capitulo, donde le pondremos IA de verdad a todo esto. — Bit 🦎
+> ¡Lo lograste! OAuth es uno de esos temas que parecen un nudo imposible y, en cuanto ves los tres roles y los 6 pasos, se desata solito. Acuerdate de la regla de oro que repetimos hasta el cansancio: **los secretos viven en el servidor**. Nos vemos en el siguiente capitulo, donde por fin le ponemos IA de verdad a todo esto. — Bit 🦎

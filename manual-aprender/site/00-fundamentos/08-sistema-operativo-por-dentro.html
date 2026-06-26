@@ -23,44 +23,44 @@
 </p>
 
 <blockquote>
-<p>En este capítulo vas a abrir la "caja negra" que hay debajo de todos tus programas: el <strong>sistema operativo</strong>. Aprenderás qué hace en realidad cuando abres una app, cómo reparte el cerebro (CPU) y la memoria (RAM) entre muchas tareas a la vez, cómo organiza tus archivos en carpetas y rutas, qué son los permisos y los drivers, y en qué se parecen y diferencian Windows, macOS y Linux. Importa porque <strong>todo</strong> lo que programas —tu sitio web, tu app de hábitos, tu NAS— corre encima de un sistema operativo, y entenderlo te da superpoderes para no perderte cuando algo falla. Bit, el ajolote, te acompaña.</p>
+<p>En este capítulo vamos a abrir la "caja negra" que hay debajo de todos tus programas: el <strong>sistema operativo</strong>. Veremos qué hace de verdad cuando abres una app, cómo reparte el cerebro (la CPU) y la memoria (la RAM) entre muchas tareas al mismo tiempo, cómo ordena tus archivos en carpetas y rutas, qué son los permisos y los drivers, y en qué se parecen y en qué se diferencian Windows, macOS y Linux. ¿Por qué importa todo esto? Porque <strong>todo</strong> lo que programas —tu sitio web, tu app de hábitos, tu NAS— corre encima de un sistema operativo, y entenderlo te da una ventaja enorme para no perderte cuando algo se rompe. Bit, el ajolote, te acompaña en el recorrido.</p>
 </blockquote>
 <h2 id="1-que-es-un-sistema-operativo-y-por-que-existe">1. ¿Qué es un sistema operativo y por qué existe?</h2>
-<p>Imagina que tu computadora es un edificio enorme lleno de máquinas potentísimas: el procesador, la memoria, el disco, la pantalla, el teclado, la tarjeta de red. Esas máquinas no saben hablar entre ellas ni saben repartirse el trabajo solas. Hace falta un <strong>administrador del edificio</strong> que abra puertas, asigne salas, evite peleas y haga que todo funcione en orden. Ese administrador es el sistema operativo.</p>
+<p>Imagina que tu computadora es un edificio enorme lleno de máquinas potentísimas: el procesador, la memoria, el disco, la pantalla, el teclado, la tarjeta de red. El problema es que esas máquinas no saben hablar entre sí ni saben repartirse el trabajo solas. Hace falta alguien que coordine: un <strong>administrador del edificio</strong> que abra puertas, asigne salas, evite peleas y mantenga el orden. Ese administrador es el sistema operativo.</p>
 <blockquote class="def">
 <h3 id="que-significa-sistema-operativo-so">🟦 ¿Qué significa? — <em>Sistema operativo (SO)</em></h3>
-<p>Es el <strong>programa más importante</strong> de una computadora: arranca antes que todo lo demás y se encarga de gestionar el hardware (CPU, memoria, disco, dispositivos) y de ofrecer servicios a los demás programas. Sin él, cada aplicación tendría que saber controlar el hardware por su cuenta, lo cual sería imposible. Para qué sirve: para que tú puedas usar el navegador, escribir código y escuchar música a la vez sin que nada choque.</p>
+<p>Es el <strong>programa más importante</strong> de una computadora. Arranca antes que cualquier otra cosa y se encarga de gestionar el hardware (CPU, memoria, disco, dispositivos) y de ofrecer servicios al resto de los programas. Sin él, cada aplicación tendría que saber controlar el hardware por su cuenta, y eso sería un caos imposible de manejar. ¿Para qué sirve? Para que tú puedas tener el navegador abierto, escribir código y escuchar música a la vez sin que nada se atropelle.</p>
 </blockquote>
-<p>El SO se sienta justo en medio: por debajo está el <strong>hardware</strong> (lo físico) y por encima están tus <strong>aplicaciones</strong> (el navegador, el editor de código, tus proyectos). Tú casi nunca hablas directamente con el hardware; le pides cosas al SO y él las traduce.</p>
+<p>El SO se sienta justo en medio de dos mundos: por debajo está el <strong>hardware</strong> (lo físico) y por encima están tus <strong>aplicaciones</strong> (el navegador, el editor de código, tus proyectos). Tú casi nunca hablas directamente con el hardware; le pides cosas al SO y él se encarga de traducirlas.</p>
 <blockquote class="def">
 <h3 id="que-significa-hardware-y-software">🟦 ¿Qué significa? — <em>Hardware y software</em></h3>
-<p><strong>Hardware</strong> es todo lo que puedes tocar: el procesador, la memoria, el disco, el teclado. <strong>Software</strong> es todo lo que NO puedes tocar: programas, instrucciones, datos. El sistema operativo es software, pero un software especial que manda sobre el hardware. Tus proyectos (PolyPaw, Faro, RachaSimple) son software que corre sobre el SO.</p>
+<p><strong>Hardware</strong> es todo lo que puedes tocar: el procesador, la memoria, el disco, el teclado. <strong>Software</strong> es todo lo que NO puedes tocar: programas, instrucciones, datos. El sistema operativo es software, pero un software especial, porque manda sobre el hardware. Tus proyectos (PolyPaw, Faro, RachaSimple) también son software, y corren sobre el SO.</p>
 <h3 id="que-significa-kernel-nucleo">🟦 ¿Qué significa? — <em>Kernel (núcleo)</em></h3>
-<p>Es el corazón del sistema operativo: la parte que de verdad toca el hardware, reparte la CPU y la memoria y controla los dispositivos. Todo lo demás del SO (la interfaz, las ventanas, las apps) le pide permiso al kernel. En tu NAS <strong>polypaw-nas</strong>, que usa Ubuntu Server, el kernel es el de <strong>Linux</strong>. Cuando lees "Linux" técnicamente se refiere a ese núcleo.</p>
+<p>Es el corazón del sistema operativo: la parte que de verdad toca el hardware, reparte la CPU y la memoria y controla los dispositivos. Todo lo demás del SO (la interfaz, las ventanas, las apps) tiene que pedirle permiso al kernel. En tu NAS <strong>polypaw-nas</strong>, que usa Ubuntu Server, el kernel es el de <strong>Linux</strong>. De hecho, cuando lees "Linux", técnicamente se está hablando de ese núcleo.</p>
 <h3 id="tip-el-so-tambien-es-un-programa">💡 Tip — El SO también es un programa</h3>
-<p>Esto sorprende a muchos: el sistema operativo es <em>software</em>, igual que tu app. La diferencia es que arranca primero y tiene privilegios especiales para mandar sobre el hardware. No es magia; es código que alguien escribió.</p>
+<p>Esto suele sorprender: el sistema operativo es <em>software</em>, igual que tu app. La diferencia es que arranca primero y tiene privilegios especiales para mandar sobre el hardware. No hay magia detrás; es código que alguien se sentó a escribir.</p>
 </blockquote>
 <h2 id="2-programa-vs-proceso-el-corazon-del-asunto">2. Programa vs proceso: el corazón del asunto</h2>
-<p>Esta distinción confunde a casi todo el mundo al principio, así que vamos despacio.</p>
+<p>Esta distinción confunde a casi todo el mundo al principio, así que vamos despacio y sin prisa.</p>
 <blockquote class="def">
 <h3 id="que-significa-programa">🟦 ¿Qué significa? — <em>Programa</em></h3>
-<p>Es un archivo (o conjunto de archivos) guardado en el disco con instrucciones escritas. Está <strong>quieto</strong>, no hace nada por sí solo. Es como una receta de cocina impresa: existe, pero nadie está cocinando todavía. Tu archivo <code>main.py</code> de <strong>PolyPaw</strong> es un programa: instrucciones en reposo.</p>
+<p>Es un archivo (o un conjunto de archivos) guardado en el disco con instrucciones escritas. Está <strong>quieto</strong>, no hace nada por sí solo. Piénsalo como una receta de cocina impresa: existe, pero nadie está cocinando todavía. Tu archivo <code>main.py</code> de <strong>PolyPaw</strong> es un programa: instrucciones en reposo.</p>
 <h3 id="que-significa-proceso">🟦 ¿Qué significa? — <em>Proceso</em></h3>
-<p>Es un programa <strong>en ejecución</strong>: ya lo cargaste en la memoria y la CPU está corriendo sus instrucciones. Es la receta <em>mientras alguien la cocina de verdad</em>, con sus ingredientes (datos en memoria) sobre la mesa. Cuando haces <code>python main.py</code> en PolyPaw, el archivo (programa) se convierte en un proceso vivo.</p>
+<p>Es un programa <strong>en ejecución</strong>: ya lo cargaste en la memoria y la CPU está corriendo sus instrucciones. Es la receta <em>mientras alguien la cocina de verdad</em>, con los ingredientes (los datos en memoria) sobre la mesa. Cuando haces <code>python main.py</code> en PolyPaw, el archivo (programa) se convierte en un proceso vivo.</p>
 </blockquote>
-<p>La diferencia clave:</p>
+<p>La diferencia clave es esta:</p>
 <ul>
-<li><strong>Un programa</strong> está en el disco, ocupa espacio, está dormido.</li>
-<li><strong>Un proceso</strong> está en la memoria, está despierto, consume CPU y RAM, tiene un número de identificación.</li>
+<li><strong>Un programa</strong> está en el disco, ocupa espacio y está dormido.</li>
+<li><strong>Un proceso</strong> está en la memoria, está despierto, consume CPU y RAM, y tiene un número de identificación.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-pid-process-id">🟦 ¿Qué significa? — <em>PID (Process ID)</em></h3>
-<p>Es el número único que el sistema operativo le pone a cada proceso para identificarlo, como una cédula. Si dos personas abren el mismo programa, hay <strong>dos procesos</strong> distintos con <strong>dos PID</strong> distintos, aunque la receta sea la misma. Sirve para que el SO sepa exactamente a quién darle CPU o a quién cerrar.</p>
+<p>Es el número único que el sistema operativo le asigna a cada proceso para identificarlo, como una cédula. Si dos personas abren el mismo programa, hay <strong>dos procesos</strong> distintos con <strong>dos PID</strong> distintos, aunque la receta sea la misma. Sirve para que el SO sepa exactamente a quién darle CPU o a quién cerrar.</p>
 </blockquote>
-<p>Un mismo programa puede generar muchos procesos a la vez. Si abres tres ventanas del navegador, hay un solo programa instalado pero varios procesos corriendo.</p>
+<p>Un mismo programa puede dar lugar a muchos procesos a la vez. Si abres tres ventanas del navegador, hay un solo programa instalado pero varios procesos corriendo en paralelo.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Cuando levantas <strong>Faro</strong> en tu computadora con <code>npm run dev</code>, el archivo de código (programa) arranca un <strong>proceso</strong> de Node.js que escucha en un puerto. Ese proceso tiene un PID. Si lo cierras con Ctrl+C, matas el proceso, pero los archivos (<code>src/app/api</code>, <code>src/lib</code>) siguen ahí intactos en el disco, listos para volver a arrancar.</p>
+<p>Cuando levantas <strong>Faro</strong> en tu computadora con <code>npm run dev</code>, el archivo de código (programa) arranca un <strong>proceso</strong> de Node.js que se queda escuchando en un puerto. Ese proceso tiene su PID. Si lo cierras con Ctrl+C, matas el proceso, pero los archivos (<code>src/app/api</code>, <code>src/lib</code>) siguen ahí intactos en el disco, listos para volver a arrancar cuando quieras.</p>
 </blockquote>
 <pre><code class="language-bash"># En el NAS (Ubuntu Server), ver los procesos vivos:
 ps aux
@@ -71,23 +71,23 @@ ps aux | grep smbd
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-cuando-una-app-se-cuelga">💡 Tip — Cuando una app "se cuelga"</h3>
-<p>Lo que se cuelga es el <em>proceso</em>, no el programa. Por eso "cerrar y volver a abrir" funciona: matas el proceso defectuoso y arrancas uno nuevo y limpio desde el mismo programa intacto del disco.</p>
+<p>Lo que se cuelga es el <em>proceso</em>, no el programa. Por eso "cerrar y volver a abrir" funciona tan bien: matas el proceso defectuoso y arrancas uno nuevo y limpio desde el mismo programa, que sigue intacto en el disco.</p>
 </blockquote>
 <h2 id="3-repartir-la-cpu-como-se-hacen-mil-cosas-a-la-vez">3. Repartir la CPU: cómo se hacen mil cosas "a la vez"</h2>
 <blockquote class="def">
 <h3 id="que-significa-cpu-procesador">🟦 ¿Qué significa? — <em>CPU (procesador)</em></h3>
-<p>Es el cerebro de la computadora: el chip que ejecuta las instrucciones de los programas, una tras otra, a velocidades enormes (miles de millones por segundo). Cada instrucción es algo diminuto, como "suma estos dos números" o "mueve este dato".</p>
+<p>Es el cerebro de la computadora: el chip que ejecuta las instrucciones de los programas, una tras otra, a velocidades enormes (miles de millones por segundo). Cada instrucción es algo diminuto, del estilo "suma estos dos números" o "mueve este dato de aquí para allá".</p>
 </blockquote>
-<p>Aquí viene un secreto: tu computadora <strong>no</strong> hace de verdad cien cosas al mismo tiempo. Un núcleo de CPU solo puede ejecutar una instrucción a la vez. Entonces, ¿cómo es que el navegador, la música y el editor parecen funcionar simultáneamente?</p>
+<p>Aquí va un secreto: tu computadora <strong>no</strong> hace de verdad cien cosas al mismo tiempo. Un núcleo de CPU solo puede ejecutar una instrucción a la vez. Entonces, ¿cómo es posible que el navegador, la música y el editor parezcan funcionar todos a la vez?</p>
 <blockquote class="def">
 <h3 id="que-significa-multitarea-time-sharing">🟦 ¿Qué significa? — <em>Multitarea (time-sharing)</em></h3>
-<p>Es el truco del sistema operativo para que parezca que todo corre a la vez: le da a cada proceso un <strong>turno</strong> brevísimo de CPU (milésimas de segundo), luego lo pausa, le da el turno a otro, y así rota tan rápido que tú no notas las pausas. Es como un cocinero que atiende cinco ollas dando vueltas tan rápido que parece estar en todas a la vez.</p>
+<p>Es el truco del sistema operativo para que parezca que todo corre a la vez: le da a cada proceso un <strong>turno</strong> brevísimo de CPU (milésimas de segundo), luego lo pausa, le pasa el turno a otro, y así va rotando tan rápido que tú ni notas las pausas. Es como un cocinero que atiende cinco ollas dando vueltas tan veloces que parece estar en todas al mismo tiempo.</p>
 <h3 id="que-significa-planificador-scheduler">🟦 ¿Qué significa? — <em>Planificador (scheduler)</em></h3>
-<p>Es la parte del kernel que decide a qué proceso le toca CPU y por cuánto tiempo. Reparte los turnos con criterios de prioridad: lo urgente primero, lo que puede esperar después. Tú no lo ves nunca, pero está trabajando miles de veces por segundo.</p>
+<p>Es la parte del kernel que decide a qué proceso le toca CPU y por cuánto tiempo. Reparte los turnos con criterios de prioridad: primero lo urgente, después lo que puede esperar. Tú nunca lo ves, pero está trabajando miles de veces por segundo.</p>
 <h3 id="que-significa-nucleos-cores">🟦 ¿Qué significa? — <em>Núcleos (cores)</em></h3>
-<p>Los procesadores modernos traen varios "cerebros" dentro del mismo chip, llamados núcleos. Cada núcleo puede ejecutar instrucciones de forma independiente, así que un procesador de 4 núcleos sí puede hacer 4 cosas <em>realmente</em> a la vez, y combinado con la multitarea, parece hacer cientos.</p>
+<p>Los procesadores modernos traen varios "cerebros" dentro del mismo chip, llamados núcleos. Cada núcleo puede ejecutar instrucciones por su cuenta, así que un procesador de 4 núcleos sí puede hacer 4 cosas <em>de verdad</em> a la vez. Y si a eso le sumas la multitarea, el resultado es que parece hacer cientos.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>Tu <strong>polypaw-nas</strong> es un Acer Nitro con varios núcleos. Mientras corre Samba (compartir archivos), AdGuard Home (filtrar publicidad), Tailscale (la VPN) y contenedores de Docker, el planificador de Ubuntu reparte la CPU entre todos esos procesos. Con 8 GB de RAM y varios núcleos, el SO hace malabares para que ningún servicio se quede sin turno.</p>
+<p>Tu <strong>polypaw-nas</strong> es un Acer Nitro con varios núcleos. Mientras corre Samba (compartir archivos), AdGuard Home (filtrar publicidad), Tailscale (la VPN) y contenedores de Docker, el planificador de Ubuntu reparte la CPU entre todos esos procesos. Con 8 GB de RAM y varios núcleos, el SO hace malabares para que ningún servicio se quede sin su turno.</p>
 </blockquote>
 <pre><code class="language-bash"># En el NAS, ver en vivo qué procesos consumen más CPU (como un &quot;monitor de actividad&quot;):
 top
@@ -96,35 +96,35 @@ htop
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado-un-proceso-puede-acaparar-la-cpu">⚠️ Cuidado — Un proceso puede acaparar la CPU</h3>
-<p>A veces un programa con un error entra en un bucle infinito y consume el 100% de un núcleo. El SO no lo puede adivinar como "malo", solo ve un proceso que pide mucho turno. Por eso a veces tu ventilador suena fuerte: hay un proceso comiéndose la CPU. Con <code>top</code> lo identificas por su PID y lo puedes cerrar.</p>
+<p>A veces un programa con un error entra en un bucle infinito y se come el 100% de un núcleo. El SO no puede adivinar que es "malo"; lo único que ve es un proceso que pide turno sin parar. Por eso, cuando tu ventilador suena fuerte de la nada, suele haber un proceso devorando la CPU. Con <code>top</code> lo localizas por su PID y lo puedes cerrar.</p>
 </blockquote>
 <h2 id="4-repartir-la-ram-la-mesa-de-trabajo">4. Repartir la RAM: la mesa de trabajo</h2>
 <blockquote class="def">
 <h3 id="que-significa-ram-memoria">🟦 ¿Qué significa? — <em>RAM (memoria)</em></h3>
-<p>Es la <strong>mesa de trabajo</strong> de la computadora: una memoria rápida pero temporal donde se cargan los procesos y sus datos mientras se usan. Es rápida pero se borra al apagar. No confundir con el disco, que es lento pero permanente. Tu NAS tiene <strong>8 GB de RAM</strong>: esa es su mesa de trabajo total.</p>
+<p>Es la <strong>mesa de trabajo</strong> de la computadora: una memoria rápida pero temporal donde se cargan los procesos y sus datos mientras se usan. Es veloz, pero se borra al apagar. No la confundas con el disco, que es lento pero permanente. Tu NAS tiene <strong>8 GB de RAM</strong>: esa es su mesa de trabajo completa.</p>
 </blockquote>
-<p>Cada proceso necesita un trozo de RAM para vivir: ahí guarda sus variables, sus datos abiertos, su estado. El sistema operativo reparte la RAM entre todos los procesos y, muy importante, <strong>los aísla</strong> unos de otros.</p>
+<p>Cada proceso necesita un trozo de RAM para vivir: ahí guarda sus variables, los datos que tiene abiertos y su estado. El sistema operativo reparte la RAM entre todos los procesos y, esto es importante, <strong>los aísla</strong> unos de otros.</p>
 <blockquote class="def">
 <h3 id="que-significa-aislamiento-de-memoria">🟦 ¿Qué significa? — <em>Aislamiento de memoria</em></h3>
-<p>El SO le da a cada proceso su propio espacio de memoria privado, como cubículos separados. El proceso A no puede leer ni dañar la memoria del proceso B. Esto sirve para la <strong>seguridad</strong> (una app maliciosa no fisgonea a otra) y la <strong>estabilidad</strong> (si una app falla, no se lleva a las demás por delante).</p>
+<p>El SO le da a cada proceso su propio espacio de memoria privado, como cubículos separados. El proceso A no puede leer ni dañar la memoria del proceso B. Esto sirve para dos cosas: la <strong>seguridad</strong> (una app maliciosa no puede fisgonear a otra) y la <strong>estabilidad</strong> (si una app falla, no se lleva a las demás por delante).</p>
 <h3 id="que-significa-memoria-virtual-y-swap">🟦 ¿Qué significa? — <em>Memoria virtual y swap</em></h3>
-<p>Cuando la RAM se llena, el SO usa un truco: guarda en el disco los trozos de memoria que ahora no se están usando, y los trae de vuelta cuando hacen falta. Eso reservado en disco se llama <strong>swap</strong> (intercambio). Es como dejar platos en el fregadero para liberar la mesa: funciona, pero ir al fregadero es lento. Por eso, si tu NAS se queda sin RAM y tira mucho de swap, todo va más lento.</p>
+<p>Cuando la RAM se llena, el SO recurre a un truco: guarda en el disco los trozos de memoria que ahora mismo no se están usando, y los trae de vuelta cuando hacen falta. Ese espacio reservado en disco se llama <strong>swap</strong> (intercambio). Es como dejar platos en el fregadero para liberar la mesa: funciona, pero cada viaje al fregadero es lento. Por eso, si tu NAS se queda corto de RAM y tira mucho de swap, todo empieza a ir más despacio.</p>
 <h3 id="cuidado-quedarse-sin-ram">⚠️ Cuidado — Quedarse sin RAM</h3>
-<p>Si los procesos piden más RAM de la que hay (y el swap también se agota), el SO tiene que tomar una decisión dura: en Linux, un guardián llamado <strong>OOM killer</strong> (Out Of Memory) cierra el proceso más glotón para salvar al sistema. En tu NAS con 8 GB, si levantas demasiados contenedores Docker a la vez, podrías toparte con esto. La solución suele ser limitar la memoria de cada contenedor.</p>
+<p>Si los procesos piden más RAM de la que hay (y el swap también se agota), el SO tiene que tomar una decisión dura: en Linux, un guardián llamado <strong>OOM killer</strong> (Out Of Memory) cierra el proceso más glotón para salvar al resto del sistema. En tu NAS con 8 GB, si levantas demasiados contenedores Docker a la vez, te puedes topar con esto. Lo habitual es limitar la memoria de cada contenedor para evitarlo.</p>
 <h3 id="tip-ram-vs-disco-no-los-confundas">💡 Tip — RAM vs disco, no los confundas</h3>
-<p>Regla mental: la <strong>RAM</strong> es para lo que estás usando <em>ahorita</em> (rápida, temporal). El <strong>disco</strong> (SSD/HDD) es para guardar para siempre. Cuando guardas <code>polypaw_db.json</code>, eso va al disco. Cuando PolyPaw está corriendo y manipula esos datos, una copia vive en la RAM.</p>
+<p>Una regla mental sencilla: la <strong>RAM</strong> es para lo que estás usando <em>ahorita</em> (rápida, temporal). El <strong>disco</strong> (SSD/HDD) es para guardar para siempre. Cuando guardas <code>polypaw_db.json</code>, eso va al disco. Cuando PolyPaw está corriendo y manipula esos datos, una copia vive en la RAM.</p>
 </blockquote>
 <h2 id="5-el-sistema-de-archivos-a-fondo">5. El sistema de archivos a fondo</h2>
-<p>Ahora bajemos al disco, donde viven tus proyectos de verdad.</p>
+<p>Ahora bajemos al disco, que es donde viven tus proyectos de verdad.</p>
 <blockquote class="def">
 <h3 id="que-significa-sistema-de-archivos">🟦 ¿Qué significa? — <em>Sistema de archivos</em></h3>
-<p>Es la forma en que el SO organiza la información del disco en <strong>archivos</strong> y <strong>carpetas</strong> (también llamadas directorios), con nombres, fechas, tamaños y permisos. Sin él, el disco sería solo un mar de unos y ceros sin orden. Gracias a él, puedes tener tu carpeta <code>Organizer</code> con <code>src/</code> dentro, y dentro <code>app/</code>, y así.</p>
+<p>Es la forma en que el SO organiza la información del disco en <strong>archivos</strong> y <strong>carpetas</strong> (también llamadas directorios), con sus nombres, fechas, tamaños y permisos. Sin él, el disco sería un mar de unos y ceros sin ningún orden. Gracias a él puedes tener tu carpeta <code>Organizer</code> con <code>src/</code> dentro, y dentro <code>app/</code>, y así sucesivamente.</p>
 </blockquote>
-<p>Las carpetas se anidan formando un <strong>árbol</strong>: una carpeta dentro de otra, dentro de otra. Para llegar a un archivo, escribes el camino: la <strong>ruta</strong>.</p>
+<p>Las carpetas se anidan formando un <strong>árbol</strong>: una carpeta dentro de otra, dentro de otra. Para llegar a un archivo concreto, escribes el camino que lleva hasta él: la <strong>ruta</strong>.</p>
 <h3 id="rutas-absolutas-y-relativas">Rutas absolutas y relativas</h3>
 <blockquote class="def">
 <h3 id="que-significa-ruta-absoluta">🟦 ¿Qué significa? — <em>Ruta absoluta</em></h3>
-<p>Es la dirección <strong>completa</strong> de un archivo, desde la raíz del disco hasta él, sin ambigüedad. En Linux/macOS empieza con <code>/</code>; en Windows con algo como <code>C:\</code>. Es como dar tu dirección completa con país, ciudad, calle y número: funciona la escribas desde donde la escribas.</p>
+<p>Es la dirección <strong>completa</strong> de un archivo, desde la raíz del disco hasta él, sin lugar a dudas. En Linux/macOS empieza con <code>/</code>; en Windows con algo como <code>C:\</code>. Es como dar tu dirección completa con país, ciudad, calle y número: funciona la escribas desde donde la escribas.</p>
 <h3 id="que-significa-ruta-relativa">🟦 ¿Qué significa? — <em>Ruta relativa</em></h3>
 <p>Es la dirección de un archivo <strong>desde donde estás parado ahora</strong> (la carpeta actual). No empieza con <code>/</code>. Es como decir "dos puertas a la derecha": solo tiene sentido si se sabe desde dónde partes. <code>./</code> significa "aquí mismo" y <code>..</code> significa "la carpeta de arriba".</p>
 </blockquote>
@@ -140,14 +140,14 @@ backend/worker.js
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>En <strong>RachaSimple</strong> importas componentes con rutas relativas: desde un archivo dentro de <code>src/components</code> puedes escribir <code>../hooks/useRacha</code> o <code>../types/database</code>. Esos <code>..</code> significan "sal de esta carpeta y busca la hermana". Si movieras el archivo, esas rutas relativas podrían romperse, mientras que una ruta absoluta no.</p>
+<p>En <strong>RachaSimple</strong> importas componentes con rutas relativas: desde un archivo dentro de <code>src/components</code> puedes escribir <code>../hooks/useRacha</code> o <code>../types/database</code>. Esos <code>..</code> significan "sal de esta carpeta y busca en la hermana". Si movieras el archivo de sitio, esas rutas relativas podrían romperse; una ruta absoluta, en cambio, seguiría apuntando al mismo lugar.</p>
 <h3 id="tip-la-raiz-y-c">💡 Tip — La raíz <code>/</code> y <code>C:\</code></h3>
-<p>En Linux y macOS, todo cuelga de una única raíz llamada <code>/</code>. En tu NAS, el segundo disco (HDD de 954 GB) está montado en <code>/srv/nas</code>: o sea, esa carpeta <em>es</em> la puerta de entrada al disco grande. En Windows hay varias raíces con letras: <code>C:\</code>, <code>D:\</code>. Esa es una de las diferencias más visibles entre sistemas.</p>
+<p>En Linux y macOS, todo cuelga de una única raíz llamada <code>/</code>. En tu NAS, el segundo disco (el HDD de 954 GB) está montado en <code>/srv/nas</code>: o sea, esa carpeta <em>es</em> la puerta de entrada al disco grande. En Windows, en cambio, hay varias raíces con letra: <code>C:\</code>, <code>D:\</code>. Y esa es justo una de las diferencias más visibles entre sistemas.</p>
 </blockquote>
 <h3 id="permisos-basicos">Permisos básicos</h3>
 <blockquote class="def">
 <h3 id="que-significa-permisos-de-archivo">🟦 ¿Qué significa? — <em>Permisos de archivo</em></h3>
-<p>Son las reglas que dicen <strong>quién puede hacer qué</strong> con un archivo o carpeta. En Linux y macOS hay tres acciones —leer (r), escribir (w) y ejecutar (x)— y tres grupos de gente: el <strong>dueño</strong> del archivo, su <strong>grupo</strong> y <strong>los demás</strong> (todos). Sirven para la seguridad: que no cualquiera borre o lea cosas que no le tocan.</p>
+<p>Son las reglas que dicen <strong>quién puede hacer qué</strong> con un archivo o una carpeta. En Linux y macOS hay tres acciones —leer (r), escribir (w) y ejecutar (x)— y tres grupos de gente: el <strong>dueño</strong> del archivo, su <strong>grupo</strong> y <strong>los demás</strong> (todos los otros). Sirven para la seguridad: que no cualquiera borre o lea cosas que no le corresponden.</p>
 <h3 id="que-significa-leer-escribir-ejecutar">🟦 ¿Qué significa? — <em>Leer, escribir, ejecutar</em></h3>
 <p><strong>Leer (r)</strong>: poder ver el contenido. <strong>Escribir (w)</strong>: poder modificar o borrar. <strong>Ejecutar (x)</strong>: poder <em>correr</em> el archivo como programa (o, en una carpeta, poder entrar en ella). Un script solo arranca si tiene permiso de ejecución.</p>
 </blockquote>
@@ -161,57 +161,57 @@ ls -l
 #   │  └─── el grupo: solo leer (r--)
 #   └────── el dueño: leer y escribir (rw-)
 </code></pre>
-<p>Esos tres bloques de letras de la izquierda son los permisos. El primer carácter dice el tipo: <code>-</code> es un archivo normal, <code>d</code> es una carpeta (directory).</p>
+<p>Esos tres bloques de letras de la izquierda son los permisos. El primer carácter indica el tipo: <code>-</code> es un archivo normal, <code>d</code> es una carpeta (directory).</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
-<p>En tu <strong>polypaw-nas</strong>, los archivos compartidos por Samba en <code>/srv/nas</code> necesitan los permisos correctos para que tu usuario pueda escribir desde otra computadora. Si copias un archivo y no puedes borrarlo después, casi siempre es un tema de permisos: el dueño o el grupo no coinciden con tu usuario. Se arregla con <code>chmod</code> (cambiar permisos) o <code>chown</code> (cambiar dueño).</p>
+<p>En tu <strong>polypaw-nas</strong>, los archivos que comparte Samba en <code>/srv/nas</code> necesitan los permisos correctos para que tu usuario pueda escribir desde otra computadora. Si copias un archivo y luego no consigues borrarlo, casi siempre es cuestión de permisos: el dueño o el grupo no coinciden con tu usuario. Se arregla con <code>chmod</code> (cambiar permisos) o <code>chown</code> (cambiar dueño).</p>
 <h3 id="cuidado-el-usuario-root">⚠️ Cuidado — El usuario root</h3>
-<p>En Linux existe un superusuario llamado <strong>root</strong> que puede saltarse todos los permisos. En tu NAS, lo usas con <code>sudo</code> (ejecutar "como superusuario") para tareas administrativas. Es poderoso y peligroso: un <code>sudo rm</code> mal escrito puede borrar cosas importantes sin preguntar. Usa <code>sudo</code> solo cuando de verdad haga falta y lee dos veces antes de pulsar Enter.</p>
+<p>En Linux existe un superusuario llamado <strong>root</strong> que puede saltarse todos los permisos. En tu NAS lo usas a través de <code>sudo</code> (ejecutar "como superusuario") para las tareas administrativas. Es poderoso y, por lo mismo, peligroso: un <code>sudo rm</code> mal escrito puede borrar cosas importantes sin preguntar nada. Usa <code>sudo</code> solo cuando de verdad haga falta, y lee dos veces antes de pulsar Enter.</p>
 </blockquote>
 <h2 id="6-drivers-traductores-hacia-el-hardware">6. Drivers: traductores hacia el hardware</h2>
 <blockquote class="def">
 <h3 id="que-significa-driver-controlador">🟦 ¿Qué significa? — <em>Driver (controlador)</em></h3>
 <p>Es un pequeño software que le enseña al sistema operativo a <strong>hablar con un dispositivo concreto</strong>: una impresora, una tarjeta de red, una webcam, un disco. Cada fabricante hace sus dispositivos a su manera, y el driver es el traductor que convierte las órdenes genéricas del SO ("imprime esto") en las señales exactas que ese aparato entiende.</p>
 </blockquote>
-<p>Sin el driver correcto, el SO ve el dispositivo pero no sabe usarlo bien. Por eso a veces conectas algo y "no funciona hasta instalar el driver".</p>
+<p>Sin el driver correcto, el SO detecta el dispositivo pero no sabe usarlo bien. Por eso, a veces conectas algo y "no funciona hasta instalar el driver".</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_4">🔎 En tu código</h3>
-<p>Tu <strong>polypaw-nas</strong> es un portátil Acer con tarjeta de red, Wi-Fi y discos. Ubuntu Server trae drivers para casi todo el hardware común ya incluidos en el kernel de Linux, por eso suele "funcionar de una". El SSD de 238 GB y el HDD de 954 GB se comunican con el sistema gracias a drivers de disco que Ubuntu maneja sin que tú hagas nada. Cuando un dispositivo raro no funciona en Linux, suele ser justamente porque falta su driver.</p>
+<p>Tu <strong>polypaw-nas</strong> es un portátil Acer con tarjeta de red, Wi-Fi y discos. Ubuntu Server ya trae incluidos en el kernel de Linux los drivers para casi todo el hardware común, y por eso suele "funcionar de una". El SSD de 238 GB y el HDD de 954 GB se comunican con el sistema gracias a drivers de disco que Ubuntu maneja sin que tú tengas que mover un dedo. Cuando un dispositivo raro no funciona en Linux, casi siempre es justamente porque falta su driver.</p>
 <h3 id="tip-los-drivers-viven-cerca-del-kernel">💡 Tip — Los drivers viven cerca del kernel</h3>
-<p>Como los drivers tocan el hardware, corren con privilegios muy altos, casi como parte del kernel. Por eso un driver mal hecho puede tumbar todo el sistema (en Windows es la causa clásica de la "pantalla azul"). Mantenerlos actualizados es parte de la salud de cualquier computadora o servidor.</p>
+<p>Como los drivers tocan el hardware, corren con privilegios muy altos, casi como si fueran parte del kernel. Por eso un driver mal hecho puede tumbar todo el sistema (en Windows es la causa clásica de la "pantalla azul"). Mantenerlos al día es parte de la salud de cualquier computadora o servidor.</p>
 </blockquote>
 <h2 id="7-windows-macos-y-linux-tres-administradores-distintos">7. Windows, macOS y Linux: tres administradores distintos</h2>
-<p>Los tres son sistemas operativos: los tres gestionan procesos, RAM, archivos y drivers. Pero tienen filosofías, dueños y costumbres diferentes.</p>
+<p>Los tres son sistemas operativos: los tres gestionan procesos, RAM, archivos y drivers. Lo que cambia entre ellos son sus filosofías, sus dueños y sus costumbres.</p>
 <blockquote class="def">
 <h3 id="que-significa-windows">🟦 ¿Qué significa? — <em>Windows</em></h3>
-<p>El SO de Microsoft, el más usado en computadoras de escritorio del mundo. De pago, cerrado (su código no es público), pensado para máxima compatibilidad con programas comerciales y juegos. Usa rutas con <code>\</code> y unidades con letra (<code>C:\</code>).</p>
+<p>El SO de Microsoft, el más usado en computadoras de escritorio del mundo. Es de pago y cerrado (su código no es público), y está pensado para ofrecer la máxima compatibilidad con programas comerciales y juegos. Usa rutas con <code>\</code> y unidades con letra (<code>C:\</code>).</p>
 <h3 id="que-significa-macos">🟦 ¿Qué significa? — <em>macOS</em></h3>
-<p>El SO de Apple, que solo corre en computadoras Apple (Mac). Por debajo es un pariente de Unix (la familia "abuela" de Linux), así que su terminal se parece mucho a la de Linux: rutas con <code>/</code>, comandos parecidos. Muy popular entre desarrolladores por esa razón.</p>
+<p>El SO de Apple, que solo corre en computadoras Apple (las Mac). Por debajo es pariente de Unix (la familia "abuela" de Linux), así que su terminal se parece mucho a la de Linux: rutas con <code>/</code>, comandos parecidos. Esa es una de las razones por las que es tan popular entre desarrolladores.</p>
 <h3 id="que-significa-linux">🟦 ¿Qué significa? — <em>Linux</em></h3>
-<p>Una familia de sistemas operativos <strong>libres y de código abierto</strong>: cualquiera puede ver, modificar y distribuir su código. No hay un solo Linux, sino muchas <strong>distribuciones</strong> (Ubuntu, Debian, Fedora...) que comparten el mismo kernel pero empaquetan las cosas a su manera. Domina en servidores, nubes y dispositivos: tu NAS es Linux.</p>
+<p>Una familia de sistemas operativos <strong>libres y de código abierto</strong>: cualquiera puede ver, modificar y distribuir su código. No existe un solo Linux, sino muchas <strong>distribuciones</strong> (Ubuntu, Debian, Fedora...) que comparten el mismo kernel pero empaquetan las cosas cada una a su manera. Domina en servidores, en la nube y en todo tipo de dispositivos: tu NAS, por ejemplo, es Linux.</p>
 <h3 id="que-significa-distribucion-distro">🟦 ¿Qué significa? — <em>Distribución (distro)</em></h3>
-<p>Es un "sabor" de Linux: el kernel de Linux más un conjunto de programas, herramientas y un instalador, empaquetados juntos por una comunidad o empresa. <strong>Ubuntu</strong> es una de las distros más populares y fáciles. Tu NAS usa <strong>Ubuntu Server</strong>, la variante sin escritorio gráfico, pensada para correr servicios.</p>
+<p>Es un "sabor" de Linux: el kernel de Linux más un conjunto de programas, herramientas y un instalador, todo empaquetado junto por una comunidad o una empresa. <strong>Ubuntu</strong> es una de las distros más populares y amables con quien empieza. Tu NAS usa <strong>Ubuntu Server</strong>, la variante sin escritorio gráfico, pensada para correr servicios.</p>
 <h3 id="en-tu-codigo_5">🔎 En tu código</h3>
-<p>Probablemente desarrollas <strong>Faro</strong>, <strong>RachaSimple</strong> y los demás en Windows o macOS, pero tu <strong>polypaw-nas</strong> corre <strong>Ubuntu Server 26.04</strong>, <em>sin pantalla ni mouse</em>: lo controlas por la red. Esto te obliga a conocer la línea de comandos de Linux, porque no hay ventanas donde hacer clic. Servicios como <strong>smbd</strong> (Samba), <strong>Cockpit</strong> (el panel web en el puerto :9090) y <strong>Tailscale</strong> son procesos de Linux que arrancan solos al encender el servidor.</p>
+<p>Lo más probable es que desarrolles <strong>Faro</strong>, <strong>RachaSimple</strong> y los demás en Windows o macOS, mientras que tu <strong>polypaw-nas</strong> corre <strong>Ubuntu Server 26.04</strong>, <em>sin pantalla ni mouse</em>: lo controlas por la red. Eso te obliga a conocer la línea de comandos de Linux, porque no hay ventanas donde hacer clic. Servicios como <strong>smbd</strong> (Samba), <strong>Cockpit</strong> (el panel web en el puerto :9090) y <strong>Tailscale</strong> son procesos de Linux que arrancan solos al encender el servidor.</p>
 <h3 id="que-significa-servidor-server">🟦 ¿Qué significa? — <em>Servidor (server)</em></h3>
-<p>Una computadora (o programa) cuyo trabajo es <strong>dar servicio</strong> a otras a través de la red: guardar archivos, servir páginas web, filtrar publicidad. No necesita pantalla porque nadie se sienta frente a él; otros equipos le hacen peticiones por red. Tu NAS es un servidor casero de archivos.</p>
+<p>Una computadora (o un programa) cuyo trabajo es <strong>dar servicio</strong> a otras a través de la red: guardar archivos, servir páginas web, filtrar publicidad. No necesita pantalla porque nadie se sienta enfrente; son otros equipos los que le hacen peticiones por red. Tu NAS es un servidor casero de archivos.</p>
 <h3 id="tip-por-que-los-servidores-usan-linux">💡 Tip — Por qué los servidores usan Linux</h3>
-<p>Linux es gratis, estable, ligero (sin escritorio gasta poca RAM, ideal para tus 8 GB), seguro y se controla 100% por comandos, lo que permite automatizarlo. Por eso la inmensa mayoría de servidores del mundo —incluido el tuyo y los de Cloudflare donde corre tu <code>worker.js</code> de tunal-digital— usan Linux.</p>
+<p>Linux es gratis, estable, ligero (sin escritorio gasta poca RAM, ideal para tus 8 GB), seguro y se controla 100% por comandos, lo que permite automatizarlo de cabo a rabo. Por eso la inmensa mayoría de servidores del mundo —incluido el tuyo y los de Cloudflare donde corre tu <code>worker.js</code> de tunal-digital— usan Linux.</p>
 </blockquote>
 <h2 id="8-como-se-ve-todo-esto-junto">8. Cómo se ve todo esto junto</h2>
-<p>Juntemos las piezas con un recorrido. Cuando enciendes tu <strong>polypaw-nas</strong>:</p>
+<p>Juntemos las piezas con un recorrido completo. Cuando enciendes tu <strong>polypaw-nas</strong>, esto es lo que pasa:</p>
 <ol>
 <li>El hardware arranca y carga el <strong>kernel</strong> de Linux en la RAM.</li>
-<li>El kernel detecta los discos, la red y demás usando sus <strong>drivers</strong>.</li>
+<li>El kernel detecta los discos, la red y demás dispositivos usando sus <strong>drivers</strong>.</li>
 <li>El SO monta el sistema de archivos: la raíz <code>/</code> y el disco grande en <code>/srv/nas</code>.</li>
-<li>Arranca los <strong>procesos</strong> de servicio: <code>smbd</code> (Samba), Cockpit, Tailscale, AdGuard, los contenedores de Docker. Cada uno recibe su PID y su trozo de RAM aislado.</li>
+<li>Arrancan los <strong>procesos</strong> de servicio: <code>smbd</code> (Samba), Cockpit, Tailscale, AdGuard, los contenedores de Docker. Cada uno recibe su PID y su trozo de RAM aislado.</li>
 <li>El <strong>planificador</strong> empieza a repartir la CPU entre todos esos procesos, milésima a milésima.</li>
-<li>Desde tu laptop, por la VPN de Tailscale, le pides un archivo a Samba: el SO comprueba <strong>permisos</strong>, lee del disco y te lo envía por la red.</li>
+<li>Desde tu laptop, por la VPN de Tailscale, le pides un archivo a Samba: el SO comprueba <strong>permisos</strong>, lee del disco y te lo manda por la red.</li>
 </ol>
-<p>Todo eso pasa en segundos, en silencio, sin que veas nada. Eso es el sistema operativo "por dentro".</p>
+<p>Todo eso ocurre en cuestión de segundos, en silencio, sin que veas absolutamente nada. Eso es el sistema operativo "por dentro".</p>
 <blockquote class="tip">
 <h3 id="tip-esto-aplica-a-todos-tus-proyectos">💡 Tip — Esto aplica a TODOS tus proyectos</h3>
-<p>No solo al NAS. Cuando corres <strong>PolyPaw</strong> (proceso de Python leyendo <code>missions/*.json</code> del disco), cuando levantas <strong>Faro</strong> (proceso de Node con su RAM), o cuando tu <code>worker.js</code> de <strong>tunal-digital</strong> corre en los servidores de Cloudflare: siempre hay un SO debajo gestionando procesos, memoria, archivos y permisos. Lo que aprendiste aquí te sirve en todas partes.</p>
+<p>No solo al NAS. Cuando corres <strong>PolyPaw</strong> (un proceso de Python leyendo <code>missions/*.json</code> del disco), cuando levantas <strong>Faro</strong> (un proceso de Node con su RAM), o cuando tu <code>worker.js</code> de <strong>tunal-digital</strong> corre en los servidores de Cloudflare: siempre hay un SO debajo gestionando procesos, memoria, archivos y permisos. Lo que aprendiste aquí te sirve en todos esos casos.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

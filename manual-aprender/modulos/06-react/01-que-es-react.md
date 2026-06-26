@@ -8,16 +8,17 @@
 
 ## 1. El problema que resuelve React
 
-Recuerda el Módulo 03: para cambiar la página, seleccionabas elementos del DOM y los modificabas
-a mano (`querySelector`, `textContent`, `classList`…). Funciona para cosas pequeñas, pero en una
-app grande (con listas que cambian, formularios, datos que llegan de internet) se vuelve un caos:
-miles de instrucciones de "busca esto y cámbialo", fáciles de romper.
+¿Te acuerdas del Módulo 03? Cuando querías cambiar algo en la página, ibas a buscar el elemento al
+DOM y lo modificabas tú mismo (`querySelector`, `textContent`, `classList`…). Para una página
+pequeña, perfecto. El problema aparece cuando la app crece: listas que cambian, formularios, datos
+que llegan de internet. De repente tienes cientos de instrucciones del tipo "busca esto y cámbialo",
+y basta con que una falle para que todo se rompa. Se vuelve un caos difícil de seguir.
 
 > ### 🟦 ¿Qué significa? — *React*
 > **React** es una **librería de JavaScript para construir interfaces de usuario** a base de
-> **componentes** reutilizables. Su gran idea: en vez de decir *cómo* cambiar el DOM paso a paso,
-> tú describes *cómo debe verse* la interfaz según los datos, y React se encarga de actualizar la
-> pantalla por ti cuando los datos cambian.
+> **componentes** reutilizables. Su gran idea es darle la vuelta al asunto: en lugar de explicarle
+> al navegador *cómo* cambiar el DOM paso a paso, tú describes *cómo debe verse* la interfaz según
+> los datos. Cuando esos datos cambian, React se encarga solo de actualizar la pantalla.
 
 ---
 
@@ -29,14 +30,14 @@ miles de instrucciones de "busca esto y cámbialo", fáciles de romper.
 > - **Declarativo** = describes **el resultado deseado**. "El contador muestra el valor actual."
 >   Y cuando el valor cambia, React redibuja solo.
 >
-> Analogía: imperativo es dar indicaciones giro a giro ("derecha, luego izquierda, luego
-> recto"); declarativo es decir la dirección de destino y dejar que el GPS calcule. React es el
-> GPS: tú dices el destino (cómo debe verse), él calcula los cambios.
+> Piénsalo así: lo imperativo es dar indicaciones giro a giro ("derecha, luego izquierda, luego
+> recto"); lo declarativo es decir a dónde quieres llegar y dejar que el GPS calcule la ruta. React
+> es ese GPS: tú dices el destino (cómo debe verse) y él se ocupa de los cambios.
 
 > ### 💡 Tip — Por qué esto importa
-> El enfoque declarativo hace que las apps grandes sean **manejables**: no rastreas mil cambios
-> manuales; solo describes "así se ve con estos datos", y confías en que React mantiene la
-> pantalla sincronizada. Menos errores, código más claro.
+> El enfoque declarativo es justo lo que vuelve **manejables** las apps grandes. No tienes que
+> rastrear mil cambios manuales: solo describes "así se ve con estos datos" y confías en que React
+> mantiene la pantalla sincronizada. El resultado son menos errores y un código mucho más claro.
 
 ---
 
@@ -44,43 +45,43 @@ miles de instrucciones de "busca esto y cámbialo", fáciles de romper.
 
 > ### 🟦 ¿Qué significa? — *Componente*
 > Un **componente** es una **pieza reutilizable de interfaz**, con su propia estructura, estilo y
-> lógica, que puedes usar muchas veces. Una tarjeta de hábito, un botón, una barra de navegación:
-> cada uno es un componente.
-> Analogía: son como **bloques de LEGO**. Construyes piezas pequeñas (un botón, una tarjeta) y
-> las combinas para formar pantallas completas. Y como son reutilizables, defines la tarjeta
-> **una vez** y la usas para los 20 hábitos de la lista.
+> lógica, que puedes usar las veces que quieras. Una tarjeta de hábito, un botón, una barra de
+> navegación: cada uno es un componente.
+> La imagen que suele ayudar es la de los **bloques de LEGO**. Armas piezas pequeñas (un botón, una
+> tarjeta) y las vas combinando hasta formar pantallas completas. Y como son reutilizables, defines
+> la tarjeta **una sola vez** y la usas para los 20 hábitos de la lista.
 
 > ### 🔎 En tu código
 > En `RachaSimple/src/components/racha/` cada archivo es un componente: `HabitCard.tsx` (una
 > tarjeta de hábito), `MetricCard.tsx` (una métrica), `AppShell.tsx` (el armazón de la app). Las
-> pantallas en `src/pages/` (como `Today.tsx`) **combinan** esos componentes. Faro hace lo mismo
-> con `project-card.tsx`, `roadmap-view.tsx`, etc. Toda la app es un árbol de componentes.
+> pantallas en `src/pages/` (como `Today.tsx`) **combinan** esos componentes. Faro funciona igual,
+> con `project-card.tsx`, `roadmap-view.tsx`, etc. Al final, toda la app es un árbol de componentes.
 
 > ### 🟦 ¿Qué significa? — *Árbol de componentes*
-> Los componentes se **anidan** unos dentro de otros, formando un árbol (como el DOM del Módulo
-> 01): un componente "App" contiene una "Página", que contiene una "Lista", que contiene muchas
-> "Tarjetas". Pensar en árbol te ayuda a ubicar dónde vive cada cosa.
+> Los componentes se **anidan** unos dentro de otros y van formando un árbol (igual que el DOM del
+> Módulo 01): un componente "App" contiene una "Página", que contiene una "Lista", que contiene
+> muchas "Tarjetas". Pensar en árbol te ayuda a saber dónde vive cada cosa.
 
 ---
 
 ## 4. React, Vite y Next.js: ¿qué es cada uno?
 
-Para no confundirte con los nombres que aparecen en tus proyectos:
+Para que no te líes con los nombres que vas viendo en tus proyectos:
 
 > ### 🟦 ¿Qué significa? — *React vs. su "andamiaje"*
 > - **React** es la librería de componentes en sí.
 > - **Vite** (en RachaSimple) es la **herramienta de construcción**: arranca el servidor de
->   desarrollo, compila el TypeScript, refresca el navegador al guardar. Es el "taller".
+>   desarrollo, compila el TypeScript y refresca el navegador cada vez que guardas. Es el "taller".
 > - **Next.js** (en Faro) es un **framework sobre React** que añade más cosas (rutas por
 >   carpetas, código de servidor, etc.). Es "React con baterías incluidas".
-> Por ahora: **React es lo que aprendes aquí**; Vite y Next.js son envoltorios que lo hacen
+> Quédate con esto: **lo que aprendes aquí es React**; Vite y Next.js son envoltorios que lo hacen
 > cómodo de usar. Los conceptos de componentes, props y estado son **los mismos** en ambos.
 
 ---
 
 ## 5. Cómo se ve un componente (un primer vistazo)
 
-No te preocupes por entenderlo del todo aún; solo nota la forma:
+No hace falta que lo entiendas del todo todavía; por ahora fíjate solo en la forma:
 
 ```tsx
 function Saludo() {
@@ -88,14 +89,15 @@ function Saludo() {
 }
 ```
 
-Eso es un componente: **una función** (¿recuerdas las funciones del Módulo 03?) que **devuelve
-algo que parece HTML**. Ese "HTML dentro de JavaScript" se llama **JSX**, y es el tema del
-próximo capítulo. Lo mágico: usas `<Saludo />` como si fuera una etiqueta HTML nueva, y React
-pone ahí ese `<h1>`.
+Eso es un componente: **una función** (¿te acuerdas de las funciones del Módulo 03?) que **devuelve
+algo que parece HTML**. A ese "HTML dentro de JavaScript" se le llama **JSX**, y es justo el tema
+del próximo capítulo. Lo bonito es que luego usas `<Saludo />` como si fuera una etiqueta HTML
+nueva, y React coloca ahí ese `<h1>`.
 
 > ### 💡 Tip — Un componente es una función que devuelve interfaz
-> Si te quedas con una sola frase de este capítulo, que sea esta. Todo lo demás (props, estado,
-> hooks) son añadidos sobre esta idea simple. Ya sabes hacer funciones; ahora devuelven pantalla.
+> Si de este capítulo te llevas una sola frase, que sea esta. Todo lo demás (props, estado, hooks)
+> se construye encima de esta idea tan simple. Ya sabes hacer funciones; ahora resulta que devuelven
+> pantalla.
 
 ---
 

@@ -1,43 +1,46 @@
 # Capítulo 02 — Consultar con SQL
 
-> SQL se aprende rápido porque se lee casi como inglés. En este capítulo dominas la operación
-> más usada de todas: **pedir datos** (consultar). Con `SELECT`, `WHERE` y `ORDER BY` ya puedes
-> sacar de una base de datos justo lo que necesitas.
+> SQL tiene una ventaja: se lee casi como una frase en inglés, así que se aprende deprisa. En
+> este capítulo te centras en lo que más vas a hacer con una base de datos: **pedirle datos**.
+> Con `SELECT`, `WHERE` y `ORDER BY` ya puedes sacar exactamente lo que necesitas, ni más ni menos.
 
 ---
 
 ## 1. `SELECT`: pedir datos
 
 > ### 🟦 ¿Qué significa? — *`SELECT ... FROM`*
-> `SELECT` elige **qué columnas** quieres; `FROM` dice **de qué tabla**. Es la consulta base:
+> `SELECT` indica **qué columnas** quieres ver; `FROM`, **de qué tabla** las sacas. Esta es la
+> consulta de la que parte todo lo demás:
 > ```sql
 > SELECT nombre, color FROM habitos;
 > ```
-> "Dame las columnas nombre y color, de la tabla habitos." Para pedir **todas** las columnas se
-> usa el asterisco `*`:
+> Léelo tal cual: "dame las columnas nombre y color de la tabla habitos". Y si quieres **todas**
+> las columnas de golpe, en lugar de nombrarlas una a una pones un asterisco `*`:
 > ```sql
 > SELECT * FROM habitos;
 > ```
 
 > ### 💡 Tip — La convención de SQL
-> Las palabras clave de SQL (`SELECT`, `FROM`, `WHERE`…) suelen escribirse en **MAYÚSCULAS** por
-> costumbre, para distinguirlas de los nombres de tus tablas/columnas. No es obligatorio (SQL no
-> distingue mayúsculas en las palabras clave), pero se lee mejor. Cada consulta termina en `;`.
+> Verás que las palabras clave de SQL (`SELECT`, `FROM`, `WHERE`…) casi siempre van en
+> **MAYÚSCULAS**. Es pura costumbre: ayuda a distinguirlas de un vistazo de los nombres de tus
+> tablas y columnas. No es obligatorio (a SQL le da igual cómo escribas las palabras clave), pero
+> de verdad se lee mejor. Una cosa más: cada consulta termina en `;`.
 
 ---
 
 ## 2. `WHERE`: filtrar filas
 
-Casi nunca quieres **todas** las filas; quieres las que cumplen una condición.
+Lo normal es que no quieras **todas** las filas, sino solo las que cumplen cierta condición. Para
+eso está `WHERE`.
 
 > ### 🟦 ¿Qué significa? — *`WHERE`*
-> `WHERE` filtra: solo devuelve las filas que **cumplen una condición** (¿recuerdas las
-> condiciones del Módulo 03?). 
+> `WHERE` filtra: te devuelve únicamente las filas que **cumplen una condición** (¿te suenan las
+> condiciones del Módulo 03? Es la misma idea).
 > ```sql
 > SELECT * FROM habitos WHERE usuario_id = 7;
 > ```
-> "Dame los hábitos cuyo usuario_id sea 7." Operadores de comparación (parecidos a los que ya
-> conoces):
+> "Dame los hábitos cuyo usuario_id sea 7." Estos son los operadores de comparación que puedes
+> usar; varios ya los conoces:
 > | Operador | Significa | Ejemplo |
 > |---|---|---|
 > | `=` | igual | `meta = 20` |
@@ -48,41 +51,44 @@ Casi nunca quieres **todas** las filas; quieres las que cumplen una condición.
 > | `IN` | está en una lista | `usuario_id IN (7, 9)` |
 
 > ### ⚠️ Cuidado — En SQL, la igualdad es UN solo `=`
-> Ojo con esto si vienes de JavaScript: en SQL, comparar es con **un** `=` (no `===` ni `==`).
-> Y el texto va entre **comillas simples**: `WHERE nombre = 'Leer'` (no comillas dobles).
+> Si vienes de JavaScript, presta atención aquí: en SQL comparas con **un** solo `=`, nada de
+> `===` ni `==`. Y el texto siempre va entre **comillas simples**: `WHERE nombre = 'Leer'`. Las
+> comillas dobles no sirven para esto.
 
 > ### 🟦 ¿Qué significa? — *`LIKE` y los comodines*
-> `LIKE` busca por **patrón** de texto. El comodín `%` representa "cualquier cosa":
+> `LIKE` busca por **patrón** de texto. El comodín `%` significa "aquí va cualquier cosa":
 > - `'Le%'` → empieza por "Le" (Leer, Lectura…).
 > - `'%ar'` → termina en "ar".
 > - `'%jercicio%'` → contiene "jercicio".
-> Útil para buscadores.
+> Es justo lo que necesitas cuando montas un buscador.
 
 ---
 
 ## 3. Combinar condiciones: `AND` / `OR`
 
 > ### 🟦 ¿Qué significa? — *`AND` y `OR`*
-> Igual que `&&` y `||` del Módulo 03, pero escritos como palabras:
+> Son los `&&` y `||` del Módulo 03, pero escritos como palabras de toda la vida:
 > ```sql
 > SELECT * FROM habitos WHERE usuario_id = 7 AND meta > 15;
 > SELECT * FROM habitos WHERE color = '#1B6B6B' OR color = '#D98A3D';
 > ```
-> `AND` exige que se cumplan **ambas**; `OR`, que se cumpla **al menos una**.
+> Con `AND` se tienen que cumplir **las dos** condiciones; con `OR`, basta con que se cumpla
+> **una**.
 
 ---
 
 ## 4. Ordenar y limitar: `ORDER BY` y `LIMIT`
 
 > ### 🟦 ¿Qué significa? — *`ORDER BY`*
-> Ordena los resultados por una columna, ascendente (`ASC`, por defecto) o descendente (`DESC`):
+> Ordena los resultados según una columna, de menor a mayor (`ASC`, que es lo que hace por
+> defecto) o de mayor a menor (`DESC`):
 > ```sql
 > SELECT * FROM habitos ORDER BY meta DESC;
 > ```
 > "Dame los hábitos ordenados por meta, de mayor a menor."
 
 > ### 🟦 ¿Qué significa? — *`LIMIT`*
-> Limita cuántas filas devuelve. Útil para "los 5 primeros":
+> Recorta cuántas filas te devuelve. Perfecto cuando solo quieres "los 5 primeros":
 > ```sql
 > SELECT * FROM habitos ORDER BY meta DESC LIMIT 5;
 > ```
@@ -92,35 +98,38 @@ Casi nunca quieres **todas** las filas; quieres las que cumplen una condición.
 ## 5. Contar y agrupar (un vistazo)
 
 > ### 🟦 ¿Qué significa? — *Funciones de agregación y `COUNT`*
-> A veces no quieres las filas, sino un **resumen**: cuántas hay, el promedio, el total. Eso son
-> las **funciones de agregación**. La más común es `COUNT` (contar):
+> A veces no te interesan las filas en sí, sino un **resumen** de ellas: cuántas hay, cuánto suman,
+> cuál es el promedio. De eso se encargan las **funciones de agregación**. La que más vas a usar es
+> `COUNT`, que cuenta:
 > ```sql
 > SELECT COUNT(*) FROM habitos WHERE usuario_id = 7;
 > ```
-> "¿Cuántos hábitos tiene el usuario 7?" Otras: `SUM` (suma), `AVG` (promedio), `MAX`, `MIN`.
+> "¿Cuántos hábitos tiene el usuario 7?" Hay más en la misma familia: `SUM` (suma), `AVG`
+> (promedio), `MAX` y `MIN`.
 
 > ### 🟦 ¿Qué significa? — *`GROUP BY`*
-> `GROUP BY` agrupa filas para resumir **por categoría**. Por ejemplo, "cuántos hábitos tiene
-> cada usuario":
+> `GROUP BY` junta las filas para resumirlas **por categoría**. Por ejemplo, para saber cuántos
+> hábitos tiene cada usuario:
 > ```sql
 > SELECT usuario_id, COUNT(*) FROM habitos GROUP BY usuario_id;
 > ```
-> No necesitas dominarlo ahora; reconócelo como "resumir datos por grupos".
+> No hace falta que lo domines todavía. Por ahora con que lo reconozcas como "resumir datos por
+> grupos" es suficiente.
 
 ---
 
 ## 6. Cómo se ve esto en tus apps
 
 > ### 🔎 En tu código
-> En RachaSimple y Faro no escribes SQL "a mano" en la mayoría de sitios: usas el **cliente de
-> Supabase**, que traduce a SQL por debajo. Por ejemplo, esto de la app:
+> En RachaSimple y en Faro casi nunca escribes SQL "a mano". En su lugar usas el **cliente de
+> Supabase**, que se encarga de traducirlo a SQL por debajo. Mira este trozo de la app:
 > ```js
 > supabase.from('habitos').select('*').eq('usuario_id', 7)
 > ```
-> es, en el fondo, `SELECT * FROM habitos WHERE usuario_id = 7;`. Entender el SQL te permite
-> saber **qué hace realmente** ese código y depurarlo. (El cliente de Supabase lo verás en el
-> capítulo 04.) Además, Supabase tiene un **editor SQL** donde puedes escribir consultas
-> directas, ideal para practicar.
+> que, en el fondo, no es más que `SELECT * FROM habitos WHERE usuario_id = 7;`. Por eso vale la
+> pena entender el SQL: te deja ver **qué está haciendo de verdad** ese código y arreglarlo cuando
+> algo falla. (El cliente de Supabase lo vemos a fondo en el capítulo 04.) Y por si fuera poco,
+> Supabase trae un **editor SQL** donde puedes lanzar consultas directas: ideal para practicar.
 
 ---
 

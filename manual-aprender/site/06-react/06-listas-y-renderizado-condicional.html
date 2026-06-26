@@ -23,17 +23,17 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora dibujaste cosas <strong>fijas</strong>: un componente, un texto, un botón. Pero las apps
-de verdad muestran <strong>muchas</strong> cosas que vienen de datos: la lista de hábitos de
-<strong>RachaSimple</strong>, la lista de proyectos de <strong>Faro</strong>. En este capítulo aprendes a convertir
+<p>Hasta ahora pintaste cosas <strong>fijas</strong>: un componente, un texto, un botón. Pero las apps
+de verdad muestran <strong>muchas</strong> cosas que salen de datos: la lista de hábitos de
+<strong>RachaSimple</strong>, la lista de proyectos de <strong>Faro</strong>. En este capítulo vas a aprender a convertir
 un array en pantalla con <code>.map()</code>, a darle a cada elemento su <code>key</code>, y a mostrar u ocultar
-partes de la interfaz según condiciones (<code>&amp;&amp;</code>, el ternario, devolver <code>null</code>) y a agrupar sin
-ensuciar el HTML con <strong>fragmentos</strong>. Bit, el ajolote, te acompaña: él odia repetir cosas a
-mano, así que las listas son su parte favorita.</p>
+partes de la interfaz según condiciones (<code>&amp;&amp;</code>, el ternario, devolver <code>null</code>). También verás cómo
+agrupar elementos sin meter etiquetas de más en el HTML usando <strong>fragmentos</strong>. Bit, el ajolote, va
+contigo: él detesta repetir cosas a mano, así que las listas son lo que más le gusta.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-tengo-un-array-quiero-pintarlo">1. El problema: tengo un array, quiero pintarlo</h2>
-<p>Imagina que en RachaSimple tienes los hábitos del usuario guardados en un array, como aprendiste
+<p>Pongamos que en RachaSimple tienes los hábitos del usuario guardados en un array, como viste
 en el módulo 03 de JavaScript:</p>
 <pre><code class="language-ts">const habitos = [
   { id: &quot;a1&quot;, nombre: &quot;Beber agua&quot;, racha: 5 },
@@ -41,15 +41,15 @@ en el módulo 03 de JavaScript:</p>
   { id: &quot;a3&quot;, nombre: &quot;Salir a caminar&quot;, racha: 0 },
 ];
 </code></pre>
-<p>No quieres escribir tres bloques de JSX a mano, porque mañana habrá cinco hábitos, o ninguno.
-Quieres una regla: <strong>"por cada hábito del array, dibuja una tarjeta"</strong>. Eso es justo lo que hace
-<code>.map()</code> dentro de JSX.</p>
+<p>No tiene sentido escribir tres bloques de JSX a mano, porque mañana habrá cinco hábitos, o ninguno.
+Lo que quieres es una regla: <strong>"por cada hábito del array, dibuja una tarjeta"</strong>. Y eso es exactamente
+lo que hace <code>.map()</code> dentro de JSX.</p>
 <blockquote class="def">
 <h3 id="que-significa-renderizar-una-lista">🟦 ¿Qué significa? — <em>Renderizar una lista</em></h3>
-<p><strong>Renderizar una lista</strong> es transformar un array de datos en un array de elementos de interfaz
-(una tarjeta, una fila, un <code>&lt;li&gt;</code>...), uno por cada dato. En vez de escribir el HTML repetido a
-mano, le das a React el array y una "plantilla", y React dibuja tantos elementos como datos
-haya. Es el patrón más común de toda app: en RachaSimple pinta los hábitos, en Faro pinta los
+<p><strong>Renderizar una lista</strong> es convertir un array de datos en un array de elementos de interfaz
+(una tarjeta, una fila, un <code>&lt;li&gt;</code>...), uno por cada dato. En lugar de escribir el HTML repetido a
+mano, le pasas a React el array y una "plantilla", y React dibuja tantos elementos como datos
+haya. Es el patrón más común de cualquier app: en RachaSimple pinta los hábitos, en Faro pinta los
 proyectos.</p>
 </blockquote>
 <hr />
@@ -58,12 +58,12 @@ proyectos.</p>
 elemento transformado. En React lo usamos para transformar <strong>datos</strong> en <strong>JSX</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-map-recordatorio-del-modulo-03">🟦 ¿Qué significa? — <em><code>.map()</code> (recordatorio del módulo 03)</em></h3>
-<p><code>.map()</code> es un método de los arrays. Recibe una función y la aplica a cada elemento, devolviendo
-un array nuevo con los resultados. <code>[1, 2, 3].map(n =&gt; n * 2)</code> da <code>[2, 4, 6]</code>. En React, la función
-devuelve <strong>un trozo de JSX</strong> por cada elemento, así que terminas con un array de elementos que
+<p><code>.map()</code> es un método de los arrays. Recibe una función y la aplica a cada elemento, y devuelve
+un array nuevo con los resultados. <code>[1, 2, 3].map(n =&gt; n * 2)</code> da <code>[2, 4, 6]</code>. En React, esa función
+devuelve <strong>un trozo de JSX</strong> por cada elemento, así que acabas con un array de elementos que
 React sabe dibujar.</p>
 </blockquote>
-<p>Mira cómo se vería la lista de hábitos de RachaSimple. Recuerda que RachaSimple usa <strong>React 18 +
+<p>Mira cómo quedaría la lista de hábitos de RachaSimple. Recuerda que RachaSimple usa <strong>React 18 +
 TypeScript</strong>, así que cada componente es un archivo <code>.tsx</code>:</p>
 <pre><code class="language-tsx">function ListaHabitos() {
   const habitos = [
@@ -85,33 +85,33 @@ TypeScript</strong>, así que cada componente es un archivo <code>.tsx</code>:</
 </code></pre>
 <p>Fíjate en tres cosas:</p>
 <ol>
-<li>El <code>.map()</code> va <strong>dentro de llaves</strong> <code>{ }</code>, porque es JavaScript metido en JSX (lo viste en el
+<li>El <code>.map()</code> va <strong>dentro de llaves</strong> <code>{ }</code>, porque es JavaScript metido en JSX (eso lo viste en el
    capítulo 02).</li>
-<li>La función del <code>.map()</code> <strong>devuelve JSX</strong> (<code>&lt;li&gt;...&lt;/li&gt;</code>). Aquí usamos paréntesis <code>( )</code> después
+<li>La función del <code>.map()</code> <strong>devuelve JSX</strong> (<code>&lt;li&gt;...&lt;/li&gt;</code>). Aquí ponemos paréntesis <code>( )</code> después
    de la flecha para devolver el JSX directamente, sin escribir <code>return</code>.</li>
-<li>Cada <code>&lt;li&gt;</code> tiene una prop rara llamada <code>key</code>. Esa <code>key</code> es tan importante que tiene su propia
+<li>Cada <code>&lt;li&gt;</code> lleva una prop rara llamada <code>key</code>. Esa <code>key</code> es tan importante que tiene su propia
    sección entera más abajo.</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-la-plantilla-del-map">🟦 ¿Qué significa? — <em>La "plantilla" del map</em></h3>
 <p>La <strong>plantilla</strong> es el trozo de JSX que escribes dentro del <code>.map()</code> y que se repite por cada
 dato. Escribes la tarjeta <strong>una sola vez</strong> y React la clona con los datos de cada elemento. Si
-mañana cambias el diseño de la tarjeta, lo cambias en un solo lugar.</p>
+mañana cambias el diseño de la tarjeta, lo tocas en un único lugar.</p>
 <h3 id="tip-parentesis-para-devolver-sin-return">💡 Tip — Paréntesis para "devolver sin return"</h3>
-<p>En una flecha, <code>(habito) =&gt; (&lt;li&gt;...&lt;/li&gt;)</code> devuelve el <code>&lt;li&gt;</code> automáticamente. Si en cambio usas
-llaves <code>(habito) =&gt; { ... }</code> estás abriendo un <strong>cuerpo de función</strong>, y entonces <strong>sí</strong> necesitas
-escribir <code>return</code>. Olvidar el <code>return</code> cuando usas llaves es uno de los errores más comunes de
-principiante: el map devuelve <code>undefined</code> y no aparece nada.</p>
+<p>En una flecha, <code>(habito) =&gt; (&lt;li&gt;...&lt;/li&gt;)</code> devuelve el <code>&lt;li&gt;</code> solo. Si en cambio usas
+llaves <code>(habito) =&gt; { ... }</code>, estás abriendo un <strong>cuerpo de función</strong>, y entonces <strong>sí</strong> tienes que
+escribir <code>return</code>. Olvidar el <code>return</code> cuando usas llaves es de los errores más comunes al
+empezar: el map devuelve <code>undefined</code> y no aparece nada.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En RachaSimple casi todas las pantallas que listan algo (los hábitos del día, el historial)
+<p>En RachaSimple, casi todas las pantallas que listan algo (los hábitos del día, el historial)
 nacen de un <code>.map()</code> sobre un array que viene de Supabase. En Faro, la cuadrícula de tarjetas de
-proyectos es exactamente esto: un <code>.map()</code> sobre el array de proyectos del usuario.</p>
+proyectos es justo esto: un <code>.map()</code> sobre el array de proyectos del usuario.</p>
 </blockquote>
 <hr />
 <h2 id="3-la-prop-key-por-que-react-te-la-pide">3. La prop <code>key</code>: por qué React te la pide</h2>
-<p>Si ejecutas un <code>.map()</code> sin <code>key</code>, React funciona... pero te grita en la consola con un aviso
+<p>Si ejecutas un <code>.map()</code> sin <code>key</code>, React funciona... pero te avisa en la consola con un mensaje
 amarillo: <em>"Each child in a list should have a unique key prop"</em> ("cada hijo de una lista debería
-tener una prop key única"). No es un capricho.</p>
+tener una prop key única"). No es un capricho suyo.</p>
 <blockquote class="def">
 <h3 id="que-significa-la-prop-key">🟦 ¿Qué significa? — <em>La prop <code>key</code></em></h3>
 <p><code>key</code> es una prop especial que le das a cada elemento de una lista para que React pueda
@@ -119,16 +119,16 @@ tener una prop key única"). No es un capricho.</p>
 dentro. Sirve para que, cuando la lista cambie (se añade, se borra o se reordena algo), React
 sepa <strong>qué elemento es cuál</strong> y actualice solo lo que cambió, en vez de redibujar todo.</p>
 </blockquote>
-<p>Piénsalo así: imagina que tienes tres hábitos y borras el del medio. Sin <code>key</code>, React ve "antes
-había 3, ahora hay 2" y no está seguro de <strong>cuál</strong> desapareció, así que puede confundirse y dejar
+<p>Piénsalo así: tienes tres hábitos y borras el del medio. Sin <code>key</code>, React ve "antes
+había 3, ahora hay 2" y no sabe con certeza <strong>cuál</strong> desapareció, así que puede liarse y dejar
 datos viejos (por ejemplo, un checkbox marcado) en la tarjeta equivocada. Con <code>key</code>, React dice
-"ah, desapareció el de <code>key="a2"</code>, dejo intactos los otros dos". Rápido y sin errores.</p>
+"ah, desapareció el de <code>key="a2"</code>, dejo intactos los otros dos". Rápido y sin sorpresas.</p>
 <blockquote class="def">
 <h3 id="que-significa-una-key-unica-y-estable">🟦 ¿Qué significa? — <em>Una key "única y estable"</em></h3>
 <ul>
-<li><strong>Única</strong>: dos elementos de la misma lista no pueden tener la misma <code>key</code>.</li>
-<li><strong>Estable</strong>: la <code>key</code> de un elemento no debe cambiar entre renders. El mismo hábito debe tener
-  siempre la misma <code>key</code>.
+<li><strong>Única</strong>: dos elementos de la misma lista no pueden compartir la misma <code>key</code>.</li>
+<li><strong>Estable</strong>: la <code>key</code> de un elemento no debe cambiar entre renders. El mismo hábito tiene que
+  tener siempre la misma <code>key</code>.
 El candidato perfecto es el <strong><code>id</code></strong> que ya viene de la base de datos. En RachaSimple cada hábito
 tiene un <code>id</code> de Supabase; en Faro cada proyecto tiene su <code>id</code>. Úsalos.</li>
 </ul>
@@ -140,8 +140,8 @@ tiene un <code>id</code> de Supabase; en Faro cada proyecto tiene su <code>id</c
 <blockquote class="warn">
 <h3 id="cuidado-no-uses-el-indice-como-key-casi-nunca">⚠️ Cuidado — No uses el índice como key (casi nunca)</h3>
 <p>Es tentador escribir <code>habitos.map((habito, indice) =&gt; &lt;li key={indice}&gt;...)</code>. El <code>indice</code> es la
-posición (0, 1, 2...). Funciona si la lista <strong>nunca</strong> se reordena ni se borra del medio. Pero en
-cuanto borras o reordenas, los índices se "corren" y la <code>key</code> deja de ser estable: el elemento 1
+posición (0, 1, 2...). Funciona mientras la lista <strong>nunca</strong> se reordene ni se borre del medio. Pero
+en cuanto borras o reordenas, los índices se "corren" y la <code>key</code> deja de ser estable: el elemento 1
 pasa a ser el 0, y React vuelve a confundirse. Resultado: bugs raros con inputs y checkboxes.
 Regla simple: <strong>si tienes un <code>id</code>, usa el <code>id</code></strong>. El índice es el último recurso.</p>
 <h3 id="cuidado-la-key-va-en-el-elemento-de-mas-afuera-del-map">⚠️ Cuidado — La key va en el elemento de más afuera del map</h3>
@@ -155,8 +155,8 @@ pásalo aparte: <code>&lt;HabitCard key={habito.id} id={habito.id} habito={habit
 <hr />
 <h2 id="4-renderizado-condicional-mostrar-u-ocultar-partes">4. Renderizado condicional: mostrar u ocultar partes</h2>
 <p>A veces no quieres dibujar algo <strong>siempre</strong>, sino <strong>solo si</strong> se cumple una condición. Por
-ejemplo: mostrar "¡Vas en racha!" solo si la racha es mayor que cero, o mostrar un mensaje de
-"todavía no tienes hábitos" solo si la lista está vacía.</p>
+ejemplo: mostrar "¡Vas en racha!" únicamente si la racha es mayor que cero, o mostrar un mensaje de
+"todavía no tienes hábitos" únicamente si la lista está vacía.</p>
 <blockquote class="def">
 <h3 id="que-significa-renderizado-condicional">🟦 ¿Qué significa? — <em>Renderizado condicional</em></h3>
 <p><strong>Renderizado condicional</strong> es decidir, según una condición (un <code>if</code> disfrazado), <strong>qué</strong> se
@@ -169,7 +169,7 @@ dibuja o <strong>si</strong> se dibuja algo. Es el equivalente en interfaz de un
 <h3 id="que-significa-el-operador-en-jsx">🟦 ¿Qué significa? — <em>El operador <code>&amp;&amp;</code> en JSX</em></h3>
 <p><code>condicion &amp;&amp; &lt;Algo /&gt;</code> significa <strong>"si <code>condicion</code> es verdadera, dibuja <code>&lt;Algo /&gt;</code>; si no, no
 dibujes nada"</strong>. Funciona porque en JavaScript <code>&amp;&amp;</code> devuelve el segundo valor solo si el primero
-es verdadero. React, cuando recibe <code>false</code>, simplemente no pinta nada.</p>
+es verdadero. Y React, cuando recibe <code>false</code>, no pinta nada.</p>
 </blockquote>
 <pre><code class="language-tsx">function HabitCard({ habito }: { habito: { nombre: string; racha: number } }) {
   return (
@@ -180,14 +180,14 @@ es verdadero. React, cuando recibe <code>false</code>, simplemente no pinta nada
   );
 }
 </code></pre>
-<p>Si <code>habito.racha</code> es 0, la condición es falsa y el <code>&lt;span&gt;</code> simplemente no aparece. Es el patrón
-perfecto para "muestra esto <strong>solo cuando</strong> haga falta", sin un "si no" alternativo.</p>
+<p>Si <code>habito.racha</code> es 0, la condición es falsa y el <code>&lt;span&gt;</code> no aparece. Es el patrón
+perfecto para "muestra esto <strong>solo cuando</strong> haga falta", sin una alternativa de "si no".</p>
 <blockquote class="warn">
 <h3 id="cuidado-el-bug-del-cero-con">⚠️ Cuidado — El bug del cero con <code>&amp;&amp;</code></h3>
-<p>Hay una trampa famosa. Si escribes <code>{habito.racha &amp;&amp; &lt;span&gt;...&lt;/span&gt;}</code> y <code>racha</code> vale <code>0</code>,
+<p>Aquí hay una trampa famosa. Si escribes <code>{habito.racha &amp;&amp; &lt;span&gt;...&lt;/span&gt;}</code> y <code>racha</code> vale <code>0</code>,
 JavaScript trata el <code>0</code> como falso... pero <code>&amp;&amp;</code> devuelve ese <code>0</code>, y React <strong>lo dibuja como
-texto</strong>: aparece un "0" suelto en pantalla. Por eso conviene escribir una condición que dé un
-verdadero/falso real: <code>habito.racha &gt; 0 &amp;&amp; ...</code>. Lo mismo pasa con listas: usa
+texto</strong>: te aparece un "0" suelto en pantalla. Por eso conviene escribir una condición que dé un
+verdadero/falso de verdad: <code>habito.racha &gt; 0 &amp;&amp; ...</code>. Lo mismo pasa con las listas: usa
 <code>habitos.length &gt; 0 &amp;&amp; ...</code>, no <code>habitos.length &amp;&amp; ...</code>.</p>
 </blockquote>
 <h3 id="42-el-operador-ternario-esto-o-aquello">4.2 El operador ternario ("esto o aquello")</h3>
@@ -207,15 +207,15 @@ valorSiFalso</code>. En JSX lo usas cuando quieres dibujar <strong>una cosa u ot
   );
 }
 </code></pre>
-<p>Lo lees como una frase: <em>"si racha es mayor que cero, muestra los días; si no, muestra 'hoy
-empieza tu racha'"</em>. Es el patrón ideal para <strong>cargando / cargado</strong>, <strong>vacío / con datos</strong>,
+<p>Se lee como una frase: <em>"si racha es mayor que cero, muestra los días; si no, muestra 'hoy
+empieza tu racha'"</em>. Es el patrón ideal para <strong>cargando / cargado</strong>, <strong>vacío / con datos</strong> o
 <strong>logueado / invitado</strong>.</p>
 <blockquote class="tip">
 <h3 id="tip-vs-ternario-cual-uso">💡 Tip — <code>&amp;&amp;</code> vs ternario, ¿cuál uso?</h3>
 <ul>
 <li>¿Quieres mostrar algo <strong>o nada</strong>? Usa <code>&amp;&amp;</code>.</li>
 <li>¿Quieres mostrar <strong>una cosa u otra</strong>? Usa el ternario <code>? :</code>.
-Si te encuentras escribiendo <code>condicion ? &lt;Algo /&gt; : null</code>, eso es un <code>&amp;&amp;</code> disfrazado; mejor
+Si te ves escribiendo <code>condicion ? &lt;Algo /&gt; : null</code>, eso es un <code>&amp;&amp;</code> disfrazado; mejor
 <code>condicion &amp;&amp; &lt;Algo /&gt;</code>.</li>
 </ul>
 </blockquote>
@@ -248,8 +248,8 @@ final limpio, sin anidar mil ternarios. Es el estilo que verás tanto en RachaSi
 <h3 id="que-significa-fragmento">🟦 ¿Qué significa? — <em>Fragmento (<code>&lt;&gt;...&lt;/&gt;</code>)</em></h3>
 <p>Un <strong>fragmento</strong> es un envoltorio <strong>invisible</strong>: agrupa varios elementos para devolverlos juntos,
 pero <strong>no genera ninguna etiqueta</strong> en el HTML final. Se escribe con la sintaxis corta <code>&lt;&gt;</code> ...
-<code>&lt;/&gt;</code>. Sirve cuando necesitas devolver varios elementos hermanos pero no quieres meter un <code>&lt;div&gt;</code>
-extra que ensucie el diseño (y que pueda romper tu CSS de Tailwind).</p>
+<code>&lt;/&gt;</code>. Te sirve cuando necesitas devolver varios elementos hermanos pero no quieres meter un <code>&lt;div&gt;</code>
+extra que ensucie el diseño (y que de paso te rompa el CSS de Tailwind).</p>
 </blockquote>
 <pre><code class="language-tsx">function CabeceraHabito({ nombre, racha }: { nombre: string; racha: number }) {
   return (
@@ -260,41 +260,42 @@ extra que ensucie el diseño (y que pueda romper tu CSS de Tailwind).</p>
   );
 }
 </code></pre>
-<p>Sin el fragmento, esto sería un error: <em>"JSX expressions must have one parent element"</em> ("las
+<p>Sin el fragmento, esto daría error: <em>"JSX expressions must have one parent element"</em> ("las
 expresiones JSX deben tener un solo elemento padre"). Con <code>&lt;&gt;...&lt;/&gt;</code> devuelves los dos como un
-grupo, y en el HTML final solo aparecen el <code>&lt;h2&gt;</code> y el <code>&lt;p&gt;</code>, sin envoltorio.</p>
+grupo, y en el HTML final solo aparecen el <code>&lt;h2&gt;</code> y el <code>&lt;p&gt;</code>, sin envoltorio de por medio.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-fragmento-con-key">🟦 ¿Qué significa? — <em>El fragmento con <code>key</code></em></h3>
 <p>La forma corta <code>&lt;&gt;...&lt;/&gt;</code> no acepta props. Si necesitas un fragmento <strong>con <code>key</code></strong> (por ejemplo,
 dentro de un <code>.map()</code> donde cada elemento devuelve dos hermanos), tienes que usar la forma larga:
 <code>&lt;React.Fragment key={algo}&gt;...&lt;/React.Fragment&gt;</code>. Es el único caso donde no puedes usar <code>&lt;&gt;</code>.</p>
 <h3 id="tip-div-o-fragmento">💡 Tip — ¿Div o fragmento?</h3>
-<p>Si vas a poner clases de Tailwind, un <code>onClick</code>, o cualquier estilo, necesitas un elemento real
+<p>Si vas a poner clases de Tailwind, un <code>onClick</code> o cualquier estilo, necesitas un elemento real
 como <code>&lt;div&gt;</code>. Si <strong>solo</strong> quieres agrupar para cumplir la regla del "un solo padre" y no añadir
-nada visual, usa un fragmento. Menos <code>&lt;div&gt;</code> basura = HTML más limpio.</p>
+nada visual, usa un fragmento. Menos <code>&lt;div&gt;</code> de relleno = HTML más limpio.</p>
 </blockquote>
 <hr />
 <h2 id="6-juntandolo-una-lista-que-viene-de-supabase">6. Juntándolo: una lista que viene de Supabase</h2>
-<p>Aquí es donde todo se conecta. En la vida real, el array de hábitos no está escrito a mano: viene
+<p>Aquí es donde todo encaja. En la vida real, el array de hábitos no está escrito a mano: viene
 de la base de datos. RachaSimple y Faro usan <strong>Supabase</strong> para guardar los datos, y los piden con
 un hook de <strong>TanStack Query</strong> (lo viste asomar en el capítulo de hooks). No te preocupes por los
-detalles de la consulta; concéntrate en cómo el componente reacciona a los tres estados:
+detalles de la consulta; fíjate en cómo el componente reacciona a los tres estados:
 <strong>cargando</strong>, <strong>vacío</strong> y <strong>con datos</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-supabase-recordatorio">🟦 ¿Qué significa? — <em>Supabase (recordatorio)</em></h3>
 <p><strong>Supabase</strong> es el servicio que guarda los datos de la app en una base de datos en la nube
-(lo verás a fondo en los módulos 07 y 08). Por ahora basta saber que le pides una "tabla" (por
+(lo verás a fondo en los módulos 07 y 08). Por ahora basta con saber que le pides una "tabla" (por
 ejemplo <code>habits</code> o <code>projects</code>) y te devuelve un <strong>array</strong> de filas. Ese array es el que pintas
 con <code>.map()</code>.</p>
 <h3 id="que-significa-los-estados-de-una-carga-de-datos">🟦 ¿Qué significa? — <em>Los estados de una carga de datos</em></h3>
-<p>Pedir datos a Supabase no es instantáneo. Mientras tanto, tu componente pasa por estados:
+<p>Pedir datos a Supabase no es instantáneo. Mientras llega la respuesta, tu componente pasa por varios
+estados:
 - <strong>cargando</strong> (<code>isLoading</code>): todavía esperando la respuesta.
 - <strong>con datos</strong>: el array llegó y tiene elementos.
 - <strong>vacío</strong>: el array llegó pero está vacío (el usuario aún no creó nada).
-Tu interfaz debe manejar los tres. Esto se llama, informalmente, cubrir los "estados de
+Tu interfaz tiene que manejar los tres. A esto se le llama, informalmente, cubrir los "estados de
 carga, vacío y lleno".</p>
 </blockquote>
-<p>Así se ve la lista de hábitos de RachaSimple combinando todo lo del capítulo:</p>
+<p>Así queda la lista de hábitos de RachaSimple combinando todo lo del capítulo:</p>
 <pre><code class="language-tsx">import { useQuery } from &quot;@tanstack/react-query&quot;;
 import { supabase } from &quot;@/lib/supabase&quot;;
 
@@ -336,11 +337,11 @@ function ListaHabitos() {
   );
 }
 </code></pre>
-<p>Repasa lo que reconoces de este capítulo en ese componente:</p>
+<p>Repasa lo que ya reconoces de este capítulo en ese componente:</p>
 <ul>
 <li>Dos <strong>return tempranos</strong> con <code>if</code> para cargando y vacío.</li>
 <li>El <code>.map()</code> para la lista, con <code>key={habito.id}</code> (un <code>id</code> real de Supabase, único y estable).</li>
-<li>Un <code>&amp;&amp;</code> para mostrar la racha <strong>solo si</strong> es mayor que cero (con <code>&gt; 0</code>, evitando el bug del cero).</li>
+<li>Un <code>&amp;&amp;</code> para mostrar la racha <strong>solo si</strong> es mayor que cero (con <code>&gt; 0</code>, esquivando el bug del cero).</li>
 </ul>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
@@ -397,20 +398,20 @@ function CuadriculaProyectos({ proyectos }: { proyectos: Proyecto[] }) {
 <h3 id="que-significa-ternarios-encadenados">🟦 ¿Qué significa? — <em>Ternarios encadenados</em></h3>
 <p>Cuando hay <strong>más de dos</strong> opciones (aquí: activo / pausado / archivado), puedes <strong>encadenar</strong>
 ternarios: <code>A ? "x" : B ? "y" : "z"</code>. Se lee "si A, x; si no, si B, y; si no, z". Funciona, pero
-si encadenas muchos se vuelve difícil de leer; en ese caso muchos prefieren una función aparte o
+si encadenas muchos se vuelve difícil de leer; en ese caso mucha gente prefiere una función aparte o
 un objeto que mapee estado → texto. Para dos o tres opciones, el ternario encadenado está bien.</p>
 <h3 id="tip-comentarios-dentro-de-jsx">💡 Tip — Comentarios dentro de JSX</h3>
 <p>¿Viste los <code>{/* ... */}</code>? Así se escribe un comentario <strong>dentro</strong> del JSX: va entre llaves y con
 la sintaxis de comentario de bloque. Un <code>// comentario</code> suelto dentro del JSX no funciona y rompe
 el render.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>La diferencia entre RachaSimple (React 18) y Faro (React 19) <strong>no afecta</strong> nada de este capítulo:
+<p>La diferencia entre RachaSimple (React 18) y Faro (React 19) <strong>no afecta</strong> a nada de este capítulo:
 <code>.map()</code>, <code>key</code>, <code>&amp;&amp;</code>, ternarios y fragmentos funcionan igual en ambas versiones. Es la base de
-React, no cambia.</p>
+React, y eso no cambia.</p>
 </blockquote>
 <hr />
 <h2 id="8-errores-tipicos-y-como-los-detecta-bit">8. Errores típicos (y cómo los detecta Bit)</h2>
-<p>Bit el ajolote ya pisó todos estos charcos por ti. Memoriza la lista:</p>
+<p>Bit el ajolote ya pisó todos estos charcos por ti. Apréndete la lista:</p>
 <blockquote class="warn">
 <h3 id="cuidado-resumen-de-trampas">⚠️ Cuidado — Resumen de trampas</h3>
 <ul>
@@ -422,7 +423,7 @@ React, no cambia.</p>
 <li><strong><code>// comentario</code></strong> suelto dentro del JSX → usa <code>{/* ... */}</code>.</li>
 </ul>
 <h3 id="tip-cuando-no-aparece-nada">💡 Tip — Cuando "no aparece nada"</h3>
-<p>Si tu lista no se dibuja, revisa en orden: (1) ¿el array tiene elementos? (haz un <code>console.log</code>),
+<p>Si tu lista no se dibuja, revisa en este orden: (1) ¿el array tiene elementos? (haz un <code>console.log</code>),
 (2) ¿el <code>.map()</code> está dentro de llaves <code>{ }</code>?, (3) ¿devuelves el JSX (paréntesis) o te falta el
 <code>return</code> (llaves)? El 90% de las veces es una de esas tres.</p>
 </blockquote>

@@ -23,10 +23,10 @@
 </p>
 
 <blockquote>
-<p>Hola, soy Bit, tu ajolote guia. En el capitulo anterior aprendiste a guardar datos en tablas de Postgres. Pero ahora viene la pregunta incomoda: si <strong>todos</strong> los usuarios de RachaSimple comparten la misma tabla de habitos... ¿que impide que Ana vea los habitos de Beto? La respuesta es <strong>Row-Level Security</strong>, y es, sin exagerar, la pieza mas importante de seguridad de toda app con Supabase. Acompañame, que esto lo vamos a entender de verdad, ladrillo por ladrillo.</p>
+<p>Hola, soy Bit, tu ajolote guia. En el capitulo anterior aprendiste a guardar datos en tablas de Postgres. Hoy toca una pregunta algo incomoda: si <strong>todos</strong> los usuarios de RachaSimple comparten la misma tabla de habitos... ¿que impide que Ana vea los habitos de Beto? La respuesta es <strong>Row-Level Security</strong>, y, sin exagerar, es la pieza de seguridad mas importante de cualquier app hecha con Supabase. Ven conmigo, que esto lo vamos a entender de verdad, ladrillo por ladrillo.</p>
 </blockquote>
 <h2 id="1-el-problema-una-sola-tabla-muchos-duenos">1. El problema: una sola tabla, muchos dueños</h2>
-<p>Imagina la tabla <code>habitos</code> de <strong>RachaSimple</strong> (la app de habitos hecha con Supabase/Postgres). No hay una tabla por persona; hay <strong>una sola tabla</strong> donde caen los habitos de todo el mundo. Cada fila tiene una columna que dice de quien es:</p>
+<p>Piensa en la tabla <code>habitos</code> de <strong>RachaSimple</strong> (la app de habitos hecha con Supabase/Postgres). No existe una tabla por persona; hay <strong>una sola tabla</strong> donde caen los habitos de todo el mundo. Cada fila lleva una columna que indica de quien es:</p>
 <pre><code class="language-sql">-- Asi luce (simplificada) la tabla de habitos en RachaSimple
 create table habitos (
   id uuid primary key default gen_random_uuid(),
@@ -35,59 +35,59 @@ create table habitos (
   creado_en timestamptz default now()
 );
 </code></pre>
-<p>Sin proteccion, cualquier consulta <code>select * from habitos</code> devolveria <strong>todo</strong>: los tuyos y los de los demas. En una app web, donde el cliente (el navegador) habla casi directo con la base de datos a traves de la API de Supabase, eso seria un desastre de privacidad.</p>
-<p>Aqui es donde <strong>PolyPaw</strong> nos sirve de contraste. PolyPaw guarda sus datos en <strong>archivos JSON</strong> locales, no en una base de datos relacional compartida. Cada instalacion tiene su propio archivo: no hay "filas de otros usuarios" mezcladas, asi que el problema de "quien ve que fila" ni siquiera existe alli. RLS es una herramienta para el mundo de <strong>tablas compartidas</strong> (RachaSimple, Faro), no para el mundo de <strong>archivos por usuario</strong> (PolyPaw).</p>
+<p>Si no proteges nada, una consulta <code>select * from habitos</code> te devuelve <strong>todo</strong>: los tuyos y los de los demas. Y en una app web, donde el cliente (el navegador) habla casi directo con la base de datos a traves de la API de Supabase, eso seria un desastre de privacidad.</p>
+<p>Aqui <strong>PolyPaw</strong> sirve de contraste perfecto. PolyPaw guarda sus datos en <strong>archivos JSON</strong> locales, no en una base de datos relacional compartida. Cada instalacion tiene su propio archivo: no hay "filas de otros usuarios" mezcladas, asi que el problema de "quien ve que fila" alli ni siquiera aparece. RLS es para el mundo de <strong>tablas compartidas</strong> (RachaSimple, Faro), no para el de <strong>archivos por usuario</strong> (PolyPaw).</p>
 <blockquote class="def">
 <h3 id="que-significa-fila-row">🟦 ¿Que significa? — <em>Fila (row)</em></h3>
 <p>Una <strong>fila</strong> es un registro individual dentro de una tabla: una sola linea con todos sus campos. En la tabla <code>habitos</code>, cada fila es <strong>un</strong> habito (con su id, su dueño, su nombre). Sirve para representar una "cosa" concreta. En RachaSimple, una fila = un habito de una persona; en <strong>Faro</strong>, una fila de la tabla <code>proyectos</code> = un proyecto concreto de un usuario.</p>
 <h3 id="que-significa-row-level-security-rls">🟦 ¿Que significa? — <em>Row-Level Security (RLS)</em></h3>
-<p><strong>Row-Level Security</strong> (seguridad a nivel de fila) es una funcion de Postgres que decide, <strong>fila por fila</strong>, si un usuario puede verla o tocarla. En lugar de "puedes leer la tabla o no", dice "puedes leer <strong>estas</strong> filas". Sirve para que muchos usuarios compartan una tabla sin verse entre si. En RachaSimple y Faro, RLS es lo que hace que cada quien solo vea <strong>sus</strong> datos.</p>
+<p><strong>Row-Level Security</strong> (seguridad a nivel de fila) es una funcion de Postgres que decide, <strong>fila por fila</strong>, si un usuario puede verla o tocarla. En vez de "puedes leer la tabla o no", dice "puedes leer <strong>estas</strong> filas". Sirve para que muchos usuarios compartan una tabla sin verse entre si. En RachaSimple y Faro, RLS es lo que hace que cada quien solo vea <strong>sus</strong> datos.</p>
 </blockquote>
 <h2 id="2-rls-empieza-apagado-hay-que-encenderlo">2. RLS empieza apagado: hay que encenderlo</h2>
-<p>Esto es clave y mucha gente lo aprende por las malas: cuando creas una tabla, <strong>RLS viene desactivado</strong>. Eso significa que la tabla esta abierta de par en par para quien tenga acceso a la API. El primer paso siempre es <strong>habilitarlo</strong>:</p>
+<p>Esto es clave y mucha gente lo aprende por las malas: cuando creas una tabla, <strong>RLS viene desactivado</strong>. O sea, la tabla queda abierta de par en par para cualquiera que tenga acceso a la API. El primer paso, siempre, es <strong>habilitarlo</strong>:</p>
 <pre><code class="language-sql">-- Encender RLS en la tabla de habitos de RachaSimple
 alter table habitos enable row level security;
 </code></pre>
-<p>Cuando ejecutas esto pasa algo que sorprende a los principiantes: la tabla queda <strong>cerrada para todos</strong>. Sin politicas, RLS bloquea <strong>todo</strong> acceso (salvo el del dueño de la tabla y la <code>service_role</code>, que veremos luego). Es decir: activar RLS no abre nada, lo <strong>cierra</strong>. Tu tarea despues es abrir, con cuidado, solo lo justo mediante <strong>politicas</strong>.</p>
+<p>Al ejecutar esto pasa algo que sorprende a los principiantes: la tabla queda <strong>cerrada para todos</strong>. Sin politicas, RLS bloquea <strong>todo</strong> acceso (salvo el del dueño de la tabla y la <code>service_role</code>, que veremos mas adelante). Dicho de otra forma: activar RLS no abre nada, lo <strong>cierra</strong>. Lo que viene despues es tu tarea: abrir, con cuidado, solo lo justo mediante <strong>politicas</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-habilitar-rls-enable-row-level-security">🟦 ¿Que significa? — <em>Habilitar RLS (enable row level security)</em></h3>
-<p>Es el interruptor que <strong>activa</strong> la revision fila por fila en una tabla. Mientras este apagado, las politicas que escribas <strong>no se aplican</strong> (la tabla esta abierta). Sirve como el "candado maestro". En RachaSimple, cada tabla sensible (<code>habitos</code>, <code>registros</code>, <code>perfiles</code>) tiene RLS habilitado; en Faro lo mismo con <code>proyectos</code>, <code>fases</code> y <code>user_connections</code>.</p>
+<p>Es el interruptor que <strong>activa</strong> la revision fila por fila en una tabla. Mientras este apagado, las politicas que escribas <strong>no se aplican</strong> (la tabla esta abierta). Sirve como el "candado maestro". En RachaSimple, cada tabla sensible (<code>habitos</code>, <code>registros</code>, <code>perfiles</code>) tiene RLS habilitado; en Faro pasa igual con <code>proyectos</code>, <code>fases</code> y <code>user_connections</code>.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>El error de seguridad mas comun en Supabase es <strong>crear una tabla y olvidar encender RLS</strong>. La tabla parece funcionar perfecto en tu app... y mientras tanto esta visible para cualquiera con la clave publica. Supabase incluso te muestra una advertencia ("RLS disabled in public") por esto. Cada vez que crees una tabla con datos de usuarios, tu reflejo debe ser: <code>enable row level security</code>.</p>
+<p>El fallo de seguridad mas comun en Supabase es <strong>crear una tabla y olvidar encender RLS</strong>. La tabla parece funcionar perfecto en tu app... y, mientras tanto, esta visible para cualquiera con la clave publica. Por eso Supabase te muestra una advertencia ("RLS disabled in public"). Cada vez que crees una tabla con datos de usuarios, tu reflejo debe ser: <code>enable row level security</code>.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En <strong>Faro</strong>, la regla de seguridad del proyecto (ver <code>CLAUDE.md</code>) dice que los tokens y secretos viven en el servidor o en <code>user_connections</code> <strong>con RLS</strong>. Esa frase "con RLS" no es decorativa: es lo unico que impide que un usuario lea las conexiones OAuth de otro. Sin RLS, esa tabla expondria tokens ajenos.</p>
+<p>En <strong>Faro</strong>, la regla de seguridad del proyecto (ver <code>CLAUDE.md</code>) dice que los tokens y secretos viven en el servidor o en <code>user_connections</code> <strong>con RLS</strong>. Esa coletilla "con RLS" no esta de adorno: es lo unico que impide que un usuario lea las conexiones OAuth de otro. Sin RLS, esa tabla expondria tokens ajenos.</p>
 </blockquote>
 <h2 id="3-politicas-las-reglas-que-abren-la-puerta">3. Politicas: las reglas que abren la puerta</h2>
-<p>Una vez encendido RLS, la tabla esta cerrada. Para dejar pasar a la gente correcta usamos <strong>politicas</strong> (policies). Una politica es una regla escrita en SQL que responde: "para <strong>esta</strong> operacion (leer, insertar, actualizar, borrar), ¿que filas puede tocar este usuario?".</p>
-<p>Cada politica se asocia a un <strong>comando</strong>: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code>. Y usa una de dos clausulas:</p>
+<p>Con RLS encendido, la tabla queda cerrada. Para dejar pasar a la gente correcta usamos <strong>politicas</strong> (policies). Una politica es una regla escrita en SQL que responde a una pregunta: "para <strong>esta</strong> operacion (leer, insertar, actualizar, borrar), ¿que filas puede tocar este usuario?".</p>
+<p>Cada politica se asocia a un <strong>comando</strong>: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code>. Y se apoya en una de estas dos clausulas:</p>
 <ul>
 <li><strong><code>USING</code></strong>: filtra <strong>que filas existentes</strong> ve o toca el usuario (para SELECT, UPDATE, DELETE).</li>
 <li><strong><code>WITH CHECK</code></strong>: valida <strong>que filas nuevas o modificadas</strong> tiene permitido escribir (para INSERT, UPDATE).</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-politica-policy">🟦 ¿Que significa? — <em>Politica (policy)</em></h3>
-<p>Una <strong>politica</strong> es una condicion SQL que Postgres añade automaticamente a cada consulta sobre una tabla con RLS. Si la condicion da verdadero para una fila, el usuario puede tocarla; si da falso, esa fila es <strong>invisible</strong> para el. Sirve para definir "quien puede que". En RachaSimple, la politica de <code>habitos</code> dice, en esencia: "solo si la fila es tuya".</p>
+<p>Una <strong>politica</strong> es una condicion SQL que Postgres añade automaticamente a cada consulta sobre una tabla con RLS. Si la condicion da verdadero para una fila, el usuario puede tocarla; si da falso, esa fila es <strong>invisible</strong> para el. Sirve para definir "quien puede que". En RachaSimple, la politica de <code>habitos</code> viene a decir: "solo si la fila es tuya".</p>
 <h3 id="que-significa-comando-select-insert-update-delete">🟦 ¿Que significa? — <em>Comando (SELECT / INSERT / UPDATE / DELETE)</em></h3>
 <p>Son las cuatro operaciones basicas sobre datos: <strong>SELECT</strong> lee, <strong>INSERT</strong> crea filas nuevas, <strong>UPDATE</strong> modifica filas existentes, <strong>DELETE</strong> las borra. Cada una puede tener su propia politica. Sirve para dar permisos finos (por ejemplo, dejar leer pero no borrar). En Faro, un usuario puede <strong>leer</strong> y <strong>editar</strong> sus proyectos, pero las politicas controlan cada caso por separado.</p>
 <h3 id="que-significa-using-vs-with-check">🟦 ¿Que significa? — <em>USING vs WITH CHECK</em></h3>
-<p><strong>USING</strong> mira filas que <strong>ya existen</strong> y decide si las dejas ver/cambiar/borrar. <strong>WITH CHECK</strong> mira el dato que <strong>vas a escribir</strong> y decide si lo dejas guardar. La diferencia es "lo que ya hay" vs "lo que entra". Sirve, por ejemplo, para impedir que alguien inserte una fila a nombre de <strong>otro</strong> usuario (eso lo bloquea <code>WITH CHECK</code>).</p>
+<p><strong>USING</strong> mira filas que <strong>ya existen</strong> y decide si las dejas ver/cambiar/borrar. <strong>WITH CHECK</strong> mira el dato que <strong>vas a escribir</strong> y decide si lo dejas guardar. La diferencia es "lo que ya hay" frente a "lo que entra". Sirve, por ejemplo, para impedir que alguien inserte una fila a nombre de <strong>otro</strong> usuario (eso lo bloquea <code>WITH CHECK</code>).</p>
 </blockquote>
 <h2 id="4-la-pieza-magica-authuid">4. La pieza magica: <code>auth.uid()</code></h2>
-<p>Todas las politicas de RachaSimple y Faro giran alrededor de una funcion: <code>auth.uid()</code>. Devuelve el <strong>identificador (UUID)</strong> del usuario que esta haciendo la peticion en este momento, sacado de su token de sesion. Es la forma que tiene la base de datos de preguntar: "¿quien eres tu, ahora mismo?".</p>
+<p>Todas las politicas de RachaSimple y Faro giran alrededor de una misma funcion: <code>auth.uid()</code>. Devuelve el <strong>identificador (UUID)</strong> del usuario que esta haciendo la peticion en ese instante, sacado de su token de sesion. Es la forma que tiene la base de datos de preguntar: "¿quien eres tu, ahora mismo?".</p>
 <blockquote class="def">
 <h3 id="que-significa-uuid">🟦 ¿Que significa? — <em>UUID</em></h3>
 <p>Un <strong>UUID</strong> es un identificador unico larguisimo, tipo <code>8f3b1c2a-...-d4e5</code>. Se usa como "numero de serie" imposible de adivinar para cada usuario o fila. Sirve para identificar sin ambiguedad. En RachaSimple y Faro, tanto el usuario (<code>auth.users.id</code>) como cada habito o proyecto se identifican con UUID.</p>
 <h3 id="que-significa-authuid">🟦 ¿Que significa? — <em><code>auth.uid()</code></em></h3>
 <p>Es una funcion de Supabase que, dentro de una politica, devuelve el <strong>UUID del usuario autenticado</strong> que hace la consulta. Si nadie inicio sesion, devuelve <code>null</code>. Sirve para comparar "el dueño de la fila" contra "quien pregunta". Es el corazon de cada politica en RachaSimple y Faro.</p>
 <h3 id="que-significa-autenticado-authenticated">🟦 ¿Que significa? — <em>Autenticado (authenticated)</em></h3>
-<p>Un usuario <strong>autenticado</strong> es el que ya inicio sesion y tiene un token valido. Lo contrario es <strong>anonimo</strong> (<code>anon</code>), sin sesion. Sirve para distinguir visitantes de usuarios reales. En Supabase, las politicas suelen dirigirse al rol <code>authenticated</code>; un <code>anon</code> simplemente no pasa porque su <code>auth.uid()</code> es <code>null</code>.</p>
+<p>Un usuario <strong>autenticado</strong> es el que ya inicio sesion y tiene un token valido. Lo contrario es <strong>anonimo</strong> (<code>anon</code>), sin sesion. Sirve para distinguir visitantes de usuarios reales. En Supabase, las politicas suelen dirigirse al rol <code>authenticated</code>; un <code>anon</code> sencillamente no pasa, porque su <code>auth.uid()</code> es <code>null</code>.</p>
 </blockquote>
 <h2 id="5-el-patron-de-oro-usuario_id-authuid">5. El patron de oro: <code>usuario_id = auth.uid()</code></h2>
-<p>Junta las piezas y obtienes el patron que protege practicamente toda app de Supabase, incluidas RachaSimple y Faro:</p>
+<p>Junta las piezas y aparece el patron que protege practicamente toda app de Supabase, RachaSimple y Faro incluidas:</p>
 <pre><code class="language-sql">-- Comparar el dueño de la fila con quien pregunta
 usuario_id = auth.uid()
 </code></pre>
-<p>Esto se lee: "la columna <code>usuario_id</code> de esta fila debe ser igual al id del usuario que esta consultando". Si coincide, la fila es tuya y la ves; si no, es invisible. Veamos las <strong>cuatro</strong> politicas reales de la tabla <code>habitos</code> de RachaSimple:</p>
+<p>Esto se lee asi: "la columna <code>usuario_id</code> de esta fila debe ser igual al id del usuario que esta consultando". Si coinciden, la fila es tuya y la ves; si no, queda invisible. Veamos las <strong>cuatro</strong> politicas reales de la tabla <code>habitos</code> de RachaSimple:</p>
 <pre><code class="language-sql">-- 1) SELECT: solo veo mis habitos
 create policy &quot;ver mis habitos&quot;
   on habitos
@@ -113,7 +113,7 @@ create policy &quot;borrar mis habitos&quot;
   for delete
   using ( usuario_id = auth.uid() );
 </code></pre>
-<p>Fijate en el detalle del UPDATE: lleva <strong>las dos</strong> clausulas. <code>USING</code> asegura que solo puedas tocar filas que ya son tuyas; <code>WITH CHECK</code> asegura que, despues de editar, la fila <strong>siga</strong> siendo tuya (que no le pongas el <code>usuario_id</code> de otra persona). Sin el <code>WITH CHECK</code>, un usuario malicioso podria "regalarle" su fila a otro o, peor, robar la de alguien.</p>
+<p>Mira con atencion el UPDATE: lleva <strong>las dos</strong> clausulas. <code>USING</code> garantiza que solo puedas tocar filas que ya son tuyas; <code>WITH CHECK</code> garantiza que, despues de editar, la fila <strong>siga</strong> siendo tuya (que no le pongas el <code>usuario_id</code> de otra persona). Sin ese <code>WITH CHECK</code>, alguien con malas intenciones podria "regalarle" su fila a otro o, peor todavia, robar la de alguien.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-patron-usuario_id-authuid">🟦 ¿Que significa? — <em>El patron <code>usuario_id = auth.uid()</code></em></h3>
 <p>Es la comparacion que pregunta: "¿el dueño guardado en la fila es la misma persona que consulta?". Solo deja pasar las filas propias. Sirve como muralla de privacidad multiusuario. En RachaSimple aparece en <code>habitos</code>, <code>registros</code> y <code>perfiles</code>; en Faro, en <code>proyectos</code>, <code>fases</code> y <code>user_connections</code> (a veces con el nombre de columna <code>user_id</code>).</p>
@@ -122,12 +122,12 @@ create policy &quot;borrar mis habitos&quot;
 <code>sql
 alter table habitos
   alter column usuario_id set default auth.uid();</code>
-Asi, aunque el cliente no envie <code>usuario_id</code>, Postgres pone el del usuario actual y el <code>WITH CHECK</code> siempre cuadra.</p>
+De este modo, aunque el cliente no envie <code>usuario_id</code>, Postgres pone el del usuario actual y el <code>WITH CHECK</code> siempre cuadra.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En <strong>Faro</strong>, la tabla <code>fases</code> pertenece a un <code>proyecto</code>, y el proyecto pertenece a un usuario. Su politica no compara contra <code>auth.uid()</code> directo, sino que comprueba que la fase cuelgue de un proyecto <strong>tuyo</strong>, usando una subconsulta. Ese patron "la fila hija es mia si su padre es mio" lo veremos enseguida.</p>
+<p>En <strong>Faro</strong>, la tabla <code>fases</code> pertenece a un <code>proyecto</code>, y el proyecto pertenece a un usuario. Su politica no compara contra <code>auth.uid()</code> de forma directa, sino que comprueba que la fase cuelgue de un proyecto <strong>tuyo</strong>, usando una subconsulta. Ese patron de "la fila hija es mia si su padre es mio" lo veremos en un momento.</p>
 </blockquote>
 <h2 id="6-cuando-el-dueno-esta-en-otra-tabla-faro-proyectos-y-fases">6. Cuando el dueño esta en otra tabla (Faro: proyectos y fases)</h2>
-<p>En Faro, una <strong>fase</strong> no guarda directamente el <code>user_id</code>; guarda el <code>proyecto_id</code>. El dueño esta en la tabla <code>proyectos</code>. Para saber si una fase es tuya, hay que mirar su proyecto. La politica usa una subconsulta <code>exists</code>:</p>
+<p>En Faro, una <strong>fase</strong> no guarda el <code>user_id</code> directamente; guarda el <code>proyecto_id</code>. El dueño esta en la tabla <code>proyectos</code>. Asi que, para saber si una fase es tuya, hay que mirar su proyecto. La politica recurre a una subconsulta <code>exists</code>:</p>
 <pre><code class="language-sql">-- Politica SELECT de fases en Faro:
 -- veo una fase solo si su proyecto es mio
 create policy &quot;ver fases de mis proyectos&quot;
@@ -142,29 +142,29 @@ create policy &quot;ver fases de mis proyectos&quot;
     )
   );
 </code></pre>
-<p>Se lee: "deja ver esta fase <strong>si existe</strong> un proyecto con el id que apunta la fase <strong>y</strong> ese proyecto es mio". Asi, la pertenencia se hereda del padre. Esto es muy comun cuando tienes tablas relacionadas (proyecto → fases, habito → registros).</p>
+<p>Se lee asi: "deja ver esta fase <strong>si existe</strong> un proyecto con el id al que apunta la fase <strong>y</strong> ese proyecto es mio". De este modo, la pertenencia se hereda del padre. Es algo muy habitual cuando tienes tablas relacionadas (proyecto → fases, habito → registros).</p>
 <blockquote class="def">
 <h3 id="que-significa-subconsulta-subquery-exists">🟦 ¿Que significa? — <em>Subconsulta (subquery) / <code>exists</code></em></h3>
 <p>Una <strong>subconsulta</strong> es una consulta dentro de otra. <code>exists (...)</code> devuelve verdadero si la subconsulta encuentra <strong>al menos una</strong> fila. Sirve para preguntar cosas como "¿existe un proyecto mio que sea dueño de esta fase?". En Faro, <code>exists</code> conecta <code>fases</code> con <code>proyectos</code> para heredar la pertenencia.</p>
 <h3 id="que-significa-llave-foranea-foreign-key">🟦 ¿Que significa? — <em>Llave foranea (foreign key)</em></h3>
-<p>Es una columna que <strong>apunta</strong> a la fila de otra tabla (por ejemplo, <code>fases.proyecto_id</code> apunta a <code>proyectos.id</code>). Sirve para relacionar datos y garantizar que no apunten a la nada. En Faro, esa llave foranea es justo lo que la politica usa para rastrear quien es el dueño real de una fase.</p>
+<p>Es una columna que <strong>apunta</strong> a la fila de otra tabla (por ejemplo, <code>fases.proyecto_id</code> apunta a <code>proyectos.id</code>). Sirve para relacionar datos y asegurar que no apunten a la nada. En Faro, esa llave foranea es justo lo que la politica usa para rastrear quien es el dueño real de una fase.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Si una tabla hija (como <code>registros</code> en RachaSimple) tambien guarda su propio <code>usuario_id</code>, puedes evitar la subconsulta y usar el patron simple <code>usuario_id = auth.uid()</code>. Es mas rapido (no hace falta consultar otra tabla) a cambio de duplicar el dato del dueño. Muchas apps eligen esto a proposito por rendimiento.</p>
+<p>Si una tabla hija (como <code>registros</code> en RachaSimple) guarda tambien su propio <code>usuario_id</code>, puedes saltarte la subconsulta y usar el patron simple <code>usuario_id = auth.uid()</code>. Es mas rapido (no hace falta consultar otra tabla) a cambio de duplicar el dato del dueño. Muchas apps lo eligen a proposito por rendimiento.</p>
 </blockquote>
 <h2 id="7-el-peligro-mayuscula-la-service_role">7. El peligro mayuscula: la <code>service_role</code></h2>
-<p>Supabase te da varias claves. Dos importan ahora:</p>
+<p>Supabase te da varias claves. Ahora mismo nos importan dos:</p>
 <ul>
-<li>La clave <strong><code>anon</code> / publishable</strong>: va en el navegador, es publica, y <strong>respeta RLS</strong>. Con ella, las politicas mandan.</li>
+<li>La clave <strong><code>anon</code> / publishable</strong>: va en el navegador, es publica y <strong>respeta RLS</strong>. Con ella, las politicas mandan.</li>
 <li>La clave <strong><code>service_role</code></strong>: es secreta, de servidor, y <strong>se salta TODO RLS</strong>. Con ella, las politicas no existen: ves y tocas cualquier fila de cualquier usuario.</li>
 </ul>
-<p>La <code>service_role</code> es como una llave maestra del edificio. Util para tareas de servidor (migraciones, trabajos administrativos, el backend que llama a OpenAI en Faro). Pero si <strong>se filtra</strong> —si la pones en el cliente, la subes a un repo o la dejas en una variable expuesta al navegador— cualquiera puede leer y borrar la base de datos entera. RLS deja de protegerte por completo.</p>
+<p>La <code>service_role</code> es como la llave maestra del edificio. Va de maravilla para tareas de servidor (migraciones, trabajos administrativos, el backend que llama a OpenAI en Faro). Pero si <strong>se filtra</strong> —si la pones en el cliente, la subes a un repo o la dejas en una variable expuesta al navegador— cualquiera puede leer y borrar la base de datos entera. RLS deja de protegerte del todo.</p>
 <blockquote class="def">
 <h3 id="que-significa-service_role">🟦 ¿Que significa? — <em><code>service_role</code></em></h3>
 <p>Es una clave de Supabase con <strong>privilegios totales</strong> que <strong>ignora RLS</strong>. Sirve para operaciones de servidor que necesitan acceso completo. Es peligrosisima si se expone. En Faro, el backend que habla con OpenAI o gestiona datos puede usar <code>service_role</code>, pero <strong>solo</strong> en el servidor, nunca en el cliente.</p>
 <h3 id="que-significa-clave-anon-publishable">🟦 ¿Que significa? — <em>Clave <code>anon</code> / publishable</em></h3>
-<p>Es la clave <strong>publica</strong> que va en el navegador. Identifica a tu proyecto pero <strong>no</strong> otorga poderes: todo lo que pase con ella esta sujeto a RLS y al usuario autenticado. Sirve para que el front hable con Supabase de forma segura. RachaSimple y Faro la usan en el cliente sin riesgo, porque RLS la mantiene a raya.</p>
+<p>Es la clave <strong>publica</strong> que va en el navegador. Identifica a tu proyecto pero <strong>no</strong> reparte poderes: todo lo que pase con ella esta sujeto a RLS y al usuario autenticado. Sirve para que el front hable con Supabase de forma segura. RachaSimple y Faro la usan en el cliente sin riesgo, porque RLS la mantiene a raya.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p><strong>Nunca</strong> pongas la <code>service_role</code> en codigo del cliente ni la commitees. En Next.js (Faro), una variable con prefijo <code>NEXT_PUBLIC_</code> se envia al navegador: jamas metas la <code>service_role</code> ahi. La regla de seguridad de Faro lo dice claro: <em>"Tokens y secretos solo en el servidor. Nunca exponer claves en el cliente ni commitearlas."</em> La <code>service_role</code> es el ejemplo numero uno de esa regla.</p>
+<p><strong>Nunca</strong> pongas la <code>service_role</code> en codigo del cliente ni la commitees. En Next.js (Faro), una variable con prefijo <code>NEXT_PUBLIC_</code> se envia al navegador: jamas metas la <code>service_role</code> ahi. La regla de seguridad de Faro lo dice sin rodeos: <em>"Tokens y secretos solo en el servidor. Nunca exponer claves en el cliente ni commitearlas."</em> La <code>service_role</code> es el ejemplo numero uno de esa regla.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
 <p>Asi luce el cliente <strong>seguro</strong> que usa el navegador en RachaSimple/Faro (con la clave publica, sujeto a RLS):
 ```ts
@@ -179,8 +179,8 @@ const supabase = createClient(
 El</code>service_role` jamas aparece en un archivo asi.</p>
 </blockquote>
 <h2 id="8-probar-las-politicas-no-confies-verifica">8. Probar las politicas (no confies, verifica)</h2>
-<p>Una politica mal escrita puede dejar la puerta abierta sin que te des cuenta: la app "funciona" igual. Por eso hay que <strong>probar</strong> activamente. Tres formas, de menos a mas realista:</p>
-<p><strong>a) Probar como un usuario concreto desde el editor SQL de Supabase.</strong> Puedes simular el rol y el id de un usuario y ver que devuelve una consulta:</p>
+<p>Una politica mal escrita puede dejar la puerta abierta sin que lo notes: la app "funciona" igual. Por eso conviene <strong>probar</strong> activamente. Hay tres formas, de menos a mas realista:</p>
+<p><strong>a) Probar como un usuario concreto desde el editor SQL de Supabase.</strong> Puedes simular el rol y el id de un usuario y ver que te devuelve una consulta:</p>
 <pre><code class="language-sql">-- Simular que soy el usuario authenticated con cierto id
 set local role authenticated;
 set local request.jwt.claims = '{&quot;sub&quot;: &quot;ID-DE-ANA-AQUI&quot;}';
@@ -189,12 +189,12 @@ set local request.jwt.claims = '{&quot;sub&quot;: &quot;ID-DE-ANA-AQUI&quot;}';
 -- Esto SOLO debe traer los habitos de Ana:
 select * from habitos;
 </code></pre>
-<p><strong>b) La prueba del intruso.</strong> Pon el id de Ana en la sesion y pide explicitamente un habito de Beto. El resultado correcto es <strong>cero filas</strong> (no un error: simplemente la fila es invisible):</p>
+<p><strong>b) La prueba del intruso.</strong> Pon el id de Ana en la sesion y pide a proposito un habito de Beto. El resultado correcto son <strong>cero filas</strong> (no un error: simplemente la fila es invisible):</p>
 <pre><code class="language-sql">-- Sigo &quot;siendo&quot; Ana. Intento ver un habito de Beto:
 select * from habitos where id = 'ID-DE-UN-HABITO-DE-BETO';
 -- Esperado: 0 filas. Si aparece algo, tu politica tiene un hueco.
 </code></pre>
-<p><strong>c) Probar desde la app real con dos cuentas.</strong> Crea dos usuarios de prueba, inicia sesion con cada uno y confirma que ninguno ve lo del otro. Como RachaSimple usa <strong>TanStack Query</strong> para traer datos, asegurate de que los datos cacheados de una cuenta no se mezclen al cambiar de usuario.</p>
+<p><strong>c) Probar desde la app real con dos cuentas.</strong> Crea dos usuarios de prueba, inicia sesion con cada uno y confirma que ninguno ve lo del otro. Como RachaSimple usa <strong>TanStack Query</strong> para traer datos, asegurate de que los datos cacheados de una cuenta no se cuelen al cambiar de usuario.</p>
 <blockquote class="def">
 <h3 id="que-significa-editor-sql-de-supabase">🟦 ¿Que significa? — <em>Editor SQL de Supabase</em></h3>
 <p>Es una pantalla dentro del panel de Supabase donde escribes y ejecutas SQL directamente contra tu base de datos. Sirve para crear tablas, escribir politicas y <strong>probarlas</strong>. Es el lugar ideal para hacer la "prueba del intruso" sin tocar tu app.</p>
@@ -203,9 +203,9 @@ select * from habitos where id = 'ID-DE-UN-HABITO-DE-BETO';
 <h3 id="que-significa-tanstack-query">🟦 ¿Que significa? — <em>TanStack Query</em></h3>
 <p>Es una libreria del lado del cliente que <strong>trae, cachea y refresca</strong> datos de una API (en RachaSimple, de Supabase). Sirve para no recargar de mas y mantener la UI al dia. Ojo: cachea por usuario; al cerrar sesion conviene <strong>limpiar</strong> su cache para que el siguiente no vea datos viejos.</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>Una manera rapida de detectar tablas sin proteger: en el panel de Supabase, abre <strong>Advisors</strong> (o la pestaña de seguridad). Te lista las tablas con RLS apagado. Si ves ahi <code>proyectos</code>, <code>fases</code>, <code>habitos</code> o <code>user_connections</code>, corre a encenderlo.</p>
+<p>Una forma rapida de cazar tablas sin proteger: en el panel de Supabase, abre <strong>Advisors</strong> (o la pestaña de seguridad). Te lista las tablas con RLS apagado. Si ahi aparecen <code>proyectos</code>, <code>fases</code>, <code>habitos</code> o <code>user_connections</code>, corre a encenderlo.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Que tu app muestre solo tus datos <strong>no</strong> prueba que RLS funcione. Quiza tu codigo añade un <code>.eq('usuario_id', miId)</code> y por eso ves solo lo tuyo. Pero si RLS esta apagado, un atacante puede ignorar tu codigo y pedir todo por la API. <strong>El filtro en el front es comodidad; RLS es la seguridad real.</strong> Siempre prueba a nivel de base de datos.</p>
+<p>Que tu app muestre solo tus datos <strong>no</strong> demuestra que RLS funcione. A lo mejor tu codigo añade un <code>.eq('usuario_id', miId)</code> y por eso ves solo lo tuyo. Pero si RLS esta apagado, un atacante puede ignorar tu codigo y pedir todo por la API. <strong>El filtro en el front es comodidad; RLS es la seguridad real.</strong> Prueba siempre a nivel de base de datos.</p>
 </blockquote>
 <h2 id="9-resumen-mental">9. Resumen mental</h2>
 <ul>
@@ -214,7 +214,7 @@ select * from habitos where id = 'ID-DE-UN-HABITO-DE-BETO';
 <li>Cada operacion (SELECT/INSERT/UPDATE/DELETE) puede tener su politica, con <code>USING</code> (filas existentes) y <code>WITH CHECK</code> (filas que entran).</li>
 <li>El patron estrella es <code>usuario_id = auth.uid()</code> (o, via <code>exists</code>, heredar el dueño del padre).</li>
 <li>La <code>service_role</code> se salta RLS: vive <strong>solo</strong> en el servidor.</li>
-<li><strong>Prueba</strong> siempre con la "prueba del intruso", no confies en el filtro del front.</li>
+<li><strong>Prueba</strong> siempre con la "prueba del intruso", no te fies del filtro del front.</li>
 </ul>
 <p>PolyPaw, recuerda, no necesita nada de esto: con datos en JSON por instalacion, no hay tabla compartida que proteger. RLS es el guardian del mundo multiusuario de RachaSimple y Faro. Bit aprueba.</p>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

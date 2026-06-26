@@ -19,26 +19,26 @@
 <main class="contenedor">
 <h1 id="capitulo-02-componentes-y-jsx">Capítulo 02 — Componentes y JSX</h1>
 <blockquote>
-<p>Ya sabes que un componente es "una función que devuelve interfaz". Ahora aprendamos a
-escribirlos de verdad, y a entender <strong>JSX</strong>: ese "HTML dentro de JavaScript" que da un poco de
-impresión al principio y se vuelve natural enseguida.</p>
+<p>Ya sabes que un componente es "una función que devuelve interfaz". Toca aprender a
+escribirlos en serio y a entender <strong>JSX</strong>: ese "HTML dentro de JavaScript" que al principio
+echa un poco para atrás y, en cuanto le coges el truco, se vuelve de lo más natural.</p>
 </blockquote>
 <hr />
 <h2 id="1-un-componente-es-una-funcion-con-mayuscula">1. Un componente es una función con mayúscula</h2>
 <blockquote class="def">
 <h3 id="que-significa-componente-de-funcion">🟦 ¿Qué significa? — <em>Componente de función</em></h3>
-<p>Un componente es una <strong>función de JavaScript que devuelve JSX</strong> (la interfaz). Dos reglas:
+<p>Un componente es una <strong>función de JavaScript que devuelve JSX</strong> (la interfaz). Tiene dos reglas:
 1. Su nombre empieza con <strong>mayúscula</strong> (<code>Saludo</code>, <code>HabitCard</code>), para que React lo distinga de
    una etiqueta HTML normal.
-2. Devuelve <strong>una</strong> cosa (un solo elemento, que puede contener otros dentro).
+2. Devuelve <strong>una sola</strong> cosa: un único elemento, que por dentro puede contener todos los que quieras.
 <code>tsx
 function Saludo() {
   return &lt;h1&gt;¡Hola, Edwar!&lt;/h1&gt;;
 }</code>
-Y se usa como si fuera una etiqueta nueva: <code>&lt;Saludo /&gt;</code>.</p>
+Y lo usas como si fuera una etiqueta recién inventada: <code>&lt;Saludo /&gt;</code>.</p>
 <h3 id="tip-componer-componentes">💡 Tip — Componer componentes</h3>
-<p>Como un componente puede usar otros dentro, construyes pantallas combinándolos, igual que
-bloques:
+<p>Como un componente puede meter otros por dentro, montas pantallas combinándolos, igual que
+quien encaja piezas:
 <code>tsx
 function App() {
   return (
@@ -48,33 +48,33 @@ function App() {
     &lt;/main&gt;
   );
 }</code>
-Aquí <code>App</code> usa <code>Saludo</code> dos veces. Reutilización en acción.</p>
+Aquí <code>App</code> usa <code>Saludo</code> dos veces. Reutilización en estado puro.</p>
 </blockquote>
 <hr />
 <h2 id="2-que-es-jsx">2. Qué es JSX</h2>
 <blockquote class="def">
 <h3 id="que-significa-jsx">🟦 ¿Qué significa? — <em>JSX</em></h3>
-<p><strong>JSX</strong> (<em>JavaScript XML</em>) es una sintaxis que te deja escribir algo <strong>parecido a HTML dentro
-de tu JavaScript/TypeScript</strong>. No es HTML de verdad ni texto: es una forma cómoda de describir
-interfaz que luego React convierte en elementos reales.
+<p><strong>JSX</strong> (<em>JavaScript XML</em>) es una sintaxis que te permite escribir algo <strong>muy parecido a HTML,
+pero dentro de tu JavaScript/TypeScript</strong>. No es HTML de verdad ni una cadena de texto: es una
+manera cómoda de describir la interfaz que después React traduce a elementos reales.
 <code>tsx
 const elemento = &lt;h1 className="titulo"&gt;Hola&lt;/h1&gt;;</code>
-Parece HTML, pero vive dentro del código y puede mezclarse con variables y lógica. Por eso los
-archivos de React son <code>.jsx</code> o, con TypeScript, <code>.tsx</code>.</p>
+A la vista parece HTML, pero vive dentro del código y se mezcla sin problema con variables y
+lógica. Por eso los archivos de React llevan extensión <code>.jsx</code> o, cuando usas TypeScript, <code>.tsx</code>.</p>
 </blockquote>
 <hr />
 <h2 id="3-las-reglas-de-jsx-las-que-mas-confunden-al-inicio">3. Las reglas de JSX (las que más confunden al inicio)</h2>
-<p>JSX se parece al HTML pero tiene <strong>diferencias</strong> que conviene conocer desde ya:</p>
+<p>JSX se parece al HTML, pero tiene unas cuantas <strong>diferencias</strong> que vale la pena tener claras desde el primer día:</p>
 <blockquote class="def">
 <h3 id="que-significa-classname-en-vez-de-class">🟦 ¿Qué significa? — <em><code>className</code> en vez de <code>class</code></em></h3>
-<p>Para poner una clase CSS, en JSX se usa <code>className</code>, no <code>class</code> (porque <code>class</code> es una palabra
-reservada de JavaScript):
+<p>Para asignar una clase CSS, en JSX se escribe <code>className</code>, no <code>class</code> (la palabra <code>class</code> ya está
+reservada en JavaScript y no puedes reutilizarla):
 <code>tsx
 &lt;div className="tarjeta"&gt;…&lt;/div&gt;</code></p>
 <h3 id="que-significa-un-solo-elemento-raiz-y-los-fragments">🟦 ¿Qué significa? — <em>Un solo elemento raíz (y los Fragments)</em></h3>
-<p>Un componente debe devolver <strong>un único elemento</strong>. Si quieres devolver varios "hermanos", los
-envuelves: en un <code>&lt;div&gt;</code>, o en un <strong>Fragment</strong> vacío <code>&lt;&gt; &lt;/&gt;</code> (que agrupa sin añadir un <code>&lt;div&gt;</code>
-extra al resultado):
+<p>Un componente tiene que devolver <strong>un único elemento</strong>. Si necesitas devolver varios "hermanos",
+los envuelves: dentro de un <code>&lt;div&gt;</code>, o dentro de un <strong>Fragment</strong> vacío <code>&lt;&gt; &lt;/&gt;</code>, que los agrupa
+sin colar un <code>&lt;div&gt;</code> de más en el resultado final:
 <code>tsx
 return (
   &lt;&gt;
@@ -83,17 +83,17 @@ return (
   &lt;/&gt;
 );</code></p>
 <h3 id="que-significa-etiquetas-que-se-autocierran">🟦 ¿Qué significa? — <em>Etiquetas que se autocierran</em></h3>
-<p>En JSX, los elementos sin contenido <strong>deben</strong> cerrarse con <code>/</code>: <code>&lt;img /&gt;</code>, <code>&lt;br /&gt;</code>,
-<code>&lt;input /&gt;</code>. (En HTML era opcional; en JSX es obligatorio.)</p>
+<p>En JSX, los elementos que no tienen contenido <strong>tienen que</strong> cerrarse con <code>/</code>: <code>&lt;img /&gt;</code>, <code>&lt;br /&gt;</code>,
+<code>&lt;input /&gt;</code>. En HTML esto era opcional; aquí no te lo puedes saltar.</p>
 </blockquote>
 <hr />
 <h2 id="4-insertar-javascript-en-el-jsx-con">4. Insertar JavaScript en el JSX con <code>{ }</code></h2>
-<p>Aquí está la magia que diferencia JSX del HTML estático: puedes meter <strong>cualquier valor de
-JavaScript</strong> usando llaves <code>{ }</code>.</p>
+<p>Llegamos a lo que de verdad separa al JSX del HTML estático: puedes colar <strong>cualquier valor de
+JavaScript</strong> entre llaves <code>{ }</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-las-llaves-en-jsx">🟦 ¿Qué significa? — <em>Las llaves <code>{ }</code> en JSX</em></h3>
-<p>Dentro del JSX, <code>{ }</code> significa "aquí va una expresión de JavaScript". Sirve para mostrar
-variables, hacer cálculos o llamar funciones:
+<p>Dentro del JSX, <code>{ }</code> quiere decir "aquí va una expresión de JavaScript". Te sirven para mostrar
+variables, hacer cuentas o llamar a funciones:
 <code>tsx
 function Saludo() {
   const nombre = "Edwar";
@@ -106,16 +106,16 @@ function Saludo() {
     &lt;/div&gt;
   );
 }</code>
-Esto es lo que hace a React tan potente: la interfaz se construye <strong>con datos</strong>, no con texto
-fijo. (¿Recuerdas los template strings y el operador ternario del Módulo 03? Reaparecen aquí.)</p>
+Aquí está la gracia de React: la interfaz se arma <strong>a partir de los datos</strong>, no con texto clavado
+a mano. (¿Te acuerdas de los template strings y el operador ternario del Módulo 03? Pues vuelven a aparecer.)</p>
 </blockquote>
 <hr />
 <h2 id="5-mostrar-listas-map">5. Mostrar listas: <code>.map()</code></h2>
-<p>Una de las cosas más comunes: convertir una lista de datos en una lista de elementos. Se usa el
-método <code>.map()</code> de los arrays (Módulo 03).</p>
+<p>Una tarea que harás mil veces: tomar una lista de datos y convertirla en una lista de elementos.
+Para eso está el método <code>.map()</code> de los arrays (Módulo 03).</p>
 <blockquote class="def">
 <h3 id="que-significa-renderizar-una-lista-con-map">🟦 ¿Qué significa? — <em>Renderizar una lista con <code>.map()</code></em></h3>
-<p><code>.map()</code> transforma cada elemento de un array en un trozo de JSX:
+<p><code>.map()</code> convierte cada elemento de un array en un trozo de JSX:
 <code>tsx
 function ListaServicios() {
   const servicios = ["Diseño web", "IA", "Marketing"];
@@ -127,19 +127,20 @@ function ListaServicios() {
     &lt;/ul&gt;
   );
 }</code>
-Esto genera un <code>&lt;li&gt;</code> por cada servicio. Es exactamente cómo RachaSimple muestra tu lista de
-hábitos y Faro tus proyectos: un array de datos → un componente por cada uno.</p>
+El resultado es un <code>&lt;li&gt;</code> por cada servicio. Es justo así como RachaSimple pinta tu lista de
+hábitos y Faro tus proyectos: un array de datos y, por cada dato, un componente.</p>
 <h3 id="que-significa-la-prop-key">🟦 ¿Qué significa? — <em>La prop <code>key</code></em></h3>
-<p>Cuando renderizas una lista, React pide una <strong><code>key</code></strong>: un identificador único por elemento
-(idealmente un <code>id</code>). Le sirve para saber qué cambió y actualizar solo lo necesario. Olvidarla
-da una advertencia. Por ahora: <strong>en cada <code>.map()</code> que devuelva elementos, pon una <code>key</code> única</strong>.</p>
+<p>Cuando renderizas una lista, React te pide una <strong><code>key</code></strong>: un identificador único para cada
+elemento (lo ideal es un <code>id</code>). Le sirve para saber qué cambió y actualizar solo lo que hace
+falta. Si la olvidas, te suelta una advertencia. De momento quédate con esto: <strong>en cada <code>.map()</code>
+que devuelva elementos, pon una <code>key</code> única</strong>.</p>
 <h3 id="cuidado-if-no-va-dentro-del-jsx-pero-el-ternario-si">⚠️ Cuidado — <code>if</code> no va dentro del JSX, pero el ternario sí</h3>
-<p>Dentro de <code>{ }</code> solo van <strong>expresiones</strong> (cosas que devuelven un valor), no un <code>if</code> completo.
-Para condicionar, usa el ternario (<code>condición ? a : b</code>) o el <code>&amp;&amp;</code>:
+<p>Dentro de <code>{ }</code> solo caben <strong>expresiones</strong>, es decir, cosas que devuelven un valor; un <code>if</code>
+completo no entra. Para condicionar, tira del ternario (<code>condición ? a : b</code>) o del <code>&amp;&amp;</code>:
 <code>tsx
 {cargando ? &lt;Spinner /&gt; : &lt;Contenido /&gt;}
 {hayError &amp;&amp; &lt;p&gt;Algo salió mal&lt;/p&gt;}</code>
-El patrón <code>condición &amp;&amp; &lt;Algo /&gt;</code> muestra <code>&lt;Algo /&gt;</code> solo si la condición es verdadera.</p>
+El patrón <code>condición &amp;&amp; &lt;Algo /&gt;</code> muestra <code>&lt;Algo /&gt;</code> únicamente cuando la condición es verdadera.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

@@ -1,39 +1,41 @@
 # Capítulo 05 — Hooks y efectos
 
-> Cierras React con los **hooks**: ya usaste `useState`; ahora verás `useEffect` (para
-> "efectos" como cargar datos) y la idea de los **hooks personalizados**, que es como están
-> organizados RachaSimple y Faro. Con esto entiendes el motor completo de tus apps.
+> Llegamos al último tramo de React: los **hooks**. Ya trabajaste con `useState`, así que la
+> mitad del camino la tienes andada. Ahora toca `useEffect` (el que usas para "efectos" como
+> cargar datos) y la idea de los **hooks personalizados**, que es justo la forma en que están
+> organizados RachaSimple y Faro por dentro. Cuando termines esto, vas a entender el motor
+> completo de tus apps.
 
 ---
 
 ## 1. Repaso: qué es un hook
 
 > ### 🟦 ¿Qué significa? — *Hook (recordatorio)*
-> Un **hook** es una función de React que empieza por `use...` y le añade capacidades a un
-> componente. Ya conoces `useState` (recordar datos). Hay varios más; aquí ves el segundo más
-> importante, `useEffect`.
+> Un **hook** es una función de React que empieza por `use...` y le suma capacidades a un
+> componente. Ya conoces `useState`, que sirve para recordar datos. Hay varios más, pero aquí
+> nos centramos en el segundo en importancia: `useEffect`.
 
 > ### ⚠️ Cuidado — Las reglas de los hooks
-> Dos reglas que React exige:
-> 1. Los hooks se llaman **siempre arriba** del componente, no dentro de `if`, bucles ni
+> React te pide cumplir dos reglas con los hooks:
+> 1. Se llaman **siempre arriba** del componente. Nunca dentro de un `if`, de un bucle ni de
 >    funciones anidadas.
-> 2. Solo se usan **dentro de componentes** (o de otros hooks).
-> Si las rompes, React avisa con un error. Por ahora: pon tus `useState`/`useEffect` al
-> principio del componente y listo.
+> 2. Solo se usan **dentro de componentes** (o dentro de otros hooks).
+> Si rompes alguna, React te lo dirá con un error bien claro. La regla de oro mientras te
+> acostumbras: pon tus `useState` y tus `useEffect` al principio del componente y ya está.
 
 ---
 
 ## 2. `useEffect`: ejecutar código "como efecto"
 
 > ### 🟦 ¿Qué significa? — *Efecto secundario (side effect)*
-> Un **efecto secundario** es algo que tu componente hace **además** de dibujar la interfaz, y
-> que toca el "mundo exterior": pedir datos a una API, leer/escribir en el almacenamiento,
-> poner un temporizador, suscribirse a algo. React separa "dibujar" (el `return` del componente)
-> de "efectos" (con `useEffect`).
+> Un **efecto secundario** es todo lo que tu componente hace **aparte** de dibujar la interfaz,
+> y que toca el "mundo exterior": pedir datos a una API, leer o escribir en el almacenamiento,
+> arrancar un temporizador, suscribirse a algo. React mantiene separadas dos cosas: dibujar (eso
+> es el `return` del componente) y los efectos (eso va en `useEffect`).
 
 > ### 🟦 ¿Qué significa? — *`useEffect`*
-> `useEffect` ejecuta una función **después** de que el componente se dibuja, y la repite según
-> una lista de **dependencias**:
+> `useEffect` corre una función **después** de que el componente se dibuja, y la vuelve a correr
+> según lo que le digas en una lista de **dependencias**:
 > ```tsx
 > import { useState, useEffect } from "react";
 >
@@ -50,24 +52,25 @@
 > ```
 
 > ### 🟦 ¿Qué significa? — *El array de dependencias*
-> El segundo argumento de `useEffect` (`[]` arriba) controla **cuándo** se repite el efecto:
-> - `[]` (vacío) → se ejecuta **una sola vez**, cuando el componente aparece ("se monta").
+> El segundo argumento de `useEffect` (ese `[]` de arriba) decide **cuándo** se repite el efecto:
+> - `[]` (vacío) → corre **una sola vez**, cuando el componente aparece, lo que llamamos "montar".
 > - `[algo]` → se repite cada vez que `algo` cambia.
-> - sin array → se ejecuta tras **cada** render (rara vez lo quieres).
-> El caso más común es `[]`: "haz esto una vez al cargar" (por ejemplo, pedir datos).
+> - sin array → corre tras **cada** render, algo que rara vez quieres.
+> El caso que más vas a usar es `[]`: "haz esto una vez al cargar", por ejemplo pedir datos.
 
 > ### 🟦 ¿Qué significa? — *La función de limpieza*
-> Si tu efecto "engancha" algo (un temporizador, una suscripción), debe **desengancharlo** al
-> desaparecer el componente. Para eso, el efecto **devuelve una función** de limpieza (el
-> `return () => clearInterval(id)` de arriba). React la llama al "desmontar". Evita fugas y
-> errores. Por ahora, recuerda: *si abro algo en el efecto, lo cierro en el return*.
+> Cuando tu efecto "engancha" algo (un temporizador, una suscripción), tiene que
+> **desengancharlo** cuando el componente desaparece. Para eso el efecto **devuelve una función**
+> de limpieza, que es ese `return () => clearInterval(id)` del ejemplo. React la ejecuta al
+> "desmontar" el componente, y así evitas fugas de memoria y errores raros. Quédate con la idea:
+> *si abro algo en el efecto, lo cierro en el return*.
 
 ---
 
 ## 3. Cargar datos: el patrón clásico
 
-El uso más típico de `useEffect`: pedir datos a una API al cargar (uniendo el `fetch`/`async`
-del Módulo 03).
+El trabajo más habitual de `useEffect` es justamente pedir datos a una API en cuanto la pantalla
+carga. Aquí se juntan el `fetch` y el `async` que viste en el Módulo 03.
 
 ```tsx
 function Perfil() {
@@ -88,18 +91,19 @@ function Perfil() {
 }
 ```
 
-Aquí ves casi todo el manual junto: estado (`useState`), efecto (`useEffect`), petición
-asíncrona (`fetch`/`await`), renderizado condicional (`if (cargando)`). **Eso es una pantalla
-real.**
+Fíjate en lo que cabe en este pedacito: estado (`useState`), efecto (`useEffect`), una petición
+asíncrona (`fetch`/`await`) y renderizado condicional (`if (cargando)`). Casi todo el manual
+junto. **Esto ya es una pantalla de verdad.**
 
 ---
 
 ## 4. Hooks personalizados: tu propia lógica reutilizable
 
 > ### 🟦 ¿Qué significa? — *Hook personalizado (custom hook)*
-> Un **hook personalizado** es una función tuya que **empieza por `use`** y agrupa lógica con
-> hooks, para **reutilizarla** en varios componentes. Si tienes que "cargar los hábitos" en tres
-> pantallas, no copias el código: lo metes en un `useHabitos()` y lo usas en las tres.
+> Un **hook personalizado** es una función tuya que **empieza por `use`** y junta lógica con
+> otros hooks, para que puedas **reutilizarla** en varios componentes. Imagina que tienes que
+> "cargar los hábitos" en tres pantallas distintas: en lugar de copiar y pegar el mismo código
+> tres veces, lo metes en un `useHabitos()` y lo llamas en las tres.
 > ```tsx
 > function useHabitos() {
 >   const [habitos, setHabitos] = useState([]);
@@ -111,17 +115,18 @@ real.**
 > ```
 
 > ### 🔎 En tu código
-> Esto es **exactamente** cómo está organizado RachaSimple: la carpeta `src/hooks/` tiene
-> `useHabits.ts`, `useCheckins.ts`, etc. Cada uno encapsula "cómo obtener y cambiar" un tipo de
-> dato. Los componentes solo llaman al hook y reciben los datos, sin saber los detalles. Es orden
-> y reutilización al máximo.
+> Así, tal cual, está montado RachaSimple: la carpeta `src/hooks/` tiene `useHabits.ts`,
+> `useCheckins.ts` y otros. Cada archivo encierra el "cómo obtener y cambiar" un tipo de dato.
+> Los componentes solo llaman al hook y reciben los datos ya listos, sin enterarse de los
+> detalles de por medio. Orden y reutilización al máximo.
 
 > ### 💡 Tip — TanStack Query: hooks para datos del servidor
-> RachaSimple y Faro usan una librería, **TanStack Query**, que ofrece hooks como `useQuery` para
-> pedir datos con súper poderes (caché, recarga automática, estados de carga/error) sin escribir
-> todo el `useEffect`/`useState` a mano. No la necesitas para aprender; solo reconoce que
-> `useQuery(...)` es "un hook para traer datos del servidor de forma inteligente". Aquí cierra el
-> círculo con los genéricos de TypeScript: `useQuery<Habito[]>(...)`.
+> Tanto RachaSimple como Faro usan una librería llamada **TanStack Query**, que trae hooks como
+> `useQuery` para pedir datos con superpoderes: caché, recarga automática, estados de carga y de
+> error… todo sin que tengas que escribir a mano el `useEffect`/`useState` de cada petición. No
+> hace falta que la domines para aprender; con que reconozcas que `useQuery(...)` es "un hook
+> para traer datos del servidor de forma inteligente" basta. Y de paso cierra el círculo con los
+> genéricos de TypeScript: `useQuery<Habito[]>(...)`.
 
 ---
 
@@ -136,9 +141,9 @@ React
 └── Efectos y hooks: useEffect, custom hooks         (cap. 05)
 ```
 
-Con esto puedes **leer y entender** los componentes de RachaSimple y Faro, y empezar a construir
-los tuyos. React no era un monstruo: era funciones (que ya sabías) que devuelven interfaz, con
-props (parámetros), estado (memoria) y efectos (acciones al mundo exterior).
+Con esto ya puedes **leer y entender** los componentes de RachaSimple y Faro, y empezar a armar
+los tuyos. Al final React no era ningún monstruo: eran funciones (que ya sabías) que devuelven
+interfaz, con props (parámetros), estado (memoria) y efectos (acciones hacia el mundo exterior).
 
 ---
 

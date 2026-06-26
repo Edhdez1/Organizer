@@ -19,62 +19,65 @@
 <main class="contenedor">
 <h1 id="capitulo-02-linux-y-la-terminal-del-servidor">Capítulo 02 — Linux y la terminal del servidor</h1>
 <blockquote>
-<p>Tu NAS corre <strong>Ubuntu Server</strong>, una versión de Linux <strong>sin escritorio</strong>: se maneja escribiendo
-comandos. Ya viste la terminal en el Módulo 00; aquí la aplicas a administrar un servidor de
-verdad: usuarios, permisos, discos y servicios. Es la base de toda la administración de sistemas.</p>
+<p>Tu NAS corre <strong>Ubuntu Server</strong>, una versión de Linux <strong>sin escritorio</strong>: todo se hace
+escribiendo comandos. La terminal ya la conociste en el Módulo 00; aquí la usas para algo
+real, administrar un servidor de verdad: usuarios, permisos, discos y servicios. Esta es la
+base sobre la que se apoya toda la administración de sistemas.</p>
 </blockquote>
 <hr />
 <h2 id="1-por-que-linux-y-por-que-sin-escritorio">1. Por qué Linux y por qué "sin escritorio"</h2>
 <blockquote class="def">
 <h3 id="que-significa-linux-y-distribucion">🟦 ¿Qué significa? — <em>Linux y "distribución"</em></h3>
-<p><strong>Linux</strong> es un sistema operativo (Módulo 00) gratuito, de código abierto y muy estable, que
-domina el mundo de los servidores (la mayoría de internet corre sobre Linux). Viene en muchas
+<p><strong>Linux</strong> es un sistema operativo (Módulo 00) gratuito, de código abierto y muy estable. Manda
+en el terreno de los servidores: buena parte de internet funciona sobre Linux. Existe en muchas
 variantes llamadas <strong>distribuciones</strong> ("distros"): <strong>Ubuntu</strong>, Debian, Fedora… <strong>Ubuntu</strong> es de
-las más populares y fáciles. Tu NAS usa <strong>Ubuntu Server 26.04</strong>.</p>
+las más populares y de las más fáciles para empezar. Tu NAS usa <strong>Ubuntu Server 26.04</strong>.</p>
 <h3 id="que-significa-ubuntu-server-sin-interfaz-grafica">🟦 ¿Qué significa? — <em>Ubuntu Server (sin interfaz gráfica)</em></h3>
-<p><strong>Ubuntu Server</strong> es Ubuntu <strong>sin escritorio</strong> (sin ventanas ni ratón): solo terminal. ¿Por
-qué? Porque un servidor no necesita pantalla bonita —nadie está sentado frente a él—, y quitar
-el escritorio <strong>ahorra RAM y recursos</strong> para lo importante: servir. Por eso administras tu NAS
-<strong>por terminal</strong>, normalmente conectándote desde otro equipo (lo verás abajo).</p>
+<p><strong>Ubuntu Server</strong> es Ubuntu <strong>sin escritorio</strong>: nada de ventanas ni ratón, solo terminal. ¿Por
+qué así? Porque un servidor no necesita una pantalla bonita —nadie está sentado delante de él— y
+quitar el escritorio <strong>ahorra RAM y recursos</strong> para lo que de verdad importa: servir. Así que
+administras tu NAS <strong>por terminal</strong>, casi siempre conectándote desde otro equipo (lo verás más
+abajo).</p>
 <h3 id="que-significa-ssh-conexion-remota-segura">🟦 ¿Qué significa? — <em>SSH (conexión remota segura)</em></h3>
-<p><strong>SSH</strong> (<em>Secure Shell</em>) es la forma estándar de <strong>conectarte a la terminal de un servidor a
-distancia</strong>, de forma cifrada. Desde tu laptop escribes algo como <code>ssh usuario@polypaw-nas</code> y
-obtienes la terminal del NAS como si estuvieras frente a él. Es la herramienta nº 1 de cualquier
-administrador. (En tu caso, además, te conectas a través de Tailscale, capítulo 04, lo que lo
-hace seguro incluso desde fuera de casa.)</p>
+<p><strong>SSH</strong> (<em>Secure Shell</em>) es la forma estándar de <strong>entrar a la terminal de un servidor a
+distancia</strong>, todo cifrado. Desde tu laptop escribes algo como <code>ssh usuario@polypaw-nas</code> y te
+aparece la terminal del NAS como si lo tuvieras delante. Es la herramienta nº 1 de cualquier
+administrador. (En tu caso, además, te conectas a través de Tailscale, capítulo 04, lo que
+mantiene la conexión segura incluso desde fuera de casa.)</p>
 </blockquote>
 <hr />
 <h2 id="2-usuarios-y-permisos-el-corazon-de-la-seguridad-en-linux">2. Usuarios y permisos: el corazón de la seguridad en Linux</h2>
-<p>Linux fue diseñado para que <strong>muchos usuarios</strong> compartan una máquina sin pisarse ni espiarse.
-Eso se basa en usuarios y permisos.</p>
+<p>Linux nació con una idea clara: que <strong>muchos usuarios</strong> puedan compartir una misma máquina sin
+pisarse el trabajo ni husmear en lo del otro. Todo eso se construye sobre usuarios y permisos.</p>
 <blockquote class="def">
 <h3 id="que-significa-usuario-y-el-superusuario-root">🟦 ¿Qué significa? — <em>Usuario y el superusuario <code>root</code></em></h3>
-<p>Cada persona (o servicio) tiene un <strong>usuario</strong>. Hay uno especial, <strong><code>root</code></strong>, que es el
-<strong>administrador total</strong>: puede hacer absolutamente todo. Por eso <code>root</code> es peligroso: un error
-como <code>root</code> puede romper el sistema. Regla de oro: <strong>no trabajes como <code>root</code></strong> a diario.</p>
+<p>Cada persona (o cada servicio) tiene su <strong>usuario</strong>. Hay uno especial, <strong><code>root</code></strong>, que es el
+<strong>administrador total</strong>: puede hacer absolutamente todo. Precisamente por eso <code>root</code> es
+peligroso: un descuido siendo <code>root</code> puede dejar el sistema hecho trizas. Regla de oro: <strong>no
+trabajes como <code>root</code></strong> en el día a día.</p>
 <h3 id="que-significa-sudo-hacer-algo-como-administrador">🟦 ¿Qué significa? — <em><code>sudo</code> (hacer algo como administrador)</em></h3>
-<p><code>sudo</code> ("<em>superuser do</em>") ejecuta <strong>un solo comando</strong> con permisos de administrador, pidiéndote
-tu contraseña. Así trabajas como usuario normal (seguro) y solo "subes" a administrador para
-tareas concretas:
+<p><code>sudo</code> ("<em>superuser do</em>") ejecuta <strong>un único comando</strong> con permisos de administrador y te pide
+tu contraseña antes. Así andas como usuario normal (seguro) y solo "subes" a administrador para
+tareas puntuales:
 <code>bash
 sudo apt update      # actualizar la lista de programas (necesita permisos)</code>
-Verás <code>sudo</code> delante de casi todo comando administrativo. Es el equilibrio entre poder y
-seguridad.</p>
+Verás <code>sudo</code> delante de casi cualquier comando administrativo. Es el punto medio entre el poder y
+la seguridad.</p>
 <h3 id="que-significa-permisos-de-archivos-lectura-escritura-ejecucion">🟦 ¿Qué significa? — <em>Permisos de archivos (lectura, escritura, ejecución)</em></h3>
-<p>Cada archivo y carpeta en Linux tiene permisos que dicen <strong>quién puede leerlo (r), escribirlo
-(w) o ejecutarlo (x)</strong>, para tres grupos: el <strong>dueño</strong>, su <strong>grupo</strong> y <strong>los demás</strong>. Cuando
-haces <code>ls -l</code> ves algo así:
+<p>Cada archivo y cada carpeta en Linux lleva permisos que indican <strong>quién puede leerlo (r),
+escribirlo (w) o ejecutarlo (x)</strong>, y eso para tres grupos: el <strong>dueño</strong>, su <strong>grupo</strong> y <strong>los
+demás</strong>. Cuando haces <code>ls -l</code> aparece algo parecido a esto:
 <code>drwxr-xr-x  edwar  edwar  /srv/nas</code>
-Esa cadena <code>rwxr-xr-x</code> son los permisos. No necesitas memorizarla ahora; lo importante es la
-idea: <strong>Linux controla, archivo por archivo, quién puede hacer qué</strong>. Es lo que evita que un
-usuario lea los datos de otro. (¿Te suena? Es el primo de la RLS del Módulo 07, pero para
-archivos.)</p>
+Esa cadena <code>rwxr-xr-x</code> son los permisos. No hace falta que te la aprendas de memoria ahora; lo
+que cuenta es la idea de fondo: <strong>Linux decide, archivo por archivo, quién puede hacer qué</strong>. Es
+justo lo que impide que un usuario lea los datos de otro. (¿Te suena? Es el primo de la RLS del
+Módulo 07, pero aplicado a archivos.)</p>
 <h3 id="que-significa-chmod-y-chown">🟦 ¿Qué significa? — <em><code>chmod</code> y <code>chown</code></em></h3>
 <ul>
-<li><code>chmod</code> cambia los <strong>permisos</strong> de un archivo (quién puede leer/escribir/ejecutar).</li>
+<li><code>chmod</code> cambia los <strong>permisos</strong> de un archivo (quién lee, escribe o ejecuta).</li>
 <li><code>chown</code> cambia el <strong>dueño</strong> de un archivo.
-Se usan al configurar, por ejemplo, qué carpeta puede compartir Samba y quién puede escribir en
-ella. Reconócelos cuando los veas; los detalles se buscan al momento.</li>
+Aparecen, por ejemplo, cuando configuras qué carpeta comparte Samba y quién puede escribir en
+ella. Por ahora basta con reconocerlos cuando los veas; los detalles se consultan en el momento.</li>
 </ul>
 </blockquote>
 <hr />
@@ -82,48 +85,51 @@ ella. Reconócelos cuando los veas; los detalles se buscan al momento.</li>
 <blockquote class="def">
 <h3 id="que-significa-servicio-demonio-y-systemd">🟦 ¿Qué significa? — <em>Servicio (demonio) y <code>systemd</code></em></h3>
 <p>Un <strong>servicio</strong> (o <em>daemon</em>, "demonio") es un programa que corre <strong>en segundo plano</strong>, sin que
-nadie lo abra, atendiendo peticiones: Samba (compartir archivos), AdGuard (DNS), etc. En Ubuntu,
-los servicios los gestiona <strong><code>systemd</code></strong>, el "director de orquesta" que los arranca al encender
-y los mantiene vivos.
+nadie tenga que abrirlo, atendiendo peticiones: Samba (compartir archivos), AdGuard (DNS) y demás.
+En Ubuntu, de los servicios se encarga <strong><code>systemd</code></strong>, el "director de orquesta" que los arranca
+al encender la máquina y los mantiene vivos.
 Se controlan con <code>systemctl</code>:
 <code>bash
 systemctl status smbd     # ¿está corriendo Samba?
 sudo systemctl restart smbd   # reiniciarlo</code>
-En tu NAS, <code>smbd</code> (Samba) está <strong>activo</strong> como servicio: por eso comparte archivos siempre, sin
-que tengas que "abrirlo".</p>
+En tu NAS, <code>smbd</code> (Samba) está <strong>activo</strong> como servicio: por eso comparte archivos a todas horas
+sin que tengas que "abrirlo".</p>
 </blockquote>
 <hr />
 <h2 id="4-ver-y-entender-los-discos-los-tuyos">4. Ver y entender los discos (los tuyos)</h2>
 <blockquote class="def">
 <h3 id="que-significa-sistema-de-archivos-y-puntos-de-montaje">🟦 ¿Qué significa? — <em>Sistema de archivos y puntos de montaje</em></h3>
-<p>En Linux <strong>todo cuelga de una sola raíz <code>/</code></strong> (no hay "C:" ni "D:" como en Windows). Cada disco
-se <strong>"monta"</strong> en una carpeta. Tu HDD de datos está montado en <strong><code>/srv/nas</code></strong>: entrar a esa
-carpeta es entrar al disco grande. "Montar" = conectar un disco a un punto del árbol de carpetas.</p>
+<p>En Linux <strong>todo cuelga de una sola raíz <code>/</code></strong>: aquí no hay "C:" ni "D:" como en Windows. Cada
+disco se <strong>"monta"</strong> en una carpeta. Tu HDD de datos está montado en <strong><code>/srv/nas</code></strong>, así que
+entrar a esa carpeta es, en la práctica, entrar al disco grande. "Montar" no es más que conectar
+un disco a un punto del árbol de carpetas.</p>
 <h3 id="que-significa-comandos-para-ver-discos">🟦 ¿Qué significa? — <em>Comandos para ver discos</em></h3>
 <p><code>bash
 df -h            # espacio libre/usado por disco, en formato legible
 lsblk            # lista los discos y sus particiones, en árbol</code>
-<code>df -h</code> en tu NAS mostraría el SSD del sistema (~98 GB, 12% usado) y el HDD en <code>/srv/nas</code>
-(954 GB, casi vacío). Son los comandos que usas para responder "¿cuánto espacio me queda?".</p>
+En tu NAS, <code>df -h</code> te mostraría el SSD del sistema (~98 GB, 12% usado) y el HDD en <code>/srv/nas</code>
+(954 GB, casi vacío). Son los comandos a los que recurres cuando te preguntas "¿cuánto espacio me
+queda?".</p>
 <h3 id="que-significa-lvm-gestion-flexible-de-discos">🟦 ¿Qué significa? — <em>LVM (gestión flexible de discos)</em></h3>
-<p><strong>LVM</strong> (<em>Logical Volume Manager</em>) es una capa que permite manejar el espacio de forma
-<strong>flexible</strong>: agrandar o combinar "volúmenes" sin reparticionar todo. Tu Ubuntu usa LVM para el
-sistema. Por ahora basta saber que existe y que da flexibilidad para crecer; sus detalles se
-aprenden cuando necesitas ampliar espacio.</p>
+<p><strong>LVM</strong> (<em>Logical Volume Manager</em>) es una capa que te deja manejar el espacio con
+<strong>flexibilidad</strong>: agrandar o combinar "volúmenes" sin tener que reparticionar todo de nuevo. Tu
+Ubuntu usa LVM para el sistema. De momento te alcanza con saber que existe y que da margen para
+crecer; sus detalles los aprendes el día que necesites ampliar espacio.</p>
 </blockquote>
 <hr />
 <h2 id="5-mantener-el-servidor-actualizaciones">5. Mantener el servidor: actualizaciones</h2>
 <blockquote class="def">
 <h3 id="que-significa-gestor-de-paquetes-apt">🟦 ¿Qué significa? — <em>Gestor de paquetes (<code>apt</code>)</em></h3>
-<p>En Linux no descargas instaladores de webs: usas un <strong>gestor de paquetes</strong> que instala programas
-desde repositorios oficiales, con un comando. En Ubuntu es <strong><code>apt</code></strong>:
+<p>En Linux no andas bajando instaladores de webs sueltas: usas un <strong>gestor de paquetes</strong> que
+instala programas desde repositorios oficiales con un solo comando. En Ubuntu ese gestor es
+<strong><code>apt</code></strong>:
 <code>bash
 sudo apt update           # refresca la lista de versiones disponibles
 sudo apt upgrade          # actualiza los programas instalados
 sudo apt install programa # instala algo nuevo</code>
-Mantener el servidor <strong>actualizado</strong> (<code>update</code> + <code>upgrade</code>) es la tarea de mantenimiento más
-importante: corrige fallos de seguridad. Es como aplicar las actualizaciones del teléfono, pero
-por terminal.</p>
+Mantener el servidor <strong>al día</strong> (<code>update</code> + <code>upgrade</code>) es la tarea de mantenimiento más
+importante de todas: ahí se tapan los fallos de seguridad. Es como aplicar las actualizaciones del
+teléfono, solo que por terminal.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

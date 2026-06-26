@@ -1,14 +1,14 @@
 # Capítulo 02 — Consumir una API
 
-> "Consumir" una API es usarla desde tu código: hacerle peticiones y procesar sus respuestas.
-> La buena noticia: ya sabes la herramienta (`fetch`, del Módulo 03). Aquí la juntamos con
-> headers, métodos y **claves de API**, que es lo nuevo.
+> "Consumir" una API es usarla desde tu código: hacerle peticiones y leer lo que te responde.
+> Lo bueno es que la herramienta ya la conoces (`fetch`, del Módulo 03). Aquí la combinamos con
+> headers, métodos y **claves de API**, que es la parte nueva.
 
 ---
 
 ## 1. La petición más simple: un GET con fetch
 
-Recuerda `fetch` del Módulo 03. Consumir una API GET es exactamente eso:
+Acuérdate de `fetch`, del Módulo 03. Consumir una API GET es justo eso:
 
 ```js
 async function verUsuario() {
@@ -18,8 +18,8 @@ async function verUsuario() {
 }
 ```
 
-"Pide a este endpoint (espera), convierte la respuesta de JSON a objeto (espera), y úsala." Ya
-lo hiciste con la API de GitHub en el Módulo 03. Eso **es** consumir una API.
+Léelo en voz alta: "pide a este endpoint (espera), pasa la respuesta de JSON a objeto (espera) y
+úsala". Ya lo hiciste con la API de GitHub en el Módulo 03. Eso **es** consumir una API.
 
 > ### 🟦 ¿Qué significa? — *Consumir vs. exponer una API*
 > - **Consumir** una API = ser el cliente: tú le pides cosas (lo de este capítulo).
@@ -30,8 +30,8 @@ lo hiciste con la API de GitHub en el Módulo 03. Eso **es** consumir una API.
 
 ## 2. Enviar datos: POST con body y headers
 
-Para **crear** algo, usas POST y mandas datos en el **body**, además de indicar el formato con
-un **header**:
+Cuando quieres **crear** algo, usas POST y mandas los datos en el **body**, y de paso avisas en
+qué formato van con un **header**:
 
 ```js
 const respuesta = await fetch("https://api.ejemplo.com/proyectos", {
@@ -43,58 +43,59 @@ const respuesta = await fetch("https://api.ejemplo.com/proyectos", {
 
 > ### 🟦 ¿Qué significa? — *Las opciones de fetch (método, headers, body)*
 > El segundo argumento de `fetch` es un objeto con opciones:
-> - `method`: el verbo HTTP (`POST`, `PUT`, `DELETE`…). Si lo omites, es `GET`.
+> - `method`: el verbo HTTP (`POST`, `PUT`, `DELETE`…). Si no lo pones, asume `GET`.
 > - `headers`: las cabeceras. `"Content-Type": "application/json"` avisa "te mando JSON".
-> - `body`: los datos a enviar. Se convierten a texto JSON con `JSON.stringify` (Módulo 03).
-> ¿Reconoces el patrón? Es la "anatomía de una petición" del capítulo anterior, en código.
+> - `body`: los datos que envías. Se convierten a texto JSON con `JSON.stringify` (Módulo 03).
+> ¿Te suena? Es la "anatomía de una petición" del capítulo anterior, ahora escrita en código.
 
 > ### 🔎 En tu código
-> El chat de tu sitio (`main.js`) hace un `fetch` **POST** al Cloudflare Worker, con tu mensaje
-> en el `body` como JSON. El Worker se lo pasa a Claude y devuelve la respuesta. Es este mismo
-> patrón.
+> El chat de tu sitio (`main.js`) hace un `fetch` **POST** al Cloudflare Worker y mete tu mensaje
+> en el `body` como JSON. El Worker se lo pasa a Claude y te devuelve la respuesta. Es exactamente
+> este patrón.
 
 ---
 
 ## 3. Claves de API: identificarte ante el servicio
 
-La mayoría de las APIs **no son abiertas**: necesitas una credencial para usarlas (para saber
-quién eres, controlar el uso y cobrar si aplica).
+La mayoría de las APIs **no son abiertas**: te piden una credencial para usarlas. Así saben quién
+eres, controlan el uso y, si toca, te cobran.
 
 > ### 🟦 ¿Qué significa? — *Clave de API (API key) y token*
-> Una **clave de API** (o **token**) es un texto secreto, único para ti, que envías en cada
-> petición para **identificarte** ante la API. Suele ir en un header de autorización:
+> Una **clave de API** (o **token**) es un texto secreto, único para ti, que mandas en cada
+> petición para **identificarte** ante la API. Normalmente viaja en un header de autorización:
 > ```js
 > headers: { "Authorization": "Bearer sk-tu-clave-secreta" }
 > ```
-> `Bearer` ("portador") es el esquema típico: "quien porta este token, es el autorizado".
-> La API de OpenAI, la de Claude, etc., funcionan así: sin una clave válida, te rechazan (estado
-> 401 "no autorizado").
+> `Bearer` ("portador") es el esquema habitual: "quien lleva este token es el autorizado".
+> Las APIs de OpenAI, de Claude y muchas más funcionan así: si tu clave no es válida, te rechazan
+> con un estado 401 ("no autorizado").
 
 > ### ⚠️ Cuidado — Las claves de API son SECRETAS (esto es crucial)
-> Una clave de API suele dar acceso de pago a tu cuenta. Si alguien la consigue, puede gastar tu
-> dinero. Reglas inquebrantables (ya las viste en Git y Supabase, aquí se confirman):
+> Una clave de API normalmente da acceso de pago a tu cuenta. Si alguien la consigue, puede gastar
+> tu dinero. Son reglas que no se negocian (ya las viste en Git y en Supabase; aquí solo se
+> confirman):
 > 1. **Nunca** la escribas directamente en el código del frontend (cualquiera la vería en el
 >    navegador).
 > 2. **Nunca** la subas a GitHub (queda en el historial para siempre).
 > 3. Guárdala en **variables de entorno** del **servidor** (`.env.local`, excluido por
->    `.gitignore`), y haz las llamadas desde ahí.
-> Es exactamente por esto que tu chat usa un **Cloudflare Worker**: la clave de Claude vive en el
-> Worker (servidor), nunca en la página. El navegador habla con tu Worker; tu Worker, con Claude.
+>    `.gitignore`) y haz las llamadas desde ahí.
+> Por esto mismo tu chat usa un **Cloudflare Worker**: la clave de Claude vive en el Worker
+> (servidor), nunca en la página. El navegador habla con tu Worker, y tu Worker habla con Claude.
 
 > ### 🟦 ¿Qué significa? — *Variable de entorno*
-> Una **variable de entorno** es un valor de configuración (como una clave secreta) que se guarda
-> **fuera del código**, en el entorno donde corre el programa (el servidor, Vercel, el Worker).
-> Así el código dice "usa la clave que está en la variable `OPENAI_API_KEY`" sin que la clave
-> esté escrita en ningún archivo que se suba. Faro tiene un `.env.local.example` que lista qué
-> variables necesita (sin los valores reales).
+> Una **variable de entorno** es un valor de configuración (por ejemplo, una clave secreta) que se
+> guarda **fuera del código**, en el entorno donde corre el programa (el servidor, Vercel, el
+> Worker). Así el código dice "usa la clave que está en la variable `OPENAI_API_KEY`" sin que la
+> clave aparezca escrita en ningún archivo que se suba. Faro tiene un `.env.local.example` que
+> lista qué variables necesita, pero sin los valores reales.
 
 ---
 
 ## 4. Manejar la respuesta y los errores
 
 > ### 🟦 ¿Qué significa? — *Revisar el estado de la respuesta*
-> Una API puede responder con error (401 sin clave, 404 no existe, 429 demasiadas peticiones).
-> Conviene revisar antes de usar los datos:
+> Una API puede responderte con un error (401 sin clave, 404 no existe, 429 demasiadas
+> peticiones). Por eso conviene revisar antes de usar los datos:
 > ```js
 > const r = await fetch(url, opciones);
 > if (!r.ok) {            // r.ok es true si el estado es 200-299
@@ -103,14 +104,14 @@ quién eres, controlar el uso y cobrar si aplica).
 > }
 > const datos = await r.json();
 > ```
-> `r.ok` y `r.status` (¿recuerdas los códigos del Módulo 00?) te dicen si todo fue bien. Envuelve
-> todo en `try/catch` (Módulo 03) para los fallos de red.
+> `r.ok` y `r.status` (¿te acuerdas de los códigos del Módulo 00?) te dicen si todo salió bien.
+> Y envuelve todo en `try/catch` (Módulo 03) por si la red falla.
 
 > ### 🟦 ¿Qué significa? — *Límite de tasa (rate limit)*
-> Las APIs limitan cuántas peticiones puedes hacer por minuto/día (para no saturarse). Si te
-> pasas, responden **429** ("demasiadas peticiones"). Por eso las apps serias controlan su ritmo.
-> Tu Worker de Claude tiene su propio rate limiting **por IP** para que nadie abuse de tu chat y
-> te dispare la factura.
+> Las APIs ponen un tope a cuántas peticiones puedes hacer por minuto o por día, para no saturarse.
+> Si te pasas, te responden **429** ("demasiadas peticiones"). Por eso las apps serias cuidan su
+> ritmo. Tu Worker de Claude tiene su propio rate limiting **por IP**, para que nadie abuse de tu
+> chat y te dispare la factura.
 
 ---
 

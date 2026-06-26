@@ -5,19 +5,19 @@
 </p>
 
 
-> Llegaste al gran final del modulo. En los capitulos anteriores aprendiste a hablar con APIs, a usar `fetch`, a pedir una clave secreta y hasta a entender OAuth. Hoy vas a juntar TODO en un solo proyecto que de verdad funciona: un pequeno backend que recibe un mensaje desde el navegador, le anade tu clave secreta **en el servidor**, llama a una API de IA y te devuelve la respuesta, sin que nadie pueda robarte la clave. Es exactamente el patron que usa el sitio real **tunal-digital** para su chat con la IA de Claude. Bit, nuestro ajolote, se puso el casco de obra: hoy construimos algo de verdad.
+> Llegamos al gran final del modulo. En los capitulos anteriores aprendiste a hablar con APIs, a usar `fetch`, a pedir una clave secreta y hasta a entender que es OAuth. Hoy todo eso se junta en un solo proyecto que de verdad funciona: un pequeno backend que recibe un mensaje desde el navegador, le pega tu clave secreta **en el servidor**, llama a una API de IA y te devuelve la respuesta, sin que nadie pueda robarte la clave por el camino. Es justo el patron que usa el sitio real **tunal-digital** para su chat con la IA de Claude. Bit, nuestro ajolote, se puso el casco de obra: hoy construimos algo de verdad.
 
 ---
 
 ## 1. Que vamos a construir (y por que importa)
 
-Imagina una pagina web sencilla: tiene una cajita de texto donde escribes una pregunta, un boton "Enviar" y un area donde aparece la respuesta de una IA. Suena simple, y la parte visual lo es. El problema esta escondido: **para hablar con la IA necesitas una clave secreta**, y esa clave NO puede vivir en el navegador.
+Imagina una pagina web sencilla: una cajita de texto donde escribes una pregunta, un boton "Enviar" y un area donde aparece la respuesta de una IA. Suena simple, y la parte visual lo es. El problema esta escondido: **para hablar con la IA necesitas una clave secreta**, y esa clave NO puede vivir en el navegador.
 
-Entonces, ¿como hace la pagina para usar la IA sin tener la clave? La respuesta es poner a alguien **en el medio**: un pequeno servidor de confianza que si tiene la clave. El navegador le habla a ese servidor; el servidor le habla a la IA. A ese intermediario lo llamamos **proxy**.
+Entonces, ¿como hace la pagina para usar la IA sin tener la clave? Poniendo a alguien **en el medio**: un pequeno servidor de confianza que si la tiene. El navegador le habla a ese servidor, y el servidor le habla a la IA. A ese intermediario lo llamamos **proxy**.
 
 > ### 🟦 ¿Que significa? — *Proxy*
-> Un **proxy** es un programa que se pone en medio de dos partes y reenvia mensajes de una a otra, normalmente anadiendo o quitando algo en el camino. En nuestro caso, recibe el mensaje del navegador, le agrega la clave secreta y lo reenvia a la IA.
-> **Para que sirve:** para que el navegador nunca tenga que conocer la clave; el proxy la guarda y la usa por el.
+> Un **proxy** es un programa que se planta en medio de dos partes y reenvia mensajes de una a otra, normalmente anadiendo o quitando algo en el camino. En nuestro caso, recibe el mensaje del navegador, le agrega la clave secreta y lo reenvia a la IA.
+> **Para que sirve:** para que el navegador nunca tenga que conocer la clave; el proxy la guarda y la usa en su lugar.
 > **Donde se usa en un repo real:** en **tunal-digital**, el chat de la web no llama directo a la API de Claude. Llama a un **Cloudflare Worker** (el proxy), y ese Worker es quien tiene la clave de Anthropic y habla con la IA.
 
 El diagrama mental es este:
@@ -28,36 +28,36 @@ Navegador  ◄──(respuesta)──  Proxy                 ◄──(respuesta
 ```
 
 > ### 💡 Tip
-> Si recuerdas una sola idea de este capitulo, que sea esta: **la clave secreta vive en el servidor, jamas en el navegador**. Todo lo demas que construyamos hoy existe para cumplir esa regla.
+> Si te quedas con una sola idea de este capitulo, que sea esta: **la clave secreta vive en el servidor, jamas en el navegador**. Todo lo demas que construyamos hoy existe para cumplir esa regla.
 
 ---
 
 ## 2. Repaso rapido de las piezas que ya conoces
 
-No empezamos de cero. Estas piezas ya las viste en el modulo, solo las vamos a conectar. Igual te dejo la definicion fresca de cada una para que nada quede sin explicar.
+No empezamos de cero. Estas piezas ya las viste a lo largo del modulo; hoy solo las vamos a conectar. Aun asi te dejo la definicion fresca de cada una para que nada quede colgando.
 
 > ### 🟦 ¿Que significa? — *HTTP*
-> **HTTP** es el idioma con el que dos computadoras se hablan por internet. El navegador manda una **peticion** ("dame esto", "guarda esto otro") y el servidor manda una **respuesta**. Cada peticion tiene un metodo (como `GET` para pedir o `POST` para enviar datos), unas cabeceras y, a veces, un cuerpo con datos.
+> **HTTP** es el idioma con el que dos computadoras se hablan por internet. El navegador manda una **peticion** ("dame esto", "guarda esto otro") y el servidor manda una **respuesta**. Cada peticion lleva un metodo (como `GET` para pedir o `POST` para enviar datos), unas cabeceras y, a veces, un cuerpo con datos.
 > **Para que sirve:** para mover informacion entre cliente y servidor de forma ordenada.
 > **Donde se usa en un repo real:** en **Faro**, cuando aprietas "analizar proyecto", el navegador manda una peticion HTTP a una ruta del backend de Next.js, y esa ruta responde con el analisis generado por IA.
 
 > ### 🟦 ¿Que significa? — *API*
 > Una **API** (Interfaz de Programacion de Aplicaciones) es la lista de "puertas de entrada" que un programa ofrece para que otros programas le pidan cosas. Es como el menu de un restaurante: tu no entras a la cocina, pides del menu y te traen el plato.
-> **Para que sirve:** para que tu codigo use un servicio (una IA, una base de datos, GitHub) sin saber como funciona por dentro.
+> **Para que sirve:** para que tu codigo use un servicio (una IA, una base de datos, GitHub) sin tener que saber como funciona por dentro.
 > **Donde se usa en un repo real:** **Faro** usa la API de OpenAI para generar texto, y las APIs de GitHub y Google Drive para leer tus proyectos. **tunal-digital** usa la API de Anthropic (Claude).
 
 > ### 🟦 ¿Que significa? — *fetch*
-> **`fetch`** es una funcion que trae JavaScript para hacer peticiones HTTP desde el codigo. Le pasas una direccion (URL) y opciones (metodo, cabeceras, cuerpo) y te devuelve una **promesa** con la respuesta.
+> **`fetch`** es una funcion que ya trae JavaScript para hacer peticiones HTTP desde el codigo. Le pasas una direccion (URL) y unas opciones (metodo, cabeceras, cuerpo) y te devuelve una **promesa** con la respuesta.
 > **Para que sirve:** es la herramienta principal para llamar a una API desde JavaScript, tanto en el navegador como en el servidor.
 > **Donde se usa en un repo real:** el chat de **tunal-digital** usa `fetch` en el navegador para llamar al Worker, y el Worker usa `fetch` por dentro para llamar a la API de Claude.
 
 > ### 🟦 ¿Que significa? — *Clave de API (API key)*
-> Una **clave de API** es una contrasena larga y secreta que identifica quien esta usando un servicio. La API de IA revisa la clave para saber que la peticion viene de una cuenta valida (y, normalmente, para cobrarte por el uso).
+> Una **clave de API** es una contrasena larga y secreta que identifica a quien esta usando un servicio. La API de IA revisa la clave para saber que la peticion viene de una cuenta valida (y, normalmente, para cobrarte por el uso).
 > **Para que sirve:** para autenticarte ante el servicio y poder usarlo.
 > **Donde se usa en un repo real:** **Faro** guarda la clave de OpenAI como variable de entorno del servidor; **tunal-digital** guarda la clave de Anthropic como secreto del Worker. En ninguno de los dos la clave llega al navegador.
 
 > ### ⚠️ Cuidado
-> Si pegaras tu clave de API directamente en el JavaScript del navegador, cualquier persona podria abrir las herramientas de desarrollo (F12), verla, copiarla y gastar dinero con tu cuenta. Esto ha arruinado a mas de un proyecto. Por eso existe el proxy.
+> Si pegaras tu clave de API directamente en el JavaScript del navegador, cualquiera podria abrir las herramientas de desarrollo (F12), verla, copiarla y gastar tu dinero con tu cuenta. Esto ha arruinado a mas de un proyecto. Por eso existe el proxy.
 
 ---
 
@@ -74,12 +74,12 @@ No empezamos de cero. Estas piezas ya las viste en el modulo, solo las vamos a c
 > **Donde se usa en un repo real:** en **tunal-digital**, la pagina HTML/CSS/JS **vanilla** (es decir, JavaScript "puro", sin frameworks como React) con la cajita del chat, el cotizador y el formulario es todo cliente.
 
 > ### 🟦 ¿Que significa? — *Cloudflare Worker*
-> Un **Cloudflare Worker** es un pequeno programa de servidor que corre en la nube de Cloudflare, sin que tengas que administrar una maquina. Le das un trozo de codigo y Cloudflare lo ejecuta cada vez que llega una peticion a su direccion.
+> Un **Cloudflare Worker** es un pequeno programa de servidor que corre en la nube de Cloudflare sin que tengas que administrar ninguna maquina. Le das un trozo de codigo y Cloudflare lo ejecuta cada vez que llega una peticion a su direccion.
 > **Para que sirve:** para tener un backend liviano y barato, ideal justo para un proxy de IA.
 > **Donde se usa en un repo real:** es exactamente lo que usa **tunal-digital** para su chat: el Worker es el proxy entre la web y la API de Claude.
 
 > ### 🔎 En tu codigo
-> Para este capitulo no necesitas Cloudflare. Vamos a construir el mismo proxy con **Node.js** en tu propia computadora, porque es mas facil de probar y la idea es identica. Una vez que lo entiendas, mover el codigo a un Worker o a una ruta de Next.js (como en Faro) es un paso pequeno.
+> Para este capitulo no necesitas Cloudflare. Vamos a construir el mismo proxy con **Node.js** en tu propia computadora, porque es mas facil de probar y la idea de fondo es identica. Una vez que lo entiendas, mover el codigo a un Worker o a una ruta de Next.js (como en Faro) es un paso pequeno.
 
 ---
 
@@ -95,7 +95,7 @@ npm init -y
 
 > ### 🟦 ¿Que significa? — *npm init*
 > **`npm init -y`** crea un archivo `package.json`, que es la "ficha de identidad" de tu proyecto JavaScript: dice como se llama, que dependencias usa y que comandos sabe ejecutar. El `-y` acepta todas las respuestas por defecto.
-> **Para que sirve:** para que Node sepa que esto es un proyecto y poder instalar librerias.
+> **Para que sirve:** para que Node sepa que esto es un proyecto y puedas instalar librerias.
 > **Donde se usa en un repo real:** todos los repos del curso lo tienen. **Faro** y **RachaSimple** tienen un `package.json` con sus dependencias (Next.js, React, Supabase, etc.).
 
 Ahora vamos a usar variables de entorno para guardar la clave. Crea un archivo llamado `.env`:
@@ -110,16 +110,16 @@ IA_API_KEY=pega-aqui-tu-clave-secreta
 > **Donde se usa en un repo real:** **Faro** guarda ahi la clave de OpenAI y las credenciales de Supabase; su `CLAUDE.md` ordena explicitamente que "tokens y secretos solo en el servidor (variables de entorno)".
 
 > ### ⚠️ Cuidado
-> El archivo `.env` NUNCA debe subirse a GitHub. Crea un archivo `.gitignore` con una linea que diga `.env` para que git lo ignore. Si tu clave termina en un repo publico, considerala quemada y generala de nuevo de inmediato.
+> El archivo `.env` NUNCA debe subirse a GitHub. Crea un archivo `.gitignore` con una linea que diga `.env` para que git lo ignore. Si tu clave termina en un repo publico, dala por quemada y generala de nuevo de inmediato.
 
 > ### 💡 Tip
-> Una clave "quemada" es una clave que se volvio publica por accidente. Casi todos los servicios te dejan **revocar** (anular) una clave y crear otra en su panel. Hazlo sin pena: es lo correcto.
+> Una clave "quemada" es una clave que se volvio publica por accidente. Casi todos los servicios te dejan **revocar** (anular) una clave y crear otra desde su panel. Hazlo sin pena: es lo correcto.
 
 ---
 
 ## 5. Escribir el proxy paso a paso 💻
 
-Crea un archivo `servidor.js`. Lo vamos a construir por pedazos para entender cada linea, y al final lo veras completo.
+Crea un archivo `servidor.js`. Lo vamos a armar por pedazos para entender cada linea, y al final lo veras completo.
 
 ### 5.1 Levantar un servidor que escucha
 
@@ -147,7 +147,7 @@ Corre `node servidor.js` y abre `http://localhost:3000` en el navegador. Si ves 
 
 ### 5.2 Leer el mensaje que manda el navegador
 
-El navegador nos va a mandar el mensaje del usuario en el **cuerpo** de una peticion `POST`, en formato JSON. Hay que leerlo.
+El navegador nos va a mandar el mensaje del usuario en el **cuerpo** de una peticion `POST`, en formato JSON. Toca leerlo.
 
 > ### 🟦 ¿Que significa? — *JSON*
 > **JSON** (JavaScript Object Notation) es una forma de escribir datos como texto, con llaves, comillas y dos puntos. Por ejemplo `{ "mensaje": "hola" }`. Casi todas las APIs hablan en JSON.
@@ -170,7 +170,7 @@ function leerCuerpo(req) {
 ```
 
 > ### 🟦 ¿Que significa? — *Promesa (Promise)*
-> Una **promesa** es un objeto de JavaScript que representa un resultado que **aun no esta listo** pero llegara mas tarde (por ejemplo, cuando el cuerpo de la peticion termine de llegar). Cuando el valor esta disponible, la promesa se **resuelve** (`resolve`). El `await` que viste antes es justo la forma de esperar a que una promesa se resuelva.
+> Una **promesa** es un objeto de JavaScript que representa un resultado que **aun no esta listo** pero llegara mas tarde (por ejemplo, cuando el cuerpo de la peticion termine de llegar). Cuando el valor ya esta disponible, la promesa se **resuelve** (`resolve`). El `await` que viste antes es justo la forma de esperar a que una promesa se resuelva.
 > **Para que sirve:** para manejar cosas que tardan (red, archivos, temporizadores) sin congelar el programa mientras esperas.
 > **Donde se usa en un repo real:** `fetch` siempre devuelve una promesa; cada llamada a la API de OpenAI en **Faro** o a la de Claude en **tunal-digital** es, por dentro, una promesa que se espera con `await`.
 
@@ -203,7 +203,7 @@ async function preguntarAIA(mensajeUsuario) {
 ```
 
 > ### 🟦 ¿Que significa? — *Cabecera (header) HTTP*
-> Una **cabecera** es un par "nombre: valor" que viaja con la peticion para dar informacion extra: que tipo de datos mandas (`Content-Type`), o quien eres (`Authorization`).
+> Una **cabecera** es un par "nombre: valor" que viaja con la peticion para dar informacion extra: que tipo de datos mandas (`Content-Type`) o quien eres (`Authorization`).
 > **Para que sirve:** para acompanar el mensaje con metadatos que el servidor necesita.
 > **Donde se usa en un repo real:** el Worker de **tunal-digital** pone la cabecera con la clave de Anthropic antes de reenviar a la API de Claude.
 
@@ -213,7 +213,7 @@ async function preguntarAIA(mensajeUsuario) {
 > **Donde se usa en un repo real:** asi se autentica **Faro** ante OpenAI; el formato exacto cambia un poco segun el proveedor, pero la idea es la misma.
 
 > ### 🟦 ¿Que significa? — *async / await*
-> **`async`** marca una funcion que hace cosas que tardan (como una llamada de red). **`await`** dice "espera aqui hasta que termine esto antes de seguir". Juntos hacen que el codigo asincrono se lea casi como codigo normal, de arriba hacia abajo.
+> **`async`** marca una funcion que hace cosas que tardan (como una llamada de red). **`await`** dice "espera aqui hasta que esto termine antes de seguir". Juntos hacen que el codigo asincrono se lea casi como codigo normal, de arriba hacia abajo.
 > **Para que sirve:** para esperar respuestas de la red sin congelar el programa ni enredarte con promesas.
 > **Donde se usa en un repo real:** toda llamada a IA, base de datos o API en **Faro** y **RachaSimple** usa `async/await`.
 
@@ -269,15 +269,15 @@ const servidor = http.createServer(async (req, res) => {
 > **Donde se usa en un repo real:** toda API responde con estos codigos; el chat de **tunal-digital** revisa el estado para mostrar un error amable si la IA falla.
 
 > ### 🟦 ¿Que significa? — *CORS*
-> **CORS** (Cross-Origin Resource Sharing) es la regla del navegador que decide si una pagina puede llamar a un servidor que esta en otra direccion. El servidor debe enviar la cabecera `Access-Control-Allow-Origin` para dar permiso. La peticion `OPTIONS` es el "permiso previo" que el navegador pregunta antes.
+> **CORS** (Cross-Origin Resource Sharing) es la regla del navegador que decide si una pagina puede llamar a un servidor que esta en otra direccion. El servidor tiene que enviar la cabecera `Access-Control-Allow-Origin` para dar permiso. La peticion `OPTIONS` es el "permiso previo" que el navegador pregunta antes.
 > **Para que sirve:** para proteger a los usuarios de que cualquier sitio llame a cualquier servidor sin permiso.
 > **Donde se usa en un repo real:** el Worker de **tunal-digital** configura CORS para que solo el sitio de Tunal pueda usar el proxy.
 
 > ### ⚠️ Cuidado
-> Pusimos `Access-Control-Allow-Origin: "*"` (cualquier origen) solo para practicar en tu maquina. En produccion, como en **tunal-digital**, debes poner el dominio exacto de tu sitio, para que no cualquier pagina del mundo use tu proxy y gaste tu saldo.
+> Pusimos `Access-Control-Allow-Origin: "*"` (cualquier origen) solo para practicar en tu maquina. En produccion, como en **tunal-digital**, debes poner el dominio exacto de tu sitio, para que no cualquier pagina del mundo use tu proxy y te queme el saldo.
 
 > ### 💡 Tip
-> Fijate que cortamos el mensaje a 1000 caracteres con `.slice(0, 1000)`. **Validar y limitar** lo que llega es parte del trabajo del backend: nunca confies a ciegas en lo que manda el navegador.
+> Fijate que cortamos el mensaje a 1000 caracteres con `.slice(0, 1000)`. **Validar y limitar** lo que llega es parte del trabajo del backend: nunca te fies a ciegas de lo que manda el navegador.
 
 ---
 
@@ -326,7 +326,7 @@ Ahora la parte bonita. Crea un archivo `index.html`. Fijate que aqui **no aparec
 > Lee con calma el `<script>`: el navegador hace `fetch` a `http://localhost:3000/chat`, que es **tu proxy**, no la IA. El navegador no sabe ni la direccion de la IA ni la clave. Esa separacion es justo la arquitectura de **tunal-digital**: cliente vanilla → Worker → Claude.
 
 > ### 💡 Tip
-> Abre el `index.html` con una extension de servidor local (como "Live Server" en tu editor) en vez de hacer doble clic. Asi el navegador lo sirve por `http://` y CORS funciona como en la vida real.
+> Abre el `index.html` con una extension de servidor local (como "Live Server" en tu editor) en lugar de hacer doble clic en el archivo. Asi el navegador lo sirve por `http://` y CORS funciona como en la vida real.
 
 Para probar todo junto: en una terminal corre `node servidor.js`, en el editor abre `index.html` con Live Server, escribe una pregunta y aprieta Enviar. Si recibes una respuesta, **acabas de construir tu primer proxy de IA**. Bit hace una vuelta de campana en el agua.
 
@@ -337,7 +337,7 @@ Para probar todo junto: en una terminal corre `node servidor.js`, en el editor a
 
 ## 7. Por que este patron es tan importante
 
-Lo que construiste hoy no es un ejercicio de juguete: es la columna vertebral de casi cualquier app que use IA de forma seria.
+Lo que construiste hoy no es un ejercicio de juguete: es la columna vertebral de casi cualquier app que use IA en serio.
 
 - En **tunal-digital**, el patron es identico: el chat de la web (cliente) llama a un Cloudflare Worker (proxy) que guarda la clave de Anthropic y habla con Claude.
 - En **Faro**, las rutas de servidor de Next.js hacen de proxy hacia OpenAI: el navegador pide un analisis, el servidor pone la clave y llama a la IA, y devuelve descripcion, estado, progreso y roadmap. La regla de seguridad del proyecto lo dice sin rodeos: tokens y secretos solo en el servidor.
@@ -345,13 +345,13 @@ Lo que construiste hoy no es un ejercicio de juguete: es la columna vertebral de
 > ### 🟦 ¿Que significa? — *Variable de entorno en el servidor (recordatorio aplicado)*
 > Es el lugar donde, tanto en tu proxy como en Faro y en tunal-digital, vive la clave: en el entorno del servidor, leida con `process.env`, fuera del codigo publico y fuera del navegador.
 > **Para que sirve:** para cumplir la regla de oro de seguridad de todo este modulo.
-> **Donde se usa en un repo real:** en los tres casos mencionados. Si entendiste tu proxy, entendiste como protegen su clave los proyectos reales.
+> **Donde se usa en un repo real:** en los tres casos que mencionamos. Si entendiste tu proxy, entendiste como protegen su clave los proyectos reales.
 
 > ### 💡 Tip
 > El mismo patron protege MAS que claves de IA. Un proxy/backend es donde tambien validas tokens de OAuth, hablas con la base de datos (como Supabase en **RachaSimple** y **Faro**) y aplicas reglas de seguridad. El cliente pide; el servidor de confianza decide.
 
 > ### ⚠️ Cuidado
-> Tener la clave en el servidor te protege de que la roben del navegador, pero no de gastar de mas. Un proxy abierto al mundo puede recibir miles de peticiones. En produccion conviene anadir limites de uso (rate limiting) y, si aplica, exigir que el usuario haya iniciado sesion antes de usar la IA.
+> Tener la clave en el servidor te protege de que la roben desde el navegador, pero no de gastar de mas. Un proxy abierto al mundo puede recibir miles de peticiones. En produccion conviene anadir limites de uso (rate limiting) y, si aplica, exigir que el usuario haya iniciado sesion antes de usar la IA.
 
 ---
 

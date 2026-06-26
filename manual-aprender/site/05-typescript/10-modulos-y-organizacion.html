@@ -23,20 +23,20 @@
 </p>
 
 <blockquote>
-<p>¡Hola de nuevo! Soy <strong>Bit</strong>, tu ajolote acompañante. Hasta ahora aprendiste a ponerle tipos a variables, funciones, props y hooks. Pero todo eso vivía dentro de un solo archivo imaginario. En un proyecto real hay <strong>decenas</strong> de archivos, y un mismo tipo (por ejemplo, qué es un <code>Habit</code> o un <code>Project</code>) lo necesitan muchos de ellos. En este capítulo aprenderás a <strong>compartir tipos</strong> entre archivos sin caos: cómo exportarlos, cómo importarlos (con un truco especial llamado <code>import type</code>), dónde guardarlos para no repetirte, y cómo <code>RachaSimple</code> y <code>Faro</code> ordenan sus carpetas para que el equipo no se pierda. Recuerda: TypeScript es JavaScript con tipos, así que ya conoces <code>import</code> y <code>export</code> del Módulo 03. Aquí solo le sumamos la parte de los tipos. ¡Vamos a ordenar la casa! 🪶</p>
+<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote acompañante. Hasta ahora le pusiste tipos a variables, funciones, props y hooks, pero todo eso vivía dentro de un solo archivo imaginario. La realidad es otra: un proyecto de verdad tiene <strong>decenas</strong> de archivos, y un mismo tipo (qué es un <code>Habit</code>, qué es un <code>Project</code>) lo necesitan muchos a la vez. En este capítulo vas a aprender a <strong>compartir tipos</strong> entre archivos sin que se arme un lío: cómo exportarlos, cómo importarlos con un truco propio de TypeScript llamado <code>import type</code>, dónde guardarlos para no repetir lo mismo diez veces, y cómo <code>RachaSimple</code> y <code>Faro</code> acomodan sus carpetas para que nadie se pierda. Acuérdate de que TypeScript es JavaScript con tipos, así que <code>import</code> y <code>export</code> ya los viste en el Módulo 03; aquí solo añadimos la parte de los tipos. Vamos a ordenar la casa. 🪶</p>
 </blockquote>
 <hr />
 <h2 id="1-repaso-rapido-import-y-export">1. Repaso rápido: import y export</h2>
-<p>En el Módulo 03 ya viste que un <strong>módulo</strong> en JavaScript es simplemente un archivo. Un archivo puede <strong>exportar</strong> cosas (compartirlas hacia afuera) y otro archivo puede <strong>importarlas</strong> (traerlas para usarlas).</p>
+<p>En el Módulo 03 viste que un <strong>módulo</strong> en JavaScript no es más que un archivo. Un archivo puede <strong>exportar</strong> cosas (compartirlas hacia afuera) y otro archivo puede <strong>importarlas</strong> (traerlas para usarlas). Esa es toda la idea.</p>
 <blockquote class="def">
 <h3 id="que-significa-modulo">🟦 ¿Que significa? — <em>Módulo</em></h3>
-<p>Un módulo es <strong>un archivo</strong> de código (<code>.ts</code> o <code>.tsx</code>) que comparte parte de su contenido con otros archivos. Sirve para partir un programa grande en pedazos pequeños y manejables, en lugar de tener todo en un archivo gigante. En <code>RachaSimple</code>, cada archivo dentro de <code>src/</code> es un módulo: <code>src/repositories/habits.ts</code> es el módulo que sabe leer y guardar hábitos en la base de datos.</p>
+<p>Un módulo es <strong>un archivo</strong> de código (<code>.ts</code> o <code>.tsx</code>) que comparte parte de su contenido con otros archivos. Sirve para partir un programa grande en pedazos pequeños y manejables, en lugar de tener todo amontonado en un archivo gigante. En <code>RachaSimple</code>, cada archivo dentro de <code>src/</code> es un módulo: <code>src/repositories/habits.ts</code> es el módulo que sabe leer y guardar hábitos en la base de datos.</p>
 <h3 id="que-significa-export">🟦 ¿Que significa? — <em>export</em></h3>
-<p><code>export</code> marca algo (una función, una constante, un tipo) como <strong>disponible para otros archivos</strong>. Sirve para que ese pedazo de código pueda reutilizarse desde fuera. En <code>Faro</code>, el archivo <code>src/lib/types.ts</code> empieza casi cada línea con <code>export</code> porque su trabajo es justamente entregar tipos a todo el proyecto.</p>
+<p><code>export</code> marca algo (una función, una constante, un tipo) como <strong>disponible para otros archivos</strong>. Sirve para que ese pedazo de código se pueda reutilizar desde fuera. En <code>Faro</code>, el archivo <code>src/lib/types.ts</code> empieza casi cada línea con <code>export</code>, porque su trabajo es justamente repartir tipos a todo el proyecto.</p>
 <h3 id="que-significa-import">🟦 ¿Que significa? — <em>import</em></h3>
-<p><code>import</code> <strong>trae</strong> a tu archivo algo que otro archivo exportó. Sirve para usar código que ya existe sin copiarlo. En <code>RachaSimple</code>, el hook <code>useHabits</code> hace <code>import { habitsRepo } from '@/repositories/habits'</code> para usar las funciones que leen hábitos.</p>
+<p><code>import</code> <strong>trae</strong> a tu archivo algo que otro archivo exportó. Sirve para usar código que ya existe sin tener que copiarlo. En <code>RachaSimple</code>, el hook <code>useHabits</code> hace <code>import { habitsRepo } from '@/repositories/habits'</code> para usar las funciones que leen hábitos.</p>
 </blockquote>
-<p>En TypeScript, no solo exportamos funciones y valores: también podemos exportar e importar <strong>tipos</strong>. Y aquí empieza lo nuevo.</p>
+<p>En TypeScript no solo exportamos funciones y valores: también podemos exportar e importar <strong>tipos</strong>. Y ahí empieza lo nuevo.</p>
 <pre><code class="language-typescript">// Esto ya lo conoces: exportar e importar VALORES
 export const VERSION = &quot;1.0&quot;;        // archivo A
 import { VERSION } from &quot;./config&quot;;  // archivo B
@@ -47,7 +47,7 @@ import { Habit } from &quot;./types/database&quot;; // archivo B
 </code></pre>
 <hr />
 <h2 id="2-exportar-tipos">2. Exportar tipos</h2>
-<p>Exportar un tipo es igual que exportar cualquier otra cosa: le pones <code>export</code> delante. Mira cómo lo hace <code>RachaSimple</code> en su archivo <code>src/types/database.ts</code>:</p>
+<p>Exportar un tipo funciona igual que exportar cualquier otra cosa: le pones <code>export</code> delante y listo. Así lo hace <code>RachaSimple</code> en su archivo <code>src/types/database.ts</code>:</p>
 <pre><code class="language-typescript">export type SupportTone = 'gentle' | 'practical' | 'encouraging' | 'direct';
 export type HabitCategory = 'reading' | 'exercise' | 'study' | 'wellness' | 'other';
 
@@ -61,28 +61,28 @@ export interface Habit {
   created_at: string;
 }
 </code></pre>
-<p>Fíjate en dos cosas: cada <code>type</code> y cada <code>interface</code> lleva <code>export</code>, y además <strong>un tipo puede usar a otro</strong>. La interface <code>Habit</code> usa los tipos <code>HabitCategory</code> y <code>SupportTone</code> que se declararon arriba, en el mismo archivo. No hace falta importarlos porque ya están ahí.</p>
+<p>Fíjate en dos detalles. Primero, cada <code>type</code> y cada <code>interface</code> lleva su <code>export</code>. Y segundo, <strong>un tipo puede apoyarse en otro</strong>: la interface <code>Habit</code> usa los tipos <code>HabitCategory</code> y <code>SupportTone</code>, que se declararon unas líneas más arriba en el mismo archivo. No hay que importarlos porque ya están ahí, al alcance de la mano.</p>
 <blockquote class="def">
 <h3 id="que-significa-tipo-exportado">🟦 ¿Que significa? — <em>Tipo exportado</em></h3>
-<p>Es un <code>type</code> o una <code>interface</code> que lleva <code>export</code> delante, lista para que otros archivos la usen. Sirve para <strong>describir una forma de dato una sola vez</strong> y reutilizar esa descripción en todo el proyecto. En <code>Faro</code>, <code>export interface Project { ... }</code> describe cómo es un proyecto, y lo usan el dashboard, las tarjetas, el editor y la API.</p>
+<p>Es un <code>type</code> o una <code>interface</code> que lleva <code>export</code> delante, listo para que otros archivos lo usen. Sirve para <strong>describir una forma de dato una sola vez</strong> y reutilizar esa descripción en todo el proyecto. En <code>Faro</code>, <code>export interface Project { ... }</code> describe cómo es un proyecto, y lo usan el dashboard, las tarjetas, el editor y la API.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>Exporta un tipo en cuanto <strong>dos o más archivos</strong> lo necesiten. Si un tipo solo lo usa un archivo (por ejemplo, las props internas de un componente pequeño), déjalo dentro de ese archivo sin exportar: no contamines el espacio compartido con cosas privadas.</p>
+<p>Exporta un tipo en cuanto <strong>dos o más archivos</strong> lo necesiten. Si un tipo solo lo usa un archivo (por ejemplo, las props internas de un componente pequeño), déjalo ahí dentro sin exportar: no hace falta ensuciar el espacio compartido con cosas que son privadas.</p>
 </blockquote>
 <hr />
 <h2 id="3-importar-tipos-con-import-type">3. Importar tipos con <code>import type</code></h2>
-<p>Cuando importas un tipo, puedes hacerlo de dos formas. La normal:</p>
+<p>A la hora de importar un tipo, tienes dos caminos. El normal:</p>
 <pre><code class="language-typescript">import { Habit } from &quot;@/types/database&quot;;
 </code></pre>
-<p>Y la forma especial de TypeScript, que es la que usan <code>RachaSimple</code> y <code>Faro</code> <strong>siempre</strong> que importan tipos:</p>
+<p>Y el camino especial de TypeScript, que es el que usan <code>RachaSimple</code> y <code>Faro</code> <strong>siempre</strong> que importan tipos:</p>
 <pre><code class="language-typescript">import type { Habit, NewHabit } from &quot;@/types/database&quot;;
 </code></pre>
-<p>¿La diferencia? La palabra <strong><code>type</code></strong> justo después de <code>import</code>.</p>
+<p>¿La diferencia? Esa palabrita <strong><code>type</code></strong> justo después de <code>import</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-import-type">🟦 ¿Que significa? — <em>import type</em></h3>
-<p>Es una importación que le dice a TypeScript: "lo que traigo aquí es <strong>solo un tipo</strong>, una etiqueta que existe únicamente mientras escribo el código; no es código real que se ejecute". Sirve para que el compilador pueda <strong>borrar esa línea por completo</strong> al generar el JavaScript final, porque los tipos no existen cuando el programa corre. En <code>RachaSimple</code>, el repositorio de hábitos hace <code>import type { Habit, NewHabit } from '@/types/database'</code>: trae las etiquetas para chequear formas, y al compilar esa línea desaparece.</p>
+<p>Es una importación que le avisa a TypeScript: "lo que traigo aquí es <strong>solo un tipo</strong>, una etiqueta que existe únicamente mientras escribo el código; no es código de verdad que se ejecute". Sirve para que el compilador pueda <strong>borrar esa línea entera</strong> al generar el JavaScript final, porque los tipos no existen cuando el programa corre. En <code>RachaSimple</code>, el repositorio de hábitos hace <code>import type { Habit, NewHabit } from '@/types/database'</code>: trae las etiquetas para chequear formas, y al compilar esa línea desaparece sin dejar rastro.</p>
 </blockquote>
-<p>Recuerda algo del Módulo 03: <strong>los tipos no existen cuando tu programa se ejecuta</strong>. El navegador y Node.js solo entienden JavaScript, y JavaScript no sabe qué es una <code>interface</code>. TypeScript usa los tipos mientras escribes (para avisarte de errores) y luego los <strong>borra</strong>. <code>import type</code> deja eso clarísimo desde la línea de import.</p>
-<p>Mira un caso real de <code>RachaSimple</code>, el repositorio de hábitos:</p>
+<p>Recuerda una cosa del Módulo 03: <strong>los tipos no existen cuando tu programa se ejecuta</strong>. El navegador y Node.js solo hablan JavaScript, y JavaScript no tiene idea de qué es una <code>interface</code>. TypeScript se apoya en los tipos mientras escribes, para avisarte de errores, y después los <strong>borra</strong>. Con <code>import type</code> eso queda clarísimo desde la propia línea de import.</p>
+<p>Veámoslo en un caso real de <code>RachaSimple</code>, el repositorio de hábitos:</p>
 <pre><code class="language-typescript">import { supabase } from '@/lib/supabase';        // import normal: supabase ES código real
 import type { Habit, NewHabit } from '@/types/database'; // import type: solo etiquetas
 
@@ -94,30 +94,30 @@ export const habitsRepo = {
   },
 };
 </code></pre>
-<p>Verás dos imports juntos. El primero (<code>supabase</code>) <strong>sin</strong> <code>type</code>, porque <code>supabase</code> es un objeto real que se usa al ejecutar. El segundo (<code>Habit</code>, <code>NewHabit</code>) <strong>con</strong> <code>type</code>, porque son solo etiquetas para describir formas.</p>
+<p>Mira los dos imports juntos. El primero (<code>supabase</code>) va <strong>sin</strong> <code>type</code>, porque <code>supabase</code> es un objeto real que se usa al ejecutar. El segundo (<code>Habit</code>, <code>NewHabit</code>) va <strong>con</strong> <code>type</code>, porque no son más que etiquetas para describir formas.</p>
 <blockquote class="def">
 <h3 id="que-significa-promise">🟦 ¿Que significa? — <em>Promise<Habit[]></em></h3>
 <p>Es el tipo de algo que tarda en llegar (una consulta a la base de datos) y que, cuando llega, será una <strong>lista de hábitos</strong> (<code>Habit[]</code>). Sirve para que TypeScript sepa qué forma tendrá el resultado de una función <code>async</code>. En <code>RachaSimple</code>, <code>listAll(): Promise&lt;Habit[]&gt;</code> promete devolver un arreglo de hábitos.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>¿No sabes si usar <code>import</code> o <code>import type</code>? Regla simple: si lo que traes se usa <strong>solo en posiciones de tipo</strong> (después de <code>:</code>, en <code>&lt;...&gt;</code>, en <code>as</code>, en <code>extends</code>), usa <code>import type</code>. Si lo usas como <strong>valor</strong> (lo llamas, lo lees, lo pasas a una función), usa <code>import</code> normal. Ambos repos siguen esta regla a rajatabla.</p>
+<p>¿Dudas entre <code>import</code> o <code>import type</code>? La regla es sencilla: si lo que traes aparece <strong>solo en posiciones de tipo</strong> (después de <code>:</code>, dentro de <code>&lt;...&gt;</code>, en un <code>as</code>, en un <code>extends</code>), usa <code>import type</code>. Si lo usas como <strong>valor</strong> (lo llamas, lo lees, se lo pasas a una función), usa <code>import</code> normal. Los dos repos la siguen al pie de la letra.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>No mezcles por accidente. Si haces <code>import type { celebrate }</code> y luego intentas <strong>ejecutar</strong> <code>celebrate()</code>, fallará: le dijiste a TypeScript que era solo una etiqueta y la borró del JavaScript. <code>import type</code> es exclusivamente para tipos.</p>
+<p>Cuidado con mezclarlos sin querer. Si haces <code>import type { celebrate }</code> y luego intentas <strong>ejecutar</strong> <code>celebrate()</code>, va a fallar: le dijiste a TypeScript que era una simple etiqueta, así que la borró del JavaScript. <code>import type</code> es exclusivamente para tipos, nunca para valores.</p>
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>Abre cualquier archivo de <code>RachaSimple</code> o <code>Faro</code> y cuenta los imports. Verás un patrón clarísimo: los valores (componentes, funciones, <code>supabase</code>, hooks) entran con <code>import</code> normal, y los tipos entran con <code>import type</code>. En <code>Faro</code>, <code>src/lib/phases.ts</code> arranca con <code>import type { GithubSnapshot, ProjectPhase } from "@/lib/types";</code>.</p>
+<p>Abre cualquier archivo de <code>RachaSimple</code> o <code>Faro</code> y cuenta los imports. Vas a ver un patrón clarísimo: los valores (componentes, funciones, <code>supabase</code>, hooks) entran con <code>import</code> normal, y los tipos entran con <code>import type</code>. En <code>Faro</code>, <code>src/lib/phases.ts</code> arranca con <code>import type { GithubSnapshot, ProjectPhase } from "@/lib/types";</code>.</p>
 </blockquote>
 <hr />
 <h2 id="4-un-archivo-de-tipos-compartidos-typests">4. Un archivo de tipos compartidos: <code>types.ts</code></h2>
-<p>¿Dónde guardas los tipos que usa medio proyecto? La respuesta de ambos repos: en <strong>un archivo dedicado solo a tipos</strong>. Así nadie tiene que adivinar dónde vive la definición de <code>Project</code> o de <code>Habit</code>.</p>
+<p>¿Dónde guardas los tipos que usa medio proyecto? Ambos repos responden lo mismo: en <strong>un archivo dedicado solo a tipos</strong>. Así nadie tiene que andar adivinando dónde vive la definición de <code>Project</code> o de <code>Habit</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-archivo-de-tipos-compartidos">🟦 ¿Que significa? — <em>Archivo de tipos compartidos</em></h3>
-<p>Es un archivo (como <code>types.ts</code> o <code>database.ts</code>) cuyo único trabajo es <strong>declarar y exportar tipos</strong> del dominio: los conceptos centrales de la app. Sirve como una <strong>única fuente de la verdad</strong>: si la forma de un dato cambia, se cambia ahí y todos los archivos que lo importan se enteran. En <code>Faro</code> ese archivo es <code>src/lib/types.ts</code>; en <code>RachaSimple</code> es <code>src/types/database.ts</code>.</p>
+<p>Es un archivo (como <code>types.ts</code> o <code>database.ts</code>) cuyo único trabajo es <strong>declarar y exportar tipos</strong> del dominio: los conceptos centrales de la app. Funciona como una <strong>única fuente de la verdad</strong>: si la forma de un dato cambia, se cambia ahí y todos los archivos que lo importan se enteran de golpe. En <code>Faro</code> ese archivo es <code>src/lib/types.ts</code>; en <code>RachaSimple</code> es <code>src/types/database.ts</code>.</p>
 </blockquote>
-<p>Compara cómo lo nombra y ubica cada uno:</p>
+<p>Compara cómo lo nombra y dónde lo pone cada uno:</p>
 <ul>
 <li><strong>Faro</strong> → <code>src/lib/types.ts</code>. Su primera línea es un comentario: <code>// Tipos compartidos del dominio de Organizer.</code> Define <code>Project</code>, <code>ProjectPhase</code>, <code>ProjectSource</code>, <code>AgendaDay</code>, <code>UserPrefs</code>, etc.</li>
-<li><strong>RachaSimple</strong> → <code>src/types/database.ts</code>. Una carpeta <code>types/</code> con un archivo <code>database.ts</code> porque sus tipos describen las tablas de la base de datos (Supabase). Define <code>Habit</code>, <code>UserProfile</code>, <code>DailyCheckin</code>, etc.</li>
+<li><strong>RachaSimple</strong> → <code>src/types/database.ts</code>. Una carpeta <code>types/</code> con un archivo <code>database.ts</code>, porque sus tipos describen las tablas de la base de datos (Supabase). Define <code>Habit</code>, <code>UserProfile</code>, <code>DailyCheckin</code>, etc.</li>
 </ul>
-<p>Ambos son la misma idea con distinto nombre. Mira un trozo del de <code>Faro</code>:</p>
+<p>Son la misma idea con distinto nombre. Mira un trozo del de <code>Faro</code>:</p>
 <pre><code class="language-typescript">// src/lib/types.ts — Tipos compartidos del dominio de Organizer.
 
 export type ProjectPhase =
@@ -142,7 +142,7 @@ export interface Project {
   updated_at: string;
 }
 </code></pre>
-<p>Y luego, <strong>muchos</strong> archivos de <code>Faro</code> importan de ahí:</p>
+<p>Y desde ahí lo importan <strong>un montón</strong> de archivos de <code>Faro</code>:</p>
 <pre><code class="language-typescript">// src/components/phase-badge.tsx
 import type { ProjectPhase } from &quot;@/lib/types&quot;;
 
@@ -154,13 +154,13 @@ import type { GithubSnapshot, ProjectSource } from &quot;@/lib/types&quot;;
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>En <code>Faro</code>, el tipo <code>ProjectPhase</code> (las fases de un proyecto: idea, en progreso, etc.) lo importan al menos seis archivos distintos: la insignia de fase, el tablero, el editor, la barra de progreso, la página de nuevo proyecto y más. Si mañana se añade una fase nueva, <strong>se edita un solo lugar</strong> (<code>types.ts</code>) y TypeScript marca en rojo todos los sitios que hay que actualizar. Esa es la magia de centralizar tipos.</p>
+<p>En <code>Faro</code>, el tipo <code>ProjectPhase</code> (las fases de un proyecto: idea, en progreso, etc.) lo importan al menos seis archivos distintos: la insignia de fase, el tablero, el editor, la barra de progreso, la página de nuevo proyecto y alguno más. Si mañana se añade una fase nueva, <strong>se edita un solo sitio</strong> (<code>types.ts</code>) y TypeScript te marca en rojo todos los lugares que hay que actualizar. Esa es justo la ventaja de centralizar los tipos.</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p>Pon en <code>types.ts</code> los tipos del <strong>dominio</strong>: las cosas de las que trata tu app (hábitos, proyectos, usuarios). Las props de un componente concreto <strong>no</strong> van ahí; viven junto al componente. La regla es: comparte lo que se comparte, guarda en privado lo que es de uno.</p>
+<p>Mete en <code>types.ts</code> los tipos del <strong>dominio</strong>: las cosas de las que trata tu app (hábitos, proyectos, usuarios). Las props de un componente concreto <strong>no</strong> van ahí; viven junto a su componente. La idea es: comparte lo que de verdad se comparte, y guarda en privado lo que es de uno solo.</p>
 </blockquote>
 <hr />
 <h2 id="5-tipos-derivados-no-te-repitas">5. Tipos derivados: no te repitas</h2>
-<p>Un truco bonito que hace <code>RachaSimple</code>: en vez de escribir un tipo nuevo desde cero para "crear un hábito", <strong>deriva</strong> uno a partir del <code>Habit</code> que ya tiene. Esto usa <code>Pick</code> y <code>Partial</code>, ayudantes de TypeScript que ya viste en capítulos anteriores.</p>
+<p>Hay un truco bonito que hace <code>RachaSimple</code>: en lugar de escribir un tipo nuevo desde cero para "crear un hábito", <strong>deriva</strong> uno a partir del <code>Habit</code> que ya tiene. Para eso usa <code>Pick</code> y <code>Partial</code>, esos ayudantes de TypeScript que ya viste en capítulos anteriores.</p>
 <pre><code class="language-typescript">// src/types/database.ts
 export type NewHabit = Pick&lt;
   Habit,
@@ -171,22 +171,22 @@ export type NewHabit = Pick&lt;
 <h3 id="que-significa-tipo-derivado">🟦 ¿Que significa? — <em>Tipo derivado</em></h3>
 <p>Es un tipo construido <strong>a partir de otro</strong> usando ayudantes como <code>Pick</code> (elige algunas propiedades) u <code>Omit</code> (quita algunas). Sirve para no repetir la misma lista de campos en varios sitios: si el original cambia, el derivado se ajusta solo. En <code>RachaSimple</code>, <code>NewHabit</code> es un <code>Habit</code> recortado (sin <code>id</code>, sin <code>streak</code>, sin fechas) porque esos campos los pone la base de datos, no el formulario de creación.</p>
 </blockquote>
-<p><code>NewHabit</code> dice: "para crear un hábito, el usuario solo da el nombre, la meta diaria, la versión mínima, la categoría y el tono; lo demás (id, racha, fechas) lo añade el sistema". Y se exporta justo al lado de <code>Habit</code>, en el mismo <code>database.ts</code>. Luego el repositorio y el hook lo importan juntos:</p>
+<p>Lo que dice <code>NewHabit</code> es: "para crear un hábito, el usuario solo aporta el nombre, la meta diaria, la versión mínima, la categoría y el tono; lo demás (id, racha, fechas) lo añade el sistema". Y se exporta justo al lado de <code>Habit</code>, en el mismo <code>database.ts</code>. Después el repositorio y el hook lo importan juntos:</p>
 <pre><code class="language-typescript">// src/hooks/useHabits.ts
 import type { Habit, NewHabit } from '@/types/database';
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Guardar el tipo original (<code>Habit</code>) y sus derivados (<code>NewHabit</code>) en el <strong>mismo archivo</strong> es buena práctica: quien busca uno encuentra el otro al lado, y la relación entre ambos queda obvia.</p>
+<p>Tener el tipo original (<code>Habit</code>) y sus derivados (<code>NewHabit</code>) en el <strong>mismo archivo</strong> es una buena costumbre: quien busca uno encuentra el otro al lado, y la relación entre ambos salta a la vista.</p>
 </blockquote>
 <hr />
 <h2 id="6-archivos-de-declaracion-dts-a-grandes-rasgos">6. Archivos de declaración <code>.d.ts</code> (a grandes rasgos)</h2>
-<p>A veces ves un archivo raro que termina en <code>.d.ts</code>. No te asustes: es un archivo <strong>solo de tipos</strong>, sin código que se ejecute.</p>
+<p>De vez en cuando te topas con un archivo raro que termina en <code>.d.ts</code>. No te asustes: es un archivo <strong>solo de tipos</strong>, sin nada de código que se ejecute.</p>
 <blockquote class="def">
 <h3 id="que-significa-archivo-de-declaracion-dts">🟦 ¿Que significa? — <em>Archivo de declaración (.d.ts)</em></h3>
 <p>Es un archivo que <strong>solo contiene tipos y declaraciones</strong>, nunca lógica que corra. Su trabajo es describirle a TypeScript la forma de cosas que vienen de fuera (librerías, variables de entorno, herramientas) para que el chequeo de tipos funcione. La "d" es de <em>declaration</em> (declaración). En <code>RachaSimple</code> existe <code>src/vite-env.d.ts</code>; en <code>Faro</code>, <code>next-env.d.ts</code>.</p>
 </blockquote>
-<p>Como principiante <strong>casi nunca escribirás uno a mano</strong>; suelen venir con las herramientas. Mira el de <code>RachaSimple</code>, que describe las variables de entorno de Vite:</p>
+<p>Siendo principiante <strong>casi nunca escribirás uno a mano</strong>; lo habitual es que vengan con las herramientas. Mira el de <code>RachaSimple</code>, que describe las variables de entorno de Vite:</p>
 <pre><code class="language-typescript">// src/vite-env.d.ts
 /// &lt;reference types=&quot;vite/client&quot; /&gt;
 
@@ -196,8 +196,8 @@ interface ImportMetaEnv {
   readonly VITE_VAPID_PUBLIC_KEY: string;
 }
 </code></pre>
-<p>Esto le enseña a TypeScript que, cuando escribas <code>import.meta.env.VITE_SUPABASE_URL</code>, eso es un <code>string</code>. Sin este <code>.d.ts</code>, TypeScript no sabría qué forma tienen esas variables.</p>
-<p>El de <code>Faro</code> es aún más sencillo, y trae una advertencia escrita por la propia herramienta:</p>
+<p>Esto le enseña a TypeScript que, cuando escribas <code>import.meta.env.VITE_SUPABASE_URL</code>, eso es un <code>string</code>. Sin este <code>.d.ts</code>, TypeScript no tendría ni idea de qué forma tienen esas variables.</p>
+<p>El de <code>Faro</code> es todavía más sencillo, y encima trae una advertencia escrita por la propia herramienta:</p>
 <pre><code class="language-typescript">// next-env.d.ts
 /// &lt;reference types=&quot;next&quot; /&gt;
 /// &lt;reference types=&quot;next/image-types/global&quot; /&gt;
@@ -206,38 +206,38 @@ interface ImportMetaEnv {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Si ves <code>// This file should not be edited</code> (no editar), <strong>hazle caso</strong>. Archivos como <code>next-env.d.ts</code> los regenera la herramienta sola; si los modificas, tus cambios se perderán o romperás cosas. Los <code>.d.ts</code> que vienen con el proyecto son territorio de las herramientas, no tuyo.</p>
+<p>Si ves <code>// This file should not be edited</code> (no editar), <strong>hazle caso</strong>. Archivos como <code>next-env.d.ts</code> los regenera la herramienta sola; si los modificas, tus cambios se perderán o terminarás rompiendo algo. Los <code>.d.ts</code> que vienen con el proyecto son territorio de las herramientas, no tuyo.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>La línea <code>/// &lt;reference types="vite/client" /&gt;</code> que aparece en <code>vite-env.d.ts</code> no es un comentario cualquiera: es una <strong>directiva</strong> que le dice a TypeScript "carga también los tipos de Vite". Por eso <code>import.meta.env</code> funciona con autocompletado en <code>RachaSimple</code>. No la borres.</p>
+<p>La línea <code>/// &lt;reference types="vite/client" /&gt;</code> que aparece en <code>vite-env.d.ts</code> no es un comentario cualquiera: es una <strong>directiva</strong> que le dice a TypeScript "carga también los tipos de Vite". Gracias a ella <code>import.meta.env</code> funciona con autocompletado en <code>RachaSimple</code>. No la borres.</p>
 </blockquote>
 <hr />
 <h2 id="7-barrel-files-una-puerta-unica-a-una-carpeta">7. Barrel files: una puerta única a una carpeta</h2>
-<p>Cuando una carpeta tiene muchos archivitos, a veces se crea un <code>index.ts</code> que <strong>reexporta</strong> todo, para que quien importe escriba una sola línea bonita en vez de muchas.</p>
+<p>Cuando una carpeta junta muchos archivitos, a veces se crea un <code>index.ts</code> que <strong>reexporta</strong> todo, de modo que quien importe escriba una sola línea bonita en vez de varias.</p>
 <blockquote class="def">
 <h3 id="que-significa-barrel-file">🟦 ¿Que significa? — <em>Barrel file</em></h3>
-<p>Es un archivo <code>index.ts</code> que <strong>junta y reexporta</strong> lo que hay en una carpeta, para importar todo desde un solo punto. "Barrel" significa "barril": metes muchas cosas en un barril y sacas por un solo agujero. Sirve para acortar imports y esconder la estructura interna de una carpeta.</p>
+<p>Es un archivo <code>index.ts</code> que <strong>junta y reexporta</strong> lo que hay en una carpeta, para poder importar todo desde un único punto. "Barrel" significa "barril": metes muchas cosas en un barril y las sacas por un solo agujero. Sirve para acortar imports y esconder la estructura interna de una carpeta.</p>
 </blockquote>
-<p>Así se vería un barrel file:</p>
+<p>Un barrel file se vería así:</p>
 <pre><code class="language-typescript">// src/components/ui/index.ts  (un barrel file de ejemplo)
 export { Button } from &quot;./button&quot;;
 export { Input } from &quot;./input&quot;;
 export { Label } from &quot;./label&quot;;
 </code></pre>
-<p>Con eso, otro archivo puede traer los tres de una sola línea:</p>
+<p>Y con eso otro archivo puede traerse los tres en una sola línea:</p>
 <pre><code class="language-typescript">import { Button, Input, Label } from &quot;@/components/ui&quot;;
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Los barrel files son cómodos pero tienen trampa: si abusas, las herramientas tardan más en arrancar y a veces se cargan archivos que no necesitabas. Por eso <strong>ni <code>RachaSimple</code> ni <code>Faro</code> usan barrel files</strong> para sus componentes: prefieren imports directos y explícitos como <code>import { Button } from '@/components/ui/button'</code>. Es totalmente válido (y muchas veces mejor) <strong>no</strong> tener barrels. No te sientas obligado a crearlos.</p>
+<p>Los barrel files son cómodos, pero tienen su trampa: si abusas, las herramientas tardan más en arrancar y a veces se cargan archivos que ni necesitabas. Por eso <strong>ni <code>RachaSimple</code> ni <code>Faro</code> usan barrel files</strong> para sus componentes: prefieren imports directos y explícitos como <code>import { Button } from '@/components/ui/button'</code>. Es perfectamente válido (y muchas veces mejor) <strong>no</strong> tener barrels. No te sientas obligado a crearlos.</p>
 <h3 id="tip_4">💡 Tip</h3>
-<p>Un buen lugar donde un barrel sí compensa es un archivo de tipos: <code>types.ts</code> ya funciona como un mini-barrel de tipos, porque junta muchas definiciones y todos importan desde un solo <code>@/lib/types</code>. ¡Ya estabas usando la idea sin saberlo!</p>
+<p>Un sitio donde el barrel sí compensa es un archivo de tipos: <code>types.ts</code> ya funciona como un mini-barrel de tipos, porque junta muchas definiciones y todos importan desde un mismo <code>@/lib/types</code>. Ya estabas usando la idea sin darte cuenta.</p>
 </blockquote>
 <hr />
 <h2 id="8-alias-de-import">8. Alias de import: <code>@/</code></h2>
-<p>¿Notaste que todos los imports dicen <code>@/algo</code> en vez de rutas con muchos <code>../../../</code>? Eso es un <strong>alias</strong>.</p>
+<p>¿Te diste cuenta de que todos los imports dicen <code>@/algo</code> en vez de rutas llenas de <code>../../../</code>? Eso es un <strong>alias</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-alias-de-import">🟦 ¿Que significa? — <em>Alias de import (@/)</em></h3>
-<p>Es un atajo configurado para que <code>@/</code> signifique siempre "la carpeta <code>src/</code>", sin importar en qué archivo estés. Sirve para no escribir rutas relativas frágiles como <code>../../../lib/types</code>, que se rompen si mueves un archivo. En <code>RachaSimple</code> y <code>Faro</code>, <code>@/lib/types</code> siempre apunta a <code>src/lib/types</code>, estés donde estés.</p>
+<p>Es un atajo configurado para que <code>@/</code> signifique siempre "la carpeta <code>src/</code>", sin importar en qué archivo estés. Sirve para no escribir rutas relativas frágiles como <code>../../../lib/types</code>, que se rompen en cuanto mueves un archivo. En <code>RachaSimple</code> y <code>Faro</code>, <code>@/lib/types</code> siempre apunta a <code>src/lib/types</code>, estés donde estés.</p>
 </blockquote>
 <p>El alias se configura en <code>tsconfig.json</code>. Mira el de <code>Faro</code>:</p>
 <pre><code class="language-json">{
@@ -258,13 +258,13 @@ import type { Habit } from &quot;@/types/database&quot;;
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu codigo</h3>
-<p>En <code>RachaSimple</code>, el componente <code>HabitCard.tsx</code> (que está hondo en <code>src/components/racha/</code>) importa así: <code>import type { CheckinStatus, DailyCheckin, Habit } from '@/types/database';</code>. Sin el alias, esa ruta sería un montón de <code>../</code>. Con <code>@/</code>, da igual qué tan profundo esté el archivo: el import se lee igual de claro.</p>
+<p>En <code>RachaSimple</code>, el componente <code>HabitCard.tsx</code> (que está bien hondo en <code>src/components/racha/</code>) importa así: <code>import type { CheckinStatus, DailyCheckin, Habit } from '@/types/database';</code>. Sin el alias, esa ruta sería un desfile de <code>../</code>. Con <code>@/</code>, da igual lo profundo que esté el archivo: el import se lee igual de claro.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>El alias <code>@/</code> no es magia de JavaScript: hay que <strong>configurarlo</strong> en <code>tsconfig.json</code> (y a veces también en la herramienta de build, como Vite o Next). Si copias un import <code>@/...</code> a un proyecto nuevo que no tiene esa config, fallará. Ambos repos lo tienen configurado; por eso funciona.</p>
+<p>El alias <code>@/</code> no es magia de JavaScript: hay que <strong>configurarlo</strong> en <code>tsconfig.json</code> (y a veces también en la herramienta de build, como Vite o Next). Si copias un import <code>@/...</code> a un proyecto nuevo que no tenga esa configuración, fallará. Los dos repos la tienen puesta; por eso funciona.</p>
 </blockquote>
 <hr />
 <h2 id="9-como-organizan-sus-carpetas-rachasimple-y-faro">9. Cómo organizan sus carpetas RachaSimple y Faro</h2>
-<p>Juntemos todo viendo el <strong>mapa de carpetas</strong> de cada repo. Verás que cada carpeta tiene un trabajo claro.</p>
+<p>Juntemos todo mirando el <strong>mapa de carpetas</strong> de cada repo. Vas a notar que cada carpeta tiene un trabajo claro.</p>
 <p><strong>RachaSimple</strong> (React + Vite) ordena <code>src/</code> por <em>responsabilidad</em>:</p>
 <pre><code>src/
   types/        → database.ts (todos los tipos del dominio)
@@ -274,7 +274,7 @@ import type { Habit } from &quot;@/types/database&quot;;
   pages/        → Today.tsx, Settings.tsx... (pantallas)
   lib/          → utilidades (fechas, colores, supabase)
 </code></pre>
-<p><strong>Faro</strong> (Next.js) ordena <code>src/</code> parecido, con su propio estilo:</p>
+<p><strong>Faro</strong> (Next.js) ordena <code>src/</code> de forma parecida, con su propio estilo:</p>
 <pre><code>src/
   lib/          → types.ts, queries.ts, github.ts... (lógica y tipos)
   components/   → project-card.tsx, roadmap-view.tsx... (piezas visuales)
@@ -284,7 +284,7 @@ import type { Habit } from &quot;@/types/database&quot;;
 <h3 id="que-significa-organizacion-por-responsabilidad">🟦 ¿Que significa? — <em>Organización por responsabilidad</em></h3>
 <p>Es agrupar archivos según <strong>qué trabajo hacen</strong>, no según a qué función pertenecen. Sirve para encontrar las cosas rápido: ¿buscas un tipo? carpeta <code>types/</code>. ¿Una pantalla? carpeta <code>pages/</code>. En <code>RachaSimple</code>, todo lo que toca la base de datos vive en <code>repositories/</code>, y todo lo que es estado vive en <code>hooks/</code>.</p>
 </blockquote>
-<p>Fíjate en el patrón que une todo el proyecto de <code>RachaSimple</code>: el tipo nace en <code>types/database.ts</code>, lo importa el <code>repositories/habits.ts</code> (que lee/escribe), lo importa el <code>hooks/useHabits.ts</code> (que maneja el estado), y al final lo importa el <code>components/racha/HabitCard.tsx</code> (que lo pinta). <strong>Un solo tipo viaja por cuatro capas</strong>, siempre con <code>import type</code> y siempre con alias <code>@/</code>:</p>
+<p>Fíjate en el patrón que recorre todo el proyecto de <code>RachaSimple</code>: el tipo nace en <code>types/database.ts</code>, lo importa <code>repositories/habits.ts</code> (que lee y escribe), lo importa <code>hooks/useHabits.ts</code> (que maneja el estado), y al final lo importa <code>components/racha/HabitCard.tsx</code> (que lo pinta en pantalla). <strong>Un solo tipo viaja por cuatro capas</strong>, siempre con <code>import type</code> y siempre con el alias <code>@/</code>:</p>
 <pre><code class="language-typescript">// types/database.ts  →  define
 export interface Habit { /* ... */ }
 
@@ -304,11 +304,11 @@ interface HabitCardProps {
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo_4">🔎 En tu codigo</h3>
-<p>Ese <code>interface HabitCardProps</code> de <code>RachaSimple</code> es exactamente lo que viste en el capítulo de props: un tipo local, <strong>no exportado</strong>, que vive junto a su componente porque solo <code>HabitCard</code> lo usa. En cambio <code>Habit</code> sí viene de <code>@/types/database</code> porque lo comparte medio proyecto. Esa es la diferencia entre tipo compartido y tipo privado, en código real.</p>
+<p>Ese <code>interface HabitCardProps</code> de <code>RachaSimple</code> es exactamente lo que viste en el capítulo de props: un tipo local, <strong>no exportado</strong>, que vive junto a su componente porque solo <code>HabitCard</code> lo usa. En cambio <code>Habit</code> sí viene de <code>@/types/database</code>, porque lo comparte medio proyecto. Ahí tienes, en código real, la diferencia entre un tipo compartido y uno privado.</p>
 <h3 id="tip_5">💡 Tip</h3>
-<p>No copies estas carpetas al pie de la letra en tu primer proyecto. Empieza simple: un <code>types.ts</code>, una carpeta <code>components/</code> y poco más. Cuando un archivo se vuelva incómodo de grande, <strong>entonces</strong> lo partes. La estructura crece contigo; no al revés.</p>
+<p>No copies estas carpetas al pie de la letra en tu primer proyecto. Empieza simple: un <code>types.ts</code>, una carpeta <code>components/</code> y poco más. Cuando un archivo se te vuelva incómodo de tan grande, <strong>ahí</strong> lo partes. La estructura crece contigo, no al revés.</p>
 </blockquote>
-<p>Los demás repos del manual viven sin todo esto: <code>tunal-digital</code> es HTML/CSS/JS plano (sin tipos ni módulos así), <code>PolyPaw</code> es Python con JSON, y <code>polypaw-nas</code> es configuración de servidor. Por eso los ejemplos de organización de tipos salen siempre de <code>RachaSimple</code> y <code>Faro</code>: son los dos proyectos TypeScript, y los dos resuelven el mismo problema de forma casi idéntica. Buena señal: cuando dos proyectos distintos llegan solos al mismo patrón, ese patrón suele ser sólido. 🪶</p>
+<p>Los demás repos del manual viven sin nada de esto: <code>tunal-digital</code> es HTML/CSS/JS plano (sin tipos ni módulos de este estilo), <code>PolyPaw</code> es Python con JSON, y <code>polypaw-nas</code> es configuración de servidor. Por eso los ejemplos de organización de tipos salen siempre de <code>RachaSimple</code> y <code>Faro</code>: son los dos proyectos TypeScript, y los dos resuelven el mismo problema de manera casi idéntica. Y eso es buena señal: cuando dos proyectos distintos llegan por su cuenta al mismo patrón, suele ser porque ese patrón es sólido. 🪶</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>

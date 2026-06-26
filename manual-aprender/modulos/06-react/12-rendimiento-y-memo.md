@@ -5,25 +5,25 @@
 </p>
 
 
-> Hola otra vez. Soy **Bit**, tu ajolote de bolsillo. Hasta ahora hemos hecho que React funcione: componentes que pintan cosas, estado que cambia, props que viajan. En este capitulo vamos a hablar de algo distinto: que React funcione **rapido** y, sobre todo, que tu sepas *cuando* preocuparte por eso y cuando NO. Spoiler de ajolote: la mayoria de las veces React ya es lo bastante rapido y meterte a "optimizar" sin medir solo ensucia el codigo. Aprenderemos `React.memo`, `useMemo` y `useCallback` con ejemplos de **RachaSimple** (app de habitos) y **Faro** (organizador de proyectos). Respira: esto es mas facil de lo que suena.
+> Hola otra vez. Soy **Bit**, tu ajolote de bolsillo. Hasta ahora nos hemos dedicado a que React funcione: componentes que pintan cosas, estado que cambia, props que viajan de un lado a otro. Este capitulo va de otra cosa: que React funcione **rapido** y, mas importante todavia, que sepas *cuando* preocuparte por eso y cuando no. Te lo adelanto desde ya: casi siempre React es lo bastante rapido por su cuenta, y ponerte a "optimizar" sin haber medido antes solo ensucia el codigo. Vamos a ver `React.memo`, `useMemo` y `useCallback` con ejemplos de **RachaSimple** (la app de habitos) y **Faro** (el organizador de proyectos). Respira tranquilo: esto suena mas dificil de lo que es.
 
 ---
 
 ## 1. Primero: ¿que es "re-renderizar" y por que pasa?
 
-Antes de optimizar nada, hay que entender el "problema". Y empieza por una palabra que vas a oir mil veces.
+Antes de optimizar nada conviene entender cual es el "problema". Y todo arranca con una palabra que vas a escuchar un monton de veces.
 
 > ### 🟦 ¿Que significa? — *Render (renderizado)*
-> Un **render** es cuando React **ejecuta tu funcion de componente** para averiguar que debe mostrar en pantalla. Tu componente es literalmente una funcion que devuelve JSX; "renderizar" = llamar a esa funcion. Sirve para que React calcule el aspecto actual de la interfaz. En **RachaSimple**, cada vez que se renderiza `HabitCard`, React vuelve a ejecutar el cuerpo de esa funcion `.tsx` para saber que pintar.
+> Un **render** ocurre cuando React **ejecuta tu funcion de componente** para saber que tiene que mostrar en pantalla. Tu componente es, al fin y al cabo, una funcion que devuelve JSX; "renderizar" no es mas que llamar a esa funcion. Asi React calcula como debe verse la interfaz en este momento. En **RachaSimple**, cada vez que se renderiza `HabitCard`, React vuelve a ejecutar el cuerpo de esa funcion `.tsx` para decidir que pintar.
 
 > ### 🟦 ¿Que significa? — *Re-render (re-renderizado)*
-> Un **re-render** es renderizar **otra vez** un componente que ya estaba en pantalla, porque algo pudo haber cambiado. No significa "borrar y volver a dibujar todo" de cero: React solo aplica al navegador las diferencias. Sirve para mantener la pantalla sincronizada con el estado. En **Faro**, cuando marcas una fase de un proyecto como hecha, el componente que muestra el progreso se re-renderiza para mostrar el nuevo porcentaje.
+> Un **re-render** es volver a renderizar un componente que ya estaba en pantalla, porque puede que algo haya cambiado. Ojo: no significa "borrar todo y dibujarlo otra vez desde cero". React solo lleva al navegador las diferencias. Sirve para que la pantalla siga al dia con el estado. En **Faro**, cuando marcas una fase de un proyecto como hecha, el componente que muestra el progreso se re-renderiza para ensenar el porcentaje nuevo.
 
 React decide re-renderizar un componente por **tres razones** principales:
 
 1. **Cambia su estado** (`useState` / `useReducer`).
 2. **Cambian sus props** (lo que le pasa el componente padre).
-3. **Se re-renderiza su padre** — y esto es la clave del capitulo: cuando un componente se re-renderiza, **por defecto** React tambien re-renderiza a *todos sus hijos*, aunque sus props no hayan cambiado.
+3. **Se re-renderiza su padre** — y aqui esta el meollo del capitulo: cuando un componente se re-renderiza, **por defecto** React re-renderiza tambien a *todos sus hijos*, aunque sus props no hayan cambiado.
 
 ```tsx
 // RachaSimple — version simplificada
@@ -39,40 +39,40 @@ function Dashboard() {
 }
 ```
 
-Cuando cambias `filtro`, `Dashboard` se re-renderiza. Y como `Dashboard` es el padre, **`ListaHabitos` tambien se re-renderiza**, aunque `ListaHabitos` no reciba `filtro` ni le importe. Asi funciona React por diseno.
+Al cambiar `filtro`, `Dashboard` se re-renderiza. Y como `Dashboard` es el padre, **`ListaHabitos` se re-renderiza con el**, aunque `ListaHabitos` ni reciba `filtro` ni le interese para nada. Asi esta disenado React.
 
 > ### 💡 Tip
-> Re-renderizar **no es malo por defecto**. React es muy rapido ejecutando funciones de componentes. Un re-render de mas no se nota. El problema aparece solo cuando re-renderizas *muchas veces* algo que hace *mucho trabajo*. Recuerda esa frase: **muchas veces × mucho trabajo**.
+> Re-renderizar **no es malo de por si**. React es velocisimo ejecutando funciones de componentes, y un re-render de sobra ni se nota. El problema aparece unicamente cuando re-renderizas *muchas veces* algo que hace *mucho trabajo*. Quedate con esa frase: **muchas veces × mucho trabajo**.
 
 ---
 
 ## 2. ¿Cuando es un problema de verdad?
 
-Bit te lo dice claro: la mayoria de tus componentes **no necesitan** optimizacion. Vas a saber que tienes un problema real cuando se cumpla una de estas:
+Te lo digo sin rodeos: la mayoria de tus componentes **no necesitan** optimizacion. Sabras que tienes un problema real cuando se cumpla alguna de estas cosas:
 
-- La interfaz **se siente lenta** al escribir, hacer scroll o arrastrar (hay un retraso visible).
-- Renderizas **listas largas** (cientos de elementos) que se re-pintan en cada tecla.
-- Un componente hace un **calculo pesado** (ordenar, filtrar, recorrer mucho dato) en cada render.
+- La interfaz **se siente lenta** al escribir, al hacer scroll o al arrastrar (notas un retraso a ojo).
+- Renderizas **listas largas** (cientos de elementos) que se vuelven a pintar con cada tecla.
+- Un componente hace un **calculo pesado** (ordenar, filtrar, recorrer un monton de datos) en cada render.
 
-En **RachaSimple**, una app de habitos de uso personal, normalmente tienes pocas tarjetas en pantalla: no hay problema de rendimiento real. En **Faro**, si listaras decenas de proyectos y cada uno recalculara su progreso con logica pesada en cada render, *ahi* empezaria a tener sentido medir.
+En **RachaSimple**, que es una app de habitos de uso personal, lo normal es tener pocas tarjetas en pantalla: ahi no hay problema de rendimiento que valga. En **Faro**, en cambio, si listaras decenas de proyectos y cada uno recalculara su progreso con logica pesada en cada render, *ahi* si empezaria a tener sentido medir.
 
 > ### 🟦 ¿Que significa? — *Optimizacion prematura*
-> **Optimizar prematuramente** es agregar trucos de rendimiento *antes* de comprobar que existe un problema. Es un anti-patron: complica el codigo, esconde bugs y casi nunca mejora nada perceptible. La regla sana es **primero medir, despues optimizar**. En **RachaSimple**, envolver cada componentito en `memo` "por si acaso" seria optimizacion prematura.
+> **Optimizar prematuramente** es meter trucos de rendimiento *antes* de comprobar que hay un problema. Es un anti-patron de manual: complica el codigo, esconde bugs y casi nunca mejora nada que se note. La regla sana es bien simple: **primero medir, despues optimizar**. En **RachaSimple**, envolver cada componentito en `memo` "por si las moscas" seria justo eso, optimizacion prematura.
 
 > ### 🟦 ¿Que significa? — *Profiler (de React DevTools)*
-> El **Profiler** es una pestana de la extension **React Developer Tools** del navegador que **graba** lo que se renderiza y te dice *que componentes* se renderizaron y *cuanto tardo* cada uno. Sirve para medir antes de optimizar, en vez de adivinar. Lo usarias abriendo **RachaSimple** o **Faro** en `localhost`, grabando mientras interactuas, y mirando que tarjeta aparece costosa.
+> El **Profiler** es una pestana de la extension **React Developer Tools** del navegador que **graba** lo que se renderiza y te cuenta *que componentes* se renderizaron y *cuanto tardo* cada uno. Sirve para medir antes de optimizar, en lugar de adivinar a ciegas. Lo usarias abriendo **RachaSimple** o **Faro** en `localhost`, grabando mientras interactuas y mirando que tarjeta sale cara.
 
 > ### ⚠️ Cuidado
-> No optimices "a ojo". Si no has abierto el Profiler y visto un componente lento de verdad, probablemente no tienes un problema de rendimiento — tienes un problema imaginario. Bit ha visto codigo lleno de `useMemo` que no aceleraba nada y solo hacia el archivo mas dificil de leer.
+> No optimices "a ojo". Si no has abierto el Profiler y visto un componente lento de verdad, lo mas seguro es que no tengas un problema de rendimiento, sino uno imaginario. Bit ha visto codigo plagado de `useMemo` que no aceleraba absolutamente nada y solo conseguia volver el archivo mas dificil de leer.
 
 ---
 
 ## 3. Una pieza que falta: igualdad por referencia
 
-Para entender `memo`, `useMemo` y `useCallback` necesitas una idea de JavaScript (la viste en el modulo 03) que ahora cobra todo su sentido.
+Para entender `memo`, `useMemo` y `useCallback` te hace falta una idea de JavaScript (la viste en el modulo 03) que aqui cobra todo su sentido.
 
 > ### 🟦 ¿Que significa? — *Igualdad por referencia*
-> En JavaScript, los **objetos**, **arrays** y **funciones** se comparan por **referencia** (su "direccion en memoria"), no por su contenido. Dos objetos con los mismos datos NO son iguales si son objetos distintos. Sirve para entender por que React cree que "algo cambio" aunque a tus ojos sea lo mismo. Esto es la causa de casi todos los re-renders "raros" en **Faro** y **RachaSimple**.
+> En JavaScript, los **objetos**, **arrays** y **funciones** se comparan por **referencia** (su "direccion en memoria"), no por su contenido. Dos objetos con exactamente los mismos datos NO son iguales si son objetos distintos. Entender esto explica por que React cree que "algo cambio" aunque a tus ojos sea lo mismisimo de antes. Esta es la causa de casi todos los re-renders "raros" en **Faro** y **RachaSimple**.
 
 ```ts
 // Numeros y textos: se comparan por valor
@@ -85,7 +85,7 @@ Para entender `memo`, `useMemo` y `useCallback` necesitas una idea de JavaScript
 (() => {}) === (() => {}) // false!
 ```
 
-¿Por que importa? Porque **cada vez que tu componente se renderiza**, las funciones y objetos que escribes *dentro* de el se **crean de nuevo**. Son nuevas referencias en cada render:
+¿Y por que importa esto? Porque **cada vez que tu componente se renderiza**, las funciones y objetos que escribes *dentro* de el se **crean de nuevo**. Son referencias nuevas en cada render:
 
 ```tsx
 function ListaHabitos({ habitos }) {
@@ -101,17 +101,17 @@ function ListaHabitos({ habitos }) {
 }
 ```
 
-Para *ti*, `onToggle` "es la misma funcion". Para React, es una referencia distinta en cada render. Y eso, como veras, anula los trucos de memorizacion si no tienes cuidado. Guarda esta idea: vamos a volver a ella.
+Para *ti*, `onToggle` "es la misma funcion de siempre". Para React, es una referencia distinta en cada render. Y eso, como veras enseguida, echa por tierra los trucos de memorizacion si no andas con ojo. Guarda esta idea en el bolsillo: vamos a volver a ella.
 
 ---
 
 ## 4. `React.memo` — memorizar un componente
 
 > ### 🟦 ¿Que significa? — *Memorizar (memoization)*
-> **Memorizar** es **guardar un resultado** para reutilizarlo cuando las entradas no cambian, en vez de calcularlo otra vez. Es como cuando anotas el resultado de una suma dificil en un papel para no repetirla. En React, las tres herramientas de este capitulo son formas de memorizar: un componente, un calculo o una funcion.
+> **Memorizar** es **guardar un resultado** para reutilizarlo cuando las entradas no cambian, en vez de calcularlo otra vez. Es como cuando apuntas en un papel el resultado de una suma dificil para no tener que rehacerla. En React, las tres herramientas de este capitulo son maneras de memorizar: un componente, un calculo o una funcion.
 
 > ### 🟦 ¿Que significa? — *`React.memo`*
-> **`React.memo`** envuelve un componente y le dice a React: "si las **props** de este componente no cambiaron, **no lo re-renderices** aunque su padre si se haya re-renderizado". Sirve para evitar re-renders inutiles de hijos. Lo aplicarias en **RachaSimple** a una `HabitCard` que aparece muchas veces en una lista y cuyas props casi nunca cambian.
+> **`React.memo`** envuelve un componente y le da a React esta orden: "si las **props** de este componente no cambiaron, **no lo re-renderices** aunque su padre si se haya re-renderizado". Sirve para ahorrarte re-renders inutiles de los hijos. Lo aplicarias en **RachaSimple** a una `HabitCard` que aparece muchas veces en una lista y cuyas props casi nunca cambian.
 
 ```tsx
 // RachaSimple — components/HabitCard.tsx
@@ -136,22 +136,22 @@ function HabitCard({ habito, onToggle }: HabitCardProps) {
 export default memo(HabitCard);
 ```
 
-Sin `memo`, cada vez que `Dashboard` se re-renderiza (por ejemplo al cambiar un filtro), **todas** las `HabitCard` se re-renderizan. Con `memo`, React compara las props nuevas con las anteriores; si son iguales, **se salta** el render de esa tarjeta.
+Sin `memo`, cada vez que `Dashboard` se re-renderiza (al cambiar un filtro, por ejemplo) se re-renderizan **todas** las `HabitCard`. Con `memo`, React compara las props nuevas con las anteriores; si son iguales, **se salta** el render de esa tarjeta.
 
 > ### ⚠️ Cuidado
-> `React.memo` compara las props **por referencia** (lo que vimos en la seccion 3). Si le pasas a la tarjeta una funcion `onToggle` que se crea nueva en cada render del padre, `memo` vera "una prop distinta" cada vez y **no servira de nada**. Por eso `memo` casi siempre necesita la ayuda de `useCallback` y `useMemo` para las props que sean funciones u objetos. Esto es lo que mas confunde a la gente — y la razon de las siguientes secciones.
+> `React.memo` compara las props **por referencia** (justo lo que vimos en la seccion 3). Si le pasas a la tarjeta una funcion `onToggle` que se crea nueva en cada render del padre, `memo` vera "una prop distinta" cada vez y **no servira de nada**. Por eso `memo` casi siempre va de la mano de `useCallback` y `useMemo` para las props que sean funciones u objetos. Esto es lo que mas lia a la gente, y es el motivo de las dos secciones que vienen.
 
 > ### 🔎 En tu codigo
-> En **RachaSimple**, una `HabitCard` dentro de una lista es buena candidata a `memo` *si* la lista es larga y el padre se re-renderiza seguido. Si solo tienes 4 habitos, `memo` no aporta nada notable: dejalo simple.
+> En **RachaSimple**, una `HabitCard` dentro de una lista es buena candidata a `memo` *si* la lista es larga y el padre se re-renderiza a menudo. Si solo tienes 4 habitos, `memo` no te aporta nada que se note: dejalo simple.
 
 ---
 
 ## 5. `useCallback` — memorizar una funcion
 
-Ahora resolvamos el problema que dejo `memo`: las funciones que se crean nuevas en cada render.
+Vamos ahora a resolver el lio que dejo abierto `memo`: esas funciones que se crean nuevas en cada render.
 
 > ### 🟦 ¿Que significa? — *`useCallback`*
-> **`useCallback`** es un Hook que **guarda la misma referencia de una funcion** entre renders, mientras sus dependencias no cambien. Asi, en vez de crear una funcion nueva cada vez, React te devuelve la *misma* de antes. Sirve para que las funciones que pasas como props a un hijo con `memo` no rompan la memorizacion. En **RachaSimple** lo usarias para el `onToggle` que pasas a cada `HabitCard`.
+> **`useCallback`** es un Hook que **conserva la misma referencia de una funcion** entre renders, mientras sus dependencias no cambien. Asi, en vez de fabricar una funcion nueva cada vez, React te devuelve la *misma* de antes. Sirve para que las funciones que pasas como props a un hijo con `memo` no rompan la memorizacion. En **RachaSimple** lo usarias para el `onToggle` que le pasas a cada `HabitCard`.
 
 ```tsx
 // RachaSimple — Dashboard.tsx
@@ -178,20 +178,20 @@ function Dashboard() {
 ```
 
 > ### 🟦 ¿Que significa? — *Array de dependencias*
-> El **array de dependencias** es el segundo argumento de `useCallback` (y de `useMemo` y `useEffect`): la lista de valores que, si cambian, hacen que React **vuelva a crear** la funcion/calculo. Si pones `[]`, nunca se recrea. Si pones `[filtro]`, se recrea cuando `filtro` cambie. Sirve para decirle a React *de que depende* tu funcion. En **Faro**, una funcion que filtra proyectos por estado tendria `[estado]` en su array.
+> El **array de dependencias** es el segundo argumento de `useCallback` (y tambien de `useMemo` y `useEffect`): la lista de valores que, si cambian, hacen que React **vuelva a crear** la funcion o el calculo. Si pones `[]`, no se recrea nunca. Si pones `[filtro]`, se recrea cuando `filtro` cambie. Sirve para decirle a React *de que depende* tu funcion. En **Faro**, una funcion que filtra proyectos por estado llevaria `[estado]` en su array.
 
 > ### ⚠️ Cuidado
-> El array de dependencias debe incluir **todo** lo que la funcion use de fuera (props, estado, otras variables). Si lo dejas incompleto, tu funcion puede quedarse usando un valor **viejo** (un bug llamado *stale closure*, "cierre rancio"). El plugin de ESLint `react-hooks` te avisa de dependencias faltantes — hazle caso. En **Faro** esto importa porque un filtro con dependencias mal puestas mostraria proyectos equivocados.
+> El array de dependencias tiene que incluir **todo** lo que la funcion use de fuera (props, estado, otras variables). Si lo dejas a medias, tu funcion puede quedarse usando un valor **viejo** (un bug que se llama *stale closure*, o "cierre rancio"). El plugin de ESLint `react-hooks` te avisa cuando faltan dependencias, asi que hazle caso. En **Faro** esto pesa de verdad, porque un filtro con las dependencias mal puestas te mostraria proyectos que no son.
 
 > ### 💡 Tip
-> `useCallback` **solo vale la pena** cuando esa funcion se pasa como prop a un componente memorizado (`memo`) o es dependencia de otro Hook. Envolver en `useCallback` una funcion que solo usa un `onClick` normal de un boton no aporta nada — es ruido. Recuerda: `useCallback` existe *para no romper* a `memo`.
+> `useCallback` **solo merece la pena** cuando esa funcion se pasa como prop a un componente memorizado (`memo`) o es dependencia de otro Hook. Envolver en `useCallback` una funcion que solo alimenta un `onClick` normalito de un boton no aporta nada: es ruido. No lo olvides: `useCallback` existe *para no romper* a `memo`.
 
 ---
 
 ## 6. `useMemo` — memorizar un calculo
 
 > ### 🟦 ¿Que significa? — *`useMemo`*
-> **`useMemo`** es un Hook que **guarda el resultado de un calculo** entre renders, y solo lo vuelve a calcular si sus dependencias cambian. Sirve para dos cosas: (1) evitar repetir un calculo **pesado** en cada render, y (2) mantener **estable la referencia** de un objeto o array que pasas como prop. En **Faro** lo usarias para no recalcular en cada render la lista ordenada de proyectos o un porcentaje de progreso costoso.
+> **`useMemo`** es un Hook que **guarda el resultado de un calculo** entre renders, y solo lo vuelve a calcular cuando sus dependencias cambian. Sirve para dos cosas: (1) no repetir un calculo **pesado** en cada render, y (2) mantener **estable la referencia** de un objeto o array que pasas como prop. En **Faro** lo usarias para no recalcular en cada render la lista ordenada de proyectos o un porcentaje de progreso costoso.
 
 ```tsx
 // Faro — components/ListaProyectos.tsx (Next.js + React 19)
@@ -215,9 +215,9 @@ function ListaProyectos({ proyectos, busqueda }: Props) {
 }
 ```
 
-Sin `useMemo`, ese `filter` + `sort` se ejecutaria en **cada** render de `ListaProyectos`, aunque solo hubiera cambiado algo sin relacion. Con `useMemo`, si `proyectos` y `busqueda` siguen igual, React **reutiliza** la lista calculada antes.
+Sin `useMemo`, ese `filter` + `sort` se ejecutaria en **cada** render de `ListaProyectos`, aunque lo que hubiera cambiado fuese algo sin la menor relacion. Con `useMemo`, si `proyectos` y `busqueda` siguen igual, React **reutiliza** la lista que ya calculo antes.
 
-El segundo uso de `useMemo` es sutil pero util: **estabilizar referencias de objetos/arrays** que pasas a un hijo con `memo`.
+El segundo uso de `useMemo` es mas sutil, pero util de tener a mano: **estabilizar referencias de objetos y arrays** que pasas a un hijo con `memo`.
 
 ```tsx
 // Faro — sin useMemo, 'config' es un objeto nuevo cada render
@@ -228,28 +228,28 @@ const config = useMemo(() => ({ tema: "claro", compacto: true }), []); // ✅
 ```
 
 > ### 💡 Tip
-> Diferencia rapida para no confundirte: **`useMemo` memoriza un VALOR** (lo que devuelve la funcion) y **`useCallback` memoriza la FUNCION en si**. De hecho, `useCallback(fn, deps)` es lo mismo que `useMemo(() => fn, deps)`. Si lo recuerdas asi, nunca los mezclas.
+> Una forma rapida de no confundirlos: **`useMemo` memoriza un VALOR** (lo que devuelve la funcion) y **`useCallback` memoriza la FUNCION en si misma**. De hecho, `useCallback(fn, deps)` es lo mismo que `useMemo(() => fn, deps)`. Si lo recuerdas asi, no los mezclas mas.
 
 > ### 🔎 En tu codigo
-> En **Faro**, el progreso de un proyecto es "hibrido" (milestones + IA). Si calcularlo implica recorrer milestones y combinar con datos del analisis, ese calculo dentro del componente de la tarjeta es un candidato natural a `useMemo` con dependencias `[milestones, analisisIA]`. Si solo es una resta de dos numeros, **no** lo memorices: no vale el costo.
+> En **Faro**, el progreso de un proyecto es "hibrido" (milestones + IA). Si calcularlo supone recorrer milestones y combinarlos con datos del analisis, ese calculo dentro del componente de la tarjeta es un candidato natural a `useMemo` con dependencias `[milestones, analisisIA]`. Si en cambio es una simple resta de dos numeros, **no** lo memorices: no compensa el coste.
 
 ---
 
 ## 7. TanStack Query y Server Components: ya optimizan por ti
 
-Bit quiere que ahorres trabajo. Tus dos repos ya tienen herramientas que reducen muchos renders sin que toques `memo`.
+Bit quiere que te ahorres trabajo. Tus dos repos ya traen herramientas que reducen un monton de renders sin que tu toques `memo`.
 
 > ### 🟦 ¿Que significa? — *Cache (de datos)*
-> Una **cache** es un almacen temporal de resultados ya obtenidos para no volver a pedirlos. En **RachaSimple**, **TanStack Query** mantiene en cache los habitos que trajo de Supabase: si vuelves a la pantalla, te los da de su memoria en vez de re-consultar, y solo re-renderiza cuando los datos *de verdad* cambian. Eso ya te evita renders innecesarios sin que escribas `useMemo`.
+> Una **cache** es un almacen temporal de resultados ya obtenidos para no tener que volver a pedirlos. En **RachaSimple**, **TanStack Query** guarda en cache los habitos que trajo de Supabase: si vuelves a esa pantalla, te los da de su memoria en lugar de re-consultar, y solo re-renderiza cuando los datos cambian *de verdad*. Eso ya te ahorra renders innecesarios sin escribir ni un `useMemo`.
 
 > ### 🟦 ¿Que significa? — *Server Component*
-> Un **Server Component** es un componente de React que se ejecuta **en el servidor** y nunca se re-renderiza en el navegador del usuario. **Faro** (Next.js 15 + React 19) los usa por defecto. Como no viven en el cliente, no tienen el "problema" de re-renders que trata este capitulo: `memo`/`useMemo`/`useCallback` solo aplican a los componentes de cliente (los que llevan `"use client"`). Sirve para mover trabajo fuera del navegador.
+> Un **Server Component** es un componente de React que corre **en el servidor** y nunca se re-renderiza en el navegador del usuario. **Faro** (Next.js 15 + React 19) los usa por defecto. Como no viven en el cliente, no sufren el "problema" de re-renders del que trata este capitulo: `memo`/`useMemo`/`useCallback` solo aplican a los componentes de cliente (los que llevan `"use client"`). Sirven para mover trabajo fuera del navegador.
 
 > ### 💡 Tip
-> Antes de alcanzar `useMemo` en **Faro**, pregunta: ¿este componente necesita ser de cliente? Mucho codigo que parece "necesitar optimizacion" simplemente no deberia ejecutarse en el navegador. En **RachaSimple**, antes de memorizar, confia en que TanStack Query ya esta evitando consultas y renders de mas.
+> Antes de echar mano de `useMemo` en **Faro**, preguntate: ¿este componente necesita de verdad ser de cliente? Mucho codigo que parece "pedir optimizacion" sencillamente no deberia estar corriendo en el navegador. Y en **RachaSimple**, antes de memorizar nada, confia en que TanStack Query ya esta evitando consultas y renders de sobra.
 
 > ### ⚠️ Cuidado
-> `useMemo`, `useCallback` y los Hooks en general **solo funcionan en componentes de cliente**. Si intentas usarlos en un Server Component de **Faro** sin `"use client"` arriba del archivo, tendras un error. No es un detalle de rendimiento: es una regla de donde corre el codigo.
+> `useMemo`, `useCallback` y los Hooks en general **solo funcionan en componentes de cliente**. Si intentas usarlos en un Server Component de **Faro** sin el `"use client"` arriba del archivo, te saltara un error. Y no es un detalle de rendimiento: es una regla sobre donde corre el codigo.
 
 ---
 
@@ -264,10 +264,10 @@ Bit quiere que ahorres trabajo. Tus dos repos ya tienen herramientas que reducen
 7. **Aprovecha lo que ya tienes:** TanStack Query en RachaSimple y Server Components en Faro te ahorran muchisima optimizacion manual.
 
 > ### 💡 Tip
-> Un truco mental: las tres herramientas tienen un **costo** (memoria + comparaciones). Solo valen la pena cuando lo que evitan cuesta **mas** que ese costo. Para trabajo barato, memorizar es como pagar por guardar algo que no te importaba perder.
+> Un truco mental: las tres herramientas tienen un **coste** (memoria + comparaciones). Solo merecen la pena cuando lo que evitan cuesta **mas** que ese coste. Para trabajo barato, memorizar es como pagar por guardar algo que no te importaba perder.
 
 > ### 🔎 En tu codigo
-> Revisa **RachaSimple** y **Faro** con esta pregunta honesta: "¿hay algo que se sienta lento *de verdad*?". Si la respuesta es no, el mejor uso de este capitulo es **entender** los conceptos y *no* tocar nada. Saber cuando NO optimizar es tan valioso como saber optimizar.
+> Repasa **RachaSimple** y **Faro** con esta pregunta honesta: "¿hay algo que se sienta lento *de verdad*?". Si la respuesta es no, el mejor uso que le puedes dar a este capitulo es **entender** los conceptos y *no* tocar nada. Saber cuando NO optimizar vale tanto como saber optimizar.
 
 ---
 
@@ -308,4 +308,4 @@ Bit quiere que ahorres trabajo. Tus dos repos ya tienen herramientas que reducen
 
 ---
 
-> Lo lograste. Lo mas importante que te llevas no es como escribir `memo`, sino **cuando** hacerlo: muchas veces × mucho trabajo, y siempre despues de medir. Un buen desarrollador de React escribe codigo simple primero y optimiza solo donde el Profiler le pide. Nos vemos en el siguiente capitulo. — Bit 🐾
+> Lo lograste. Lo mas valioso que te llevas no es como escribir `memo`, sino **cuando** hacerlo: muchas veces × mucho trabajo, y siempre despues de medir. Un buen desarrollador de React escribe codigo simple primero y optimiza solo donde el Profiler se lo pide. Nos vemos en el siguiente capitulo. — Bit 🐾

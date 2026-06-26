@@ -19,89 +19,95 @@
 <main class="contenedor">
 <h1 id="capitulo-01-que-es-javascript">Capítulo 01 — ¿Qué es JavaScript?</h1>
 <blockquote>
-<p>Llegó el momento de programar de verdad. En el Módulo 00 viste que casi todo programa usa
-tres ingredientes: <strong>datos, decisiones y repeticiones</strong>. JavaScript es donde por fin los
-escribes. Empecemos por qué es y por los datos (las variables).</p>
+<p>Aquí empieza la programación de verdad. En el Módulo 00 viste que casi cualquier programa
+se arma con tres ingredientes: <strong>datos, decisiones y repeticiones</strong>. JavaScript es donde por
+fin los escribes con tus propias manos. Arranquemos por lo básico: qué es y cómo se guardan
+los datos (las variables).</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-javascript-y-donde-vive">1. Qué es JavaScript y dónde vive</h2>
 <blockquote class="def">
 <h3 id="que-significa-javascript-js">🟦 ¿Qué significa? — <em>JavaScript (JS)</em></h3>
-<p><strong>JavaScript</strong> es un <strong>lenguaje de programación</strong> (este sí, a diferencia de HTML/CSS) que da
-<strong>comportamiento</strong> a las páginas web. Originalmente corría solo dentro del <strong>navegador</strong>, para
-hacer las páginas interactivas. Hoy también corre en servidores (con Node.js) y en apps.
-<strong>¿Para qué sirve?</strong> Para todo lo que "reacciona": clics, formularios que validan, contenido
-que aparece, datos que se piden a un servidor, animaciones, juegos.</p>
+<p><strong>JavaScript</strong> es un <strong>lenguaje de programación</strong> de verdad (este sí, al contrario que
+HTML/CSS) y su trabajo es darle <strong>comportamiento</strong> a las páginas web. Al principio solo vivía
+dentro del <strong>navegador</strong>, donde se encargaba de que las páginas reaccionaran. Hoy hace mucho
+más: también corre en servidores (con Node.js) y en aplicaciones.
+<strong>¿Para qué sirve?</strong> Para todo lo que "responde": clics, formularios que se validan, contenido
+que aparece de repente, datos que se piden a un servidor, animaciones, juegos.</p>
 <h3 id="cuidado-javascript-no-es-java">⚠️ Cuidado — JavaScript NO es Java</h3>
-<p>A pesar del nombre, <strong>JavaScript y Java son lenguajes distintos</strong>, tan diferentes como "carro"
-y "carpa". El nombre fue una decisión de marketing de los años 90. Si buscas ayuda, busca
-"JavaScript", no "Java".</p>
+<p>Aunque el nombre confunda, <strong>JavaScript y Java son dos lenguajes distintos</strong>, tan parecidos
+como "carro" y "carpa". Lo del nombre fue una jugada de marketing de los años 90, nada más.
+Así que cuando busques ayuda, busca "JavaScript", no "Java".</p>
 <h3 id="que-significa-el-motor-y-la-consola">🟦 ¿Qué significa? — <em>El motor y la consola</em></h3>
-<p>El navegador trae un <strong>motor de JavaScript</strong> que ejecuta tu código. Y trae una <strong>consola</strong>:
-una ventana (dentro de las DevTools, <code>F12</code> → pestaña <strong>Console</strong>) donde puedes escribir
-JavaScript y ver resultados al instante. Es tu laboratorio para practicar.</p>
+<p>El navegador incluye un <strong>motor de JavaScript</strong>, que es lo que ejecuta tu código. Y trae
+también una <strong>consola</strong>: una ventanita (dentro de las DevTools, <code>F12</code> → pestaña <strong>Console</strong>)
+donde puedes escribir JavaScript y ver el resultado al momento. Piénsala como tu laboratorio
+para practicar.</p>
 <h3 id="que-significa-consolelog">🟦 ¿Qué significa? — <em><code>console.log()</code></em></h3>
-<p><code>console.log(...)</code> es la instrucción para <strong>mostrar un valor en la consola</strong>. Es la
-herramienta número uno para ver qué está pasando en tu código (lo que en otros lenguajes
-sería "imprimir"):
+<p><code>console.log(...)</code> es la instrucción que usas para <strong>mostrar un valor en la consola</strong>. Es,
+con diferencia, tu mejor amiga para ver qué está pasando dentro de tu código (lo que en otros
+lenguajes llamarían "imprimir"):
 <code>javascript
 console.log("Hola, mundo");   // muestra: Hola, mundo
 console.log(2 + 3);            // muestra: 5</code>
 <strong>Pruébalo ya:</strong> abre cualquier página, pulsa <code>F12</code> → Console, escribe <code>console.log("hola")</code>
-y pulsa Enter. Acabas de ejecutar JavaScript.</p>
+y dale a Enter. Listo, acabas de ejecutar JavaScript.</p>
 </blockquote>
 <hr />
 <h2 id="2-como-se-conecta-js-a-una-pagina">2. Cómo se conecta JS a una página</h2>
-<p>Igual que el CSS, el JavaScript se suele poner en un <strong>archivo aparte</strong> (<code>.js</code>) y se enlaza
-desde el HTML, normalmente justo antes de cerrar el <code>&lt;body&gt;</code>:</p>
+<p>Como pasaba con el CSS, lo normal es que el JavaScript viva en su propio <strong>archivo aparte</strong>
+(<code>.js</code>) y se enlace desde el HTML, casi siempre justo antes de cerrar el <code>&lt;body&gt;</code>:</p>
 <pre><code class="language-html">  &lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;
 &lt;/body&gt;
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-la-etiqueta-script">🟦 ¿Qué significa? — <em>La etiqueta <code>&lt;script&gt;</code></em></h3>
-<p><code>&lt;script&gt;</code> carga y ejecuta JavaScript en la página. Con <code>src</code> apunta a un archivo externo
-(recomendado). Se coloca al final del <code>&lt;body&gt;</code> para que el HTML ya esté cargado cuando el
-script intente manipularlo (lo entenderás en el capítulo 04). <strong>¿Dónde se usa en tu
-proyecto?</strong> Tu <code>index.html</code> carga <code>main.js</code> justo así.</p>
+<p><code>&lt;script&gt;</code> es la etiqueta que carga y ejecuta JavaScript en la página. Con <code>src</code> la haces
+apuntar a un archivo externo (lo más recomendable). Se pone al final del <code>&lt;body&gt;</code> para que,
+cuando el script intente tocar el HTML, ese HTML ya esté cargado (le verás todo el sentido
+en el capítulo 04). <strong>¿Dónde se usa en tu proyecto?</strong> Tu <code>index.html</code> carga <code>main.js</code>
+exactamente así.</p>
 </blockquote>
 <hr />
 <h2 id="3-variables-cajitas-con-nombre-para-guardar-datos">3. Variables: cajitas con nombre para guardar datos</h2>
 <blockquote class="def">
 <h3 id="que-significa-variable">🟦 ¿Qué significa? — <em>Variable</em></h3>
 <p>Una <strong>variable</strong> es un espacio en memoria, <strong>con un nombre</strong>, donde guardas un dato para
-usarlo o cambiarlo después. (Ya viste el concepto en el Módulo 00; aquí lo escribes.)
-En JavaScript moderno se crean con <code>let</code> o <code>const</code>:
+volver a usarlo o cambiarlo más tarde. (El concepto ya lo viste en el Módulo 00; aquí toca
+escribirlo.) En el JavaScript de hoy se crean con <code>let</code> o <code>const</code>:
 <code>javascript
 let edad = 25;
 const nombre = "Edwar";</code></p>
 <h3 id="que-significa-let-vs-const-y-por-que-no-var">🟦 ¿Qué significa? — <em><code>let</code> vs. <code>const</code> (y por qué no <code>var</code>)</em></h3>
 <ul>
-<li><code>const</code> → una variable <strong>constante</strong>: su valor <strong>no cambiará</strong>. Úsala por defecto.</li>
+<li><code>const</code> → una variable <strong>constante</strong>: su valor <strong>no va a cambiar</strong>. Esta es tu opción por
+  defecto.</li>
 <li><code>let</code> → una variable que <strong>sí podrá cambiar</strong> de valor más adelante.</li>
-<li><code>var</code> → la forma <strong>antigua</strong>; tiene comportamientos confusos. <strong>No la uses</strong> en código nuevo
-  (la verás en código viejo).
+<li><code>var</code> → la forma <strong>antigua</strong>, con comportamientos que despistan. <strong>No la uses</strong> en código
+  nuevo (aunque te la cruzarás en código viejo).
 <code>javascript
 const pi = 3.14;     // nunca cambia
 let contador = 0;    // cambiará
 contador = contador + 1;   // ahora vale 1</code>
-<strong>Regla práctica:</strong> usa <code>const</code> siempre; cámbiala a <code>let</code> solo cuando de verdad necesites
-reasignar el valor. Esto evita errores.</li>
+<strong>Regla práctica:</strong> empieza siempre con <code>const</code> y cámbiala a <code>let</code> solo cuando de verdad
+necesites reasignar el valor. Esto te ahorra errores.</li>
 </ul>
 <h3 id="que-significa-asignacion">🟦 ¿Qué significa? — <em>Asignación (<code>=</code>)</em></h3>
-<p>El signo <code>=</code> <strong>no</strong> significa "igual" como en matemáticas: significa "<strong>guarda</strong> el valor de
-la derecha en la variable de la izquierda". <code>edad = 25</code> se lee "guarda 25 en edad". (Para
-comparar igualdad se usa <code>===</code>, que verás en el próximo capítulo.)</p>
+<p>El signo <code>=</code> <strong>no</strong> quiere decir "igual" como en matemáticas. Aquí significa "<strong>guarda</strong> el
+valor de la derecha en la variable de la izquierda". Así que <code>edad = 25</code> se lee "guarda 25 en
+edad". (Para comparar si dos cosas son iguales se usa <code>===</code>, que llega en el próximo capítulo.)</p>
 <h3 id="tip-nombres-de-variables">💡 Tip — Nombres de variables</h3>
 <ul>
-<li>Usa nombres <strong>descriptivos</strong>: <code>precioTotal</code>, no <code>x</code>.</li>
-<li>Se escriben en <strong>camelCase</strong>: primera palabra en minúscula y las siguientes con mayúscula
-  inicial (<code>nombreUsuario</code>, <code>totalConIva</code>). Es la convención en JavaScript.</li>
-<li>No pueden empezar con número ni tener espacios.</li>
+<li>Pon nombres <strong>descriptivos</strong>: <code>precioTotal</code>, no <code>x</code>.</li>
+<li>Se escriben en <strong>camelCase</strong>: la primera palabra en minúscula y las siguientes con mayúscula
+  inicial (<code>nombreUsuario</code>, <code>totalConIva</code>). Es la convención de JavaScript.</li>
+<li>No pueden empezar con número ni llevar espacios.</li>
 </ul>
 </blockquote>
 <hr />
 <h2 id="4-los-tipos-de-dato">4. Los tipos de dato</h2>
-<p>Los datos que guardas son de distintos <strong>tipos</strong>. Estos son los que usarás siempre:</p>
+<p>Los datos que guardas no son todos iguales: cada uno es de un <strong>tipo</strong>. Estos son los que vas a
+manejar a diario:</p>
 <blockquote class="def">
 <h3 id="que-significa-tipos-de-dato-basicos">🟦 ¿Qué significa? — <em>Tipos de dato básicos</em></h3>
 <table>
@@ -149,30 +155,38 @@ comparar igualdad se usa <code>===</code>, que verás en el próximo capítulo.)
 <td><code>{ nombre: "Edwar" }</code></td>
 </tr>
 <tr>
-<td>Los <strong>arrays</strong> y <strong>objetos</strong> los veremos a fondo en el capítulo 05; por ahora reconócelos.</td>
+<td>Los <strong>arrays</strong> y <strong>objetos</strong> los veremos con calma en el capítulo 05; por ahora basta con que</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>los reconozcas.</td>
 <td></td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <h3 id="que-significa-string-cadena-de-texto">🟦 ¿Qué significa? — <em>String (cadena de texto)</em></h3>
-<p>Un <strong>string</strong> es texto. Va entre comillas dobles <code>"..."</code>, simples <code>'...'</code>, o invertidas
-<code>`...`</code> (estas últimas son especiales: las verás abajo). Ejemplos: <code>"correo@ejemplo.com"</code>.</p>
+<p>Un <strong>string</strong> es texto, sin más. Va entre comillas dobles <code>"..."</code>, simples <code>'...'</code> o
+invertidas <code>`...`</code> (estas últimas tienen su truco; las verás abajo). Por ejemplo:
+<code>"correo@ejemplo.com"</code>.</p>
 <h3 id="que-significa-booleano">🟦 ¿Qué significa? — <em>Booleano</em></h3>
-<p>Un <strong>booleano</strong> solo tiene dos valores: <code>true</code> (verdadero) o <code>false</code> (falso). Es la base de
-las <strong>decisiones</strong>: "¿el usuario está logueado? → true/false". Lo usarás en cada <code>if</code>.</p>
+<p>Un <strong>booleano</strong> solo puede valer dos cosas: <code>true</code> (verdadero) o <code>false</code> (falso). Es la base
+de las <strong>decisiones</strong>: "¿el usuario está logueado? → true/false". Lo usarás en cada <code>if</code> que
+escribas.</p>
 <h3 id="que-significa-template-strings-plantillas-de-texto">🟦 ¿Qué significa? — <em>Template strings (plantillas de texto)</em></h3>
-<p>Con las comillas invertidas <code>`</code> puedes <strong>insertar variables dentro de un texto</strong> usando
-<code>${...}</code>. Es comodísimo:
+<p>Con las comillas invertidas <code>`</code> puedes <strong>meter variables dentro de un texto</strong> usando
+<code>${...}</code>. Es de lo más cómodo:
 <code>javascript
 const nombre = "Edwar";
 const saludo = `Hola, ${nombre}. ¡Bienvenido!`;
 console.log(saludo);   // muestra: Hola, Edwar. ¡Bienvenido!</code>
-Sin esto tendrías que "pegar" textos con <code>+</code> ("Hola, " + nombre + "."), más engorroso.</p>
+Sin esto te tocaría "pegar" textos con <code>+</code> ("Hola, " + nombre + "."), que es mucho más
+engorroso.</p>
 </blockquote>
 <hr />
 <h2 id="5-un-primer-programa-completo">5. Un primer programa completo</h2>
-<p>Junta todo: variables, tipos, template string y <code>console.log</code>:</p>
+<p>Vamos a juntarlo todo: variables, tipos, un template string y <code>console.log</code>:</p>
 <pre><code class="language-javascript">const nombre = &quot;Edwar&quot;;
 const edad = 25;
 const esProgramador = true;
@@ -187,7 +201,7 @@ console.log(mensaje);
 // Comentario de una línea
 /* Comentario
    de varias líneas */</code>
-(En HTML era <code>&lt;!-- --&gt;</code>, en CSS <code>/* */</code>; en JS la forma rápida es <code>//</code>.)</p>
+(En HTML era <code>&lt;!-- --&gt;</code>, en CSS <code>/* */</code>; en JS la forma rápida de comentar una línea es <code>//</code>.)</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
@@ -201,7 +215,7 @@ console.log(mensaje);
 </ul>
 <hr />
 <h2 id="ejercicios">🧪 Ejercicios</h2>
-<p>Puedes hacer varios <strong>directamente en la consola</strong> del navegador (<code>F12</code> → Console), sin instalar nada.</p>
+<p>Varios de estos los puedes hacer <strong>directamente en la consola</strong> del navegador (<code>F12</code> → Console), sin instalar nada.</p>
 <ol>
 <li><strong>Tipos.</strong> Di de qué tipo es cada valor: <code>"42"</code>, <code>42</code>, <code>true</code>, <code>[1,2,3]</code>, <code>null</code>,
    <code>{ x: 1 }</code>.</li>

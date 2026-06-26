@@ -19,34 +19,37 @@
 <main class="contenedor">
 <h1 id="capitulo-01-que-es-una-base-de-datos">Capítulo 01 — ¿Qué es una base de datos?</h1>
 <blockquote>
-<p>Toda app seria necesita <strong>recordar</strong> cosas entre sesiones: tus hábitos, tus proyectos, tu
-perfil. Ese "recuerdo permanente" es la base de datos. Empecemos por la idea, que es más
-sencilla de lo que suena: en el fondo, es <strong>una tabla</strong> (como las de una hoja de cálculo).</p>
+<p>Cualquier app que se tome en serio tiene que <strong>recordar</strong> cosas de una sesión a otra: tus
+hábitos, tus proyectos, tu perfil. Ese "recuerdo permanente" es la base de datos. Y antes de
+que te asuste la palabra, te adelanto algo: la idea de fondo es bastante simple. En el fondo,
+es <strong>una tabla</strong>, como las de una hoja de cálculo.</p>
 </blockquote>
 <hr />
 <h2 id="1-el-problema-los-datos-que-no-se-pierden">1. El problema: los datos que no se pierden</h2>
-<p>En el Módulo 03, una variable guardaba un dato… hasta que recargabas la página y <strong>se borraba</strong>.
-Para que tus hábitos sigan ahí mañana, en otro dispositivo, se necesita guardarlos en un lugar
-permanente y central.</p>
+<p>¿Te acuerdas del Módulo 03? Allí una variable guardaba un dato… pero recargabas la página y
+<strong>se borraba</strong>. Para que tus hábitos sigan ahí mañana, y para que aparezcan también cuando abras
+la app en otro dispositivo, hace falta guardarlos en un sitio permanente y central.</p>
 <blockquote class="def">
 <h3 id="que-significa-base-de-datos">🟦 ¿Qué significa? — <em>Base de datos</em></h3>
 <p>Una <strong>base de datos</strong> es un sistema para <strong>guardar, organizar y consultar</strong> información de
-forma permanente y eficiente. No es un simple archivo: está pensada para manejar muchísimos
-datos, buscarlos rápido, y que varias personas los usen a la vez sin pisarse.</p>
+forma permanente y eficiente. No es un simple archivo: está pensada para manejar cantidades
+enormes de datos, encontrarlos rápido y dejar que varias personas trabajen con ellos a la vez
+sin pisarse.</p>
 <h3 id="que-significa-persistencia">🟦 ¿Qué significa? — <em>Persistencia</em></h3>
-<p><strong>Persistir</strong> un dato es guardarlo de forma que <strong>sobreviva</strong> al cierre del programa. La RAM
-(Módulo 00) es temporal; la base de datos es persistente. "Persistencia" = que los datos
-permanezcan.</p>
+<p><strong>Persistir</strong> un dato es guardarlo de manera que <strong>sobreviva</strong> al cierre del programa. La RAM
+(Módulo 00) es temporal: se vacía al apagar. La base de datos es lo contrario, permanente.
+Cuando alguien dice "persistencia", se refiere justo a eso: a que los datos se queden.</p>
 </blockquote>
 <hr />
 <h2 id="2-la-idea-central-tablas-filas-y-columnas">2. La idea central: tablas, filas y columnas</h2>
-<p>La base de datos más común es la <strong>relacional</strong>, y su unidad es la <strong>tabla</strong>. Si has visto una
-hoja de cálculo (Excel, Google Sheets), ya entiendes el 80%.</p>
+<p>La base de datos más común es la <strong>relacional</strong>, y su pieza básica es la <strong>tabla</strong>. Si alguna vez
+has trasteado con una hoja de cálculo (Excel, Google Sheets), ya tienes el 80% andado.</p>
 <blockquote class="def">
 <h3 id="que-significa-tabla-fila-y-columna">🟦 ¿Qué significa? — <em>Tabla, fila y columna</em></h3>
 <ul>
-<li>Una <strong>tabla</strong> guarda datos de <strong>un tipo de cosa</strong> (una tabla de hábitos, otra de usuarios).</li>
-<li>Las <strong>columnas</strong> son los <strong>campos</strong> (atributos): nombre, color, meta…</li>
+<li>Una <strong>tabla</strong> guarda datos de <strong>un tipo de cosa</strong>: una tabla para los hábitos, otra para los
+  usuarios.</li>
+<li>Las <strong>columnas</strong> son los <strong>campos</strong> (los atributos): nombre, color, meta…</li>
 <li>Las <strong>filas</strong> (o <strong>registros</strong>) son <strong>cada elemento concreto</strong>: un hábito específico.</li>
 </ul>
 <p>Tabla <code>habitos</code>:
@@ -55,29 +58,30 @@ hoja de cálculo (Excel, Google Sheets), ya entiendes el 80%.</p>
 | 1  | Leer       | 20   | #1B6B6B | 7          |
 | 2  | Ejercicio  | 30   | #D98A3D | 7          |
 | 3  | Meditar    | 10   | #7A5CFF | 9          |</p>
-<p>Cada <strong>fila</strong> es un hábito; cada <strong>columna</strong> un dato de ese hábito. ¿Te suena? Es como la
-<strong>interface <code>Habito</code></strong> del Módulo 05, pero guardada de forma permanente. Esa conexión es clave:
-una fila de la tabla ≈ un objeto en tu código.</p>
+<p>Cada <strong>fila</strong> es un hábito; cada <strong>columna</strong>, un dato de ese hábito. ¿No te resulta familiar?
+Es justo como la <strong>interface <code>Habito</code></strong> del Módulo 05, solo que guardada para siempre. Quédate
+con esta conexión, porque es la clave de todo: una fila de la tabla ≈ un objeto de tu código.</p>
 <h3 id="que-significa-esquema-schema">🟦 ¿Qué significa? — <em>Esquema (schema)</em></h3>
 <p>El <strong>esquema</strong> es la <strong>definición</strong> de la tabla: qué columnas tiene y de qué <strong>tipo</strong> es cada
-una (texto, número, fecha, booleano). Es el "molde". Define el esquema una vez, y la tabla solo
-aceptará datos que encajen. (Igual que una interface de TypeScript, pero en la base de datos.)</p>
+una (texto, número, fecha, booleano). Piénsalo como el "molde". Lo defines una sola vez, y a
+partir de ahí la tabla solo aceptará datos que encajen en él. Viene a ser una interface de
+TypeScript, pero viviendo dentro de la base de datos.</p>
 </blockquote>
 <hr />
 <h2 id="3-relacional-tablas-que-se-conectan">3. Relacional: tablas que se conectan</h2>
 <blockquote class="def">
 <h3 id="que-significa-base-de-datos-relacional">🟦 ¿Qué significa? — <em>Base de datos relacional</em></h3>
-<p>"Relacional" significa que las tablas se <strong>relacionan</strong> entre sí. En vez de repetir datos, una
-tabla <strong>apunta</strong> a otra. Ejemplo: en lugar de guardar el nombre del usuario en cada hábito,
-guardas su <code>usuario_id</code> (un número que apunta a la fila de ese usuario en la tabla <code>usuarios</code>).
-Así, los datos no se duplican y se mantienen coherentes.</p>
+<p>"Relacional" quiere decir que las tablas se <strong>relacionan</strong> unas con otras. En lugar de repetir
+los mismos datos una y otra vez, una tabla <strong>apunta</strong> a otra. Por ejemplo: en vez de guardar el
+nombre del usuario en cada hábito, guardas su <code>usuario_id</code>, un número que apunta a la fila de
+ese usuario en la tabla <code>usuarios</code>. Así los datos no se duplican y se mantienen coherentes.</p>
 <h3 id="que-significa-clave-primaria-y-clave-foranea">🟦 ¿Qué significa? — <em>Clave primaria y clave foránea</em></h3>
 <ul>
 <li>La <strong>clave primaria</strong> (<em>primary key</em>) es la columna que <strong>identifica de forma única</strong> cada
-  fila, normalmente un <code>id</code>. No se repite: como una cédula.</li>
+  fila, casi siempre un <code>id</code>. Nunca se repite: funciona como una cédula.</li>
 <li>La <strong>clave foránea</strong> (<em>foreign key</em>) es una columna que <strong>apunta a la clave primaria de otra
-  tabla</strong>. El <code>usuario_id</code> de la tabla <code>habitos</code> es una clave foránea hacia <code>usuarios.id</code>.
-Esto crea la "relación". Lo verás a fondo en el capítulo 03.</li>
+  tabla</strong>. El <code>usuario_id</code> de la tabla <code>habitos</code> es una clave foránea que apunta a <code>usuarios.id</code>.
+Esa es exactamente la "relación" de la que hablábamos. Lo verás con calma en el capítulo 03.</li>
 </ul>
 </blockquote>
 <hr />
@@ -85,32 +89,32 @@ Esto crea la "relación". Lo verás a fondo en el capítulo 03.</li>
 <blockquote class="def">
 <h3 id="que-significa-sql">🟦 ¿Qué significa? — <em>SQL</em></h3>
 <p><strong>SQL</strong> (<em>Structured Query Language</em>, "lenguaje de consulta estructurado") es el <strong>idioma
-estándar</strong> para hablar con bases de datos relacionales: pedir datos, agregarlos, cambiarlos,
-borrarlos. Se pronuncia "ese-cu-ele" o "síquel". Casi todas las bases de datos relacionales lo
-entienden (Postgres, MySQL, SQLite…).
-Una consulta SQL se lee casi como inglés:
+estándar</strong> para hablar con las bases de datos relacionales: pedir datos, añadirlos, cambiarlos
+o borrarlos. Se pronuncia "ese-cu-ele" o "síquel", como prefieras. Lo entienden casi todas las
+bases de datos relacionales (Postgres, MySQL, SQLite…).
+Una consulta SQL se lee casi como una frase en inglés:
 <code>sql
 SELECT nombre FROM habitos WHERE usuario_id = 7;</code>
-"Selecciona el nombre, de la tabla hábitos, donde el usuario_id sea 7." Lo aprenderás en el
-próximo capítulo.</p>
+"Selecciona el nombre, de la tabla hábitos, donde el usuario_id sea 7." Le dedicamos el
+próximo capítulo entero.</p>
 <h3 id="que-significa-postgres-postgresql">🟦 ¿Qué significa? — <em>Postgres (PostgreSQL)</em></h3>
-<p><strong>Postgres</strong> es uno de los sistemas de base de datos relacional más potentes y queridos, y es
-<strong>gratis y de código abierto</strong>. Es el que usa <strong>Supabase</strong> por debajo, así que es el que
-alimenta a RachaSimple y Faro. Cuando aprendes SQL con Postgres, aprendes algo que vale en casi
-cualquier trabajo.</p>
+<p><strong>Postgres</strong> es uno de los sistemas de base de datos relacional más capaces y queridos que
+existen, y encima es <strong>gratis y de código abierto</strong>. Es el que usa <strong>Supabase</strong> por debajo, o
+sea que es el motor que alimenta a RachaSimple y a Faro. Lo bueno: cuando aprendes SQL con
+Postgres, aprendes algo que te va a servir en casi cualquier trabajo.</p>
 </blockquote>
 <hr />
 <h2 id="5-base-de-datos-vs-archivo-polypaw-vs-rachasimple">5. Base de datos vs. archivo (PolyPaw vs. RachaSimple)</h2>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Tus apps muestran las dos formas de guardar datos:
-- <strong>PolyPaw</strong> guarda en un <strong>archivo JSON</strong> local (<code>polypaw_db.json</code>). Simple y suficiente para
-  empezar, pero: vive en un solo dispositivo, no maneja bien muchos usuarios a la vez, y buscar
-  es lento si crece.
+<p>Tus propias apps enseñan las dos maneras de guardar datos:
+- <strong>PolyPaw</strong> guarda en un <strong>archivo JSON</strong> local (<code>polypaw_db.json</code>). Es simple y le sobra
+  para empezar, pero tiene sus límites: vive en un único dispositivo, se atasca cuando hay
+  muchos usuarios a la vez y buscar se vuelve lento a medida que crece.
 - <strong>RachaSimple / Faro</strong> guardan en una <strong>base de datos</strong> (Supabase/Postgres): permanente,
   central, multiusuario, con búsquedas rápidas y seguridad por usuario.
-Por eso un proyecto que crece suele <strong>migrar</strong> de "archivo" a "base de datos". Entender ambos te
-deja elegir la herramienta correcta según el caso.</p>
+Por eso, cuando un proyecto crece, lo normal es <strong>migrar</strong> del "archivo" a la "base de datos".
+Conocer las dos opciones es lo que te permite elegir la herramienta adecuada en cada caso.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

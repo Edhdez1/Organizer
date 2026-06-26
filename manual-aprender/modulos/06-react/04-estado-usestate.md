@@ -1,9 +1,9 @@
 # Capítulo 04 — Estado con useState
 
-> Las props son datos que **llegan de afuera** y no cambian. Pero una app viva necesita datos
-> que **cambian con el tiempo**: un contador que sube, un campo que el usuario escribe, un menú
-> que se abre. Eso es el **estado**, y se maneja con tu primer **hook**: `useState`. Es el
-> concepto que hace que React sea "reactivo".
+> Las props son datos que **llegan de afuera** y se quedan quietos. Pero una app viva necesita
+> datos que **cambian con el tiempo**: un contador que sube, un campo que el usuario va llenando,
+> un menú que se abre y se cierra. A eso lo llamamos **estado**, y se maneja con tu primer
+> **hook**: `useState`. Es justo lo que hace que React sea "reactivo".
 
 <p align="center">
   <img src="../../recursos/imagenes/06-react/estado-rerender.png" alt="Bit pulsa un botón y el contador en pantalla cambia de 2 a 3: la interfaz se redibuja al cambiar el estado" width="640">
@@ -16,14 +16,15 @@
 > ### 🟦 ¿Qué significa? — *Estado (state)*
 > El **estado** son los **datos que cambian con el tiempo** dentro de un componente y que, al
 > cambiar, hacen que la interfaz se **vuelva a dibujar** para reflejarlos. Si las props son "lo
-> que me dan desde afuera (no lo toco)", el estado es "lo mío, que evoluciona aquí adentro".
-> Ejemplos: el número de un contador, si un menú está abierto, lo que hay escrito en un input.
+> que me dan desde afuera y no toco", el estado es "lo mío, lo que evoluciona aquí dentro".
+> Por ejemplo: el número de un contador, si un menú está abierto o cerrado, o lo que hay escrito
+> en un input.
 
 > ### 🟦 ¿Qué significa? — *Re-render (volver a renderizar)*
 > **Renderizar** es "dibujar" el componente en pantalla. Cuando el estado cambia, React
-> **vuelve a ejecutar** la función del componente y actualiza solo lo que cambió en la pantalla.
-> A eso se le llama **re-render**. Esta es la magia declarativa del Módulo 06-cap.01: tú cambias
-> el dato, React redibuja; no tocas el DOM a mano.
+> **vuelve a ejecutar** la función del componente y actualiza solo lo que cambió. A eso le
+> decimos **re-render**. Es la misma magia declarativa del Módulo 06-cap.01: tú cambias el dato y
+> React redibuja; no tocas el DOM a mano.
 
 ---
 
@@ -31,11 +32,11 @@
 
 > ### 🟦 ¿Qué significa? — *Hook*
 > Un **hook** ("gancho") es una **función especial de React** cuyo nombre empieza por `use...` y
-> que le da "superpoderes" a un componente (recordar datos, ejecutar efectos…). El primero y más
-> importante es `useState`.
+> que le da "superpoderes" a un componente: recordar datos, ejecutar efectos, y más. El primero y
+> el que más vas a usar es `useState`.
 
 > ### 🟦 ¿Qué significa? — *`useState`*
-> `useState` crea una variable de **estado** dentro de un componente. Devuelve **dos cosas** en
+> `useState` crea una variable de **estado** dentro de un componente. Te devuelve **dos cosas** en
 > un array: el **valor actual** y una **función para cambiarlo**.
 > ```tsx
 > import { useState } from "react";
@@ -50,17 +51,17 @@
 >   );
 > }
 > ```
-> - `cuenta` → el valor actual del estado (empieza en `0`).
+> - `cuenta` → el valor actual del estado (arranca en `0`).
 > - `setCuenta` → la función que lo cambia. **Siempre** se usa esta función para cambiarlo, nunca
 >   `cuenta = cuenta + 1` directamente.
-> - `useState(0)` → el `0` es el valor inicial.
-> Cada vez que pulsas el botón, `setCuenta` actualiza el estado, React **re-renderiza**, y el
-> número en pantalla sube. Sin tocar el DOM. Eso es React.
+> - `useState(0)` → ese `0` es el valor inicial.
+> Cada vez que pulsas el botón, `setCuenta` actualiza el estado, React **re-renderiza** y el
+> número en pantalla sube. Todo sin tocar el DOM. Eso es React.
 
 > ### 🟦 ¿Qué significa? — *La desestructuración `[valor, setValor]`*
-> `const [cuenta, setCuenta] = useState(0)` usa **desestructuración de array** (saca dos cosas de
-> la lista que devuelve `useState`, por su posición). Convención: la función se llama igual que
-> el estado con `set` delante (`cuenta` → `setCuenta`).
+> `const [cuenta, setCuenta] = useState(0)` usa **desestructuración de array**: saca dos cosas de
+> la lista que devuelve `useState`, una por posición. Hay una convención cómoda: la función se
+> llama igual que el estado pero con `set` delante (`cuenta` → `setCuenta`).
 
 ---
 
@@ -74,40 +75,42 @@
 > // ✅ BIEN: avisa a React, que re-renderiza
 > setCuenta(cuenta + 1);
 > ```
-> ¿Por qué? Porque la función `set...` es la que le **avisa a React** que algo cambió para que
-> redibuje. Si modificas la variable a mano, React no se entera y la pantalla se queda igual. Es
-> el error nº 1 al empezar con estado.
+> ¿Por qué? Porque la función `set...` es la que le **avisa a React** de que algo cambió, y por eso
+> redibuja. Si modificas la variable a mano, React ni se entera y la pantalla se queda igual. Este
+> es el error número uno cuando uno empieza con estado.
 
 > ### 💡 Tip — Estado basado en el anterior
-> Cuando el nuevo valor depende del actual, pásale a `set...` una función:
+> Cuando el nuevo valor depende del que ya tienes, pásale a `set...` una función:
 > ```tsx
 > setCuenta((anterior) => anterior + 1);
 > ```
-> Es la forma segura cuando haces varios cambios seguidos. Por ahora, reconócela; la verás mucho.
+> Es la forma segura cuando haces varios cambios seguidos. Por ahora solo apréndela de vista; la
+> vas a ver muchísimo.
 
 ---
 
 ## 4. Eventos en React
 
-Para que el estado cambie, normalmente respondes a un **evento** del usuario (un clic, escribir).
-Es como el `addEventListener` del Módulo 03, pero más directo.
+Para que el estado cambie, casi siempre respondes a un **evento** del usuario: un clic, una tecla.
+Es parecido al `addEventListener` del Módulo 03, pero más directo y cómodo.
 
 > ### 🟦 ¿Qué significa? — *Manejadores de eventos en JSX*
-> En JSX, los eventos se ponen como props con `on...` y reciben una función:
+> En JSX, los eventos se ponen como props que empiezan por `on...` y reciben una función:
 > ```tsx
 > <button onClick={() => setAbierto(!abierto)}>Abrir/cerrar</button>
 > <input onChange={(e) => setTexto(e.target.value)} />
 > ```
 > - `onClick` → al hacer clic.
-> - `onChange` → al cambiar un campo (escribir). `e.target.value` es lo que el usuario escribió.
-> Fíjate: se pasa **una función** (`() => ...`), no se ejecuta en el momento. (Camel-case:
-> `onClick`, no `onclick`.)
+> - `onChange` → al cambiar un campo, es decir, al escribir. `e.target.value` es lo que el usuario
+>   tecleó.
+> Fíjate en un detalle: le pasas **una función** (`() => ...`), no la ejecutas ahí mismo. Y va en
+> camel-case: `onClick`, no `onclick`.
 
 ---
 
 ## 5. Un formulario controlado (caso real)
 
-Juntando estado + eventos, así se maneja un campo de texto en React:
+Ahora juntemos estado y eventos. Así se maneja un campo de texto en React:
 
 ```tsx
 function Saludo() {
@@ -127,14 +130,16 @@ function Saludo() {
 ```
 
 > ### 🟦 ¿Qué significa? — *Componente/input controlado*
-> Un **input controlado** es uno cuyo valor **lo gobierna el estado de React** (`value={nombre}`),
-> y cada tecla actualiza ese estado (`onChange`). Así, la "fuente de la verdad" de lo que hay en
-> el campo es tu estado, no el DOM. Es como RachaSimple maneja sus formularios (crear hábito,
-> check-in). El `<p>` de abajo se actualiza **en vivo** mientras escribes: estado → re-render.
+> Un **input controlado** es aquel cuyo valor **lo gobierna el estado de React** (`value={nombre}`),
+> y donde cada tecla actualiza ese estado (`onChange`). Así, la "fuente de la verdad" de lo que hay
+> en el campo es tu estado, no el DOM. Es como RachaSimple maneja sus formularios (crear hábito,
+> check-in). El `<p>` de abajo se actualiza **en vivo** mientras escribes: cambia el estado, viene
+> el re-render.
 
 > ### 🔎 En tu código
-> Cada vez que en RachaSimple escribes el nombre de un hábito o eliges su color, hay un
-> `useState` detrás guardando ese valor y re-renderizando la vista previa. Ya entiendes el motor.
+> Cada vez que en RachaSimple escribes el nombre de un hábito o eliges su color, hay un `useState`
+> detrás guardando ese valor y volviendo a renderizar la vista previa. Ya conoces el motor que lo
+> mueve.
 
 ---
 

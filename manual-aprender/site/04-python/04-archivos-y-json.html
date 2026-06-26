@@ -19,27 +19,29 @@
 <main class="contenedor">
 <h1 id="capitulo-04-archivos-y-json">Capítulo 04 — Archivos y JSON</h1>
 <blockquote>
-<p>Los programas necesitan <strong>guardar</strong> datos para que no se pierdan al cerrarse, y <strong>leerlos</strong> al
-abrirse. Aquí aprendes a trabajar con archivos y con <strong>JSON</strong>, el formato que usa PolyPaw para
-sus misiones y el perfil del usuario. Es el capítulo que conecta Python con datos reales.</p>
+<p>Un programa que no guarda nada empieza de cero cada vez que lo abres. Aquí vas a aprender a
+<strong>guardar</strong> datos en el disco para que sobrevivan al cierre y a <strong>leerlos</strong> de vuelta cuando
+arranca otra vez. Y lo harás con <strong>JSON</strong>, que es justo el formato con el que PolyPaw guarda
+sus misiones y el perfil del usuario. Este es el capítulo que enlaza Python con datos de
+verdad.</p>
 </blockquote>
 <hr />
 <h2 id="1-por-que-necesitamos-archivos">1. Por qué necesitamos archivos</h2>
-<p>Hasta ahora, todo lo que guardabas en variables <strong>desaparecía</strong> al terminar el programa (vivía
-en la RAM, ¿recuerdas el Módulo 00?). Para que un dato <strong>persista</strong> (siga existiendo mañana),
-hay que escribirlo en un <strong>archivo</strong> del disco.</p>
+<p>Hasta ahora, todo lo que metías en una variable <strong>desaparecía</strong> al terminar el programa: vivía
+en la RAM (¿te acuerdas del Módulo 00?) y la RAM se borra. Si quieres que un dato siga ahí
+mañana, que <strong>persista</strong>, tienes que escribirlo en un <strong>archivo</strong> del disco.</p>
 <blockquote class="def">
 <h3 id="que-significa-persistencia">🟦 ¿Qué significa? — <em>Persistencia</em></h3>
-<p><strong>Persistir</strong> un dato es guardarlo de forma permanente (en disco), para recuperarlo después
-aunque el programa se haya cerrado o la computadora se haya apagado. Sin persistencia, una app
-de hábitos olvidaría tu racha cada vez que la cierras.</p>
+<p><strong>Persistir</strong> un dato es dejarlo guardado de forma permanente, en disco, para poder
+recuperarlo más tarde aunque el programa se haya cerrado o hayas apagado la computadora. Sin
+persistencia, una app de hábitos olvidaría tu racha cada vez que sales de ella.</p>
 </blockquote>
 <hr />
 <h2 id="2-leer-y-escribir-archivos-de-texto">2. Leer y escribir archivos de texto</h2>
 <blockquote class="def">
 <h3 id="que-significa-abrir-un-archivo-con-open-y-with">🟦 ¿Qué significa? — <em>Abrir un archivo con <code>open</code> y <code>with</code></em></h3>
-<p>Para trabajar con un archivo se usa <code>open()</code>, normalmente dentro de un bloque <code>with</code> (que se
-encarga de cerrarlo solo al terminar):
+<p>Para trabajar con un archivo usas <code>open()</code>, casi siempre dentro de un bloque <code>with</code>, que se
+ocupa de cerrarlo por ti cuando terminas:
 ```python</p>
 <h1 id="escribir">Escribir</h1>
 <p>with open("notas.txt", "w", encoding="utf-8") as archivo:
@@ -49,26 +51,26 @@ encarga de cerrarlo solo al terminar):
     contenido = archivo.read()
     print(contenido)
 <code>``
--</code>"w"<code>= *write* (escribir; **borra** lo anterior).</code>"r"<code>= *read* (leer).</code>"a"<code>= *append*
-  (añadir al final sin borrar).
--</code>encoding="utf-8"<code>asegura que acentos y ñ se guarden bien (igual que el</code>charset<code>del HTML).
-- El bloque</code>with` cierra el archivo automáticamente al salir; es la forma recomendada.</p>
+-</code>"w"<code>= *write* (escribir; ojo, **borra** lo que hubiera antes).</code>"r"<code>= *read* (leer).</code>"a"<code>= *append* (añadir al final sin borrar nada).
+-</code>encoding="utf-8"<code>se asegura de que los acentos y la ñ se guarden bien, igual que el</code>charset<code>que pusiste en el HTML.
+- Al salir del bloque</code>with`, el archivo se cierra solo. Es la forma recomendada de hacerlo.</p>
 </blockquote>
 <hr />
 <h2 id="3-json-en-python-el-modulo-json">3. JSON en Python: el módulo <code>json</code></h2>
-<p>Guardar texto plano sirve para poco. Lo que de verdad quieres guardar son <strong>datos
-estructurados</strong> (listas, diccionarios). Para eso está JSON.</p>
+<p>Guardar texto plano sirve para poco. Lo que normalmente quieres guardar son <strong>datos
+estructurados</strong>: listas, diccionarios. Y para eso existe JSON.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-modulo-json-repaso-de-json">🟦 ¿Qué significa? — <em>El módulo <code>json</code> (repaso de JSON)</em></h3>
-<p>Recuerda del Módulo 03: <strong>JSON</strong> es un formato de texto para datos estructurados. Python trae
-un <strong>módulo</strong> llamado <code>json</code> para convertir entre sus diccionarios/listas y texto JSON.</p>
+<p>Como viste en el Módulo 03, <strong>JSON</strong> es un formato de texto para datos estructurados. Python
+incluye de fábrica un <strong>módulo</strong> llamado <code>json</code> que pasa de tus diccionarios y listas a texto
+JSON, y al revés.</p>
 <h3 id="que-significa-modulo-e-import">🟦 ¿Qué significa? — <em>Módulo e <code>import</code></em></h3>
-<p>Un <strong>módulo</strong> es un conjunto de funciones ya hechas que puedes usar en tu programa. Para
-usarlo, lo <strong>importas</strong> al inicio con <code>import</code>:
+<p>Un <strong>módulo</strong> es un paquete de funciones ya hechas que puedes aprovechar en tu programa. Para
+usarlo, lo <strong>importas</strong> al principio del archivo con <code>import</code>:
 <code>python
 import json</code>
-Python trae muchísimos módulos listos (la "biblioteca estándar"): <code>json</code>, <code>random</code>,
-<code>datetime</code>, etc. <code>import</code> es como decir "tráeme esta caja de herramientas".</p>
+Python viene con un montón de módulos listos (es la "biblioteca estándar"): <code>json</code>, <code>random</code>,
+<code>datetime</code> y muchos más. Hacer <code>import</code> es como decir "tráeme esa caja de herramientas".</p>
 <h3 id="que-significa-las-cuatro-funciones-de-json">🟦 ¿Qué significa? — <em>Las cuatro funciones de <code>json</code></em></h3>
 <table>
 <thead>
@@ -95,11 +97,11 @@ Python trae muchísimos módulos listos (la "biblioteca estándar"): <code>json<
 <td>lee un archivo JSON y lo convierte a dict/lista</td>
 </tr>
 <tr>
-<td>(Truco para recordar: las versiones <strong>con <code>s</code></strong> trabajan con <em>strings</em> (texto); las <strong>sin <code>s</code></strong></td>
+<td>Para no confundirlas, un truco: las que llevan <strong><code>s</code></strong> trabajan con <em>strings</em> (texto); las que</td>
 <td></td>
 </tr>
 <tr>
-<td>trabajan con archivos.)</td>
+<td>van <strong>sin <code>s</code></strong> trabajan con archivos.</td>
 <td></td>
 </tr>
 </tbody>
@@ -107,7 +109,7 @@ Python trae muchísimos módulos listos (la "biblioteca estándar"): <code>json<
 </blockquote>
 <hr />
 <h2 id="4-guardar-y-cargar-datos-reales-como-polypaw">4. Guardar y cargar datos reales (como PolyPaw)</h2>
-<p>Juntando archivos + JSON, así se guarda y se recupera el perfil de un usuario:</p>
+<p>Cuando juntas archivos y JSON, guardar y recuperar el perfil de un usuario queda así:</p>
 <pre><code class="language-python">import json
 
 # El dato que queremos guardar (un diccionario)
@@ -132,26 +134,28 @@ print(datos[&quot;xp&quot;])       # 1500
 <blockquote class="def">
 <h3 id="que-significa-indent-y-ensure_ascii">🟦 ¿Qué significa? — <em><code>indent</code> y <code>ensure_ascii</code></em></h3>
 <ul>
-<li><code>indent=2</code> guarda el JSON "bonito", con sangría, para que un humano pueda leerlo.</li>
-<li><code>ensure_ascii=False</code> permite guardar acentos y ñ tal cual (sin convertirlos a códigos raros).</li>
+<li><code>indent=2</code> guarda el JSON "bonito", con sangría, para que un humano lo pueda leer sin
+  esfuerzo.</li>
+<li><code>ensure_ascii=False</code> deja los acentos y la ñ tal cual, sin convertirlos en códigos raros.</li>
 </ul>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Esto es, literalmente, lo que hace <code>database_manager.py</code> de PolyPaw con <code>polypaw_db.json</code>:
-al iniciar, <code>json.load</code> lee el perfil del usuario; cuando ganas XP o subes tu racha, modifica
-el diccionario y <code>json.dump</code> lo vuelve a guardar. Y <code>curriculum_loader.py</code> usa <code>json.load</code>
-para cargar las misiones desde <code>missions/*.json</code>. <strong>Ahora entiendes el sistema de datos
-completo de tu app.</strong></p>
+<p>Esto es, casi al pie de la letra, lo que hace <code>database_manager.py</code> de PolyPaw con
+<code>polypaw_db.json</code>: al arrancar, <code>json.load</code> lee el perfil del usuario; cuando ganas XP o subes
+la racha, modifica el diccionario y <code>json.dump</code> lo vuelve a guardar. Y <code>curriculum_loader.py</code>
+usa <code>json.load</code> para cargar las misiones desde <code>missions/*.json</code>. <strong>Con esto ya entiendes el
+sistema de datos completo de tu app.</strong></p>
 <h3 id="cuidado-maneja-el-caso-el-archivo-no-existe">⚠️ Cuidado — Maneja el caso "el archivo no existe"</h3>
-<p>La primera vez que se ejecuta la app, el archivo de datos aún no existe y <code>json.load</code> fallaría.
-Por eso se protege con <code>try/except</code> (el <code>try/catch</code> de Python; lo verás abajo) o comprobando
-antes si el archivo existe. PolyPaw crea un perfil por defecto si no encuentra el archivo.</p>
+<p>La primera vez que alguien ejecuta la app, el archivo de datos todavía no existe, así que
+<code>json.load</code> fallaría. Por eso se protege con <code>try/except</code> (el <code>try/catch</code> de Python, que verás
+justo abajo) o comprobando antes si el archivo está ahí. PolyPaw, cuando no encuentra el
+archivo, crea un perfil por defecto.</p>
 </blockquote>
 <hr />
 <h2 id="5-manejo-de-errores-try-except">5. Manejo de errores: <code>try</code> / <code>except</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-try-except">🟦 ¿Qué significa? — <em><code>try</code> / <code>except</code></em></h3>
-<p>Es el equivalente de <code>try/catch</code> de JavaScript: intenta un código y, si falla, ejecuta un
-plan B en lugar de romperse:
+<p>Es el equivalente del <code>try/catch</code> de JavaScript: intenta ejecutar un código y, si algo falla,
+pasa a un plan B en vez de reventar:
 <code>python
 try:
     with open("usuario.json", "r", encoding="utf-8") as archivo:
@@ -159,8 +163,8 @@ try:
 except FileNotFoundError:
     print("No hay datos aún; creando perfil nuevo.")
     datos = {"nombre": "", "nivel": "A1", "xp": 0, "racha": 0}</code>
-<code>except FileNotFoundError</code> atrapa específicamente el error de "archivo no encontrado". Manejar
-errores así hace tu programa <strong>robusto</strong> (no se cae ante lo inesperado).</p>
+<code>except FileNotFoundError</code> atrapa concretamente el error de "archivo no encontrado". Manejar
+los fallos así hace que tu programa sea <strong>robusto</strong>: aguanta lo inesperado sin caerse.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

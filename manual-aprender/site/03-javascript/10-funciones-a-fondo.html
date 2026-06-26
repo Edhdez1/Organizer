@@ -23,15 +23,15 @@
 </p>
 
 <blockquote>
-<p>Hola, soy <strong>Bit</strong>, el ajolote del manual. En los capitulos anteriores escribiste tus primeras funciones, esas cajitas que reciben datos y devuelven resultados. Hoy vamos a abrirlas, mirarlas por dentro y descubrir que una funcion en JavaScript es mucho mas que una receta: es <strong>un valor que puedes pasar de mano en mano</strong>. Te prometo ir con calma. Cada palabra rara la meto en un recuadro azul antes de usarla. Respira, agarra agua, y vamos nadando despacio.</p>
+<p>Hola, soy <strong>Bit</strong>, el ajolote del manual. En los capitulos pasados ya escribiste tus primeras funciones: esas cajitas que reciben datos y devuelven un resultado. Hoy las vamos a abrir, mirar por dentro y descubrir algo que cambia bastante la forma de programar: en JavaScript una funcion no es solo una receta, es <strong>un valor que puedes pasar de mano en mano</strong>. Iremos con calma, te lo prometo. Cada palabra rara la dejo primero en un recuadro azul antes de soltarla en el texto. Respira, agarra agua y vamos nadando despacio.</p>
 </blockquote>
-<p>Las funciones son el corazon de JavaScript. Si entiendes de verdad este capitulo, dos cosas pasaran: tu codigo del proyecto <strong>tunal-digital</strong> (el <code>main.js</code> con sus atajos, su <code>fetch</code> al Worker y su chat con IA) dejara de parecer magia, y cuando lleguemos al <strong>Modulo 06 (React)</strong> vas a entender por que React esta hecho casi entero de funciones. Vamos.</p>
+<p>Las funciones son el corazon de JavaScript. Si este capitulo te queda claro de verdad, vas a notar dos cosas. La primera: tu codigo del proyecto <strong>tunal-digital</strong> (ese <code>main.js</code> con sus atajos, su <code>fetch</code> al Worker y su chat con IA) dejara de parecerte magia. La segunda: cuando lleguemos al <strong>Modulo 06 (React)</strong>, entenderas por que React esta hecho casi entero de funciones. Empecemos.</p>
 <hr />
 <h2 id="1-una-funcion-tambien-es-un-valor">1. Una funcion tambien es un valor</h2>
-<p>Hasta ahora pensabas en una funcion como en una accion: "haz esto". Pero en JavaScript una funcion es ademas un <strong>dato</strong> que vive en una variable, igual que un numero o un texto.</p>
+<p>Hasta ahora pensabas en una funcion como en una accion: "haz esto". Y esta bien, pero en JavaScript una funcion es ademas un <strong>dato</strong> que puede vivir en una variable, igual que un numero o un texto.</p>
 <blockquote class="def">
 <h3 id="que-significa-valor-de-primera-clase-first-class">🟦 ¿Que significa? — <em>Valor de primera clase (first-class)</em></h3>
-<p>Decimos que las funciones son "valores de primera clase" cuando el lenguaje las trata como a cualquier otro dato: puedes guardarlas en una variable, meterlas en un array, pasarlas a otra funcion y devolverlas. <strong>Para que sirve:</strong> te deja construir piezas reutilizables y combinarlas. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, las funciones que abren el chat o envian el formulario se guardan y luego se "enchufan" a los botones; son valores que el navegador llama cuando toca.</p>
+<p>Decimos que las funciones son "valores de primera clase" cuando el lenguaje las trata como a cualquier otro dato: puedes guardarlas en una variable, meterlas en un array, pasarlas a otra funcion y devolverlas. <strong>Para que sirve:</strong> te deja construir piezas reutilizables y combinarlas a tu gusto. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, las funciones que abren el chat o envian el formulario se guardan y luego se "enchufan" a los botones; son valores que el navegador llama cuando toca.</p>
 </blockquote>
 <p>Mira la diferencia entre <strong>llamar</strong> una funcion y <strong>referirse</strong> a ella:</p>
 <pre><code class="language-javascript">function saludar() {
@@ -45,17 +45,17 @@ console.log(resultado);   // &quot;Hola desde Tunal&quot;
 console.log(referencia);  // [Function: saludar]
 console.log(referencia()); // &quot;Hola desde Tunal&quot; (ahora si la llamas)
 </code></pre>
-<p>El detalle clave son los parentesis. <code>saludar()</code> con parentesis <strong>ejecuta</strong> y te da lo que devuelve. <code>saludar</code> sin parentesis <strong>es</strong> la funcion, todavia sin ejecutar.</p>
+<p>Todo depende de los parentesis. <code>saludar()</code>, con parentesis, <strong>ejecuta</strong> la funcion y te entrega lo que devuelve. <code>saludar</code>, sin parentesis, <strong>es</strong> la funcion en si, todavia sin ejecutar.</p>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Confundir <code>saludar</code> con <code>saludar()</code> es uno de los errores mas comunes al principio. Cuando le das una funcion a un boton, casi siempre quieres pasar <code>saludar</code> (sin parentesis), porque le estas diciendo "guarda esta funcion para mas tarde". Si pones <code>saludar()</code>, la ejecutas <strong>ahora mismo</strong> y el boton recibe el resultado, no la funcion. Mas sobre esto en la seccion 2.</p>
+<p>Confundir <code>saludar</code> con <code>saludar()</code> es uno de los tropiezos mas comunes al principio. Cuando le das una funcion a un boton, casi siempre quieres pasarle <code>saludar</code> (sin parentesis), porque le estas diciendo "guardate esta funcion para mas tarde". Si pones <code>saludar()</code>, la ejecutas <strong>ahora mismo</strong> y el boton recibe el resultado, no la funcion. Volvemos a esto en la seccion 2.</p>
 </blockquote>
 <hr />
 <h2 id="2-callbacks-una-funcion-que-le-das-a-otra">2. Callbacks: una funcion que le das a otra</h2>
-<p>Como una funcion es un valor, puedes pasarla como argumento a otra funcion. Eso tiene un nombre propio.</p>
+<p>Como una funcion es un valor, nada te impide pasarla como argumento a otra funcion. Y eso tiene nombre propio.</p>
 <blockquote class="def">
 <h3 id="que-significa-callback">🟦 ¿Que significa? — <em>Callback</em></h3>
-<p>Un <em>callback</em> es una funcion que le entregas a otra funcion para que la llame <strong>mas tarde</strong>, cuando ocurra algo. La palabra significa "vuelve a llamar": tu das la funcion y dices "llamame cuando pase tal cosa". <strong>Para que sirve:</strong> reaccionar a eventos (un clic, una respuesta del servidor) sin saber cuando pasaran. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, cuando haces <code>boton.addEventListener("click", abrirChat)</code>, la funcion <code>abrirChat</code> es el callback que el navegador guarda y dispara cuando el usuario hace clic.</p>
+<p>Un <em>callback</em> es una funcion que le entregas a otra funcion para que la llame <strong>mas tarde</strong>, cuando ocurra algo. La palabra significa "vuelve a llamar": tu pasas la funcion y dices "llamame cuando pase tal cosa". <strong>Para que sirve:</strong> reaccionar a eventos (un clic, una respuesta del servidor) sin saber de antemano cuando van a pasar. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, cuando haces <code>boton.addEventListener("click", abrirChat)</code>, la funcion <code>abrirChat</code> es el callback que el navegador guarda y dispara cuando el usuario hace clic.</p>
 </blockquote>
 <pre><code class="language-javascript">const boton = document.querySelector(&quot;#abrir-chat&quot;);
 
@@ -66,11 +66,11 @@ function abrirChat() {
 // Le pasamos abrirChat SIN parentesis: es un callback.
 boton.addEventListener(&quot;click&quot;, abrirChat);
 </code></pre>
-<p>Fijate: pasamos <code>abrirChat</code> sin parentesis. Le estamos dando la funcion al navegador para que <strong>el</strong> la llame cuando haya un clic. Si escribieramos <code>addEventListener("click", abrirChat())</code>, ejecutariamos <code>abrirChat</code> de inmediato y le pasariamos su resultado (probablemente <code>undefined</code>) al evento. Error clasico.</p>
-<p>A veces el callback no tiene nombre: lo escribes ahi mismo, "anonimo".</p>
+<p>Fijate bien: pasamos <code>abrirChat</code> sin parentesis. Le estamos dando la funcion al navegador para que sea <strong>el</strong> quien la llame cuando haya un clic. Si escribieramos <code>addEventListener("click", abrirChat())</code>, ejecutariamos <code>abrirChat</code> de inmediato y le pasariamos su resultado (probablemente <code>undefined</code>) al evento. Ese es el error clasico.</p>
+<p>A veces el callback ni siquiera necesita nombre: lo escribes ahi mismo, "anonimo".</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-anonima">🟦 ¿Que significa? — <em>Funcion anonima</em></h3>
-<p>Una <em>funcion anonima</em> es una funcion sin nombre que escribes justo en el lugar donde la necesitas. <strong>Para que sirve:</strong> cuando solo la vas a usar una vez, no vale la pena ponerle nombre. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, el <code>submit</code> del formulario suele llevar una funcion anonima inline que evita el envio por defecto y dispara el <code>fetch</code>.</p>
+<p>Una <em>funcion anonima</em> es una funcion sin nombre que escribes justo en el lugar donde la necesitas. <strong>Para que sirve:</strong> cuando solo la vas a usar una vez, no vale la pena bautizarla. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, el <code>submit</code> del formulario suele llevar una funcion anonima inline que evita el envio por defecto y dispara el <code>fetch</code>.</p>
 </blockquote>
 <pre><code class="language-javascript">const formulario = document.querySelector(&quot;#contacto&quot;);
 
@@ -81,16 +81,16 @@ formulario.addEventListener(&quot;submit&quot;, function (evento) {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>El parametro <code>evento</code> (muchos lo llaman <code>e</code>) lo crea y te lo pasa el navegador automaticamente. Contiene informacion de lo que paso: que elemento se toco, que tecla se pulso, etc. Tu solo tienes que recibirlo en el callback.</p>
+<p>El parametro <code>evento</code> (muchos lo abrevian como <code>e</code>) lo crea y te lo entrega el navegador solo, sin que hagas nada. Dentro trae la informacion de lo que paso: que elemento se toco, que tecla se pulso, etc. Tu unica tarea es recibirlo en el callback.</p>
 </blockquote>
 <hr />
 <h2 id="3-funciones-de-orden-superior">3. Funciones de orden superior</h2>
-<p>Si una funcion puede recibir o devolver otra funcion, esa funcion merece un titulo elegante.</p>
+<p>Si una funcion es capaz de recibir o devolver otra funcion, se gana un titulo elegante.</p>
 <blockquote class="def">
 <h3 id="que-significa-funcion-de-orden-superior-higher-order">🟦 ¿Que significa? — <em>Funcion de orden superior (higher-order)</em></h3>
-<p>Es una funcion que hace al menos una de estas dos cosas: <strong>recibe</strong> una funcion como argumento, o <strong>devuelve</strong> una funcion. <strong>Para que sirve:</strong> te deja escribir logica generica y personalizar el comportamiento con la funcion que le pasas. <strong>Donde se usa en un repo real:</strong> los metodos de array como <code>.map</code>, <code>.filter</code> y <code>.forEach</code> son funciones de orden superior; en <strong>RachaSimple</strong> (React+TS) se usan constantemente para transformar las listas de rachas antes de pintarlas.</p>
+<p>Es una funcion que hace al menos una de estas dos cosas: <strong>recibe</strong> una funcion como argumento, o <strong>devuelve</strong> una funcion. <strong>Para que sirve:</strong> te deja escribir una logica generica y personalizar el comportamiento con la funcion que le pasas. <strong>Donde se usa en un repo real:</strong> los metodos de array como <code>.map</code>, <code>.filter</code> y <code>.forEach</code> son funciones de orden superior; en <strong>RachaSimple</strong> (React+TS) se usan a cada rato para transformar las listas de rachas antes de pintarlas.</p>
 </blockquote>
-<p>Los tres metodos de array mas usados son de orden superior. Veamoslos con una lista de servicios de Tunal Digital.</p>
+<p>Los tres metodos de array mas usados son justamente de orden superior. Veamoslos con una lista de servicios de Tunal Digital.</p>
 <pre><code class="language-javascript">const servicios = [
   { nombre: &quot;Sitio web&quot;, precio: 800 },
   { nombre: &quot;SEO local&quot;, precio: 300 },
@@ -116,21 +116,21 @@ const baratos = servicios.filter(function (s) {
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En <strong>tunal-digital</strong>, cuando el chat de IA recibe una lista de mensajes desde el Worker, lo natural es recorrerla con <code>.map</code> para convertir cada mensaje en un trozo de HTML. En <strong>Faro/Organizer</strong> (Next.js+React), el roadmap de un proyecto es un array de fases que se renderiza con <code>.map</code>. Dominar estos tres metodos te ahorra muchisimos bucles <code>for</code>.</p>
+<p>En <strong>tunal-digital</strong>, cuando el chat de IA recibe una lista de mensajes desde el Worker, lo natural es recorrerla con <code>.map</code> para convertir cada mensaje en un trozo de HTML. En <strong>Faro/Organizer</strong> (Next.js+React), el roadmap de un proyecto es un array de fases que se renderiza con <code>.map</code>. Dominar estos tres metodos te ahorra una montaña de bucles <code>for</code>.</p>
 <h3 id="que-significa-inmutable-array-nuevo">🟦 ¿Que significa? — <em>Inmutable / array nuevo</em></h3>
-<p>"Inmutable" significa que <strong>no se modifica el original</strong>. <code>map</code> y <code>filter</code> no tocan tu array de partida: te devuelven uno nuevo. <strong>Para que sirve:</strong> evita errores raros donde algo cambia sin que te des cuenta. <strong>Donde se usa en un repo real:</strong> React (RachaSimple, Faro) depende de esta idea; veremos en el Modulo 06 que para que React detecte cambios casi siempre creamos datos nuevos en vez de modificar los viejos.</p>
+<p>"Inmutable" significa que <strong>no se modifica el original</strong>. <code>map</code> y <code>filter</code> no tocan tu array de partida: te devuelven uno nuevo. <strong>Para que sirve:</strong> evita esos errores raros en los que algo cambia a tus espaldas. <strong>Donde se usa en un repo real:</strong> React (RachaSimple, Faro) se apoya en esta idea; en el Modulo 06 veremos que, para que React note los cambios, casi siempre creamos datos nuevos en vez de modificar los viejos.</p>
 </blockquote>
 <hr />
 <h2 id="4-ambito-scope-donde-viven-las-variables">4. Ambito (scope): donde viven las variables</h2>
-<p>Para entender lo que viene (closures), primero necesitas el concepto de <strong>ambito</strong>. Tranquilo, es mas sencillo de lo que suena.</p>
+<p>Antes de meternos con los closures, necesitas tener claro el concepto de <strong>ambito</strong>. Tranquilo, es mas sencillo de lo que suena el nombre.</p>
 <blockquote class="def">
 <h3 id="que-significa-ambito-scope">🟦 ¿Que significa? — <em>Ambito (scope)</em></h3>
-<p>El <em>ambito</em> es la zona del codigo donde una variable existe y puede usarse. Fuera de su ambito, esa variable es invisible. <strong>Para que sirve:</strong> mantiene ordenado tu programa; cada funcion tiene sus propias variables sin pisar las de otras. <strong>Donde se usa en un repo real:</strong> en cualquier funcion de <code>main.js</code> de <strong>tunal-digital</strong>, las variables que declaras dentro solo viven ahi; eso evita que el formulario y el chat se mezclen por accidente.</p>
+<p>El <em>ambito</em> es la zona del codigo donde una variable existe y se puede usar. Fuera de su ambito, esa variable es invisible. <strong>Para que sirve:</strong> mantiene ordenado tu programa; cada funcion tiene sus propias variables sin pisar las de otra. <strong>Donde se usa en un repo real:</strong> en cualquier funcion de <code>main.js</code> de <strong>tunal-digital</strong>, las variables que declaras dentro solo viven ahi; gracias a eso el formulario y el chat no se mezclan por accidente.</p>
 </blockquote>
 <p>Hay dos sabores principales:</p>
 <blockquote class="def">
 <h3 id="que-significa-ambito-global-vs-ambito-local">🟦 ¿Que significa? — <em>Ambito global vs. ambito local</em></h3>
-<p>El <em>ambito global</em> es el nivel de afuera de todo: lo que declaras ahi lo ve cualquier parte del programa. El <em>ambito local</em> es el de adentro de una funcion: lo que declaras ahi solo lo ve esa funcion. <strong>Para que sirve:</strong> lo local te protege; mantener pocas cosas en global evita choques de nombres. <strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> una constante como la URL del Worker puede vivir arriba (casi global) mientras los datos temporales del formulario viven dentro de la funcion.</p>
+<p>El <em>ambito global</em> es el nivel de afuera de todo: lo que declaras ahi lo ve cualquier parte del programa. El <em>ambito local</em> es el de dentro de una funcion: lo que declaras ahi solo lo ve esa funcion. <strong>Para que sirve:</strong> lo local te protege; tener pocas cosas en global evita choques de nombres. <strong>Donde se usa en un repo real:</strong> en <strong>tunal-digital</strong> una constante como la URL del Worker puede vivir arriba (casi global) mientras los datos temporales del formulario viven dentro de la funcion.</p>
 </blockquote>
 <pre><code class="language-javascript">const URL_WORKER = &quot;https://api.tunal.workers.dev&quot;; // ambito de modulo (visible abajo)
 
@@ -143,10 +143,10 @@ function enviarMensaje(texto) {
 enviarMensaje(&quot;hola&quot;);
 console.log(cuerpo); // ERROR: cuerpo no existe aqui afuera
 </code></pre>
-<p>La regla mental: <strong>desde adentro puedes mirar hacia afuera, pero desde afuera no puedes mirar hacia adentro.</strong> Una funcion ve las variables de su alrededor, pero el mundo de afuera no ve lo que pasa dentro de la funcion.</p>
+<p>Guardate esta regla mental: <strong>desde adentro puedes mirar hacia afuera, pero desde afuera no puedes mirar hacia adentro.</strong> Una funcion ve las variables de su alrededor, pero el mundo de afuera no tiene ni idea de lo que pasa dentro de la funcion.</p>
 <blockquote class="def">
 <h3 id="que-significa-ambito-de-bloque-let-y-const">🟦 ¿Que significa? — <em>Ambito de bloque (let y const)</em></h3>
-<p>Un <em>bloque</em> es todo lo que va entre llaves <code>{ }</code> (un <code>if</code>, un <code>for</code>, etc.). Las variables con <code>let</code> y <code>const</code> solo viven dentro del bloque donde nacen. <strong>Para que sirve:</strong> evita fugas de variables a sitios donde no las quieres. <strong>Donde se usa en un repo real:</strong> en los bucles de cualquiera de tus repos JS; cada vuelta de un <code>for</code> con <code>let</code> tiene su propia copia.</p>
+<p>Un <em>bloque</em> es todo lo que va entre llaves <code>{ }</code> (un <code>if</code>, un <code>for</code>, etc.). Las variables con <code>let</code> y <code>const</code> solo viven dentro del bloque donde nacen. <strong>Para que sirve:</strong> evita que una variable se escape a sitios donde no la quieres. <strong>Donde se usa en un repo real:</strong> en los bucles de cualquiera de tus repos JS; cada vuelta de un <code>for</code> con <code>let</code> tiene su propia copia.</p>
 </blockquote>
 <pre><code class="language-javascript">if (true) {
   const secreto = 42;
@@ -156,16 +156,16 @@ console.log(secreto); // ERROR: secreto murio al cerrar la llave
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>La vieja palabra <code>var</code> <strong>no</strong> respeta el ambito de bloque (se escapa de los <code>if</code> y <code>for</code>) y trae sorpresas desagradables. En este manual usamos siempre <code>const</code>, y <code>let</code> solo cuando de verdad necesitas reasignar. Olvidate de <code>var</code>.</p>
+<p>La vieja palabra <code>var</code> <strong>no</strong> respeta el ambito de bloque: se escapa de los <code>if</code> y los <code>for</code> y te trae sorpresas desagradables. En este manual usamos siempre <code>const</code>, y <code>let</code> solo cuando de verdad necesitas reasignar. A <code>var</code> ya puedes olvidarla.</p>
 </blockquote>
 <hr />
 <h2 id="5-closures-la-funcion-que-se-acuerda">5. Closures: la funcion que se acuerda</h2>
-<p>Llegamos a la palabra que asusta a medio internet. Vas a ver que es casi natural despues de entender el ambito.</p>
+<p>Llegamos a la palabra que asusta a medio internet. Vas a ver que, despues de entender el ambito, es casi natural.</p>
 <blockquote class="def">
 <h3 id="que-significa-closure-clausura">🟦 ¿Que significa? — <em>Closure (clausura)</em></h3>
-<p>Un <em>closure</em> ocurre cuando una funcion <strong>recuerda</strong> las variables del lugar donde fue creada, aunque la ejecutes mas tarde y en otro sitio. La funcion "se lleva consigo" su entorno. <strong>Para que sirve:</strong> guardar un estado privado entre llamadas y crear funciones a la medida. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, una funcion que crea atajos (un "fabricador" de manejadores) usa closures para recordar a que elemento o a que URL apunta cada atajo.</p>
+<p>Un <em>closure</em> ocurre cuando una funcion <strong>recuerda</strong> las variables del lugar donde fue creada, aunque la ejecutes mucho mas tarde y en otro sitio. La funcion "se lleva consigo" su entorno. <strong>Para que sirve:</strong> guardar un estado privado entre llamadas y crear funciones a la medida. <strong>Donde se usa en un repo real:</strong> en <code>main.js</code> de <strong>tunal-digital</strong>, una funcion que crea atajos (un "fabricador" de manejadores) usa closures para recordar a que elemento o a que URL apunta cada atajo.</p>
 </blockquote>
-<p>Vamos paso a paso. Primero, una funcion que <strong>devuelve</strong> otra funcion:</p>
+<p>Vamos por partes. Primero, una funcion que <strong>devuelve</strong> otra funcion:</p>
 <pre><code class="language-javascript">function crearContador() {
   let cuenta = 0; // esta variable vive en el ambito de crearContador
 
@@ -181,8 +181,8 @@ console.log(contar()); // 1
 console.log(contar()); // 2
 console.log(contar()); // 3
 </code></pre>
-<p>Lo magico: cuando <code>crearContador()</code> termina, normalmente esperarias que <code>cuenta</code> desapareciera. Pero la funcion que devolvimos <strong>se aferra</strong> a ella. Cada vez que llamas <code>contar()</code>, la misma <code>cuenta</code> sigue viva, escondida, sumando. Eso es un closure: la funcion interior <strong>cerro</strong> alrededor de <code>cuenta</code>.</p>
-<p>Otro ejemplo mas cercano a tu codigo, un "fabricador" de saludos:</p>
+<p>Aqui esta lo curioso: cuando <code>crearContador()</code> termina, lo logico seria que <code>cuenta</code> desapareciera. Pero la funcion que devolvimos <strong>se aferra</strong> a ella. Cada vez que llamas <code>contar()</code>, esa misma <code>cuenta</code> sigue viva, escondida, sumando. Eso es un closure: la funcion interior <strong>cerro</strong> alrededor de <code>cuenta</code>.</p>
+<p>Otro ejemplo mas pegado a tu codigo, un "fabricador" de saludos:</p>
 <pre><code class="language-javascript">function crearSaludo(nombre) {
   // la funcion devuelta recuerda &quot;nombre&quot;
   return function () {
@@ -196,19 +196,19 @@ const saludarLuis = crearSaludo(&quot;Luis&quot;);
 console.log(saludarAna());  // &quot;Hola, Ana, bienvenido a Tunal&quot;
 console.log(saludarLuis()); // &quot;Hola, Luis, bienvenido a Tunal&quot;
 </code></pre>
-<p><code>saludarAna</code> y <code>saludarLuis</code> son dos funciones distintas, cada una con su propio <code>nombre</code> recordado. No se pisan.</p>
+<p><code>saludarAna</code> y <code>saludarLuis</code> son dos funciones distintas, y cada una recuerda su propio <code>nombre</code>. No se pisan entre ellas.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
 <p>Cada vez que en <code>main.js</code> de <strong>tunal-digital</strong> escribes un callback dentro de otra funcion y usas una variable de afuera (la URL del Worker, el elemento del formulario), estas creando un closure sin darte cuenta. Por eso funciona aunque el callback se ejecute segundos despues, cuando el usuario hace clic. Y en el <strong>Modulo 06 (React)</strong>, el hook <code>useState</code> esta construido sobre closures: por eso un componente "recuerda" su estado entre renders.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>No te obsesiones con memorizar la definicion de closure. Quedate con la imagen: <strong>una funcion es como una mochila que se lleva las variables de su vecindario.</strong> Cuando la abres mas tarde, las variables siguen ahi.</p>
+<p>No te obsesiones con memorizar la definicion exacta de closure. Quedate con la imagen: <strong>una funcion es como una mochila que se lleva las variables de su vecindario.</strong> Cuando la abres mas tarde, las variables siguen ahi dentro.</p>
 </blockquote>
 <hr />
 <h2 id="6-parametros-por-defecto-y-rest">6. Parametros por defecto y rest</h2>
-<p>Dos comodidades modernas que hacen tus funciones mas flexibles y faciles de leer.</p>
+<p>Dos comodidades modernas que vuelven tus funciones mas flexibles y mas faciles de leer.</p>
 <blockquote class="def">
 <h3 id="que-significa-parametro-por-defecto">🟦 ¿Que significa? — <em>Parametro por defecto</em></h3>
-<p>Es un valor que la funcion usa <strong>cuando no le pasas ese argumento</strong>. Se escribe con <code>=</code> en la definicion. <strong>Para que sirve:</strong> evita errores cuando un dato falta y ahorra escribir <code>if</code>s. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong> (Python) tambien existe esta idea; en JS, una funcion de <code>main.js</code> que arma una peticion al Worker puede tener un modelo de IA por defecto si no se especifica otro.</p>
+<p>Es un valor que la funcion usa <strong>cuando no le pasas ese argumento</strong>. Se escribe con <code>=</code> en la definicion. <strong>Para que sirve:</strong> evita errores cuando falta un dato y te ahorra escribir <code>if</code>s. <strong>Donde se usa en un repo real:</strong> en <strong>PolyPaw</strong> (Python) tambien existe esta idea; en JS, una funcion de <code>main.js</code> que arma una peticion al Worker puede traer un modelo de IA por defecto si no le indicas otro.</p>
 </blockquote>
 <pre><code class="language-javascript">function enviarAlChat(mensaje, modelo = &quot;gpt-mini&quot;) {
   console.log(&quot;Enviando:&quot;, mensaje, &quot;con modelo&quot;, modelo);
@@ -231,17 +231,17 @@ registrar(&quot;ERROR&quot;, &quot;fallo el fetch&quot;, &quot;codigo 500&quot;)
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>No confundas el <em>rest</em> (<code>...</code> en la <strong>definicion</strong>, recoge muchos en un array) con el <em>spread</em>, que es el mismo <code>...</code> pero al <strong>llamar</strong> o al construir, donde <strong>reparte</strong> un array en piezas sueltas. Mismo simbolo, trabajo opuesto. Veras el spread cuando copies objetos en React: <code>{ ...proyecto, estado: "activo" }</code>.</p>
+<p>Ojo con no mezclar el <em>rest</em> (<code>...</code> en la <strong>definicion</strong>, recoge muchos en un array) con el <em>spread</em>, que es el mismo <code>...</code> pero al <strong>llamar</strong> o al construir, donde <strong>reparte</strong> un array en piezas sueltas. Mismo simbolo, trabajo opuesto. Al spread lo veras cuando copies objetos en React: <code>{ ...proyecto, estado: "activo" }</code>.</p>
 </blockquote>
 <pre><code class="language-javascript">const numeros = [3, 7, 2];
 console.log(Math.max(...numeros)); // spread: reparte como Math.max(3, 7, 2) -&gt; 7
 </code></pre>
 <hr />
 <h2 id="7-arrow-functions-vs-function-y-el-famoso-this">7. Arrow functions vs. function (y el famoso <code>this</code>)</h2>
-<p>Hay dos formas de escribir funciones. Ya viste la palabra <code>function</code>. Ahora conoce a su prima compacta.</p>
+<p>Hay dos maneras de escribir funciones. La palabra <code>function</code> ya la conoces. Ahora te presento a su prima compacta.</p>
 <blockquote class="def">
 <h3 id="que-significa-arrow-function-funcion-flecha">🟦 ¿Que significa? — <em>Arrow function (funcion flecha)</em></h3>
-<p>Es una forma corta de escribir funciones usando la flecha <code>=&gt;</code>. <strong>Para que sirve:</strong> escribir callbacks cortos de forma limpia. <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong> (React+TS), casi todos los callbacks de <code>.map</code>, los manejadores de eventos y los efectos se escriben como arrow functions porque son breves.</p>
+<p>Es una forma corta de escribir funciones usando la flecha <code>=&gt;</code>. <strong>Para que sirve:</strong> escribir callbacks cortos de forma limpia. <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong> (React+TS), casi todos los callbacks de <code>.map</code>, los manejadores de eventos y los efectos se escriben como arrow functions, justamente porque son breves.</p>
 </blockquote>
 <p>Compara la misma funcion en los dos estilos:</p>
 <pre><code class="language-javascript">// Estilo clasico
@@ -259,16 +259,16 @@ const dobleC = (n) =&gt; n * 2;
 
 console.log(dobleA(4), dobleB(4), dobleC(4)); // 8 8 8
 </code></pre>
-<p>Con <code>.map</code> quedan preciosas y cortas:</p>
+<p>Con <code>.map</code> quedan cortas y elegantes:</p>
 <pre><code class="language-javascript">const servicios = [&quot;Sitio web&quot;, &quot;SEO local&quot;, &quot;Chat IA&quot;];
 const enMayusculas = servicios.map((s) =&gt; s.toUpperCase());
 // [&quot;SITIO WEB&quot;, &quot;SEO LOCAL&quot;, &quot;CHAT IA&quot;]
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Si la arrow recibe <strong>un solo</strong> parametro puedes quitar los parentesis: <code>s =&gt; s.toUpperCase()</code>. Si recibe cero o dos o mas, los parentesis son obligatorios: <code>() =&gt; ...</code> o <code>(a, b) =&gt; ...</code>. Yo te recomiendo dejar siempre los parentesis al principio: es mas facil de leer.</p>
+<p>Si la arrow recibe <strong>un solo</strong> parametro, puedes quitar los parentesis: <code>s =&gt; s.toUpperCase()</code>. Si recibe cero, dos o mas, los parentesis son obligatorios: <code>() =&gt; ...</code> o <code>(a, b) =&gt; ...</code>. Mi consejo: deja siempre los parentesis. Se lee mas facil y te ahorras dudas.</p>
 </blockquote>
-<p>Ahora la parte que confunde a casi todo el mundo: la palabra <code>this</code>.</p>
+<p>Y ahora la parte que confunde a casi todo el mundo: la palabra <code>this</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-this">🟦 ¿Que significa? — <em>this</em></h3>
 <p><code>this</code> es una palabra especial que apunta al <strong>objeto que esta ejecutando la funcion</strong> en ese momento. Su valor cambia segun <strong>como</strong> se llame la funcion. <strong>Para que sirve:</strong> dentro de un metodo, acceder a los datos del propio objeto. <strong>Donde se usa en un repo real:</strong> en JS orientado a objetos y en algunas APIs del navegador; en <strong>tunal-digital</strong>, dentro de un manejador de evento clasico, <code>this</code> apunta al elemento del DOM que disparo el evento.</p>
@@ -282,10 +282,10 @@ const enMayusculas = servicios.map((s) =&gt; s.toUpperCase());
 
 console.log(proyecto.describir()); // &quot;Proyecto: Tunal Digital&quot;
 </code></pre>
-<p>Aqui esta <strong>la gran diferencia</strong> entre los dos estilos de funcion:</p>
+<p>Y aqui esta <strong>la gran diferencia</strong> entre los dos estilos de funcion:</p>
 <blockquote class="def">
 <h3 id="que-significa-this-lexico-en-arrow-functions">🟦 ¿Que significa? — <em>this lexico (en arrow functions)</em></h3>
-<p>Las arrow functions <strong>no tienen su propio <code>this</code></strong>: usan el <code>this</code> del lugar donde fueron escritas (su entorno, igual que un closure). A eso se le llama "this lexico". <strong>Para que sirve:</strong> evita el clasico bug donde <code>this</code> "se pierde" dentro de un callback. <strong>Donde se usa en un repo real:</strong> por esta razon, en React (Faro, RachaSimple) se prefieren arrow functions; mantienen el contexto sin sorpresas.</p>
+<p>Las arrow functions <strong>no tienen su propio <code>this</code></strong>: usan el <code>this</code> del lugar donde fueron escritas (su entorno, igual que un closure). A esto se le llama "this lexico". <strong>Para que sirve:</strong> evita el clasico bug en el que <code>this</code> "se pierde" dentro de un callback. <strong>Donde se usa en un repo real:</strong> por esta misma razon, en React (Faro, RachaSimple) se prefieren las arrow functions; mantienen el contexto sin sorpresas.</p>
 </blockquote>
 <pre><code class="language-javascript">const cronometro = {
   segundos: 0,
@@ -301,36 +301,36 @@ console.log(proyecto.describir()); // &quot;Proyecto: Tunal Digital&quot;
   },
 };
 </code></pre>
-<p>En <code>iniciarMal</code>, la <code>function</code> interior tiene su propio <code>this</code> (que no es el cronometro), asi que falla. En <code>iniciarBien</code>, la arrow <strong>no crea</strong> un <code>this</code> nuevo: hereda el del metodo, que si es el cronometro. Funciona.</p>
+<p>En <code>iniciarMal</code>, la <code>function</code> interior trae su propio <code>this</code> (que no es el cronometro), asi que la cosa falla. En <code>iniciarBien</code>, la arrow <strong>no crea</strong> un <code>this</code> nuevo: hereda el del metodo, que si es el cronometro. Y por eso funciona.</p>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>No uses arrow functions para definir <strong>metodos</strong> de un objeto si dentro necesitas <code>this</code> apuntando a ese objeto. Para un metodo "normal" que use <code>this</code>, prefiere <code>function</code> o la sintaxis corta <code>describir() { ... }</code>. Las arrow brillan como <strong>callbacks</strong>, no tanto como metodos.</p>
+<p>No uses arrow functions para definir <strong>metodos</strong> de un objeto si dentro necesitas que <code>this</code> apunte a ese objeto. Para un metodo "normal" que use <code>this</code>, ve por <code>function</code> o por la sintaxis corta <code>describir() { ... }</code>. Las arrow brillan como <strong>callbacks</strong>, no tanto como metodos.</p>
 <h3 id="tip_3">💡 Tip</h3>
-<p>Regla practica para principiantes: usa <strong>arrow</strong> para callbacks cortos (lo mas comun, sobre todo en React). Usa <strong><code>function</code></strong> o el metodo corto cuando definas un metodo de objeto que dependa de <code>this</code>. Con eso evitas el 95% de los lios.</p>
+<p>Regla practica para principiantes: usa <strong>arrow</strong> para callbacks cortos (lo mas comun, sobre todo en React). Y usa <strong><code>function</code></strong> o el metodo corto cuando definas un metodo de objeto que dependa de <code>this</code>. Con eso te quitas de encima el 95% de los lios.</p>
 </blockquote>
 <hr />
 <h2 id="8-por-que-todo-esto-importa-en-react-modulo-06">8. Por que todo esto importa en React (Modulo 06)</h2>
-<p>Te adelanto el premio, para que sepas a donde vamos.</p>
+<p>Te adelanto el premio, para que sepas hacia donde vamos.</p>
 <blockquote class="def">
 <h3 id="que-significa-componente-en-react">🟦 ¿Que significa? — <em>Componente (en React)</em></h3>
 <p>Un <em>componente</em> es, casi siempre, <strong>una funcion</strong> que recibe datos (props) y devuelve lo que se ve en pantalla. <strong>Para que sirve:</strong> dividir la interfaz en piezas reutilizables. <strong>Donde se usa en un repo real:</strong> <strong>RachaSimple</strong> y <strong>Faro/Organizer</strong> estan construidos con componentes; cada tarjeta de racha o de proyecto es una funcion que devuelve interfaz.</p>
 </blockquote>
-<p>Cuando llegues al Modulo 06, todo lo de hoy reaparece:</p>
+<p>Cuando llegues al Modulo 06, todo lo de hoy vuelve a aparecer:</p>
 <ul>
 <li>Un <strong>componente</strong> es una funcion (seccion 1).</li>
 <li>Los <strong>eventos</strong> (<code>onClick</code>, <code>onSubmit</code>) reciben <strong>callbacks</strong>, normalmente arrow functions (secciones 2 y 7).</li>
 <li>Las listas se pintan con <code>.map</code>, una <strong>funcion de orden superior</strong> (seccion 3).</li>
 <li><code>useState</code> recuerda el estado del componente gracias a <strong>closures</strong> (seccion 5).</li>
 <li>Pasar "el resto de las props" usa <strong>rest/spread</strong> (seccion 6).</li>
-<li>Se prefieren arrow functions por su <strong>this lexico</strong> y por lo cortas (seccion 7).</li>
+<li>Se prefieren arrow functions por su <strong>this lexico</strong> y por lo cortas que son (seccion 7).</li>
 </ul>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>En <strong>RachaSimple</strong> veras algo como <code>rachas.map((r) =&gt; &lt;Tarjeta key={r.id} dato={r} /&gt;)</code>. Ahi conviven cuatro ideas de este capitulo: una funcion de orden superior (<code>map</code>), una arrow function como callback, un closure que recuerda <code>rachas</code>, y funciones que devuelven interfaz (componentes). No es magia nueva: es exactamente lo que practicaste hoy.</p>
+<p>En <strong>RachaSimple</strong> veras algo asi como <code>rachas.map((r) =&gt; &lt;Tarjeta key={r.id} dato={r} /&gt;)</code>. En esa sola linea conviven cuatro ideas de este capitulo: una funcion de orden superior (<code>map</code>), una arrow function como callback, un closure que recuerda <code>rachas</code>, y funciones que devuelven interfaz (componentes). No es magia nueva: es exactamente lo que practicaste hoy.</p>
 </blockquote>
 <hr />
 <blockquote>
-<p>Lo lograste. Hoy abriste la caja de las funciones y viste sus engranajes: son valores, viajan como callbacks, otras funciones las reciben (orden superior), viven en ambitos, recuerdan su entorno (closures), aceptan parametros flexibles (rest y por defecto) y vienen en dos sabores (arrow y function) que tratan a <code>this</code> distinto. Con esto, el <code>main.js</code> de tunal-digital deja de tener secretos, y React te esperara con los brazos abiertos. Nos vemos en el siguiente capitulo, dice <strong>Bit</strong> mientras mueve sus branquias rosadas.</p>
+<p>Lo lograste. Hoy abriste la caja de las funciones y viste los engranajes de dentro: son valores, viajan como callbacks, otras funciones las reciben (orden superior), viven en ambitos, recuerdan su entorno (closures), aceptan parametros flexibles (rest y por defecto) y vienen en dos sabores (arrow y function) que tratan a <code>this</code> de forma distinta. Con esto, el <code>main.js</code> de tunal-digital deja de guardar secretos, y React te va a recibir con los brazos abiertos. Nos vemos en el siguiente capitulo, dice <strong>Bit</strong> mientras mueve sus branquias rosadas.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

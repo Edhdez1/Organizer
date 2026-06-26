@@ -27,14 +27,15 @@ configuración, el modo "estricto" que usan tus apps, y cómo todo lo aprendido 
 <h2 id="1-el-archivo-de-configuracion-tsconfigjson">1. El archivo de configuración: <code>tsconfig.json</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-tsconfigjson">🟦 ¿Qué significa? — <em><code>tsconfig.json</code></em></h3>
-<p>Es el archivo donde se configura <strong>cómo</strong> se comporta TypeScript en un proyecto: qué tan
-estricto es, a qué versión de JavaScript compila, qué carpetas revisa. Cada uno de tus repos
-con TypeScript (RachaSimple, Faro) tiene el suyo en la raíz.</p>
+<p>Es el archivo donde decides <strong>cómo</strong> se comporta TypeScript en tu proyecto: qué tan
+estricto quieres que sea, a qué versión de JavaScript traduce tu código, qué carpetas mira.
+Cada uno de tus repos con TypeScript (RachaSimple, Faro) lleva el suyo en la raíz.</p>
 <h3 id="que-significa-el-modo-estricto-strict">🟦 ¿Qué significa? — <em>El modo estricto (<code>strict</code>)</em></h3>
-<p>La opción <code>"strict": true</code> activa las comprobaciones <strong>más severas</strong> de TypeScript: te obliga
-a manejar los casos <code>null</code>/<code>undefined</code>, no permite <code>any</code> implícitos, etc. Es más exigente al
-escribir, pero atrapa muchísimos más errores. <strong>Tus dos proyectos lo usan</strong> (RachaSimple
-incluso añade <code>noUncheckedIndexedAccess</code>, una comprobación extra para accesos a listas).
+<p>Cuando pones <code>"strict": true</code>, activas las comprobaciones <strong>más severas</strong> de TypeScript: te
+obliga a tener en cuenta los casos <code>null</code>/<code>undefined</code>, no te deja colar <code>any</code> implícitos, y
+así con varias reglas más. Al escribir es más exigente, sí, pero a cambio caza muchísimos más
+errores. <strong>Tus dos proyectos lo tienen activado</strong> (RachaSimple va un paso más allá y añade
+<code>noUncheckedIndexedAccess</code>, una comprobación extra para cuando accedes a listas).
 <code>json
 {
   "compilerOptions": {
@@ -43,30 +44,30 @@ incluso añade <code>noUncheckedIndexedAccess</code>, una comprobación extra pa
   }
 }</code></p>
 <h3 id="tip-estricto-desde-el-dia-1">💡 Tip — Estricto desde el día 1</h3>
-<p>Empezar un proyecto con <code>strict: true</code> es como ponerte el cinturón antes de arrancar: molesta
-un segundo, pero te protege todo el viaje. Activarlo después, en un proyecto grande, es mucho
-trabajo. Por eso es buena práctica nacer estricto.</p>
+<p>Arrancar un proyecto con <code>strict: true</code> es como abrocharte el cinturón antes de salir: molesta
+un segundo y luego te cuida todo el viaje. Activarlo más tarde, cuando el proyecto ya es grande,
+se convierte en un trabajo enorme. De ahí que lo mejor sea nacer estricto.</p>
 </blockquote>
 <hr />
 <h2 id="2-como-se-compila-y-revisa-en-tus-apps">2. Cómo se compila y revisa en tus apps</h2>
-<p>No ejecutas el compilador a mano: las herramientas lo hacen por ti.</p>
+<p>Tranquilo, no vas a ejecutar el compilador a mano: las herramientas se encargan de eso por ti.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-flujo-en-rachasimple-vite">🟦 ¿Qué significa? — <em>El flujo en RachaSimple (Vite)</em></h3>
 <ul>
 <li>Mientras desarrollas, <strong>Vite</strong> (la herramienta de construcción) y tu editor revisan los
-  tipos al vuelo: ves los errores subrayados al instante.</li>
-<li>Al construir para producción, el comando <code>tsc</code> (el compilador de TypeScript) revisa <strong>todo</strong>
-  el proyecto y falla si hay errores de tipo, evitando publicar código roto.
+  tipos sobre la marcha: los errores te aparecen subrayados al instante.</li>
+<li>Cuando construyes para producción, el comando <code>tsc</code> (el compilador de TypeScript) repasa
+  <strong>todo</strong> el proyecto y se detiene si encuentra un error de tipo, así no publicas código roto.
 <code>escribes .ts/.tsx  →  Vite/editor avisan en vivo  →  build con tsc revisa todo  →  .js final</code></li>
 </ul>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>El <code>package.json</code> de RachaSimple tiene comandos como <code>"typecheck": "tsc --noEmit"</code> (revisa los
-tipos sin generar archivos) y un <code>"build"</code> que corre <code>tsc</code> antes de empaquetar. Es una <strong>red de
-seguridad automática</strong>: nada con errores de tipo llega a tus usuarios.</p>
+<p>El <code>package.json</code> de RachaSimple incluye comandos como <code>"typecheck": "tsc --noEmit"</code> (revisa los
+tipos sin generar ningún archivo) y un <code>"build"</code> que pasa <code>tsc</code> antes de empaquetar. Funciona como
+una <strong>red de seguridad automática</strong>: nada con errores de tipo llega hasta tus usuarios.</p>
 </blockquote>
 <hr />
 <h2 id="3-el-panorama-como-encaja-todo">3. El panorama: cómo encaja todo</h2>
-<p>Repasa el viaje. Un dato en RachaSimple vive así, con TypeScript cuidándolo en cada paso:</p>
+<p>Mira el viaje completo. Un dato en RachaSimple recorre este camino, y TypeScript lo cuida en cada paso:</p>
 <pre><code>types/database.ts          →  define la forma:  interface Habito { ... }
         │
 repositories/habits.ts     →  funciones tipadas que leen/escriben hábitos en Supabase
@@ -75,16 +76,16 @@ hooks/useHabits.ts         →  entrega los hábitos a la interfaz (con TanStack
         │
 components/HabitCard.tsx    →  un componente que recibe un 'Habito' y lo muestra
 </code></pre>
-<p>En cada flecha, TypeScript verifica que la "forma" del hábito se respete. Si alguien cambia la
-interface <code>Habito</code> (por ejemplo, renombra <code>nombre</code> a <code>titulo</code>), TypeScript marca <strong>todos</strong> los
-lugares que hay que actualizar. Esa es la magia: el tipo es un contrato que mantiene coherente
-toda la app, y por eso equipos y proyectos serios lo usan.</p>
+<p>En cada flecha, TypeScript comprueba que la "forma" del hábito se respete. Si alguien cambia la
+interface <code>Habito</code> (digamos que renombra <code>nombre</code> a <code>titulo</code>), TypeScript te señala <strong>todos</strong> los
+sitios que hay que tocar. Ahí está lo bueno: el tipo funciona como un contrato que mantiene
+coherente toda la app de punta a punta, y por eso los equipos y proyectos serios lo usan.</p>
 <blockquote class="tip">
 <h3 id="tip-por-que-esto-te-empodera-tu-meta-original">💡 Tip — Por qué esto te empodera (tu meta original)</h3>
 <p>Ahora puedes dar órdenes precisas como: <em>"añade a la interface <code>Habito</code> un campo opcional
 <code>recordatorio</code> de tipo <code>string</code>, y actualiza el repositorio y la tarjeta para usarlo"</em>. Eso es
-hablar el idioma de tus apps con propiedad, no "hazme algo con los hábitos". Justo el salto que
-buscabas al empezar este manual.</p>
+hablarle a tus apps con propiedad, y no quedarte en un "hazme algo con los hábitos". Justo el
+salto que querías dar cuando empezaste este manual.</p>
 </blockquote>
 <hr />
 <h2 id="4-resumen-del-modulo">4. Resumen del módulo</h2>
@@ -95,8 +96,9 @@ buscabas al empezar este manual.</p>
 ├── Funciones tipadas y, de lejos, los genéricos             (cap. 04)
 └── tsconfig estricto y cómo encaja en RachaSimple/Faro      (cap. 05)
 </code></pre>
-<p>Lo esencial: <strong>TypeScript no es un lenguaje nuevo, es JavaScript con una red de seguridad</strong>. Con
-poco esfuerzo extra, tu código se vuelve más seguro, más claro y más fácil de mantener.</p>
+<p>Quédate con esto: <strong>TypeScript no es un lenguaje nuevo, es JavaScript con una red de seguridad</strong>.
+A cambio de un poco de esfuerzo extra, tu código se vuelve más seguro, más claro y más fácil de
+mantener.</p>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -120,7 +122,7 @@ poco esfuerzo extra, tu código se vuelve más seguro, más claro y más fácil 
    entenderla toda.</li>
 </ol>
 <hr />
-<p>🎉 <strong>¡Terminaste el Módulo 05 — TypeScript!</strong> Sumaste seguridad de tipos a tu JavaScript y ahora
+<p>🎉 <strong>¡Terminaste el Módulo 05 — TypeScript!</strong> Le sumaste seguridad de tipos a tu JavaScript y ahora
 puedes leer el código de RachaSimple y Faro. Lo que viene es el módulo más esperado para esas
 apps: <strong>React</strong>, donde se construyen las interfaces con componentes.</p>
 <p>➡️ Siguiente módulo: <strong><a href="../06-react/README.html">06 — React</a></strong> <em>(en preparación)</em>.</p><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>

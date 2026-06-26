@@ -19,21 +19,21 @@
 <main class="contenedor">
 <h1 id="capitulo-02-consumir-una-api">Capítulo 02 — Consumir una API</h1>
 <blockquote>
-<p>"Consumir" una API es usarla desde tu código: hacerle peticiones y procesar sus respuestas.
-La buena noticia: ya sabes la herramienta (<code>fetch</code>, del Módulo 03). Aquí la juntamos con
-headers, métodos y <strong>claves de API</strong>, que es lo nuevo.</p>
+<p>"Consumir" una API es usarla desde tu código: hacerle peticiones y leer lo que te responde.
+Lo bueno es que la herramienta ya la conoces (<code>fetch</code>, del Módulo 03). Aquí la combinamos con
+headers, métodos y <strong>claves de API</strong>, que es la parte nueva.</p>
 </blockquote>
 <hr />
 <h2 id="1-la-peticion-mas-simple-un-get-con-fetch">1. La petición más simple: un GET con fetch</h2>
-<p>Recuerda <code>fetch</code> del Módulo 03. Consumir una API GET es exactamente eso:</p>
+<p>Acuérdate de <code>fetch</code>, del Módulo 03. Consumir una API GET es justo eso:</p>
 <pre><code class="language-js">async function verUsuario() {
   const respuesta = await fetch(&quot;https://api.github.com/users/Edhdez1&quot;);
   const datos = await respuesta.json();   // de JSON a objeto
   console.log(datos.name, datos.public_repos);
 }
 </code></pre>
-<p>"Pide a este endpoint (espera), convierte la respuesta de JSON a objeto (espera), y úsala." Ya
-lo hiciste con la API de GitHub en el Módulo 03. Eso <strong>es</strong> consumir una API.</p>
+<p>Léelo en voz alta: "pide a este endpoint (espera), pasa la respuesta de JSON a objeto (espera) y
+úsala". Ya lo hiciste con la API de GitHub en el Módulo 03. Eso <strong>es</strong> consumir una API.</p>
 <blockquote class="def">
 <h3 id="que-significa-consumir-vs-exponer-una-api">🟦 ¿Qué significa? — <em>Consumir vs. exponer una API</em></h3>
 <ul>
@@ -44,8 +44,8 @@ En este módulo verás las dos caras.</li>
 </blockquote>
 <hr />
 <h2 id="2-enviar-datos-post-con-body-y-headers">2. Enviar datos: POST con body y headers</h2>
-<p>Para <strong>crear</strong> algo, usas POST y mandas datos en el <strong>body</strong>, además de indicar el formato con
-un <strong>header</strong>:</p>
+<p>Cuando quieres <strong>crear</strong> algo, usas POST y mandas los datos en el <strong>body</strong>, y de paso avisas en
+qué formato van con un <strong>header</strong>:</p>
 <pre><code class="language-js">const respuesta = await fetch(&quot;https://api.ejemplo.com/proyectos&quot;, {
   method: &quot;POST&quot;,
   headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
@@ -55,51 +55,52 @@ un <strong>header</strong>:</p>
 <blockquote class="def">
 <h3 id="que-significa-las-opciones-de-fetch-metodo-headers-body">🟦 ¿Qué significa? — <em>Las opciones de fetch (método, headers, body)</em></h3>
 <p>El segundo argumento de <code>fetch</code> es un objeto con opciones:
-- <code>method</code>: el verbo HTTP (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>…). Si lo omites, es <code>GET</code>.
+- <code>method</code>: el verbo HTTP (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>…). Si no lo pones, asume <code>GET</code>.
 - <code>headers</code>: las cabeceras. <code>"Content-Type": "application/json"</code> avisa "te mando JSON".
-- <code>body</code>: los datos a enviar. Se convierten a texto JSON con <code>JSON.stringify</code> (Módulo 03).
-¿Reconoces el patrón? Es la "anatomía de una petición" del capítulo anterior, en código.</p>
+- <code>body</code>: los datos que envías. Se convierten a texto JSON con <code>JSON.stringify</code> (Módulo 03).
+¿Te suena? Es la "anatomía de una petición" del capítulo anterior, ahora escrita en código.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>El chat de tu sitio (<code>main.js</code>) hace un <code>fetch</code> <strong>POST</strong> al Cloudflare Worker, con tu mensaje
-en el <code>body</code> como JSON. El Worker se lo pasa a Claude y devuelve la respuesta. Es este mismo
-patrón.</p>
+<p>El chat de tu sitio (<code>main.js</code>) hace un <code>fetch</code> <strong>POST</strong> al Cloudflare Worker y mete tu mensaje
+en el <code>body</code> como JSON. El Worker se lo pasa a Claude y te devuelve la respuesta. Es exactamente
+este patrón.</p>
 </blockquote>
 <hr />
 <h2 id="3-claves-de-api-identificarte-ante-el-servicio">3. Claves de API: identificarte ante el servicio</h2>
-<p>La mayoría de las APIs <strong>no son abiertas</strong>: necesitas una credencial para usarlas (para saber
-quién eres, controlar el uso y cobrar si aplica).</p>
+<p>La mayoría de las APIs <strong>no son abiertas</strong>: te piden una credencial para usarlas. Así saben quién
+eres, controlan el uso y, si toca, te cobran.</p>
 <blockquote class="def">
 <h3 id="que-significa-clave-de-api-api-key-y-token">🟦 ¿Qué significa? — <em>Clave de API (API key) y token</em></h3>
-<p>Una <strong>clave de API</strong> (o <strong>token</strong>) es un texto secreto, único para ti, que envías en cada
-petición para <strong>identificarte</strong> ante la API. Suele ir en un header de autorización:
+<p>Una <strong>clave de API</strong> (o <strong>token</strong>) es un texto secreto, único para ti, que mandas en cada
+petición para <strong>identificarte</strong> ante la API. Normalmente viaja en un header de autorización:
 <code>js
 headers: { "Authorization": "Bearer sk-tu-clave-secreta" }</code>
-<code>Bearer</code> ("portador") es el esquema típico: "quien porta este token, es el autorizado".
-La API de OpenAI, la de Claude, etc., funcionan así: sin una clave válida, te rechazan (estado
-401 "no autorizado").</p>
+<code>Bearer</code> ("portador") es el esquema habitual: "quien lleva este token es el autorizado".
+Las APIs de OpenAI, de Claude y muchas más funcionan así: si tu clave no es válida, te rechazan
+con un estado 401 ("no autorizado").</p>
 <h3 id="cuidado-las-claves-de-api-son-secretas-esto-es-crucial">⚠️ Cuidado — Las claves de API son SECRETAS (esto es crucial)</h3>
-<p>Una clave de API suele dar acceso de pago a tu cuenta. Si alguien la consigue, puede gastar tu
-dinero. Reglas inquebrantables (ya las viste en Git y Supabase, aquí se confirman):
+<p>Una clave de API normalmente da acceso de pago a tu cuenta. Si alguien la consigue, puede gastar
+tu dinero. Son reglas que no se negocian (ya las viste en Git y en Supabase; aquí solo se
+confirman):
 1. <strong>Nunca</strong> la escribas directamente en el código del frontend (cualquiera la vería en el
    navegador).
 2. <strong>Nunca</strong> la subas a GitHub (queda en el historial para siempre).
 3. Guárdala en <strong>variables de entorno</strong> del <strong>servidor</strong> (<code>.env.local</code>, excluido por
-   <code>.gitignore</code>), y haz las llamadas desde ahí.
-Es exactamente por esto que tu chat usa un <strong>Cloudflare Worker</strong>: la clave de Claude vive en el
-Worker (servidor), nunca en la página. El navegador habla con tu Worker; tu Worker, con Claude.</p>
+   <code>.gitignore</code>) y haz las llamadas desde ahí.
+Por esto mismo tu chat usa un <strong>Cloudflare Worker</strong>: la clave de Claude vive en el Worker
+(servidor), nunca en la página. El navegador habla con tu Worker, y tu Worker habla con Claude.</p>
 <h3 id="que-significa-variable-de-entorno">🟦 ¿Qué significa? — <em>Variable de entorno</em></h3>
-<p>Una <strong>variable de entorno</strong> es un valor de configuración (como una clave secreta) que se guarda
-<strong>fuera del código</strong>, en el entorno donde corre el programa (el servidor, Vercel, el Worker).
-Así el código dice "usa la clave que está en la variable <code>OPENAI_API_KEY</code>" sin que la clave
-esté escrita en ningún archivo que se suba. Faro tiene un <code>.env.local.example</code> que lista qué
-variables necesita (sin los valores reales).</p>
+<p>Una <strong>variable de entorno</strong> es un valor de configuración (por ejemplo, una clave secreta) que se
+guarda <strong>fuera del código</strong>, en el entorno donde corre el programa (el servidor, Vercel, el
+Worker). Así el código dice "usa la clave que está en la variable <code>OPENAI_API_KEY</code>" sin que la
+clave aparezca escrita en ningún archivo que se suba. Faro tiene un <code>.env.local.example</code> que
+lista qué variables necesita, pero sin los valores reales.</p>
 </blockquote>
 <hr />
 <h2 id="4-manejar-la-respuesta-y-los-errores">4. Manejar la respuesta y los errores</h2>
 <blockquote class="def">
 <h3 id="que-significa-revisar-el-estado-de-la-respuesta">🟦 ¿Qué significa? — <em>Revisar el estado de la respuesta</em></h3>
-<p>Una API puede responder con error (401 sin clave, 404 no existe, 429 demasiadas peticiones).
-Conviene revisar antes de usar los datos:
+<p>Una API puede responderte con un error (401 sin clave, 404 no existe, 429 demasiadas
+peticiones). Por eso conviene revisar antes de usar los datos:
 <code>js
 const r = await fetch(url, opciones);
 if (!r.ok) {            // r.ok es true si el estado es 200-299
@@ -107,13 +108,13 @@ if (!r.ok) {            // r.ok es true si el estado es 200-299
   return;
 }
 const datos = await r.json();</code>
-<code>r.ok</code> y <code>r.status</code> (¿recuerdas los códigos del Módulo 00?) te dicen si todo fue bien. Envuelve
-todo en <code>try/catch</code> (Módulo 03) para los fallos de red.</p>
+<code>r.ok</code> y <code>r.status</code> (¿te acuerdas de los códigos del Módulo 00?) te dicen si todo salió bien.
+Y envuelve todo en <code>try/catch</code> (Módulo 03) por si la red falla.</p>
 <h3 id="que-significa-limite-de-tasa-rate-limit">🟦 ¿Qué significa? — <em>Límite de tasa (rate limit)</em></h3>
-<p>Las APIs limitan cuántas peticiones puedes hacer por minuto/día (para no saturarse). Si te
-pasas, responden <strong>429</strong> ("demasiadas peticiones"). Por eso las apps serias controlan su ritmo.
-Tu Worker de Claude tiene su propio rate limiting <strong>por IP</strong> para que nadie abuse de tu chat y
-te dispare la factura.</p>
+<p>Las APIs ponen un tope a cuántas peticiones puedes hacer por minuto o por día, para no saturarse.
+Si te pasas, te responden <strong>429</strong> ("demasiadas peticiones"). Por eso las apps serias cuidan su
+ritmo. Tu Worker de Claude tiene su propio rate limiting <strong>por IP</strong>, para que nadie abuse de tu
+chat y te dispare la factura.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

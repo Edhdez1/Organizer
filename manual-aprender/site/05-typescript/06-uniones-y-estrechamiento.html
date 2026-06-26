@@ -23,16 +23,16 @@
 </p>
 
 <blockquote>
-<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guia. En el capitulo anterior aprendiste a ponerle "etiquetas" a tus datos con tipos. Hoy vamos a dar un paso enorme: aprender a decir cosas como <em>"esto es texto </em><em>o</em><em> numero"</em> y <em>"este estado solo puede ser <code>activo</code> o <code>pausado</code>, nada mas"</em>. Y lo mejor: TypeScript te ayudara a <strong>descubrir cual de las dos cosas es</strong> justo en el momento en que lo necesitas. A eso se le llama <em>estrechamiento</em>, y es una de las magias mas utiles del lenguaje. Respira, mueve las branquias, y vamos.</p>
+<p>Hola otra vez, soy <strong>Bit</strong>, tu ajolote guia. En el capitulo pasado aprendiste a ponerle "etiquetas" a tus datos con tipos. Hoy damos un salto grande: vas a aprender a decir cosas como <em>"esto es texto </em><em>o</em><em> numero"</em> y <em>"este estado solo puede ser <code>activo</code> o <code>pausado</code>, y nada mas"</em>. Y lo mejor de todo: en el momento justo en que lo necesites, TypeScript te ayudara a <strong>averiguar cual de las dos cosas es</strong>. A eso se le llama <em>estrechamiento</em>, y es uno de los trucos mas utiles del lenguaje. Respira, mueve las branquias, y arrancamos.</p>
 </blockquote>
-<p>Recuerda la idea base de todo este modulo: <strong>TypeScript es JavaScript con tipos</strong>. Todo lo que veras hoy se ejecuta como JavaScript normal; los tipos solo viven mientras escribes el codigo y desaparecen al compilar. Asi que apoyate en lo que ya sabes de JavaScript (modulo 03): condicionales, <code>typeof</code>, comparaciones con <code>===</code>, valores "verdaderos" y "falsos".</p>
+<p>Antes de seguir, repasa la idea que sostiene todo este modulo: <strong>TypeScript es JavaScript con tipos</strong>. Lo de hoy se ejecuta como JavaScript de toda la vida; los tipos solo existen mientras escribes y se evaporan al compilar. Asi que apoyate en lo que ya sabes de JavaScript (modulo 03): condicionales, <code>typeof</code>, comparaciones con <code>===</code> y la idea de valores "verdaderos" y "falsos".</p>
 <hr />
 <h2 id="1-el-tipo-union-esto-o-aquello">1. El tipo union: "esto o aquello"</h2>
-<p>A veces un valor puede ser de <strong>mas de un tipo</strong>. Por ejemplo, una funcion que recibe un identificador que a veces llega como numero y a veces como texto. En JavaScript simplemente lo aceptabas y ya. En TypeScript se lo decimos de forma explicita con una <strong>union</strong>.</p>
+<p>Hay valores que pueden ser de <strong>mas de un tipo</strong>. Piensa en una funcion que recibe un identificador: unas veces llega como numero y otras como texto. En JavaScript lo aceptabas sin mas y seguias adelante. En TypeScript se lo decimos de forma explicita con una <strong>union</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-tipo-union-union-type">🟦 ¿Que significa? — <em>Tipo union (union type)</em></h3>
 <p>Es un tipo que dice "el valor puede ser <strong>uno de varios</strong> tipos posibles". Se escribe separando los tipos con una barra vertical <code>|</code>, que aqui se lee como <strong>"o"</strong>.
-<strong>Para que sirve:</strong> para describir datos que legitimamente pueden tener mas de una forma, sin renunciar a la seguridad de tipos.
+<strong>Para que sirve:</strong> para describir datos que de verdad pueden tener mas de una forma, sin perder la seguridad de tipos.
 <strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, una funcion que formatea un identificador podria recibir <code>string | number</code>, porque GitHub a veces entrega IDs numericos y a veces cadenas.</p>
 </blockquote>
 <p>Un ejemplo sencillo:</p>
@@ -45,28 +45,28 @@ mostrarId(&quot;abc-123&quot;); // valido
 mostrarId(42);         // tambien valido
 mostrarId(true);       // ❌ Error: boolean no esta en la union
 </code></pre>
-<p>La parte <code>string | number</code> es la union. TypeScript ahora vigila que <strong>solo</strong> entren cadenas o numeros. Si intentas pasar un booleano, te avisa antes de ejecutar nada.</p>
+<p>La parte <code>string | number</code> es la union. A partir de ahi, TypeScript vigila que <strong>solo</strong> entren cadenas o numeros. Si intentas colar un booleano, te avisa antes de ejecutar nada.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Lee el simbolo <code>|</code> como la palabra "o". Asi <code>string | number | null</code> se lee literalmente "texto, o numero, o nulo". Tu cerebro lo procesara mucho mas rapido.</p>
+<p>Lee el simbolo <code>|</code> como la palabra "o". Asi <code>string | number | null</code> se lee literalmente "texto, o numero, o nulo". Tu cabeza lo procesa mucho mas rapido.</p>
 </blockquote>
 <h3 id="lo-que-puedes-hacer-con-una-union">Lo que puedes hacer con una union</h3>
-<p>Aqui viene el detalle importante. Mientras un valor sea <code>string | number</code>, <strong>solo puedes usar lo que ambos tipos tienen en comun</strong>. Por ejemplo, <code>.toFixed()</code> existe en los numeros pero no en los textos, asi que TypeScript no te deja usarlo todavia:</p>
+<p>Aqui esta el detalle que importa. Mientras un valor sea <code>string | number</code>, <strong>solo puedes usar lo que ambos tipos tienen en comun</strong>. Por ejemplo, <code>.toFixed()</code> existe en los numeros pero no en los textos, asi que TypeScript todavia no te deja usarlo:</p>
 <pre><code class="language-typescript">function aDoble(valor: string | number) {
   return valor.toFixed(2); // ❌ Error: 'toFixed' no existe en 'string'
 }
 </code></pre>
-<p>TypeScript es prudente: como no sabe si en ese momento <code>valor</code> es texto o numero, no te deja usar nada que pueda fallar. ¿Como lo resolvemos? Necesitamos <strong>demostrarle</strong> cual de los dos es. Eso es el estrechamiento, y llegamos a el en un momento. Primero, un tipo de union muy especial y muy usado.</p>
+<p>TypeScript va con pies de plomo: como no sabe si en ese instante <code>valor</code> es texto o numero, no te deja usar nada que pudiera fallar. ¿Y como salimos de ahi? Hay que <strong>demostrarle</strong> cual de los dos es. Eso es el estrechamiento, y llegamos en un momento. Antes, un tipo de union muy especial y muy usado.</p>
 <hr />
 <h2 id="2-tipos-literales-valores-exactos-como-tipo">2. Tipos literales: valores exactos como tipo</h2>
-<p>Hasta ahora un tipo era una <strong>categoria</strong> (todos los textos, todos los numeros). Pero TypeScript puede ir mas fino y decir: <em>"este valor no es cualquier texto, es exactamente la palabra <code>activo</code>"</em>.</p>
+<p>Hasta ahora un tipo era una <strong>categoria</strong>: todos los textos, todos los numeros. Pero TypeScript puede afinar mucho mas y decir: <em>"este valor no es cualquier texto, es exactamente la palabra <code>activo</code>"</em>.</p>
 <blockquote class="def">
 <h3 id="que-significa-tipo-literal-literal-type">🟦 ¿Que significa? — <em>Tipo literal (literal type)</em></h3>
 <p>Es un tipo cuyo unico valor permitido es <strong>un valor concreto</strong>: una cadena especifica, un numero especifico o un booleano especifico. Por ejemplo, el tipo <code>"activo"</code> solo acepta la cadena exacta <code>"activo"</code>.
-<strong>Para que sirve:</strong> para limitar un valor a un conjunto cerrado y conocido de opciones, en vez de "cualquier texto".
+<strong>Para que sirve:</strong> para limitar un valor a un conjunto cerrado y conocido de opciones, en lugar de "cualquier texto".
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, el estado de una racha de habito no es "cualquier texto": es una de unas pocas palabras fijas como <code>activa</code> o <code>rota</code>.</p>
 </blockquote>
-<p>Un literal solo no sirve de mucho (un tipo que solo acepta una palabra). La gracia aparece cuando combinas <strong>literales con uniones</strong>.</p>
+<p>Un literal a solas no da para mucho (un tipo que solo acepta una palabra). La gracia salta cuando combinas <strong>literales con uniones</strong>.</p>
 <h3 id="uniones-de-literales-el-patron-estrella">Uniones de literales: el patron estrella</h3>
 <pre><code class="language-typescript">// El estado de una racha solo puede ser una de estas tres palabras
 type EstadoRacha = &quot;activa&quot; | &quot;pausada&quot; | &quot;rota&quot;;
@@ -76,27 +76,27 @@ estado = &quot;activa&quot;; // ✅ valido
 estado = &quot;rota&quot;;   // ✅ valido
 estado = &quot;muerta&quot;; // ❌ Error: no esta entre las opciones permitidas
 </code></pre>
-<p>Esto es oro puro. Antes, en JavaScript, podias escribir <code>estado = "actva"</code> con un dedazo y no te enterabas hasta que algo se rompia en produccion. Ahora TypeScript te subraya el error mientras escribes.</p>
+<p>Esto vale oro. Antes, en JavaScript, podias escribir <code>estado = "actva"</code> con un dedazo y no te enterabas hasta que algo reventaba en produccion. Ahora TypeScript te subraya el error mientras escribes.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu codigo</h3>
-<p>En <strong>RachaSimple</strong>, modelar el estado de una racha o de un habito como <code>"activa" | "pausada" | "rota"</code> evita un monton de bugs. Si en algun <code>if</code> comparas contra <code>"pauseda"</code> (mal escrito), TypeScript te avisa porque esa palabra <strong>no existe</strong> en el tipo. En <strong>Faro</strong> pasa lo mismo con el estado de un proyecto, algo como <code>"al_dia" | "en_riesgo" | "atrasado"</code>.</p>
+<p>En <strong>RachaSimple</strong>, modelar el estado de una racha o de un habito como <code>"activa" | "pausada" | "rota"</code> te ahorra un monton de bugs. Si en algun <code>if</code> comparas contra <code>"pauseda"</code> (mal escrito), TypeScript te avisa, porque esa palabra <strong>no existe</strong> en el tipo. En <strong>Faro</strong> ocurre lo mismo con el estado de un proyecto, algo como <code>"al_dia" | "en_riesgo" | "atrasado"</code>.</p>
 <h3 id="que-significa-alias-de-tipo-type">🟦 ¿Que significa? — <em>Alias de tipo (<code>type</code>)</em></h3>
 <p>Es ponerle un <strong>nombre</strong> a un tipo para reutilizarlo. Se escribe <code>type NombreNuevo = ...</code>. Una vez definido, puedes usar <code>NombreNuevo</code> en muchos sitios en lugar de repetir la union completa.
-<strong>Para que sirve:</strong> para no repetir <code>"activa" | "pausada" | "rota"</code> cien veces y, si un dia agregas un estado, cambiarlo en un solo lugar.
+<strong>Para que sirve:</strong> para no escribir <code>"activa" | "pausada" | "rota"</code> cien veces y, si un dia agregas un estado, cambiarlo en un solo lugar.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong>, los tipos de dominio (estados, prioridades, fases) suelen vivir como alias en un archivo de tipos, importados desde componentes y hooks.</p>
 <h3 id="tip_1">💡 Tip</h3>
-<p>Una union de literales es como un menu cerrado de restaurante: solo puedes pedir lo que esta en la carta. Esto es muchisimo mas seguro que un <code>string</code> libre, que seria como dejar al cliente escribir cualquier cosa en una servilleta.</p>
+<p>Una union de literales es como el menu cerrado de un restaurante: solo puedes pedir lo que esta en la carta. Es muchisimo mas seguro que un <code>string</code> libre, que seria como dejar al cliente escribir cualquier cosa en una servilleta.</p>
 </blockquote>
 <hr />
 <h2 id="3-estrechamiento-convencer-a-typescript-de-cual-tipo-es">3. Estrechamiento: convencer a TypeScript de cual tipo es</h2>
-<p>Volvamos al problema de la seccion 1: teniamos <code>string | number</code> y no podiamos usar <code>.toFixed()</code>. La solucion se llama <strong>estrechamiento</strong>.</p>
+<p>Retomemos el problema de la seccion 1: teniamos <code>string | number</code> y no podiamos usar <code>.toFixed()</code>. La salida se llama <strong>estrechamiento</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-estrechamiento-narrowing">🟦 ¿Que significa? — <em>Estrechamiento (narrowing)</em></h3>
 <p>Es el proceso por el cual TypeScript <strong>reduce</strong> un tipo amplio (como <code>string | number</code>) a uno mas concreto (solo <code>number</code>) dentro de una parte del codigo, gracias a las comprobaciones que tu escribes. "Estrechar" = pasar de muchas posibilidades a menos.
-<strong>Para que sirve:</strong> para poder usar de forma segura los metodos y propiedades especificos de un tipo, una vez que has demostrado cual es.
+<strong>Para que sirve:</strong> para poder usar con seguridad los metodos y propiedades especificos de un tipo, una vez que has demostrado cual es.
 <strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong> y <strong>RachaSimple</strong>, cada vez que recibes datos que pueden venir nulos o de varios tipos (respuestas de Supabase, datos de OpenAI), estrechas antes de usarlos.</p>
 </blockquote>
-<p>Lo bonito es que el estrechamiento usa <strong>las mismas herramientas de JavaScript que ya conoces</strong> del modulo 03. TypeScript simplemente las "entiende" y ajusta el tipo segun la rama del codigo en la que estes. Veamos las principales.</p>
+<p>Lo bonito es que el estrechamiento usa <strong>las mismas herramientas de JavaScript que ya conoces</strong> del modulo 03. TypeScript simplemente las "entiende" y ajusta el tipo segun la rama del codigo en la que estes. Veamoslas una a una.</p>
 <h3 id="31-estrechar-con-typeof">3.1 Estrechar con <code>typeof</code></h3>
 <blockquote class="def">
 <h3 id="que-significa-typeof">🟦 ¿Que significa? — <em><code>typeof</code></em></h3>
@@ -113,13 +113,13 @@ estado = &quot;muerta&quot;; // ❌ Error: no esta entre las opciones permitidas
   return valor.toUpperCase(); // ✅ TypeScript sabe que es string
 }
 </code></pre>
-<p>Fijate en la magia: dentro del <code>if</code>, <code>valor</code> es <code>number</code>; despues del <code>if</code>, TypeScript <strong>descarta</strong> <code>number</code> (porque ya lo atrapamos) y deduce que lo unico que queda es <code>string</code>. No tuviste que decirselo: lo razono solo.</p>
+<p>Mira la jugada: dentro del <code>if</code>, <code>valor</code> es <code>number</code>; despues del <code>if</code>, TypeScript <strong>descarta</strong> <code>number</code> (porque ya lo atrapamos) y deduce que lo unico que queda es <code>string</code>. No tuviste que decirselo, lo razono el solito.</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Estrechar con <code>typeof</code> es como mirar dentro de una caja antes de meter la mano. Una vez que sabes que dentro hay un numero, puedes hacer cuentas con tranquilidad.</p>
+<p>Estrechar con <code>typeof</code> es como mirar dentro de una caja antes de meter la mano. Una vez que sabes que ahi hay un numero, puedes hacer cuentas con tranquilidad.</p>
 </blockquote>
 <h3 id="32-estrechar-con-igualdad-estricta">3.2 Estrechar con <code>===</code> (igualdad estricta)</h3>
-<p>Cuando trabajas con <strong>uniones de literales</strong> (la seccion 2), la herramienta natural es comparar con <code>===</code>. Cada comparacion descarta opciones.</p>
+<p>Cuando trabajas con <strong>uniones de literales</strong> (la seccion 2), la herramienta natural es comparar con <code>===</code>. Cada comparacion va descartando opciones.</p>
 <blockquote class="def">
 <h3 id="que-significa-igualdad-estricta">🟦 ¿Que significa? — <em><code>===</code> (igualdad estricta)</em></h3>
 <p>Compara dos valores <strong>sin convertir tipos</strong>: solo es <code>true</code> si son del mismo tipo y el mismo valor. Es la comparacion que usaste en JavaScript; TypeScript la aprovecha para estrechar uniones de literales.
@@ -141,7 +141,7 @@ function colorDeEstado(estado: EstadoRacha): string {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Usa siempre <code>===</code> y nunca <code>==</code> para estas comparaciones. El <code>==</code> convierte tipos por detras y trae sorpresas (por ejemplo, <code>0 == ""</code> es <code>true</code> en JavaScript). TypeScript y el equipo de cualquier proyecto serio prefieren <code>===</code>. En <strong>RachaSimple</strong> y <strong>Faro</strong> la regla es: siempre <code>===</code>.</p>
+<p>Para estas comparaciones usa siempre <code>===</code> y nunca <code>==</code>. El <code>==</code> convierte tipos por detras y te trae sorpresas (por ejemplo, <code>0 == ""</code> es <code>true</code> en JavaScript). TypeScript, y cualquier equipo que se tome en serio su proyecto, prefiere <code>===</code>. En <strong>RachaSimple</strong> y <strong>Faro</strong> la regla es clara: siempre <code>===</code>.</p>
 </blockquote>
 <h3 id="33-estrechar-con-truthiness-valores-verdaderosfalsos">3.3 Estrechar con truthiness (valores verdaderos/falsos)</h3>
 <blockquote class="def">
@@ -160,7 +160,7 @@ function colorDeEstado(estado: EstadoRacha): string {
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>Truthiness descarta tambien la cadena vacia <code>""</code> y el numero <code>0</code>, no solo <code>null</code>. Si para tu logica <code>0</code> o <code>""</code> son valores <strong>validos</strong>, comprueba explicitamente: <code>if (valor !== null)</code> en vez de <code>if (valor)</code>. Es un error clasico contar mal una racha cuando el contador es <code>0</code>.</p>
+<p>La truthiness descarta tambien la cadena vacia <code>""</code> y el numero <code>0</code>, no solo <code>null</code>. Si para tu logica <code>0</code> o <code>""</code> son valores <strong>validos</strong>, comprueba de forma explicita: <code>if (valor !== null)</code> en vez de <code>if (valor)</code>. Es un fallo clasico contar mal una racha justo cuando el contador esta en <code>0</code>.</p>
 </blockquote>
 <h3 id="34-estrechar-con-in">3.4 Estrechar con <code>in</code></h3>
 <blockquote class="def">
@@ -184,15 +184,15 @@ function describir(r: Resultado): string {
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Cuando los objetos de tu union comparten una propiedad "etiqueta" (como <code>ok: true</code> / <code>ok: false</code>), puedes estrechar comparando esa etiqueta con <code>===</code>. A ese patron se le llama <strong>union discriminada</strong> y es comodisimo: <code>if (r.ok) { ... }</code>.</p>
+<p>Cuando los objetos de tu union comparten una propiedad "etiqueta" (como <code>ok: true</code> / <code>ok: false</code>), puedes estrechar comparando esa etiqueta con <code>===</code>. Ese patron se llama <strong>union discriminada</strong> y es comodisimo: <code>if (r.ok) { ... }</code>.</p>
 </blockquote>
 <hr />
 <h2 id="4-type-guards-tus-propias-preguntas-de-tipo">4. Type guards: tus propias preguntas de tipo</h2>
-<p>Las herramientas anteriores (<code>typeof</code>, <code>in</code>, <code>===</code>) son guardias <strong>de tipo</strong> integradas. Pero a veces necesitas una comprobacion mas a tu medida y reutilizable. Para eso existen los <strong>type guards</strong> personalizados.</p>
+<p>Las herramientas anteriores (<code>typeof</code>, <code>in</code>, <code>===</code>) son guardias <strong>de tipo</strong> que vienen de fabrica. Pero a veces necesitas una comprobacion mas a tu medida y que puedas reutilizar. Para eso estan los <strong>type guards</strong> personalizados.</p>
 <blockquote class="def">
 <h3 id="que-significa-type-guard-guardia-de-tipo">🟦 ¿Que significa? — <em>Type guard (guardia de tipo)</em></h3>
 <p>Es cualquier comprobacion que le permite a TypeScript estrechar un tipo. Un <strong>type guard personalizado</strong> es una funcion que devuelve <code>true</code>/<code>false</code> y, ademas, le ensena a TypeScript <em>que tipo es el valor</em> cuando devuelve <code>true</code>, usando la sintaxis especial <code>valor is Tipo</code>.
-<strong>Para que sirve:</strong> para encapsular una comprobacion de tipo y reutilizarla en varios sitios, manteniendo el estrechamiento.
+<strong>Para que sirve:</strong> para encapsular una comprobacion de tipo y reutilizarla en varios sitios, sin perder el estrechamiento.
 <strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong>, para validar que un texto cualquiera es de verdad un <code>EstadoRacha</code> valido antes de guardarlo.</p>
 </blockquote>
 <pre><code class="language-typescript">type EstadoRacha = &quot;activa&quot; | &quot;pausada&quot; | &quot;rota&quot;;
@@ -215,21 +215,21 @@ function procesar(textoDelServidor: string) {
 <blockquote class="def">
 <h3 id="que-significa-predicado-de-tipo-valor-is-tipo">🟦 ¿Que significa? — <em>Predicado de tipo (<code>valor is Tipo</code>)</em></h3>
 <p>Es la parte <code>: valor is EstadoRacha</code> en el tipo de retorno de la funcion. Le promete a TypeScript: "si esta funcion devuelve <code>true</code>, puedes confiar en que <code>valor</code> es de ese tipo".
-<strong>Para que sirve:</strong> para que tu funcion guardiana <strong>estreche</strong> el tipo en quien la llama, no solo devuelva un booleano cualquiera.
+<strong>Para que sirve:</strong> para que tu funcion guardiana <strong>estreche</strong> el tipo en quien la llama, en vez de devolver un booleano cualquiera.
 <strong>Donde se usa en un repo real:</strong> en <strong>Faro</strong>, para validar datos que llegan de OpenAI o de Supabase antes de tratarlos como tipos de dominio confiables.</p>
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Un type guard es una <strong>promesa que tu haces</strong>. Si tu funcion devuelve <code>true</code> pero la comprobacion interna esta mal, TypeScript te creera de todos modos y confiara en un tipo equivocado. Escribe la condicion con cuidado: es tu responsabilidad que sea verdad.</p>
+<p>Un type guard es una <strong>promesa que tu haces</strong>. Si tu funcion devuelve <code>true</code> pero la comprobacion de dentro esta mal, TypeScript te creera igual y confiara en un tipo equivocado. Escribe la condicion con cuidado: que sea verdad corre por tu cuenta.</p>
 </blockquote>
 <hr />
 <h2 id="5-el-tipo-never-lo-que-no-puede-pasar">5. El tipo <code>never</code>: lo que no puede pasar</h2>
 <p>Llegamos al tipo mas filosofico de todos. Cuando estrechas tanto una union que <strong>ya no queda ninguna opcion</strong>, TypeScript le pone a ese valor el tipo <code>never</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-tipo-never">🟦 ¿Que significa? — <em>Tipo <code>never</code></em></h3>
-<p>Es el tipo de un valor que <strong>no puede existir</strong>. Aparece cuando has descartado todas las opciones posibles de una union, o en funciones que nunca terminan normalmente (siempre lanzan un error). "never" significa literalmente "nunca".
+<p>Es el tipo de un valor que <strong>no puede existir</strong>. Aparece cuando has descartado todas las opciones posibles de una union, o en funciones que nunca terminan de forma normal (siempre lanzan un error). "never" significa literalmente "nunca".
 <strong>Para que sirve:</strong> sobre todo para <strong>comprobaciones de exhaustividad</strong>: asegurarte de que tu codigo maneja <em>todos</em> los casos de una union de literales. Si manana agregas un estado nuevo y olvidas manejarlo, TypeScript te avisa.
-<strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong>, en los <code>switch</code> que deciden algo segun el estado, para que el compilador obligue a manejar cada estado posible.</p>
+<strong>Donde se usa en un repo real:</strong> en <strong>RachaSimple</strong> y <strong>Faro</strong>, en los <code>switch</code> que deciden algo segun el estado, para que el compilador te obligue a manejar cada estado posible.</p>
 </blockquote>
-<p>El truco clasico: un <code>switch</code> que cubre todos los casos y, en el <code>default</code>, asigna el valor a una variable <code>never</code>.</p>
+<p>El truco de siempre: un <code>switch</code> que cubre todos los casos y, en el <code>default</code>, asigna el valor a una variable <code>never</code>.</p>
 <pre><code class="language-typescript">type EstadoRacha = &quot;activa&quot; | &quot;pausada&quot; | &quot;rota&quot;;
 
 function etiqueta(estado: EstadoRacha): string {
@@ -247,16 +247,16 @@ function etiqueta(estado: EstadoRacha): string {
   }
 }
 </code></pre>
-<p>¿Por que es genial? Imagina que el equipo de <strong>RachaSimple</strong> decide anadir un cuarto estado, <code>"reiniciada"</code>, al tipo <code>EstadoRacha</code>. En cuanto lo agregas a la union, TypeScript marca un <strong>error</strong> en la linea del <code>default</code>: ahora <code>estado</code> <em>podria</em> ser <code>"reiniciada"</code>, asi que ya no es <code>never</code>. Eso te recuerda, sin que se te olvide, que debes anadir su <code>case</code>. Es como una alarma que suena justo donde tienes que actuar.</p>
+<p>¿Por que esto es tan bueno? Imagina que el equipo de <strong>RachaSimple</strong> decide anadir un cuarto estado, <code>"reiniciada"</code>, al tipo <code>EstadoRacha</code>. En cuanto lo agregas a la union, TypeScript marca un <strong>error</strong> en la linea del <code>default</code>: ahora <code>estado</code> <em>podria</em> ser <code>"reiniciada"</code>, asi que ya no es <code>never</code>. Eso te recuerda, sin que se te pase, que tienes que anadir su <code>case</code>. Es como una alarma que suena justo donde tienes que actuar.</p>
 <blockquote class="tip">
 <h3 id="tip_4">💡 Tip</h3>
-<p>Recuerda: <code>void</code> significa "esta funcion no devuelve nada util" (pero termina). <code>never</code> significa "este punto <strong>no se alcanza jamas</strong>" o "este valor no puede existir". Son distintos: <code>void</code> es para funciones que terminan sin valor; <code>never</code> es para lo imposible.</p>
+<p>No los confundas: <code>void</code> significa "esta funcion no devuelve nada util" (pero termina). <code>never</code> significa "este punto <strong>no se alcanza jamas</strong>" o "este valor no puede existir". <code>void</code> es para funciones que terminan sin valor; <code>never</code> es para lo imposible.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu codigo</h3>
-<p>Cada vez que en <strong>Faro</strong> escribas un <code>switch</code> sobre el estado de un proyecto (<code>"al_dia" | "en_riesgo" | "atrasado"</code>), agrega el caso <code>default</code> con <code>const _: never = estado</code>. Asi, el dia que el roadmap crezca y agregues un estado nuevo, el compilador te obliga a actualizar todos los lugares que dependen de el. Es seguridad gratis.</p>
+<p>Cada vez que en <strong>Faro</strong> escribas un <code>switch</code> sobre el estado de un proyecto (<code>"al_dia" | "en_riesgo" | "atrasado"</code>), agrega el caso <code>default</code> con <code>const _: never = estado</code>. Asi, el dia que el roadmap crezca y agregues un estado nuevo, el compilador te obliga a actualizar todos los lugares que dependen de el. Seguridad gratis.</p>
 </blockquote>
 <hr />
 <h2 id="6-juntandolo-todo-un-ejemplo-tipo-react">6. Juntandolo todo: un ejemplo tipo React</h2>
-<p>En <strong>RachaSimple</strong> (React 18 + TypeScript) los componentes reciben <strong>props</strong> tipadas. Una union de literales como prop es muy comun: por ejemplo, una insignia que muestra el estado de la racha con color y texto.</p>
+<p>En <strong>RachaSimple</strong> (React 18 + TypeScript) los componentes reciben <strong>props</strong> tipadas. Una union de literales como prop es de lo mas habitual: por ejemplo, una insignia que muestra el estado de la racha con color y texto.</p>
 <blockquote class="def">
 <h3 id="que-significa-props-tipadas">🟦 ¿Que significa? — <em>Props tipadas</em></h3>
 <p>Las <strong>props</strong> son los datos que un componente de React recibe de su componente padre. Tiparlas significa describir con TypeScript que forma tienen (que campos y de que tipo), para que nadie pase datos equivocados.
@@ -285,10 +285,10 @@ function InsigniaRacha({ estado, dias }: InsigniaProps) {
   return `[${texto}] ${dias} dias - color ${color}`;
 }
 </code></pre>
-<p>Quien use este componente <strong>no podra</strong> escribir <code>&lt;InsigniaRacha estado="muerta" dias={5} /&gt;</code>, porque <code>"muerta"</code> no esta en <code>EstadoRacha</code>. Y si pasa <code>dias="cinco"</code> (texto en vez de numero), tambien recibe un error. Toda esa proteccion sale de unir literales y estrechar con <code>===</code>. Recuerda: en el JavaScript final, esto es solo un <code>if</code>/ternario corriente; los tipos hicieron su trabajo <em>antes</em> de ejecutarse.</p>
+<p>Quien use este componente <strong>no podra</strong> escribir <code>&lt;InsigniaRacha estado="muerta" dias={5} /&gt;</code>, porque <code>"muerta"</code> no esta en <code>EstadoRacha</code>. Y si pasa <code>dias="cinco"</code> (texto en vez de numero), tambien recibe un error. Toda esa proteccion sale de unir literales y estrechar con <code>===</code>. Y no lo olvides: en el JavaScript final esto es un <code>if</code>/ternario corriente; los tipos hicieron su trabajo <em>antes</em> de ejecutarse.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu codigo</h3>
-<p>En <strong>Faro</strong> (Next.js 15 + React 19), un patron identico aparece para mostrar el estado de un proyecto o la fase de un roadmap. Definir esos estados como union de literales y estrechar con <code>===</code> mantiene la interfaz coherente y a prueba de dedazos.</p>
+<p>En <strong>Faro</strong> (Next.js 15 + React 19) aparece un patron identico para mostrar el estado de un proyecto o la fase de un roadmap. Definir esos estados como union de literales y estrechar con <code>===</code> mantiene la interfaz coherente y a prueba de dedazos.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

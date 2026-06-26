@@ -1,28 +1,28 @@
 # Capítulo 02 — Componentes y JSX
 
-> Ya sabes que un componente es "una función que devuelve interfaz". Ahora aprendamos a
-> escribirlos de verdad, y a entender **JSX**: ese "HTML dentro de JavaScript" que da un poco de
-> impresión al principio y se vuelve natural enseguida.
+> Ya sabes que un componente es "una función que devuelve interfaz". Toca aprender a
+> escribirlos en serio y a entender **JSX**: ese "HTML dentro de JavaScript" que al principio
+> echa un poco para atrás y, en cuanto le coges el truco, se vuelve de lo más natural.
 
 ---
 
 ## 1. Un componente es una función con mayúscula
 
 > ### 🟦 ¿Qué significa? — *Componente de función*
-> Un componente es una **función de JavaScript que devuelve JSX** (la interfaz). Dos reglas:
+> Un componente es una **función de JavaScript que devuelve JSX** (la interfaz). Tiene dos reglas:
 > 1. Su nombre empieza con **mayúscula** (`Saludo`, `HabitCard`), para que React lo distinga de
 >    una etiqueta HTML normal.
-> 2. Devuelve **una** cosa (un solo elemento, que puede contener otros dentro).
+> 2. Devuelve **una sola** cosa: un único elemento, que por dentro puede contener todos los que quieras.
 > ```tsx
 > function Saludo() {
 >   return <h1>¡Hola, Edwar!</h1>;
 > }
 > ```
-> Y se usa como si fuera una etiqueta nueva: `<Saludo />`.
+> Y lo usas como si fuera una etiqueta recién inventada: `<Saludo />`.
 
 > ### 💡 Tip — Componer componentes
-> Como un componente puede usar otros dentro, construyes pantallas combinándolos, igual que
-> bloques:
+> Como un componente puede meter otros por dentro, montas pantallas combinándolos, igual que
+> quien encaja piezas:
 > ```tsx
 > function App() {
 >   return (
@@ -33,39 +33,39 @@
 >   );
 > }
 > ```
-> Aquí `App` usa `Saludo` dos veces. Reutilización en acción.
+> Aquí `App` usa `Saludo` dos veces. Reutilización en estado puro.
 
 ---
 
 ## 2. Qué es JSX
 
 > ### 🟦 ¿Qué significa? — *JSX*
-> **JSX** (*JavaScript XML*) es una sintaxis que te deja escribir algo **parecido a HTML dentro
-> de tu JavaScript/TypeScript**. No es HTML de verdad ni texto: es una forma cómoda de describir
-> interfaz que luego React convierte en elementos reales.
+> **JSX** (*JavaScript XML*) es una sintaxis que te permite escribir algo **muy parecido a HTML,
+> pero dentro de tu JavaScript/TypeScript**. No es HTML de verdad ni una cadena de texto: es una
+> manera cómoda de describir la interfaz que después React traduce a elementos reales.
 > ```tsx
 > const elemento = <h1 className="titulo">Hola</h1>;
 > ```
-> Parece HTML, pero vive dentro del código y puede mezclarse con variables y lógica. Por eso los
-> archivos de React son `.jsx` o, con TypeScript, `.tsx`.
+> A la vista parece HTML, pero vive dentro del código y se mezcla sin problema con variables y
+> lógica. Por eso los archivos de React llevan extensión `.jsx` o, cuando usas TypeScript, `.tsx`.
 
 ---
 
 ## 3. Las reglas de JSX (las que más confunden al inicio)
 
-JSX se parece al HTML pero tiene **diferencias** que conviene conocer desde ya:
+JSX se parece al HTML, pero tiene unas cuantas **diferencias** que vale la pena tener claras desde el primer día:
 
 > ### 🟦 ¿Qué significa? — *`className` en vez de `class`*
-> Para poner una clase CSS, en JSX se usa `className`, no `class` (porque `class` es una palabra
-> reservada de JavaScript):
+> Para asignar una clase CSS, en JSX se escribe `className`, no `class` (la palabra `class` ya está
+> reservada en JavaScript y no puedes reutilizarla):
 > ```tsx
 > <div className="tarjeta">…</div>
 > ```
 
 > ### 🟦 ¿Qué significa? — *Un solo elemento raíz (y los Fragments)*
-> Un componente debe devolver **un único elemento**. Si quieres devolver varios "hermanos", los
-> envuelves: en un `<div>`, o en un **Fragment** vacío `<> </>` (que agrupa sin añadir un `<div>`
-> extra al resultado):
+> Un componente tiene que devolver **un único elemento**. Si necesitas devolver varios "hermanos",
+> los envuelves: dentro de un `<div>`, o dentro de un **Fragment** vacío `<> </>`, que los agrupa
+> sin colar un `<div>` de más en el resultado final:
 > ```tsx
 > return (
 >   <>
@@ -76,19 +76,19 @@ JSX se parece al HTML pero tiene **diferencias** que conviene conocer desde ya:
 > ```
 
 > ### 🟦 ¿Qué significa? — *Etiquetas que se autocierran*
-> En JSX, los elementos sin contenido **deben** cerrarse con `/`: `<img />`, `<br />`,
-> `<input />`. (En HTML era opcional; en JSX es obligatorio.)
+> En JSX, los elementos que no tienen contenido **tienen que** cerrarse con `/`: `<img />`, `<br />`,
+> `<input />`. En HTML esto era opcional; aquí no te lo puedes saltar.
 
 ---
 
 ## 4. Insertar JavaScript en el JSX con `{ }`
 
-Aquí está la magia que diferencia JSX del HTML estático: puedes meter **cualquier valor de
-JavaScript** usando llaves `{ }`.
+Llegamos a lo que de verdad separa al JSX del HTML estático: puedes colar **cualquier valor de
+JavaScript** entre llaves `{ }`.
 
 > ### 🟦 ¿Qué significa? — *Las llaves `{ }` en JSX*
-> Dentro del JSX, `{ }` significa "aquí va una expresión de JavaScript". Sirve para mostrar
-> variables, hacer cálculos o llamar funciones:
+> Dentro del JSX, `{ }` quiere decir "aquí va una expresión de JavaScript". Te sirven para mostrar
+> variables, hacer cuentas o llamar a funciones:
 > ```tsx
 > function Saludo() {
 >   const nombre = "Edwar";
@@ -102,18 +102,18 @@ JavaScript** usando llaves `{ }`.
 >   );
 > }
 > ```
-> Esto es lo que hace a React tan potente: la interfaz se construye **con datos**, no con texto
-> fijo. (¿Recuerdas los template strings y el operador ternario del Módulo 03? Reaparecen aquí.)
+> Aquí está la gracia de React: la interfaz se arma **a partir de los datos**, no con texto clavado
+> a mano. (¿Te acuerdas de los template strings y el operador ternario del Módulo 03? Pues vuelven a aparecer.)
 
 ---
 
 ## 5. Mostrar listas: `.map()`
 
-Una de las cosas más comunes: convertir una lista de datos en una lista de elementos. Se usa el
-método `.map()` de los arrays (Módulo 03).
+Una tarea que harás mil veces: tomar una lista de datos y convertirla en una lista de elementos.
+Para eso está el método `.map()` de los arrays (Módulo 03).
 
 > ### 🟦 ¿Qué significa? — *Renderizar una lista con `.map()`*
-> `.map()` transforma cada elemento de un array en un trozo de JSX:
+> `.map()` convierte cada elemento de un array en un trozo de JSX:
 > ```tsx
 > function ListaServicios() {
 >   const servicios = ["Diseño web", "IA", "Marketing"];
@@ -126,22 +126,23 @@ método `.map()` de los arrays (Módulo 03).
 >   );
 > }
 > ```
-> Esto genera un `<li>` por cada servicio. Es exactamente cómo RachaSimple muestra tu lista de
-> hábitos y Faro tus proyectos: un array de datos → un componente por cada uno.
+> El resultado es un `<li>` por cada servicio. Es justo así como RachaSimple pinta tu lista de
+> hábitos y Faro tus proyectos: un array de datos y, por cada dato, un componente.
 
 > ### 🟦 ¿Qué significa? — *La prop `key`*
-> Cuando renderizas una lista, React pide una **`key`**: un identificador único por elemento
-> (idealmente un `id`). Le sirve para saber qué cambió y actualizar solo lo necesario. Olvidarla
-> da una advertencia. Por ahora: **en cada `.map()` que devuelva elementos, pon una `key` única**.
+> Cuando renderizas una lista, React te pide una **`key`**: un identificador único para cada
+> elemento (lo ideal es un `id`). Le sirve para saber qué cambió y actualizar solo lo que hace
+> falta. Si la olvidas, te suelta una advertencia. De momento quédate con esto: **en cada `.map()`
+> que devuelva elementos, pon una `key` única**.
 
 > ### ⚠️ Cuidado — `if` no va dentro del JSX, pero el ternario sí
-> Dentro de `{ }` solo van **expresiones** (cosas que devuelven un valor), no un `if` completo.
-> Para condicionar, usa el ternario (`condición ? a : b`) o el `&&`:
+> Dentro de `{ }` solo caben **expresiones**, es decir, cosas que devuelven un valor; un `if`
+> completo no entra. Para condicionar, tira del ternario (`condición ? a : b`) o del `&&`:
 > ```tsx
 > {cargando ? <Spinner /> : <Contenido />}
 > {hayError && <p>Algo salió mal</p>}
 > ```
-> El patrón `condición && <Algo />` muestra `<Algo />` solo si la condición es verdadera.
+> El patrón `condición && <Algo />` muestra `<Algo />` únicamente cuando la condición es verdadera.
 
 ---
 

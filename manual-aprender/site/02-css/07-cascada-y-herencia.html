@@ -23,17 +23,17 @@
 </p>
 
 <blockquote>
-<p>Bienvenido de nuevo. En este capítulo vamos a descubrir el corazón secreto de CSS: por qué se llama así (la "C" de <em>Cascading</em>, en cascada) y cómo el navegador decide qué regla gana cuando dos reglas se pelean por el mismo elemento. Spoiler: no es magia ni azar, es un conjunto de reglas claras que vas a poder predecir. Bit, nuestro ajolote favorito, dice que esto es como ordenar la fila del recreo: hay que saber quién va primero. Vamos despacio y con calma.</p>
+<p>Qué bueno verte de nuevo. Hoy vamos a entender el corazón de CSS: por qué lleva ese nombre (la "C" es de <em>Cascading</em>, en cascada) y cómo el navegador decide qué regla manda cuando dos se pelean por el mismo elemento. Te adelanto algo: no hay magia ni suerte de por medio. Son reglas claras, y cuando las conoces, puedes predecir el resultado. Bit, nuestro ajolote, lo compara con ordenar la fila del recreo: hace falta saber quién va primero. Lo vamos a ver con calma.</p>
 </blockquote>
 <hr />
 <h2 id="1-por-que-css-se-llama-cascada">1. Por qué CSS se llama "cascada"</h2>
-<p>Las siglas <strong>CSS</strong> significan <em>Cascading Style Sheets</em>: "Hojas de estilo en cascada". Esa palabra, <strong>cascada</strong>, no está ahí de adorno. Describe exactamente cómo funciona la herramienta: los estilos caen desde varias fuentes (el navegador, tu archivo <code>styles.css</code>, los atributos en el HTML) y se van apilando como el agua que baja por escalones, hasta que para cada propiedad de cada elemento queda <strong>un único valor ganador</strong>.</p>
+<p><strong>CSS</strong> son las siglas de <em>Cascading Style Sheets</em>: "Hojas de estilo en cascada". Y esa palabra, <strong>cascada</strong>, no es decorativa. Describe justo cómo funciona la herramienta: los estilos caen desde varias fuentes (el propio navegador, tu archivo <code>styles.css</code>, los atributos que escribes en el HTML) y se apilan como el agua que baja por una escalera, hasta que cada propiedad de cada elemento se queda con <strong>un único valor ganador</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-cascada">🟦 ¿Qué significa? — <em>Cascada</em></h3>
-<p>La <strong>cascada</strong> es el proceso por el que el navegador combina todas las reglas CSS que existen y, cuando varias quieren cambiar lo mismo (por ejemplo, el color de un párrafo), elige una sola usando criterios de prioridad. Sirve para que nunca haya empate ni confusión: siempre hay un ganador definido.
-En <code>tunal-digital</code>, tu archivo <code>styles.css</code> participa en la cascada junto con los estilos por defecto del navegador. Por eso un enlace <code>&lt;a&gt;</code> es azul aunque tú no escribas nada: ese azul viene del navegador, y tu CSS puede sobrescribirlo.</p>
+<p>La <strong>cascada</strong> es el proceso por el que el navegador junta todas las reglas CSS que existen y, cuando varias quieren cambiar lo mismo (por ejemplo, el color de un párrafo), escoge una sola siguiendo criterios de prioridad. Gracias a eso nunca hay empate ni confusión: siempre queda un ganador definido.
+En <code>tunal-digital</code>, tu archivo <code>styles.css</code> entra en la cascada junto con los estilos por defecto del navegador. Por eso un enlace <code>&lt;a&gt;</code> aparece azul aunque tú no escribas nada: ese azul lo trae el navegador, y tu CSS puede cambiarlo.</p>
 </blockquote>
-<p>Imagina que tienes estas dos reglas en el <code>styles.css</code> de tunal-digital:</p>
+<p>Supón que tienes estas dos reglas en el <code>styles.css</code> de tunal-digital:</p>
 <pre><code class="language-css">p {
   color: gray;
 }
@@ -42,14 +42,14 @@ p {
   color: navy;
 }
 </code></pre>
-<p>Las dos apuntan al mismo elemento (<code>p</code>) y a la misma propiedad (<code>color</code>). No pueden ganar las dos. La cascada decide: como tienen la <strong>misma importancia</strong> y la <strong>misma especificidad</strong> (ya veremos qué es eso), gana <strong>la que aparece después</strong>. Resultado: los párrafos serán <code>navy</code> (azul marino).</p>
+<p>Las dos apuntan al mismo elemento (<code>p</code>) y a la misma propiedad (<code>color</code>). No pueden ganar las dos a la vez. Ahí entra la cascada: como tienen la <strong>misma importancia</strong> y la <strong>misma especificidad</strong> (enseguida vemos qué es eso), gana <strong>la que aparece después</strong>. Así que los párrafos saldrán <code>navy</code>, azul marino.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>Cuando algo "no se aplica" en tu CSS, casi nunca es un bug del navegador. Es la cascada haciendo su trabajo: otra regla está ganando. Aprender este capítulo te ahorrará horas de frustración.</p>
+<p>Cuando algo "no se aplica" en tu CSS, casi nunca es culpa del navegador. Es la cascada haciendo su trabajo: hay otra regla ganando la partida. Entender este capítulo te va a ahorrar muchas horas de frustración.</p>
 </blockquote>
 <hr />
 <h2 id="2-los-tres-criterios-que-deciden-el-ganador">2. Los tres criterios que deciden el ganador</h2>
-<p>Cuando dos o más reglas afectan a la misma propiedad del mismo elemento, el navegador aplica <strong>tres criterios en orden</strong>. Solo pasa al siguiente si el anterior queda empatado:</p>
+<p>Cuando dos o más reglas tocan la misma propiedad del mismo elemento, el navegador aplica <strong>tres criterios en orden</strong>. Y solo pasa al siguiente si el anterior termina en empate:</p>
 <ol>
 <li><strong>Importancia</strong> (¿alguna regla usa <code>!important</code>?).</li>
 <li><strong>Especificidad</strong> (¿qué tan "específico" es el selector?).</li>
@@ -59,8 +59,8 @@ p {
 <h3 id="21-importancia">2.1 Importancia</h3>
 <blockquote class="def">
 <h3 id="que-significa-important">🟦 ¿Qué significa? — <em>!important</em></h3>
-<p><code>!important</code> es una marca que añades al final de una declaración para decirle al navegador: "esta gana, pase lo que pase". Sirve para forzar un estilo por encima de todos los demás. Se usa muy poco a propósito, porque rompe el flujo normal de la cascada.
-En <code>tunal-digital</code> podrías sentir la tentación de poner <code>!important</code> para "arreglar" algo rápido, pero suele ser señal de que conviene revisar el orden o el selector.</p>
+<p><code>!important</code> es una marca que pones al final de una declaración para decirle al navegador: "esta gana, pase lo que pase". Sirve para forzar un estilo por encima de todos los demás. Se usa muy poco a propósito, porque rompe el funcionamiento normal de la cascada.
+En <code>tunal-digital</code> quizá sientas la tentación de poner <code>!important</code> para "arreglar" algo rápido, pero casi siempre es la señal de que conviene revisar el orden o el selector.</p>
 </blockquote>
 <pre><code class="language-css">p {
   color: red !important; /* esta gana aunque otra regla diga otra cosa */
@@ -70,30 +70,30 @@ p {
   color: green; /* pierde, aunque esté después */
 }
 </code></pre>
-<p>Aquí los párrafos serán <strong>rojos</strong>, porque <code>!important</code> rompe la regla normal del orden. Por eso decimos que la importancia se evalúa <strong>primero</strong>.</p>
+<p>Aquí los párrafos salen <strong>rojos</strong>, porque <code>!important</code> se salta la regla habitual del orden. Por eso decimos que la importancia se mira <strong>primero</strong> de todo.</p>
 <blockquote class="warn">
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p><code>!important</code> es como gritar en una conversación: si todos gritan, nadie se entiende. Úsalo solo en casos muy puntuales (por ejemplo, sobrescribir un estilo de una librería que no puedes editar). En tus propios archivos, casi siempre hay una solución más limpia.</p>
+<p><code>!important</code> es como gritar en una conversación: si todos gritan, nadie se entiende. Resérvalo para casos muy puntuales, por ejemplo sobrescribir un estilo de una librería que no puedes editar. En tus propios archivos, casi siempre existe una salida más limpia.</p>
 </blockquote>
 <h3 id="22-especificidad">2.2 Especificidad</h3>
-<p>Si ninguna regla usa <code>!important</code> (lo normal), el navegador mira la <strong>especificidad</strong>: qué tan preciso es el selector. Un selector más específico le gana a uno más general.</p>
+<p>Si ninguna regla usa <code>!important</code> (que es lo normal), el navegador pasa a la <strong>especificidad</strong>: qué tan preciso es el selector. Un selector más específico le gana a uno más general.</p>
 <blockquote class="def">
 <h3 id="que-significa-especificidad">🟦 ¿Qué significa? — <em>Especificidad</em></h3>
-<p>La <strong>especificidad</strong> es un puntaje que el navegador calcula para cada selector según los "ingredientes" que usa. A más puntaje, más prioridad. Sirve para que un estilo dirigido a un elemento concreto pese más que un estilo genérico.
-En el <code>styles.css</code> de tunal-digital, una regla <code>.boton-cta</code> (clase) gana sobre una regla <code>button</code> (etiqueta), porque la clase es más específica.</p>
+<p>La <strong>especificidad</strong> es un puntaje que el navegador calcula para cada selector según los "ingredientes" que use. A más puntaje, más prioridad. Así, un estilo dirigido a un elemento concreto pesa más que uno genérico.
+En el <code>styles.css</code> de tunal-digital, una regla <code>.boton-cta</code> (clase) le gana a una regla <code>button</code> (etiqueta), porque la clase es más específica.</p>
 </blockquote>
-<p>La especificidad se calcula con tres "columnas" que puedes imaginar como un marcador <code>(A, B, C)</code>:</p>
+<p>La especificidad se calcula con tres "columnas", que puedes imaginar como un marcador <code>(A, B, C)</code>:</p>
 <ul>
 <li><strong>A — IDs</strong>: cuántos <code>#identificador</code> hay en el selector.</li>
-<li><strong>B — clases, atributos y pseudo-clases</strong>: cuántos <code>.clase</code>, <code>[type="text"]</code>, <code>:hover</code> hay.</li>
-<li><strong>C — etiquetas y pseudo-elementos</strong>: cuántos <code>p</code>, <code>div</code>, <code>::before</code> hay.</li>
+<li><strong>B — clases, atributos y pseudo-clases</strong>: cuántos <code>.clase</code>, <code>[type="text"]</code>, <code>:hover</code> aparecen.</li>
+<li><strong>C — etiquetas y pseudo-elementos</strong>: cuántos <code>p</code>, <code>div</code>, <code>::before</code> aparecen.</li>
 </ul>
 <blockquote class="def">
 <h3 id="que-significa-pseudo-clase-y-pseudo-elemento">🟦 ¿Qué significa? — <em>Pseudo-clase y pseudo-elemento</em></h3>
 <p>Una <strong>pseudo-clase</strong> es una palabra que se añade a un selector con dos puntos (<code>:</code>) para apuntar a un elemento cuando está en cierto <strong>estado</strong>: <code>:hover</code> (el ratón encima), <code>:focus</code> (tiene el foco del teclado), <code>:first-child</code> (es el primer hijo). Un <strong>pseudo-elemento</strong> se escribe con dos puntos dobles (<code>::</code>) y apunta a una <strong>parte virtual</strong> del elemento que no existe como etiqueta propia: <code>::before</code> y <code>::after</code> (contenido generado antes o después), <code>::first-line</code> (la primera línea de texto). Sirven para estilar estados y trozos sin tener que crear más HTML.
 En el <code>styles.css</code> de tunal-digital, <code>.boton-cta:hover { background: navy; }</code> cambia el fondo del botón solo mientras el visitante pasa el ratón por encima. Para la especificidad, una pseudo-clase cuenta como clase (columna B) y un pseudo-elemento como etiqueta (columna C).</p>
 </blockquote>
-<p>Se comparan de izquierda a derecha. Quien tenga más en la columna A gana; si empatan en A, se mira B; si empatan en B, se mira C.</p>
+<p>La comparación va de izquierda a derecha. Quien tenga más en la columna A gana; si empatan en A, se mira B; si también empatan en B, decide C.</p>
 <table>
 <thead>
 <tr>
@@ -142,7 +142,7 @@ En el <code>styles.css</code> de tunal-digital, <code>.boton-cta:hover { backgro
 </tr>
 </tbody>
 </table>
-<p>Veamos un ejemplo real con un fragmento estilo tunal-digital:</p>
+<p>Veámoslo con un fragmento al estilo de tunal-digital:</p>
 <pre><code class="language-css">/* C = 1 etiqueta → (0,0,1) */
 a {
   color: gray;
@@ -158,13 +158,13 @@ a {
   color: gold;
 }
 </code></pre>
-<p>Un enlace dentro de <code>#nav-principal</code> será <strong>dorado</strong>, porque <code>(1,0,0)</code> le gana a <code>(0,1,0)</code> y a <code>(0,0,1)</code>. Aunque la regla <code>a { color: gray }</code> esté escrita después, pierde: el orden solo decide cuando la especificidad empata.</p>
+<p>Un enlace dentro de <code>#nav-principal</code> saldrá <strong>dorado</strong>, porque <code>(1,0,0)</code> le gana a <code>(0,1,0)</code> y a <code>(0,0,1)</code>. Y aunque la regla <code>a { color: gray }</code> esté escrita después, pierde igual: el orden solo decide cuando la especificidad ya está empatada.</p>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Para comparar dos selectores, no sumes los números de las columnas como si fueran un total. <code>(1,0,0)</code> siempre gana a <code>(0,9,9)</code>. Un solo ID pesa más que muchísimas clases. Por eso conviene no abusar de los IDs en CSS: vuelven los estilos muy difíciles de sobrescribir después.</p>
+<p>Para comparar dos selectores, no sumes los números de las columnas como si fueran un total. <code>(1,0,0)</code> siempre le gana a <code>(0,9,9)</code>. Un solo ID pesa más que un montón de clases juntas. Por eso conviene no abusar de los IDs en CSS: dejan los estilos muy difíciles de sobrescribir más adelante.</p>
 </blockquote>
 <h3 id="23-orden-de-aparicion">2.3 Orden de aparición</h3>
-<p>Si dos reglas tienen la <strong>misma importancia</strong> y la <strong>misma especificidad</strong>, entonces —y solo entonces— gana <strong>la última que aparece</strong>. Esto incluye el orden dentro de un archivo y el orden en que cargas varios archivos en el HTML.</p>
+<p>Si dos reglas tienen la <strong>misma importancia</strong> y la <strong>misma especificidad</strong>, entonces —y solo entonces— gana <strong>la última que aparece</strong>. Esto cuenta tanto para el orden dentro de un archivo como para el orden en que cargas varios archivos en el HTML.</p>
 <pre><code class="language-css">.boton {
   background: blue;
 }
@@ -173,72 +173,72 @@ a {
   background: orange; /* misma especificidad, está después → gana */
 }
 </code></pre>
-<p>El botón será <strong>naranja</strong>. Este es el criterio que usaste sin saberlo en el primer ejemplo del capítulo.</p>
+<p>El botón queda <strong>naranja</strong>. Y este es justo el criterio que usaste sin darte cuenta en el primer ejemplo del capítulo.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <code>tunal-digital</code>, el orden en que enlazas tus hojas en el <code>&lt;head&gt;</code> importa. Si tienes <code>&lt;link rel="stylesheet" href="reset.css"&gt;</code> antes de <code>&lt;link rel="stylesheet" href="styles.css"&gt;</code>, las reglas de <code>styles.css</code> pueden sobrescribir a las de <code>reset.css</code> cuando empatan en especificidad. Por eso los "reset" o "normalize" se cargan siempre <strong>primero</strong>.</p>
+<p>En <code>tunal-digital</code>, el orden en que enlazas tus hojas dentro del <code>&lt;head&gt;</code> importa. Si tienes <code>&lt;link rel="stylesheet" href="reset.css"&gt;</code> antes de <code>&lt;link rel="stylesheet" href="styles.css"&gt;</code>, las reglas de <code>styles.css</code> pueden sobrescribir a las de <code>reset.css</code> cuando empatan en especificidad. Por eso los "reset" o "normalize" se cargan siempre <strong>primero</strong>.</p>
 </blockquote>
 <hr />
 <h2 id="3-como-tailwind-se-relaciona-con-la-cascada">3. Cómo Tailwind se relaciona con la cascada</h2>
-<p>En <code>RachaSimple</code> (React + TS + Tailwind) y en <code>Faro/Organizer</code> (Next.js + Tailwind) no escribes selectores como en tunal-digital, sino <strong>clases utilitarias</strong> directamente en el HTML/JSX: <code>class="text-blue-600 bg-white p-4"</code>. Pero por dentro, eso sigue siendo CSS y sigue obedeciendo la cascada.</p>
+<p>En <code>RachaSimple</code> (React + TS + Tailwind) y en <code>Faro/Organizer</code> (Next.js + Tailwind) no escribes selectores como en tunal-digital, sino <strong>clases utilitarias</strong> directamente en el HTML/JSX: <code>class="text-blue-600 bg-white p-4"</code>. Pero por debajo eso sigue siendo CSS, y sigue obedeciendo la cascada.</p>
 <blockquote class="def">
 <h3 id="que-significa-clase-utilitaria-utility-class">🟦 ¿Qué significa? — <em>Clase utilitaria (utility class)</em></h3>
-<p>Una <strong>clase utilitaria</strong> es una clase de CSS pequeñita que hace una sola cosa: <code>p-4</code> añade padding, <code>text-center</code> centra el texto. Tailwind te da cientos de ellas listas para usar. Sirve para estilar sin salir del HTML/JSX y sin inventar nombres de clases.
+<p>Una <strong>clase utilitaria</strong> es una clase de CSS pequeñita que hace una sola cosa: <code>p-4</code> añade padding, <code>text-center</code> centra el texto. Tailwind te trae cientos de ellas listas para usar. Así estilas sin salir del HTML/JSX y sin tener que inventar nombres de clases.
 En <code>RachaSimple</code>, un botón puede ser <code>&lt;button className="bg-green-500 text-white rounded"&gt;</code>. Cada utilidad es, por debajo, una regla CSS normal con su especificidad.</p>
 </blockquote>
-<p>Aquí aparece una duda muy común: si pongo <code>class="text-red-500 text-blue-500"</code>, ¿de qué color queda el texto? Mucha gente cree que gana el que escribe <strong>último en el HTML</strong>. Falso. Lo que gana es el que aparece <strong>último en el archivo CSS generado por Tailwind</strong>, no el orden en que escribiste las clases en el atributo.</p>
+<p>Aquí surge una duda muy habitual: si pongo <code>class="text-red-500 text-blue-500"</code>, ¿de qué color queda el texto? Mucha gente piensa que gana el que escribe <strong>último en el HTML</strong>. Pues no. Gana el que aparece <strong>último en el archivo CSS que genera Tailwind</strong>, no el orden en que tú escribiste las clases dentro del atributo.</p>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>En Tailwind, el orden de las clases en el atributo <code>class</code>/<code>className</code> <strong>no decide</strong> quién gana, porque todas tienen la misma especificidad y lo que manda es el orden en la hoja de estilos final. Si necesitas garantizar que una utilidad gane (por ejemplo, en estados como <code>hover:</code> o <code>md:</code>), usa los prefijos y variantes que Tailwind provee, no reordenes clases al azar.</p>
+<p>En Tailwind, el orden de las clases en el atributo <code>class</code>/<code>className</code> <strong>no decide</strong> quién gana, porque todas comparten la misma especificidad y lo que manda es el orden en la hoja de estilos final. Si necesitas asegurar que una utilidad gane (por ejemplo, en estados como <code>hover:</code> o <code>md:</code>), apóyate en los prefijos y variantes que trae Tailwind, no reordenes clases al azar.</p>
 </blockquote>
 <hr />
 <h2 id="4-la-herencia-cuando-los-hijos-copian-a-los-padres">4. La herencia: cuando los hijos copian a los padres</h2>
-<p>Hasta ahora hablamos de conflictos entre reglas. Ahora viene la otra mitad mágica de CSS: la <strong>herencia</strong>. Es la razón por la que pones un <code>color</code> en <code>body</code> y, de repente, <strong>todo el texto de la página</strong> cambia, sin que toques cada elemento.</p>
+<p>Hasta aquí hablamos de conflictos entre reglas. Ahora viene la otra mitad bonita de CSS: la <strong>herencia</strong>. Es la razón de que pongas un <code>color</code> en <code>body</code> y, de golpe, <strong>todo el texto de la página</strong> cambie sin que toques cada elemento uno por uno.</p>
 <blockquote class="def">
 <h3 id="que-significa-herencia">🟦 ¿Qué significa? — <em>Herencia</em></h3>
-<p>La <strong>herencia</strong> es el mecanismo por el que ciertos elementos hijos toman automáticamente el valor de una propiedad de su elemento padre, si tú no se lo defines explícitamente. Sirve para no tener que repetir estilos en cada etiqueta. Es como un apellido: lo recibes de tu familia sin pedirlo.
+<p>La <strong>herencia</strong> es el mecanismo por el que ciertos elementos hijos toman automáticamente el valor de una propiedad de su padre, siempre que tú no se lo definas a mano. Te ahorra repetir estilos en cada etiqueta. Funciona como un apellido: lo recibes de tu familia sin pedirlo.
 En el <code>styles.css</code> de tunal-digital, si pones <code>body { color: #333; font-family: sans-serif; }</code>, todos los <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;li&gt;</code>, etc., heredan ese gris oscuro y esa tipografía. No tienes que escribirlo cien veces.</p>
 </blockquote>
 <h3 id="41-padre-e-hijo-el-arbol-del-html">4.1 Padre e hijo: el árbol del HTML</h3>
-<p>Para entender la herencia, piensa en el HTML como un árbol genealógico. Cada elemento está dentro de otro:</p>
+<p>Para entender la herencia, piensa en el HTML como un árbol genealógico. Cada elemento vive dentro de otro:</p>
 <pre><code class="language-html">&lt;body&gt;            &lt;!-- abuelo --&gt;
   &lt;article&gt;       &lt;!-- padre --&gt;
     &lt;p&gt;Hola&lt;/p&gt;   &lt;!-- hijo --&gt;
   &lt;/article&gt;
 &lt;/body&gt;
 </code></pre>
-<p>Aquí <code>body</code> es ancestro de <code>article</code>, y <code>article</code> es el padre directo de <code>p</code>. Las propiedades que se heredan <strong>bajan</strong> por este árbol, de arriba hacia abajo.</p>
+<p>Aquí <code>body</code> es ancestro de <code>article</code>, y <code>article</code> es el padre directo de <code>p</code>. Las propiedades que se heredan <strong>bajan</strong> por ese árbol, de arriba hacia abajo.</p>
 <pre><code class="language-css">body {
   color: #2c3e50;          /* heredable */
   font-family: Georgia, serif; /* heredable */
 }
 </code></pre>
-<p>El <code>&lt;p&gt;Hola&lt;/p&gt;</code> saldrá con texto color <code>#2c3e50</code> y fuente Georgia, <strong>aunque nunca le escribiste una regla propia</strong>, porque heredó esos valores pasando por <code>article</code> y <code>body</code>.</p>
+<p>El <code>&lt;p&gt;Hola&lt;/p&gt;</code> saldrá con texto color <code>#2c3e50</code> y fuente Georgia, <strong>aunque nunca le escribiste una regla propia</strong>, porque heredó esos valores bajando por <code>article</code> y <code>body</code>.</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>Poner las propiedades de texto (color, fuente, tamaño base, interlineado) en <code>body</code> es una práctica excelente. Defines el "tono general" una sola vez y dejas que la herencia lo reparta. Luego solo sobrescribes las excepciones: un título más grande, un aviso en rojo, etc.</p>
+<p>Poner las propiedades de texto (color, fuente, tamaño base, interlineado) en <code>body</code> es una práctica buenísima. Defines el "tono general" una sola vez y dejas que la herencia lo reparta. Después solo sobrescribes las excepciones: un título más grande, un aviso en rojo, lo que haga falta.</p>
 </blockquote>
 <h3 id="42-que-se-hereda-y-que-no">4.2 Qué se hereda y qué no</h3>
-<p>No todas las propiedades se heredan. Hay una lógica detrás:</p>
+<p>No todas las propiedades se heredan. Y hay una lógica detrás:</p>
 <ul>
 <li><strong>Se heredan</strong> sobre todo las propiedades de <strong>texto</strong>: <code>color</code>, <code>font-family</code>, <code>font-size</code>, <code>font-weight</code>, <code>line-height</code>, <code>text-align</code>, <code>letter-spacing</code>, <code>visibility</code>, <code>cursor</code>.</li>
 <li><strong>NO se heredan</strong> las propiedades de <strong>caja y layout</strong>: <code>margin</code>, <code>padding</code>, <code>border</code>, <code>width</code>, <code>height</code>, <code>background</code>, <code>display</code>, <code>position</code>.</li>
 </ul>
-<p>¿Por qué? Imagina que <code>border</code> se heredara: si pones un borde en <code>body</code>, ¡cada párrafo, cada palabra envuelta, cada lista tendría su propio borde! Sería un caos. En cambio, que el color del texto se herede es comodísimo. Las personas que diseñaron CSS eligieron heredar lo que casi siempre quieres compartir, y no heredar lo que casi nunca quieres repetir.</p>
+<p>¿Por qué esa separación? Imagina que <code>border</code> se heredara: pones un borde en <code>body</code> y, de repente, cada párrafo, cada palabra envuelta y cada lista tendría su propio borde. Un caos. En cambio, que el color del texto se herede es comodísimo. Quienes diseñaron CSS eligieron heredar lo que casi siempre quieres compartir, y dejar fuera lo que casi nunca quieres repetir.</p>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p><code>background</code> no se hereda, pero a veces <em>parece</em> que sí. Si pones <code>background: yellow</code> en <code>body</code>, los párrafos se ven amarillos porque su fondo es <strong>transparente</strong> por defecto y deja ver el amarillo del padre. No es herencia: es que no tienen fondo propio. Es un detalle sutil pero importante.</p>
+<p><code>background</code> no se hereda, pero a veces <em>parece</em> que sí. Si pones <code>background: yellow</code> en <code>body</code>, los párrafos se ven amarillos porque su fondo es <strong>transparente</strong> por defecto y deja ver el amarillo del padre. No es herencia: simplemente no tienen fondo propio. Es un matiz sutil, pero importante.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <code>PolyPaw</code> (Python/Flet) no escribes CSS, pero el concepto de heredar estilo de un contenedor padre a sus hijos existe igual: defines propiedades en un control contenedor y los controles internos las toman. Y en <code>RachaSimple</code>/<code>Faro</code> con Tailwind, también puedes apoyarte en la herencia: si pones <code>text-gray-800</code> en un contenedor, el texto de los hijos sin clase de color la hereda igual que en CSS puro.</p>
+<p>En <code>PolyPaw</code> (Python/Flet) no escribes CSS, pero la idea de heredar el estilo de un contenedor padre a sus hijos existe igual: defines propiedades en un control contenedor y los controles de dentro las toman. Y en <code>RachaSimple</code>/<code>Faro</code> con Tailwind, también puedes apoyarte en la herencia: si pones <code>text-gray-800</code> en un contenedor, el texto de los hijos que no tengan clase de color la hereda igual que en CSS puro.</p>
 </blockquote>
 <hr />
 <h2 id="5-las-palabras-clave-inherit-initial-unset-y-revert">5. Las palabras clave: inherit, initial, unset (y revert)</h2>
-<p>CSS te da palabras especiales para <strong>controlar la herencia a mano</strong>. Sirven para forzar que algo herede, o para borrarle lo heredado y dejarlo "de fábrica".</p>
+<p>CSS te ofrece unas palabras especiales para <strong>controlar la herencia a mano</strong>. Sirven para forzar que algo herede, o para borrarle lo heredado y dejarlo "de fábrica".</p>
 <h3 id="51-inherit">5.1 inherit</h3>
 <blockquote class="def">
 <h3 id="que-significa-inherit">🟦 ¿Qué significa? — <em>inherit</em></h3>
 <p><code>inherit</code> le dice a una propiedad: "toma el mismo valor que tenga mi padre, sea cual sea". Sirve para forzar la herencia incluso en propiedades que normalmente no se heredan, o para reconectar un hijo con su padre.
-En <code>tunal-digital</code>, los <code>&lt;button&gt;</code> no heredan el color del texto del padre (los navegadores les ponen el suyo). Con <code>button { color: inherit; }</code> haces que el botón use el mismo color que el resto del texto alrededor.</p>
+En <code>tunal-digital</code>, los <code>&lt;button&gt;</code> no heredan el color del texto del padre (los navegadores les ponen el suyo). Con <code>button { color: inherit; }</code> haces que el botón use el mismo color que el texto que lo rodea.</p>
 </blockquote>
 <pre><code class="language-css">article {
   color: darkgreen;
@@ -251,7 +251,7 @@ article button {
 <h3 id="52-initial">5.2 initial</h3>
 <blockquote class="def">
 <h3 id="que-significa-initial">🟦 ¿Qué significa? — <em>initial</em></h3>
-<p><code>initial</code> reinicia una propiedad a su <strong>valor inicial de fábrica</strong> definido por la especificación de CSS (no por el navegador ni por tu CSS). Sirve para "limpiar" un valor heredado o anterior y volver al punto de partida.
+<p><code>initial</code> reinicia una propiedad a su <strong>valor inicial de fábrica</strong>, el que define la especificación de CSS (no el navegador ni tu CSS). Sirve para "limpiar" un valor heredado o anterior y volver al punto de partida.
 En <code>Faro</code>, si un componente hereda un <code>color</code> que no quieres, <code>color: initial</code> lo devuelve a su valor por defecto del estándar (que para <code>color</code> es negro).</p>
 </blockquote>
 <pre><code class="language-css">.aviso {
@@ -260,13 +260,13 @@ En <code>Faro</code>, si un componente hereda un <code>color</code> que no quier
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>Ojo: el valor <code>initial</code> es el del <strong>estándar CSS</strong>, que no siempre coincide con lo que muestra el navegador por defecto. Por ejemplo, el <code>display</code> inicial de cualquier elemento es <code>inline</code>, aunque un <code>&lt;div&gt;</code> se vea como bloque por la hoja de estilos del navegador. Por eso <code>display: initial</code> en un <code>div</code> puede sorprenderte.</p>
+<p>Ojo con un detalle: el valor <code>initial</code> es el del <strong>estándar CSS</strong>, que no siempre coincide con lo que ves en el navegador por defecto. Por ejemplo, el <code>display</code> inicial de cualquier elemento es <code>inline</code>, aunque un <code>&lt;div&gt;</code> se muestre como bloque por la hoja de estilos del navegador. Por eso <code>display: initial</code> en un <code>div</code> te puede dejar con cara de sorpresa.</p>
 </blockquote>
 <h3 id="53-unset">5.3 unset</h3>
 <blockquote class="def">
 <h3 id="que-significa-unset">🟦 ¿Qué significa? — <em>unset</em></h3>
-<p><code>unset</code> es un comodín inteligente: si la propiedad <strong>es heredable</strong>, se comporta como <code>inherit</code>; si <strong>no es heredable</strong>, se comporta como <code>initial</code>. Sirve para "quitar tu intervención" y dejar que la propiedad haga lo que naturalmente haría.
-En <code>RachaSimple</code>, si una librería te metió un <code>color</code> o un <code>border</code> que no quieres, <code>unset</code> deja cada uno en su comportamiento natural sin que tengas que recordar cuál hereda y cuál no.</p>
+<p><code>unset</code> es un comodín inteligente: si la propiedad <strong>es heredable</strong>, se comporta como <code>inherit</code>; si <strong>no es heredable</strong>, se comporta como <code>initial</code>. Sirve para "quitar tu intervención" y dejar que la propiedad haga lo que haría de forma natural.
+En <code>RachaSimple</code>, si una librería te metió un <code>color</code> o un <code>border</code> que no quieres, <code>unset</code> deja a cada uno en su comportamiento natural sin que tengas que recordar cuál hereda y cuál no.</p>
 </blockquote>
 <pre><code class="language-css">.reiniciado {
   color: unset;  /* color hereda → actúa como inherit */
@@ -284,7 +284,7 @@ En <code>RachaSimple</code>, si una librería te metió un <code>color</code> o 
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p><code>inherit</code>, <code>initial</code>, <code>unset</code> y <code>revert</code> se parecen y es fácil confundirlas. Una guía mental: <code>inherit</code> = "como mi padre"; <code>initial</code> = "como el estándar de fábrica"; <code>unset</code> = "lo natural según si hereda o no"; <code>revert</code> = "como lo deja el navegador". No necesitas usarlas todos los días, pero saber que existen te saca de apuros.</p>
+<p><code>inherit</code>, <code>initial</code>, <code>unset</code> y <code>revert</code> se parecen y es fácil mezclarlas. Te dejo una guía mental: <code>inherit</code> = "como mi padre"; <code>initial</code> = "como el estándar de fábrica"; <code>unset</code> = "lo natural según si hereda o no"; <code>revert</code> = "como lo deja el navegador". No las vas a usar a diario, pero saber que existen te saca de más de un apuro.</p>
 </blockquote>
 <hr />
 <h2 id="6-juntandolo-todo-un-ejemplo-que-pelea">6. Juntándolo todo: un ejemplo que pelea</h2>
@@ -310,17 +310,17 @@ a {
   color: #ffd166;
 }
 </code></pre>
-<p>Recorramos qué le pasa a un párrafo y a tres enlaces:</p>
+<p>Sigamos qué le pasa a un párrafo y a tres enlaces:</p>
 <ul>
 <li>Un <code>&lt;p&gt;</code> cualquiera: no tiene regla propia de color, así que <strong>hereda</strong> <code>#333</code> desde <code>body</code>. La herencia resuelve el caso sin conflicto.</li>
 <li>Un <code>&lt;a&gt;</code> suelto en el contenido: gana <code>a { color: #0066cc }</code> → azul.</li>
 <li>Un <code>&lt;a&gt;</code> dentro de <code>.menu</code>: compiten <code>a</code> <code>(0,0,1)</code> y <code>.menu a</code> <code>(0,1,0)</code>. Gana la clase → blanco.</li>
 <li>Un <code>&lt;a class="activo"&gt;</code> dentro de <code>.menu</code>: compiten <code>.menu a</code> <code>(0,1,0)</code> y <code>.menu a.activo</code> <code>(0,1,1)</code>. Gana la última, más específica → amarillo dorado.</li>
 </ul>
-<p>Fíjate cómo <strong>nunca hubo azar</strong>: cada decisión salió de los tres criterios (importancia → especificidad → orden) o de la herencia. Eso es CSS bajo control.</p>
+<p>Fíjate en que <strong>en ningún momento hubo azar</strong>: cada decisión salió de los tres criterios (importancia → especificidad → orden) o de la herencia. Eso es CSS bajo control.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>El propio sitio de este manual (<code>site/estilos.css</code>) usa <strong>variables CSS</strong> y temas. Las variables CSS (como <code>--color-texto</code>) también se apoyan en la herencia: una variable definida en <code>:root</code> (que representa el <code>&lt;html&gt;</code>, el ancestro de todo) está disponible para todos los descendientes. Cuando cambias el tema, cambias la variable en un ancestro y la cascada/herencia la reparte a todos los hijos automáticamente. Es la herencia trabajando a tu favor.</p>
+<p>El propio sitio de este manual (<code>site/estilos.css</code>) usa <strong>variables CSS</strong> y temas. Las variables CSS (como <code>--color-texto</code>) también se apoyan en la herencia: una variable definida en <code>:root</code> (que representa el <code>&lt;html&gt;</code>, el ancestro de todo) queda disponible para todos los descendientes. Cuando cambias el tema, cambias la variable en un ancestro y la cascada/herencia la reparte sola a todos los hijos. Es la herencia trabajando a tu favor.</p>
 <p>Bit asoma la cabeza entre tus pestañas del navegador y comenta: "¿Ves? La cascada no es un río salvaje. Es más bien una escalera de agua bien ordenada. Si sabes en qué escalón está cada regla, siempre adivinas dónde cae la gota." Luego se va a tomar una siesta sobre tu teclado, justo encima de la tecla Enter.</p>
 </blockquote>
 <hr />

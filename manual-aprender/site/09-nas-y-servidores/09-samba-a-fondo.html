@@ -23,85 +23,85 @@
 </p>
 
 <blockquote>
-<p>Hasta ahora tu servidor <strong>polypaw-nas</strong> (el laptop Acer Nitro AN515-54 con Ubuntu Server 26.04) ha estado encendido haciendo cosas por dentro. En este capitulo le damos su trabajo mas importante: convertirse en un disco gigante que toda tu casa puede usar. Vas a arrastrar un archivo desde tu Windows, soltarlo en una carpeta de red, y que ese archivo aterrice en el HDD de 954 GB montado en <code>/srv/nas</code>. Sin cables USB, sin pasarte una memoria de mano en mano. Bit, nuestro ajolote, ya tiene las branquias puestas para nadar entre carpetas compartidas. Vamos con calma, definiendo cada palabra rara antes de usarla.</p>
+<p>Hasta ahora tu servidor <strong>polypaw-nas</strong> (el laptop Acer Nitro AN515-54 con Ubuntu Server 26.04) ha estado encendido trabajando por dentro, casi en silencio. En este capitulo le toca su tarea estrella: convertirse en un disco gigante que cualquiera en tu casa puede usar. La idea es sencilla y, cuando la veas funcionar, hasta satisfactoria: arrastras un archivo desde tu Windows, lo sueltas en una carpeta de red y ese archivo aterriza en el HDD de 954 GB montado en <code>/srv/nas</code>. Nada de cables USB ni de pasarte una memoria de mano en mano. Bit, nuestro ajolote, ya tiene las branquias puestas para nadar entre carpetas compartidas. Iremos con calma y definiremos cada palabra rara antes de usarla.</p>
 </blockquote>
 <h2 id="1-que-es-samba-y-por-que-lo-necesitas">1. ¿Que es Samba y por que lo necesitas?</h2>
-<p>Imagina que tu HDD de 954 GB es un almacen enorme dentro de polypaw-nas. El problema es que ese almacen esta <strong>dentro</strong> del laptop, y tu PC de escritorio, tu Mac o tu telefono no pueden meter la mano ahi por arte de magia. Necesitan una puerta, un idioma comun y un guardia que decida quien entra. Eso, en conjunto, es lo que ofrece Samba.</p>
+<p>Piensa en tu HDD de 954 GB como un almacen enorme metido dentro de polypaw-nas. El problema es justo ese: el almacen vive <strong>dentro</strong> del laptop, y tu PC de escritorio, tu Mac o tu telefono no pueden meter la mano ahi por arte de magia. Hace falta una puerta, un idioma comun y un guardia que decida quien pasa. Todo eso junto es lo que te da Samba.</p>
 <blockquote class="def">
 <h3 id="que-significa-samba">🟦 ¿Que significa? — <em>Samba</em></h3>
-<p>Samba es un programa que hace que las carpetas de tu servidor Linux aparezcan como <strong>carpetas de red</strong> que cualquier dispositivo de la casa puede abrir, como si fueran una unidad mas. <strong>Para que sirve:</strong> compartir archivos entre computadoras sin pasar memorias USB. <strong>Donde aparece en tu NAS:</strong> ya esta instalado en polypaw-nas; su recurso compartido se llama <strong>PolyPawNAS</strong> y apunta a <code>/srv/nas</code>.</p>
+<p>Samba es un programa que hace que las carpetas de tu servidor Linux aparezcan como <strong>carpetas de red</strong>, esas que cualquier dispositivo de la casa puede abrir como si fueran una unidad mas. <strong>Para que sirve:</strong> compartir archivos entre computadoras sin andar pasando memorias USB. <strong>Donde aparece en tu NAS:</strong> ya esta instalado en polypaw-nas; su recurso compartido se llama <strong>PolyPawNAS</strong> y apunta a <code>/srv/nas</code>.</p>
 <h3 id="que-significa-smb-protocolo">🟦 ¿Que significa? — <em>SMB (protocolo)</em></h3>
-<p>SMB (Server Message Block) es el <strong>idioma</strong> que hablan las computadoras para pedirse archivos por la red: "dame este archivo", "guarda este otro", "lista esta carpeta". <strong>Para que sirve:</strong> es el estandar que usa Windows desde hace decadas para compartir carpetas. <strong>Donde aparece en tu NAS:</strong> Samba es la version libre de ese idioma; cuando escribes <code>\\polypaw-nas\PolyPawNAS</code> en Windows, estas hablando SMB con tu servidor.</p>
+<p>SMB (Server Message Block) es el <strong>idioma</strong> que hablan las computadoras para pedirse archivos por la red: "dame este archivo", "guarda este otro", "listame esta carpeta". <strong>Para que sirve:</strong> es el estandar que usa Windows desde hace decadas para compartir carpetas. <strong>Donde aparece en tu NAS:</strong> Samba es la version libre de ese idioma; cuando escribes <code>\\polypaw-nas\PolyPawNAS</code> en Windows, estas hablando SMB con tu servidor.</p>
 <h3 id="que-significa-protocolo">🟦 ¿Que significa? — <em>Protocolo</em></h3>
-<p>Un protocolo es un conjunto de reglas acordadas para que dos maquinas se entiendan, igual que dos personas acuerdan hablar espanol antes de conversar. <strong>Para que sirve:</strong> sin reglas comunes, una computadora enviaria datos que la otra no sabria leer. <strong>Donde aparece en tu NAS:</strong> SMB, SSH, DNS y HTTP son todos protocolos que viven en polypaw-nas.</p>
+<p>Un protocolo es un conjunto de reglas acordadas para que dos maquinas se entiendan, igual que dos personas acuerdan hablar espanol antes de ponerse a conversar. <strong>Para que sirve:</strong> sin reglas comunes, una computadora enviaria datos que la otra no sabria leer. <strong>Donde aparece en tu NAS:</strong> SMB, SSH, DNS y HTTP son todos protocolos que conviven en polypaw-nas.</p>
 <h3 id="que-significa-recurso-compartido-share">🟦 ¿Que significa? — <em>Recurso compartido (share)</em></h3>
-<p>Un recurso compartido es una carpeta especifica que decides ofrecer a la red, con un nombre publico. <strong>Para que sirve:</strong> no compartes todo el disco, solo la carpeta que tu eliges. <strong>Donde aparece en tu NAS:</strong> tu recurso se llama <strong>PolyPawNAS</strong> y por dentro es la carpeta <code>/srv/nas</code>.</p>
+<p>Un recurso compartido es una carpeta concreta que decides ofrecer a la red, con un nombre publico. <strong>Para que sirve:</strong> no compartes el disco entero, solo la carpeta que tu elijas. <strong>Donde aparece en tu NAS:</strong> tu recurso se llama <strong>PolyPawNAS</strong> y por dentro es la carpeta <code>/srv/nas</code>.</p>
 <h3 id="tip">💡 Tip</h3>
-<p>"Samba" es el programa instalado en el servidor; "SMB" es el idioma que habla. La gente usa ambos nombres como sinonimos en conversaciones, pero ahora tu sabes la diferencia fina: Samba <em>implementa</em> SMB.</p>
+<p>"Samba" es el programa instalado en el servidor; "SMB" es el idioma que habla. En la practica la gente usa ambos nombres como sinonimos, pero ahora tu conoces la diferencia fina: Samba <em>implementa</em> SMB.</p>
 </blockquote>
 <p>Antes de tocar nada, comprueba que Samba esta vivo en tu servidor:</p>
 <pre><code class="language-bash">systemctl status smbd
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-smbd">🟦 ¿Que significa? — <em>smbd</em></h3>
-<p><code>smbd</code> es el <strong>demonio</strong> (el programa de fondo) de Samba que atiende las peticiones de archivos. La "d" final significa <em>daemon</em>. <strong>Para que sirve:</strong> es el que realmente entrega y recibe los archivos. <strong>Donde aparece en tu NAS:</strong> corre permanentemente en polypaw-nas; si esta detenido, nadie puede acceder a PolyPawNAS.</p>
+<p><code>smbd</code> es el <strong>demonio</strong> (el programa de fondo) de Samba que atiende las peticiones de archivos. La "d" final viene de <em>daemon</em>. <strong>Para que sirve:</strong> es el que de verdad entrega y recibe los archivos. <strong>Donde aparece en tu NAS:</strong> corre permanentemente en polypaw-nas; si esta detenido, nadie puede acceder a PolyPawNAS.</p>
 <h3 id="que-significa-demonio-daemon">🟦 ¿Que significa? — <em>Demonio (daemon)</em></h3>
-<p>Un demonio es un programa que corre en segundo plano, sin ventana ni interaccion directa, esperando para hacer su trabajo cuando se le necesita. <strong>Para que sirve:</strong> servicios como Samba, SSH o el cortafuegos viven asi, siempre listos pero invisibles. <strong>Donde aparece en tu NAS:</strong> <code>smbd</code> es uno de los muchos demonios que conviven en polypaw-nas junto a los de Docker, Tailscale y AdGuard.</p>
+<p>Un demonio es un programa que corre en segundo plano, sin ventana ni interaccion directa, esperando para entrar en accion cuando se le necesita. <strong>Para que sirve:</strong> servicios como Samba, SSH o el cortafuegos viven asi, siempre listos pero invisibles. <strong>Donde aparece en tu NAS:</strong> <code>smbd</code> es uno de los muchos demonios que conviven en polypaw-nas junto a los de Docker, Tailscale y AdGuard.</p>
 <h3 id="que-significa-systemctl">🟦 ¿Que significa? — <em>systemctl</em></h3>
 <p><code>systemctl</code> es el comando con el que enciendes, apagas, reinicias o consultas el estado de los servicios (demonios) del sistema en Ubuntu. <strong>Para que sirve:</strong> controlar Samba y cualquier otro servicio sin tener que reiniciar el laptop entero. <strong>Donde aparece en tu NAS:</strong> lo usas con <code>smbd</code> (<code>systemctl status smbd</code>, <code>systemctl restart smbd</code>) y tambien con Docker, Tailscale o el cortafuegos.</p>
 </blockquote>
-<p>Si ves la palabra <code>active (running)</code> en verde, Samba esta despierto. Si ves <code>inactive</code> o <code>failed</code>, lo arrancamos asi:</p>
+<p>Si ves la palabra <code>active (running)</code> en verde, Samba esta despierto. Si en cambio aparece <code>inactive</code> o <code>failed</code>, lo arrancamos asi:</p>
 <pre><code class="language-bash">sudo systemctl enable --now smbd
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-servidor">🔎 En tu servidor</h3>
-<p>Como polypaw-nas solo tiene <strong>8 GB de RAM</strong> (es un Acer Nitro AN515-54 con procesador Intel i5-9300H), conviene saber que Samba es ligero: en reposo consume muy poca memoria. No es Samba lo que te va a apretar la RAM, sino Docker/Podman, Cockpit (el panel web en el puerto <strong>:9090</strong>) y AdGuard sumados. Aun asi, vigila el conjunto con <code>free -h</code> de vez en cuando, o mira los graficos de RAM y CPU directamente en Cockpit, entrando a <code>https://polypaw-nas:9090</code>.</p>
+<p>Como polypaw-nas solo tiene <strong>8 GB de RAM</strong> (es un Acer Nitro AN515-54 con procesador Intel i5-9300H), viene bien saber que Samba es ligero: en reposo consume muy poca memoria. Lo que te va a apretar la RAM no es Samba, sino Docker/Podman, Cockpit (el panel web en el puerto <strong>:9090</strong>) y AdGuard sumados. Aun asi, echale un ojo al conjunto con <code>free -h</code> de vez en cuando, o mira los graficos de RAM y CPU directamente en Cockpit, entrando a <code>https://polypaw-nas:9090</code>.</p>
 </blockquote>
 <h2 id="2-el-disco-de-datos-por-que-srvnas">2. El disco de datos: por que <code>/srv/nas</code></h2>
-<p>Tu laptop tiene dos discos: el SSD de 238 GB donde vive Ubuntu (el sistema) y el HDD de 954 GB para datos. <strong>No</strong> queremos compartir carpetas del sistema; queremos compartir el disco grande, que esta montado en <code>/srv/nas</code>.</p>
+<p>Tu laptop tiene dos discos: el SSD de 238 GB donde vive Ubuntu (el sistema) y el HDD de 954 GB para datos. Lo que <strong>no</strong> queremos es compartir carpetas del sistema; queremos compartir el disco grande, que esta montado en <code>/srv/nas</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-montar-mount">🟦 ¿Que significa? — <em>Montar (mount)</em></h3>
-<p>Montar es conectar un disco a una carpeta para poder usarlo. En Linux los discos no tienen letra (como <code>D:</code> en Windows); en cambio "aparecen" dentro de una carpeta. <strong>Para que sirve:</strong> asi tu HDD de 954 GB se ve y se usa como si fuera la carpeta <code>/srv/nas</code>. <strong>Donde aparece en tu NAS:</strong> tu HDD esta montado en <code>/srv/nas</code>; todo lo que guardes ahi va al disco de 954 GB, no al SSD del sistema.</p>
+<p>Montar es conectar un disco a una carpeta para poder usarlo. En Linux los discos no llevan letra (como <code>D:</code> en Windows); en su lugar "aparecen" dentro de una carpeta. <strong>Para que sirve:</strong> asi tu HDD de 954 GB se ve y se usa como si fuera la carpeta <code>/srv/nas</code>. <strong>Donde aparece en tu NAS:</strong> tu HDD esta montado en <code>/srv/nas</code>; todo lo que guardes ahi va al disco de 954 GB, no al SSD del sistema.</p>
 <h3 id="que-significa-srv">🟦 ¿Que significa? — <em><code>/srv</code></em></h3>
 <p><code>/srv</code> es una carpeta estandar de Linux pensada para "datos servidos a la red" (de ahi la "srv" de <em>serve</em>). <strong>Para que sirve:</strong> es el lugar logico y ordenado para los datos que tu NAS sirve. <strong>Donde aparece en tu NAS:</strong> ahi colgaste tu disco de datos como <code>/srv/nas</code>.</p>
 </blockquote>
-<p>Confirma que el disco grande esta montado donde crees:</p>
+<p>Confirma que el disco grande esta montado donde tu crees:</p>
 <pre><code class="language-bash">df -h /srv/nas
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-df-h">🟦 ¿Que significa? — <em><code>df -h</code></em></h3>
-<p><code>df</code> (disk free) muestra cuanto espacio libre y usado tiene cada disco; la <code>-h</code> lo pone en formato humano (GB en vez de numeros enormes). <strong>Para que sirve:</strong> saber cuanto te queda en el HDD. <strong>Donde aparece en tu NAS:</strong> la linea de <code>/srv/nas</code> debe mostrar cerca de 954G de tamano total.</p>
+<p><code>df</code> (disk free) muestra cuanto espacio libre y usado tiene cada disco; la <code>-h</code> lo pone en formato humano (GB en vez de numeros gigantes). <strong>Para que sirve:</strong> saber cuanto te queda en el HDD. <strong>Donde aparece en tu NAS:</strong> la linea de <code>/srv/nas</code> debe mostrar cerca de 954G de tamano total.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>Si <code>df -h /srv/nas</code> muestra un tamano pequeno (como 238G, el del SSD del sistema), significa que el HDD <strong>no esta montado</strong> y estarias compartiendo una carpeta vacia en el SSD del sistema. En ese caso, revisa <code>/etc/fstab</code> antes de seguir. Compartir sin que el disco este montado llena el SSD de 238 GB del sistema sin querer.</p>
+<p>Si <code>df -h /srv/nas</code> muestra un tamano pequeno (como 238G, el del SSD del sistema), significa que el HDD <strong>no esta montado</strong> y estarias compartiendo una carpeta vacia que en realidad vive en el SSD. Si te pasa eso, revisa <code>/etc/fstab</code> antes de seguir. Compartir sin que el disco este montado te llena el SSD de 238 GB del sistema sin que te des cuenta.</p>
 <h3 id="que-significa-etcfstab">🟦 ¿Que significa? — <em><code>/etc/fstab</code></em></h3>
-<p><code>/etc/fstab</code> es el archivo que le dice a Linux que discos montar automaticamente al arrancar, y en que carpeta. <strong>Para que sirve:</strong> que tu HDD de 954 GB aparezca solo en <code>/srv/nas</code> cada vez que enciendes polypaw-nas, sin montarlo a mano. <strong>Donde aparece en tu NAS:</strong> si tras un reinicio <code>/srv/nas</code> se ve vacio o pequeno, casi siempre es porque falta o esta mal su linea en <code>/etc/fstab</code>.</p>
+<p><code>/etc/fstab</code> es el archivo que le dice a Linux que discos montar automaticamente al arrancar, y en que carpeta. <strong>Para que sirve:</strong> que tu HDD de 954 GB aparezca solo en <code>/srv/nas</code> cada vez que enciendes polypaw-nas, sin tener que montarlo a mano. <strong>Donde aparece en tu NAS:</strong> si tras un reinicio <code>/srv/nas</code> se ve vacio o pequeno, casi siempre es porque falta o esta mal su linea en <code>/etc/fstab</code>.</p>
 </blockquote>
-<p>Crea la carpeta de datos si aun no existe y deja un archivo de prueba:</p>
+<p>Crea la carpeta de datos si aun no existe y deja ahi un archivo de prueba:</p>
 <pre><code class="language-bash">sudo mkdir -p /srv/nas
 sudo touch /srv/nas/hola-desde-polypaw.txt
 ls -l /srv/nas
 </code></pre>
 <h2 id="3-el-corazon-etcsambasmbconf">3. El corazon: <code>/etc/samba/smb.conf</code></h2>
-<p>Toda la configuracion de Samba vive en un solo archivo de texto. Aprender a leerlo es el 80% de dominar Samba.</p>
+<p>Toda la configuracion de Samba vive en un solo archivo de texto. Aprender a leerlo es, sin exagerar, el 80% de dominar Samba.</p>
 <blockquote class="def">
 <h3 id="que-significa-etcsambasmbconf">🟦 ¿Que significa? — <em><code>/etc/samba/smb.conf</code></em></h3>
-<p>Es el archivo de configuracion de Samba. <code>/etc</code> es la carpeta de Linux donde viven los archivos de ajustes de los programas. <strong>Para que sirve:</strong> ahi defines que carpetas compartes, quien puede entrar y con que permisos. <strong>Donde aparece en tu NAS:</strong> es el unico archivo que editaras para crear o cambiar el recurso PolyPawNAS.</p>
+<p>Es el archivo de configuracion de Samba. <code>/etc</code> es la carpeta de Linux donde viven los ajustes de los programas. <strong>Para que sirve:</strong> ahi defines que carpetas compartes, quien puede entrar y con que permisos. <strong>Donde aparece en tu NAS:</strong> es el unico archivo que tocaras para crear o cambiar el recurso PolyPawNAS.</p>
 </blockquote>
-<p>Antes de tocarlo, <strong>siempre</strong> haz una copia de seguridad. Si rompes este archivo, Samba no arranca.</p>
+<p>Antes de editarlo, <strong>siempre</strong> haz una copia de seguridad. Si rompes este archivo, Samba no arranca, y te quedas a oscuras.</p>
 <pre><code class="language-bash">sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>El <code>.bak</code> es una convencion para "copia de respaldo" (<em>backup</em>). Si algo sale mal, restauras con <code>sudo cp /etc/samba/smb.conf.bak /etc/samba/smb.conf</code>. Bit dice: nadie ha lamentado nunca tener una copia de mas.</p>
+<p>El <code>.bak</code> es una convencion para "copia de respaldo" (<em>backup</em>). Si algo sale mal, restauras con <code>sudo cp /etc/samba/smb.conf.bak /etc/samba/smb.conf</code> y listo. Bit lo resume asi: nadie ha lamentado nunca tener una copia de mas.</p>
 </blockquote>
 <p>Ahora abre el archivo con un editor de terminal:</p>
 <pre><code class="language-bash">sudo nano /etc/samba/smb.conf
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-nano">🟦 ¿Que significa? — <em>nano</em></h3>
-<p>nano es un editor de texto sencillo dentro de la terminal. <strong>Para que sirve:</strong> modificar archivos de configuracion sin salir de la terminal. <strong>Donde aparece en tu NAS:</strong> lo usaras cada vez que ajustes Samba. Para guardar pulsas <code>Ctrl+O</code> y <code>Enter</code>; para salir, <code>Ctrl+X</code>.</p>
+<p>nano es un editor de texto sencillo que vive dentro de la terminal. <strong>Para que sirve:</strong> modificar archivos de configuracion sin salir de la terminal. <strong>Donde aparece en tu NAS:</strong> lo usaras cada vez que ajustes Samba. Para guardar pulsas <code>Ctrl+O</code> y <code>Enter</code>; para salir, <code>Ctrl+X</code>.</p>
 </blockquote>
-<p>El archivo tiene dos partes: una seccion <code>[global]</code> (ajustes generales) y luego una seccion por cada recurso compartido, entre corchetes.</p>
+<p>El archivo tiene dos partes: una seccion <code>[global]</code> con los ajustes generales y, despues, una seccion por cada recurso compartido, cada una entre corchetes.</p>
 <h3 id="la-seccion-global">La seccion global</h3>
 <pre><code class="language-ini">[global]
    workgroup = WORKGROUP
@@ -115,9 +115,9 @@ ls -l /srv/nas
 <h3 id="que-significa-global">🟦 ¿Que significa? — <em><code>[global]</code></em></h3>
 <p>Es la seccion donde pones ajustes que afectan a <strong>todo</strong> Samba, no a un recurso en concreto. <strong>Para que sirve:</strong> definir el nombre del grupo de trabajo, los registros y el comportamiento general. <strong>Donde aparece en tu NAS:</strong> es la primera seccion de tu <code>smb.conf</code>.</p>
 <h3 id="que-significa-workgroup-grupo-de-trabajo">🟦 ¿Que significa? — <em>workgroup (grupo de trabajo)</em></h3>
-<p>Es un nombre que agrupa computadoras de una red casera para que se vean entre si en Windows. <strong>Para que sirve:</strong> que tu PC encuentre el servidor en el explorador de red. <strong>Donde aparece en tu NAS:</strong> por defecto es <code>WORKGROUP</code>, el mismo que usa Windows de fabrica; dejalo asi salvo que lo hayas cambiado en tus PCs.</p>
+<p>Es un nombre que agrupa las computadoras de una red casera para que se vean entre si en Windows. <strong>Para que sirve:</strong> que tu PC encuentre el servidor en el explorador de red. <strong>Donde aparece en tu NAS:</strong> por defecto es <code>WORKGROUP</code>, el mismo que trae Windows de fabrica; dejalo asi salvo que lo hayas cambiado tu en tus PCs.</p>
 <h3 id="que-significa-map-to-guest-never">🟦 ¿Que significa? — <em><code>map to guest = never</code></em></h3>
-<p>Le dice a Samba: nunca dejes entrar a un "invitado" anonimo; siempre exige usuario y contrasena. <strong>Para que sirve:</strong> seguridad. <strong>Donde aparece en tu NAS:</strong> en <code>[global]</code>; es la diferencia entre que cualquiera de la red lea tus archivos o solo quien tu autorices.</p>
+<p>Le dice a Samba: no dejes entrar nunca a un "invitado" anonimo; exige siempre usuario y contrasena. <strong>Para que sirve:</strong> seguridad. <strong>Donde aparece en tu NAS:</strong> en <code>[global]</code>; es la diferencia entre que cualquiera de la red lea tus archivos o que solo entre quien tu autorices.</p>
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
 <p>Hay tutoriales viejos que ponen <code>guest ok = yes</code> para "facilitar" el acceso. Eso significa <strong>abrir tus archivos a cualquiera</strong> que se conecte a tu red, sin contrasena. En polypaw-nas no lo hagas: tus respaldos de <strong>Faro/Organizer</strong>, <strong>PolyPaw</strong> o <strong>tunal-digital</strong> merecen una contrasena de verdad.</p>
 </blockquote>
@@ -132,20 +132,20 @@ ls -l /srv/nas
    create mask = 0664
    directory mask = 0775
 </code></pre>
-<p>Vamos linea por linea, porque cada una importa:</p>
+<p>Vamos linea por linea, porque cada una cuenta:</p>
 <blockquote class="def">
 <h3 id="que-significa-polypawnas">🟦 ¿Que significa? — <em><code>[PolyPawNAS]</code></em></h3>
 <p>El texto entre corchetes es el <strong>nombre publico</strong> del recurso, el que veras en la red. <strong>Para que sirve:</strong> identificar la carpeta compartida. <strong>Donde aparece en tu NAS:</strong> es exactamente lo que escribes en <code>\\polypaw-nas\PolyPawNAS</code> desde Windows.</p>
 <h3 id="que-significa-path">🟦 ¿Que significa? — <em><code>path</code></em></h3>
-<p>Es la carpeta real del servidor que se comparte. <strong>Para que sirve:</strong> conecta el nombre publico (PolyPawNAS) con la carpeta fisica. <strong>Donde aparece en tu NAS:</strong> apunta a <code>/srv/nas</code>, es decir, tu HDD de 954 GB.</p>
+<p>Es la carpeta real del servidor que se comparte. <strong>Para que sirve:</strong> conectar el nombre publico (PolyPawNAS) con la carpeta fisica. <strong>Donde aparece en tu NAS:</strong> apunta a <code>/srv/nas</code>, es decir, tu HDD de 954 GB.</p>
 <h3 id="que-significa-browseable">🟦 ¿Que significa? — <em><code>browseable</code></em></h3>
-<p>Con <code>yes</code>, el recurso aparece listado cuando alguien explora la red; con <code>no</code>, existe pero esta "escondido" (hay que escribir su nombre a mano). <strong>Para que sirve:</strong> comodidad o discrecion. <strong>Donde aparece en tu NAS:</strong> en <code>yes</code> para que lo veas facil al empezar.</p>
+<p>Con <code>yes</code>, el recurso aparece en la lista cuando alguien explora la red; con <code>no</code>, existe pero queda "escondido" (hay que escribir su nombre a mano). <strong>Para que sirve:</strong> comodidad o discrecion, segun prefieras. <strong>Donde aparece en tu NAS:</strong> en <code>yes</code> para que lo veas facil al empezar.</p>
 <h3 id="que-significa-read-only-no">🟦 ¿Que significa? — <em><code>read only = no</code></em></h3>
-<p>Controla si la gente solo puede <strong>leer</strong> o tambien <strong>escribir/borrar</strong>. <code>no</code> significa "no es solo lectura", o sea, <strong>si</strong> se puede escribir. <strong>Para que sirve:</strong> decidir si el recurso es de consulta o tambien para guardar. <strong>Donde aparece en tu NAS:</strong> en <code>no</code> para poder subir tus respaldos al HDD.</p>
+<p>Controla si la gente solo puede <strong>leer</strong> o tambien <strong>escribir y borrar</strong>. <code>no</code> significa "no es solo lectura", o sea que <strong>si</strong> se puede escribir. <strong>Para que sirve:</strong> decidir si el recurso es de solo consulta o tambien para guardar cosas. <strong>Donde aparece en tu NAS:</strong> en <code>no</code> para poder subir tus respaldos al HDD.</p>
 <h3 id="que-significa-valid-users">🟦 ¿Que significa? — <em><code>valid users</code></em></h3>
-<p>La lista de usuarios autorizados a entrar a este recurso. <strong>Para que sirve:</strong> que solo tu (o quien decidas) acceda. <strong>Donde aparece en tu NAS:</strong> pon tu usuario real (en estos ejemplos uso <code>edwar</code>; cambialo por el tuyo).</p>
+<p>Es la lista de usuarios autorizados a entrar a este recurso. <strong>Para que sirve:</strong> que solo tu (o quien tu decidas) acceda. <strong>Donde aparece en tu NAS:</strong> pon tu usuario real (en estos ejemplos uso <code>edwar</code>; cambialo por el tuyo).</p>
 <h3 id="que-significa-create-mask-y-directory-mask">🟦 ¿Que significa? — <em><code>create mask</code> y <code>directory mask</code></em></h3>
-<p>Definen los permisos que tendran los archivos (<code>0664</code>) y carpetas (<code>0775</code>) nuevos que se creen por la red. Son los numeros de permisos de Linux. <strong>Para que sirve:</strong> que los archivos subidos queden con permisos sensatos. <strong>Donde aparece en tu NAS:</strong> en tu recurso; <code>0664</code> = el dueno y su grupo escriben, los demas leen.</p>
+<p>Definen los permisos que tendran los archivos (<code>0664</code>) y carpetas (<code>0775</code>) nuevos que se creen por la red. Son los numeros de permisos de Linux. <strong>Para que sirve:</strong> que los archivos subidos queden con permisos sensatos. <strong>Donde aparece en tu NAS:</strong> en tu recurso; <code>0664</code> quiere decir que el dueno y su grupo escriben, y los demas solo leen.</p>
 </blockquote>
 <p>Guarda con <code>Ctrl+O</code>, <code>Enter</code>, y sal con <code>Ctrl+X</code>.</p>
 <h3 id="comprueba-que-no-rompiste-nada">Comprueba que no rompiste nada</h3>
@@ -154,15 +154,15 @@ ls -l /srv/nas
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-testparm">🟦 ¿Que significa? — <em>testparm</em></h3>
-<p>Es un verificador de la configuracion de Samba. Lee tu <code>smb.conf</code> y avisa si hay errores de sintaxis. <strong>Para que sirve:</strong> evitar reiniciar Samba con un archivo roto. <strong>Donde aparece en tu NAS:</strong> ejecutalo siempre tras editar; si dice "Loaded services file OK", vas bien.</p>
+<p>Es un verificador de la configuracion de Samba. Lee tu <code>smb.conf</code> y avisa si hay errores de sintaxis. <strong>Para que sirve:</strong> evitar reiniciar Samba con un archivo roto. <strong>Donde aparece en tu NAS:</strong> ejecutalo siempre tras editar; si te dice "Loaded services file OK", vas bien.</p>
 <h3 id="tip_2">💡 Tip</h3>
-<p><code>testparm</code> no solo valida: tambien te muestra como Samba interpreta tu archivo. Si pulsas <code>Enter</code> cuando lo pida, lista todas las secciones. Deberias ver tu <code>[PolyPawNAS]</code> con su <code>path = /srv/nas</code>.</p>
+<p><code>testparm</code> no solo valida: tambien te ensena como Samba interpreta tu archivo. Si pulsas <code>Enter</code> cuando lo pida, lista todas las secciones. Deberias ver tu <code>[PolyPawNAS]</code> con su <code>path = /srv/nas</code>.</p>
 </blockquote>
-<p>Si todo esta bien, recarga Samba:</p>
+<p>Si todo esta en orden, recarga Samba:</p>
 <pre><code class="language-bash">sudo systemctl restart smbd
 </code></pre>
 <h2 id="4-usuarios-y-contrasenas-de-samba">4. Usuarios y contrasenas de Samba</h2>
-<p>Aqui viene una sutileza que confunde a todos los principiantes: el usuario de Linux y el usuario de Samba <strong>no son lo mismo</strong>, aunque se llamen igual.</p>
+<p>Aqui viene una sutileza que tropieza a todos los principiantes: el usuario de Linux y el usuario de Samba <strong>no son lo mismo</strong>, aunque se llamen igual.</p>
 <blockquote class="def">
 <h3 id="que-significa-usuario-de-samba">🟦 ¿Que significa? — <em>Usuario de Samba</em></h3>
 <p>Es una cuenta con su propia contrasena que Samba guarda aparte, solo para acceder a los recursos compartidos. <strong>Para que sirve:</strong> poder pedir contrasena por la red sin usar la contrasena de inicio de sesion de Linux. <strong>Donde aparece en tu NAS:</strong> la creas con <code>smbpasswd</code>; el nombre debe coincidir con un usuario de Linux que ya exista (como <code>edwar</code>).</p>
@@ -177,7 +177,7 @@ ls -l /srv/nas
 <p>Te pedira la contrasena dos veces. <strong>Aqui es donde la seguridad empieza de verdad.</strong></p>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>Esta contrasena es la unica barrera entre tus datos y cualquiera que entre a tu red. Usa una contrasena <strong>larga y unica</strong>, no la misma de tu correo. Una frase de 4 palabras al azar (tipo "ajolote-techo-naranja-22") es facil de recordar y dificil de adivinar. Nunca la guardes en texto plano en un repo como <strong>Faro/Organizer</strong>.</p>
+<p>Esta contrasena es la unica barrera entre tus datos y cualquiera que entre a tu red. Usa una contrasena <strong>larga y unica</strong>, no la misma de tu correo. Una frase de 4 palabras al azar (tipo "ajolote-techo-naranja-22") es facil de recordar y dificil de adivinar. Y nunca, jamas, la guardes en texto plano en un repo como <strong>Faro/Organizer</strong>.</p>
 </blockquote>
 <p>Una vez creado, puedes listar y activar el usuario:</p>
 <pre><code class="language-bash">sudo pdbedit -L -v
@@ -190,10 +190,10 @@ sudo smbpasswd -e edwar
 <p><code>pdbedit</code> es la herramienta que lista y administra la base de datos de usuarios de Samba. Con <code>-L</code> muestra la lista; con <code>-L -v</code>, los detalles de cada uno. <strong>Para que sirve:</strong> comprobar que tu usuario quedo bien registrado en Samba. <strong>Donde aparece en tu NAS:</strong> lo usas para verificar que <code>edwar</code> existe como usuario de Samba antes de pelearte con una conexion rechazada.</p>
 </blockquote>
 <h2 id="5-permisos-del-recurso-el-guardia-del-almacen">5. Permisos del recurso: el guardia del almacen</h2>
-<p>Samba puede decir "este usuario puede entrar", pero el <strong>sistema de archivos de Linux</strong> tiene la ultima palabra. Si la carpeta <code>/srv/nas</code> no le pertenece a tu usuario, podras conectarte pero no escribir. Son dos guardias que deben estar de acuerdo.</p>
+<p>Samba puede decir "este usuario puede entrar", pero el <strong>sistema de archivos de Linux</strong> tiene la ultima palabra. Si la carpeta <code>/srv/nas</code> no le pertenece a tu usuario, lograras conectarte pero no escribir. Son dos guardias distintos, y los dos tienen que estar de acuerdo.</p>
 <blockquote class="def">
 <h3 id="que-significa-permisos-de-archivos">🟦 ¿Que significa? — <em>Permisos de archivos</em></h3>
-<p>En Linux cada carpeta y archivo tiene un dueno, un grupo y reglas de quien puede leer, escribir o ejecutar. <strong>Para que sirve:</strong> controlar quien toca que, incluso por fuera de Samba. <strong>Donde aparece en tu NAS:</strong> <code>/srv/nas</code> debe ser propiedad de tu usuario para que puedas escribir.</p>
+<p>En Linux cada carpeta y cada archivo tiene un dueno, un grupo y reglas sobre quien puede leer, escribir o ejecutar. <strong>Para que sirve:</strong> controlar quien toca que, incluso por fuera de Samba. <strong>Donde aparece en tu NAS:</strong> <code>/srv/nas</code> debe ser propiedad de tu usuario para que puedas escribir.</p>
 </blockquote>
 <p>Dale la propiedad de la carpeta de datos a tu usuario:</p>
 <pre><code class="language-bash">sudo chown -R edwar:edwar /srv/nas
@@ -201,14 +201,14 @@ sudo chmod -R 0775 /srv/nas
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-chown">🟦 ¿Que significa? — <em>chown</em></h3>
-<p><code>chown</code> (change owner) cambia el <strong>dueno</strong> de archivos y carpetas. La <code>-R</code> lo aplica de forma recursiva (a todo lo de adentro). <strong>Para que sirve:</strong> que tu usuario sea el propietario de <code>/srv/nas</code>. <strong>Donde aparece en tu NAS:</strong> lo corres una vez tras montar el disco.</p>
+<p><code>chown</code> (change owner) cambia el <strong>dueno</strong> de archivos y carpetas. La <code>-R</code> lo aplica de forma recursiva, es decir, a todo lo que haya dentro. <strong>Para que sirve:</strong> que tu usuario sea el propietario de <code>/srv/nas</code>. <strong>Donde aparece en tu NAS:</strong> lo corres una vez tras montar el disco.</p>
 <h3 id="que-significa-chmod">🟦 ¿Que significa? — <em>chmod</em></h3>
-<p><code>chmod</code> (change mode) cambia los <strong>permisos</strong>. <code>0775</code> significa: dueno y grupo pueden leer/escribir/entrar; los demas solo leer/entrar. <strong>Para que sirve:</strong> ajustar finamente quien hace que. <strong>Donde aparece en tu NAS:</strong> lo combinas con <code>chown</code> para preparar <code>/srv/nas</code>.</p>
+<p><code>chmod</code> (change mode) cambia los <strong>permisos</strong>. <code>0775</code> significa: dueno y grupo pueden leer, escribir y entrar; los demas solo leer y entrar. <strong>Para que sirve:</strong> ajustar con detalle quien hace que. <strong>Donde aparece en tu NAS:</strong> lo combinas con <code>chown</code> para dejar <code>/srv/nas</code> listo.</p>
 <h3 id="en-tu-servidor_1">🔎 En tu servidor</h3>
-<p>Si planeas que polypaw-nas reciba respaldos automaticos de <strong>RachaSimple</strong> o <strong>tunal-digital</strong>, conviene crear subcarpetas ordenadas: <code>/srv/nas/respaldos</code>, <code>/srv/nas/multimedia</code>, <code>/srv/nas/documentos</code>. Asi el HDD de 954 GB no se vuelve un cajon de sastre, y puedes compartir solo la carpeta que necesites mas adelante creando recursos separados.</p>
+<p>Si tienes pensado que polypaw-nas reciba respaldos automaticos de <strong>RachaSimple</strong> o <strong>tunal-digital</strong>, te conviene crear subcarpetas ordenadas: <code>/srv/nas/respaldos</code>, <code>/srv/nas/multimedia</code>, <code>/srv/nas/documentos</code>. Asi el HDD de 954 GB no se vuelve un cajon de sastre, y mas adelante puedes compartir solo la carpeta que necesites creando recursos separados.</p>
 </blockquote>
 <h2 id="6-el-cortafuegos-dejar-pasar-a-samba-y-solo-en-casa">6. El cortafuegos: dejar pasar a Samba (y solo en casa)</h2>
-<p>Si tienes el cortafuegos activado (muy recomendable), Samba podria estar bloqueado. Pero ojo: lo abriremos <strong>solo para tu red local</strong>, jamas para internet.</p>
+<p>Si tienes el cortafuegos activado (muy recomendable que asi sea), puede que Samba este bloqueado. Pero ojo con esto: lo vamos a abrir <strong>solo para tu red local</strong>, jamas para internet.</p>
 <blockquote class="def">
 <h3 id="que-significa-cortafuegos-firewall">🟦 ¿Que significa? — <em>Cortafuegos (firewall)</em></h3>
 <p>Es un filtro que decide que conexiones de red entran y salen del servidor. <strong>Para que sirve:</strong> bloquear accesos no deseados. <strong>Donde aparece en tu NAS:</strong> en Ubuntu suele gestionarse con <code>ufw</code>.</p>
@@ -220,27 +220,27 @@ sudo ufw status
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-1921680016">🟦 ¿Que significa? — <em><code>192.168.0.0/16</code></em></h3>
-<p>Es un rango de direcciones IP <strong>privadas</strong>, las que usan las redes caseras. <strong>Para que sirve:</strong> decir "permite solo a las computadoras de mi propia red". <strong>Donde aparece en tu NAS:</strong> ajusta el rango a tu red real (mira tu IP con <code>ip a</code>; si es <code>192.168.1.x</code>, ese rango cubre).</p>
+<p>Es un rango de direcciones IP <strong>privadas</strong>, las que usan las redes caseras. <strong>Para que sirve:</strong> decir "permite solo a las computadoras de mi propia red". <strong>Donde aparece en tu NAS:</strong> ajusta el rango a tu red real (mira tu IP con <code>ip a</code>; si es <code>192.168.1.x</code>, ese rango la cubre).</p>
 <h3 id="que-significa-puerto">🟦 ¿Que significa? — <em>Puerto</em></h3>
 <p>Un puerto es como una <strong>ventanilla numerada</strong> dentro de la direccion IP del servidor: por cada ventanilla entra y sale un tipo de servicio. <strong>Para que sirve:</strong> que en una sola IP convivan muchos servicios sin mezclarse (Samba en sus puertos, Cockpit en el 9090, etc.). <strong>Donde aparece en tu NAS:</strong> Samba usa los puertos 137, 138, 139 y 445; Cockpit el 9090. Abrir un puerto "al internet" significa dejar esa ventanilla accesible desde cualquier parte del mundo, no solo desde tu casa.</p>
 <h3 id="cuidado-la-regla-de-oro-de-la-seguridad">⚠️ Cuidado — la regla de oro de la seguridad</h3>
-<p><strong>Nunca</strong> abras los puertos de Samba (137, 138, 139, 445) hacia internet en tu router. SMB ha sido blanco de ataques famosos (como el ransomware WannaCry, que en 2017 secuestro cientos de miles de equipos saltando precisamente por SMB expuesto). Para acceder a tus archivos <strong>fuera de casa</strong>, usa <strong>Tailscale</strong>, que ya tienes instalado en polypaw-nas. Tailscale crea un tunel privado y cifrado: tu telefono entra como si estuviera en casa, sin exponer ni un puerto al mundo. Regla simple: si dudas entre abrir un puerto o usar Tailscale, <strong>siempre Tailscale</strong>.</p>
+<p><strong>Nunca</strong> abras los puertos de Samba (137, 138, 139, 445) hacia internet en tu router. SMB ha sido blanco de ataques famosos; el caso mas conocido es el ransomware WannaCry, que en 2017 secuestro cientos de miles de equipos colandose precisamente por SMB expuesto. Para llegar a tus archivos <strong>fuera de casa</strong>, usa <strong>Tailscale</strong>, que ya tienes instalado en polypaw-nas. Tailscale crea un tunel privado y cifrado: tu telefono entra como si estuviera en casa, sin exponer ni un solo puerto al mundo. La regla es simple: si dudas entre abrir un puerto o usar Tailscale, <strong>siempre Tailscale</strong>.</p>
 <h3 id="que-significa-ransomware">🟦 ¿Que significa? — <em>Ransomware</em></h3>
-<p>Ransomware es un tipo de programa malicioso que <strong>cifra (secuestra) tus archivos</strong> y exige un pago para devolvertelos. <strong>Para que sirve (a los atacantes):</strong> extorsionar; suele entrar por servicios mal protegidos expuestos a internet. <strong>Donde aparece en tu NAS:</strong> es exactamente el riesgo que evitas al <strong>no</strong> abrir los puertos de Samba al mundo y al usar Tailscale en su lugar.</p>
+<p>Ransomware es un tipo de programa malicioso que <strong>cifra (secuestra) tus archivos</strong> y exige un pago para devolvertelos. <strong>Para que sirve (a los atacantes):</strong> extorsionar; suele entrar por servicios mal protegidos que estan expuestos a internet. <strong>Donde aparece en tu NAS:</strong> es exactamente el riesgo que esquivas al <strong>no</strong> abrir los puertos de Samba al mundo y usar Tailscale en su lugar.</p>
 <h3 id="que-significa-vpn-red-privada-virtual">🟦 ¿Que significa? — <em>VPN (red privada virtual)</em></h3>
-<p>Una VPN es un <strong>tunel cifrado</strong> que une tus dispositivos por una red privada, como si estuvieran todos enchufados al mismo router aunque esten en ciudades distintas. <strong>Para que sirve:</strong> llegar a tu servidor desde fuera de casa sin exponerlo al internet abierto. <strong>Donde aparece en tu NAS:</strong> Tailscale es la VPN que usas; por dentro funciona con tecnologia WireGuard, pero tu solo enciendes la app y listo.</p>
+<p>Una VPN es un <strong>tunel cifrado</strong> que une tus dispositivos en una red privada, como si estuvieran todos enchufados al mismo router aunque esten en ciudades distintas. <strong>Para que sirve:</strong> llegar a tu servidor desde fuera de casa sin exponerlo al internet abierto. <strong>Donde aparece en tu NAS:</strong> Tailscale es la VPN que usas; por dentro funciona con tecnologia WireGuard, pero tu solo enciendes la app y ya esta.</p>
 <h3 id="que-significa-tailscale">🟦 ¿Que significa? — <em>Tailscale</em></h3>
-<p>Tailscale es una VPN (red privada virtual) que conecta tus dispositivos entre si de forma segura, estes donde estes. <strong>Para que sirve:</strong> acceder a polypaw-nas desde fuera de casa sin abrir puertos peligrosos. <strong>Donde aparece en tu NAS:</strong> ya esta instalado; tus dispositivos con Tailscale ven al servidor por su IP de Tailscale (algo como <code>100.x.x.x</code>).</p>
+<p>Tailscale es una VPN (red privada virtual) que conecta tus dispositivos entre si de forma segura, estes donde estes. <strong>Para que sirve:</strong> acceder a polypaw-nas desde fuera de casa sin abrir puertos peligrosos. <strong>Donde aparece en tu NAS:</strong> ya esta instalado; tus dispositivos con Tailscale ven al servidor por su IP de Tailscale (algo parecido a <code>100.x.x.x</code>).</p>
 </blockquote>
 <h2 id="7-conectarte-desde-cada-dispositivo">7. Conectarte desde cada dispositivo</h2>
-<p>Necesitas saber la direccion de tu servidor. Averigua su IP local:</p>
+<p>Primero necesitas saber la direccion de tu servidor. Averigua su IP local:</p>
 <pre><code class="language-bash">ip a | grep inet
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-ip-direccion-ip">🟦 ¿Que significa? — <em>IP (direccion IP)</em></h3>
-<p>Es el "numero de telefono" de tu servidor en la red. <strong>Para que sirve:</strong> que otros dispositivos sepan a donde conectarse. <strong>Donde aparece en tu NAS:</strong> algo como <code>192.168.1.50</code>. Tambien puedes usar el nombre <code>polypaw-nas</code> si tu red resuelve nombres.</p>
+<p>Es el "numero de telefono" de tu servidor en la red. <strong>Para que sirve:</strong> que otros dispositivos sepan a donde conectarse. <strong>Donde aparece en tu NAS:</strong> algo como <code>192.168.1.50</code>. Tambien puedes usar el nombre <code>polypaw-nas</code> si tu red sabe resolver nombres.</p>
 </blockquote>
-<p>Supongamos que tu IP es <code>192.168.1.50</code>. Vamos dispositivo por dispositivo.</p>
+<p>Pongamos que tu IP es <code>192.168.1.50</code>. Vamos dispositivo por dispositivo.</p>
 <h3 id="desde-windows">Desde Windows</h3>
 <ol>
 <li>Abre el Explorador de archivos.</li>
@@ -249,20 +249,20 @@ sudo ufw status
 </ol>
 <blockquote class="tip">
 <h3 id="tip_3">💡 Tip</h3>
-<p>En Windows, la barra invertida <code>\</code> es la que se usa para rutas de red. Marca la casilla "Recordar mis credenciales" solo si la PC es de confianza. Para que la unidad aparezca siempre, haz clic derecho y "Conectar a unidad de red".</p>
+<p>En Windows, la barra invertida <code>\</code> es la que se usa para las rutas de red. Marca la casilla "Recordar mis credenciales" solo si la PC es de confianza. Y si quieres que la unidad aparezca siempre, haz clic derecho y elige "Conectar a unidad de red".</p>
 </blockquote>
 <h3 id="desde-mac">Desde Mac</h3>
 <ol>
 <li>En Finder, menu <strong>Ir</strong> -&gt; <strong>Conectarse al servidor</strong> (o <code>Cmd+K</code>).</li>
 <li>Escribe: <code>smb://192.168.1.50/PolyPawNAS</code>.</li>
-<li>Conectar, y pon tu usuario y contrasena.</li>
+<li>Pulsa Conectar y pon tu usuario y contrasena.</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-smb">🟦 ¿Que significa? — <em><code>smb://</code></em></h3>
-<p>Es la forma de escribir una direccion SMB en Mac, Linux y telefonos, igual que <code>https://</code> es para webs. <strong>Para que sirve:</strong> decirle al sistema "conectate por SMB a esta direccion". <strong>Donde aparece en tu NAS:</strong> <code>smb://192.168.1.50/PolyPawNAS</code> apunta a tu recurso.</p>
+<p>Es la forma de escribir una direccion SMB en Mac, Linux y telefonos, igual que <code>https://</code> lo es para las webs. <strong>Para que sirve:</strong> decirle al sistema "conectate por SMB a esta direccion". <strong>Donde aparece en tu NAS:</strong> <code>smb://192.168.1.50/PolyPawNAS</code> apunta a tu recurso.</p>
 </blockquote>
 <h3 id="desde-linux-otro-equipo">Desde Linux (otro equipo)</h3>
-<p>En el explorador de archivos (Nautilus, Dolphin), busca "Otras ubicaciones" o "Conectar a servidor" y escribe <code>smb://192.168.1.50/PolyPawNAS</code>. O desde terminal:</p>
+<p>En el explorador de archivos (Nautilus, Dolphin), busca "Otras ubicaciones" o "Conectar a servidor" y escribe <code>smb://192.168.1.50/PolyPawNAS</code>. O, si prefieres la terminal:</p>
 <pre><code class="language-bash">sudo apt install cifs-utils
 sudo mkdir -p /mnt/polypaw
 sudo mount -t cifs //192.168.1.50/PolyPawNAS /mnt/polypaw -o username=edwar
@@ -272,32 +272,32 @@ sudo mount -t cifs //192.168.1.50/PolyPawNAS /mnt/polypaw -o username=edwar
 <p>CIFS es otro nombre para una version de SMB; <code>cifs-utils</code> son las herramientas de Linux para montar recursos SMB como si fueran carpetas locales. <strong>Para que sirve:</strong> que <code>/mnt/polypaw</code> sea tu recurso de red, accesible como una carpeta normal. <strong>Donde aparece en tu NAS:</strong> del lado del cliente Linux, no del servidor.</p>
 </blockquote>
 <h3 id="desde-el-telefono-android-iphone">Desde el telefono (Android / iPhone)</h3>
-<p>Instala una app de archivos con soporte SMB. En Android sirven "Files by Google" (con la opcion de red) o "CX File Explorer"; en iPhone, la app <strong>Archivos</strong> ya trae "Conectar al servidor". Escribe <code>smb://192.168.1.50/PolyPawNAS</code> y tus credenciales.</p>
+<p>Instala una app de archivos que soporte SMB. En Android te sirven "Files by Google" (con la opcion de red) o "CX File Explorer"; en iPhone, la app <strong>Archivos</strong> ya trae "Conectar al servidor". Escribe <code>smb://192.168.1.50/PolyPawNAS</code> con tus credenciales y dentro.</p>
 <blockquote class="code">
 <h3 id="en-tu-servidor_2">🔎 En tu servidor</h3>
-<p>Cuando estes fuera de casa, primero enciende Tailscale en el telefono y luego usa la <strong>IP de Tailscale</strong> de polypaw-nas (la <code>100.x.x.x</code>) en lugar de la <code>192.168.x.x</code>. Mismo recurso, misma contrasena, pero ahora viajando por el tunel cifrado. Asi accedes a tus archivos desde la calle sin abrir nada en el router.</p>
+<p>Cuando estes fuera de casa, primero enciende Tailscale en el telefono y luego usa la <strong>IP de Tailscale</strong> de polypaw-nas (la <code>100.x.x.x</code>) en lugar de la <code>192.168.x.x</code>. Es el mismo recurso y la misma contrasena, pero ahora viajando por el tunel cifrado. Asi llegas a tus archivos desde la calle sin abrir nada en el router.</p>
 </blockquote>
 <h2 id="8-problemas-comunes-y-como-salir-de-ellos">8. Problemas comunes (y como salir de ellos)</h2>
 <p><strong>"No puedo ver el servidor en la red."</strong>
 - Revisa que <code>smbd</code> este <code>active (running)</code>.
 - Prueba con la IP directa (<code>\\192.168.1.50\PolyPawNAS</code>) en vez del nombre.
-- Confirma que el cortafuegos deja pasar Samba (<code>sudo ufw status</code>).</p>
+- Confirma que el cortafuegos deja pasar a Samba (<code>sudo ufw status</code>).</p>
 <p><strong>"Me pide usuario y contrasena pero los rechaza."</strong>
 - ¿Creaste el usuario con <code>sudo smbpasswd -a edwar</code>? El usuario de Linux por si solo no basta.
 - ¿El usuario esta en <code>valid users</code> del recurso?
 - Verifica con <code>sudo pdbedit -L</code> que el usuario existe en Samba.</p>
 <p><strong>"Entro pero no puedo escribir / 'permiso denegado'."</strong>
-- Revisa <code>read only = no</code> en el recurso.
-- Revisa que <code>/srv/nas</code> le pertenezca a tu usuario (<code>ls -ld /srv/nas</code>) y corrige con <code>chown</code>.</p>
+- Revisa que tengas <code>read only = no</code> en el recurso.
+- Comprueba que <code>/srv/nas</code> le pertenezca a tu usuario (<code>ls -ld /srv/nas</code>) y corrige con <code>chown</code> si hace falta.</p>
 <p><strong>"Escribi <code>\\polypaw-nas</code> y no resuelve."</strong>
-- Tu red puede no traducir el nombre a IP. Usa la IP directa, o configura AdGuard Home (que ya tienes) para que resuelva nombres locales.</p>
+- Tu red puede no estar traduciendo el nombre a IP. Usa la IP directa, o configura AdGuard Home (que ya tienes) para que resuelva nombres locales.</p>
 <blockquote class="def">
 <h3 id="que-significa-registro-log">🟦 ¿Que significa? — <em>Registro (log)</em></h3>
-<p>Un registro o <em>log</em> es un archivo donde un programa va anotando lo que hace y los errores que encuentra, con fecha y hora. <strong>Para que sirve:</strong> averiguar <strong>por que</strong> algo fallo, leyendo lo que el propio programa apunto. <strong>Donde aparece en tu NAS:</strong> Samba escribe sus logs en <code>/var/log/samba/</code>; el de conexiones de archivos suele ser <code>log.smbd</code>.</p>
+<p>Un registro o <em>log</em> es un archivo donde un programa va anotando lo que hace y los errores que se encuentra, con fecha y hora. <strong>Para que sirve:</strong> averiguar <strong>por que</strong> algo fallo, leyendo lo que el propio programa dejo anotado. <strong>Donde aparece en tu NAS:</strong> Samba escribe sus logs en <code>/var/log/samba/</code>; el de las conexiones de archivos suele ser <code>log.smbd</code>.</p>
 <h3 id="tip_4">💡 Tip</h3>
-<p>El registro (<em>log</em>) de Samba es tu mejor amigo cuando algo falla. Revisa los ultimos errores con <code>sudo tail -n 40 /var/log/samba/log.smbd</code>. Casi siempre la causa exacta esta ahi escrita en una linea.</p>
+<p>El registro (<em>log</em>) de Samba es tu mejor amigo cuando algo falla. Revisa los ultimos errores con <code>sudo tail -n 40 /var/log/samba/log.smbd</code>. Casi siempre la causa exacta esta ahi, escrita en una linea.</p>
 <h3 id="cuidado_3">⚠️ Cuidado</h3>
-<p>Samba comparte archivos, pero <strong>no</strong> es un respaldo. Si el HDD de 954 GB se daña, pierdes lo que tenga. Manten una copia de lo importante (tus repos <strong>PolyPaw</strong>, <strong>Faro/Organizer</strong>, fotos) en otro disco o en la nube. Compartir y respaldar son cosas distintas; necesitas ambas.</p>
+<p>Samba comparte archivos, pero <strong>no</strong> es un respaldo. Si el HDD de 954 GB se daña, pierdes lo que tuviera dentro. Manten una copia de lo importante (tus repos <strong>PolyPaw</strong>, <strong>Faro/Organizer</strong>, fotos) en otro disco o en la nube. Compartir y respaldar son cosas distintas; necesitas las dos.</p>
 </blockquote>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
@@ -317,7 +317,7 @@ sudo mount -t cifs //192.168.1.50/PolyPawNAS /mnt/polypaw -o username=edwar
 <h2 id="ejercicios">🧪 Ejercicios</h2>
 <ol>
 <li>
-<p>💻 <strong>El check de salud.</strong> Ejecuta <code>systemctl status smbd</code> y <code>df -h /srv/nas</code>. Escribe en una nota si Samba esta <code>running</code> y cuanto espacio libre te queda en el HDD de 954 GB.</p>
+<p>💻 <strong>El check de salud.</strong> Ejecuta <code>systemctl status smbd</code> y <code>df -h /srv/nas</code>. Anota en una nota si Samba esta <code>running</code> y cuanto espacio libre te queda en el HDD de 954 GB.</p>
 </li>
 <li>
 <p>💻 <strong>Crea tu primer recurso.</strong> Si no existe aun, define <code>[PolyPawNAS]</code> en <code>smb.conf</code> apuntando a <code>/srv/nas</code>, valida con <code>testparm</code>, reinicia con <code>systemctl restart smbd</code> y crea tu usuario con <code>smbpasswd -a</code>. Sube un archivo de prueba desde otra computadora.</p>
@@ -329,14 +329,14 @@ sudo mount -t cifs //192.168.1.50/PolyPawNAS /mnt/polypaw -o username=edwar
 <p>💻 <strong>El tunel seguro.</strong> Enciende Tailscale en tu telefono, averigua la IP <code>100.x.x.x</code> de polypaw-nas y conectate a <code>smb://100.x.x.x/PolyPawNAS</code> desde fuera de tu wifi (usa datos moviles). Comprueba que ves tus archivos sin haber abierto ningun puerto en el router.</p>
 </li>
 <li>
-<p><strong>Auditoria de seguridad.</strong> Sin tocar el servidor, escribe en tu cuaderno las respuestas: ¿esta <code>map to guest = never</code>? ¿Tu contrasena de Samba es unica y larga? ¿Algun puerto de SMB esta abierto en tu router hacia internet (deberia ser NO)? ¿Cuando hiciste el ultimo respaldo del HDD?</p>
+<p><strong>Auditoria de seguridad.</strong> Sin tocar el servidor, escribe en tu cuaderno las respuestas: ¿esta <code>map to guest = never</code>? ¿Tu contrasena de Samba es unica y larga? ¿Hay algun puerto de SMB abierto en tu router hacia internet (deberia ser NO)? ¿Cuando hiciste el ultimo respaldo del HDD?</p>
 </li>
 <li>
 <p>💻 <strong>Lee los registros.</strong> Provoca un error a proposito (intenta entrar con una contrasena equivocada desde otro equipo) y luego revisa <code>sudo tail -n 40 /var/log/samba/log.smbd</code> para encontrar la linea que registra el intento fallido. Aprender a leer logs te salvara mil veces.</p>
 </li>
 </ol>
 <blockquote>
-<p>Bit el ajolote te felicita: acabas de convertir un laptop con bateria-UPS en un disco de red de toda la casa. La proxima vez que arrastres una foto a <code>\\polypaw-nas\PolyPawNAS</code>, recuerda que viaja por SMB hasta el HDD de 954 GB, pasando por el guardia de permisos y el de usuarios. Y si alguien te dice "abre el puerto 445 al internet para entrar desde fuera", ya sabes que la respuesta es: no, para eso esta Tailscale. Nada nada tranquilo, tus archivos estan en buenas branquias.</p>
+<p>Bit el ajolote te felicita: acabas de convertir un laptop con bateria-UPS en un disco de red para toda la casa. La proxima vez que arrastres una foto a <code>\\polypaw-nas\PolyPawNAS</code>, acuerdate de que viaja por SMB hasta el HDD de 954 GB, pasando por el guardia de permisos y el de usuarios. Y si alguien te dice "abre el puerto 445 al internet para entrar desde fuera", ya sabes que la respuesta es: no, para eso esta Tailscale. Nada tranquilo, que tus archivos estan en buenas branquias.</p>
 </blockquote><footer>Manuales de Aprendizaje · Hecho con 🦎 por Bit · Idioma: español</footer>
 </main>
 <button id="arriba" title="Subir" aria-label="Subir">▲</button>

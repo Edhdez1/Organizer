@@ -23,29 +23,29 @@
 </p>
 
 <blockquote>
-<p>En el capítulo 05 aprendiste a hacer tus primeros <code>commit</code> y a guardar la historia de tu proyecto. Ahora vas a llevar Git al siguiente nivel: trabajar con <strong>ramas</strong> para experimentar sin miedo, <strong>fusionar</strong> tu trabajo, resolver <strong>conflictos</strong> cuando dos cambios chocan, <strong>comparar versiones</strong>, <strong>deshacer errores</strong> con calma y decidir qué archivos Git debe <strong>ignorar</strong>. Todo esto es lo que separa a alguien que "usa Git" de alguien que de verdad confía en Git. Y, como bonus, entenderás el mismo flujo de trabajo con ramas y <em>pull requests</em> que usamos para construir este propio manual. Bit, tu ajolote guía, te acompaña con la linterna encendida.</p>
+<p>En el capítulo 05 hiciste tus primeros <code>commit</code> y empezaste a guardar la historia de tu proyecto. Aquí damos un paso más: vas a trabajar con <strong>ramas</strong> para experimentar sin miedo, <strong>fusionar</strong> tu trabajo cuando esté listo, salir vivo de los <strong>conflictos</strong> cuando dos cambios chocan, <strong>comparar versiones</strong>, <strong>deshacer errores</strong> sin sudar frío y decidir qué archivos Git debe <strong>ignorar</strong>. Eso es justo lo que diferencia a quien "usa Git" de quien de verdad confía en Git. Y de paso vas a entender el mismo flujo de ramas y <em>pull requests</em> con el que construimos este manual. Bit, tu ajolote guía, te acompaña con la linterna encendida.</p>
 </blockquote>
 <h2 id="1-repaso-rapido-donde-quedamos">1. Repaso rápido: ¿dónde quedamos?</h2>
-<p>En el capítulo 05 vimos que Git guarda "fotos" de tu proyecto llamadas <em>commits</em>. Cada commit tiene un mensaje, una fecha y un identificador único. Hasta ahora trabajabas en una sola línea de tiempo: hacías un cambio, lo guardabas, hacías otro, lo guardabas, y así.</p>
-<p>El problema aparece cuando quieres <strong>probar algo nuevo sin romper lo que ya funciona</strong>. Por ejemplo, en tu proyecto <strong>RachaSimple</strong> (la app de hábitos en React) quieres añadir una pantalla de estadísticas, pero no estás seguro de que vaya a quedar bien. Si tocas el código directamente y algo falla, te quedas sin nada que funcione. La solución es trabajar en una <strong>rama</strong> separada.</p>
+<p>En el capítulo 05 vimos que Git guarda "fotos" de tu proyecto llamadas <em>commits</em>. Cada commit lleva un mensaje, una fecha y un identificador único. Hasta ahora trabajabas sobre una sola línea de tiempo: hacías un cambio y lo guardabas, hacías otro y lo guardabas, y así una cosa detrás de otra.</p>
+<p>El lío empieza cuando quieres <strong>probar algo nuevo sin romper lo que ya funciona</strong>. Imagina que en tu proyecto <strong>RachaSimple</strong> (la app de hábitos en React) se te ocurre añadir una pantalla de estadísticas, pero no tienes claro si va a quedar bien. Si metes mano al código directamente y algo se rompe, te quedas sin nada que funcione. Para eso sirve trabajar en una <strong>rama</strong> aparte.</p>
 <blockquote class="def">
 <h3 id="que-significa-rama-branch">🟦 ¿Qué significa? — <em>Rama (branch)</em></h3>
-<p>Una <strong>rama</strong> es una línea de trabajo paralela dentro de tu repositorio. Es como sacar una fotocopia de tu proyecto en su estado actual y empezar a dibujar sobre esa copia, sin tocar el original. Sirve para experimentar, desarrollar una funcionalidad o arreglar un error de forma aislada. Si sale bien, juntas el resultado con el original; si sale mal, tiras la rama y no pasó nada.
-<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>Faro</strong> (la carpeta Organizer), cada vez que una sesión añade una nueva <em>feature</em> lo hace en una rama propia antes de fusionarla a <code>main</code>.</p>
+<p>Una <strong>rama</strong> es una línea de trabajo paralela dentro de tu repositorio. Piénsalo como sacar una fotocopia de tu proyecto tal y como está ahora y empezar a dibujar sobre esa copia, sin tocar el original. Te sirve para experimentar, desarrollar una funcionalidad o arreglar un error de forma aislada. Si sale bien, juntas el resultado con el original; si sale mal, tiras la rama y aquí no ha pasado nada.
+<strong>¿Dónde se usa en tu proyecto?</strong> En <strong>Faro</strong> (la carpeta Organizer), cada vez que una sesión añade una <em>feature</em> nueva la trabaja en su propia rama antes de fusionarla a <code>main</code>.</p>
 </blockquote>
 <h2 id="2-la-rama-principal-y-por-que-no-se-toca-a-la-ligera">2. La rama principal y por qué no se toca a la ligera</h2>
-<p>Cuando creas un repositorio, Git crea una rama por defecto. Hoy se llama casi siempre <code>main</code> (antes se llamaba <code>master</code>).</p>
+<p>Al crear un repositorio, Git genera una rama por defecto. Hoy casi siempre se llama <code>main</code> (antes solía llamarse <code>master</code>).</p>
 <blockquote class="def">
 <h3 id="que-significa-main">🟦 ¿Qué significa? — <em><code>main</code></em></h3>
-<p><code>main</code> es el nombre de la rama principal: la versión "oficial" y estable de tu proyecto. Sirve como la fuente de la verdad. La idea es que el código en <code>main</code> siempre funcione, de modo que cualquiera que lo descargue obtenga algo que no esté roto.</p>
+<p><code>main</code> es el nombre de la rama principal: la versión "oficial" y estable de tu proyecto, la fuente de la verdad. La idea es que el código en <code>main</code> siempre funcione, de modo que cualquiera que lo descargue se encuentre algo que no esté roto.</p>
 </blockquote>
-<p>La regla de oro de los proyectos serios es: <strong>no trabajes directamente sobre <code>main</code></strong>. En su lugar, creas una rama para tu tarea, trabajas tranquilo ahí, y solo cuando esté listo y probado lo llevas a <code>main</code>. Así <code>main</code> se mantiene siempre sano.</p>
+<p>La regla de oro en los proyectos serios es una sola: <strong>no trabajes directamente sobre <code>main</code></strong>. Lo que haces es crear una rama para tu tarea, trabajar tranquilo ahí, y solo cuando esté listo y probado lo llevas a <code>main</code>. Así <code>main</code> se mantiene siempre sano.</p>
 <blockquote class="tip">
 <h3 id="tip-una-rama-una-tarea">💡 Tip — Una rama, una tarea</h3>
-<p>No metas diez cosas distintas en la misma rama. Una rama debería resolver <strong>un</strong> asunto concreto: "añadir login", "arreglar el color del botón", "corregir el cálculo de progreso". Ramas pequeñas y enfocadas son fáciles de revisar y de fusionar.</p>
+<p>No metas diez cosas distintas en la misma rama. Una rama debería resolver <strong>un</strong> asunto concreto: "añadir login", "arreglar el color del botón", "corregir el cálculo de progreso". Las ramas pequeñas y enfocadas son fáciles de revisar y de fusionar.</p>
 </blockquote>
 <h2 id="3-crear-listar-y-cambiar-de-rama">3. Crear, listar y cambiar de rama</h2>
-<p>Veamos los comandos. Imagina que estás en <strong>RachaSimple</strong> y quieres crear la rama de las estadísticas.</p>
+<p>Vamos a los comandos. Supón que estás en <strong>RachaSimple</strong> y quieres crear la rama de las estadísticas.</p>
 <pre><code class="language-bash"># Ver en qué rama estás y qué otras existen
 git branch
 
@@ -55,14 +55,14 @@ git branch estadisticas
 # Cambiarte a esa rama (moverte a esa línea de trabajo)
 git switch estadisticas
 </code></pre>
-<p>Hay un atajo muy común que <strong>crea la rama y te cambia a ella</strong> en un solo paso:</p>
+<p>Existe un atajo muy usado que <strong>crea la rama y te cambia a ella</strong> de un solo golpe:</p>
 <pre><code class="language-bash">git switch -c estadisticas
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-switch-y-checkout">🟦 ¿Qué significa? — <em><code>switch</code> y <code>checkout</code></em></h3>
-<p><code>git switch</code> sirve para moverte entre ramas. Verás también <code>git checkout</code> en tutoriales antiguos: hace lo mismo (y más cosas), pero Git separó esa función en <code>switch</code> precisamente porque <code>checkout</code> hacía demasiadas tareas distintas y confundía. Para cambiar de rama, prefiere <code>switch</code>; es más claro.</p>
+<p><code>git switch</code> sirve para moverte entre ramas. En tutoriales antiguos verás <code>git checkout</code>, que hace lo mismo (y unas cuantas cosas más). Git decidió separar esa función en <code>switch</code> precisamente porque <code>checkout</code> cargaba con demasiadas tareas distintas y eso confundía a todo el mundo. Para cambiar de rama, quédate con <code>switch</code>; es más claro.</p>
 </blockquote>
-<p>Cuando te cambias de rama, los archivos en tu carpeta <strong>cambian</strong> para reflejar el estado de esa rama. Si en <code>main</code> el archivo <code>src/components/Stats.tsx</code> no existía y en tu rama sí, al volver a <code>main</code> ese archivo desaparece de la vista (pero sigue guardado en la rama). Esto asusta la primera vez; es normal. No perdiste nada: cada rama recuerda su propia versión.</p>
+<p>Cuando te cambias de rama, los archivos de tu carpeta <strong>cambian</strong> para reflejar el estado de esa rama. Si en <code>main</code> no existía el archivo <code>src/components/Stats.tsx</code> y en tu rama sí, al volver a <code>main</code> ese archivo desaparece de la vista (pero sigue guardado en la rama). La primera vez asusta un poco; es normal. No perdiste nada: cada rama recuerda su propia versión.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
 <p>En <strong>RachaSimple</strong>, una rama típica viviría así:
@@ -72,13 +72,13 @@ git switch -c stats-pantalla</p>
 <p>git add src/components/StatsView.tsx src/hooks/useStats.ts
 git commit -m "Añade vista de estadísticas semanales"
 <code>``
-Mientras tanto, tu rama</code>main` sigue intacta con la app funcionando como antes.</p>
+Mientras tanto, tu rama</code>main` sigue intacta, con la app funcionando igual que antes.</p>
 </blockquote>
 <h2 id="4-ver-diferencias-con-diff">4. Ver diferencias con <code>diff</code></h2>
-<p>Antes de guardar nada, conviene mirar <strong>qué cambiaste exactamente</strong>. Para eso está <code>git diff</code>.</p>
+<p>Antes de guardar nada, vale la pena mirar <strong>qué cambiaste exactamente</strong>. Para eso está <code>git diff</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-diff-diferencia">🟦 ¿Qué significa? — <em><code>diff</code> (diferencia)</em></h3>
-<p>Un <strong>diff</strong> es una comparación que muestra, línea por línea, qué cambió entre dos versiones de un archivo. Las líneas que añadiste aparecen con <code>+</code> (normalmente en verde) y las que borraste con <code>-</code> (en rojo). Sirve para revisar tu propio trabajo antes de confirmarlo y para entender qué hizo otra persona.</p>
+<p>Un <strong>diff</strong> es una comparación que te muestra, línea por línea, qué cambió entre dos versiones de un archivo. Las líneas que añadiste salen con <code>+</code> (normalmente en verde) y las que borraste con <code>-</code> (en rojo). Te sirve para revisar tu propio trabajo antes de confirmarlo y para entender qué tocó otra persona.</p>
 </blockquote>
 <pre><code class="language-bash"># Ver los cambios que aún NO has preparado (no hiciste git add)
 git diff
@@ -89,7 +89,7 @@ git diff --staged
 # Comparar tu rama actual con main
 git diff main
 </code></pre>
-<p>Una lectura de ejemplo, sobre el archivo <code>main.js</code> de <strong>tunal-digital</strong>:</p>
+<p>Veamos un ejemplo, sobre el archivo <code>main.js</code> de <strong>tunal-digital</strong>:</p>
 <pre><code class="language-diff">diff --git a/sitio-web/main.js b/sitio-web/main.js
 --- a/sitio-web/main.js
 +++ b/sitio-web/main.js
@@ -98,40 +98,40 @@ git diff main
 +  const url = &quot;https://tunal-worker.workers.dev/chat&quot;;
    fetch(url, { method: &quot;POST&quot;, body: texto });
 </code></pre>
-<p>Esto se lee así: en <code>main.js</code>, alrededor de la línea 10, <strong>quitaste</strong> la línea con <code>localhost</code> y la <strong>reemplazaste</strong> por la URL real del Worker de Cloudflare. El diff te deja revisar exactamente eso antes de hacer commit.</p>
+<p>Se lee así: en <code>main.js</code>, alrededor de la línea 10, <strong>quitaste</strong> la línea con <code>localhost</code> y la <strong>reemplazaste</strong> por la URL real del Worker de Cloudflare. El diff te deja revisar justo eso antes de hacer commit.</p>
 <blockquote class="tip">
 <h3 id="tip-lee-siempre-tu-diff-antes-del-commit">💡 Tip — Lee siempre tu diff antes del commit</h3>
-<p>Hacer <code>git diff</code> antes de <code>git commit</code> es como releer un mensaje antes de enviarlo. Atrapa errores tontos: una clave de API pegada por accidente, un <code>console.log</code> olvidado, una línea borrada de más. Bit te lo recordará.</p>
+<p>Hacer <code>git diff</code> antes de <code>git commit</code> es como releer un mensaje antes de darle a enviar. Pilla errores tontos: una clave de API pegada por accidente, un <code>console.log</code> que se te olvidó quitar, una línea borrada de más. Bit te lo recordará.</p>
 </blockquote>
 <h2 id="5-fusionar-ramas-con-merge">5. Fusionar ramas con <code>merge</code></h2>
-<p>Cuando tu rama está lista y probada, quieres llevar esos cambios de vuelta a <code>main</code>. Eso es <strong>fusionar</strong> (merge).</p>
+<p>Cuando tu rama está lista y probada, querrás llevar esos cambios de vuelta a <code>main</code>. A eso lo llamamos <strong>fusionar</strong> (merge).</p>
 <blockquote class="def">
 <h3 id="que-significa-fusionar-merge">🟦 ¿Qué significa? — <em>Fusionar (merge)</em></h3>
-<p><strong>Fusionar</strong> es combinar el trabajo de una rama dentro de otra. Git toma los commits de tu rama y los integra en la rama destino, creando una historia unificada. Sirve para que el trabajo que hiciste aislado pase a formar parte de la versión oficial.</p>
+<p><strong>Fusionar</strong> es combinar el trabajo de una rama dentro de otra. Git toma los commits de tu rama y los integra en la rama destino, dejando una historia unificada. Sirve para que ese trabajo que hiciste aislado pase a formar parte de la versión oficial.</p>
 </blockquote>
-<p>El patrón es: te paras en la rama que va a <strong>recibir</strong> los cambios y le pides que se traiga la otra.</p>
+<p>El patrón es sencillo: te paras en la rama que va a <strong>recibir</strong> los cambios y le pides que se traiga la otra.</p>
 <pre><code class="language-bash"># 1. Me muevo a la rama destino (la que recibe)
 git switch main
 
 # 2. Le traigo el trabajo de la rama &quot;estadisticas&quot;
 git merge estadisticas
 </code></pre>
-<p>Hay dos formas en que Git puede fusionar:</p>
+<p>Git puede fusionar de dos maneras:</p>
 <ul>
 <li><strong>Fast-forward (avance rápido):</strong> si <code>main</code> no cambió desde que creaste tu rama, Git simplemente "adelanta" el puntero de <code>main</code> hasta tu último commit. No hay nada que combinar; es instantáneo.</li>
 <li><strong>Merge commit (commit de fusión):</strong> si <code>main</code> también avanzó por su cuenta, Git crea un commit especial que une las dos historias. Es perfectamente normal y deseable.</li>
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado-fusiona-hacia-donde-quieres">⚠️ Cuidado — Fusiona hacia donde quieres</h3>
-<p>Un error clásico de principiante es fusionar al revés. Recuerda: primero <code>switch</code> a la rama <strong>destino</strong>, luego <code>merge</code> de la rama <strong>origen</strong>. Si te paras en <code>estadisticas</code> y haces <code>git merge main</code>, estás trayendo <code>main</code> <em>hacia tu rama</em>, que a veces es lo que quieres (actualizar tu rama) pero no es "publicar tu trabajo".</p>
+<p>Un error clásico de principiante es fusionar al revés. Recuerda el orden: primero <code>switch</code> a la rama <strong>destino</strong>, luego <code>merge</code> de la rama <strong>origen</strong>. Si te paras en <code>estadisticas</code> y haces <code>git merge main</code>, estás trayendo <code>main</code> <em>hacia tu rama</em>. A veces es lo que buscas (actualizar tu rama con lo último), pero eso no es "publicar tu trabajo".</p>
 </blockquote>
 <h2 id="6-conflictos-cuando-dos-cambios-chocan">6. Conflictos: cuando dos cambios chocan</h2>
-<p>A veces, dos ramas modifican <strong>la misma línea del mismo archivo</strong> de forma distinta. Git no puede adivinar cuál es la correcta, así que se detiene y te pide ayuda. Eso es un <strong>conflicto de fusión</strong>.</p>
+<p>A veces dos ramas modifican <strong>la misma línea del mismo archivo</strong> de formas distintas. Git no tiene cómo adivinar cuál es la buena, así que se detiene y te pide ayuda. Eso es un <strong>conflicto de fusión</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-conflicto-merge-conflict">🟦 ¿Qué significa? — <em>Conflicto (merge conflict)</em></h3>
-<p>Un <strong>conflicto</strong> ocurre cuando Git no puede combinar dos versiones automáticamente porque ambas tocaron las mismas líneas. No es un error tuyo ni un daño: es Git pidiéndote que decidas tú qué versión gana. Sirve para que nunca se pierda trabajo sin que un humano lo apruebe.</p>
+<p>Un <strong>conflicto</strong> ocurre cuando Git no puede combinar dos versiones de forma automática porque ambas tocaron las mismas líneas. No es un error tuyo ni un daño: es Git pidiéndote que decidas tú qué versión gana. Está pensado para que nunca se pierda trabajo sin que un humano lo apruebe.</p>
 </blockquote>
-<p>Cuando hay conflicto, Git marca el archivo con unos símbolos especiales. Por ejemplo, en <code>polypaw_db.json</code> de <strong>PolyPaw</strong> dos ramas cambiaron el mismo valor:</p>
+<p>Cuando hay conflicto, Git marca el archivo con unos símbolos especiales. Por ejemplo, en <code>polypaw_db.json</code> de <strong>PolyPaw</strong>, dos ramas cambiaron el mismo valor:</p>
 <pre><code class="language-text">{
   &quot;version_datos&quot;:
 &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
@@ -141,30 +141,30 @@ git merge estadisticas
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; nuevas-misiones
 }
 </code></pre>
-<p>Cómo leer esto:</p>
+<p>Cómo se lee esto:</p>
 <ul>
-<li><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> hasta <code>=======</code> es <strong>lo que hay en tu rama actual</strong> (HEAD).</li>
-<li><code>=======</code> hasta <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; nuevas-misiones</code> es <strong>lo que trae la otra rama</strong>.</li>
+<li>Desde <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> hasta <code>=======</code> está <strong>lo que hay en tu rama actual</strong> (HEAD).</li>
+<li>Desde <code>=======</code> hasta <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; nuevas-misiones</code> está <strong>lo que trae la otra rama</strong>.</li>
 </ul>
-<p>Tu trabajo es <strong>editar el archivo a mano</strong> para dejarlo como debe quedar, <strong>borrando</strong> las tres líneas de marcas (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>). Por ejemplo, decides que la versión correcta es la <code>1.3.0</code>:</p>
+<p>Tu trabajo es <strong>editar el archivo a mano</strong> para dejarlo como debe quedar, y <strong>borrar</strong> las tres líneas de marcas (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>). Pongamos que decides que la versión correcta es la <code>1.3.0</code>:</p>
 <pre><code class="language-text">{
   &quot;version_datos&quot;: &quot;1.3.0&quot;
 }
 </code></pre>
-<p>Luego le dices a Git que ya lo resolviste:</p>
+<p>Después le avisas a Git de que ya lo resolviste:</p>
 <pre><code class="language-bash">git add polypaw_db.json
 git commit          # cierra la fusión
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-calma-con-los-conflictos">💡 Tip — Calma con los conflictos</h3>
-<p>Los conflictos asustan al principio, pero son rutina. La clave es ir archivo por archivo: abre cada uno marcado, decide qué texto queda, borra las marcas, guarda. Si te enredas y quieres empezar de cero, <code>git merge --abort</code> cancela la fusión y te devuelve a como estabas antes de empezar.</p>
+<p>Los conflictos asustan al principio, pero acaban siendo rutina. El truco es ir archivo por archivo: abres cada uno marcado, decides qué texto se queda, borras las marcas y guardas. Y si te enredas y prefieres empezar de cero, <code>git merge --abort</code> cancela la fusión y te devuelve a como estabas antes de empezar.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
-<p>En <strong>Faro</strong> (Next.js), un conflicto típico aparece en <code>src/lib/</code> cuando dos sesiones tocan la misma función de análisis con OpenAI. Resolverlo es leer ambas versiones, entender qué hacía cada una, y combinar la lógica a mano para que el resultado tenga sentido, no solo elegir una al azar.</p>
+<p>En <strong>Faro</strong> (Next.js), un conflicto típico aparece en <code>src/lib/</code> cuando dos sesiones tocan la misma función de análisis con OpenAI. Resolverlo significa leer ambas versiones, entender qué hacía cada una y combinar la lógica a mano para que el resultado tenga sentido, no quedarte con una al azar.</p>
 </blockquote>
 <h2 id="7-deshacer-cambios-restore-checkout-y-revert">7. Deshacer cambios: <code>restore</code>, <code>checkout</code> y <code>revert</code></h2>
-<p>Equivocarse es parte de programar. Git te da varias formas de retroceder, según <strong>qué tan lejos</strong> quieres deshacer.</p>
+<p>Equivocarse es parte de programar. Git te ofrece varias formas de retroceder, según <strong>qué tan atrás</strong> quieras llegar.</p>
 <h3 id="71-descartar-cambios-que-aun-no-guardaste">7.1 Descartar cambios que aún no guardaste</h3>
-<p>Editaste <code>styles.css</code> de <strong>tunal-digital</strong>, no te gustó y quieres volver a como estaba en el último commit:</p>
+<p>Editaste <code>styles.css</code> de <strong>tunal-digital</strong>, no te convenció y quieres volver a como estaba en el último commit:</p>
 <pre><code class="language-bash"># Forma moderna y recomendada
 git restore sitio-web/styles.css
 
@@ -173,12 +173,12 @@ git checkout -- sitio-web/styles.css
 </code></pre>
 <blockquote class="def">
 <h3 id="que-significa-restore">🟦 ¿Qué significa? — <em><code>restore</code></em></h3>
-<p><code>git restore</code> devuelve un archivo (o varios) a un estado anterior, normalmente el del último commit. Sirve para tirar a la basura cambios sin guardar que no quieres conservar. <strong>Cuidado:</strong> lo descartado no se recupera, porque nunca llegó a la historia de Git.</p>
+<p><code>git restore</code> devuelve un archivo (o varios) a un estado anterior, normalmente el del último commit. Sirve para tirar a la basura cambios sin guardar que no quieres conservar. <strong>Ojo:</strong> lo que descartas no se recupera, porque nunca llegó a entrar en la historia de Git.</p>
 <h3 id="cuidado-restore-borra-de-verdad">⚠️ Cuidado — <code>restore</code> borra de verdad</h3>
-<p>A diferencia de un <code>commit</code>, lo que descartas con <code>restore</code> no está guardado en ningún lado. Úsalo solo cuando estés seguro de que esos cambios no valen nada. Bit sugiere mirar primero con <code>git diff</code> para no arrepentirte.</p>
+<p>A diferencia de un <code>commit</code>, lo que descartas con <code>restore</code> no queda guardado en ningún lado. Úsalo solo cuando estés seguro de que esos cambios no valen nada. Bit sugiere mirar primero con <code>git diff</code>, para no arrepentirte luego.</p>
 </blockquote>
 <h3 id="72-quitar-un-archivo-del-area-preparada">7.2 Quitar un archivo del área preparada</h3>
-<p>Hiciste <code>git add</code> de un archivo que no querías incluir todavía:</p>
+<p>Hiciste <code>git add</code> de un archivo que todavía no querías incluir:</p>
 <pre><code class="language-bash"># Lo saca de &quot;preparado&quot;, pero conserva tus ediciones
 git restore --staged backend/worker.js
 </code></pre>
@@ -186,7 +186,7 @@ git restore --staged backend/worker.js
 <p>Aquí la herramienta más segura es <code>revert</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-revert">🟦 ¿Qué significa? — <em><code>revert</code></em></h3>
-<p><code>git revert</code> crea un <strong>nuevo commit</strong> que deshace los cambios de un commit anterior. No borra historia: la <em>añade</em>. Es como decir "este commit fue un error, aquí va otro que lo cancela". Sirve para deshacer algo que ya compartiste con otras personas sin reescribir el pasado, lo cual sería peligroso en un trabajo en equipo.</p>
+<p><code>git revert</code> crea un <strong>nuevo commit</strong> que deshace los cambios de un commit anterior. No borra historia: la <em>suma</em>. Es como decir "este commit fue un error, aquí va otro que lo cancela". Sirve para deshacer algo que ya compartiste con otras personas sin reescribir el pasado, cosa que sería peligrosa cuando se trabaja en equipo.</p>
 </blockquote>
 <pre><code class="language-bash"># Ver los identificadores de los commits
 git log --oneline
@@ -196,13 +196,13 @@ git revert a1b2c3d
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip-revert-para-historia-compartida-restore-para-lo-local">💡 Tip — <code>revert</code> para historia compartida, <code>restore</code> para lo local</h3>
-<p>Regla mental sencilla: si el cambio <strong>ya está en GitHub</strong> o lo vio alguien más, usa <code>revert</code> (suma un commit que corrige). Si el cambio es <strong>solo tuyo y local</strong>, puedes usar <code>restore</code> o rehacerlo sin drama. Reescribir historia que otros ya descargaron causa líos; <code>revert</code> los evita.</p>
+<p>Una regla mental sencilla: si el cambio <strong>ya está en GitHub</strong> o lo vio alguien más, usa <code>revert</code> (añade un commit que corrige). Si el cambio es <strong>solo tuyo y local</strong>, puedes usar <code>restore</code> o rehacerlo sin drama. Reescribir historia que otros ya descargaron es pedir líos; <code>revert</code> te los ahorra.</p>
 </blockquote>
 <h2 id="8-gitignore-lo-que-git-no-debe-vigilar">8. <code>.gitignore</code>: lo que Git no debe vigilar</h2>
-<p>No todo lo que hay en tu carpeta debe entrar al repositorio. Cosas como dependencias descargadas, archivos temporales o, sobre todo, <strong>secretos</strong>, deben quedar fuera.</p>
+<p>No todo lo que vive en tu carpeta tiene que entrar al repositorio. Cosas como las dependencias descargadas, los archivos temporales y, sobre todo, los <strong>secretos</strong>, deben quedarse fuera.</p>
 <blockquote class="def">
 <h3 id="que-significa-gitignore">🟦 ¿Qué significa? — <em><code>.gitignore</code></em></h3>
-<p><code>.gitignore</code> es un archivo de texto donde escribes, una por línea, los nombres o patrones de archivos que quieres que Git <strong>ignore</strong> por completo: no los sigue, no los sube, no los muestra como cambios. Sirve para mantener el repo limpio y, crítico, para no subir contraseñas ni claves de API por accidente.</p>
+<p><code>.gitignore</code> es un archivo de texto donde escribes, una por línea, los nombres o patrones de archivos que quieres que Git <strong>ignore</strong> por completo: no los sigue, no los sube, no los muestra como cambios. Sirve para mantener el repo limpio y, esto es lo crítico, para no subir contraseñas ni claves de API por descuido.</p>
 </blockquote>
 <p>Un <code>.gitignore</code> realista para <strong>Faro</strong> (Next.js) se vería así:</p>
 <pre><code class="language-gitignore"># Dependencias instaladas (se reinstalan con npm install)
@@ -218,25 +218,25 @@ node_modules/
 # Archivos del sistema operativo
 .DS_Store
 </code></pre>
-<p>Cada línea es un patrón. <code>node_modules/</code> ignora toda esa carpeta. <code>.env.local</code> ignora ese archivo concreto. El <code>#</code> marca un comentario para que tú te acuerdes de para qué es cada regla.</p>
+<p>Cada línea es un patrón. <code>node_modules/</code> ignora toda esa carpeta. <code>.env.local</code> ignora ese archivo concreto. El <code>#</code> marca un comentario, para que tú te acuerdes de para qué sirve cada regla.</p>
 <blockquote class="warn">
 <h3 id="cuidado-los-secretos-jamas-van-a-git">⚠️ Cuidado — Los secretos jamás van a Git</h3>
-<p>Las convenciones de <strong>Faro</strong> son tajantes: tokens y claves (las de OpenAI, las de Supabase) viven solo en variables de entorno del servidor, nunca en el código ni en el repositorio. Por eso <code>.env</code> y <code>.env.local</code> <strong>siempre</strong> están en <code>.gitignore</code>. Si alguna vez una clave llega a subirse, debe considerarse comprometida y rotarse (cambiarse) de inmediato.</p>
+<p>Las convenciones de <strong>Faro</strong> son tajantes en esto: los tokens y claves (los de OpenAI, los de Supabase) viven solo en variables de entorno del servidor, nunca en el código ni en el repositorio. Por eso <code>.env</code> y <code>.env.local</code> están <strong>siempre</strong> en <code>.gitignore</code>. Y si alguna vez una clave acaba subiéndose, hay que darla por comprometida y rotarla (cambiarla) de inmediato.</p>
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>En <strong>PolyPaw</strong> (Python + Flet) tu <code>.gitignore</code> ignoraría la carpeta del entorno virtual y los archivos compilados de Python:
+<p>En <strong>PolyPaw</strong> (Python + Flet), tu <code>.gitignore</code> ignoraría la carpeta del entorno virtual y los archivos compilados de Python:
 <code>gitignore
 __pycache__/
 *.pyc
 .venv/</code>
 En cambio, sí quieres versionar <code>missions/*.json</code> y <code>polypaw_db.json</code>, porque esos datos <strong>son</strong> el contenido de la app.</p>
 <h3 id="tip-ignora-antes-de-anadir">💡 Tip — Ignora antes de añadir</h3>
-<p><code>.gitignore</code> solo evita que se <strong>empiecen</strong> a seguir archivos. Si ya hiciste <code>git add</code> de algo y luego lo pones en <code>.gitignore</code>, Git lo seguirá vigilando. Para que deje de hacerlo: <code>git rm --cached archivo</code> y luego commit. Por eso conviene crear el <code>.gitignore</code> al inicio del proyecto.</p>
+<p><code>.gitignore</code> solo evita que se <strong>empiecen</strong> a seguir archivos. Si ya hiciste <code>git add</code> de algo y después lo pones en <code>.gitignore</code>, Git seguirá vigilándolo. Para que deje de hacerlo: <code>git rm --cached archivo</code> y luego commit. Por eso conviene crear el <code>.gitignore</code> al arrancar el proyecto.</p>
 </blockquote>
 <h2 id="9-el-flujo-con-ramas-y-pull-requests-como-en-este-manual">9. El flujo con ramas y <em>pull requests</em> (como en este manual)</h2>
-<p>Ya tienes todas las piezas. Ahora veamos cómo se combinan en un <strong>flujo de trabajo</strong> real, el mismo que usamos para construir este manual y que describen las convenciones de <strong>Faro</strong>.</p>
+<p>Ya tienes todas las piezas sueltas. Veamos cómo encajan en un <strong>flujo de trabajo</strong> real, el mismo que usamos para construir este manual y que describen las convenciones de <strong>Faro</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-pull-request-pr">🟦 ¿Qué significa? — <em>Pull request (PR)</em></h3>
-<p>Un <strong>pull request</strong> (literalmente "solicitud de incorporación") es una propuesta formal, hecha en GitHub, para fusionar una rama dentro de otra. Sirve para revisar los cambios antes de aceptarlos: muestra el diff completo, permite comentarios y deja constancia de qué se decidió. Es la puerta de entrada controlada hacia <code>main</code>.</p>
+<p>Un <strong>pull request</strong> (literalmente "solicitud de incorporación") es una propuesta formal, hecha en GitHub, para fusionar una rama dentro de otra. Sirve para revisar los cambios antes de aceptarlos: muestra el diff completo, deja comentar y guarda constancia de qué se decidió. Es la puerta de entrada controlada hacia <code>main</code>.</p>
 </blockquote>
 <p>El ciclo completo, paso a paso:</p>
 <pre><code class="language-bash"># 1. Parto de main actualizado
@@ -253,14 +253,14 @@ git commit -m &quot;Corrige el cálculo de progreso híbrido&quot;
 # 4. Subo mi rama al repositorio remoto (GitHub)
 git push -u origin arreglo-progreso
 </code></pre>
-<p>Con la rama subida, vas a GitHub y <strong>abres un pull request</strong> de <code>arreglo-progreso</code> hacia <code>main</code>. Ahí cualquiera (o tú mismo) revisa el diff, comenta y, si todo está bien, lo <strong>fusiona</strong>.</p>
+<p>Con la rama ya subida, te vas a GitHub y <strong>abres un pull request</strong> de <code>arreglo-progreso</code> hacia <code>main</code>. Ahí cualquiera (o tú mismo) revisa el diff, comenta y, si todo está en orden, lo <strong>fusiona</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-push-y-pull">🟦 ¿Qué significa? — <em><code>push</code> y <code>pull</code></em></h3>
-<p><code>git push</code> <strong>sube</strong> tus commits locales al repositorio remoto (GitHub) para compartirlos. <code>git pull</code> <strong>baja</strong> los commits que otros subieron, para que tu copia local esté al día. Son los dos sentidos de sincronización entre tu computadora y GitHub.</p>
+<p><code>git push</code> <strong>sube</strong> tus commits locales al repositorio remoto (GitHub) para compartirlos. <code>git pull</code> <strong>baja</strong> los commits que otros subieron, para que tu copia local esté al día. Son los dos sentidos de la sincronización entre tu computadora y GitHub.</p>
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
-<p>Las convenciones de <strong>Faro</strong> piden un detalle importante: en el <strong>mismo PR</strong> que introduce un cambio funcional, hay que <strong>actualizar el <code>README.md</code></strong> para que la documentación siempre refleje el estado real del producto. Así, cuando alguien revisa tu pull request, ve a la vez el código nuevo y su explicación. Ese es exactamente el espíritu del flujo con PRs: nada entra a <code>main</code> sin revisión y sin estar documentado.</p>
+<p>Las convenciones de <strong>Faro</strong> piden un detalle importante: en el <strong>mismo PR</strong> que introduce un cambio funcional hay que <strong>actualizar el <code>README.md</code></strong>, para que la documentación siempre refleje el estado real del producto. Así, cuando alguien revisa tu pull request, ve a la vez el código nuevo y su explicación. Ese es justo el espíritu del flujo con PRs: nada entra a <code>main</code> sin revisión y sin estar documentado.</p>
 <h3 id="tip-por-que-este-flujo-vale-la-pena">💡 Tip — Por qué este flujo vale la pena</h3>
-<p>Ramas + pull requests te dan tres regalos: (1) <code>main</code> siempre funciona porque solo recibe trabajo revisado; (2) cada cambio queda documentado con su discusión; (3) puedes experimentar sin miedo, porque una rama fallida se descarta sin tocar lo bueno. Cuando trabajes con otras personas, este flujo deja de ser opcional y se vuelve la forma normal de colaborar.</p>
+<p>Ramas + pull requests te dan tres regalos: (1) <code>main</code> siempre funciona, porque solo recibe trabajo ya revisado; (2) cada cambio queda documentado con su discusión; (3) puedes experimentar sin miedo, porque una rama fallida se descarta sin tocar lo bueno. Cuando trabajes con otras personas, este flujo deja de ser opcional y se convierte en la forma normal de colaborar.</p>
 </blockquote>
 <h2 id="10-juntandolo-todo-una-historia-completa">10. Juntándolo todo: una historia completa</h2>
 <p>Pongamos todo en una sola escena, sobre <strong>RachaSimple</strong>:</p>
@@ -283,7 +283,7 @@ git restore src/components/Header.tsx
 git push -u origin racha-semanal
 # (en GitHub: abrir PR, revisar diff, actualizar README, fusionar)
 </code></pre>
-<p>Si al fusionar en GitHub aparece un conflicto, lo resuelves localmente: traes <code>main</code> a tu rama con <code>git merge main</code>, editas los archivos marcados, borras las marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, haces <code>git add</code> y <code>git commit</code>, y vuelves a subir. El PR se actualiza solo.</p>
+<p>Si al fusionar en GitHub te aparece un conflicto, lo resuelves en local: traes <code>main</code> a tu rama con <code>git merge main</code>, editas los archivos marcados, borras las marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, haces <code>git add</code> y <code>git commit</code>, y vuelves a subir. El PR se actualiza solo.</p>
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>
 <ul>
 <li>[ ] Sé crear una rama con <code>git switch -c nombre</code> y cambiar entre ramas.</li>

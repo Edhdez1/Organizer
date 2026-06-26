@@ -21,47 +21,50 @@
 <blockquote>
 <p>Buenas noticias: ya sabes programar. En el Módulo 03 aprendiste los conceptos (variables,
 decisiones, bucles, funciones). Python usa <strong>los mismos conceptos</strong>, solo que escritos de
-forma distinta —y, para muchos, más clara—. Este módulo será más rápido porque construyes
-sobre lo que ya tienes.</p>
+forma distinta —y, para muchos, más clara—. Este módulo te va a costar menos porque ya tienes
+la base; ahora solo cambias la forma de escribir.</p>
 </blockquote>
 <hr />
 <h2 id="1-que-es-python-y-por-que-es-tan-querido">1. Qué es Python y por qué es tan querido</h2>
 <blockquote class="def">
 <h3 id="que-significa-python">🟦 ¿Qué significa? — <em>Python</em></h3>
-<p><strong>Python</strong> es un lenguaje de programación de propósito general, famoso por ser <strong>fácil de
-leer y escribir</strong>. Su código se parece al inglés y evita símbolos innecesarios. Se usa para
-casi todo: aplicaciones, páginas web (en el servidor), automatización de tareas, análisis de
-datos, ciencia y, muy especialmente, <strong>inteligencia artificial</strong>.</p>
+<p><strong>Python</strong> es un lenguaje de programación de propósito general, conocido sobre todo por lo
+<strong>fácil que es de leer y de escribir</strong>. Su código se parece bastante al inglés y se ahorra
+símbolos que en otros lenguajes solo estorban. Con él se hace de casi todo: aplicaciones,
+páginas web (la parte que corre en el servidor), automatización de tareas repetitivas,
+análisis de datos, ciencia y, muy especialmente, <strong>inteligencia artificial</strong>.</p>
 <h3 id="tip-por-que-aprender-python-si-ya-se-javascript">💡 Tip — ¿Por qué aprender Python si ya sé JavaScript?</h3>
-<p>Porque cada lenguaje brilla en cosas distintas:
-- <strong>JavaScript</strong> domina el navegador y la web.
-- <strong>Python</strong> domina la automatización, los datos y la IA, y es el lenguaje de apps como
+<p>Porque cada lenguaje tiene su terreno:
+- <strong>JavaScript</strong> manda en el navegador y en la web.
+- <strong>Python</strong> manda en la automatización, los datos y la IA, y es el lenguaje de apps como
   PolyPaw (con Flet).
-Saber ambos te da un rango enorme. Y como comparten conceptos, el segundo lenguaje siempre
-cuesta mucho menos que el primero.</p>
+Manejar los dos te da un alcance enorme. Y como comparten los mismos conceptos, el segundo
+lenguaje siempre cuesta bastante menos que el primero.</p>
 <h3 id="cuidado-el-nombre-viene-de-un-grupo-de-comedia-no-de-la-serpiente">⚠️ Cuidado — El nombre viene de un grupo de comedia, no de la serpiente</h3>
-<p>Python se llama así por <em>Monty Python</em> (humoristas británicos), no por la serpiente. Aun así,
-el logo es una serpiente y se ha vuelto su símbolo. Curiosidad inofensiva.</p>
+<p>Python se llama así por <em>Monty Python</em> (un grupo de humoristas británicos), no por la
+serpiente. Aun así, el logo es una serpiente y con el tiempo se volvió su símbolo. Una
+curiosidad inofensiva.</p>
 </blockquote>
 <hr />
 <h2 id="2-como-se-ejecuta-python-y-como-instalarlo">2. Cómo se ejecuta Python (y cómo instalarlo)</h2>
-<p>A diferencia de JavaScript (que vive en el navegador), Python se ejecuta con un programa
-llamado <strong>intérprete</strong> que instalas en tu computadora.</p>
+<p>JavaScript vive dentro del navegador. Python no: para ejecutarlo necesitas un programa llamado
+<strong>intérprete</strong> que instalas en tu computadora.</p>
 <blockquote class="def">
 <h3 id="que-significa-interprete">🟦 ¿Qué significa? — <em>Intérprete</em></h3>
-<p>Un <strong>intérprete</strong> es el programa que <strong>lee tu código y lo ejecuta</strong> línea por línea. Para
-Python, ese programa también se llama <code>python</code>. Lo instalas una vez y luego puedes correr
-cualquier archivo <code>.py</code>.</p>
+<p>Un <strong>intérprete</strong> es el programa que <strong>lee tu código y lo ejecuta</strong> línea por línea. En el
+caso de Python, ese programa se llama precisamente <code>python</code>. Lo instalas una sola vez y a
+partir de ahí puedes correr cualquier archivo <code>.py</code>.</p>
 </blockquote>
 <p><strong>Instalación (cuando tengas tu computadora):</strong>
-1. Descarga Python desde <a href="https://python.org">https://python.org</a> (botón "Download"). En Windows, marca la casilla
-   <strong>"Add Python to PATH"</strong> durante la instalación (importante para usarlo desde la terminal).
+1. Descarga Python desde <a href="https://python.org">https://python.org</a> (botón "Download"). Si estás en Windows, marca la
+   casilla <strong>"Add Python to PATH"</strong> durante la instalación; eso es lo que te permite luego
+   usarlo desde la terminal.
 2. Comprueba en la terminal: <code>python --version</code> (o <code>python3 --version</code>) debe mostrar un número.</p>
 <blockquote class="def">
 <h3 id="que-significa-repl-la-consola-interactiva">🟦 ¿Qué significa? — <em>REPL (la consola interactiva)</em></h3>
-<p>Si escribes solo <code>python</code> en la terminal, entras al <strong>REPL</strong> (<em>Read-Eval-Print Loop</em>): una
-consola donde escribes una línea de Python y ves el resultado al instante, como la consola
-del navegador para JS. Ideal para probar. Sales con <code>exit()</code>.</p>
+<p>Si en la terminal escribes solo <code>python</code>, entras al <strong>REPL</strong> (<em>Read-Eval-Print Loop</em>): una
+consola donde escribes una línea de Python y ves el resultado al momento, igual que la consola
+del navegador para JS. Va perfecto para hacer pruebas rápidas. Para salir, escribe <code>exit()</code>.</p>
 </blockquote>
 <p><strong>Ejecutar un archivo:</strong> guardas tu código en un archivo, por ejemplo <code>hola.py</code>, y en la
 terminal escribes:</p>
@@ -78,8 +81,8 @@ print("¡Hola, mundo!")
 print(2 + 3)</code>
 Crea un archivo <code>hola.py</code> con esas líneas, ejecútalo con <code>python hola.py</code>, y verás la salida.</p>
 <h3 id="tip-compara-para-aprender-mas-rapido">💡 Tip — Compara para aprender más rápido</h3>
-<p>A lo largo del módulo verás recuadros "JS vs. Python". Aprovéchalos: ver el mismo concepto en
-dos idiomas refuerza el entendimiento.
+<p>A lo largo del módulo te irás encontrando recuadros "JS vs. Python". Úsalos: ver el mismo
+concepto escrito en dos lenguajes lo fija mucho mejor en la cabeza.
 | Idea | JavaScript | Python |
 |---|---|---|
 | Mostrar en pantalla | <code>console.log("hola")</code> | <code>print("hola")</code> |</p>
@@ -88,8 +91,8 @@ dos idiomas refuerza el entendimiento.
 <h2 id="4-variables-sin-let-ni-const">4. Variables: sin <code>let</code> ni <code>const</code></h2>
 <blockquote class="def">
 <h3 id="que-significa-variables-en-python">🟦 ¿Qué significa? — <em>Variables en Python</em></h3>
-<p>En Python <strong>no</strong> se usan <code>let</code>, <code>const</code> ni <code>var</code>: simplemente escribes el nombre y le asignas
-un valor. Tampoco se ponen <code>;</code> al final.
+<p>En Python <strong>no</strong> existen <code>let</code>, <code>const</code> ni <code>var</code>: escribes el nombre, le asignas un valor y
+listo. Tampoco hace falta poner <code>;</code> al final.
 <code>python
 nombre = "Edwar"
 edad = 25
@@ -100,18 +103,20 @@ es_programador = True</code>
 | Verdadero/falso | <code>true</code> / <code>false</code> | <code>True</code> / <code>False</code> (¡con mayúscula!) |
 | Nada / vacío | <code>null</code> | <code>None</code> |</p>
 <h3 id="tip-estilo-de-nombres-en-python">💡 Tip — Estilo de nombres en Python</h3>
-<p>Mientras en JavaScript se usa <code>camelCase</code> (<code>esProgramador</code>), en Python la convención es
-<code>snake_case</code>: todo en minúsculas y palabras unidas por guion bajo (<code>es_programador</code>). Cada
-lenguaje tiene su costumbre; respétala para que tu código "hable como un nativo".</p>
+<p>En JavaScript se acostumbra el <code>camelCase</code> (<code>esProgramador</code>); en Python la convención es otra:
+<code>snake_case</code>, es decir, todo en minúsculas y las palabras unidas por guion bajo
+(<code>es_programador</code>). Cada lenguaje tiene su costumbre, y conviene respetarla para que tu código
+"hable como un nativo".</p>
 </blockquote>
 <hr />
 <h2 id="5-la-regla-de-python-la-sangria-indentacion">5. LA regla de Python: la sangría (indentación)</h2>
-<p>Esta es la característica que más sorprende al venir de otros lenguajes, y la más importante.</p>
+<p>De todo lo que trae Python, esto es lo que más choca cuando vienes de otros lenguajes. También
+es lo más importante del capítulo.</p>
 <blockquote class="def">
 <h3 id="que-significa-sangria-indentacion">🟦 ¿Qué significa? — <em>Sangría / indentación</em></h3>
 <p>La <strong>sangría</strong> es el espacio en blanco al inicio de una línea (normalmente 4 espacios). En la
-mayoría de lenguajes la sangría es solo estética; <strong>en Python es obligatoria y tiene
-significado</strong>: define qué líneas pertenecen a un bloque.</p>
+mayoría de lenguajes esa sangría es pura estética; <strong>en Python es obligatoria y tiene
+significado</strong>: es lo que define qué líneas pertenecen a un bloque.</p>
 <p>En JavaScript, los bloques se marcan con <strong>llaves</strong> <code>{ }</code>:
 <code>javascript
 if (edad &gt;= 18) {
@@ -121,16 +126,16 @@ En Python, se marcan con <strong>dos puntos <code>:</code> y sangría</strong> (
 <code>python
 if edad &gt;= 18:
     print("Adulto")</code>
-Las líneas "dentro" del <code>if</code> van <strong>sangradas</strong> (4 espacios). Cuando la sangría termina, el
-bloque termina. Es más limpio, pero <strong>estricto</strong>.</p>
+Las líneas que van "dentro" del <code>if</code> se escriben <strong>sangradas</strong> (4 espacios). En cuanto la
+sangría se acaba, el bloque termina. Es más limpio, pero también más <strong>estricto</strong>.</p>
 <h3 id="cuidado-la-sangria-inconsistente-rompe-el-programa">⚠️ Cuidado — La sangría inconsistente rompe el programa</h3>
-<p>Si mezclas cantidades de espacios o usas tabuladores y espacios a la vez, Python lanza un
-error (<code>IndentationError</code>). Regla: usa <strong>4 espacios</strong> siempre. Los editores como VS Code lo
-hacen automáticamente al pulsar Tab. Es la fuente de error nº 1 de los principiantes en
-Python; una vez te acostumbras, se vuelve natural y hasta agradable.</p>
+<p>Si mezclas distintas cantidades de espacios, o combinas tabuladores con espacios, Python te
+lanza un error (<code>IndentationError</code>). La regla es sencilla: usa <strong>4 espacios</strong> siempre. Editores
+como VS Code lo hacen solos cuando pulsas Tab. Este es el error número uno de quien empieza con
+Python; pero en cuanto te acostumbras, deja de molestar e incluso se vuelve agradable.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Abre cualquier archivo de PolyPaw, como <code>main.py</code>: verás que NO hay llaves <code>{ }</code> para los
-bloques, solo dos puntos y sangría. Esa es la firma visual de Python.</p>
+<p>Abre cualquier archivo de PolyPaw, por ejemplo <code>main.py</code>: vas a ver que NO hay llaves <code>{ }</code>
+marcando los bloques, solo dos puntos y sangría. Esa es la firma visual de Python.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

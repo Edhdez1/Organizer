@@ -23,30 +23,30 @@
 </p>
 
 <blockquote>
-<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote guía. Hasta ahora tu CSS ha sido como una foto: bonita, pero quieta. En este capítulo le vamos a dar <strong>movimiento</strong>. Vas a aprender a que un botón cambie de color suavemente, a que una tarjeta se eleve cuando pasas el ratón por encima y a que un logo gire solito. Lo mejor: con muy poco código y sin tocar JavaScript. Eso sí, prometeme algo: el movimiento es como la sal en la comida. Una pizca realza el plato; un kilo lo arruina (y marea a la gente). Vamos despacio y con cariño. 🪼</p>
+<p>¡Hola otra vez! Soy <strong>Bit</strong>, tu ajolote guía. Hasta ahora tu CSS ha sido como una foto: bonita, pero quieta. En este capítulo le vamos a dar <strong>movimiento</strong>. Vas a aprender a que un botón cambie de color suavemente, a que una tarjeta se eleve cuando pasas el ratón por encima y a que un logo gire solito. Y todo eso con muy poco código, sin tocar JavaScript. Eso sí, prometeme una cosa: el movimiento es como la sal en la comida. Una pizca realza el plato; un kilo lo arruina (y marea a la gente). Vamos despacio y con cariño. 🪼</p>
 </blockquote>
 <hr />
 <h2 id="1-por-que-animar-el-antes-y-el-despues">1. ¿Por qué animar? El antes y el después</h2>
-<p>Imagina dos botones. El primero, cuando pasas el ratón, <strong>salta</strong> de golpe de azul a verde. El segundo se va tiñendo de verde poco a poco, en un cuarto de segundo. El segundo se siente más profesional, más “vivo”, aunque el cambio final sea idéntico. Esa diferencia —ese “poco a poco”— es lo que vamos a controlar.</p>
-<p>En CSS hay dos grandes herramientas para mover cosas:</p>
+<p>Imagina dos botones. El primero, cuando pasas el ratón, <strong>salta</strong> de golpe de azul a verde. El segundo se va tiñendo de verde poco a poco, en un cuarto de segundo. El segundo se siente más profesional, más “vivo”, aunque el color final sea idéntico en ambos. Esa diferencia —ese “poco a poco”— es justo lo que vamos a controlar.</p>
+<p>En CSS tienes dos grandes herramientas para mover cosas:</p>
 <ol>
 <li><strong><code>transition</code></strong>: para suavizar un cambio que ocurre por algo (un <code>:hover</code>, un clic, un cambio de clase). Es el “de A a B, despacito”.</li>
 <li><strong><code>animation</code> con <code>@keyframes</code></strong>: para movimientos que ocurren <strong>solos</strong> o se repiten (un spinner que gira, un texto que parpadea, algo que entra deslizándose).</li>
 </ol>
-<p>Y, muy importante, una tercera pieza que mucha gente olvida:</p>
+<p>Y hay una tercera pieza que mucha gente olvida y que pesa más de lo que parece:</p>
 <ol start="3">
-<li><strong><code>prefers-reduced-motion</code></strong>: una forma de respetar a las personas a quienes el movimiento les marea o les molesta. Accesibilidad, no es opcional.</li>
+<li><strong><code>prefers-reduced-motion</code></strong>: una forma de respetar a quienes el movimiento les marea o les molesta. Accesibilidad, y no es opcional.</li>
 </ol>
 <blockquote class="def">
 <h3 id="que-significa-animacion-en-la-web">🟦 ¿Qué significa? — <em>Animación (en la web)</em></h3>
-<p>Es un cambio visual que ocurre <strong>a lo largo del tiempo</strong> en vez de instantáneamente. En lugar de pasar de “rojo” a “azul” de un frame al siguiente, la animación dibuja todos los pasos intermedios. Sirve para guiar la atención, dar feedback (“sí, te hice caso”) y hacer la interfaz más agradable. Lo usarías, por ejemplo, en <code>styles.css</code> de <strong>tunal-digital</strong> para que las tarjetas de servicios reaccionen cuando el visitante las recorre con el ratón.</p>
+<p>Es un cambio visual que ocurre <strong>a lo largo del tiempo</strong> en lugar de instantáneamente. En vez de pasar de “rojo” a “azul” de un frame al siguiente, la animación dibuja todos los pasos intermedios. Sirve para guiar la atención, dar feedback (“sí, te hice caso”) y hacer la interfaz más agradable. Lo usarías, por ejemplo, en el <code>styles.css</code> de <strong>tunal-digital</strong> para que las tarjetas de servicios reaccionen cuando el visitante las recorre con el ratón.</p>
 </blockquote>
 <hr />
 <h2 id="2-transition-suavizar-los-cambios">2. <code>transition</code>: suavizar los cambios</h2>
-<p>Vamos con la estrella del capítulo. La idea es: tú tienes un elemento con un estado normal y otro estado distinto (al pasar el ratón, al enfocar, al añadir una clase). <code>transition</code> le dice al navegador: <strong>“no cambies de golpe, tómate tu tiempo”</strong>.</p>
+<p>Vamos con la estrella del capítulo. La idea es sencilla: tienes un elemento con un estado normal y otro estado distinto (al pasar el ratón, al enfocar, al añadir una clase). <code>transition</code> le dice al navegador: <strong>“no cambies de golpe, tómate tu tiempo”</strong>.</p>
 <blockquote class="def">
 <h3 id="que-significa-transition">🟦 ¿Qué significa? — <em>transition</em></h3>
-<p>Es una propiedad CSS que <strong>interpola</strong> (rellena los pasos intermedios) entre el valor inicial y el final de otras propiedades cuando estas cambian. Sirve para que los cambios se sientan fluidos en vez de bruscos. La encontrarías en el <code>styles.css</code> de <strong>tunal-digital</strong> sobre los botones y las tarjetas, y en el <code>site/estilos.css</code> del propio manual cuando un enlace cambia de color al pasar por encima.</p>
+<p>Es una propiedad CSS que <strong>interpola</strong> (rellena los pasos intermedios) entre el valor inicial y el final de otras propiedades cuando estas cambian. Sirve para que los cambios se sientan fluidos en vez de bruscos. La encontrarías en el <code>styles.css</code> de <strong>tunal-digital</strong> sobre los botones y las tarjetas, y en el <code>site/estilos.css</code> del propio manual, cuando un enlace cambia de color al pasar por encima.</p>
 </blockquote>
 <h3 id="21-el-ejemplo-mas-pequeno-posible">2.1 El ejemplo más pequeño posible</h3>
 <pre><code class="language-css">.boton {
@@ -58,28 +58,28 @@
   background-color: #16a34a; /* verde */
 }
 </code></pre>
-<p>Lee la línea clave: <code>transition: background-color 0.3s;</code>. Le estás diciendo al botón: <em>“cuando tu <code>background-color</code> cambie, hazlo en 0.3 segundos”</em>. El cambio lo dispara <code>:hover</code>. Sin la línea de <code>transition</code>, el salto sería instantáneo.</p>
+<p>Fíjate en la línea clave: <code>transition: background-color 0.3s;</code>. Le estás diciendo al botón: <em>“cuando tu <code>background-color</code> cambie, hazlo en 0.3 segundos”</em>. Quien dispara ese cambio es el <code>:hover</code>. Sin la línea de <code>transition</code>, el salto sería instantáneo.</p>
 <blockquote class="tip">
 <h3 id="tip">💡 Tip</h3>
-<p>La <code>transition</code> se escribe en el estado <strong>normal</strong> del elemento, no en el <code>:hover</code>. Así el suavizado funciona tanto al <strong>entrar</strong> el ratón como al <strong>salir</strong>. Si solo la pones en el <code>:hover</code>, se anima al entrar pero vuelve de golpe al salir, lo cual se siente raro.</p>
+<p>La <code>transition</code> va en el estado <strong>normal</strong> del elemento, no en el <code>:hover</code>. Así el suavizado funciona tanto al <strong>entrar</strong> el ratón como al <strong>salir</strong>. Si solo la pones en el <code>:hover</code>, se anima al entrar pero vuelve de golpe al salir, y eso se siente raro.</p>
 </blockquote>
 <h3 id="22-las-cuatro-piezas-de-transition">2.2 Las cuatro piezas de <code>transition</code></h3>
-<p>La forma corta de <code>transition</code> puede llevar hasta cuatro valores en orden:</p>
+<p>La forma corta de <code>transition</code> admite hasta cuatro valores, en este orden:</p>
 <pre><code class="language-css">transition: background-color 0.3s ease-in-out 0s;
 /*           ↑propiedad      ↑duración ↑curva    ↑retraso */
 </code></pre>
-<p>Veámoslas una por una, porque cada una tiene su propia propiedad “larga”.</p>
+<p>Veámoslas una por una, porque cada una tiene además su propia propiedad “larga”.</p>
 <blockquote class="def">
 <h3 id="que-significa-transition-property">🟦 ¿Qué significa? — <em>transition-property</em></h3>
-<p>Indica <strong>qué propiedad</strong> quieres animar: <code>background-color</code>, <code>transform</code>, <code>opacity</code>, <code>color</code>… Sirve para no animar todo a lo loco, sino solo lo que te interesa. Si pones <code>all</code>, animas cualquier cosa que cambie (cómodo, pero a veces anima cosas que no querías).</p>
+<p>Indica <strong>qué propiedad</strong> quieres animar: <code>background-color</code>, <code>transform</code>, <code>opacity</code>, <code>color</code>… Sirve para no animar todo a lo loco, sino solo lo que te interesa. Si pones <code>all</code>, animas cualquier cosa que cambie: es cómodo, pero a veces termina animando cosas que no querías.</p>
 <h3 id="que-significa-transition-duration">🟦 ¿Qué significa? — <em>transition-duration</em></h3>
-<p>Cuánto <strong>tiempo</strong> tarda la transición, en segundos (<code>s</code>) o milisegundos (<code>ms</code>). <code>0.3s</code> y <code>300ms</code> son lo mismo. Sirve para controlar la velocidad: valores entre <code>0.15s</code> y <code>0.4s</code> suelen sentirse naturales. Más de <code>0.6s</code> empieza a sentirse lento y pesado para un simple <code>:hover</code>.</p>
+<p>Cuánto <strong>tarda</strong> la transición, en segundos (<code>s</code>) o milisegundos (<code>ms</code>). <code>0.3s</code> y <code>300ms</code> son lo mismo. Sirve para controlar la velocidad: valores entre <code>0.15s</code> y <code>0.4s</code> suelen sentirse naturales. Por encima de <code>0.6s</code> un simple <code>:hover</code> empieza a sentirse lento y pesado.</p>
 <h3 id="que-significa-transition-timing-function-easing">🟦 ¿Qué significa? — <em>transition-timing-function (easing)</em></h3>
-<p>Es la <strong>curva de velocidad</strong>: ¿el movimiento es constante, arranca lento, frena al final? Sirve para que el movimiento se sienta orgánico, como en el mundo real (las cosas no arrancan ni frenan de golpe). Valores comunes: <code>ease</code> (por defecto, arranca y frena suave), <code>linear</code> (velocidad constante), <code>ease-in</code>, <code>ease-out</code>, <code>ease-in-out</code>.</p>
+<p>Es la <strong>curva de velocidad</strong>: ¿el movimiento va a ritmo constante, arranca lento, frena al final? Sirve para que el movimiento se sienta orgánico, como en el mundo real, donde las cosas no arrancan ni frenan de golpe. Los valores más comunes: <code>ease</code> (el de por defecto, arranca y frena suave), <code>linear</code> (velocidad constante), <code>ease-in</code>, <code>ease-out</code>, <code>ease-in-out</code>.</p>
 <h3 id="que-significa-transition-delay">🟦 ¿Qué significa? — <em>transition-delay</em></h3>
-<p>Cuánto <strong>espera</strong> antes de empezar. <code>0s</code> = empieza ya. Sirve para encadenar efectos o para que algo no reaccione al instante. La mayoría de las veces lo dejarás en <code>0s</code> (o ni lo escribes).</p>
+<p>Cuánto <strong>espera</strong> antes de empezar. <code>0s</code> = empieza ya. Sirve para encadenar efectos o para que algo no reaccione al instante. Casi siempre lo dejarás en <code>0s</code> (o ni lo escribes).</p>
 <h3 id="que-significa-easing">🟦 ¿Qué significa? — <em>Easing</em></h3>
-<p>“Easing” es el término general para esa curva de velocidad. La palabra viene de “to ease” (suavizar). Sirve para que los movimientos no sean robóticos. Una regla práctica: para cosas que <strong>aparecen/responden</strong> usa <code>ease-out</code> (entra rápido y frena, se siente atento); para cosas que <strong>se van</strong> usa <code>ease-in</code>.</p>
+<p>“Easing” es el término general para esa curva de velocidad. La palabra viene de “to ease” (suavizar). Sirve para que los movimientos no parezcan robóticos. Una regla práctica: para cosas que <strong>aparecen o responden</strong> usa <code>ease-out</code> (entra rápido y frena, se siente atenta); para cosas que <strong>se van</strong> usa <code>ease-in</code>.</p>
 </blockquote>
 <h3 id="23-animar-varias-propiedades-a-la-vez">2.3 Animar varias propiedades a la vez</h3>
 <p>Puedes separar varias transiciones con comas:</p>
@@ -97,30 +97,30 @@
   transform: translateY(-6px);
 }
 </code></pre>
-<p>Aquí pasan <strong>dos</strong> cosas a la vez al pasar el ratón: la sombra crece (la tarjeta parece “levantarse” del papel) y la tarjeta sube 6 píxeles. Las dos se animan en 0.25s con la misma curva. Esto es, casi literalmente, el efecto hover de tarjeta que ves en muchos sitios… incluido el tuyo.</p>
+<p>Al pasar el ratón ocurren <strong>dos</strong> cosas al mismo tiempo: la sombra crece (la tarjeta parece “levantarse” del papel) y la tarjeta sube 6 píxeles. Las dos se animan en 0.25s con la misma curva. Esto es, casi literalmente, el efecto hover de tarjeta que ves en montones de sitios… incluido el tuyo.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>En <strong>tunal-digital</strong>, en <code>styles.css</code>, busca tu sección de tarjetas de servicios. El patrón “sombra suave en reposo + sombra grande y <code>translateY</code> negativo en <code>:hover</code>” es exactamente el de arriba. Si tus tarjetas hoy cambian de golpe, agrégales una línea de <code>transition</code> en el estado normal y siente la diferencia. En <strong>RachaSimple</strong> y <strong>Faro</strong>, que usan <strong>Tailwind</strong>, este mismo efecto se escribe con clases utilitarias como <code>transition</code>, <code>duration-200</code>, <code>ease-out</code> y <code>hover:-translate-y-1</code>, pero por debajo es el mismísimo CSS.</p>
+<p>En <strong>tunal-digital</strong>, dentro de <code>styles.css</code>, busca tu sección de tarjetas de servicios. El patrón “sombra suave en reposo + sombra grande y <code>translateY</code> negativo en <code>:hover</code>” es exactamente el de arriba. Si tus tarjetas hoy cambian de golpe, agrégales una línea de <code>transition</code> en el estado normal y siente la diferencia. En <strong>RachaSimple</strong> y <strong>Faro</strong>, que usan <strong>Tailwind</strong>, este mismo efecto se escribe con clases utilitarias como <code>transition</code>, <code>duration-200</code>, <code>ease-out</code> y <code>hover:-translate-y-1</code>, pero por debajo es exactamente el mismo CSS.</p>
 <h3 id="cuidado">⚠️ Cuidado</h3>
-<p>No animes propiedades como <code>width</code>, <code>height</code>, <code>top</code> o <code>margin</code> si puedes evitarlo. Esas obligan al navegador a <strong>recalcular el layout</strong> de la página en cada frame, lo que puede verse a tirones. Las dos propiedades “baratas” y fluidas por excelencia son <strong><code>transform</code></strong> y <strong><code>opacity</code></strong>. Si quieres mover o agrandar algo, usa <code>transform</code> (lo vemos ahora), no <code>top</code>/<code>left</code>/<code>width</code>.</p>
+<p>Evita animar propiedades como <code>width</code>, <code>height</code>, <code>top</code> o <code>margin</code> siempre que puedas. Esas obligan al navegador a <strong>recalcular el layout</strong> de la página en cada frame, y eso se ve a tirones. Las dos propiedades “baratas” y fluidas por excelencia son <strong><code>transform</code></strong> y <strong><code>opacity</code></strong>. Si quieres mover o agrandar algo, usa <code>transform</code> (lo vemos ahora mismo), no <code>top</code>/<code>left</code>/<code>width</code>.</p>
 </blockquote>
 <hr />
 <h2 id="3-transform-mover-escalar-y-rotar-sin-romper-nada">3. <code>transform</code>: mover, escalar y rotar sin romper nada</h2>
 <blockquote class="def">
 <h3 id="que-significa-transform">🟦 ¿Qué significa? — <em>transform</em></h3>
-<p>Es una propiedad que <strong>desplaza, escala, rota o inclina</strong> un elemento visualmente, sin afectar a los demás elementos de la página. Sirve para mover cosas de forma fluida y barata. Es la herramienta ideal para combinar con <code>transition</code>. La usarías en <code>styles.css</code> de <strong>tunal-digital</strong> para elevar tarjetas, agrandar un icono al pasar el ratón o rotar una flecha en un acordeón.</p>
+<p>Es una propiedad que <strong>desplaza, escala, rota o inclina</strong> un elemento visualmente, sin afectar a los demás elementos de la página. Sirve para mover cosas de forma fluida y barata, y se lleva de maravilla con <code>transition</code>. La usarías en el <code>styles.css</code> de <strong>tunal-digital</strong> para elevar tarjetas, agrandar un icono al pasar el ratón o rotar una flecha en un acordeón.</p>
 </blockquote>
-<p>Lo mágico de <code>transform</code> es que el espacio que ocupaba el elemento <strong>se queda reservado</strong>: aunque lo muevas o lo agrandes, no empuja a sus vecinos. Por eso es tan suave.</p>
+<p>Lo bonito de <code>transform</code> es que el espacio que ocupaba el elemento <strong>se queda reservado</strong>: aunque lo muevas o lo agrandes, no empuja a sus vecinos. Por eso resulta tan suave.</p>
 <h3 id="31-translate-mover">3.1 <code>translate</code> — mover</h3>
 <blockquote class="def">
 <h3 id="que-significa-translate">🟦 ¿Qué significa? — <em>translate</em></h3>
-<p>Mueve el elemento en horizontal y/o vertical. <code>translateX(10px)</code> lo mueve a la derecha; <code>translateY(-6px)</code> lo sube; <code>translate(10px, -6px)</code> hace las dos. Sirve para desplazamientos suaves sin tocar el layout.</p>
+<p>Mueve el elemento en horizontal y/o vertical. <code>translateX(10px)</code> lo desplaza a la derecha; <code>translateY(-6px)</code> lo sube; <code>translate(10px, -6px)</code> hace las dos cosas a la vez. Sirve para desplazamientos suaves sin tocar el layout.</p>
 </blockquote>
 <pre><code class="language-css">.icono:hover {
   transform: translateY(-4px); /* sube 4px, como flotando */
 }
 </code></pre>
-<p>Ojo al signo: en la web el eje Y crece <strong>hacia abajo</strong>, así que un valor <strong>negativo</strong> sube. Esto confunde a todo el mundo al principio; a mí también me pasó cuando era un ajolote más pequeño. 🪼</p>
+<p>Ojo al signo: en la web el eje Y crece <strong>hacia abajo</strong>, así que un valor <strong>negativo</strong> sube. Esto confunde a todo el mundo al principio; a mí también me pasaba cuando era un ajolote más pequeño. 🪼</p>
 <h3 id="32-scale-agrandar-o-encoger">3.2 <code>scale</code> — agrandar o encoger</h3>
 <blockquote class="def">
 <h3 id="que-significa-scale">🟦 ¿Qué significa? — <em>scale</em></h3>
@@ -135,7 +135,7 @@
 </code></pre>
 <blockquote class="tip">
 <h3 id="tip_1">💡 Tip</h3>
-<p>Para fotos dentro de una tarjeta, combina <code>scale</code> con <code>overflow: hidden</code> en la tarjeta contenedora. Así la imagen se agranda “por dentro” del marco y produce el clásico efecto de zoom elegante sin desbordar.</p>
+<p>Para fotos dentro de una tarjeta, combina <code>scale</code> con <code>overflow: hidden</code> en la tarjeta contenedora. Así la imagen se agranda “por dentro” del marco y consigues el clásico efecto de zoom elegante sin que nada se desborde.</p>
 </blockquote>
 <h3 id="33-rotate-girar">3.3 <code>rotate</code> — girar</h3>
 <blockquote class="def">
@@ -157,18 +157,18 @@
 </code></pre>
 <blockquote class="warn">
 <h3 id="cuidado_1">⚠️ Cuidado</h3>
-<p>El <strong>orden importa</strong>. <code>translate(...) rotate(...)</code> no da el mismo resultado que <code>rotate(...) translate(...)</code>, porque cada transformación mueve también los ejes para la siguiente. Si algo se mueve “raro”, prueba a invertir el orden.</p>
+<p>El <strong>orden importa</strong>. <code>translate(...) rotate(...)</code> no da el mismo resultado que <code>rotate(...) translate(...)</code>, porque cada transformación arrastra también los ejes para la siguiente. Si algo se mueve “raro”, prueba a invertir el orden.</p>
 <h3 id="en-tu-codigo_1">🔎 En tu código</h3>
 <p>En <strong>PolyPaw</strong> (Python + Flet) y en <strong>polypaw-nas</strong> (Ubuntu/Samba/Cockpit) no escribes CSS a mano: Flet genera la interfaz desde Python y Cockpit ya trae sus propios estilos. Por eso <code>transform</code> y <code>@keyframes</code> viven sobre todo en tus proyectos <strong>web</strong>: <code>tunal-digital</code>, el <code>site/estilos.css</code> del manual, y vía Tailwind en <strong>RachaSimple</strong> y <strong>Faro</strong>. Tenlo presente para no buscar CSS donde no lo hay.</p>
 </blockquote>
 <hr />
 <h2 id="4-keyframes-y-animation-movimiento-que-ocurre-solo">4. <code>@keyframes</code> y <code>animation</code>: movimiento que ocurre solo</h2>
-<p><code>transition</code> necesita un “disparador” (un <code>:hover</code>, un clic). Pero ¿y si quieres que algo se mueva <strong>solo</strong>, nada más cargar la página, o que <strong>se repita</strong> para siempre, como un spinner de carga? Para eso están las animaciones con <code>@keyframes</code>.</p>
+<p><code>transition</code> siempre necesita un “disparador” (un <code>:hover</code>, un clic). ¿Y si quieres que algo se mueva <strong>solo</strong>, nada más cargar la página, o que <strong>se repita</strong> para siempre, como un spinner de carga? Ahí entran las animaciones con <code>@keyframes</code>.</p>
 <blockquote class="def">
 <h3 id="que-significa-keyframes">🟦 ¿Qué significa? — <em>@keyframes</em></h3>
-<p>Es una regla CSS donde defines los <strong>fotogramas clave</strong> de una animación: cómo empieza, cómo termina y, si quieres, pasos intermedios. Le pones un nombre y luego lo usas. Sirve para describir un movimiento completo una sola vez y reutilizarlo. Lo usarías para un spinner de carga mientras <strong>Faro</strong> consulta a OpenAI, o para que una tarjeta de <strong>tunal-digital</strong> entre deslizándose al cargar.</p>
+<p>Es una regla CSS donde defines los <strong>fotogramas clave</strong> de una animación: cómo empieza, cómo termina y, si quieres, los pasos intermedios. Le pones un nombre y luego lo usas. Sirve para describir un movimiento completo una sola vez y reutilizarlo. Lo usarías para un spinner de carga mientras <strong>Faro</strong> consulta a OpenAI, o para que una tarjeta de <strong>tunal-digital</strong> entre deslizándose al cargar.</p>
 <h3 id="que-significa-animation">🟦 ¿Qué significa? — <em>animation</em></h3>
-<p>Es la propiedad que <strong>aplica</strong> unos <code>@keyframes</code> a un elemento, indicando cuánto duran, cuántas veces se repiten, con qué curva, etc. Sin <code>animation</code>, los <code>@keyframes</code> no hacen nada por sí solos: son la receta; <code>animation</code> es ponerse a cocinar.</p>
+<p>Es la propiedad que <strong>aplica</strong> unos <code>@keyframes</code> a un elemento, indicando cuánto duran, cuántas veces se repiten, con qué curva, etc. Por sí solos, los <code>@keyframes</code> no hacen nada: son la receta; <code>animation</code> es ponerse a cocinar.</p>
 </blockquote>
 <h3 id="41-un-spinner-de-carga-el-ejemplo-clasico">4.1 Un spinner de carga (el ejemplo clásico)</h3>
 <pre><code class="language-css">@keyframes girar {
@@ -185,17 +185,17 @@
   animation: girar 0.8s linear infinite;
 }
 </code></pre>
-<p>Lee la última línea como una frase: anima usando los keyframes <code>girar</code>, dura <code>0.8s</code> cada vuelta, con velocidad constante (<code>linear</code>, porque un giro constante no debe frenar) y se repite <code>infinite</code> (para siempre). Eso es un spinner completo. Con <code>from</code>/<code>to</code> defines solo el inicio y el final; el navegador rellena el resto.</p>
+<p>Lee la última línea como si fuera una frase: anima usando los keyframes <code>girar</code>, cada vuelta dura <code>0.8s</code>, a velocidad constante (<code>linear</code>, porque un giro no debería frenar) y se repite <code>infinite</code> (para siempre). Eso ya es un spinner completo. Con <code>from</code>/<code>to</code> defines solo el inicio y el final; el navegador rellena todo lo de en medio.</p>
 <blockquote class="tip">
 <h3 id="tip_2">💡 Tip</h3>
-<p>En vez de <code>from</code>/<code>to</code> puedes usar <strong>porcentajes</strong> para pasos intermedios. <code>0%</code> es el inicio, <code>100%</code> el final, y puedes poner los que quieras en medio:
+<p>En vez de <code>from</code>/<code>to</code> puedes usar <strong>porcentajes</strong> para marcar pasos intermedios. <code>0%</code> es el inicio, <code>100%</code> el final, y entre medias pones los que quieras:
 <code>css
 @keyframes pulso {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.1); }
   100% { transform: scale(1); }
 }</code>
-Esto crece y vuelve, ideal para un “latido” que llama la atención.</p>
+Esto crece y vuelve, perfecto para un “latido” que llama la atención.</p>
 </blockquote>
 <h3 id="42-las-piezas-de-animation">4.2 Las piezas de <code>animation</code></h3>
 <p>Igual que <code>transition</code>, la forma corta de <code>animation</code> resume varias propiedades:</p>
@@ -206,20 +206,20 @@ Esto crece y vuelve, ideal para un “latido” que llama la atención.</p>
 <h3 id="que-significa-animation-name">🟦 ¿Qué significa? — <em>animation-name</em></h3>
 <p>El nombre de los <code>@keyframes</code> que quieres usar (aquí, <code>girar</code>). Tiene que coincidir exactamente con el nombre que definiste. Sirve para conectar la receta con el elemento.</p>
 <h3 id="que-significa-animation-duration">🟦 ¿Qué significa? — <em>animation-duration</em></h3>
-<p>Cuánto dura <strong>una pasada</strong> de la animación. Igual que en <code>transition</code>, en <code>s</code> o <code>ms</code>.</p>
+<p>Cuánto dura <strong>una pasada</strong> de la animación. Igual que en <code>transition</code>, se mide en <code>s</code> o <code>ms</code>.</p>
 <h3 id="que-significa-animation-iteration-count">🟦 ¿Qué significa? — <em>animation-iteration-count</em></h3>
 <p>Cuántas veces se repite. Un número (<code>1</code>, <code>3</code>) o <code>infinite</code> (sin parar). Sirve para spinners (<code>infinite</code>) o para efectos que ocurren una sola vez al cargar (<code>1</code>).</p>
 <h3 id="que-significa-animation-timing-function">🟦 ¿Qué significa? — <em>animation-timing-function</em></h3>
-<p>La misma curva de velocidad (easing) que en <code>transition</code>: <code>ease</code>, <code>linear</code>, <code>ease-in-out</code>… Para giros y barras de progreso suele querer <code>linear</code>; para entradas, <code>ease-out</code>.</p>
+<p>La misma curva de velocidad (easing) que en <code>transition</code>: <code>ease</code>, <code>linear</code>, <code>ease-in-out</code>… Para giros y barras de progreso normalmente querrás <code>linear</code>; para entradas, <code>ease-out</code>.</p>
 </blockquote>
-<p>Hay más piezas útiles que vale la pena conocer aunque no las uses siempre:</p>
+<p>Hay más piezas que vale la pena conocer, aunque no las uses todos los días:</p>
 <blockquote class="def">
 <h3 id="que-significa-animation-delay">🟦 ¿Qué significa? — <em>animation-delay</em></h3>
-<p>Espera antes de empezar. Muy útil para <strong>escalonar</strong> entradas: si tres tarjetas entran con delays de <code>0s</code>, <code>0.1s</code> y <code>0.2s</code>, aparecen una tras otra con un efecto de cascada precioso.</p>
+<p>Cuánto espera antes de empezar. Muy útil para <strong>escalonar</strong> entradas: si tres tarjetas entran con delays de <code>0s</code>, <code>0.1s</code> y <code>0.2s</code>, aparecen una tras otra con un efecto de cascada precioso.</p>
 <h3 id="que-significa-animation-fill-mode">🟦 ¿Qué significa? — <em>animation-fill-mode</em></h3>
-<p>Decide qué aspecto tiene el elemento <strong>antes</strong> de empezar y <strong>después</strong> de terminar. El valor <code>forwards</code> hace que el elemento se quede con el estilo del último fotograma (no “vuelva” a su estado inicial). Imprescindible para animaciones de entrada: sin <code>forwards</code>, el elemento parpadearía de vuelta a invisible al acabar.</p>
+<p>Decide qué aspecto tiene el elemento <strong>antes</strong> de empezar y <strong>después</strong> de terminar. El valor <code>forwards</code> hace que el elemento se quede con el estilo del último fotograma, sin “volver” a su estado inicial. Es imprescindible para animaciones de entrada: sin <code>forwards</code>, el elemento parpadearía de vuelta a invisible al acabar.</p>
 <h3 id="que-significa-animation-direction">🟦 ¿Qué significa? — <em>animation-direction</em></h3>
-<p>Si la animación va hacia adelante, hacia atrás o alterna (<code>normal</code>, <code>reverse</code>, <code>alternate</code>). Con <code>alternate</code> un pulso va y vuelve suavemente sin saltos.</p>
+<p>Si la animación va hacia adelante, hacia atrás o alterna (<code>normal</code>, <code>reverse</code>, <code>alternate</code>). Con <code>alternate</code>, un pulso va y vuelve suavemente, sin saltos.</p>
 </blockquote>
 <h3 id="43-una-entrada-elegante-fade-subida">4.3 Una entrada elegante (fade + subida)</h3>
 <pre><code class="language-css">@keyframes aparecer {
@@ -237,19 +237,19 @@ Esto crece y vuelve, ideal para un “latido” que llama la atención.</p>
   animation: aparecer 0.4s ease-out forwards;
 }
 </code></pre>
-<p>La tarjeta empieza invisible (<code>opacity: 0</code>) y 16px más abajo, y termina visible en su sitio. Como animamos <code>opacity</code> y <code>transform</code>, es súper fluido. El <code>forwards</code> evita que vuelva a desaparecer al final.</p>
+<p>La tarjeta empieza invisible (<code>opacity: 0</code>) y 16px más abajo, y termina visible en su sitio. Como animamos <code>opacity</code> y <code>transform</code>, queda súper fluido. El <code>forwards</code> evita que vuelva a desaparecer al terminar.</p>
 <blockquote class="code">
 <h3 id="en-tu-codigo_2">🔎 En tu código</h3>
-<p>En <strong>Faro/Organizer</strong> (Next.js + React), un spinner como el de la sección 4.1 es justo lo que muestras mientras esperas la respuesta de OpenAI para generar la descripción o el roadmap de un proyecto. Con Tailwind ya viene de fábrica la utilidad <code>animate-spin</code>, que internamente define unos <code>@keyframes</code> idénticos a <code>girar</code>. Saber qué hay debajo te permite entender y, si hace falta, personalizar esa animación.</p>
+<p>En <strong>Faro/Organizer</strong> (Next.js + React), un spinner como el de la sección 4.1 es justo lo que muestras mientras esperas la respuesta de OpenAI para generar la descripción o el roadmap de un proyecto. Con Tailwind ya viene de fábrica la utilidad <code>animate-spin</code>, que por dentro define unos <code>@keyframes</code> idénticos a <code>girar</code>. Saber qué hay debajo te permite entender la animación y, si hace falta, personalizarla.</p>
 <h3 id="tip-transition-vs-animation-cual-uso">💡 Tip — <code>transition</code> vs <code>animation</code>, ¿cuál uso?</h3>
 <p>Regla rápida: si el cambio lo dispara una interacción (hover, clic, foco) y va de un estado a otro, usa <strong><code>transition</code></strong>. Si el movimiento ocurre solo, se repite, o tiene varios pasos intermedios definidos, usa <strong><code>@keyframes</code> + <code>animation</code></strong>. El 80% de tus efectos del día a día serán <code>transition</code>.</p>
 </blockquote>
 <hr />
 <h2 id="5-accesibilidad-prefers-reduced-motion">5. Accesibilidad: <code>prefers-reduced-motion</code></h2>
-<p>Aquí viene la parte que separa a quien “sabe animar” de quien “anima con responsabilidad”. Para algunas personas, el movimiento en pantalla no es bonito: les provoca mareo, náuseas o dolor de cabeza (se llama trastorno vestibular). Los sistemas operativos permiten activar un ajuste de “reducir movimiento”, y nosotros podemos <strong>escucharlo</strong> desde CSS.</p>
+<p>Aquí llega la parte que separa a quien “sabe animar” de quien “anima con responsabilidad”. Para algunas personas, el movimiento en pantalla no es bonito: les provoca mareo, náuseas o dolor de cabeza (se llama trastorno vestibular). Los sistemas operativos permiten activar un ajuste de “reducir movimiento”, y nosotros podemos <strong>escucharlo</strong> desde CSS.</p>
 <blockquote class="def">
 <h3 id="que-significa-prefers-reduced-motion">🟦 ¿Qué significa? — <em>prefers-reduced-motion</em></h3>
-<p>Es una <em>media query</em> que detecta si la persona ha pedido en su sistema operativo <strong>reducir las animaciones</strong>. Sirve para apagar o suavizar tus efectos para quien los necesita apagados, sin afectar a los demás. Es una pieza de <strong>accesibilidad</strong> que deberías incluir en <code>tunal-digital</code> y en el <code>site/estilos.css</code> del manual.</p>
+<p>Es una <em>media query</em> que detecta si la persona ha pedido en su sistema operativo <strong>reducir las animaciones</strong>. Sirve para apagar o suavizar tus efectos para quien los necesita apagados, sin tocar la experiencia de los demás. Es una pieza de <strong>accesibilidad</strong> que deberías incluir en <code>tunal-digital</code> y en el <code>site/estilos.css</code> del manual.</p>
 </blockquote>
 <pre><code class="language-css">@media (prefers-reduced-motion: reduce) {
   *,
@@ -261,10 +261,10 @@ Esto crece y vuelve, ideal para un “latido” que llama la atención.</p>
   }
 }
 </code></pre>
-<p>Esta receta tan corta es casi un estándar de la industria: si la persona pidió menos movimiento, todas las animaciones y transiciones se vuelven <strong>prácticamente instantáneas</strong>. El contenido sigue funcionando igual, solo que sin el “viaje”.</p>
+<p>Esta receta tan corta es casi un estándar de la industria: si la persona pidió menos movimiento, todas tus animaciones y transiciones se vuelven <strong>prácticamente instantáneas</strong>. El contenido sigue funcionando igual; lo único que desaparece es el “viaje”.</p>
 <blockquote class="warn">
 <h3 id="cuidado_2">⚠️ Cuidado</h3>
-<p>No basta con que tu animación sea “suave” para ti. Lo que a una persona le parece elegante, a otra le revuelve el estómago. Incluir <code>prefers-reduced-motion</code> no es un extra de lujo: es parte de hacer una web para <strong>todo el mundo</strong>. Pégalo al final de tu hoja de estilos y ya cubriste a mucha gente con tres líneas.</p>
+<p>No basta con que tu animación te parezca “suave” a ti. Lo que a una persona le resulta elegante, a otra le revuelve el estómago. Incluir <code>prefers-reduced-motion</code> no es un extra de lujo: es parte de hacer una web para <strong>todo el mundo</strong>. Pégalo al final de tu hoja de estilos y, con tres líneas, ya cubriste a un montón de gente.</p>
 <h3 id="tip_3">💡 Tip</h3>
 <p>Si usas <strong>Tailwind</strong> (RachaSimple, Faro), tienes el prefijo <code>motion-reduce:</code> para aplicar clases solo cuando la persona pidió menos movimiento, y <code>motion-safe:</code> para lo contrario. Por ejemplo, <code>motion-safe:transition</code> solo activa la transición si el usuario <strong>no</strong> ha pedido reducir el movimiento.</p>
 </blockquote>
@@ -306,17 +306,17 @@ Esto crece y vuelve, ideal para un “latido” que llama la atención.</p>
 </ul>
 <blockquote class="code">
 <h3 id="en-tu-codigo_3">🔎 En tu código</h3>
-<p>Compara este <code>.card</code> con tus tarjetas reales en el <code>styles.css</code> de <strong>tunal-digital</strong>. Si encuentras que el <code>:hover</code> cambia la sombra pero la transición está dentro del <code>:hover</code> (o no está), ese es justo el detalle que hace que se sienta “a saltos”. Moverla al estado normal es un cambio de una línea con un gran efecto. Recuerda: si tocas algo funcional en Faro, actualiza también el <code>README.md</code> en el mismo PR, como pide la convención del proyecto. 🪼</p>
+<p>Compara este <code>.card</code> con tus tarjetas reales en el <code>styles.css</code> de <strong>tunal-digital</strong>. Si encuentras que el <code>:hover</code> cambia la sombra pero la transición está dentro del <code>:hover</code> (o ni aparece), ese es justo el detalle que hace que todo se sienta “a saltos”. Moverla al estado normal es un cambio de una sola línea con un efecto enorme. Y recuerda: si tocas algo funcional en Faro, actualiza también el <code>README.md</code> en el mismo PR, como pide la convención del proyecto. 🪼</p>
 <h3 id="tip-el-detalle-del-cursor">💡 Tip — el detalle del cursor</h3>
-<p>Acompaña tus tarjetas y botones clicables con <code>cursor: pointer;</code>. No es animación, pero refuerza el mensaje “esto se puede tocar”. Pequeños detalles, gran sensación de calidad.</p>
+<p>Acompaña tus tarjetas y botones clicables con <code>cursor: pointer;</code>. No es animación, pero refuerza el mensaje “esto se puede tocar”. Detalles pequeños, gran sensación de calidad.</p>
 </blockquote>
 <hr />
 <h2 id="7-errores-comunes-y-como-te-das-cuenta">7. Errores comunes (y cómo te das cuenta)</h2>
 <ul>
-<li><strong>“No se anima nada”</strong>: probablemente pusiste la <code>transition</code> solo en el <code>:hover</code>, o el navegador no puede interpolar entre los dos valores (por ejemplo, animar entre <code>display: none</code> y <code>display: block</code> no funciona: <code>display</code> no es animable de forma sencilla). Usa <code>opacity</code> + <code>visibility</code>, o <code>transform</code>, en su lugar.</li>
-<li><strong>“Se ve a tirones”</strong>: seguramente estás animando <code>width</code>, <code>height</code>, <code>top</code> o <code>margin</code>. Cambia a <code>transform</code> y <code>opacity</code>.</li>
+<li><strong>“No se anima nada”</strong>: lo más probable es que pusieras la <code>transition</code> solo en el <code>:hover</code>, o que el navegador no pueda interpolar entre los dos valores (por ejemplo, animar entre <code>display: none</code> y <code>display: block</code> no funciona: <code>display</code> no es animable de forma sencilla). Usa <code>opacity</code> + <code>visibility</code>, o <code>transform</code>, en su lugar.</li>
+<li><strong>“Se ve a tirones”</strong>: seguramente estás animando <code>width</code>, <code>height</code>, <code>top</code> o <code>margin</code>. Cámbialo a <code>transform</code> y <code>opacity</code>.</li>
 <li><strong>“Parpadea al terminar la animación de entrada”</strong>: te falta <code>animation-fill-mode: forwards;</code>.</li>
-<li><strong>“Marea / es demasiado”</strong>: baja la duración, reduce el desplazamiento, y añade <code>prefers-reduced-motion</code>. Menos es más.</li>
+<li><strong>“Marea / es demasiado”</strong>: baja la duración, reduce el desplazamiento y añade <code>prefers-reduced-motion</code>. Menos es más.</li>
 </ul>
 <blockquote class="warn">
 <h3 id="cuidado-la-prueba-del-abuelo">⚠️ Cuidado — la prueba del abuelo</h3>
@@ -340,7 +340,7 @@ Esto crece y vuelve, ideal para un “latido” que llama la atención.</p>
 <h2 id="ejercicios">🧪 Ejercicios</h2>
 <ol>
 <li>
-<p><strong>💻 Botón suave.</strong> En el <code>styles.css</code> de <strong>tunal-digital</strong>, toma un botón y haz que su <code>background-color</code> cambie en <code>0.25s</code> con <code>ease-out</code> al pasar el ratón. Prueba quitar la <code>transition</code> para sentir el “antes”, y vuelve a ponerla.</p>
+<p><strong>💻 Botón suave.</strong> En el <code>styles.css</code> de <strong>tunal-digital</strong>, toma un botón y haz que su <code>background-color</code> cambie en <code>0.25s</code> con <code>ease-out</code> al pasar el ratón. Prueba a quitar la <code>transition</code> para sentir el “antes”, y vuelve a ponerla.</p>
 </li>
 <li>
 <p><strong>💻 Tarjeta que flota.</strong> Aplica el patrón de la sección 6 a tus tarjetas de servicios: <code>transition</code> en el estado normal, y en <code>:hover</code> un <code>translateY(-6px)</code> más una <code>box-shadow</code> más grande. Ajusta los valores hasta que te guste.</p>

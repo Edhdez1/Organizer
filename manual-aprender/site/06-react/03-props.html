@@ -19,9 +19,9 @@
 <main class="contenedor">
 <h1 id="capitulo-03-props">Capítulo 03 — Props</h1>
 <blockquote>
-<p>Un componente reutilizable necesita poder mostrar <strong>datos distintos</strong> cada vez: la misma
-<code>HabitCard</code> sirve para "Leer", "Ejercicio" o "Meditar". Eso se logra con <strong>props</strong>, los datos
-que un componente recibe de quien lo usa. Es el segundo concepto más importante de React.</p>
+<p>Un componente reutilizable tiene que poder mostrar <strong>datos distintos</strong> cada vez: la misma
+<code>HabitCard</code> te sirve para "Leer", para "Ejercicio" o para "Meditar". Eso se consigue con las <strong>props</strong>,
+que son los datos que un componente recibe de quien lo usa. Es el segundo concepto más importante de React.</p>
 </blockquote>
 <p align="center">
   <img src="../../recursos/imagenes/06-react/props-flujo.png" alt="Bit reparte tarjetas de datos desde una caja 'padre' hacia tres cajas 'hijas' por tubos: el flujo de props de padre a hijo" width="640">
@@ -31,37 +31,37 @@ que un componente recibe de quien lo usa. Es el segundo concepto más importante
 <h2 id="1-que-son-las-props">1. Qué son las props</h2>
 <blockquote class="def">
 <h3 id="que-significa-props-propiedades">🟦 ¿Qué significa? — <em>Props (propiedades)</em></h3>
-<p>Las <strong>props</strong> (abreviatura de <em>properties</em>) son los <strong>datos que un componente recibe</strong> de su
-"padre" (el componente que lo usa), para personalizar lo que muestra. Funcionan como los
-<strong>parámetros de una función</strong> (¡que ya conoces!): el componente es la función, las props son
+<p>Las <strong>props</strong> (viene de <em>properties</em>) son los <strong>datos que un componente recibe</strong> de su
+"padre", es decir, del componente que lo usa, para personalizar lo que muestra. Piénsalas como los
+<strong>parámetros de una función</strong>, que ya conoces: el componente es la función y las props son
 sus argumentos.
 Se pasan como si fueran <strong>atributos</strong> de una etiqueta:
 <code>tsx
 &lt;Saludo nombre="Edwar" /&gt;
 &lt;Saludo nombre="Ana" /&gt;</code>
-Aquí <code>nombre</code> es una prop, con valor distinto cada vez.</p>
+Aquí <code>nombre</code> es una prop, y cada vez le damos un valor distinto.</p>
 </blockquote>
 <hr />
 <h2 id="2-recibir-props-en-el-componente">2. Recibir props en el componente</h2>
 <blockquote class="def">
 <h3 id="que-significa-recibir-y-usar-props">🟦 ¿Qué significa? — <em>Recibir y usar props</em></h3>
-<p>El componente recibe las props como un <strong>objeto</strong> (su primer parámetro). Lo común es
-"desestructurarlas" (sacar las que necesitas por su nombre):
+<p>El componente recibe las props como un <strong>objeto</strong>, que es su primer parámetro. Casi siempre las
+"desestructuramos", o sea, sacamos las que nos hacen falta por su nombre:
 <code>tsx
 function Saludo({ nombre }) {
   return &lt;h1&gt;¡Hola, {nombre}!&lt;/h1&gt;;
 }</code>
-<code>{ nombre }</code> saca la prop <code>nombre</code> del objeto de props. Luego se usa dentro del JSX con <code>{ }</code>.
+Ese <code>{ nombre }</code> saca la prop <code>nombre</code> del objeto de props. Después la usas dentro del JSX con <code>{ }</code>.
 Resultado: <code>&lt;Saludo nombre="Edwar" /&gt;</code> muestra "¡Hola, Edwar!".</p>
 <h3 id="que-significa-desestructuracion-destructuring">🟦 ¿Qué significa? — <em>Desestructuración (destructuring)</em></h3>
-<p>Es una forma de <strong>sacar valores</strong> de un objeto o lista directamente en variables. En vez de
-<code>props.nombre</code>, escribes <code>{ nombre }</code> y ya tienes la variable <code>nombre</code>. Lo verás por todo el
-código de React; es JavaScript moderno (también funciona fuera de React).</p>
+<p>Es una manera de <strong>sacar valores</strong> de un objeto o de una lista y meterlos directamente en variables. En lugar de
+<code>props.nombre</code>, escribes <code>{ nombre }</code> y ya tienes la variable <code>nombre</code> lista para usar. La vas a ver por todo el
+código de React, pero ojo: es JavaScript moderno y también funciona fuera de React.</p>
 </blockquote>
 <hr />
 <h2 id="3-props-tipadas-con-typescript-como-en-tus-apps">3. Props tipadas con TypeScript (como en tus apps)</h2>
-<p>Aquí se unen los Módulos 05 y 06: en RachaSimple y Faro, las props se <strong>tipan</strong> con una
-interface, para saber exactamente qué recibe cada componente.</p>
+<p>Aquí se juntan los Módulos 05 y 06. En RachaSimple y en Faro, las props se <strong>tipan</strong> con una
+interface, así sabes con exactitud qué recibe cada componente.</p>
 <pre><code class="language-tsx">interface SaludoProps {
   nombre: string;
   edad?: number;        // opcional
@@ -78,23 +78,23 @@ function Saludo({ nombre, edad }: SaludoProps) {
 </code></pre>
 <blockquote class="code">
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Así es <strong>exactamente</strong> como están escritos los componentes de RachaSimple. Por ejemplo,
-<code>HabitCard.tsx</code> define algo como <code>interface HabitCardProps { habit: Habit; ... }</code> y recibe un
-objeto <code>Habit</code> (¡la interface del Módulo 05!). Por eso, al escribir <code>habit.</code>, el editor te
-ofrece <code>nombre</code>, <code>meta</code>, <code>color</code>… TypeScript y React trabajando juntos.</p>
+<p>Así, tal cual, están escritos los componentes de RachaSimple. Por ejemplo,
+<code>HabitCard.tsx</code> define algo parecido a <code>interface HabitCardProps { habit: Habit; ... }</code> y recibe un
+objeto <code>Habit</code> (¡la interface del Módulo 05!). Por eso, cuando escribes <code>habit.</code>, el editor te
+sugiere <code>nombre</code>, <code>meta</code>, <code>color</code>… TypeScript y React trabajando codo con codo.</p>
 <h3 id="tip-las-props-son-de-solo-lectura">💡 Tip — Las props son de "solo lectura"</h3>
 <p>Un componente <strong>no debe cambiar</strong> sus props; solo las recibe y las muestra. Si algo tiene que
-cambiar con el tiempo (como un contador), eso es <strong>estado</strong>, no props (lo ves en el próximo
-capítulo). Regla: <em>props = lo que me dan desde afuera (no lo toco); estado = lo mío que cambia
-adentro</em>.</p>
+ir cambiando con el tiempo (como un contador), eso ya no es una prop, es <strong>estado</strong> (lo verás en el próximo
+capítulo). La regla es sencilla: <em>props = lo que me dan desde afuera y no toco; estado = lo mío, que cambia
+por dentro</em>.</p>
 </blockquote>
 <hr />
 <h2 id="4-el-flujo-de-datos-de-padres-a-hijos">4. El flujo de datos: de padres a hijos</h2>
 <blockquote class="def">
 <h3 id="que-significa-flujo-unidireccional-de-arriba-hacia-abajo">🟦 ¿Qué significa? — <em>Flujo unidireccional (de arriba hacia abajo)</em></h3>
-<p>En React, los datos fluyen en <strong>una dirección</strong>: del componente padre a sus hijos, vía props.
-El padre tiene los datos y los reparte; los hijos los reciben y los muestran. Esto hace la app
-<strong>predecible</strong>: para saber qué muestra un componente, miras qué props le pasan.
+<p>En React los datos van en <strong>una sola dirección</strong>: del componente padre hacia sus hijos, a través de las props.
+El padre tiene los datos y los reparte; los hijos los reciben y los muestran. Esto hace que la app sea
+<strong>predecible</strong>: para saber qué muestra un componente, basta con mirar qué props le están llegando.
 <code>tsx
 function ListaHabitos({ habitos }) {
   return (
@@ -106,18 +106,18 @@ function ListaHabitos({ habitos }) {
   );
 }</code>
 El padre <code>ListaHabitos</code> recibe un array y le pasa <strong>a cada</strong> <code>HabitCard</code> un hábito por la prop
-<code>habit</code>. Juntas, las piezas del Módulo: <code>.map()</code> (cap. 02), <code>key</code>, props tipadas. Esto es,
+<code>habit</code>. Aquí se juntan varias piezas del Módulo: el <code>.map()</code> (cap. 02), la <code>key</code> y las props tipadas. Esto es,
 literalmente, una pantalla de RachaSimple.</p>
 <h3 id="que-significa-la-prop-especial-children">🟦 ¿Qué significa? — <em>La prop especial <code>children</code></em></h3>
 <p>Si pones contenido <strong>entre</strong> las etiquetas de apertura y cierre de un componente, ese contenido
-llega como una prop llamada <code>children</code>:
+te llega como una prop que se llama <code>children</code>:
 <code>tsx
 function Tarjeta({ children }) {
   return &lt;div className="tarjeta"&gt;{children}&lt;/div&gt;;
 }
 // uso:
 &lt;Tarjeta&gt;&lt;h2&gt;Título&lt;/h2&gt;&lt;p&gt;Texto&lt;/p&gt;&lt;/Tarjeta&gt;</code>
-<code>children</code> es lo que envuelve la tarjeta. Es como hacen <code>AppShell</code> o <code>SoftCard</code> en RachaSimple:
+<code>children</code> es justo lo que va envuelto por la tarjeta. Es lo que hacen <code>AppShell</code> o <code>SoftCard</code> en RachaSimple:
 componentes "contenedores" que envuelven a otros.</p>
 </blockquote>
 <hr />

@@ -19,52 +19,54 @@
 <main class="contenedor">
 <h1 id="capitulo-04-el-dom-y-los-eventos">Capítulo 04 — El DOM y los eventos</h1>
 <blockquote>
-<p>Hasta ahora JavaScript hablaba con la consola. Ahora hará lo que de verdad importa en una web:
-<strong>cambiar la página en vivo</strong> y <strong>reaccionar a lo que hace el usuario</strong> (clics, escritura). Aquí
-es donde HTML, CSS y JavaScript por fin trabajan juntos.</p>
+<p>Hasta ahora JavaScript solo conversaba con la consola. A partir de aquí empieza a hacer lo que
+de verdad cuenta en una web: <strong>cambiar la página mientras la miras</strong> y <strong>responder a lo que hace
+quien la usa</strong> (clics, escritura). Este es el punto donde HTML, CSS y JavaScript dejan de ir cada
+uno por su lado y empiezan a trabajar en equipo.</p>
 </blockquote>
 <hr />
 <h2 id="1-recordando-el-dom">1. Recordando el DOM</h2>
 <blockquote class="def">
 <h3 id="que-significa-dom-repaso-del-modulo-01">🟦 ¿Qué significa? — <em>DOM (repaso del Módulo 01)</em></h3>
-<p>El <strong>DOM</strong> (<em>Document Object Model</em>) es el <strong>árbol</strong> que el navegador construye a partir de tu
-HTML, donde cada etiqueta es un "nodo". JavaScript puede <strong>leer y modificar</strong> ese árbol: cambiar
-un texto, ocultar un elemento, añadir una clase de CSS, crear elementos nuevos. Cuando una web
-"cambia sin recargar", es JavaScript manipulando el DOM.</p>
+<p>El <strong>DOM</strong> (<em>Document Object Model</em>) es el <strong>árbol</strong> que el navegador arma a partir de tu HTML.
+Cada etiqueta se convierte en un "nodo" de ese árbol. Y JavaScript puede <strong>leerlo y modificarlo</strong>
+a su antojo: cambiar un texto, esconder un elemento, añadirle una clase de CSS o crear elementos
+desde cero. Cada vez que ves una web que "cambia sin recargar", detrás hay JavaScript tocando el
+DOM.</p>
 </blockquote>
 <hr />
 <h2 id="2-seleccionar-elementos-encontrar-lo-que-quieres-cambiar">2. Seleccionar elementos: encontrar lo que quieres cambiar</h2>
-<p>Antes de cambiar algo, hay que <strong>agarrarlo</strong>. Para eso se usan los selectores (¡los mismos de
-CSS!).</p>
+<p>Antes de cambiar algo, primero hay que <strong>agarrarlo</strong>. Para eso usamos los selectores, que son los
+mismos que ya conoces de CSS.</p>
 <blockquote class="def">
 <h3 id="que-significa-document-y-queryselector">🟦 ¿Qué significa? — <em><code>document</code> y <code>querySelector</code></em></h3>
-<p><code>document</code> representa toda la página. <code>document.querySelector("...")</code> <strong>busca y devuelve el
-primer</strong> elemento que coincida con un selector CSS:
+<p><code>document</code> es toda la página entera. <code>document.querySelector("...")</code> recorre esa página y te
+<strong>devuelve el primer</strong> elemento que encaje con un selector CSS:
 <code>javascript
 const titulo = document.querySelector("h1");        // el primer &lt;h1&gt;
 const boton  = document.querySelector(".boton");    // el primer elemento con class="boton"
 const menu   = document.querySelector("#menu");     // el elemento con id="menu"</code>
-Para obtener <strong>todos</strong> los que coincidan (no solo el primero), se usa <code>querySelectorAll</code>, que
-devuelve una lista.</p>
+Si lo que quieres son <strong>todos</strong> los elementos que coincidan, y no solo el primero, usas
+<code>querySelectorAll</code>, que te entrega una lista con todos ellos.</p>
 <h3 id="en-tu-codigo">🔎 En tu código</h3>
-<p>Tu <code>tunal-digital/sitio-web/main.js</code> define unas funciones de atajo, <code>$</code> y <code>$$</code>, que son
-exactamente <code>querySelector</code> y <code>querySelectorAll</code> con nombre corto. Es un truco común; ahora
-sabes qué hacen por dentro.</p>
+<p>En tu <code>tunal-digital/sitio-web/main.js</code> hay un par de funciones de atajo, <code>$</code> y <code>$$</code>, que no son
+más que <code>querySelector</code> y <code>querySelectorAll</code> con un nombre corto. Es un truco que verás mucho por
+ahí; ahora ya sabes qué hacen realmente por debajo.</p>
 </blockquote>
 <hr />
 <h2 id="3-cambiar-elementos-leer-y-modificar">3. Cambiar elementos: leer y modificar</h2>
-<p>Una vez tienes el elemento en una variable, puedes cambiar sus propiedades.</p>
+<p>Cuando ya tienes el elemento guardado en una variable, puedes empezar a cambiarle sus propiedades.</p>
 <blockquote class="def">
 <h3 id="que-significa-textcontent-e-innerhtml">🟦 ¿Qué significa? — <em><code>textContent</code> e <code>innerHTML</code></em></h3>
 <ul>
 <li><code>elemento.textContent</code> → lee o cambia el <strong>texto</strong> de un elemento.</li>
-<li><code>elemento.innerHTML</code> → lee o cambia el <strong>HTML interno</strong> (puede incluir etiquetas).
+<li><code>elemento.innerHTML</code> → lee o cambia el <strong>HTML interno</strong> (o sea, puede llevar etiquetas dentro).
 <code>javascript
 const titulo = document.querySelector("h1");
 titulo.textContent = "¡Texto cambiado por JavaScript!";</code>
-⚠️ Prefiere <code>textContent</code> cuando solo metes texto: <code>innerHTML</code> con datos del usuario puede
-abrir un agujero de seguridad (inyección de código). Por eso tu <code>main.js</code> tiene una función
-<code>escHTML</code> para "limpiar" texto antes de mostrarlo.</li>
+⚠️ Cuando solo vas a meter texto, quédate con <code>textContent</code>. Usar <code>innerHTML</code> con datos que
+escribe el usuario puede abrirte un agujero de seguridad (alguien podría colar código). Por eso
+tu <code>main.js</code> tiene una función <code>escHTML</code> que "limpia" el texto antes de mostrarlo.</li>
 </ul>
 <h3 id="que-significa-cambiar-estilos-y-clases">🟦 ¿Qué significa? — <em>Cambiar estilos y clases</em></h3>
 <p><code>javascript
@@ -72,39 +74,41 @@ elemento.style.color = "#1B6B6B";          // cambia un estilo directo
 elemento.classList.add("activo");          // añade una clase CSS
 elemento.classList.remove("oculto");       // quita una clase
 elemento.classList.toggle("abierto");      // la pone si no está, la quita si está</code>
-<strong><code>classList.toggle</code></strong> es oro: con una línea muestras/ocultas un menú. Así funciona el botón
-del menú móvil de tu sitio: alterna una clase, y el CSS hace el resto.</p>
+<strong><code>classList.toggle</code></strong> vale su peso en oro: con una sola línea muestras u ocultas un menú. Así
+funciona, ni más ni menos, el botón del menú móvil de tu sitio: alterna una clase y el CSS se
+encarga del resto.</p>
 <h3 id="tip-la-division-del-trabajo">💡 Tip — La división del trabajo</h3>
-<p>Fíjate en el patrón ideal: <strong>JavaScript añade o quita una clase</strong>, y <strong>el CSS define cómo se
-ve esa clase</strong>. JS decide <em>cuándo</em>, CSS decide <em>cómo</em>. No metas diseño en el JavaScript: solo
-cambia clases. Esto mantiene todo ordenado.</p>
+<p>Fíjate en el patrón, porque es la forma limpia de hacerlo: <strong>JavaScript añade o quita una clase</strong>
+y <strong>el CSS decide cómo se ve esa clase</strong>. JS dice <em>cuándo</em> pasa algo, CSS dice <em>cómo</em> se ve. No
+metas el diseño dentro del JavaScript; deja que solo cambie clases. Así todo queda ordenado y no
+se te mezclan las cosas.</p>
 </blockquote>
 <hr />
 <h2 id="4-eventos-reaccionar-al-usuario">4. Eventos: reaccionar al usuario</h2>
 <blockquote class="def">
 <h3 id="que-significa-evento">🟦 ¿Qué significa? — <em>Evento</em></h3>
-<p>Un <strong>evento</strong> es <strong>algo que ocurre</strong> en la página: un clic, mover el ratón, escribir en un
-campo, enviar un formulario, cargar la página. JavaScript puede "escuchar" estos eventos y
-ejecutar código cuando ocurren.</p>
+<p>Un <strong>evento</strong> es <strong>algo que pasa</strong> en la página: un clic, el ratón moviéndose, alguien
+escribiendo en un campo, un formulario que se envía, la página que termina de cargar. JavaScript
+puede quedarse "a la escucha" de esos eventos y ejecutar código justo cuando ocurren.</p>
 <h3 id="que-significa-addeventlistener">🟦 ¿Qué significa? — <em><code>addEventListener</code></em></h3>
-<p><code>elemento.addEventListener("evento", función)</code> dice: "cuando a este elemento le pase <em>evento</em>,
-ejecuta <em>función</em>". Es la base de toda la interactividad.
+<p><code>elemento.addEventListener("evento", función)</code> viene a decir: "cuando a este elemento le pase
+<em>evento</em>, ejecuta <em>función</em>". Sobre esta idea se construye toda la interactividad.
 ```javascript
 const boton = document.querySelector(".boton");</p>
 <p>boton.addEventListener("click", function () {
   console.log("¡Me hicieron clic!");
 });
 <code>``
-La función que pasas se llama **callback**: no se ejecuta ahora, sino **cuando ocurra** el
-evento. Eventos comunes:</code>"click"<code>,</code>"input"<code>(al escribir),</code>"submit"<code>(al enviar formulario),</code>"mouseover"` (al pasar el ratón).</p>
+A la función que le pasas se le llama **callback**: no corre en el momento, sino **cuando ocurra**
+el evento. Algunos eventos que verás todo el tiempo:</code>"click"<code>,</code>"input"<code>(al escribir),</code>"submit"<code>(al enviar un formulario),</code>"mouseover"` (al pasar el ratón por encima).</p>
 <h3 id="que-significa-callback-funcion-de-retorno">🟦 ¿Qué significa? — <em>Callback (función de retorno)</em></h3>
-<p>Un <strong>callback</strong> es una función que entregas a otra para que la ejecute <strong>más tarde</strong>, cuando
-algo suceda. "Llámame cuando pase X". Es un concepto que reaparece en <code>fetch</code> (próximo
-capítulo) y en React.</p>
+<p>Un <strong>callback</strong> es una función que le entregas a otra para que la ejecute <strong>más tarde</strong>, cuando
+pase algo concreto. Es como decir "avísame cuando ocurra X". Lo vas a reencontrar en <code>fetch</code> (el
+próximo capítulo) y también en React, así que conviene tenerlo claro desde ya.</p>
 </blockquote>
 <hr />
 <h2 id="5-un-ejemplo-completo-un-boton-que-muestra-y-oculta">5. Un ejemplo completo: un botón que muestra y oculta</h2>
-<p>Juntando selección, eventos y clases:</p>
+<p>Vamos a juntar las tres piezas: selección, eventos y clases.</p>
 <pre><code class="language-html">&lt;button class=&quot;abrir&quot;&gt;Mostrar/ocultar menú&lt;/button&gt;
 &lt;nav class=&quot;menu oculto&quot;&gt;…enlaces…&lt;/nav&gt;
 </code></pre>
@@ -117,20 +121,21 @@ boton.addEventListener(&quot;click&quot;, () =&gt; {
   menu.classList.toggle(&quot;oculto&quot;);   // alterna: muestra u oculta
 });
 </code></pre>
-<p>Eso es, en esencia, <strong>el menú de tu propio sitio</strong>. Un clic → alternar una clase → el CSS
-muestra u oculta. Tres tecnologías, un resultado.</p>
+<p>Y eso es, básicamente, <strong>el menú de tu propio sitio</strong>. Un clic dispara el cambio de clase, y el CSS
+decide si el menú aparece o desaparece. Tres tecnologías, un solo resultado.</p>
 <blockquote class="def">
 <h3 id="que-significa-el-objeto-del-evento-y-preventdefault">🟦 ¿Qué significa? — <em>El objeto del evento y <code>preventDefault</code></em></h3>
-<p>El callback recibe un dato con información del evento (por convención <code>e</code>). Una de sus
-funciones más útiles es <code>e.preventDefault()</code>, que <strong>evita el comportamiento por defecto</strong> del
-navegador. El caso típico: al enviar un formulario, el navegador recarga la página; con
-<code>e.preventDefault()</code> lo impides para manejar el envío tú mismo con JavaScript.
+<p>Tu callback recibe un dato con la información de lo que acaba de pasar (por costumbre lo llamamos
+<code>e</code>). Una de las cosas más útiles que trae es <code>e.preventDefault()</code>, que <strong>frena el comportamiento
+que el navegador haría por defecto</strong>. El caso de siempre: al enviar un formulario, el navegador
+recarga la página; con <code>e.preventDefault()</code> se lo impides para encargarte tú del envío con
+JavaScript.
 <code>javascript
 formulario.addEventListener("submit", (e) =&gt; {
   e.preventDefault();          // no recargues la página
   // …aquí tu código para procesar el formulario…
 });</code>
-Tu sitio usa esto para enviar el formulario de contacto sin recargar.</p>
+Tu sitio se apoya en esto para mandar el formulario de contacto sin que la página se recargue.</p>
 </blockquote>
 <hr />
 <h2 id="checklist-ya-domino-esto">✅ Checklist — ¿ya domino esto?</h2>

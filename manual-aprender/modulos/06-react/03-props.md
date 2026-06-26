@@ -1,8 +1,8 @@
 # Capítulo 03 — Props
 
-> Un componente reutilizable necesita poder mostrar **datos distintos** cada vez: la misma
-> `HabitCard` sirve para "Leer", "Ejercicio" o "Meditar". Eso se logra con **props**, los datos
-> que un componente recibe de quien lo usa. Es el segundo concepto más importante de React.
+> Un componente reutilizable tiene que poder mostrar **datos distintos** cada vez: la misma
+> `HabitCard` te sirve para "Leer", para "Ejercicio" o para "Meditar". Eso se consigue con las **props**,
+> que son los datos que un componente recibe de quien lo usa. Es el segundo concepto más importante de React.
 
 <p align="center">
   <img src="../../recursos/imagenes/06-react/props-flujo.png" alt="Bit reparte tarjetas de datos desde una caja 'padre' hacia tres cajas 'hijas' por tubos: el flujo de props de padre a hijo" width="640">
@@ -13,43 +13,43 @@
 ## 1. Qué son las props
 
 > ### 🟦 ¿Qué significa? — *Props (propiedades)*
-> Las **props** (abreviatura de *properties*) son los **datos que un componente recibe** de su
-> "padre" (el componente que lo usa), para personalizar lo que muestra. Funcionan como los
-> **parámetros de una función** (¡que ya conoces!): el componente es la función, las props son
+> Las **props** (viene de *properties*) son los **datos que un componente recibe** de su
+> "padre", es decir, del componente que lo usa, para personalizar lo que muestra. Piénsalas como los
+> **parámetros de una función**, que ya conoces: el componente es la función y las props son
 > sus argumentos.
 > Se pasan como si fueran **atributos** de una etiqueta:
 > ```tsx
 > <Saludo nombre="Edwar" />
 > <Saludo nombre="Ana" />
 > ```
-> Aquí `nombre` es una prop, con valor distinto cada vez.
+> Aquí `nombre` es una prop, y cada vez le damos un valor distinto.
 
 ---
 
 ## 2. Recibir props en el componente
 
 > ### 🟦 ¿Qué significa? — *Recibir y usar props*
-> El componente recibe las props como un **objeto** (su primer parámetro). Lo común es
-> "desestructurarlas" (sacar las que necesitas por su nombre):
+> El componente recibe las props como un **objeto**, que es su primer parámetro. Casi siempre las
+> "desestructuramos", o sea, sacamos las que nos hacen falta por su nombre:
 > ```tsx
 > function Saludo({ nombre }) {
 >   return <h1>¡Hola, {nombre}!</h1>;
 > }
 > ```
-> `{ nombre }` saca la prop `nombre` del objeto de props. Luego se usa dentro del JSX con `{ }`.
+> Ese `{ nombre }` saca la prop `nombre` del objeto de props. Después la usas dentro del JSX con `{ }`.
 > Resultado: `<Saludo nombre="Edwar" />` muestra "¡Hola, Edwar!".
 
 > ### 🟦 ¿Qué significa? — *Desestructuración (destructuring)*
-> Es una forma de **sacar valores** de un objeto o lista directamente en variables. En vez de
-> `props.nombre`, escribes `{ nombre }` y ya tienes la variable `nombre`. Lo verás por todo el
-> código de React; es JavaScript moderno (también funciona fuera de React).
+> Es una manera de **sacar valores** de un objeto o de una lista y meterlos directamente en variables. En lugar de
+> `props.nombre`, escribes `{ nombre }` y ya tienes la variable `nombre` lista para usar. La vas a ver por todo el
+> código de React, pero ojo: es JavaScript moderno y también funciona fuera de React.
 
 ---
 
 ## 3. Props tipadas con TypeScript (como en tus apps)
 
-Aquí se unen los Módulos 05 y 06: en RachaSimple y Faro, las props se **tipan** con una
-interface, para saber exactamente qué recibe cada componente.
+Aquí se juntan los Módulos 05 y 06. En RachaSimple y en Faro, las props se **tipan** con una
+interface, así sabes con exactitud qué recibe cada componente.
 
 ```tsx
 interface SaludoProps {
@@ -68,25 +68,25 @@ function Saludo({ nombre, edad }: SaludoProps) {
 ```
 
 > ### 🔎 En tu código
-> Así es **exactamente** como están escritos los componentes de RachaSimple. Por ejemplo,
-> `HabitCard.tsx` define algo como `interface HabitCardProps { habit: Habit; ... }` y recibe un
-> objeto `Habit` (¡la interface del Módulo 05!). Por eso, al escribir `habit.`, el editor te
-> ofrece `nombre`, `meta`, `color`… TypeScript y React trabajando juntos.
+> Así, tal cual, están escritos los componentes de RachaSimple. Por ejemplo,
+> `HabitCard.tsx` define algo parecido a `interface HabitCardProps { habit: Habit; ... }` y recibe un
+> objeto `Habit` (¡la interface del Módulo 05!). Por eso, cuando escribes `habit.`, el editor te
+> sugiere `nombre`, `meta`, `color`… TypeScript y React trabajando codo con codo.
 
 > ### 💡 Tip — Las props son de "solo lectura"
 > Un componente **no debe cambiar** sus props; solo las recibe y las muestra. Si algo tiene que
-> cambiar con el tiempo (como un contador), eso es **estado**, no props (lo ves en el próximo
-> capítulo). Regla: *props = lo que me dan desde afuera (no lo toco); estado = lo mío que cambia
-> adentro*.
+> ir cambiando con el tiempo (como un contador), eso ya no es una prop, es **estado** (lo verás en el próximo
+> capítulo). La regla es sencilla: *props = lo que me dan desde afuera y no toco; estado = lo mío, que cambia
+> por dentro*.
 
 ---
 
 ## 4. El flujo de datos: de padres a hijos
 
 > ### 🟦 ¿Qué significa? — *Flujo unidireccional (de arriba hacia abajo)*
-> En React, los datos fluyen en **una dirección**: del componente padre a sus hijos, vía props.
-> El padre tiene los datos y los reparte; los hijos los reciben y los muestran. Esto hace la app
-> **predecible**: para saber qué muestra un componente, miras qué props le pasan.
+> En React los datos van en **una sola dirección**: del componente padre hacia sus hijos, a través de las props.
+> El padre tiene los datos y los reparte; los hijos los reciben y los muestran. Esto hace que la app sea
+> **predecible**: para saber qué muestra un componente, basta con mirar qué props le están llegando.
 > ```tsx
 > function ListaHabitos({ habitos }) {
 >   return (
@@ -99,12 +99,12 @@ function Saludo({ nombre, edad }: SaludoProps) {
 > }
 > ```
 > El padre `ListaHabitos` recibe un array y le pasa **a cada** `HabitCard` un hábito por la prop
-> `habit`. Juntas, las piezas del Módulo: `.map()` (cap. 02), `key`, props tipadas. Esto es,
+> `habit`. Aquí se juntan varias piezas del Módulo: el `.map()` (cap. 02), la `key` y las props tipadas. Esto es,
 > literalmente, una pantalla de RachaSimple.
 
 > ### 🟦 ¿Qué significa? — *La prop especial `children`*
 > Si pones contenido **entre** las etiquetas de apertura y cierre de un componente, ese contenido
-> llega como una prop llamada `children`:
+> te llega como una prop que se llama `children`:
 > ```tsx
 > function Tarjeta({ children }) {
 >   return <div className="tarjeta">{children}</div>;
@@ -112,7 +112,7 @@ function Saludo({ nombre, edad }: SaludoProps) {
 > // uso:
 > <Tarjeta><h2>Título</h2><p>Texto</p></Tarjeta>
 > ```
-> `children` es lo que envuelve la tarjeta. Es como hacen `AppShell` o `SoftCard` en RachaSimple:
+> `children` es justo lo que va envuelto por la tarjeta. Es lo que hacen `AppShell` o `SoftCard` en RachaSimple:
 > componentes "contenedores" que envuelven a otros.
 
 ---
