@@ -327,7 +327,7 @@ Esta seccion es la mas importante. Leela dos veces. Es la regla de oro de Faro y
 
 > ### 🟦 ¿Que significa? — *Variable de entorno*
 > Es un valor de configuracion (como una clave secreta) que se guarda **fuera del codigo**, en el entorno donde corre el servidor. Sirve para no escribir secretos en los archivos y no subirlos por accidente a GitHub.
-> **Donde se usa en un repo real:** **Faro** guarda sus claves y tokens en variables de entorno del servidor y en la tabla `user_connections` protegida con RLS; nunca en el codigo del cliente.
+> **Donde se usa en un repo real:** **Faro** guarda sus claves y tokens en variables de entorno del servidor y en la tabla `user_connections` protegida con **RLS** (*Row Level Security*: una regla de la base de datos que hace que cada usuario solo pueda leer sus propias filas); nunca en el codigo del cliente.
 
 > ### ⚠️ Cuidado
 > **El codigo que llega al navegador es publico.** Cualquiera puede abrir las herramientas de desarrollo y leerlo. Si pones una clave de API en el JavaScript del cliente, la estas **regalando**. Por eso tunal-digital usa un Worker y Faro usa el servidor: para que la clave nunca baje al navegador.

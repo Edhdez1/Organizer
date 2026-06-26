@@ -11,10 +11,10 @@ Cuando tu navegador pide una página o tu código llama a una API, no se manda u
 > **Dónde se usa en un repo real:** en **tunal-digital**, cuando el visitante escribe en el chat, el JavaScript del sitio hace una petición HTTP a un Cloudflare Worker, que a su vez habla por HTTP con la API de Claude (Anthropic). Todo es HTTP de punta a punta.
 
 > ### 🟦 ¿Que significa? — *Cliente y servidor*
-> El **cliente** es quien pide (el navegador, una app, tu código con `fetch`). El **servidor** es quien responde (una computadora remota que tiene los datos o ejecuta la lógica). Sirve para repartir el trabajo: el cliente muestra cosas al usuario, el servidor guarda secretos y datos.
+> El **cliente** es quien pide (el navegador, una app, tu código con `fetch`). El **servidor** es quien responde (una computadora remota con los datos o la lógica). El cliente muestra cosas al usuario; el servidor guarda secretos y datos.
 > **Dónde se usa:** en **Faro** (Next.js), el navegador es el cliente y las *rutas de API* de Next (que corren en el servidor) son el servidor; ahí viven los tokens de OpenAI y de GitHub.
 
-Una petición HTTP siempre tiene cuatro piezas que vamos a estudiar una por una:
+Una petición HTTP siempre tiene cuatro piezas que estudiaremos una por una:
 
 1. Un **método** (qué quiero hacer: leer, crear, borrar...).
 2. Una **URL** (a qué recurso).
@@ -29,6 +29,10 @@ Y la respuesta trae:
 
 > ### 💡 Tip
 > Piensa en HTTP como pedir comida a domicilio. El **método** es lo que quieres hacer (¿pedir un plato nuevo, cancelar, cambiar la dirección?). La **URL** es la dirección del restaurante. Las **cabeceras** son notas en el sobre ("soy cliente VIP", "pago con tarjeta"). El **cuerpo** es el pedido detallado. El **código de estado** es la respuesta del repartidor: "aquí está" (200) o "esa calle no existe" (404).
+
+> ### 🟦 ¿Que significa? — *URL*
+> Una **URL** (Uniform Resource Locator, "localizador uniforme de recursos") es la **dirección** que indica a qué recurso quieres llegar: el sitio, la ruta y, a veces, parámetros. Por ejemplo, en `https://api.github.com/user/repos`, el trozo `api.github.com` dice **a qué servidor** vas y `/user/repos` dice **qué recurso** pides dentro de ese servidor. Sirve para que la petición sepa exactamente su destino.
+> **Dónde se usa:** **Faro** apunta sus GET a URLs como `https://api.github.com/user/repos`; el chat de **tunal-digital** manda su POST a la URL del Cloudflare Worker. Cada llamada `fetch` empieza siempre por una URL.
 
 ## 2. Los métodos HTTP: el verbo de la petición
 
@@ -317,4 +321,4 @@ const descripcion = datos.choices[0].message.content;
 
 ---
 
-> ¡Lo lograste! 🎉 Ahora HTTP ya no es una caja negra: sabes qué viaja en cada petición, cómo leer si algo salió bien o mal, y —lo más importante— por qué los secretos viven en el servidor y nunca en el navegador. La próxima vez que algo no cargue, abre Network y deja que el código de estado te cuente la historia. Nos vemos en el siguiente capítulo. — Bit 🐾
+> ¡Lo lograste! 🎉 Ahora HTTP ya no es una caja negra: sabes qué viaja en cada petición, cómo leer si algo salió bien o mal, y por qué los secretos viven en el servidor y nunca en el navegador. La próxima vez que algo no cargue, abre Network y deja que el código de estado te cuente la historia. — Bit 🐾
